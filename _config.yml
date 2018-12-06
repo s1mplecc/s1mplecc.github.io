@@ -3,12 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: s1mple的博客
 subtitle:
-description:
+description: 清风不问过路客，岁月不负有心人
 keywords:
 author: s1mple
-language:
+language: zh-CN
 timezone:
 
 # URL
@@ -72,9 +72,19 @@ pagination_dir: page
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
+symbols_count_time:
+  symbols: true
+  time: false
+  total_symbols: false
+  total_time: false
+
 ## Themes: https://hexo.io/themes/
 # theme: landscape
-theme: next 
+theme: next
+
+post_copyright:
+  enable: true
+  license: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a>
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
