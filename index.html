@@ -421,7 +421,7 @@
                 
               
 
-              <time title="创建时间：2018-12-11 15:02:05 / 修改时间：15:39:41" itemprop="dateCreated datePublished" datetime="2018-12-11T15:02:05+08:00">2018-12-11</time>
+              <time title="创建时间：2018-12-11 15:02:00 / 修改时间：16:01:04" itemprop="dateCreated datePublished" datetime="2018-12-11T15:02:00+08:00">2018-12-11</time>
             
 
             
@@ -534,7 +534,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  crawler ✗ python3 -m perf timeit <span class="string">'import app;app.run("12/12455")'</span></span><br><span class="line">...</span><br><span class="line">* the standard deviation (281 ms) is 24% of the mean (1.16 sec)</span><br><span class="line">* the maximum (2.02 sec) is 73% greater than the mean (1.16 sec)</span><br><span class="line"></span><br><span class="line">Mean +- std dev: 1.16 sec +- 0.28 sec</span><br></pre></td></tr></table></figure>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="venv"><a href="#venv" class="headerlink" title="venv"></a>venv</h3><p><strong>venv</strong>，全称 <strong>virtualenv</strong> 虚拟环境。用过 JavaScript 的同学都知道，执行 <code>npm install xxx</code> 时会在当前目录生成一个 <code>node_modules</code> 目录，依赖会被安装在这个目录下，除非你加上 <code>-g/--global</code> 全局参数，否则安装的依赖只对当前项目生效（不是全局依赖）。这其实相当于做了一层隔离，将当前项目的环境与全局环境隔离开，有利于版本的管理。</p>
 <p>venv 也是这样的作用，用于<strong>为一个应用创建一套隔离的 Python 运行环境</strong>。在这个环境中，你可以管理 Python 版本，pip 版本，以及你所用的三方库的版本，而不会与全局环境冲突。</p>
-<p>如果你使用的是 PyCharm，那么创建项目时就可以勾选使用 venv（这也是建议的选择）。效果如下图：<br><img src="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p141" alt="86ef5354a1514b4e1cd9a8a7431583c1.png"><br>命令行多了 (venv) 前缀：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  crawler ✗</span><br></pre></td></tr></table></figure></p>
+<p>如果你使用的是 PyCharm，那么创建项目时就可以勾选使用 venv（这也是建议的选择）。效果如下图：<br><img src="1.png" alt="1"><br>命令行多了 (venv) 前缀：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  crawler ✗</span><br></pre></td></tr></table></figure></p>
 <p>如果你不是使用的 PyCharm，参考这篇文档：<a href="https://www.kancloud.cn/smilesb101/python3_x/298883" target="_blank" rel="noopener">virtualenv</a></p>
 <h3 id="风格规范"><a href="#风格规范" class="headerlink" title="风格规范"></a>风格规范</h3><p>Python 风格规范我参考的 <a href="https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/python_style_rules/#id16" target="_blank" rel="noopener">Google 开源项目风格指南</a>。推荐使用 <strong>PyCharm</strong> IDE，和 IntelliJ IDEA 一样产自 JetBrains 公司，非常良心的软件，会有一些风格提示，并且可以使用快捷键（Ctrl/Cmd + Shift + L）自动格式化。这里主要说说命名吧。</p>
 <h4 id="命名"><a href="#命名" class="headerlink" title="命名"></a>命名</h4><p><strong>应该避免的名称</strong></p>
