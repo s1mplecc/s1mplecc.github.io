@@ -112,23 +112,27 @@
 
 
 
-  <meta name="description" content="清风不问过路客，岁月不负有心人">
-<meta property="og:type" content="website">
-<meta property="og:title" content="s1mple的博客">
-<meta property="og:url" content="https://s1mplecc.github.io/index.html">
+  <meta name="description" content="前言得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。 案例还是用的之前 Java 网络爬虫 的案例。所需 Python Version &amp;gt;=">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="50行代码实现一个并发的 Python 爬虫程序.md">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/12/11/50行代码实现一个并发的-Python-爬虫程序-md/index.html">
 <meta property="og:site_name" content="s1mple的博客">
-<meta property="og:description" content="清风不问过路客，岁月不负有心人">
+<meta property="og:description" content="前言得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。 案例还是用的之前 Java 网络爬虫 的案例。所需 Python Version &amp;gt;=">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p141">
+<meta property="og:updated_time" content="2018-12-11T07:21:13.820Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="s1mple的博客">
-<meta name="twitter:description" content="清风不问过路客，岁月不负有心人">
+<meta name="twitter:title" content="50行代码实现一个并发的 Python 爬虫程序.md">
+<meta name="twitter:description" content="前言得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。 案例还是用的之前 Java 网络爬虫 的案例。所需 Python Version &amp;gt;=">
+<meta name="twitter:image" content="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p141">
 
 
 
 
 
 
-  <link rel="canonical" href="https://s1mplecc.github.io/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/12/11/50行代码实现一个并发的-Python-爬虫程序-md/">
 
 
 
@@ -138,7 +142,7 @@
   };
 </script>
 
-  <title>s1mple的博客</title>
+  <title>50行代码实现一个并发的 Python 爬虫程序.md | s1mple的博客</title>
   
 
 
@@ -187,8 +191,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -225,7 +228,7 @@
         
         
           
-          <li class="menu-item menu-item-home menu-item-active">
+          <li class="menu-item menu-item-home">
 
     
     
@@ -359,9 +362,9 @@
           
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -393,10 +396,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/12/11/50行代码实现一个并发的-Python-爬虫程序-md/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">50行代码实现一个并发的 Python 爬虫程序.md</a>
+          <h1 class="post-title" itemprop="name headline">50行代码实现一个并发的 Python 爬虫程序.md
               
             
           </h1>
@@ -506,9 +506,7 @@
       
 
       
-        
-          
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。</p>
 <p>案例还是用的之前 <a href="https://s1mple.xyz/java-web-crawler/" target="_blank" rel="noopener">Java 网络爬虫</a> 的案例。所需 <code>Python Version &gt;= 3.6</code>，用到的库有：</p>
 <ul>
 <li><strong>beautifulsoup4</strong> 三方库用于解析 Html，执行 <code>pip install beautifulsoup4</code> 安装</li>
@@ -632,8 +630,6 @@
 <li><a href="https://blog.louie.lu/2017/08/01/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84-python-%E6%A8%99%E6%BA%96%E5%87%BD%E5%BC%8F%E5%BA%AB%E7%94%A8%E6%B3%95-06-concurrent-futures/" target="_blank" rel="noopener">concurrent.futures 性能分析</a></li>
 </ul>
 
-          
-        
       
     </div>
 
@@ -654,193 +650,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/12/06/hello-world/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/12/06/hello-world/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">Hello World</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-12-06 10:44:00 / 修改时间：15:26:34" itemprop="dateCreated datePublished" datetime="2018-12-06T10:44:00+08:00">2018-12-06</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/Python/" rel="tag"># Python</a>
           
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/06/hello-world/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/06/hello-world/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">430</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/06/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
       
     </footer>
   </div>
@@ -850,14 +689,22 @@
   </article>
 
 
-    
-  </section>
-
-  
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -878,8 +725,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -977,6 +833,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码"><span class="nav-number">2.</span> <span class="nav-text">源码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#urllib"><span class="nav-number">2.1.</span> <span class="nav-text">urllib</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Beautiful-Soup"><span class="nav-number">2.2.</span> <span class="nav-text">Beautiful Soup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发"><span class="nav-number">2.3.</span> <span class="nav-text">并发</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">3.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#venv"><span class="nav-number">3.1.</span> <span class="nav-text">venv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#风格规范"><span class="nav-number">3.2.</span> <span class="nav-text">风格规范</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命名"><span class="nav-number">3.2.1.</span> <span class="nav-text">命名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Main"><span class="nav-number">3.2.2.</span> <span class="nav-text">Main</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件写入"><span class="nav-number">3.3.</span> <span class="nav-text">文件写入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1118,6 +990,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
 
   
 
@@ -1132,6 +1008,23 @@
     <script id="dsq-count-scr" src="https://s1mple.disqus.com/count.js" async></script>
   
 
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://s1mplecc.github.io/2018/12/11/50行代码实现一个并发的-Python-爬虫程序-md/';
+        this.page.identifier = '2018/12/11/50行代码实现一个并发的-Python-爬虫程序-md/';
+        this.page.title = '50行代码实现一个并发的 Python 爬虫程序.md';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://s1mple.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
   
 
 
