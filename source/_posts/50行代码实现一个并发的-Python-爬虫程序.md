@@ -1,6 +1,6 @@
 ---
 title: 50行代码实现一个并发的 Python 爬虫程序
-date: 2018-12-11 15:02:05
+date: 2018-12-11 16:08:51
 tags: [Python]
 categories: [Language]
 ---
@@ -149,7 +149,7 @@ Mean +- std dev: 1.16 sec +- 0.28 sec
 venv 也是这样的作用，用于**为一个应用创建一套隔离的 Python 运行环境**。在这个环境中，你可以管理 Python 版本，pip 版本，以及你所用的三方库的版本，而不会与全局环境冲突。
 
 如果你使用的是 PyCharm，那么创建项目时就可以勾选使用 venv（这也是建议的选择）。效果如下图：
-![86ef5354a1514b4e1cd9a8a7431583c1.png](evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p141)
+![86ef5354a1514b4e1cd9a8a7431583c1.png](1.png)
 命令行多了 (venv) 前缀：
 ```
 (venv) ➜  crawler ✗
