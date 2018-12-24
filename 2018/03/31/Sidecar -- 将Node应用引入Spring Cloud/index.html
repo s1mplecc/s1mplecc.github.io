@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Preface Sidecar 起源于 Netflix Prana，它的目的是将 Non-JVM 语言整合到 Netflix OSS 生态系统中，如今 Spring Cloud 将 Spring Boot 与 Netflix OSS 整合成一套微服务解决框架，大大简化了程序员的开发。而 Sidecar 就是其中的一个衍生物，用于将 Non-JVM 语言，譬如 Node.js、Python 引入至">
+<meta name="keywords" content="Node.js,Spring Cloud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sidecar -- 将Node应用引入Spring Cloud">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/index.html">
+<meta property="og:site_name" content="s1mple的博客">
+<meta property="og:description" content="Preface Sidecar 起源于 Netflix Prana，它的目的是将 Non-JVM 语言整合到 Netflix OSS 生态系统中，如今 Spring Cloud 将 Spring Boot 与 Netflix OSS 整合成一套微服务解决框架，大大简化了程序员的开发。而 Sidecar 就是其中的一个衍生物，用于将 Non-JVM 语言，譬如 Node.js、Python 引入至">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/03/31/Sidecar%20--%20将Node应用引入Spring%20Cloud/content/images/2018/03/B89413D5-130D-4F5D-BB76-7559B6B0A036.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/03/31/Sidecar%20--%20将Node应用引入Spring%20Cloud/content/images/2018/03/A2B5DA24-46A6-40B9-9129-54EC7FA0F329.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/03/31/Sidecar%20--%20将Node应用引入Spring%20Cloud/content/images/2018/03/A44BC958-7050-4530-8855-7F0042A6C32F.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/03/31/Sidecar%20--%20将Node应用引入Spring%20Cloud/content/images/2018/04/WX20180403-110158.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/03/31/Sidecar%20--%20将Node应用引入Spring%20Cloud/content/images/2018/03/sidecar.png">
+<meta property="og:updated_time" content="2018-12-24T08:35:32.302Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sidecar -- 将Node应用引入Spring Cloud">
+<meta name="twitter:description" content="Preface Sidecar 起源于 Netflix Prana，它的目的是将 Non-JVM 语言整合到 Netflix OSS 生态系统中，如今 Spring Cloud 将 Spring Boot 与 Netflix OSS 整合成一套微服务解决框架，大大简化了程序员的开发。而 Sidecar 就是其中的一个衍生物，用于将 Non-JVM 语言，譬如 Node.js、Python 引入至">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2018/03/31/Sidecar%20--%20将Node应用引入Spring%20Cloud/content/images/2018/03/B89413D5-130D-4F5D-BB76-7559B6B0A036.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Sidecar -- 将Node应用引入Spring Cloud | s1mple的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">s1mple的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+    <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Sidecar -- 将Node应用引入Spring Cloud
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-03-31 02:05:08" itemprop="dateCreated datePublished" datetime="2018-03-31T02:05:08+08:00">2018-03-31</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">10k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>Sidecar 起源于 <a href="https://github.com/Netflix/Prana" target="_blank" rel="noopener">Netflix Prana</a>，它的目的是将 <strong>Non-JVM</strong> 语言整合到 Netflix OSS 生态系统中，如今 Spring Cloud 将 Spring Boot 与 Netflix OSS 整合成一套微服务解决框架，大大简化了程序员的开发。而 Sidecar 就是其中的一个衍生物，用于将 Non-JVM 语言，譬如 Node.js、Python 引入至 Spring Cloud 框架中。</p>
+</blockquote>
+<ul>
+<li><p>本文的示例代码已上传至 <a href="https://github.com/s1mplecc/sidecar-example" target="_blank" rel="noopener">Github</a></p>
+</li>
+<li><p>使用 Maven 构建的多模块项目<code>sidecar-example</code>，并将 Node.js 开发的<code>book-service</code>模块拷贝至一个项目中</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 模块结构如下</span><br><span class="line">─ sidecar-example</span><br><span class="line">   ├── author-service   // Java 开发的微服务，用于测试服务间通信</span><br><span class="line">   ├── eureka-server    // 注册中心</span><br><span class="line">   ├── node-sidecar    // Sidecar，用于将 Node 应用引入 Spring Cloud</span><br><span class="line">   └── book-service    // Node.js 开发的微服务</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用的 Spring Boot 版本及 Spring Cloud 全家桶版本</p>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.5.9.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">relativePath</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>Edgware.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencyManagement</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Sidecar"><a href="#Sidecar" class="headerlink" title="Sidecar"></a>Sidecar</h2><blockquote>
+<p>先来看看引入 Sidecar 需要做些什么</p>
+</blockquote>
+<ul>
+<li><p><strong>添加 Maven 依赖</strong>，很简单，甚至于不需要<code>eureka-client</code>的依赖，因为它已经整合至 Sidecar 的依赖中</p>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-netflix-sidecar<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>接下来是<strong>注解</strong>，在 Sidecar 主类上添加<code>@EnableSidecar</code>注解，我们来看看这个注解包含些什么</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableCircuitBreaker</span></span><br><span class="line"><span class="meta">@EnableZuulProxy</span></span><br><span class="line"><span class="meta">@Target</span>(ElementType.TYPE)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Import</span>(SidecarConfiguration.class)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> EnableSidecar &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  包含了<strong>网关 Zuul</strong> 以及微服务结构中不可或缺的<strong>熔断器 Hystrix</strong></p>
+</li>
+<li><p>最后是<strong>配置文件</strong>，在<code>application.yml</code>中添加如下配置</p>
+  <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">9091</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">node-sidecar</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">  instance:</span></span><br><span class="line"><span class="attr">    hostname:</span> <span class="string">localhost</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    serviceUrl:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://$&#123;eureka.instance.hostname&#125;:9090/eureka/</span></span><br><span class="line"><span class="attr">sidecar:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">3000</span></span><br><span class="line"><span class="attr">  health-uri:</span> <span class="attr">http://localhost:$&#123;sidecar.port&#125;/health</span></span><br></pre></td></tr></table></figure>
+<p>  声明服务名和注册中心地址都没什么问题，最核心的就是 sidecar 的几个配置，包括</p>
+<ul>
+<li><code>sidecar.port</code> 监听的 Node 应用的端口号，</li>
+<li><code>sidecar.health-uri</code> Node 应用的健康检查接口的 uri</li>
+</ul>
+</li>
+</ul>
+<h4 id="健康检查接口"><a href="#健康检查接口" class="headerlink" title="健康检查接口"></a>健康检查接口</h4><blockquote>
+<p>Node.js 的微服务应用<code>book-service</code>我采用的 <strong>Koa</strong> 框架，这里不多赘述，需要注意的是：该应用必须实现一个<code>/health</code>健康检查接口，Sidecar 应用会每隔几秒访问一次该接口，并将该服务的健康状态返回给 Eureka</p>
+</blockquote>
+<ul>
+<li><p>只需要返回<code>{ status: &#39;UP&#39; }</code>这样一串 Json 即可</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">const Koa = require(&apos;koa&apos;)</span><br><span class="line">const router = require(&apos;koa-router&apos;)()</span><br><span class="line"></span><br><span class="line">const app = new Koa()</span><br><span class="line"></span><br><span class="line">// log request URL:</span><br><span class="line">app.use(async (ctx, next) =&gt; &#123;</span><br><span class="line">  console.log(`Process $&#123;ctx.request.method&#125; $&#123;ctx.request.url&#125;...`)</span><br><span class="line">  await next()</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">// add routes:</span><br><span class="line">router.get(&apos;/health&apos;, async (ctx, next) =&gt; &#123;</span><br><span class="line">  ctx.response.body = &#123;</span><br><span class="line">    status: &apos;UP&apos;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">// add router middleware:</span><br><span class="line">app.use(router.routes())</span><br><span class="line"></span><br><span class="line">app.listen(3000)</span><br><span class="line">console.log(&apos;app started at port 3000...&apos;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="服务注册"><a href="#服务注册" class="headerlink" title="服务注册"></a>服务注册</h2><blockquote>
+<p>到目前为止，Sidecar 和 Node 服务已准备就绪，我们按顺序启动 <strong>eureka-server</strong> =&gt; <strong>book-service</strong> =&gt; <strong>node-sidecar</strong></p>
+</blockquote>
+<ul>
+<li><p>访问 Eureka 的 WebUI <code>http://localhost:9090/</code>，Sidecar 已被注册到 Eureka 上，并且状态为 UP<br><img src="/2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/content/images/2018/03/B89413D5-130D-4F5D-BB76-7559B6B0A036.png" alt="B89413D5-130D-4F5D-BB76-7559B6B0A036">如果我们停掉<code>book-service</code>，则<code>node-sidecar</code>的服务状态会变为 Down，显示服务不可用</p>
+</li>
+<li><p>访问 Sidecar 的首页<code>http://localhost:9091/</code>，提供了三个接口<br><img src="/2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/content/images/2018/03/A2B5DA24-46A6-40B9-9129-54EC7FA0F329.png" alt="A2B5DA24-46A6-40B9-9129-54EC7FA0F329"></p>
+</li>
+<li><p>访问<code>/health</code>可以得到 Node 应用返回的健康报告</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"status"</span>: <span class="string">"UP"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  访问<code>hosts/node-sidecar</code>可以的到 Sidecar 实例的一些信息</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"host"</span>: <span class="string">"localhost"</span>,</span><br><span class="line">        <span class="attr">"port"</span>: <span class="number">3000</span>,</span><br><span class="line">        <span class="attr">"metadata"</span>: &#123;&#125;,</span><br><span class="line">        <span class="attr">"instanceInfo"</span>: &#123;</span><br><span class="line">            <span class="attr">"instanceId"</span>: <span class="string">"192.168.1.8:node-sidecar:9091"</span>,</span><br><span class="line">            <span class="attr">"app"</span>: <span class="string">"NODE-SIDECAR"</span>,</span><br><span class="line">            <span class="attr">"appGroupName"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"ipAddr"</span>: <span class="string">"192.168.1.8"</span>,</span><br><span class="line">            <span class="attr">"sid"</span>: <span class="string">"na"</span>,</span><br><span class="line">            <span class="attr">"homePageUrl"</span>: <span class="string">"http://localhost:3000/"</span>,</span><br><span class="line">            <span class="attr">"statusPageUrl"</span>: <span class="string">"http://localhost:9091/info"</span>,</span><br><span class="line">            <span class="attr">"healthCheckUrl"</span>: <span class="string">"http://localhost:9091/health"</span>,</span><br><span class="line">            <span class="attr">"secureHealthCheckUrl"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"vipAddress"</span>: <span class="string">"node-sidecar"</span>,</span><br><span class="line">            <span class="attr">"secureVipAddress"</span>: <span class="string">"node-sidecar"</span>,</span><br><span class="line">            <span class="attr">"countryId"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"dataCenterInfo"</span>: &#123;</span><br><span class="line">                <span class="attr">"@class"</span>: <span class="string">"com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo"</span>,</span><br><span class="line">                <span class="attr">"name"</span>: <span class="string">"MyOwn"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"hostName"</span>: <span class="string">"localhost"</span>,</span><br><span class="line">            <span class="attr">"status"</span>: <span class="string">"UP"</span>,</span><br><span class="line">            <span class="attr">"leaseInfo"</span>: &#123;</span><br><span class="line">                <span class="attr">"renewalIntervalInSecs"</span>: <span class="number">30</span>,</span><br><span class="line">                <span class="attr">"durationInSecs"</span>: <span class="number">90</span>,</span><br><span class="line">                <span class="attr">"registrationTimestamp"</span>: <span class="number">1522469074848</span>,</span><br><span class="line">                <span class="attr">"lastRenewalTimestamp"</span>: <span class="number">1522469344919</span>,</span><br><span class="line">                <span class="attr">"evictionTimestamp"</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="attr">"serviceUpTimestamp"</span>: <span class="number">1522469074848</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"isCoordinatingDiscoveryServer"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"metadata"</span>: &#123;&#125;,</span><br><span class="line">            <span class="attr">"lastUpdatedTimestamp"</span>: <span class="number">1522469074849</span>,</span><br><span class="line">            <span class="attr">"lastDirtyTimestamp"</span>: <span class="number">1522469044798</span>,</span><br><span class="line">            <span class="attr">"actionType"</span>: <span class="string">"ADDED"</span>,</span><br><span class="line">            <span class="attr">"asgName"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"overriddenStatus"</span>: <span class="string">"UNKNOWN"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"secure"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"uri"</span>: <span class="string">"http://localhost:3000"</span>,</span><br><span class="line">        <span class="attr">"serviceId"</span>: <span class="string">"NODE-SIDECAR"</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>  可以看到，该实例维护了 Node 应用的访问地址<code>&quot;uri&quot;: &quot;http://localhost:3000&quot;</code>，这也是接下来要说的：其他微服务可以通过 Sidecar 的服务名声明式调用 Node 服务</p>
+</li>
+</ul>
+<h2 id="声明式服务调用"><a href="#声明式服务调用" class="headerlink" title="声明式服务调用"></a>声明式服务调用</h2><blockquote>
+<p>以上，我们已经验证了 Eureka 可以通过 Sidecar 间接的管理基于 Node 的微服务。而在微服务体系中，还有非常重要的一点，就是服务间的调用。Spring Cloud 允许我们使用<strong>服务名</strong>进行服务间的调用，摒弃了原先的固定写死的 IP 地址，便于服务集群的横向拓展及维护。那么，Non-JVM 的微服务与其他服务间是否可以通过服务名互相调用呢，答案是可以的。</p>
+</blockquote>
+<h3 id="被调用"><a href="#被调用" class="headerlink" title="被调用"></a>被调用</h3><blockquote>
+<p>我们假设下面一个场景，book-service 提供了根据 bookId 返回对应 book 信息的接口，其中包含 authorId，而 author-service 需要根据该 authorId 获取到对应的作者信息。也就是 author-service 需要访问 book-service 的<code>/book/:bookId</code>接口拿到 authorId</p>
+</blockquote>
+<ul>
+<li><p>先在 book-service 中实现<code>/book/:bookId</code>接口，先固定返回 authorId 为 1</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">router.get(<span class="string">'/book/:bookId'</span>, <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  ctx.response.body = &#123;</span><br><span class="line">    bookId: ctx.params.bookId,</span><br><span class="line">    authorId: <span class="string">"1"</span>,</span><br><span class="line">    description: <span class="string">"This is a book."</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>而在 author-service 中声明式服务调用使用的是 Spring Cloud 整合的 <strong>Feign</strong>，Maven 依赖如下</p>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-feign<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>author-service 作为 book-service 服务的调用者，需要声明 Client 接口，代码如下</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FeignClient</span>(<span class="string">"node-sidecar"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BookServiceClient</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/book/&#123;bookId&#125;"</span>)</span><br><span class="line">    <span class="function">Book <span class="title">getBook</span><span class="params">(@PathVariable(<span class="string">"bookId"</span>)</span> String bookId)</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  注意到<code>@FeignClient</code>注解中调用的服务名填写的是 node-sidecar (大小写不敏感)，因为自始至终 Eureka 中注册的是 Sidecar 的信息，而 Sidecar 实例维护了 book-service 的地址信息，所以它可以将请求转发至 book-service</p>
+</li>
+<li><p>在 author-service 中提供<code>/book/{bookId}/author</code>接口</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AuthorController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> BookServiceClient bookServiceClient;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/book/&#123;bookId&#125;/author"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Author <span class="title">getAuthor</span><span class="params">(@PathVariable String bookId)</span></span>&#123;</span><br><span class="line">        Book book = bookServiceClient.getBook(bookId);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Author(book.getAuthorId(),<span class="string">"Jack"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>启动 author-service ，访问<code>http://localhost:9092/book/1/author</code></p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"authorId"</span>: <span class="string">"1"</span>,</span><br><span class="line">    <span class="attr">"authorName"</span>: <span class="string">"Jack"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="调用其他微服务"><a href="#调用其他微服务" class="headerlink" title="调用其他微服务"></a>调用其他微服务</h3><blockquote>
+<p>其他微服务可以通过 Sidecar 实例的服务名间接调用基于 Node 的 book-service。同样的，book-service 也可以通过服务名调用其他微服务，这要归功于<code>@EnableZuulProxy</code></p>
+</blockquote>
+<ul>
+<li>访问<code>http://localhost:9091/author-service/book/1/author</code>惊讶的发现，这和我们访问<code>http://localhost:9092/book/1/author</code>结果是一样的，这是由于 Sidecar 引入了 Zuul 网关，它可以获取 Eureka 上注册的服务的地址信息，从而进行路由跳转<br><img src="/2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/content/images/2018/03/A44BC958-7050-4530-8855-7F0042A6C32F.png" alt="A44BC958-7050-4530-8855-7F0042A6C32F"></li>
+</ul>
+<blockquote>
+<p><strong>Tips:</strong> Spring Cloud Zuul 通过与 Eureka 的整合，将自身注册为 Eureka 服务治理下的应用，同时从 Eureka 获取其他所有微服务的示实例信息。对于路由规则的维护，Zuul 默认会将服务名作为 ContextPath 的方式创建路由映射</p>
+</blockquote>
+<ul>
+<li><p>那接下来就简单了，先在 author-service 中添加一个接口返回作者描述</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/author/&#123;authorId&#125;"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getAuthorDescription</span><span class="params">(@PathVariable String authorId)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"This is an author description of "</span> + authorId;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>再在 book-service 中添加 book 的详细信息接口，需要去调用上述的作者描述接口</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> axios = <span class="built_in">require</span>(<span class="string">'axios'</span>)</span><br><span class="line"><span class="keyword">const</span> SIDECAR_URI = <span class="string">'http://localhost:9091'</span></span><br><span class="line"><span class="keyword">const</span> AUTHOR_SERVICE = <span class="string">'author-service'</span></span><br><span class="line"></span><br><span class="line">router.get(<span class="string">'/book/:bookId/detailed'</span>, <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">await</span> axios.get(<span class="string">`<span class="subst">$&#123;SIDECAR_URI&#125;</span>/<span class="subst">$&#123;AUTHOR_SERVICE&#125;</span>/author/1`</span>).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    ctx.response.body = &#123;</span><br><span class="line">      bookId: ctx.params.bookId,</span><br><span class="line">      authorId: <span class="string">'1'</span>,</span><br><span class="line">      authorDescription: res.data,</span><br><span class="line">      description: <span class="string">'This is a book.'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).catch(<span class="function"><span class="params">error</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'error'</span>, error))</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>  这里采用的 author-service 服务名去访问的该服务，而不是固定的 IP 地址，格式为<code>${SIDECAR_URI}/${AUTHOR_SERVICE}</code></p>
+</li>
+<li><p>访问<code>http://localhost:3000/book/1/detailed</code></p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"bookId"</span>: <span class="string">"1"</span>,</span><br><span class="line">    <span class="attr">"authorId"</span>: <span class="string">"1"</span>,</span><br><span class="line">    <span class="attr">"authorDescription"</span>: <span class="string">"This is an author description of 1"</span>,</span><br><span class="line">    <span class="attr">"description"</span>: <span class="string">"This is a book."</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Api-Gateway"><a href="#Api-Gateway" class="headerlink" title="Api-Gateway"></a>Api-Gateway</h2><blockquote>
+<p>后来我又加入了<code>api-gateway</code>去验证网关能否通过<code>node-sidecar</code>的服务名去将访问 API 的请求转发到<code>book-service</code>，事实证明确实是可以的</p>
+</blockquote>
+<ul>
+<li><p><code>api-gateway</code>的 Maven 依赖</p>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-eureka<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-zuul<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>需要在主类上加上<code>@EnableZuulProxy</code> Zuul 网关和<code>@EnableDiscoveryClient</code>注解</p>
+</li>
+<li><p>配置文件</p>
+<pre><code class="yml"><span class="attr">spring:</span>
+<span class="attr">  application:</span>
+<span class="attr">    name:</span> <span class="string">api-gateway</span>
+<span class="attr">server:</span>
+<span class="attr">  port:</span> <span class="number">5555</span>
+<span class="attr">  context-path:</span> <span class="string">/</span>
+<span class="attr">eureka:</span>
+<span class="attr">  instance:</span>
+<span class="attr">    hostname:</span> <span class="string">localhost</span>
+<span class="attr">  client:</span>
+<span class="attr">    serviceUrl:</span>
+<span class="attr">      defaultZone:</span> <span class="attr">http://${eureka.instance.hostname}:9090/eureka/</span>
+<span class="attr">zuul:</span>
+<span class="attr">  routes:</span>
+<span class="attr">    author-service:</span>
+<span class="attr">      path:</span> <span class="string">/author-service/**</span>
+<span class="attr">      serviceId:</span> <span class="string">author-service</span>
+<span class="attr">    book-service:</span>
+<span class="attr">      path:</span> <span class="string">/book-service/**</span>
+<span class="attr">      serviceId:</span> <span class="string">node-sidecar</span>
+</code></pre>
+</li>
+<li><p>访问<code>http://localhost:5555/book-service/book/1</code>，在接口层面，<code>node-sidecar</code>其实是不可见的，访问的还是<code>book-service</code>的 API<br><img src="/2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/content/images/2018/04/WX20180403-110158.png" alt="WX20180403-110158">  </p>
+</li>
+<li><p>由此，如果<code>book-service</code>需要横向拓展为一个集群，无非是多创建几个对应的 Sidecar 应用，它们的服务名只要是一样的，那就可以通过网关去实现负载均衡，甚至我第二个<code>book-service</code>用 Python 写也没有问题</p>
+</li>
+</ul>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
+<p>由此，基于 Non-JVM 语言的微服务，通过 Sidecar ，实现了服务向 Eureka 的注册与健康检查，并且可以通过服务名进行服务间调用。基本上可以说 Non-JVM 应用通过 Sidecar 完美的融入了 Spring Cloud 生态圈。</p>
+</blockquote>
+<ul>
+<li>附上一张架构图<br><img src="/2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/content/images/2018/03/sidecar.png" alt="sidecar"></li>
+</ul>
+<h2 id="Preferences"><a href="#Preferences" class="headerlink" title="Preferences"></a>Preferences</h2><ul>
+<li><a href="https://github.com/marshalYuan/spring-cloud-example/blob/master/docs/sidecar.md" target="_blank" rel="noopener">使用 Sidecar 将 Node.js 引入 Spring Cloud</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Node-js/" rel="tag"># Node.js</a>
+          
+            <a href="/tags/Spring-Cloud/" rel="tag"># Spring Cloud</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/16/Redis五种数据类型/" rel="next" title="Redis五种数据类型">
+                <i class="fa fa-chevron-left"></i> Redis五种数据类型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/04/ESLint -- 代码规约插件/" rel="prev" title="ESLint -- 代码规约插件">
+                ESLint -- 代码规约插件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+            
+              <p class="site-author-name" itemprop="name">s1mple</p>
+              <p class="site-description motion-element" itemprop="description">清风不问过路客，岁月不负有心人</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">56</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/s1mplecc" title="GitHub &rarr; https://github.com/s1mplecc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:s1mple951205@gmail.com" title="E-Mail &rarr; mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sidecar"><span class="nav-number">2.</span> <span class="nav-text">Sidecar</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#健康检查接口"><span class="nav-number">2.0.1.</span> <span class="nav-text">健康检查接口</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#服务注册"><span class="nav-number">3.</span> <span class="nav-text">服务注册</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#声明式服务调用"><span class="nav-number">4.</span> <span class="nav-text">声明式服务调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#被调用"><span class="nav-number">4.1.</span> <span class="nav-text">被调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用其他微服务"><span class="nav-number">4.2.</span> <span class="nav-text">调用其他微服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Api-Gateway"><span class="nav-number">5.</span> <span class="nav-text">Api-Gateway</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-number">6.</span> <span class="nav-text">Conclusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Preferences"><span class="nav-number">7.</span> <span class="nav-text">Preferences</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">s1mple</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://s1mple.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://s1mplecc.github.io/2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/';
+        this.page.identifier = '2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/';
+        this.page.title = 'Sidecar -- 将Node应用引入Spring Cloud';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://s1mple.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

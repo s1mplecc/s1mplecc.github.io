@@ -941,9 +941,1784 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/27/Java8 Optional 源码阅读/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/27/Java8 Optional 源码阅读/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">Java8 Optional 源码阅读</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-27 13:26:41" itemprop="dateCreated datePublished" datetime="2018-11-27T13:26:41+08:00">2018-11-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/27/Java8 Optional 源码阅读/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/27/Java8 Optional 源码阅读/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">8.7k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Optional 是 Java8 引入的一个重要特性，它是一个容器，里面装着一个可能为空可能不为空的对象。在它出现之前，为避免空指针异常我们可能会这样编码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getLastFour</span><span class="params">(Employee employee)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(employee != <span class="keyword">null</span>) &#123;</span><br><span class="line">        Address address = employee.getPrimaryAddress();</span><br><span class="line">        <span class="keyword">if</span>(address != <span class="keyword">null</span>) &#123;</span><br><span class="line">            ZipCode zip = address.getZipCode();</span><br><span class="line">            <span class="keyword">if</span>(zip != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> zip.getLastFour()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> FMLException(<span class="string">"Missing data"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>显然代码嵌套层次很深不够整洁。而用 Optional 将值包裹起来后，我们可以不再关注于值会不会为 <code>null</code>，会不会抛空指针，而将注意力集中在<strong>对数据的操作</strong>。并且 Optional 提供了 <code>map</code>、<code>flatMap</code>、<code>filter</code> 等方法让我们可以进行<strong>函数式风格</strong>的编码。那么上诉代码可以如此改写：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getLastFour</span><span class="params">(Optional&lt;Employee&gt; employee)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> employee.flatMap(employee -&gt; employee.getPrimaryAddress())</span><br><span class="line">                   .flatMap(address -&gt; address.getZipCode())</span><br><span class="line">                   .flatMap(zip -&gt; zip.getLastFour())</span><br><span class="line">                   .orElseThrow(() -&gt; <span class="keyword">new</span> FMLException(<span class="string">"Missing data"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更确切的说，Optional 是一个 <strong>Monad</strong> 容器。那什么是 Monad 呢？可以参考下面这段话：<code>Think of monads as an object that wraps a value and allows us to apply a set of transformations on that value and get it back out with all the transformations applied.</code> 简单的说，Monad 是一个包裹了一个值的容器（值可以是单个对象也可以是集合），允许我们对该值进行一系列的转换（函数操作）后返回给m我们期望的值。也就是说，Monad 封装了接收函数作为入参的一些方法（filter、map、flatMap 等）。</p>
+<p>那么现在，让我们从源码开始一步一步揭开它的神秘面纱。</p>
+<h2 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h2><p>Optional 使用私有化的构造函数和单例模式提供了<strong>值为空的单例</strong>，暴露的静态工厂方法为 <code>Optional.empty()</code>。该种设计感觉和 Java 设计模式中的<strong>空对象模式</strong>有异曲同工之妙，也是避免空指针的核心所在，后面我们将会提到。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Common instance for &#123;<span class="doctag">@code</span> empty()&#125;.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Optional&lt;?&gt; EMPTY = <span class="keyword">new</span> Optional&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Optional</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span>&lt;T&gt; Optional&lt;T&gt; <span class="title">empty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">    Optional&lt;T&gt; t = (Optional&lt;T&gt;) EMPTY;</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同时提供 <code>Optional.of(value)</code> 和 <code>Optional.ofNullable(value)</code> 两个工厂方法用于将 value 装入 Optional 容器中。注意 <code>of()</code> 方法在值为空时会抛出<strong>空指针异常</strong>。所以在允许入参值为空时使用 <code>ofNullable()</code>，它在值为空时调用 <code>Optional.empty()</code> 返回 <code>EMPTY</code> 单例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Optional&lt;T&gt; <span class="title">of</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Optional&lt;&gt;(value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> NullPointerException if value is null</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Optional</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = Objects.requireNonNull(value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Optional&lt;T&gt; <span class="title">ofNullable</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value == <span class="keyword">null</span> ? empty() : of(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="isPresent-和-get"><a href="#isPresent-和-get" class="headerlink" title="isPresent 和 get"></a>isPresent 和 get</h2><p>Optional 提供的 <code>isPresent()</code> 用于判断容器中的值是否为空，<code>get()</code> 方法用来获取容器中的值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isPresent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value != <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException(<span class="string">"No value present"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这两个方法通常会组合起来使用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Optional&lt;String&gt; optString = Optional.of(<span class="string">"aaa"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (optString.isPresent()) &#123;</span><br><span class="line">    System.out.println(optString.get());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但我想说的是，Optional 的初衷不是为了让我们仅仅使用这两个方法，事实上也应当尽量避免使用这两个方法，而是多使用 <code>ifPresent()</code> 和 <code>orElse()</code> 等方法代替。因为一旦你这样用，就和使用 <code>if(xxx != null){}</code> 没什么区别了。</p>
+<p>Optional 真正的核心就在于下面这些方法。</p>
+<h2 id="Optional-与函数接口"><a href="#Optional-与函数接口" class="headerlink" title="Optional 与函数接口"></a>Optional 与函数接口</h2><p>Optional 对于 Java8 提供的四种<strong>函数接口</strong>：<code>Function</code>、<code>Predicate</code>、<code>Consumer</code>、<code>Supplier</code> 都包装了相应的方法，以满足我们可以进行<strong>函数式</strong>风格的编码。本部分介绍这些方法的实现和使用，为了直观，部分代码使用匿名内部类的方式。</p>
+<p>关于函数接口（<strong>Functional Interfaces</strong>），我的上一篇博客 <a href="https://s1mple.xyz/java-functional-interfaces/" target="_blank" rel="noopener">Java8 函数接口</a>中有详细介绍。</p>
+<h3 id="ifPresent"><a href="#ifPresent" class="headerlink" title="ifPresent"></a>ifPresent</h3><p><code>ifPresent(consumer)</code> 方法接受一个<strong>消费者函数</strong> <code>Consumer</code> 入参，如果 Optional 容器中的值不为空，则调用 <code>Consumer</code> 的 <code>accept(value)</code> 方法消费容器中的值。若值为空则什么都不做。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ifPresent</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; consumer)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value != <span class="keyword">null</span>)</span><br><span class="line">        consumer.accept(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如下代码会打印容器中的值 “abc”</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Optional.of(<span class="string">"abc"</span>)</span><br><span class="line">        .ifPresent(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                System.out.println(s);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;); <span class="comment">// print abc</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).ifPresent(s -&gt; System.out.println(s));</span><br></pre></td></tr></table></figure>
+<h3 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h3><p><code>filter(predicate)</code> 方法接受一个<strong>谓词函数</strong> <code>Predicate</code> 入参，调用谓词的 <code>test(value)</code> 判断容器中的值是否满足谓词条件，<strong>满足则返回该容器本身</strong>，不满足或值为空时返回 <code>Optional.empty()</code> 单例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Optional&lt;T&gt; <span class="title">filter</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; predicate)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(predicate);</span><br><span class="line">    <span class="keyword">if</span> (!isPresent())</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> predicate.test(value) ? <span class="keyword">this</span> : empty();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以下代码分别展示了 <code>filter</code> 通过和不通过的情况：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Optional.of(<span class="string">"abc"</span>)</span><br><span class="line">        .filter(<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">test</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> s.length() &gt; <span class="number">5</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .ifPresent(System.out::println); <span class="comment">// do nothing</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">"abc"</span>)</span><br><span class="line">        .filter(s -&gt; s.length() == <span class="number">3</span>)</span><br><span class="line">        .ifPresent(System.out::println); <span class="comment">// print abc</span></span><br></pre></td></tr></table></figure>
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p><code>map(mapper)</code> 方法接受一个<strong>函数</strong> <code>Function</code> 入参，将容器中的值执行 <code>apply(value)</code> 操作后返回，返回的依然是 <code>Optional</code> 包裹的值，值的类型为 <code>apply()</code>  方法的返回类型，即 <code>map</code> 可能<strong>改变容器中值的类型</strong>。同样，值为空或 <code>apply()</code> 为空则返回 <code>empty()</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span>&lt;U&gt; Optional&lt;U&gt; <span class="title">map</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, ? extends U&gt; mapper)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(mapper);</span><br><span class="line">    <span class="keyword">if</span> (!isPresent())</span><br><span class="line">        <span class="keyword">return</span> empty();</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Optional.ofNullable(mapper.apply(value));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以下代码展示了 <code>map</code> 的用法，通过 <code>.map(s -&gt; s.length())</code> 返回类型已经从 <code>Optional&lt;String&gt;</code> 变为 <code>Optional&lt;Integer&gt;</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Optional.of(<span class="string">"abc"</span>)</span><br><span class="line">        .map(<span class="keyword">new</span> Function&lt;String, Integer&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Integer <span class="title">apply</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> s.length();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .ifPresent(System.out::println); <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).map(s -&gt; s.length()); <span class="comment">// Optional&lt;Integer&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap"></a>flatMap</h3><p><code>flatMap</code> 可以视作一种特殊的 <code>map</code> 操作，可以视为 map + flatten 操作。仔细观察，它的入参接受的 Function 函数的输出泛型为 <code>Optional&lt;U&gt;</code>，所以不需要像 <code>map</code> 方法中再用 <code>ofNullable()</code> 包装成 Optional 容器。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span>&lt;U&gt; Optional&lt;U&gt; <span class="title">flatMap</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, Optional&lt;U&gt;&gt; mapper)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(mapper);</span><br><span class="line">    <span class="keyword">if</span> (!isPresent())</span><br><span class="line">        <span class="keyword">return</span> empty();</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Objects.requireNonNull(mapper.apply(value));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>map</code> 与 <code>flatMap</code> 的区别如下。自定义的 <code>optionalLength(string)</code> 返回 <code>Optional&lt;Integer&gt;</code> 类型，所以 <code>map</code> 会返回 <code>Optional&lt;Optional&lt;Integer&gt;&gt;</code> 类型，只有调用 <code>flatMap</code> 才返回 <code>Optional&lt;Integer&gt;</code> 类型，相当于多做了一步 flatten 操作将其拍平为一维纬度。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> Optional&lt;Integer&gt; <span class="title">optionalLength</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> Optional.empty();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Optional.of(s.length());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).map(s -&gt; optionalLength(s)); <span class="comment">// Optional&lt;Optional&lt;Integer&gt;&gt;</span></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).flatMap(s -&gt; optionalLength(s)); <span class="comment">// Optional&lt;Integer&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="orElseGet-和-orElseThrow"><a href="#orElseGet-和-orElseThrow" class="headerlink" title="orElseGet 和 orElseThrow"></a>orElseGet 和 orElseThrow</h3><p><code>orElseGet(other)</code> 接受<strong>提供者函数</strong> <code>Supplier</code> 作为入参，当容器中的值为空时调用 <code>Supplier</code> 的 <code>get()</code> 方法获取值。<code>orElseThrow(supplier)</code> 则是值为空时抛出异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">orElseGet</span><span class="params">(Supplier&lt;? extends T&gt; other)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value != <span class="keyword">null</span> ? value : other.get();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> &lt;X extends Throwable&gt; <span class="function">T <span class="title">orElseThrow</span><span class="params">(Supplier&lt;? extends X&gt; exceptionSupplier)</span> <span class="keyword">throws</span> X </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> exceptionSupplier.get();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用时如下，若当前容器中的值为空则返回 <code>anotherString()</code> 的值。注意这一步已经跳出了 Optional 容器，返回的类型为容器中值的类型。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> String <span class="title">anotherString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"anotherString"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">"abc"</span>)</span><br><span class="line">        .filter(s -&gt; s.startsWith(<span class="string">"zzz"</span>)) <span class="comment">// Optional.empty()</span></span><br><span class="line">        .orElseGet(<span class="keyword">new</span> Supplier&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> String <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> anotherString();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;); <span class="comment">// "anotherString"</span></span><br><span class="line">        </span><br><span class="line">Optional.of(<span class="string">"abc"</span>)</span><br><span class="line">        .filter(s -&gt; s.length() == <span class="number">3</span>) <span class="comment">// Optional["abc"]</span></span><br><span class="line">        .orElseGet(() -&gt; anotherString()); <span class="comment">// "abc"</span></span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">"abc"</span>)</span><br><span class="line">        .filter(s -&gt; s.startsWith(<span class="string">"zzz"</span>)) <span class="comment">// Optional.empty()</span></span><br><span class="line">        .orElseThrow(() -&gt; <span class="keyword">new</span> RuntimeException(<span class="string">"no eligible values"</span>));</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Optional 提供的这些方法让我们不再关注于是否会抛出空指针异常，而是通过函数的自由组合专注于对数据的操作，比如如下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Optional.ofNullable(people)</span><br><span class="line">        .flatMap(people -&gt; people.getName())</span><br><span class="line">        .map(name -&gt; name.toUpperCase())</span><br><span class="line">        .filter(name -&gt; name.startsWith(<span class="string">"T"</span>))</span><br><span class="line">        .orElse(<span class="string">"TONY"</span>);</span><br></pre></td></tr></table></figure>
+<p>其实 Optional 的核心在于提供的 <code>empty()</code> 单例，使得如上代码整条链路不会在某一步中断抛出空指针异常，而是只要其中一步值为空后，<code>Optional.empty()</code> <strong>将在这条链路上继续向下传播</strong>，直到最后 <code>orElse()</code> 等方法指名默认处理并跳出容器。</p>
+<p>Optional 源码时有诸多值得我们借鉴取经的地方，诸如：</p>
+<ul>
+<li><p>Monad 容器的思想。容器接收一个值，进行函数操作后依然返回该容器，比如 <code>map</code>、<code>flatMap</code>、<code>filter</code>。这就使得我们可以随意组合以上方法，编写函数式风格的代码。类似的还有 Java 8 的 <code>Stream</code> 接口。</p>
+</li>
+<li><p>提供 <code>Optional.empty()</code> 类似空对象模式的空值单例。</p>
+</li>
+<li><p>严谨的编码，源码中有许多 <code>Objects.requireNonNull()</code> 对极端情况进行验证，比如 <code>flatMap</code> 方法中的 <code>Objects.requireNonNull(mapper);</code> 和 <code>Optional.ofNullable(mapper.apply(value));</code> 对于入参函数不为空和调用 <code>apply()</code> 后返回值不为空的验证。</p>
+</li>
+<li><p>API 的全面性，当容器中没有你期待的值时提供 <code>orElse</code>、<code>orElseGet</code>、<code>orElseThrow</code> 等其他处理手段，不管是设置默认值还是抛出异常，API 都考虑到了。</p>
+</li>
+</ul>
+<p>目前在一些 ORM 框架中也加入了 Optional 的支持，比如 Hibernate 从 5.2 版本后提供 <code>loadOptional()</code> 方法返回 <code>Optional&lt;T&gt;</code> 类型。有兴趣的可以自己去研究。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html" target="_blank" rel="noopener">Functors, Applicatives, And Monads In Pictures</a></li>
+<li><a href="https://medium.com/coding-with-clarity/understanding-the-optional-monad-in-java-8-e3000d85ffd2" target="_blank" rel="noopener">Understanding the Optional Monad in Java 8</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/16/Java8 函数接口/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/16/Java8 函数接口/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">Java8 函数接口</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-16 12:33:17" itemprop="dateCreated datePublished" datetime="2018-11-16T12:33:17+08:00">2018-11-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/16/Java8 函数接口/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/16/Java8 函数接口/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.8k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="函数接口"><a href="#函数接口" class="headerlink" title="函数接口"></a>函数接口</h2><p>在函数式编程中，<strong>纯函数</strong>的定义是：</p>
+<ol>
+<li>此函数在相同的输入值时，需产生相同的输出。函数的输出和输入值以外的其他隐藏信息或状态无关，也和由 I/O 设备产生的外部输出无关。</li>
+<li>该函数不能有语义上可观察的函数副作用，诸如“触发事件”，使输出设备输出，或更改输出值以外物件的内容等。</li>
+</ol>
+<p>为使 Java 支持函数式编程，<strong>函数接口</strong>（<strong>Functional Interfaces</strong>）正是 Java 8 引入的一个核心概念。函数接口要求接口中只能定义个<strong>唯一一个抽象方法</strong>。同时，引入一个新的注解： <code>@FunctionalInterface</code>，作为函数接口的标记。</p>
+<p>Java 8 提供了四大类函数接口：<strong>谓词</strong> <code>Predicate</code>，<strong>函数</strong> <code>Function</code>，<strong>提供者</strong> <code>Supplier</code>，<strong>消费者</strong> <code>Consumer</code>。以及衍生的函数接口，比如 <code>BiFunction&lt;T, U, R&gt;</code> 支持两个入参的函数等等，它们都定义在 <code>java.util.function</code> 包下。</p>
+<h3 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h3><p>函数式接口的重要属性是：<strong>我们能够使用 Lambda 实例化它们</strong>。Lambda 表达式的引入给开发者带来了不少优点：在 Java 8 之前，匿名内部类，监听器和事件处理器的使用都显得很冗长，代码可读性很差，Lambda 表达式的应用则使代码变得更加紧凑，可读性增强；Lambda 表达式使<strong>并行操作大集合</strong>变得很方便，可以充分发挥多核 CPU 的优势，更易于为多核处理器编写代码。</p>
+<p>Lambda 表达式由三个部分组成：第一部分为一个括号内用逗号分隔的函数入参；第二部分为箭头符号 <code>-&gt;</code>；第三部分为方法体，可以是表达式和代码块。语法如下：</p>
+<ul>
+<li><p><code>(parameters) ‑&gt; expression</code> 方法体为表达式，该表达式的值作为返回值返回。</p>
+</li>
+<li><p><code>(parameters) ‑&gt; { statements; }</code> 方法体为代码块，必须用 <code>{}</code> 包裹起来，若该函数需要返回值则需要 <code>return</code>。</p>
+</li>
+</ul>
+<p>用 Lambda 表达式替换匿名内部类的写法如下。再进一步，可以使用<strong>方法引用</strong>（<strong>Method Reference</strong>）简写</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Anonymous inner class</span></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).map(<span class="keyword">new</span> Function&lt;String, Integer&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">apply</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> s.length();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).map(s -&gt; s.length());</span><br><span class="line"></span><br><span class="line"><span class="comment">// Method reference</span></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).map(String::length);</span><br></pre></td></tr></table></figure>
+<p>使用 <code>parallelStream()</code> 和 Lambda 表达式并行操作集合，默认线程数为 CPU 核数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">urls.parallelStream()</span><br><span class="line">        .filter(url -&gt; url.endsWith(<span class="string">".html"</span>))</span><br><span class="line">        .map(url -&gt; htmlParser.contentFrom(url))</span><br><span class="line">        .reduce((x, y) -&gt; x + y)</span><br><span class="line">        .orElse(<span class="string">""</span>);</span><br></pre></td></tr></table></figure></p>
+<h3 id="谓词-Predicate"><a href="#谓词-Predicate" class="headerlink" title="谓词 Predicate"></a>谓词 Predicate</h3><p>在计算机语言的环境下，谓词是指条件表达式的求值返回真或假的过程。在 Java 中就是进行逻辑判断后返回值为 <code>boolean</code> 的函数，对应函数接口为 <code>Predicate&lt;T&gt;</code>。在针对集合进行筛选时，通常会使用谓词对集合元素进行条件判断。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Predicate</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">test</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">and</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; other)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; test(t) &amp;&amp; other.test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">negate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; !test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">or</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; other)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; test(t) || other.test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function">Predicate&lt;T&gt; <span class="title">isEqual</span><span class="params">(Object targetRef)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">null</span> == targetRef)</span><br><span class="line">                ? Objects::isNull</span><br><span class="line">                : object -&gt; targetRef.equals(object);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Predicate&lt;T&gt;</code> 接口定义的唯一抽象方法 <code>test(T t)</code> 用以验证输入参数是否满足谓词条件。同时，它还提供了默认方法用以支持<strong>组合的与、或、非逻辑运算</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Predicate&lt;Apple&gt; p1 = p ‑&gt; p.getColor() == Color.RED;</span><br><span class="line">Predicate&lt;Apple&gt; p2 = p ‑&gt; p.getSize() == Size.Medium;</span><br><span class="line"></span><br><span class="line">apples.stream().filter(p1.and(p2));</span><br></pre></td></tr></table></figure>
+<h3 id="函数-Function"><a href="#函数-Function" class="headerlink" title="函数 Function"></a>函数 Function</h3><p><code>Function&lt;T, R&gt;</code> 接口代表一个函数，准确地说，代表了具有输入输出的函数，这也是最常见的函数定义。具有两个入参的函数对应接口为 <code>BiFunction&lt;T, U, R&gt;</code> 。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;T&gt; the type of the input to the function</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;R&gt; the type of the result of the function</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Function</span>&lt;<span class="title">T</span>, <span class="title">R</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">R <span class="title">apply</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;V&gt; <span class="function">Function&lt;V, R&gt; <span class="title">compose</span><span class="params">(Function&lt;? <span class="keyword">super</span> V, ? extends T&gt; before)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(before);</span><br><span class="line">        <span class="keyword">return</span> (V v) -&gt; apply(before.apply(v));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;V&gt; <span class="function">Function&lt;T, V&gt; <span class="title">andThen</span><span class="params">(Function&lt;? <span class="keyword">super</span> R, ? extends V&gt; after)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        <span class="keyword">return</span> (T t) -&gt; after.apply(apply(t));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function">Function&lt;T, T&gt; <span class="title">identity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> t -&gt; t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>函数也可以进行组合，组合后返回的结果也是一个函数，这就是所谓的<strong>组合子</strong>。组合子方法分别为：</p>
+<ul>
+<li><code>compose(before)</code>，组合前一个函数，相当于 <code>V -&gt; T -&gt; R</code> </li>
+<li><code>andThen(after)</code>，组合后一个函数，相当于 <code>T -&gt; R -&gt; V</code></li>
+</ul>
+<h3 id="提供者-Supplier"><a href="#提供者-Supplier" class="headerlink" title="提供者 Supplier"></a>提供者 Supplier</h3><p>当一个函数仅仅用于返回结果时，我们可以将这种函数称为<strong>提供者</strong>，接口定义为 <code>Supplier&lt;T&gt;</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Supplier</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function">T <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>只提供一个 <code>get()</code> 方法，我们可以将这种提供者代表的函数看做是一种 Query 操作。</p>
+<h3 id="消费者-Consumer"><a href="#消费者-Consumer" class="headerlink" title="消费者 Consumer"></a>消费者 Consumer</h3><p>与提供者对应的接口则被称之为<strong>消费者</strong>，用以接收一个输入，但却并不关心返回结果，即返回值为 <code>void</code>。消费者的对应接口为 <code>Consumer&lt;T&gt;</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Represents an operation that accepts a single input argument and returns no</span></span><br><span class="line"><span class="comment"> * result. Unlike most other functional interfaces, &#123;<span class="doctag">@code</span> Consumer&#125; is expected</span></span><br><span class="line"><span class="comment"> * to operate via side-effects.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Consumer</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">accept</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Consumer&lt;T&gt; <span class="title">andThen</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; after)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        <span class="keyword">return</span> (T t) -&gt; &#123; accept(t); after.accept(t); &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不像其他函数接口，<code>Consumer</code> 通常是<strong>有副作用的</strong>。这也不难理解，该函数只有输入没有输出，那数据通常是被外部系统消费了。同时 <code>Consumer</code> 支持 <code>andThen(after)</code> 组合</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Consumer&lt;String&gt; c1 = s -&gt; System.out.println(s);</span><br><span class="line">Consumer&lt;String&gt; c2 = s -&gt; storeToDB(s);</span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).ifPresent(c1.andThen(c2));</span><br></pre></td></tr></table></figure>
+<p>这种消费者代表的函数相当于是一个 Command 操作。软件设计的一条原则就是 <strong>CQS</strong>（Command-Query Separation）命令-查询分离原则，即保证一个方法体内只有 Query 和 Command 的一种，就是因为查询无副作用而命令可能会改变数据状态。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/12/单例模式/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/12/单例模式/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">单例模式</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-12 13:42:03" itemprop="dateCreated datePublished" datetime="2018-11-12T13:42:03+08:00">2018-11-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/12/单例模式/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/12/单例模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">3.1k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><p>单例模式为GOF设计模式中的一种，当我们创建的对象需要昂贵的资源，且该对象又被频繁使用，同时，这个对象的状态是共享的，为了避免资源的浪费以及加载资源的时间，我们往往会引入单例模式。因此，要实现单例模式，其核心就是要<strong>在已有该类的实例前提下，阻止其他开发人员再创建类的新实例</strong>。</p>
+<p>在Java语言中，通常提供了如下几种单例模式的实现方式。</p>
+<h4 id="懒汉模式"><a href="#懒汉模式" class="headerlink" title="懒汉模式"></a>懒汉模式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingletonDemo instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过提供一个静态的对象 <code>instance</code>，利用 <code>private</code> 权限的构造方法和 <code>getInstance()</code> 方法来给予访问者一个单例。缺点是，没有考虑到线程安全，可能存在多个访问者同时访问，并同时构造了多个对象的问题。之所以叫做懒汉模式，主要是因为此种方法可以非常明显的 <strong>lazy loading</strong>。针对懒汉模式<strong>线程不安全</strong>的问题，我们自然想到了，在 <code>getInstance()</code> 方法前加锁，于是就有了第二种实现。</p>
+<h4 id="线程安全的懒汉模式"><a href="#线程安全的懒汉模式" class="headerlink" title="线程安全的懒汉模式"></a>线程安全的懒汉模式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingletonDemo instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然而并发其实是一种特殊情况，大多时候这个锁占用的额外资源都浪费了，这种打补丁方式写出来的结构效率很低。</p>
+<h4 id="饿汉模式"><a href="#饿汉模式" class="headerlink" title="饿汉模式"></a>饿汉模式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingletonDemo instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singleton has loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hello"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于 <code>instance</code> 成员变量使用 <code>static</code> 修饰，在 JVM 首次加载该类时单例对象 <code>instance</code> 会被创建并<strong>常驻内存</strong>，所以是线程安全的。但显然，这种方法没有起到 lazy loading 的效果。举个例子，也许你只想调用 <code>SingletonDemo.printHello()</code> 方法，但同时打印了 ”Singleton has loaded“，这可能是你不想见到的。</p>
+<p>所以我们引入静态类内部加载的方式，也算是单例模式较为完善的解决方案。</p>
+<h4 id="静态类内部加载"><a href="#静态类内部加载" class="headerlink" title="静态类内部加载"></a>静态类内部加载</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingletonHolder.instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> SingletonDemo instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用<strong>私有内部类</strong>的好处是，静态内部类不会在单例加载时就加载，而是在调用 <code>getInstance()</code> 方法时才进行加载。且单例的创建是在 SingletonHolder 被 JVM 加载时完成，故而也是线程安全的。因此该方法兼备了以上两种实现的优点。</p>
+<h4 id="双重校验锁法"><a href="#双重校验锁法" class="headerlink" title="双重校验锁法"></a>双重校验锁法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> SingletonDemo instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singletonhasloaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (SingletonDemo.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来我解释一下在并发时，双重校验锁法会有怎样的情景：</p>
+<ul>
+<li>STEP 1. 线程A访问 <code>getInstance()</code> 方法，因为单例还没有实例化，所以进入了锁定块。</li>
+<li>STEP 2. 线程B访问 <code>getInstance()</code> 方法，因为单例还没有实例化，得以访问接下来代码块，而接下来代码块已经被线程1锁定。</li>
+<li>STEP 3. 线程A进入下一判断，因为单例还没有实例化，所以进行单例实例化，成功实例化后退出代码块，解除锁定。</li>
+<li>STEP 4. 线程B进入接下来代码块，锁定线程，进入下一判断，因为已经实例化，退出代码块，解除锁定。</li>
+<li>STEP 5. 线程A初始化并获取到了单例实例并返回，线程B获取了在线程A中初始化的单例。</li>
+</ul>
+<p>理论上双重校验锁法是线程安全的，并且，这种方法实现了lazy loading。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/05/Java 网络爬虫/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/05/Java 网络爬虫/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">Java 网络爬虫</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-05 13:15:21" itemprop="dateCreated datePublished" datetime="2018-11-05T13:15:21+08:00">2018-11-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/05/Java 网络爬虫/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/05/Java 网络爬虫/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.9k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><p>很早之前写过一个 Java 的爬虫程序，可以爬取笔趣阁上的小说。最近突然有爬点书看看的想法，遂翻到原先的代码，简直不忍直视。好在现在编码能力有所提升，而且团队内一直强调重构的重要性，所以重新拾起这个爬虫程序，好好重构一番。代码已上传至 <a href="https://github.com/s1mplecc/web-crawler" target="_blank" rel="noopener">GitHub</a></p>
+<p>本文主要讲讲：</p>
+<ol>
+<li>使用 <strong>Gradle</strong> 构建项目时遇到的问题以及解决办法</li>
+<li>使用 JDK8 的特性如何简便地进行<strong>并行开发</strong></li>
+<li>写爬虫时的思路</li>
+</ol>
+<h2 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h2><p>不得不说，Gradle 让我眼前一亮，相比 Maven，它抛弃了冗余繁琐的 XML 格式，使用语法精炼的 <strong>Groovy</strong>，以下就是我的项目构建文件 <strong>build.gradle</strong> 的全部内容，相当于 Maven 的 pom.xml，清爽简短但重要的信息一点不少。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">'java'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">group <span class="string">'xyz.s1mple.crawler'</span></span><br><span class="line">version <span class="string">'1.0-SNAPSHOT'</span></span><br><span class="line"></span><br><span class="line">sourceCompatibility = <span class="number">1.8</span></span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenLocal()</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    testImplementation <span class="string">'org.junit.jupiter:junit-jupiter-api:5.3.1'</span></span><br><span class="line">    testRuntimeOnly <span class="string">'org.junit.jupiter:junit-jupiter-engine:5.3.1'</span></span><br><span class="line">    testCompile <span class="string">'org.assertj:assertj-core:3.11.1'</span></span><br><span class="line">    compile <span class="string">'org.slf4j:slf4j-api:1.7.25'</span></span><br><span class="line">    runtime <span class="string">'org.slf4j:slf4j-simple:1.7.25'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">test &#123;</span><br><span class="line">    useJUnitPlatform()</span><br><span class="line"></span><br><span class="line">    testLogging &#123;</span><br><span class="line">        events <span class="string">"passed"</span>, <span class="string">"skipped"</span>, <span class="string">"failed"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的配置文件中我们可以发现，Gradle 沿用了 Maven 的中央仓库，同时还可以设置 Maven 本地仓库，同时 Gradle 项目生成的构件也可以发布到 Maven 仓库供他人使用，这一点也是支撑 Gradle 快速发展的重要一点。</p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>关于安装，我使用的 IDE 是 IntelliJ IDEA，使用内置的 Gradle 也可，但最好是下载安装全局的 Gradle，这样可以随时随地跑 Gradle 命令。Mac 下安装十分方便。其他系统如何安装可以在 <a href="https://gradle.org/install/#with-a-package-manager" target="_blank" rel="noopener">Gradle官网</a> 上找到。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install gradle</span><br></pre></td></tr></table></figure>
+<h4 id="JUnit5"><a href="#JUnit5" class="headerlink" title="JUnit5"></a>JUnit5</h4><p>在使用 Gradle 的时候我遇到了一个问题：明明添加了 JUnit5 也就是 jupiter 的依赖，为什么使用 <code>gradle test</code> 命令没用任何输出。这个问题在我将依赖换回 Junit4 时得到解决，也就是说果然是配置的问题。在 build.gradle 中添加如下配置即可。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    testImplementation <span class="string">'org.junit.jupiter:junit-jupiter-api:5.3.1'</span></span><br><span class="line">    testRuntimeOnly <span class="string">'org.junit.jupiter:junit-jupiter-engine:5.3.1'</span></span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">test &#123;</span><br><span class="line">    useJUnitPlatform()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>还可以添加 <code>testLogging</code>。再运行命令有如下输出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  web-crawler git:(master) ✗ gradle clean test</span><br><span class="line"></span><br><span class="line">&gt; Task :test</span><br><span class="line"></span><br><span class="line">xyz.s1mple.crawler.HtmlParserTest &gt; should_parse_novel_content_from_html() PASSED</span><br><span class="line"></span><br><span class="line">xyz.s1mple.crawler.HtmlParserTest &gt; should_parse_novel_title_from_html() PASSED</span><br><span class="line"></span><br><span class="line">xyz.s1mple.crawler.HtmlParserTest &gt; should_parse_chapter_uris_from_html() PASSED</span><br><span class="line"></span><br><span class="line">BUILD SUCCESSFUL in 1s</span><br></pre></td></tr></table></figure></p>
+<h2 id="并行"><a href="#并行" class="headerlink" title="并行"></a>并行</h2><p>Java 多线程编程是越来越容易了，从最早的 Thread，Runnable 到 JDK5 的ExecutorService 到 JDK7 的 ForkJoin 框架。现在 JDK8 又提供了<strong>并行流</strong>（<strong>parallelStream</strong>）来简化这一过程。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; cost = Lists.newArrayList(<span class="number">1</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">34</span>);</span><br><span class="line"><span class="keyword">long</span> total = cost.parallelStream()</span><br><span class="line">                    .map(x -&gt; x += <span class="number">1</span>)</span><br><span class="line">                    .reduce((y, z) -&gt; y + z)</span><br><span class="line">                    .get();</span><br></pre></td></tr></table></figure>
+<p>在 parallelStream 中默认线程池大小是机器的 CPU 核数。<strong>默认情况下，所有的 Fork/Join 任务都会共用同一个线程池，线程的数量等于CPU的核数</strong>。所以在未手动设置线程池数量的情况下我的电脑会启动 4 个线程，而爬虫的瓶颈在于网络 I/O 不在 CPU，所以果断自定义线程数。效果也十分显著，爬取两千多章的时间从原先的两分多钟变为 20s。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> ForkJoinPool pool = <span class="keyword">new</span> ForkJoinPool(PARALLELISM_LEVEL);</span><br><span class="line">pool.submit(() -&gt; urls.parallelStream()</span><br><span class="line">        .map(url -&gt; htmlParser.parseContent(urlReader.read(url)))</span><br><span class="line">        .reduce((x, y) -&gt; x + y)</span><br><span class="line">        .orElse(<span class="string">""</span>))</span><br><span class="line">        .get();</span><br></pre></td></tr></table></figure>
+<p>需要注意两点：</p>
+<ol>
+<li><code>pool.submit()</code> 该方法为<strong>懒加载</strong>，如果<strong>不调用它的结果则实际不会执行</strong>，最后 <code>.get()</code> 获取执行结果。</li>
+<li><code>.reduce((x, y) -&gt; x + y)</code> 这一步貌似会有很多字符串拼接影响效率，实则底层会使用 <code>StringBuilder</code> 或 <code>StringBuffer</code> 帮你做了性能优化</li>
+</ol>
+<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>关于并行数对爬虫程序的性能影响，实际测试时受网络波动的影响，测试数据可能波动较大，连接每个 Url 的耗时在 50ms ～ 1000ms 波动区间。为减少网络不稳定带来的影响，以下测试分为 100 章、1000 章两个数量级，进行不同并行等级的循环测试，测试 3 轮，时间单位为秒。</p>
+<p><strong>数量级：103 章</strong><br>| PARALLELISM_LEVEL | 1 | 4 | 16 | 64 | 256 |<br>|:–:|:–:|:–:|:–:|:–:|:–:|<br>| 第1次测试 |9|5|2|2|2|<br>| 第2次测试 |8|4|2|2|2|<br>| 第3次测试 |9|3|2|2|3|</p>
+<p><strong>数量级：1180 章</strong><br>| PARALLELISM_LEVEL | 4 | 8 | 16 | 32 | 64 | 128 | 256 |<br>|:–:|:–:|:–:|:–:|:–:|:–:|:–:|:–:|<br>| 第1次测试 |28|16|10|13|12|12|11|<br>| 第2次测试 |23|16|14|11|12|12|14|<br>| 第3次测试 |25|29|14|13|29|20|20|</p>
+<h2 id="爬虫思路"><a href="#爬虫思路" class="headerlink" title="爬虫思路"></a>爬虫思路</h2><p>最后说一说自己写这个爬虫时的思路，也算是解决问题的入手点。主要的解析类为 HtmlParser ，负责解析 Html。其实这个程序就是通过 Html 源码解析小说名 Title、小说所含所有章节的 Url、小说每一章的内容，最后将内容 reduce 写入文件。</p>
+<h4 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h4><p>解析小说章节目录网址 Html 源码的 <code>&lt;h1&gt;...&lt;/h1&gt;</code> 标签中的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 章节目录网址</span><br><span class="line">http://www.biquge.cm/9/9422/</span><br><span class="line"></span><br><span class="line">// html</span><br><span class="line">&lt;h1&gt;大道朝天&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">// after parse</span><br><span class="line">大道朝天</span><br></pre></td></tr></table></figure>
+<h4 id="Chapter-URIs"><a href="#Chapter-URIs" class="headerlink" title="Chapter URIs"></a>Chapter URIs</h4><p>解析小说章节目录网址 Html 源码的 <code>&lt;div id=&quot;list&quot;&gt;...&lt;/div&gt;</code> 中包含的 <code>&lt;a href=&quot;...&quot;&gt;</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 章节目录网址</span><br><span class="line">http://www.biquge.cm/9/9422/</span><br><span class="line"></span><br><span class="line">// html</span><br><span class="line">&lt;div id=&quot;list&quot;&gt;</span><br><span class="line">&lt;dl&gt;&lt;dd&gt;&lt;a href=&quot;/9/9422/6927857.html&quot;&gt;第一章 三千里禁&lt;/a&gt;&lt;/dd&gt;</span><br><span class="line">&lt;dd&gt;&lt;a href=&quot;/9/9422/6927858.html&quot;&gt;第二章 斩天一剑&lt;/a&gt;&lt;/dd&gt;</span><br><span class="line">&lt;dd&gt;&lt;a href=&quot;/9/9422/6927859.html&quot;&gt;第三章 再次踏进那条河的白衣少年&lt;/a&gt;&lt;/dd&gt;</span><br><span class="line">...</span><br><span class="line">&lt;/dl&gt;&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">// after parse</span><br><span class="line">[&quot;/9/9422/6927859.html&quot;, &quot;/9/9422/6927858.html&quot;, &quot;/9/9422/6927857.html&quot; ...]</span><br></pre></td></tr></table></figure>
+<h4 id="Content"><a href="#Content" class="headerlink" title="Content"></a>Content</h4><p>根据 Chapter URIs 解析每一章的内容，最后拼接在一起写入文件。根据 <code>&lt;div id=&quot;content&quot;&gt;...&lt;/div&gt;</code> 解析，<code>&amp;nbsp;</code> 替换为空格，<code>&lt;br /&gt;</code> 替换为换行符</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 某一章的网址</span><br><span class="line">http://www.biquge.cm/9/9422/6927857.html</span><br><span class="line"></span><br><span class="line">// html</span><br><span class="line">&lt;div id=&quot;content&quot;&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;朝天大陆南方，一片青山绵延数千里，数百秀峰终年隐在云雾中。&lt;br /&gt;</span><br><span class="line">&lt;br /&gt;</span><br><span class="line">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;天下第一修行大派青山宗便在此间，普通人极难一睹真容。&lt;br /&gt;</span><br><span class="line">&lt;br /&gt;</span><br><span class="line">...</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">// after parse</span><br><span class="line"></span><br><span class="line">    朝天大陆南方，一片青山绵延数千里，数百秀峰终年隐在云雾中。</span><br><span class="line">    </span><br><span class="line">    天下第一修行大派青山宗便在此间，普通人极难一睹真容。</span><br></pre></td></tr></table></figure>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="http://www.infoq.com/cn/news/2011/04/xxb-maven-6-gradle" target="_blank" rel="noopener">Gradle，构建工具的未来？</a></li>
+<li><a href="https://medium.com/@jonashavers/how-to-use-junit-5-with-gradle-fb7c5c3286cc" target="_blank" rel="noopener">How to use JUnit 5 with Gradle</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/10/11/HTTPS & SSH 协议/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/10/11/HTTPS & SSH 协议/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">HTTPS & SSH 协议</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-11 03:14:36" itemprop="dateCreated datePublished" datetime="2018-10-11T03:14:36+08:00">2018-10-11</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/11/HTTPS & SSH 协议/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/10/11/HTTPS & SSH 协议/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">1.3k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h2><blockquote>
+<p><strong>Https(Http over Secure Socket Layer)</strong> 是基于 ssl 加密的更安全的 http 协议，默认端口 443，在普通的 HTTP 与 TCP 层之间多了一个安全加密的夹层，称之为 <strong>SSL（Secure Socket Layer）</strong>，用于加密基于HTTP的网页内容，不容易篡改、不容易劫持、网页内容保密，目前广泛用于网上银行等行业。</p>
+</blockquote>
+<h3 id="SSL握手协议"><a href="#SSL握手协议" class="headerlink" title="SSL握手协议"></a>SSL握手协议</h3><p><img src="/2018/10/11/HTTPS & SSH 协议/content/images/2017/11/78ab162bf20b438ca377faa87f4ea2a2_th.jpeg" alt="78ab162bf20b438ca377faa87f4ea2a2_th"></p>
+<blockquote>
+<p>① 客户端的浏览器向服务器传送客户端SSL协议的版本号，加密算法的种类，产生的随机数，以及其他通讯所需要信息。<br>② 服务器向客户端传送SSL协议的版本号，加密算法的种类，随机数以及其他相关信息，同时<strong>服务器还将向客户端传送自己的证书</strong>。<br>③ 客户端利用服务器传过来的信息<strong>验证服务器的合法性</strong>，服务器的合法性包括：证书是否过期，发行服务器证书的CA 是否可靠，发行者证书的公钥能否正确解开服务器证书的“发行者的数字签名”，服务器证书上的域名是否和服务器的实际域名相匹配。<br>④ 客户端随机产生一个用于后面通讯的“<strong>对称密钥</strong>”，然后用服务器的公钥（服务器的公钥从步骤②中的服务器的证书中获得）对其加密，然后传给服务器。<br>⑤ <strong>服务器用私钥解密</strong>“对称密钥”(此处的公钥和私钥是相互关联的，<strong>公钥加密的数据只能用私钥解密</strong>，<strong>私钥只在服务器端保留</strong>。详细请参看： <a href="http://zh.wikipedia.org/wiki/RSA%E7%AE%97%E6%B3%95)，然后用其作为服务器和客户端的“**通话密码**”加解密通讯。同时在SSL通讯过程中还要完成数据通讯的完整性，防止数据通讯中的任何变化。" target="_blank" rel="noopener">http://zh.wikipedia.org/wiki/RSA%E7%AE%97%E6%B3%95)，然后用其作为服务器和客户端的“**通话密码**”加解密通讯。同时在SSL通讯过程中还要完成数据通讯的完整性，防止数据通讯中的任何变化。</a><br>⑥ SSL的握手部分结束，SSL安全通道的数据通讯开始，客户和服务器开始<strong>使用相同的对称密钥进行数据通讯</strong>，同时进行通讯完整性的检验。</p>
+</blockquote>
+<h2 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h2><blockquote>
+<p><strong>SSH</strong>(Secure Shell)协议，专为远程登录会话提供安全性的协议，传输的数据都进行了加密。SSH提供两种级别的安全验证，第一种是<strong>基于口令</strong>的安全验证。第二种是<strong>基于密匙</strong>的安全验证，较之第一种不需要传输口令，但速度稍慢一些。</p>
+</blockquote>
+<h3 id="基于密钥的安全验证"><a href="#基于密钥的安全验证" class="headerlink" title="基于密钥的安全验证"></a>基于密钥的安全验证</h3><blockquote>
+<p>客户端创建<strong>一对密钥</strong>，公钥存放在服务器上，当你想通过ssh远程连接服务器时进行<strong>公钥比对</strong>。如果一致，服务器就用公用密匙加密“质询”(challenge)并把它发送给客户端。客户端收到“质询”之后就可以用你的<strong>私钥解密</strong>再把它发送给服务器。<br>这个配对密钥类似<strong>Https</strong>协议中的对称密钥。是基于<a href="https://zh.wikipedia.org/wiki/RSA%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">RSA算法</a>的。</p>
+</blockquote>
+<ul>
+<li><p>在本地执行<code>ssh-keygen</code>生成配对密钥，在你的<code>~/.ssh</code>目录下会生成两个文件，<code>id_rsa</code>私钥，<code>id_rsa.pub</code>公钥。</p>
+</li>
+<li><p>将公钥拷贝到服务器的<code>~/.ssh/authorized_keys</code>文件中</p>
+</li>
+<li><p>给<code>authorized_keys</code>增加不可修改、删除的权限</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chattr +i authorized_keysw</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="http://jingyan.baidu.com/article/e4d08ffdb61f040fd3f60d48.html" target="_blank" rel="noopener">Https协议原理</a></li>
+<li><a href="http://news.ifeng.com/a/20170904/51862764_0.shtml" target="_blank" rel="noopener">Web 加速，协议先行！</a></li>
+<li><a href="http://www.188cf.net/licai/87869x.shtml" target="_blank" rel="noopener">传输层安全协议抓包分析之SSL/TLS</a></li>
+<li><a href="https://www.cnblogs.com/yyds/p/6992125.html" target="_blank" rel="noopener">网络数据传输安全及SSH与HTTPS工作原理</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/10/10/API设计心得/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/10/10/API设计心得/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">API设计心得</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-10 06:19:11" itemprop="dateCreated datePublished" datetime="2018-10-10T06:19:11+08:00">2018-10-10</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/10/API设计心得/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/10/10/API设计心得/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.1k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>最近我在项目中单独编码了加载配置的模块，并提供给团队里的其他开发者使用。在设计 API 时有些心得体会，遂有了此博客记录下来。</p>
+</blockquote>
+<h2 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h2><p>截取了部分项目结构，大致如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config module</span></span><br><span class="line"></span><br><span class="line">├── ConfigFactory.java</span><br><span class="line">├── YamlConverter.java</span><br><span class="line">└── core</span><br><span class="line">    ├── AbstractConfig.java</span><br><span class="line">    ├── Config.java</span><br><span class="line">    ├── ConfigFile.java</span><br><span class="line">    ├── ConfigLoader.java</span><br><span class="line">    ├── ...</span><br><span class="line">    └── exceptions</span><br><span class="line">        ├── ConfigFileNotFoundException.java</span><br><span class="line">        ├── UnsupportedFileTypeException.java</span><br><span class="line">        └── ...</span><br></pre></td></tr></table></figure>
+<p><code>ConfigFactory</code> 和 <code>YamlConverter</code> 都是对外提供 API 的类，故放在最外层目录下，另外有个 <strong>core</strong> 的文件夹，存放间接使用到的类。类似于操作系统和用户 UI 界面，内核 core 封装你的实现，不暴露给用户，可以非常复杂。外层的 API 提供给用户使用，应该尽量满足<strong>不变</strong>的原则，即<strong>隔离变化</strong>，为了避免升级后用户需要改动代码。</p>
+<h2 id="易用性"><a href="#易用性" class="headerlink" title="易用性"></a>易用性</h2><p>API 应该保持简单易用，尽量可以<strong>望文知义</strong>。由于现在的 IDE 都有智能感知，会自动提示可调用的方法，一个设计优秀的 API 应该<strong>方法名即能显示用途</strong>，再不济，用户跟进方法阅读注释或者源码也应知道如何使用。<strong>能避免用户必须查阅文档才知道如何使用的应当尽量避免</strong>。</p>
+<p>提高易用性可以从如下几各方面：</p>
+<h4 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a><strong>静态方法</strong></h4><p>静态方法不需要实例化，一些工具类就大量运用静态方法，比如 Apache 的 StringUtils 字符串处理工具类，<code>StringUtils.isEmpty()、StringUtils.upperCase()</code> 等几乎所有方法都是 <code>static</code> 的。</p>
+<h4 id="Fluent-Interface"><a href="#Fluent-Interface" class="headerlink" title="Fluent Interface"></a><strong>Fluent Interface</strong></h4><p>流畅接口符合人的阅读习惯，比如 jOOQ 数据库映射库，使用流畅接口模拟 SQL。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">create.selectFrom(a)</span><br><span class="line">      .where(exists(selectOne()</span><br><span class="line">                 .from(BOOK)</span><br><span class="line">                 .where(BOOK.STATUS.equal(BOOK_STATUS.SOLD_OUT))</span><br><span class="line">                 .and(BOOK.AUTHOR_ID.equal(a.ID))));</span><br></pre></td></tr></table></figure>
+<h4 id="命名"><a href="#命名" class="headerlink" title="命名"></a><strong>命名</strong></h4><p>不管是类名、方法名还是参数名，好的命名应该<strong>语义清晰简单</strong>、<strong>符合直觉</strong>、<strong>易于记忆</strong>和<strong>引导用户</strong>，应尽量简单或使用业界常用的命名，比如我在编写 config 模块时借鉴了 Typesafe，它的 API 这样使用：<code>ConfigFactory.load(String resourceBasename)</code>，清晰明了，并且我知道入参是基于 resource 相对路径的文件名。</p>
+<p><strong>不要重复局部命名</strong>。在有上下文环境的调用中，减少不必要的描述可以提高 API 的精简和清晰度。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">  <span class="comment">// good</span></span><br><span class="line">  setName() &#123;&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// bad</span></span><br><span class="line">  setUserName() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="封装"><a href="#封装" class="headerlink" title="封装"></a><strong>封装</strong></h4><p>使用 Java 的访问控制修饰符 <code>private、default、protected</code> 对方法访问权限进行限定，该隐藏的隐藏，仅暴露对外公开接口。这样在 IDE 智能提示时也方便用户快速定位方法。</p>
+<h2 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h2><p>良好的 API 设计利于未来的版本升级——升级带来的用户兼容性成本较低，或者框架开发者的兼容性包袱较轻。</p>
+<p>为了将来的兼容性考虑，设计 API 时建议考虑这些因素：</p>
+<h4 id="不要提前公开-API"><a href="#不要提前公开-API" class="headerlink" title="不要提前公开 API"></a><strong>不要提前公开 API</strong></h4><p>如果你的某个 API 是为将来预留的，那么不要开放，因为你不清楚未来的设计需求是怎样的，提前公开的 API 在将来改变的可能性非常高。</p>
+<h4 id="预留足够的扩展点"><a href="#预留足够的扩展点" class="headerlink" title="预留足够的扩展点"></a><strong>预留足够的扩展点</strong></h4><p>没有良好扩展性的 API 通常会因为频繁的需求变更而导致 API 间接变化，这都是兼容性成本。如果在良好的设计下预留了足够的扩展点，那么这样的 API 能够应对未来一段时间内未知的需求变化，使得 API 变化在可控范围内。</p>
+<p>要预留扩展点就意味着通常应该<strong>使用接口或者抽象</strong>的概念来描述 API，建议用清晰定位的接口替代具体的类型。</p>
+<h4 id="明确的-API-迁移说明"><a href="#明确的-API-迁移说明" class="headerlink" title="明确的 API 迁移说明"></a><strong>明确的 API 迁移说明</strong></h4><p>如果某个 API 过时了，也不建议删除它；应该标记为过时，Java 中使用 <code>@Deprecated</code> 注解，并告诉使用者新的 API 是什么。当然如果这个 API 会导致出现不可接受的问题，也可以标记它无法通过编译。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://walterlv.com/post/framework-api-design.html#%E4%B8%80%E8%87%B4%E6%80%A7" target="_blank" rel="noopener">好的框架需要好的 API 设计 —— API 设计的六个原则
+</a></li>
+<li><a href="https://www.cnblogs.com/zfc2201/p/3423370.html" target="_blank" rel="noopener">接口设计六大原则</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/09/27/Trunk Based Development 主干开发模型/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/09/27/Trunk Based Development 主干开发模型/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">Trunk Based Development 主干开发模型</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-27 02:35:29" itemprop="dateCreated datePublished" datetime="2018-09-27T02:35:29+08:00">2018-09-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/27/Trunk Based Development 主干开发模型/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/09/27/Trunk Based Development 主干开发模型/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.4k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>在之前的博文中我们介绍了 Git Flow 分支模型，正如文中所说，Git Flow 偏向于控制管理，使用了较多的分支，流程颇为复杂。大量的团队在实践过程中也遇到了颇多问题，其中大部分来自长期存在的分支。随着软件开发模型的演进，GitHub Flow、Trunk Based Development 等模型也应运而生，也已被 Google、Facebook、TW 等企业实践。本文主要介绍 TBD 模型。</p>
+</blockquote>
+<h2 id="Git-Flow的问题"><a href="#Git-Flow的问题" class="headerlink" title="Git Flow的问题"></a>Git Flow的问题</h2><ul>
+<li><p><strong>合并冲突</strong>，合并冲突在使用 Git Flow 是非常常见的。原因很简单：如果你有多个并行功能分支，他们长时间存在，那么很可能代码库的相同部分在两个功能分支中被分别更改。合并冲突不仅对于需要手动解决的开发人员来说是令人沮丧的，也增加了在代码中破坏某些功能的风险，因为当你不得不决定使用哪个版本代码时，很容易犯错。</p>
+</li>
+<li><p><strong>功能分离</strong>，在合并到同一个分支之前，你不能测试两个功能的组合。当你在单独的分支中开发几天甚至几周的功能时，当合并回主分支后，可能也会发生两个功能的相互作用影响了你的代码。</p>
+</li>
+<li><p><strong>并没有做到持续交付</strong>，在 Git Flow 分支模型下，发布是非常有计划的，一个 feature 必须要经过一系列步骤才能到达生产环境，在时间上平均一个 feature 都要等待 两周时间才能长线，这样的等待并非是需求上的“按计划发布”，而是从技术上就造成了发布瓶颈，显然难以达到持续交付的要求。</p>
+</li>
+<li><p><strong>与持续集成相悖</strong>，你会发现，在坚持持续集成实践的情况下，feature 分支是一件非常矛盾的事情。持续集成鼓励更加频繁的代码集成和交互，让冲突越早解决越好。feature 分支的代码隔离策略却在尽可能推迟代码的集成。</p>
+</li>
+</ul>
+<h2 id="GitHub-Flow"><a href="#GitHub-Flow" class="headerlink" title="GitHub Flow"></a>GitHub Flow</h2><blockquote>
+<p><a href="https://guides.github.com/introduction/flow/" target="_blank" rel="noopener">GitHub Flow</a> 是一个更轻量级的软件开发模型，示意图如下。它摒弃了 Git Flow 中繁杂的分支，<strong>只保留一个主分支 master</strong>。开发新功能时从 master 分支上拉取 feature 分支，开发完成后发起 <strong>Pull-Request</strong>，小组内进行评审和反馈，此时也进行 <strong>Code Review</strong>。测试通过后合并回主分支。</p>
+</blockquote>
+<p><img src="/2018/09/27/Trunk Based Development 主干开发模型/content/images/2018/09/GitHub-Flow2-1.png" alt="GitHub-Flow2-1"></p>
+<p>相比于 Git Flow，这种方式因为省去了一些分支而降低了复杂度，同时也更符合持续集成的思想，以一张故事卡为集成的最小单位，相对来说集成的周期短，反馈的速度也快，能够及早的遇到问题并及早解决。</p>
+<p>顺着持续集成的思想，如果我们把 GitHub Flow 分支模型做得再极致一点，我们不要 feature 分支，或者把 feature 分支只留在本地；不需要使用 Pull-Request 而是直接 Push 到远程 master 分支，我们就做到了 Trunk based Development。</p>
+<h2 id="TBD"><a href="#TBD" class="headerlink" title="TBD"></a>TBD</h2><blockquote>
+<p><strong>Trunk based Development</strong>，又叫<strong>主干开发</strong>，是一套代码分支管理策略，开发人员之间通过约定向被指定为<strong>主干</strong>的分支提交代码，以此抵抗因为长期存在的多分支导致的开发压力。此举可<strong>避免分支合并的困扰，保证随时拥有可发布的版本</strong>。“主干”这个词隐喻了树木生长的场景，树木最粗最长的部位是主干，分支从主干分离出来但是长度有限。</p>
+</blockquote>
+<p><img src="/2018/09/27/Trunk Based Development 主干开发模型/content/images/2018/10/what_is_trunk.jpg" alt="what_is_trunk"></p>
+<p>使用主干开发后，我们的代码库原则上就只能有一个 Trunk 分支即 master 分支了，所有新功能的提交也都提交到 master 分支上，保证每次提交后 master 分支都是可随时发布的状态。没有了分支的代码隔离，测试和解决冲突都变得简单，持续集成也变得稳定了许多，但也有如下几个问题：</p>
+<ul>
+<li><p><strong>如何避免发布引入未完成 Feature</strong>，答案是使用 <strong>Feature Toggle</strong>。在代码库里加一个特性开关来随时打开和关闭新特性是最容易想到的也是最容易被质疑的解决方案。Feature Toggle 是有成本的，不管是在加 Toggle 时的代码设计，还是在移除 Toggle 时的人力成本和风险，都是需要和它带来的价值进行衡量的。</p>
+</li>
+<li><p><strong>如何进行线上 Bug Fix</strong>，答案是在发布时打上 Release Tag，一旦发现这个版本有问题，如果此时 master 分支还没有其他提交，那可以直接在 master 分支上 Hot Fix 然后合并至 release 分支；如果 master 分支已经有了提交就需要做以下三件事：</p>
+<ul>
+<li>从 Release Tag 创建发布分支。</li>
+<li>在 master 上做 Fix Bug 提交。</li>
+<li>将 Fix Bug 提交 <strong>Cherry Pick</strong> 到 release 分支。</li>
+<li>为 release 分支打上新的 Tag 并做一次发布。</li>
+</ul>
+</li>
+</ul>
+<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><ul>
+<li><p>主干开发是助力实现<strong>持续集成</strong>和<strong>持续交付</strong>的关键因素。开发团队的成员一天多次地将代码提交到主干分支，满足了持续交付的必要条件。团队的工作在 24 小时内就可以被整合，这保证了代码版本随时处于可发布状态，使得持续交付成为可能。</p>
+</li>
+<li><p>你可以选择直接向主干分支提交代码的方式（适用于小团队）或者采用 Pull-Request 的方式，只要保证特性分支不能长期存在，并且产品是独立存在的。</p>
+</li>
+<li><p>根据团队规模和提交频率，<strong>特性分支可用于合并到主干分支前的代码审查和持续集成</strong>。这些特性分支可以让开发人员在代码合并到主干分支之前进行持续审查，而对于较小规模的团队，则可以直接向主干分支提交。</p>
+</li>
+<li><p>根据预期的发布频率，你的团队或许需要实时从主干分支创建<strong>发布分支</strong>以确保发布版本不会有新的提交，这些分支应该在发布完成后一段时间内删除。另一方面，你的团队也可以选择从主干分支发布而不需要发布分支，并采用“<strong>修复前进（fix forward）</strong>”的策略进行 bug fix，这种发布策略适用于高吞吐量的团队（high-throughput teams）。</p>
+</li>
+</ul>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://cn.trunkbaseddevelopment.com/" target="_blank" rel="noopener">TBD中文官网</a></li>
+<li><a href="https://www.duyidong.com/2017/10/29/trunk-base-development/#Github-Flow" target="_blank" rel="noopener">分支模型与主干开发</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/09/18/Git 进阶教程/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/09/18/Git 进阶教程/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">Git 进阶教程</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-18 02:02:04" itemprop="dateCreated datePublished" datetime="2018-09-18T02:02:04+08:00">2018-09-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/18/Git 进阶教程/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/09/18/Git 进阶教程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.9k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><blockquote>
+<p>你的本地仓库由 Git 维护的三棵「树」组成。第一个是你的<strong>工作目录（Working dir）</strong>，它持有实际文件，即你所见的；第二个是<strong>缓存区（Stage or Index）</strong>，它像个缓存区域，临时保存你的改动；第三个是<strong>提交历史（Commit history）</strong>，包含的 HEAD 指针指向你最近一次 commit 的引用。关于工作区和缓存区概念可参考 <a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000" target="_blank" rel="noopener">廖雪峰的教程</a></p>
+</blockquote>
+<p><img src="/2018/09/18/Git 进阶教程/content/images/2018/09/687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f62617369632d75736167652e737667-1.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f62617369632d75736167652e737667-1"></p>
+<p>上面的四条命令在工作目录、stage 缓存（也叫做索引）和 commit 历史之间复制文件。</p>
+<ul>
+<li><code>git add files</code> 把工作目录中的文件加入 stage 缓存</li>
+<li><code>git commit</code> 把 stage 缓存生成一次 commit，并加入 commit 历史</li>
+<li><code>git reset -- files</code> 撤销最后一次 git add files，你也可以用 git reset 撤销所有 stage 缓存文件</li>
+<li><code>git checkout -- files</code> 把文件从 stage 缓存复制到工作目录，用来丢弃本地修改</li>
+</ul>
+<h2 id="Merge"><a href="#Merge" class="headerlink" title="Merge"></a>Merge</h2><p><code>git merge</code> 命令把不同分支合并起来。合并前，索引必须和当前提交相同。<strong><code>git merge other</code> 用于将 other 分支上的提交合并到当前分支</strong>。</p>
+<p>如果另一个分支是当前提交的祖父节点，那么合并命令将什么也不做。另一种情况是如果当前提交是另一个分支的祖父节点，就导致 <strong>fast-forward</strong> 合并，HEAD 指针只是简单的移动。<br><img src="/2018/09/18/Git 进阶教程/content/images/2018/09/687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652d66662e737667.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652d66662e737667"></p>
+<p>否则就是一次真正的合并。默认把当前提交（<em>ed489</em> 如下所示）和另一个提交（<em>33104</em>）以及他们的共同祖父节点（<em>b325c</em>）进行一次<a href="https://en.wikipedia.org/wiki/Merge_(version_control" target="_blank" rel="noopener">三方合并</a>#Three-way_merge)。结果是先保存当前目录和索引，然后和父节点 <em>33104</em> 一起做一次<strong>新提交</strong>。<br><img src="/2018/09/18/Git 进阶教程/content/images/2018/09/687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652e737667.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652e737667"></p>
+<h2 id="Cherry-Pick"><a href="#Cherry-Pick" class="headerlink" title="Cherry Pick"></a>Cherry Pick</h2><p><code>git cherry-pick</code> 命令「复制」一个提交节点并在当前分支做一次完全一样的新提交。</p>
+<p><img src="/2018/09/18/Git 进阶教程/content/images/2018/10/687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6368657272792d7069636b2e737667.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6368657272792d7069636b2e737667"></p>
+<h2 id="Rebase"><a href="#Rebase" class="headerlink" title="Rebase"></a>Rebase</h2><p><code>git rebase</code> 是合并命令的另一种选择。merge 把两个分支合并进行一次新提交，提交历史不是线性的。rebase 在当前分支上重演另一个分支的历史，<strong>提交历史是线性的</strong>。</p>
+<p><img src="/2018/09/18/Git 进阶教程/content/images/2018/09/687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f7265626173652e737667.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f7265626173652e737667"></p>
+<p>上面的命令都在 <em>topic</em> 分支中进行，执行 <code>git rebase master</code> 意味着将 <em>topic</em> 分支基于  <em>master</em> 分支进行重演，在 <em>da985</em> 后附加对应于 <em>169a6</em> 和 <em>2c33a</em> 的两次新提交，所以提交历史是线性的。</p>
+<h3 id="Difference-between-rebase-amp-merge"><a href="#Difference-between-rebase-amp-merge" class="headerlink" title="Difference between rebase &amp; merge"></a>Difference between rebase &amp; merge</h3><ul>
+<li><code>git rebase master</code>  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">      A---B topic</span><br><span class="line">     /</span><br><span class="line">D---E---F---G master</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">              A<span class="string">'--B'</span> topic</span><br><span class="line">             /</span><br><span class="line">D---E---F---G master</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><code>git merge master</code>  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">      A---B topic</span><br><span class="line">     /</span><br><span class="line">D---E---F---G master</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      A---B---H topic</span><br><span class="line">     /       / </span><br><span class="line">D---E---F---G master</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>rebase 最大的好处是你的项目历史会非常整洁的线性，它不像 merge 那样引入不必要的合并提交。但同时，rebase 也会带来两个后果：安全性和可跟踪性。使用时要遵守 <strong>rebase 的黄金法则：绝不要在公共的分支上使用它</strong>。可跟踪性是指 rebase 不会有合并提交中附带的信息，你看不到 <em>topic</em> 分支中并入了 <em>master</em> 的哪些更改。</p>
+</blockquote>
+<h2 id="Reset"><a href="#Reset" class="headerlink" title="Reset"></a>Reset</h2><p><code>git reset</code> 命令把当前分支指向另一个位置，并且有选择的变动工作目录和索引。如果<strong>你的更改还没有共享给别人</strong>，reset 是撤销这些更改的简单方法。当你开发一个功能的时候发现「糟糕，我做了什么？我应该重新来过！」时，reset 就像是 <code>go-to</code> 命令一样。</p>
+<p><img src="/2018/09/18/Git 进阶教程/content/images/2018/09/687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f72657365742d636f6d6d69742e737667.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f72657365742d636f6d6d69742e737667"></p>
+<p>还可以通过传入参数来修改你的缓存区或工作目录：</p>
+<ul>
+<li><code>--soft</code> 缓存区和工作目录都不会被改变</li>
+<li><code>--mixed</code> 默认选项。缓存区同步到你指定的提交，但工作目录不受影响</li>
+<li><code>--hard</code> 缓存区和工作目录都同步到你指定的提交</li>
+</ul>
+<p>把这些参数想成定义 <code>git reset</code> 操作的<strong>作用域</strong>就容易理解多了。拿上图举例来说，如果执行 <code>git reset --soft HEAD~3</code>，那么文件不会被修改，后三次提交被 <code>git add</code> 添加到暂存区，相当于只撤销了 <code>git commit</code>；<code>git reset --mixed HEAD~3</code> 则文件不会被修改，但后三次提交没有添加到暂存区；<code>git reset --hard HEAD~3</code> 则文件会被回退到 <em>b325c</em> 时的状态。</p>
+<h2 id="Revert"><a href="#Revert" class="headerlink" title="Revert"></a>Revert</h2><p><strong>revert 撤销一个提交的同时会创建一个新的提交</strong>。这是一个安全的方法，因为它不会重写提交历史。比如，下图执行<code>git revert HEAD~2</code>会创建一个新的提交来撤销前两个提交的更改，然后把新的提交加入提交历史。</p>
+<p><img src="/2018/09/18/Git 进阶教程/content/images/2018/09/06.svg" alt="06"></p>
+<p>相比 <code>git reset</code>，它不会改变现在的提交历史。因此，<strong><code>git revert</code> 可以用在公共分支上，<code>git reset</code> 应该用在私有分支上</strong>。你也可以把 <code>git revert</code> 用作撤销已经 push 的更改，而 <code>git reset</code> 用来撤销已经 commit 但没有 push 的更改，或者 <code>git reset HEAD</code> 撤销没有 commit 的更改。</p>
+<h2 id="Checkout"><a href="#Checkout" class="headerlink" title="Checkout"></a>Checkout</h2><p><strong>checkout 命令用于从历史提交（或者暂存区域）中拷贝文件到工作目录，也可用于切换分支</strong>。</p>
+<p>当给出一个（本地）分支时，那么 <em>HEAD</em> 指针将指向那个分支，也就是说，我们「切换」到那个分支了。<strong>stage 缓存和工作目录中的内容会和 <em>HEAD</em> 对应的提交节点一致</strong>。</p>
+<p><img src="/2018/09/18/Git 进阶教程/content/images/2018/09/a.svg" alt="a"></p>
+<p>当指定的是一个标签、远程分支、SHA-1 值或者是像 master~3 类似的东西，就得到一个<strong>匿名分支</strong>，又称作 <strong>detached HEAD（被分离的 HEAD 标识）</strong>。这样可以很方便地在历史版本之间互相切换。比如说你想要编译 1.2.1 版本，你可以运行 <code>git checkout v1.2.1</code>（这是一个标签 tag<br>，而非分支名），编译，安装，然后切换回原先分支。</p>
+<p><img src="/2018/09/18/Git 进阶教程/content/images/2018/09/b.svg" alt="b"></p>
+<h4 id="Detached-HEAD"><a href="#Detached-HEAD" class="headerlink" title="Detached HEAD"></a>Detached HEAD</h4><p>当提交操作涉及到 detached HEAD 时，其行为会略有不同。<em>HEAD</em> 处于分离状态（不依附于任一分支）时，提交操作可以正常进行，但是不会更新任何已命名的分支。你可以认为这是在更新一个匿名分支。</p>
+<p><img src="/2018/09/18/Git 进阶教程/content/images/2018/09/c.svg" alt="c"></p>
+<p>一旦此后你切换到别的分支，比如说 <em>master</em>，那么这个提交节点（可能）再也不会被引用到，将会被丢弃掉。</p>
+<p><img src="/2018/09/18/Git 进阶教程/content/images/2018/09/d.svg" alt="d"></p>
+<p>但是，如果你想保存这个状态，可以用命令 <code>git checkout -b name</code> 来创建一个新的分支。</p>
+<p><img src="/2018/09/18/Git 进阶教程/content/images/2018/09/e.svg" alt="e"></p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://github.com/geeeeeeeeek/git-recipes" target="_blank" rel="noopener">git-recipes —— GitHub 8k star 的高质量教程</a></li>
+<li><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing" target="_blank" rel="noopener">Merging vs. Rebasing</a></li>
+<li><a href="https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting" target="_blank" rel="noopener">Resetting, Checking Out &amp; Reverting</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
+
 
 
           </div>
@@ -986,7 +2761,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-count">56</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1018,7 +2793,63 @@
                     
                       
                     
-                    <span class="site-state-item-count">2</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

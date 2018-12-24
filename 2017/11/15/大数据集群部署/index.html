@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Prerequisites 三台服务器节点，配置均为4核8G，500G硬盘 OS：Ubuntu 16.04  hadoop-2.6.0-cdh5.13.0.tar.gz    （hadoop-cdh5官方下载链接） spark-2.2.0-bin-hadoop2.6.tgz （Spark官网下载链接） jdk-8u144-linux-x64.tar.gz   A. 服务器相关设置 三台服务器节点，">
+<meta name="keywords" content="Linux,Server,BigData,Hadoop,Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据集群部署">
+<meta property="og:url" content="https://s1mplecc.github.io/2017/11/15/大数据集群部署/index.html">
+<meta property="og:site_name" content="s1mple的博客">
+<meta property="og:description" content="Prerequisites 三台服务器节点，配置均为4核8G，500G硬盘 OS：Ubuntu 16.04  hadoop-2.6.0-cdh5.13.0.tar.gz    （hadoop-cdh5官方下载链接） spark-2.2.0-bin-hadoop2.6.tgz （Spark官网下载链接） jdk-8u144-linux-x64.tar.gz   A. 服务器相关设置 三台服务器节点，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-24T08:35:32.304Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大数据集群部署">
+<meta name="twitter:description" content="Prerequisites 三台服务器节点，配置均为4核8G，500G硬盘 OS：Ubuntu 16.04  hadoop-2.6.0-cdh5.13.0.tar.gz    （hadoop-cdh5官方下载链接） spark-2.2.0-bin-hadoop2.6.tgz （Spark官网下载链接） jdk-8u144-linux-x64.tar.gz   A. 服务器相关设置 三台服务器节点，">
+
+
+
+
+
+
+  <link rel="canonical" href="https://s1mplecc.github.io/2017/11/15/大数据集群部署/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>大数据集群部署 | s1mple的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">s1mple的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+    <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/15/大数据集群部署/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">大数据集群部署
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-11-15 07:10:09" itemprop="dateCreated datePublished" datetime="2017-11-15T07:10:09+08:00">2017-11-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/15/大数据集群部署/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/11/15/大数据集群部署/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">5.6k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
+<li>三台服务器节点，配置均为4核8G，500G硬盘</li>
+<li>OS：Ubuntu 16.04 </li>
+<li>hadoop-2.6.0-cdh5.13.0.tar.gz    <a href="http://archive.cloudera.com/cdh5/cdh/5/" target="_blank" rel="noopener">（hadoop-cdh5官方下载链接）</a></li>
+<li>spark-2.2.0-bin-hadoop2.6.tgz <a href="http://spark.apache.org/downloads.html" target="_blank" rel="noopener">（Spark官网下载链接）</a></li>
+<li>jdk-8u144-linux-x64.tar.gz</li>
+</ul>
+<p><br></p>
+<h2 id="A-服务器相关设置"><a href="#A-服务器相关设置" class="headerlink" title="A. 服务器相关设置"></a>A. 服务器相关设置</h2><blockquote>
+<p>三台服务器节点，采用一主二从的模式，需要<strong>修改主机名</strong>并建立服务器间的ssh通信便于各服务器间<strong>免密访问</strong>。并且为避免权限问题，三个节点都设置了<strong>root账户</strong>登录。</p>
+</blockquote>
+<h3 id="配置root用户登录、ssh免密通信"><a href="#配置root用户登录、ssh免密通信" class="headerlink" title="配置root用户登录、ssh免密通信"></a>配置root用户登录、ssh免密通信</h3><ul>
+<li><p>普通用户登录后，执行<code>sudo passwd root</code>修改root密码，<code>su - root</code>切换为root用户</p>
+</li>
+<li><p>修改<code>/etc/ssh/sshd_config</code>允许root登录</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PermitRootLogin yes</span><br><span class="line">RSAAuthentication yes</span><br><span class="line">PubkeyAuthentication yes</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>/root</code>目录下执行<code>ssh-keygen -t rsa</code>生成<code>.ssh</code>文件夹和公钥私钥</p>
+</li>
+<li><p>将三台服务器以及自己主机的公钥写入<code>/root/.ssh/authorized_keys</code>，并拷贝到三台服务器上</p>
+</li>
+<li><p>执行<code>service sshd restart</code>重启ssh服务</p>
+</li>
+</ul>
+<h3 id="host相关设置"><a href="#host相关设置" class="headerlink" title="host相关设置"></a>host相关设置</h3><ul>
+<li><p>执行<code>vi /etc/hostname</code>修改主机名，主节点命名为<strong>master</strong>，从节点命名为<strong>slave01</strong>和<strong>slave02</strong>，执行<code>reboot</code>重启服务器生效</p>
+</li>
+<li><p>三台服务器都修改<code>/etc/hosts</code>文件，IP地址为内网IP</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.10.6 master</span><br><span class="line">192.168.10.7 slave01</span><br><span class="line">192.168.10.8 slave02</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>现在已完成了服务器间<strong>ssh免密通信</strong>的功能，并且本地也可以通过 <strong>ssh root@{IP}</strong> 访问服务器，接下来需要安装JDK、Hadoop和Spark。均安装在 <strong>/opt</strong>目录下，并分别命名为jdk8、hadoop、spark。可以在主节点安装后再通过<strong>scp分发</strong>给从节点。</p>
+</blockquote>
+<p><br></p>
+<h2 id="B-安装JDK"><a href="#B-安装JDK" class="headerlink" title="B. 安装JDK"></a>B. 安装JDK</h2><ul>
+<li><p>将本地下载的jdk压缩包<code>scp</code>到master节点的<code>/opt</code>路径下，解压并改名</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xzvf jdk-8u144-linux-x64.tar.gz</span><br><span class="line">mv jdk1.8.0_144/ jdk8</span><br><span class="line">mv jdk-8u144-linux-x64.tar.gz /tmp</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>同理，解压hadoop和spark压缩包至<code>/opt</code>路径下，改名为<strong>hadoop</strong>和<strong>spark</strong>，等改完配置后再将整个 <strong>/opt</strong>文件夹分发给从节点</p>
+</li>
+</ul>
+<h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><ul>
+<li><p><code>vi /etc/profile</code>加入</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/opt/jdk8</span><br><span class="line">export JRE_HOME=$&#123;JAVA_HOME&#125;/jre</span><br><span class="line">export CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib:$&#123;JRE_HOME&#125;/lib</span><br><span class="line">export HADOOP_HOME=/opt/hadoop</span><br><span class="line">export SPARK_HOME=/opt/spark</span><br><span class="line">export PATH=$&#123;JAVA_HOME&#125;/bin:$HADOOP_HOME/sbin:$HADOOP_HOME/bin:$SPARK_HOME/bin:$SPARK_HOME/sbin:$PATH</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>分发配置文件，会覆盖子节点的配置文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp /etc/profile root@slave01:/etc/profile</span><br><span class="line">scp /etc/profile root@slave02:/etc/profile</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>三台服务器都执行<code>source /etc/profile</code>使配置文件生效</p>
+</li>
+</ul>
+<p><br></p>
+<h2 id="C-配置Hadoop"><a href="#C-配置Hadoop" class="headerlink" title="C. 配置Hadoop"></a>C. 配置Hadoop</h2><p><a href="http://hadoop.apache.org/docs/r2.6.5/hadoop-project-dist/hadoop-common/ClusterSetup.html" target="_blank" rel="noopener">官网配置文档</a> </p>
+<blockquote>
+<p><strong>HDFS</strong>（Hadoop分布式文件系统），启动HDFS时主节点启动<strong>NameNode</strong>，负责管理namespace、控制客户端访问。从节点启动<strong>DataNode</strong>，提供存储和客户端读写操作。<br><strong>Yarn</strong>（资源管理系统）用于改善<strong>MapReduce</strong>的实现，启动Yarn时主节点启动<strong>ResourceManager</strong>，用于调度、分发资源。从节点启动<strong>NodeManager</strong>，用于启动、监控运行应用程序的容器（Container）。<br>Hadoop支持为所有主从节点采用<strong>同一套配置文件</strong>，除非新机器的硬件规格与现有机器不同时，需要一套新的配置文件以充分利用新硬件的额外资源。</p>
+</blockquote>
+<ul>
+<li><p><code>cd /opt/hadoop/etc/hadoop</code>，前往hadoop配置文件目录</p>
+</li>
+<li><p><code>vi hadoop-env.sh</code>,修改运行hadoop时的环境变量</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/opt/jdk8</span><br><span class="line">export HADOOP_HEAPSIZE=8000</span><br><span class="line">export HADOOP_LOG_DIR=/var/log/hadoop</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p><code>vi core-site.xml</code>，该属性描述了HDFS文件系统的URI，默认端口是8020</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;hdfs://master:9000&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>vi hdfs-site.xml</code>，Hadoop守护进程配置，包括Namenode、辅助NameNode和DataNode等</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/root/hdfs/name&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/root/hdfs/data&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.namenode.checkpoint.dir&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/root/hdfs/namesecondary&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<p>  分别配置了namenode存储永久性文件系统元数据的目录、datanode存储数据块目录、辅助namenode存储文件系统的检查点目录。均可冗余备份，逗号隔开。</p>
+</li>
+<li><p><code>vi yarn-site.xml</code>，Yarn守护进程的配置项，包括资源管理器、web应用代理服务器和节点管理器</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;!-- Site specific YARN configuration properties --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;master&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.resourcemanager.webapp.address&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;master:10000&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.local-dirs&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/root/nm-local-dir&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.resource.memory-mb&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;8192&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.resource.cpu-vcores&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;4&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;mapreduce.shuffle&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><code>vi slaves</code>，在该文件中列出所有从节点的主机名或IP  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slave01</span><br><span class="line">slave02</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><br></p>
+<h2 id="D-配置Spark"><a href="#D-配置Spark" class="headerlink" title="D. 配置Spark"></a>D. 配置Spark</h2><blockquote>
+<p><strong>Apache Spark</strong>是专为大规模数据处理而设计的快速通用的计算引擎。它并没有以MapReduce作为执行引擎，而是使用的自己的分布式运行环境在集群上执行工作。Spark与Hadoop紧密集成，可以在Yarn上运行并支持HDFS。</p>
+</blockquote>
+<ul>
+<li><p><code>cd /opt/spark/conf</code>前往Spark配置文件目录</p>
+</li>
+<li><p>拷贝模版文件 </p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp spark-env.sh.template spark-env.sh</span><br><span class="line">cp slaves.template slaves</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>vi slaves</code>添加从节点</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slave01</span><br><span class="line">slave02</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>vi spark-env.sh</code>，配置spark启动环境脚本</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/opt/jdk8</span><br><span class="line">export HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop</span><br><span class="line">export SPARK_MASTER_HOST=master</span><br><span class="line">export SPARK_MASTER_PORT=7077</span><br><span class="line">export SPARK_WORKER_CORES=1</span><br><span class="line">export SPARK_WORKER_MEMORY=1g</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>vi spark-defaults.conf</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spark.master                     spark://master:7077</span><br><span class="line">spark.driver.memory              8g</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><br></p>
+<h2 id="E-启动和测试"><a href="#E-启动和测试" class="headerlink" title="E. 启动和测试"></a>E. 启动和测试</h2><blockquote>
+<p>以下操作均在主节点下完成，主节点会启动从节点的相关程序。</p>
+</blockquote>
+<ul>
+<li><p>在<code>/root</code>目录下新建存储文件夹，目录结构如下</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── hdfs</span><br><span class="line">│   ├── data</span><br><span class="line">│   ├── name</span><br><span class="line">│   └── namesecondary</span><br><span class="line">└── nm-local-dir</span><br></pre></td></tr></table></figure>
+<p>  分发给从节点</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">scp -r hdfs/ root@slave01:/root/</span><br><span class="line">scp -r hdfs/ root@slave02:/root/</span><br><span class="line">scp -r nm-local-dir/ root@slave01:/root/</span><br><span class="line">scp -r nm-local-dir/ root@slave02:/root/</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>现在JDK、Hadoop和Spark均已安装配置完成，将<code>/opt</code>文件夹分发给从节点</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r /opt root@slave01:/</span><br><span class="line">scp -r /opt root@slave02:/</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="启动hadoop"><a href="#启动hadoop" class="headerlink" title="启动hadoop"></a>启动hadoop</h3><ul>
+<li><p>执行<code>ufw disable</code>关闭防火墙</p>
+</li>
+<li><p>初始化文件系统</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs namenode -format</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动Hadoop集群</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start-all.sh</span><br></pre></td></tr></table></figure>
+<p>  该命令其实是包含了<code>start-dfs.sh</code>和<code>start-yarn.sh</code>两个命令</p>
+</li>
+<li><p>在各节点上执行<code>jps</code>查看启动情况，日志文件在<code>/opt/hadoop/logs</code>目录下</p>
+</li>
+<li><p>在本地浏览器上访问<code>{IP}:/50070</code>查看hdfs的WebUI（50070为默认端口）；访问<code>{IP}:/10000</code>查看ResourceManager的WebUI</p>
+</li>
+</ul>
+<h3 id="启动Spark"><a href="#启动Spark" class="headerlink" title="启动Spark"></a>启动Spark</h3><ul>
+<li><p>命令启动Spark集群</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/spark/sbin/start-all.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>各节点执行<code>jps</code>可以看到主节点启动了<strong>Master</strong>程序，从节点启动了<strong>Worker</strong>程序</p>
+</li>
+<li><p>可以在本地浏览器上访问<code>{IP}:8080</code>验证Spark已启动</p>
+</li>
+</ul>
+<h3 id="WebUI汇总"><a href="#WebUI汇总" class="headerlink" title="WebUI汇总"></a>WebUI汇总</h3><blockquote>
+<p><strong>hdfs：</strong> <a href="http://172.20.10.92:50070/" target="_blank" rel="noopener">http://172.20.10.92:50070/</a><br><strong>ResourceManager：</strong> <a href="http://172.20.10.92:10000/" target="_blank" rel="noopener">http://172.20.10.92:10000/</a><br><strong>Spark：</strong> <a href="http://172.20.10.92:8080/" target="_blank" rel="noopener">http://172.20.10.92:8080/</a>   </p>
+</blockquote>
+<p><br></p>
+<h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><blockquote>
+<p>有意想使用<strong>Cloudera Manager</strong>这样的集群管理工具，它们提供了简单的WebUI，可以快捷的管理、配置集群。但需要研究如何在没有外网的情况下在服务器上部署。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/Server/" rel="tag"># Server</a>
+          
+            <a href="/tags/BigData/" rel="tag"># BigData</a>
+          
+            <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/11/MyBatis Generator/" rel="next" title="MyBatis Generator">
+                <i class="fa fa-chevron-left"></i> MyBatis Generator
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/19/配置Nginx目录/" rel="prev" title="配置Nginx目录">
+                配置Nginx目录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+            
+              <p class="site-author-name" itemprop="name">s1mple</p>
+              <p class="site-description motion-element" itemprop="description">清风不问过路客，岁月不负有心人</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">56</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/s1mplecc" title="GitHub &rarr; https://github.com/s1mplecc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:s1mple951205@gmail.com" title="E-Mail &rarr; mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Prerequisites"><span class="nav-number">1.</span> <span class="nav-text">Prerequisites</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-服务器相关设置"><span class="nav-number">2.</span> <span class="nav-text">A. 服务器相关设置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置root用户登录、ssh免密通信"><span class="nav-number">2.1.</span> <span class="nav-text">配置root用户登录、ssh免密通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#host相关设置"><span class="nav-number">2.2.</span> <span class="nav-text">host相关设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-安装JDK"><span class="nav-number">3.</span> <span class="nav-text">B. 安装JDK</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置环境变量"><span class="nav-number">3.1.</span> <span class="nav-text">配置环境变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-配置Hadoop"><span class="nav-number">4.</span> <span class="nav-text">C. 配置Hadoop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#D-配置Spark"><span class="nav-number">5.</span> <span class="nav-text">D. 配置Spark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#E-启动和测试"><span class="nav-number">6.</span> <span class="nav-text">E. 启动和测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动hadoop"><span class="nav-number">6.1.</span> <span class="nav-text">启动hadoop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动Spark"><span class="nav-number">6.2.</span> <span class="nav-text">启动Spark</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WebUI汇总"><span class="nav-number">6.3.</span> <span class="nav-text">WebUI汇总</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Postscript"><span class="nav-number">7.</span> <span class="nav-text">Postscript</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">s1mple</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://s1mple.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://s1mplecc.github.io/2017/11/15/大数据集群部署/';
+        this.page.identifier = '2017/11/15/大数据集群部署/';
+        this.page.title = '大数据集群部署';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://s1mple.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

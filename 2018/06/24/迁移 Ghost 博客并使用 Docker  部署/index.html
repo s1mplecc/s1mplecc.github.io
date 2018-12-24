@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Preface 因为阿里云服务器在七月初即将过期，以及生活上的一些琐事，博客已经近一个月没有更新了。考虑到十月份域名也将过期，以及阿里云非学生用户太贵，遂考虑国外的云服务器 Vultr，优点是绑定域名不需要备案，以及按时计费也很方便，缺点是国内访问网速确实比不上阿里云，但同时也跟同学了解到可以使用锐速进行优化，这个以后再研究。此外，为将来迁移方便，使用 Docker 重新部署 Ghost 博客并制">
+<meta name="keywords" content="Server,Docker,Nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="迁移 Ghost 博客并使用 Docker  部署">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/06/24/迁移 Ghost 博客并使用 Docker  部署/index.html">
+<meta property="og:site_name" content="s1mple的博客">
+<meta property="og:description" content="Preface 因为阿里云服务器在七月初即将过期，以及生活上的一些琐事，博客已经近一个月没有更新了。考虑到十月份域名也将过期，以及阿里云非学生用户太贵，遂考虑国外的云服务器 Vultr，优点是绑定域名不需要备案，以及按时计费也很方便，缺点是国内访问网速确实比不上阿里云，但同时也跟同学了解到可以使用锐速进行优化，这个以后再研究。此外，为将来迁移方便，使用 Docker 重新部署 Ghost 博客并制">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/06/24/迁移%20Ghost%20博客并使用%20Docker%20%20部署/content/images/2018/06/14070DA1-C3CD-4A9F-AE52-D4D2DE4A2CDB.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/06/24/迁移%20Ghost%20博客并使用%20Docker%20%20部署/content/images/2018/06/64F8A358-E544-4FA3-819C-7F38F5327A5A.png">
+<meta property="og:updated_time" content="2018-12-24T08:35:32.307Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="迁移 Ghost 博客并使用 Docker  部署">
+<meta name="twitter:description" content="Preface 因为阿里云服务器在七月初即将过期，以及生活上的一些琐事，博客已经近一个月没有更新了。考虑到十月份域名也将过期，以及阿里云非学生用户太贵，遂考虑国外的云服务器 Vultr，优点是绑定域名不需要备案，以及按时计费也很方便，缺点是国内访问网速确实比不上阿里云，但同时也跟同学了解到可以使用锐速进行优化，这个以后再研究。此外，为将来迁移方便，使用 Docker 重新部署 Ghost 博客并制">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2018/06/24/迁移%20Ghost%20博客并使用%20Docker%20%20部署/content/images/2018/06/14070DA1-C3CD-4A9F-AE52-D4D2DE4A2CDB.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/06/24/迁移 Ghost 博客并使用 Docker  部署/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>迁移 Ghost 博客并使用 Docker  部署 | s1mple的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">s1mple的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+    <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/06/24/迁移 Ghost 博客并使用 Docker  部署/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">迁移 Ghost 博客并使用 Docker  部署
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-24 14:30:15" itemprop="dateCreated datePublished" datetime="2018-06-24T14:30:15+08:00">2018-06-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/24/迁移 Ghost 博客并使用 Docker  部署/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/06/24/迁移 Ghost 博客并使用 Docker  部署/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">5.9k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>因为阿里云服务器在七月初即将过期，以及生活上的一些琐事，博客已经近一个月没有更新了。考虑到十月份域名也将过期，以及阿里云非学生用户太贵，遂考虑国外的云服务器 <a href="https://www.vultr.com/" target="_blank" rel="noopener">Vultr</a>，优点是绑定域名不需要备案，以及按时计费也很方便，缺点是国内访问网速确实比不上阿里云，但同时也跟同学了解到可以使用<strong>锐速</strong>进行优化，这个以后再研究。此外，为将来迁移方便，使用 <strong>Docker</strong> 重新部署 Ghost 博客并制作成镜像上传到云端。这也算我迁移博客后的第一篇文章了。</p>
+</blockquote>
+<h2 id="Prefaring"><a href="#Prefaring" class="headerlink" title="Prefaring"></a>Prefaring</h2><ul>
+<li><p>在 Vultr 的 Servers 界面先新增一个实例，如果能抢到每月 $2.5 的服务器是最好的，然而我没有抢到，所以选择了每月 $5 的服务器，系统为 Ubuntu 16.04，机房在新加坡</p>
+</li>
+<li><p>在添加实例成功后第一件事是<code>ping</code>一下公网 IP 是否是通的，有些时候分配的 IP 是被大陆给墙了的。<code>ping</code>通后我习惯的首件要事就是添加我的 ssh 公钥以及修改 ssh 的一些策略，比如修改默认端口号、禁用密码登陆之类的，一切都是为安全考虑（吃了第一次的亏，一夜之间异常登陆三十次）</p>
+</li>
+<li><p>迁移 Ghost 博客之前需要先将原先服务器上的相关文件下载到本地，再上传到新的服务器上。主要包含文章内容，图片以及主题。所幸 Ghost 博客提供了 Export/Import 功能，而且是所有文件导出到一个大 Json 文件中，很方便迁移<br><img src="/2018/06/24/迁移 Ghost 博客并使用 Docker  部署/content/images/2018/06/14070DA1-C3CD-4A9F-AE52-D4D2DE4A2CDB.png" alt="14070DA1-C3CD-4A9F-AE52-D4D2DE4A2CDB">主题也很方便，我之前就将代码上传至 <a href="https://github.com/s1mplecc/ghost-theme-kaldorei" target="_blank" rel="noopener">GitHub</a>，克隆下来压缩上传就行。图片稍微麻烦点，需要将 Ghost 目录下的整个<code>content/images</code>文件夹<code>scp</code>到本地，再<code>scp</code>到 Vultr 服务器上，可能要花些时间</p>
+</li>
+<li><p>接下来去修改你的域名设置，我是在 <a href="https://sg.godaddy.com/zh" target="_blank" rel="noopener">GoDaddy</a> 上购买的域名，所以去狗爹网修改配置如下<br><img src="/2018/06/24/迁移 Ghost 博客并使用 Docker  部署/content/images/2018/06/64F8A358-E544-4FA3-819C-7F38F5327A5A.png" alt="64F8A358-E544-4FA3-819C-7F38F5327A5A"></p>
+</li>
+<li><p>准备工作已经做好，剩下的就是在新服务器上搭建环境和部署博客了。必要的东西也就三个，Nginx 用于做端口映射，Docker 用于运行 Ghost 容器，Certbot 用来配置 Https。Nginx 在 Ubuntu 上安装很简单，使用<code>apt-get</code>命令即可。Certbot 安装在我的另一篇博客<a href="https://s1mple.xyz/configure-https-with-certbot/" target="_blank" rel="noopener">Certbot配置Https</a>中有详细介绍。我们着重介绍一下如何安装 Docker</p>
+</li>
+</ul>
+<h2 id="Installing-Docker"><a href="#Installing-Docker" class="headerlink" title="Installing Docker"></a>Installing Docker</h2><blockquote>
+<p>参考 <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/" target="_blank" rel="noopener">Docker官方网站</a>，选择自己的操作系统，我的是 Ubuntu 16.04</p>
+</blockquote>
+<ul>
+<li><p>Update the apt package index, Install packages to allow apt to use a repository over HTTPS</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install \</span><br><span class="line">    apt-transport-https \</span><br><span class="line">    ca-certificates \</span><br><span class="line">    curl \</span><br><span class="line">    software-properties-common</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>Add Docker’s official GPG key</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>Set up the stable repository</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sudo add-apt-repository \</span><br><span class="line">   &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu \</span><br><span class="line">   $(lsb_release -cs) \</span><br><span class="line">   stable&quot;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>Install the latest version of Docker CE</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install docker-ce</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Deploying-Ghost"><a href="#Deploying-Ghost" class="headerlink" title="Deploying Ghost"></a>Deploying Ghost</h2><ul>
+<li><p>拉取 Ghost 最新的 Docker 镜像</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker pull ghost</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>运行一个容器实例，<code>-d</code>后台运行，<code>-p 2368:2368</code>绑定宿主机 2368 端口至容器内 2368 端口（必须显式的绑定，不然不会自动映射），这也是 Ghost 默认占用的端口号</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker run -d -p 2368:2368 ghost</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>运行后访问<code>{IP}:2368</code>可以成功进入 Ghost 主页，但是现在还有一些问题，就是点击 Home 键跳转的地址为 localhost:2368，我们需要进入到容器内部修改 Ghost 配置文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker exec -it 16 bash</span><br></pre></td></tr></table></figure>
+<p>  上述命令表示以交互式终端执行容器的<code>bash</code>命令，其中 16 是刚才启动的容器 ID 前两位，可以使用<code>docker ps</code>查看，通常使用可以唯一标识的前几位即可</p>
+</li>
+<li><p>进入容器后默认在<code>/var/lib/ghost</code>即 Ghost 安装路径下，修改其下的<code>config.production.json</code>配置文件，其实该文件链接到<code>config.development.json</code>，所以修改哪一个都一样，只需要修改 url 和 server 即可</p>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">"url": "https://s1mple.xyz",</span><br><span class="line">"server": &#123;</span><br><span class="line">    "port": 2368,</span><br><span class="line">    "host": "0.0.0.0"</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>  退出容器后使用<code>docker restart 16</code>重启容器</p>
+</li>
+<li><p>主题可以在网页上直接上传。图片还需要我们拷贝到容器中，使用如下命令</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker cp images/ 16:/var/lib/ghost/content</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Nginx-amp-Https"><a href="#Nginx-amp-Https" class="headerlink" title="Nginx &amp; Https"></a>Nginx &amp; Https</h2><blockquote>
+<p>至此，我们的博客已经算迁移完毕，接下来还剩下两个步骤：1. 配置 Nginx 80 端口转发到 2368 端口；2. 使用 Certbot 配置 Https。</p>
+</blockquote>
+<h4 id="Configuring-Nginx"><a href="#Configuring-Nginx" class="headerlink" title="Configuring Nginx"></a>Configuring Nginx</h4><ul>
+<li><p>前往 <code>/etc/nginx/conf.d/</code> 目录中创建 ghost.conf 配置文件，配置如下</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">server &#123;                                                                                  </span><br><span class="line">    server_name s1mple.info www.s1mple.info;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $http_host;</span><br><span class="line">        proxy_pass http://127.0.0.1:2368;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location ~ /.well-known &#123;</span><br><span class="line">        allow all;</span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    client_max_body_size 50m;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  保存退出后，<code>service nginx restart</code> 重启 Nginx 服务</p>
+</li>
+</ul>
+<h4 id="Configuring-Https"><a href="#Configuring-Https" class="headerlink" title="Configuring Https"></a>Configuring Https</h4><ul>
+<li><p>使用 Certbot 工具配置 Https，如何安装运行可以参考我的另一篇博客<a href="https://s1mple.xyz/configure-https-with-certbot/" target="_blank" rel="noopener"><br>Certbot配置Https</a>。实际上它会读取 Nginx 配置文件并修改它们，可以发现，配置完成后的 ghost.conf 多了如下一些内容，其中就包括重定位到 Https 端口 443</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    # 省略...</span><br><span class="line"></span><br><span class="line">    listen [::]:443 ssl ipv6only=on; # managed by Certbot</span><br><span class="line">    listen 443 ssl; # managed by Certbot</span><br><span class="line">    ssl_certificate /etc/letsencrypt/live/s1mple.info/fullchain.pem; # managed by Certbot</span><br><span class="line">    ssl_certificate_key /etc/letsencrypt/live/s1mple.info/privkey.pem; # managed by Certbot</span><br><span class="line">    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    if ($host = www.s1mple.info) &#123;</span><br><span class="line">        return 301 https://$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    if ($host = s1mple.info) &#123;</span><br><span class="line">        return 301 https://$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line">    listen 80; </span><br><span class="line">    listen [::]:80;</span><br><span class="line"></span><br><span class="line">    server_name s1mple.info www.s1mple.info;</span><br><span class="line">    return 404; # managed by Certbot</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  大功告成！现在就可以通过 <a href="https://s1mple.xyz" target="_blank" rel="noopener">https://s1mple.xyz</a> 访问我的博客网站了！</p>
+</li>
+</ul>
+<h2 id="Docker-image"><a href="#Docker-image" class="headerlink" title="Docker image"></a>Docker image</h2><blockquote>
+<p>接下来我们将经过修改的容器（包含文章、图片、Kaldorei 主题、修改后的配置文件）提交为一个镜像，上传到云端。以后迁移直接<code>pull</code>下来即可。可以参考我之前的博客 <a href="https://s1mple.xyz/build-docker-images/" target="_blank" rel="noopener">构建你的Docker镜像</a></p>
+</blockquote>
+<ul>
+<li><p>首先需要在 <a href="https://cloud.docker.com/" target="_blank" rel="noopener">Docker Cloud官网</a> 注册自己的账号，然后在服务器使用命令登陆</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker login</span><br><span class="line">Login with your Docker ID to push and pull images from Docker Hub. If you don&apos;t have a Docker ID, head over to https://hub.docker.com to create one.</span><br><span class="line">// username</span><br><span class="line">// password</span><br><span class="line">Login Succeeded</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>在 Docker Cloud 中创建一个新的仓库，命名为 myghost 。将当前容器提交为一个镜像，不加标签默认 latest</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker commit 16 s1mple1995/myghost</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>查看本地的 Docker 镜像，有两个，一个是原始的 ghost 镜像，一个是刚刚提交的镜像</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker images</span><br><span class="line">REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">s1mple1995/myghost   latest              e11def1af177        15 seconds ago      613MB</span><br><span class="line">ghost                latest              a375d6b66f06        4 weeks ago         574MB</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>将镜像<code>push</code>到云端，等待上传完成</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker push s1mple1995/myghost</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>现在镜像已经存放在 Docker Cloud 云端了，搜索你的镜像，随时随地可以<code>pull</code>下来</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker search s1mple1995</span><br><span class="line">NAME                      DESCRIPTION                    STARS               OFFICIAL            AUTOMATED</span><br><span class="line">s1mple1995/get-started    学习初步使用                         1                                       </span><br><span class="line">s1mple1995/java-web-env   Java Web程序的运行环境                0                                       </span><br><span class="line">s1mple1995/jpress         jpress blog                    0                                       </span><br><span class="line">s1mple1995/ubuntu         基于官方ubuntu镜像，更改为阿里云软件源，并安…     0                                       </span><br><span class="line">s1mple1995/myghost        我的 Ghost 镜像，包含了文章、图片和主题（ Ka…   0</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
+<p>总的来说，使用 Docker 部署 Ghost 的话可以方便许多。而且制作成镜像上传到云端的话，以后可以直接<code>pull</code>下来，图片、文章、主题都在镜像中了，顶多是更换域名要修改 Ghost 的配置文件。除此之外，更换域名后文章中的域名也需要全量替换，这个我打算以后要换域名的时候写个 Python 脚本来完成。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Server/" rel="tag"># Server</a>
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+            <a href="/tags/Nginx/" rel="tag"># Nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/24/函数式编程/" rel="next" title="函数式编程">
+                <i class="fa fa-chevron-left"></i> 函数式编程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/03/Git Flow 模型以及工具的使用/" rel="prev" title="Git Flow 模型以及工具的使用">
+                Git Flow 模型以及工具的使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+            
+              <p class="site-author-name" itemprop="name">s1mple</p>
+              <p class="site-description motion-element" itemprop="description">清风不问过路客，岁月不负有心人</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">56</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/s1mplecc" title="GitHub &rarr; https://github.com/s1mplecc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:s1mple951205@gmail.com" title="E-Mail &rarr; mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prefaring"><span class="nav-number">2.</span> <span class="nav-text">Prefaring</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Installing-Docker"><span class="nav-number">3.</span> <span class="nav-text">Installing Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deploying-Ghost"><span class="nav-number">4.</span> <span class="nav-text">Deploying Ghost</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nginx-amp-Https"><span class="nav-number">5.</span> <span class="nav-text">Nginx &amp; Https</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Configuring-Nginx"><span class="nav-number">5.0.1.</span> <span class="nav-text">Configuring Nginx</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Configuring-Https"><span class="nav-number">5.0.2.</span> <span class="nav-text">Configuring Https</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-image"><span class="nav-number">6.</span> <span class="nav-text">Docker image</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-number">7.</span> <span class="nav-text">Conclusion</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">s1mple</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://s1mple.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://s1mplecc.github.io/2018/06/24/迁移 Ghost 博客并使用 Docker  部署/';
+        this.page.identifier = '2018/06/24/迁移 Ghost 博客并使用 Docker  部署/';
+        this.page.title = '迁移 Ghost 博客并使用 Docker  部署';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://s1mple.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
