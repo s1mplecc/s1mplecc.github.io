@@ -1,8 +1,8 @@
 ---
 title: 50行代码实现一个并发的 Python 爬虫程序
-date: 2018-12-11 16:08:51
-tags: [Python]
-categories: [Language]
+date: 2018-12-03T13:41:09.000Z
+tags: ['Python']
+categories: []
 ---
 ## 前言
 
@@ -24,7 +24,6 @@ import re
 import time
 from urllib import request
 from concurrent.futures import ProcessPoolExecutor
-
 from bs4 import BeautifulSoup
 
 WWW_BIQUGE_CM = 'http://www.biquge.cm'
@@ -149,8 +148,7 @@ Mean +- std dev: 1.16 sec +- 0.28 sec
 venv 也是这样的作用，用于**为一个应用创建一套隔离的 Python 运行环境**。在这个环境中，你可以管理 Python 版本，pip 版本，以及你所用的三方库的版本，而不会与全局环境冲突。
 
 如果你使用的是 PyCharm，那么创建项目时就可以勾选使用 venv（这也是建议的选择）。效果如下图：
-![86ef5354a1514b4e1cd9a8a7431583c1.png](1.png)
-命令行多了 (venv) 前缀：
+![Screen-Shot-2018-12-03-at-11.01.47-AM](/0.png)命令行多了 (venv) 前缀：
 ```
 (venv) ➜  crawler ✗
 ```
