@@ -2284,7 +2284,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
+                <time title="修改时间：2018-12-25 11:19:03" itemprop="dateModified" datetime="2018-12-25T11:19:03+08:00">2018-12-25</time>
               
             
           </span>
@@ -2368,7 +2368,7 @@
 </ul>
 <h2 id="Refactoring"><a href="#Refactoring" class="headerlink" title="Refactoring"></a>Refactoring</h2><ul>
 <li><p>首先一段整洁易读的代码应该层次分明，如果没想到重构，我们可能会使用注释和换行将代码分段</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// get connection</span><br><span class="line">Class.forName(DRIVER_CLASS);</span><br><span class="line">c = DriverManager.getConnection(DB_URL, USER, PASSWORD);</span><br><span class="line"></span><br><span class="line">// get result set</span><br><span class="line">Statement stmt = c.createStatement();</span><br><span class="line">ResultSet rs = stmt.executeQuery(SQL_SELECT_PARTS);</span><br><span class="line"></span><br><span class="line">// populate parts entity</span><br><span class="line">while (rs.next()) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// get connection</span></span><br><span class="line">Class.forName(DRIVER_CLASS);</span><br><span class="line">c = DriverManager.getConnection(DB_URL, USER, PASSWORD);</span><br><span class="line"></span><br><span class="line"><span class="comment">// get result set</span></span><br><span class="line">Statement stmt = c.createStatement();</span><br><span class="line">ResultSet rs = stmt.executeQuery(SQL_SELECT_PARTS);</span><br><span class="line"></span><br><span class="line"><span class="comment">// populate parts entity</span></span><br><span class="line"><span class="keyword">while</span> (rs.next()) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>然而，在学会重构之后，我们要习惯使用方法名产生注释的效果，<strong>注释不是越多越好，而要少而精，不必要的注释就不要</strong>。使用 <strong>提取方法（Cmd + Alt + M）</strong> 重构代码，并使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 移动方法顺序<br><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/0.png" alt="25C7F4CD-951E-4B05-8A98-5A0433520EDA">注意我这里将<code>c</code>重命名（<strong>Shift + F6</strong>）为<code>connection</code>，<strong>命名要遵循在表达清楚业务含义的同时尽可能的短</strong>，<code>rs</code>、<code>err</code>甚至<code>e</code>这种因为频繁使用，基本上可以望文生义，所以可采用业界统一认可的缩写。但<code>c</code>这种命名，一旦代码量增多后，就可能带来阅读上的困扰，应当避免。顺便说一下，应该使用<code>populateParts()</code>而不是<code>populatePartList()</code>这种命名，因为<strong>命名应该站在功能层面，不应该暴露技术实现</strong>，万一哪一天，你改成 Set 了呢？</p>
 </li>
@@ -2390,7 +2390,7 @@
 </blockquote>
 <ul>
 <li><p>在上述的抽象类 JdbcTemplate 中，我们的模版方法就应该是<code>populate()</code>方法</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public void populate() throws Exception &#123;</span><br><span class="line">    Connection connection = null;</span><br><span class="line">    try &#123;</span><br><span class="line">        connection = getConnection();</span><br><span class="line">        ResultSet rs = getResultSet(connection);</span><br><span class="line">        populateEntities(rs);</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">populate</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    Connection connection = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        connection = getConnection();</span><br><span class="line">        ResultSet rs = getResultSet(connection);</span><br><span class="line">        populateEntities(rs);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>  类似于写信的模版，类似“尊敬的xxx”、“此致，敬礼”这种千篇一律的套话我们可以定义一个模版，而需要差异化书写的只是信的内容。在<code>populate()</code>中，骨架已经搭好：先创建数据库连接，再执行 SQL 返回结果集，最后填充实体类。所以这里能看出，<strong>模版方法展现了框架的生命周期</strong>。为防止恶意操作，一般模板方法都会加上<code>final</code>关键字，不允许用户重写模版方法</p>
 </li>
 <li><p>基本方法又可以分为三种：抽象方法、具体方法和钩子方法。</p>
@@ -2758,7 +2758,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
+                <time title="修改时间：2018-12-25 11:19:01" itemprop="dateModified" datetime="2018-12-25T11:19:01+08:00">2018-12-25</time>
               
             
           </span>
@@ -2888,7 +2888,7 @@
 <li><p>实际上未重构前的代码即是一种消息链条，在<code>charge()</code>方法中实际执行的是<code>myCustomer.getWallet().subtractMoney(payment)</code>，先获取 Customer 的 Wallet，再执行 Wallet 的扣钱方法</p>
 </li>
 <li><p>那么，如下代码是否这样的残骸呢？</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">str.split(&quot;&amp;&quot;)</span><br><span class="line">    .stream()</span><br><span class="line">    .map(str -&gt; str.contains(elementName) ? str.replace(elementName + &quot;=&quot;, &quot;&quot;) : &quot;&quot;)</span><br><span class="line">    .filter(str -&gt; !str.isEmpty())</span><br><span class="line">    .reduce(&quot;&quot;, (a, b) -&gt; a + &quot;,&quot; + b);</span><br></pre></td></tr></table></figure>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">str.split(<span class="string">"&amp;"</span>)</span><br><span class="line">    .stream()</span><br><span class="line">    .map(str -&gt; str.contains(elementName) ? str.replace(elementName + <span class="string">"="</span>, <span class="string">""</span>) : <span class="string">""</span>)</span><br><span class="line">    .filter(str -&gt; !str.isEmpty())</span><br><span class="line">    .reduce(<span class="string">""</span>, (a, b) -&gt; a + <span class="string">","</span> + b);</span><br></pre></td></tr></table></figure>
 <p>  不是的。这样的代码我们一般称之为“流畅接口或连贯接口（Fluent Interface）”。二者的区别在于<strong>观察形成链条的每个方法返回的是别的对象，还是对象自身。如果返回的是别的对象，就是消息链条</strong>。所谓<code>m1().m2().m3().m4()</code>的调用，其实是调用者不需要也不想知道的“知识”，把这些中间过程的细节暴露出来没有意义，调用者关心的是最终结果；而上述代码中的<code>map()</code>与<code>filter()</code>等方法其实返回的还是 Stream 类。这一调用方式其初衷并非告知中间过程的细节，而是一种声明式的 DSL 表达，调用者可以自由地组合它们。</p>
 </li>
 </ul>
