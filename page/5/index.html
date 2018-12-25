@@ -90,7 +90,7 @@
     root: '/',
     scheme: 'Gemini',
     version: '6.6.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -187,7 +187,7 @@
     
   
 
-  <div class="container sidebar-position-left 
+  <div class="container sidebar-position-right 
   page-home">
     <div class="headband"></div>
 
@@ -339,15 +339,6 @@
     </header>
 
     
-  
-  
-  
-  
-
-  
-
-    <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
-
 
 
     <main id="main" class="main">
@@ -438,7 +429,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
               
             
           </span>
@@ -506,21 +497,21 @@
 <p>在已经<a href="https://s1mple.xyz/vue-cli-project-build/" target="_blank" rel="noopener">构建vue-cli项目</a>的基础上，我们来梳理一下vue-cli项目的结构。</p>
 </blockquote>
 <ul>
-<li>vue-cli项目总体结构<br><img src="/2017/12/14/Vue 项目结构/content/images/2017/12/vue-project-structure.png" alt="vue-project-structure"></li>
+<li>vue-cli项目总体结构<br><img src="/2017/12/14/Vue 项目结构/0.png" alt="vue-project-structure"></li>
 </ul>
 <h2 id="build"><a href="#build" class="headerlink" title="build"></a>build</h2><ul>
-<li><p>build文件主要是<strong>webpack</strong>打包生成静态文件的配置<br><img src="/2017/12/14/Vue 项目结构/content/images/2017/12/build.png" alt="build"></p>
+<li><p>build文件主要是<strong>webpack</strong>打包生成静态文件的配置<br><img src="/2017/12/14/Vue 项目结构/1.png" alt="build"></p>
 </li>
 <li><p>最新的<strong>vue-webpack-template</strong>中已经去掉了<strong>dev-server.js</strong>改用<strong>webpack-dev-server</strong>代替，<strong>webpack-dev-server</strong>是一个独立的NPM包，支持<strong>热重载</strong></p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-    &quot;dev&quot;: &quot;node build/dev-server.js&quot;,</span><br><span class="line">+    &quot;dev&quot;: &quot;webpack-dev-server --inline --progress --config build/webpack.dev.conf.js&quot;,</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="config"><a href="#config" class="headerlink" title="config"></a>config</h2><ul>
-<li>config文件主要是项目相关配置，我们常用的就是当端口冲突时配置监听端口，打包输出路径及命名等<br><img src="/2017/12/14/Vue 项目结构/content/images/2017/12/config.png" alt="config"></li>
+<li>config文件主要是项目相关配置，我们常用的就是当端口冲突时配置监听端口，打包输出路径及命名等<br><img src="/2017/12/14/Vue 项目结构/2.png" alt="config"></li>
 </ul>
 <h2 id="src"><a href="#src" class="headerlink" title="src"></a>src</h2><ul>
 <li><p>这是项目最初的一个结构图。<strong>assets</strong>不用多说，静态资源文件包括css文件、外部的一些js包都可以放这里。<strong>components</strong>和<strong>router</strong>则是Vue的俩个核心概念：<strong>组件</strong>和<strong>路由</strong></p>
-<p>  <img src="/2017/12/14/Vue 项目结构/content/images/2017/12/Screen-Shot-2017-12-16-at-5.13.01-PM.png" alt="Screen-Shot-2017-12-16-at-5.13.01-PM"></p>
+<p>  <img src="/2017/12/14/Vue 项目结构/3.png" alt="Screen-Shot-2017-12-16-at-5.13.01-PM"></p>
 </li>
 </ul>
 <h3 id="main-js"><a href="#main-js" class="headerlink" title="main.js"></a>main.js</h3><ul>
@@ -543,7 +534,7 @@
 </ul>
 <h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><ul>
 <li><p>可以看到我在浏览器控制台输入app，看到的是<strong>id=app</strong>的DOM元素，也就是<strong>App.vue</strong>中插入了<strong>HelloWorld.vue</strong>的模版文件</p>
-<p>  <img src="/2017/12/14/Vue 项目结构/content/images/2017/12/Screen-Shot-2017-12-16-at-5.45.45-PM.png" alt="Screen-Shot-2017-12-16-at-5.45.45-PM"></p>
+<p>  <img src="/2017/12/14/Vue 项目结构/4.png" alt="Screen-Shot-2017-12-16-at-5.45.45-PM"></p>
 </li>
 </ul>
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
@@ -667,7 +658,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
               
             
           </span>
@@ -752,7 +743,7 @@
 <li><p>安装<strong>vue-cli</strong>，<code>-g</code>代表<strong>global</strong>全局安装，否则只在当前目录下安装</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>初始化一个项目，<code>vue init webpack projectname</code><br><img src="/2017/12/13/Vue项目构建/content/images/2017/12/Screen-Shot-2017-12-13-at-2.28.39-PM-1.png" alt="Screen-Shot-2017-12-13-at-2.28.39-PM-1"></p>
+<li><p>初始化一个项目，<code>vue init webpack projectname</code><br><img src="/2017/12/13/Vue项目构建/0.png" alt="Screen-Shot-2017-12-13-at-2.28.39-PM-1"></p>
 <h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
 <p><strong>vue-router</strong>是路由组件，后面构建项目会用到。<br><strong>Eslint</strong>是代码规范的插件，不规范的代码会报错，有助于项目成员统一编码风格。<br>后面两个都是测试相关，暂时不用。</p>
 </blockquote>
@@ -762,7 +753,7 @@
 </li>
 </ul>
 <h2 id="Running"><a href="#Running" class="headerlink" title="Running"></a>Running</h2><ul>
-<li><p>不着急安装依赖，我们先用<strong>WebStorm</strong>打开项目<br><img src="/2017/12/13/Vue项目构建/content/images/2017/12/Screen-Shot-2017-12-13-at-3.29.38-PM-1.png" alt="Screen-Shot-2017-12-13-at-3.29.38-PM-1"><br>  其中，<code>.babelrc</code>是<strong>babel</strong>配置文件，可以将ES6代码转为ES5代码。<code>.editorconfig</code>用于统一团队中的编码风格，比如缩进规则等</p>
+<li><p>不着急安装依赖，我们先用<strong>WebStorm</strong>打开项目<br><img src="/2017/12/13/Vue项目构建/1.png" alt="Screen-Shot-2017-12-13-at-3.29.38-PM-1"><br>  其中，<code>.babelrc</code>是<strong>babel</strong>配置文件，可以将ES6代码转为ES5代码。<code>.editorconfig</code>用于统一团队中的编码风格，比如缩进规则等</p>
 </li>
 <li><p><code>package.json</code>包含了项目的信息和所需的依赖，定义了三个脚本<code>dev|start|build</code>，可以在IDE中点击运行。<code>devDependencies</code>表示只有开发环境需要的依赖，比如Babel这种开发时的转码工具，生产环境即浏览器并不需要。<code>^2.5.2</code>表示向后兼容，实际下载的版本一定是大于等于该版本的</p>
   <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"vuedemo"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">"A Vue.js project"</span>,</span><br><span class="line">  <span class="attr">"author"</span>: <span class="string">"s1mple &lt;798342418@qq.com&gt;"</span>,</span><br><span class="line">  <span class="attr">"private"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"dev"</span>: <span class="string">"webpack-dev-server --inline --progress --config build/webpack.dev.conf.js"</span>,</span><br><span class="line">    <span class="attr">"start"</span>: <span class="string">"npm run dev"</span>,</span><br><span class="line">    <span class="attr">"build"</span>: <span class="string">"node build/build.js"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"dependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"vue"</span>: <span class="string">"^2.5.2"</span>,</span><br><span class="line">    <span class="attr">"vue-router"</span>: <span class="string">"^3.0.1"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"autoprefixer"</span>: <span class="string">"^7.1.2"</span>,</span><br><span class="line">    <span class="attr">"babel-core"</span>: <span class="string">"^6.22.1"</span>,</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
@@ -781,14 +772,14 @@
 </li>
 <li><p>执行<code>npm run dev</code>或者在IDE中点击<strong>start</strong>即可启动。会提示编译成功并且访问Url为 <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a></p>
 </li>
-<li><p>在IDE中执行<code>start</code>时其实执行了<code>npm run dev</code>，而<code>dev</code>又执行了<code>webpack-dev-server</code><br><img src="/2017/12/13/Vue项目构建/content/images/2017/12/Screen-Shot-2017-12-13-at-10.27.43-PM.png" alt="Screen-Shot-2017-12-13-at-10.27.43-PM"></p>
+<li><p>在IDE中执行<code>start</code>时其实执行了<code>npm run dev</code>，而<code>dev</code>又执行了<code>webpack-dev-server</code><br><img src="/2017/12/13/Vue项目构建/2.png" alt="Screen-Shot-2017-12-13-at-10.27.43-PM"></p>
 </li>
 </ul>
 <h2 id="What’s-webpack"><a href="#What’s-webpack" class="headerlink" title="What’s webpack"></a>What’s webpack</h2><blockquote>
 <p>本质上，<strong>webpack</strong>是一个现代 JavaScript 应用程序的模块打包器(<strong>module bundler</strong>)。当 webpack 处理应用程序时，它会递归地构建一个依赖关系图(dependency graph)，其中包含应用程序需要的每个模块，然后将所有这些模块打包成一个或多个<strong>bundle</strong>。</p>
 </blockquote>
 <ul>
-<li><p>如果我们的js代码中<code>require|import</code>了一个js依赖包，<strong>webpack</strong>可以方便的将我们js打包成一个<strong>bundle</strong>包，而不是像传统的HTML中<code>&lt;script&gt;</code>去引用一堆js包<br><img src="/2017/12/13/Vue项目构建/content/images/2017/12/webpack.png" alt="webpack"></p>
+<li><p>如果我们的js代码中<code>require|import</code>了一个js依赖包，<strong>webpack</strong>可以方便的将我们js打包成一个<strong>bundle</strong>包，而不是像传统的HTML中<code>&lt;script&gt;</code>去引用一堆js包<br><img src="/2017/12/13/Vue项目构建/3.png" alt="webpack"></p>
 </li>
 <li><p>在执行<code>build</code>时会去读取<strong>webpack</strong>的相关配置文件，<code>webpack.*.config.js</code>中定义了程序入口<strong>entry</strong>，输出的文件路径和文件名等</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  context: path.resolve(__dirname, <span class="string">'../'</span>),</span><br><span class="line">  entry: &#123;</span><br><span class="line">    app: <span class="string">'./src/main.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: config.build.assetsRoot,</span><br><span class="line">    filename: <span class="string">'[name].js'</span>,</span><br></pre></td></tr></table></figure>
@@ -921,7 +912,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
               
             
           </span>
@@ -1149,7 +1140,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
               
             
           </span>
@@ -1382,7 +1373,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
               
             
           </span>
@@ -1581,7 +1572,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
               
             
           </span>
@@ -1851,7 +1842,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
               
             
           </span>
@@ -1988,7 +1979,7 @@
 </li>
 </ul>
 <ul>
-<li>如果已正常启动，访问<code>{IP}:8081</code>即可前往控制台，8081为nexus默认端口，默认用户名admin，密码admin123，可在控制台中修改密码<br><img src="/2017/11/21/搭建Git和Maven私服/content/images/2017/11/-----2017-11-22---4.40.57.png" alt="-----2017-11-22---4.40.57"></li>
+<li>如果已正常启动，访问<code>{IP}:8081</code>即可前往控制台，8081为nexus默认端口，默认用户名admin，密码admin123，可在控制台中修改密码<br><img src="/2017/11/21/搭建Git和Maven私服/0.png" alt="-----2017-11-22---4.40.57"></li>
 </ul>
 <h4 id="Tips-1"><a href="#Tips-1" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
 <p>其中<strong>maven-public</strong>是一个组，包含了<strong>maven-central</strong>(代理中央仓库，存放依赖构件)、<strong>maven-releases</strong>(存放发行版本)、<strong>maven-snapshots</strong>(存放快照版本)。</p>
@@ -2006,7 +1997,7 @@
 <ul>
 <li><p>在<code>&lt;dependencies&gt;</code>中添加你需要的依赖，执行<code>mvn package</code>打包项目即可</p>
 </li>
-<li><p>控制台上查看服务器上已经存储的依赖包<br><img src="/2017/11/21/搭建Git和Maven私服/content/images/2017/11/-----2017-11-22---4.41.17.png" alt="-----2017-11-22---4.41.17"></p>
+<li><p>控制台上查看服务器上已经存储的依赖包<br><img src="/2017/11/21/搭建Git和Maven私服/1.png" alt="-----2017-11-22---4.41.17"></p>
 </li>
 </ul>
 <h2 id="搭建GitLab"><a href="#搭建GitLab" class="headerlink" title="搭建GitLab"></a>搭建GitLab</h2><ul>
@@ -2155,7 +2146,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
               
             
           </span>
@@ -2223,7 +2214,7 @@
 <p>配置Nginx目录，可以很方便的下载镜像，查看文件等等</p>
 </blockquote>
 <ul>
-<li>效果图<br><img src="/2017/11/19/配置Nginx目录/content/images/2017/11/-----2017-11-19---10.54.27.png" alt="-----2017-11-19---10.54.27"></li>
+<li>效果图<br><img src="/2017/11/19/配置Nginx目录/0.png" alt="-----2017-11-19---10.54.27"></li>
 </ul>
 <h2 id="Configure-Nginx"><a href="#Configure-Nginx" class="headerlink" title="Configure Nginx"></a>Configure Nginx</h2><ul>
 <li><p>前往nginx配置目录</p>
@@ -2248,11 +2239,11 @@
 </li>
 </ul>
 <ul>
-<li><p>它会自动检测nginx的配置文件<br><img src="/2017/11/19/配置Nginx目录/content/images/2017/11/-----2017-11-19---10.31.17.png" alt="-----2017-11-19---10.31.17"></p>
+<li><p>它会自动检测nginx的配置文件<br><img src="/2017/11/19/配置Nginx目录/1.png" alt="-----2017-11-19---10.31.17"></p>
 </li>
-<li><p>提示已经存在证书，并且已经配置了一些域名，询问是否扩充，选择E<br><img src="/2017/11/19/配置Nginx目录/content/images/2017/11/-----2017-11-19---10.32.45.png" alt="-----2017-11-19---10.32.45"></p>
+<li><p>提示已经存在证书，并且已经配置了一些域名，询问是否扩充，选择E<br><img src="/2017/11/19/配置Nginx目录/2.png" alt="-----2017-11-19---10.32.45"></p>
 </li>
-<li><p>询问是否将HTTP重定位到HTTPS，选择2是所有请求均重定位到HTTPS<br><img src="/2017/11/19/配置Nginx目录/content/images/2017/11/-----2017-11-19---10.38.24.png" alt="-----2017-11-19---10.38.24"></p>
+<li><p>询问是否将HTTP重定位到HTTPS，选择2是所有请求均重定位到HTTPS<br><img src="/2017/11/19/配置Nginx目录/3.png" alt="-----2017-11-19---10.38.24"></p>
 </li>
 </ul>
 
@@ -2373,7 +2364,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
               
             
           </span>
@@ -2700,7 +2691,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
               
             
           </span>
@@ -2768,7 +2759,7 @@
 <p>MyBatis Generator(MBG)是适用于MyBatis和iBatis的代码生成器，它可以根据数据库自动生成Model层的JavaBean，DAO层的Mapper接口，映射SQL的XML文件。<a href="http://www.mybatis.org/generator/index.html" target="_blank" rel="noopener">官方文档</a></p>
 </blockquote>
 <ul>
-<li>我们先看一下项目结构，我们的目的是生成dao、model以及mapping目录下的代码<br><img src="/2017/11/11/MyBatis Generator/content/images/2017/11/-----2017-11-26---7.26.01.png" alt="-----2017-11-26---7.26.01"></li>
+<li>我们先看一下项目结构，我们的目的是生成dao、model以及mapping目录下的代码<br><img src="/2017/11/11/MyBatis Generator/0.png" alt="-----2017-11-26---7.26.01"></li>
 </ul>
 <h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
 <li>Intellj IDEA</li>
@@ -2803,14 +2794,14 @@
 <li><code>&lt;table&gt;</code>使用到的表，可以设置对象名，自增主键等</li>
 </ol>
 <h2 id="Run-It"><a href="#Run-It" class="headerlink" title="Run It"></a>Run It</h2><ul>
-<li>可以命令行执行<code>mvn mybatis-generator:generate</code>运行MBG，或者直接在Maven Plugins中双击运行<br><img src="/2017/11/11/MyBatis Generator/content/images/2017/11/-----2017-11-27---10.37.48.png" alt="-----2017-11-27---10.37.48"></li>
+<li>可以命令行执行<code>mvn mybatis-generator:generate</code>运行MBG，或者直接在Maven Plugins中双击运行<br><img src="/2017/11/11/MyBatis Generator/1.png" alt="-----2017-11-27---10.37.48"></li>
 </ul>
 <h2 id="Results-Show"><a href="#Results-Show" class="headerlink" title="Results Show"></a>Results Show</h2><ul>
-<li><p><strong>生成的Model类</strong>，可以看到package就是我们在<code>targetPackage</code>中的写的内容，有各种注解及注释信息，以及自增主键的注解。<br><img src="/2017/11/11/MyBatis Generator/content/images/2017/11/-----2017-11-27---1.15.04.png" alt="-----2017-11-27---1.15.04"></p>
+<li><p><strong>生成的Model类</strong>，可以看到package就是我们在<code>targetPackage</code>中的写的内容，有各种注解及注释信息，以及自增主键的注解。<br><img src="/2017/11/11/MyBatis Generator/2.png" alt="-----2017-11-27---1.15.04"></p>
 </li>
-<li><p><strong>生成的Mapper.xml</strong>，一般还要自己根据需求添加SQL语句<br><img src="/2017/11/11/MyBatis Generator/content/images/2017/11/-----2017-11-27---1.24.34.png" alt="-----2017-11-27---1.24.34"></p>
+<li><p><strong>生成的Mapper.xml</strong>，一般还要自己根据需求添加SQL语句<br><img src="/2017/11/11/MyBatis Generator/3.png" alt="-----2017-11-27---1.24.34"></p>
 </li>
-<li><p><strong>生成的Dao层的Mapper接口</strong>，BaseMapper是自己写的继承了tk mapper的接口类。还需要根据需求添加方法<br><img src="/2017/11/11/MyBatis Generator/content/images/2017/11/-----2017-11-27---1.33.29.png" alt="-----2017-11-27---1.33.29"></p>
+<li><p><strong>生成的Dao层的Mapper接口</strong>，BaseMapper是自己写的继承了tk mapper的接口类。还需要根据需求添加方法<br><img src="/2017/11/11/MyBatis Generator/4.png" alt="-----2017-11-27---1.33.29"></p>
 </li>
 </ul>
 <h2 id="Postscripts"><a href="#Postscripts" class="headerlink" title="Postscripts"></a>Postscripts</h2><blockquote>
@@ -2921,7 +2912,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-count">0</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>

@@ -90,7 +90,7 @@
     root: '/',
     scheme: 'Gemini',
     version: '6.6.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -120,16 +120,16 @@
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="Preface 该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。上一篇我们通过报表参数填充案例复习了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起。本篇我们将通过 PartDB 案例来见识 IDEA 中 Extract Superclass 等强大的重构功能，以及与案例相关的设计模式：模版方法模式  Prereq">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20PartDB%20案例与模版方法模式/content/images/2018/05/25C7F4CD-951E-4B05-8A98-5A0433520EDA.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20PartDB%20案例与模版方法模式/content/images/2018/05/953ECD52-3430-4BFD-A662-24E78BCAF755.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20PartDB%20案例与模版方法模式/content/images/2018/05/F0675E41-8516-4FC3-96BB-928AB1060D40.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20PartDB%20案例与模版方法模式/content/images/2018/05/68B462DA-CB1F-41FD-A519-6576CF7BD2FE.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20PartDB%20案例与模版方法模式/content/images/2018/05/CC64100D-FC25-4825-85DD-83AECC318E86.png">
-<meta property="og:updated_time" content="2018-12-24T08:35:32.294Z">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20PartDB%20案例与模版方法模式/0.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20PartDB%20案例与模版方法模式/1.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20PartDB%20案例与模版方法模式/2.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20PartDB%20案例与模版方法模式/3.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20PartDB%20案例与模版方法模式/4.png">
+<meta property="og:updated_time" content="2018-12-25T03:06:55.652Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Clean Code -- PartDB 案例与模版方法模式">
 <meta name="twitter:description" content="Preface 该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。上一篇我们通过报表参数填充案例复习了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起。本篇我们将通过 PartDB 案例来见识 IDEA 中 Extract Superclass 等强大的重构功能，以及与案例相关的设计模式：模版方法模式  Prereq">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20PartDB%20案例与模版方法模式/content/images/2018/05/25C7F4CD-951E-4B05-8A98-5A0433520EDA.png">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20PartDB%20案例与模版方法模式/0.png">
 
 
 
@@ -195,7 +195,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -346,15 +346,6 @@
     </header>
 
     
-  
-  
-  
-  
-
-  
-
-    <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
-
 
 
     <main id="main" class="main">
@@ -442,7 +433,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
               
             
           </span>
@@ -526,17 +517,17 @@
 <li><p>首先一段整洁易读的代码应该层次分明，如果没想到重构，我们可能会使用注释和换行将代码分段</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// get connection</span><br><span class="line">Class.forName(DRIVER_CLASS);</span><br><span class="line">c = DriverManager.getConnection(DB_URL, USER, PASSWORD);</span><br><span class="line"></span><br><span class="line">// get result set</span><br><span class="line">Statement stmt = c.createStatement();</span><br><span class="line">ResultSet rs = stmt.executeQuery(SQL_SELECT_PARTS);</span><br><span class="line"></span><br><span class="line">// populate parts entity</span><br><span class="line">while (rs.next()) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>然而，在学会重构之后，我们要习惯使用方法名产生注释的效果，<strong>注释不是越多越好，而要少而精，不必要的注释就不要</strong>。使用 <strong>提取方法（Cmd + Alt + M）</strong> 重构代码，并使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 移动方法顺序<br><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/content/images/2018/05/25C7F4CD-951E-4B05-8A98-5A0433520EDA.png" alt="25C7F4CD-951E-4B05-8A98-5A0433520EDA">注意我这里将<code>c</code>重命名（<strong>Shift + F6</strong>）为<code>connection</code>，<strong>命名要遵循在表达清楚业务含义的同时尽可能的短</strong>，<code>rs</code>、<code>err</code>甚至<code>e</code>这种因为频繁使用，基本上可以望文生义，所以可采用业界统一认可的缩写。但<code>c</code>这种命名，一旦代码量增多后，就可能带来阅读上的困扰，应当避免。顺便说一下，应该使用<code>populateParts()</code>而不是<code>populatePartList()</code>这种命名，因为<strong>命名应该站在功能层面，不应该暴露技术实现</strong>，万一哪一天，你改成 Set 了呢？</p>
+<li><p>然而，在学会重构之后，我们要习惯使用方法名产生注释的效果，<strong>注释不是越多越好，而要少而精，不必要的注释就不要</strong>。使用 <strong>提取方法（Cmd + Alt + M）</strong> 重构代码，并使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 移动方法顺序<br><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/0.png" alt="25C7F4CD-951E-4B05-8A98-5A0433520EDA">注意我这里将<code>c</code>重命名（<strong>Shift + F6</strong>）为<code>connection</code>，<strong>命名要遵循在表达清楚业务含义的同时尽可能的短</strong>，<code>rs</code>、<code>err</code>甚至<code>e</code>这种因为频繁使用，基本上可以望文生义，所以可采用业界统一认可的缩写。但<code>c</code>这种命名，一旦代码量增多后，就可能带来阅读上的困扰，应当避免。顺便说一下，应该使用<code>populateParts()</code>而不是<code>populatePartList()</code>这种命名，因为<strong>命名应该站在功能层面，不应该暴露技术实现</strong>，万一哪一天，你改成 Set 了呢？</p>
 </li>
-<li><p>我们来观察提取出的三个方法。<code>getConnection()</code>创建数据库连接，在抽象层面与业务无关的，实现层面我们暂不考虑用户自定义情况（实际上应该由配置文件读入），所以实现层面也与业务无关。<code>getResultSet()</code>执行 SQL 获取结果集，在抽象层面与业务无关。实现层面上由于<code>SQL_SELECT_PARTS</code>所以与业务强耦合。我们可以使用 <strong>Cmd + Alt + N</strong> ，将<code>select * from part</code> SQL 语句<strong>内联</strong>，再提取<code>getSql()</code>方法（<strong>Cmd + Alt + M</strong>）<br><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/content/images/2018/05/953ECD52-3430-4BFD-A662-24E78BCAF755.png" alt="953ECD52-3430-4BFD-A662-24E78BCAF755"></p>
+<li><p>我们来观察提取出的三个方法。<code>getConnection()</code>创建数据库连接，在抽象层面与业务无关的，实现层面我们暂不考虑用户自定义情况（实际上应该由配置文件读入），所以实现层面也与业务无关。<code>getResultSet()</code>执行 SQL 获取结果集，在抽象层面与业务无关。实现层面上由于<code>SQL_SELECT_PARTS</code>所以与业务强耦合。我们可以使用 <strong>Cmd + Alt + N</strong> ，将<code>select * from part</code> SQL 语句<strong>内联</strong>，再提取<code>getSql()</code>方法（<strong>Cmd + Alt + M</strong>）<br><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/1.png" alt="953ECD52-3430-4BFD-A662-24E78BCAF755"></p>
 </li>
 <li><p>如此一来，<code>getResultSet()</code>在实现层面也与业务无关了。而<code>getSql()</code>方法在抽象层面与业务无关，在实现层面就与业务有关了。<code>populateParts()</code>这个名字容易让人产生误解，我们将其重命名为<code>populateEntities()</code>，这样，它在抽象层面也与业务无关，而在实现层面与业务有关。为什么我一再强调<strong>抽象层面</strong>和<strong>实现层面</strong>与<strong>业务</strong>的关系，就是为了让方法变得纯粹。这也是软件设计中一种重要的设计思维：<strong>关注点分离</strong>，目的是将<strong>解决特定领域问题的代码从业务逻辑中独立出来，业务逻辑的代码中不再含有针对特定领域问题代码的调用，业务逻辑同特定领域问题的关系通过侧面来封装、维护，这样原本分散在在整个应用程序中的变动就可以很好的管理起来</strong>。比方有一个函数叫做<code>CreateNewCustomer()</code>，那么该函数只与客户的数据（属性）打交道，而给新客户自动发优惠券的动作就不能放到这个函数里面</p>
 </li>
 <li><p>现在，我们所有的方法都在抽象层面与业务无关，只有<code>getSql()</code>和<code>populateEntities()</code>在实现层面与业务有关。至此，我们拨开重重迷雾，冰山的一角轰然显现！既然大家都在抽象层面与业务无关，我们就应该<strong>抽象出更高阶的抽象类</strong>，这里就用到了 <strong>Extract Superclass</strong> 这个神奇的重构手法</p>
 </li>
-<li><p>使用 <strong>Ctrl + T</strong> 调出重构菜单，输入 super 就可以看到 Extract Superclass 的提示，敲击回车<br><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/content/images/2018/05/F0675E41-8516-4FC3-96BB-928AB1060D40.png" alt="F0675E41-8516-4FC3-96BB-928AB1060D40">注意需要勾选组成父类的成员，这里除了最后一个<code>partList</code>是业务独有的，其他全勾选上，而<code>getSql()</code>和<code>populateEntities()</code>方法因为具体实现与业务相关，就应该是子类去重写，所以应当勾选上 Make abstract</p>
+<li><p>使用 <strong>Ctrl + T</strong> 调出重构菜单，输入 super 就可以看到 Extract Superclass 的提示，敲击回车<br><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/2.png" alt="F0675E41-8516-4FC3-96BB-928AB1060D40">注意需要勾选组成父类的成员，这里除了最后一个<code>partList</code>是业务独有的，其他全勾选上，而<code>getSql()</code>和<code>populateEntities()</code>方法因为具体实现与业务相关，就应该是子类去重写，所以应当勾选上 Make abstract</p>
 </li>
-<li><p>我们看看重构后的代码，简直太神奇了对不对！<br><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/content/images/2018/05/68B462DA-CB1F-41FD-A519-6576CF7BD2FE.png" alt="68B462DA-CB1F-41FD-A519-6576CF7BD2FE"><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/content/images/2018/05/CC64100D-FC25-4825-85DD-83AECC318E86.png" alt="CC64100D-FC25-4825-85DD-83AECC318E86"></p>
+<li><p>我们看看重构后的代码，简直太神奇了对不对！<br><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/3.png" alt="68B462DA-CB1F-41FD-A519-6576CF7BD2FE"><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/4.png" alt="CC64100D-FC25-4825-85DD-83AECC318E86"></p>
 </li>
 <li><p>为什么我在提取父类时直接将父类命名为 JdbcTemplate，大家应该不难想到，我们重构完成的抽象父类，就是一个最简化的 JdbcTemplate。许多框架亦是如此诞生的，使用者使用时让自己的业务实体类去继承这个模版类，重写业务相关方法。这也是软件设计模式中非常著名的<strong>模版方法模式</strong></p>
 </li>
@@ -710,7 +701,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-count">0</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>

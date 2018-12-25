@@ -90,7 +90,7 @@
     root: '/',
     scheme: 'Gemini',
     version: '6.6.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -120,15 +120,15 @@
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="Preface 目前常用的 Linux 系统和 OS X 系统的默认 Shell 都是 bash，但是真正强大的 Shell 是深藏不露的 zsh， 这货绝对是马车中的跑车，跑车中的飞行车，史称『终极 Shell』，但是由于配置过于复杂，所以初期无人问津，很多人跑过来看看 zsh 的配置指南，什么都不说转身就走了。直到有一天，国外某位大牛开源出一个能够让你快速上手的 zsh 项目，叫做『oh my">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/content/images/2018/07/8F9622E7-901E-46F0-94D7-B5E7AEE04C08.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/content/images/2018/07/678A0E3A-EDE9-4D9B-AA39-A6E14DC6E2EC.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/content/images/2018/07/82881CCA-A343-45D1-9A1D-4DD8E77E1B78.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/content/images/2018/07/8B1B4FDE-F810-4E90-B20A-37274ABDDFDE.png">
-<meta property="og:updated_time" content="2018-12-24T08:35:32.300Z">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/0.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/1.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/2.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/3.png">
+<meta property="og:updated_time" content="2018-12-25T03:06:55.689Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mac 的终极 Shell -- ZSH">
 <meta name="twitter:description" content="Preface 目前常用的 Linux 系统和 OS X 系统的默认 Shell 都是 bash，但是真正强大的 Shell 是深藏不露的 zsh， 这货绝对是马车中的跑车，跑车中的飞行车，史称『终极 Shell』，但是由于配置过于复杂，所以初期无人问津，很多人跑过来看看 zsh 的配置指南，什么都不说转身就走了。直到有一天，国外某位大牛开源出一个能够让你快速上手的 zsh 项目，叫做『oh my">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/content/images/2018/07/8F9622E7-901E-46F0-94D7-B5E7AEE04C08.png">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/0.png">
 
 
 
@@ -194,7 +194,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -345,15 +345,6 @@
     </header>
 
     
-  
-  
-  
-  
-
-  
-
-    <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
-
 
 
     <main id="main" class="main">
@@ -441,7 +432,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-24 16:35:32" itemprop="dateModified" datetime="2018-12-24T16:35:32+08:00">2018-12-24</time>
+                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
               
             
           </span>
@@ -509,7 +500,7 @@
 <h2 id="ZSH"><a href="#ZSH" class="headerlink" title="ZSH"></a>ZSH</h2><ul>
 <li><p>安装 zsh</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install zsh</span><br></pre></td></tr></table></figure>
-<p>  安装完后在 Terminal 的设置中设置默认使用 zsh<img src="/2018/07/30/Mac 的终极 Shell -- ZSH/content/images/2018/07/8F9622E7-901E-46F0-94D7-B5E7AEE04C08.png" alt="8F9622E7-901E-46F0-94D7-B5E7AEE04C08"></p>
+<p>  安装完后在 Terminal 的设置中设置默认使用 zsh<img src="/2018/07/30/Mac 的终极 Shell -- ZSH/0.png" alt="8F9622E7-901E-46F0-94D7-B5E7AEE04C08"></p>
 </li>
 </ul>
 <h2 id="Oh-My-Zsh"><a href="#Oh-My-Zsh" class="headerlink" title="Oh My Zsh"></a>Oh My Zsh</h2><ul>
@@ -538,18 +529,18 @@
 <h4 id="Z"><a href="#Z" class="headerlink" title="Z"></a>Z</h4><ul>
 <li><p>功能和 autojump 类似，使用<code>z {path}</code>实现目录间快速跳转，并且作为 oh-my-zsh 的内置组件，只需要在<code>.zshrc</code>中打开即可。<a href="https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/z" target="_blank" rel="noopener">GitHub 链接</a></p>
 </li>
-<li><p>如图，Z 插件会记录你前往的目录，并根据进入次数计算权重（<code>z -r</code>查看权重），以后再进入该目录只用<code>z ddd</code>，会进行<strong>模糊匹配</strong>，前往<strong>权重最高</strong>的目录<br><img src="/2018/07/30/Mac 的终极 Shell -- ZSH/content/images/2018/07/678A0E3A-EDE9-4D9B-AA39-A6E14DC6E2EC.png" alt="678A0E3A-EDE9-4D9B-AA39-A6E14DC6E2EC"></p>
+<li><p>如图，Z 插件会记录你前往的目录，并根据进入次数计算权重（<code>z -r</code>查看权重），以后再进入该目录只用<code>z ddd</code>，会进行<strong>模糊匹配</strong>，前往<strong>权重最高</strong>的目录<br><img src="/2018/07/30/Mac 的终极 Shell -- ZSH/1.png" alt="678A0E3A-EDE9-4D9B-AA39-A6E14DC6E2EC"></p>
 </li>
 </ul>
 <h4 id="zsh-syntax-highlighting"><a href="#zsh-syntax-highlighting" class="headerlink" title="zsh-syntax-highlighting"></a>zsh-syntax-highlighting</h4><ul>
-<li><p>终端输入的命令正确会<strong>绿色高亮</strong>显示，输入错误会显示红色，用于在执行命令前检查是否有语法错误。<a href="https://github.com/zsh-users/zsh-syntax-highlighting" target="_blank" rel="noopener">GitHub 链接</a><br><img src="/2018/07/30/Mac 的终极 Shell -- ZSH/content/images/2018/07/82881CCA-A343-45D1-9A1D-4DD8E77E1B78.png" alt="82881CCA-A343-45D1-9A1D-4DD8E77E1B78"></p>
+<li><p>终端输入的命令正确会<strong>绿色高亮</strong>显示，输入错误会显示红色，用于在执行命令前检查是否有语法错误。<a href="https://github.com/zsh-users/zsh-syntax-highlighting" target="_blank" rel="noopener">GitHub 链接</a><br><img src="/2018/07/30/Mac 的终极 Shell -- ZSH/2.png" alt="82881CCA-A343-45D1-9A1D-4DD8E77E1B78"></p>
 </li>
 <li><p>安装，完成后在<code>.zshrc</code>中添加</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h4 id="zsh-autosuggestions"><a href="#zsh-autosuggestions" class="headerlink" title="zsh-autosuggestions"></a>zsh-autosuggestions</h4><ul>
-<li><p>效率神器。如图输入命令时，会给出建议的命令（灰色部分）按键盘 → 补全。<a href="https://github.com/zsh-users/zsh-autosuggestions" target="_blank" rel="noopener">GitHub 链接</a><br><img src="/2018/07/30/Mac 的终极 Shell -- ZSH/content/images/2018/07/8B1B4FDE-F810-4E90-B20A-37274ABDDFDE.png" alt="8B1B4FDE-F810-4E90-B20A-37274ABDDFDE"></p>
+<li><p>效率神器。如图输入命令时，会给出建议的命令（灰色部分）按键盘 → 补全。<a href="https://github.com/zsh-users/zsh-autosuggestions" target="_blank" rel="noopener">GitHub 链接</a><br><img src="/2018/07/30/Mac 的终极 Shell -- ZSH/3.png" alt="8B1B4FDE-F810-4E90-B20A-37274ABDDFDE"></p>
 </li>
 <li><p>安装，完成后在<code>.zshrc</code>中添加</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
@@ -701,7 +692,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-count">0</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
