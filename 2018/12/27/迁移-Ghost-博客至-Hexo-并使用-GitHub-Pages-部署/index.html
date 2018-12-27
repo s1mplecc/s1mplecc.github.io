@@ -125,7 +125,7 @@
 <meta property="og:image" content="https://s1mplecc.github.io/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/2.png">
 <meta property="og:image" content="https://s1mplecc.github.io/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/3.png">
 <meta property="og:image" content="https://s1mplecc.github.io/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/4.png">
-<meta property="og:updated_time" content="2018-12-27T07:29:57.906Z">
+<meta property="og:updated_time" content="2018-12-27T13:03:09.740Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="迁移 Ghost 博客至 Hexo 并使用 GitHub Pages 部署">
 <meta name="twitter:description" content="为什么迁移Ghost优点： 1. 支持在线编辑文章，随时更新随时发布。 2. 图片上传方便，直接拷贝到正文即可，会自动上传到服务器并生成 Markdown 链接。 3. 支持多人同时使用，可以用作团队博客。 缺点： 1. 需要在服务器上部署 Ghost。 2. 本地和服务器端文章同步麻烦（这也是我换用 Hexo 的主要原因）。 3. 不支持离线编辑文章。虽说这个可以本地写完了再一次性拷贝到服务器上">
@@ -416,7 +416,7 @@
                 
               
 
-              <time title="创建时间：2018-12-27 13:45:37 / 修改时间：15:29:57" itemprop="dateCreated datePublished" datetime="2018-12-27T13:45:37+08:00">2018-12-27</time>
+              <time title="创建时间：2018-12-27 13:45:37 / 修改时间：21:03:09" itemprop="dateCreated datePublished" datetime="2018-12-27T13:45:37+08:00">2018-12-27</time>
             
 
             
@@ -426,6 +426,24 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -459,7 +477,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.9k</span>
+                <span title="本文字数">4k</span>
               
 
               
@@ -537,7 +555,7 @@
 <p>除此之外，图片还可以放在 <code>source/_posts</code> 下与文章同名的目录中。需要先将 Hexo 配置文件中的开关打开。</p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hexo _config.yml</span></span><br><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
 <p>这样在执行 <code>hexo new xxx</code> 后会在 <code>source/_posts</code> 中会生成文章 <code>xxx.md</code> 和同名文件夹 <code>xxx</code>。将图片资源放在 <code>xxx</code> 中，然后在 <code>xxx.md</code> 中使用图片的文件名引用它。</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![](image.jpg)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![](image.jpg)</span><br></pre></td></tr></table></figure>
 <h2 id="ghost-to-hexo-migrater"><a href="#ghost-to-hexo-migrater" class="headerlink" title="ghost-to-hexo-migrater"></a>ghost-to-hexo-migrater</h2><p>我自己用 Python 写了一个迁移 Ghost 博客至 Hexo 的程序，项目已经提交到 <a href="https://github.com/s1mplecc/ghost-to-hexo-migrater" target="_blank" rel="noopener">GitHub</a>。</p>
 <p>主要做了如下事情：</p>
 <ul>
@@ -545,6 +563,7 @@
 <li>给每篇文章加上 Hexo 规定的 header，包括 Title、创建日期、Tags；由于 Ghost 博客不支持分类，所以保留 categories 默认为空。</li>
 <li>按照 Hexo 的规定，创建与文章标题一致的文件夹用于存放文章中的图片，并更换文章中图片的 Markdown 链接。</li>
 </ul>
+<p>这样可以将整个 <code>downloads</code> 文件夹拷贝到 Hexo 的 <code>source/_posts</code> 目录下发布即可！</p>
 <p><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/4.png" alt="7292889b7bb90233a1ac2dd1ac2cd97a.png"></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages官网</a></li>
@@ -684,6 +703,33 @@
               
 
               
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
 
               
                 
@@ -691,6 +737,8 @@
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
+                    
+                      
                     
                       
                     
