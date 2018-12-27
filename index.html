@@ -412,7 +412,7 @@
                 
               
 
-              <time title="创建时间：2018-12-27 13:45:37 / 修改时间：13:48:25" itemprop="dateCreated datePublished" datetime="2018-12-27T13:45:37+08:00">2018-12-27</time>
+              <time title="创建时间：2018-12-27 13:45:37 / 修改时间：15:01:22" itemprop="dateCreated datePublished" datetime="2018-12-27T13:45:37+08:00">2018-12-27</time>
             
 
             
@@ -481,13 +481,11 @@
       
         
           
-            <h2 id="为什么迁移"><a href="#为什么迁移" class="headerlink" title="为什么迁移"></a>为什么迁移</h2><h3 id="Ghost"><a href="#Ghost" class="headerlink" title="Ghost"></a>Ghost</h3><p><img src="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p265" alt="dbdd8ad99f065192aa340cf474709b2d.png"><br><img src="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p266" alt="fa0a3c8ae59030f8e5ef80a9b04d8c7d.png"></p>
-<p>优点：</p>
-<ol>
-<li>支持在线编辑文章，随时更新随时发布。</li>
-<li>图片上传方便，直接拷贝到正文即可，会自动上传到服务器并生成 Markdown 链接。</li>
-<li>支持多人同时使用，可以用作团队博客。</li>
-</ol>
+            <h2 id="为什么迁移"><a href="#为什么迁移" class="headerlink" title="为什么迁移"></a>为什么迁移</h2><h3 id="Ghost"><a href="#Ghost" class="headerlink" title="Ghost"></a>Ghost</h3><p>优点：</p>
+<pre><code>1. 支持在线编辑文章，随时更新随时发布。
+2. 图片上传方便，直接拷贝到正文即可，会自动上传到服务器并生成 Markdown 链接。
+3. 支持多人同时使用，可以用作团队博客。
+</code></pre><p><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/0.png" alt="dbdd8ad99f065192aa340cf474709b2d.png"><br><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/1.png" alt="fa0a3c8ae59030f8e5ef80a9b04d8c7d.png"></p>
 <p>缺点：</p>
 <ol>
 <li>需要在服务器上部署 Ghost。</li>
@@ -495,7 +493,7 @@
 <li>不支持离线编辑文章（虽说这个可以本地写完了再一次性拷贝到服务器，但这又回到了缺点 2）。</li>
 <li>Themes 配置麻烦，不够统一。我的 Kaldorei 主题还是去 GitHub 上克隆的源码，修改了源文件后打包上传的。</li>
 </ol>
-<h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><p><img src="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p267" alt="6bc65c0ff0fb6d62ea90ce4c35c04ac9.png"><br><img src="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p268" alt="8b1c5aa127adbfef220cfb30a6d55e1d.png"></p>
+<h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><p><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/2.png" alt="6bc65c0ff0fb6d62ea90ce4c35c04ac9.png"><br><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/3.png" alt="8b1c5aa127adbfef220cfb30a6d55e1d.png"></p>
 <p>优点：</p>
 <ol>
 <li>文档本地化。在本地编写博客，一条指令即可生成静态网页。（具体体现就是你在 <code>source/_posts</code> 下编写）</li>
@@ -503,14 +501,14 @@
 <li>丰富的插件和主题，配置也统一化了。比如上图我使用的 Next 主题，Next 的相关配置修改 <code>_config.yml</code> 即可；Hexo 的相关配置修改主目录的 <code>_config.yml</code> 即可。</li>
 <li>图片上传还算方便。在与文章同名的文件夹下保存图片即可。这个下面会细说。</li>
 </ol>
-<h2 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h2><h4 id="GitHub-创建仓库"><a href="#GitHub-创建仓库" class="headerlink" title="GitHub 创建仓库"></a>GitHub 创建仓库</h4><p>GitHub Pages 分为两类，用户主页和项目主页。我们需要部署的是用户主页，首先需要在 GitHub 上新建一个仓库。仓库名必须为 <code>${GitHub username}.github.io</code>。这样才会被识别为 GitHub Pages。用户主页是唯一的，填其他名称只会被当成普通项目。通过 <code>https://${GitHub username}.github.io</code> 进行访问。</p>
-<h4 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h4><p>GitHub Pages 会自动部署静态网页文件，并<strong>将 master 分支作为部署的默认分支</strong>。为将静态网页和源文件（包含文章、主题等）分离开，强烈建议创建新分支。<code>git checkout -b hexo</code> 创建源码分支。你的文档编辑和 Hexo 操作应当在此分支上完成，这样在执行 <code>hexo generate -deploy</code> 时就会生成静态文件（public 文件夹），并将整个 public 文件夹 deploy 到 GitHub 的 master 分支上。</p>
+<h2 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h2><h3 id="GitHub-创建仓库"><a href="#GitHub-创建仓库" class="headerlink" title="GitHub 创建仓库"></a>GitHub 创建仓库</h3><p>GitHub Pages 分为两类，用户主页和项目主页。我们需要部署的是用户主页，首先需要在 GitHub 上新建一个仓库。仓库名必须为 <code>${GitHub username}.github.io</code>。这样才会被识别为 GitHub Pages。用户主页是唯一的，填其他名称只会被当成普通项目。通过 <code>https://${GitHub username}.github.io</code> 进行访问。</p>
+<h3 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h3><p>GitHub Pages 会自动部署静态网页文件，并<strong>将 master 分支作为部署的默认分支</strong>。为将静态网页和源文件（包含文章、主题等）分离开，强烈建议创建新分支。<code>git checkout -b hexo</code> 创建源码分支。你的文档编辑和 Hexo 操作应当在此分支上完成，这样在执行 <code>hexo generate -deploy</code> 时就会生成静态文件（public 文件夹），并将整个 public 文件夹 deploy 到 GitHub 的 master 分支上。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜  github.io git:(hexo) ✗ gb -v    </span><br><span class="line"></span><br><span class="line">* hexo                  0d03653 dump ghost markdown files to hexo</span><br><span class="line">  master                673d037 initial commit</span><br></pre></td></tr></table></figure>
-<h4 id="安装-Hexo"><a href="#安装-Hexo" class="headerlink" title="安装 Hexo"></a>安装 Hexo</h4><p>Hexo 和 Ghost 一样，都是使用 Node.js 编写的，所以使用 npm 安装即可。</p>
+<h3 id="安装-Hexo"><a href="#安装-Hexo" class="headerlink" title="安装 Hexo"></a>安装 Hexo</h3><p>Hexo 和 Ghost 一样，都是使用 Node.js 编写的，所以使用 npm 安装即可。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
-<h4 id="生成-Hexo-项目"><a href="#生成-Hexo-项目" class="headerlink" title="生成 Hexo 项目"></a>生成 Hexo 项目</h4><p>现在你可以使用 <code>hexo</code> 命令了，为了生成 Hexo 项目首先需要确保一件事：你已将 Git 仓库 clone 至本地，并且处于 hexo 分支上。由于必须在空文件夹下生成 Hexo 项目，所以我们先将 <code>.git</code> 文件夹整个移出去，然后执行 <code>hexo init</code> 命令。最后别忘了将 <code>.git</code> 文件夹移回来。</p>
+<h3 id="生成-Hexo-项目"><a href="#生成-Hexo-项目" class="headerlink" title="生成 Hexo 项目"></a>生成 Hexo 项目</h3><p>现在你可以使用 <code>hexo</code> 命令了，为了生成 Hexo 项目首先需要确保一件事：你已将 Git 仓库 clone 至本地，并且处于 hexo 分支上。由于必须在空文件夹下生成 Hexo 项目，所以我们先将 <code>.git</code> 文件夹整个移出去，然后执行 <code>hexo init</code> 命令。最后别忘了将 <code>.git</code> 文件夹移回来。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜  github.io git:(hexo) ✗ mv .git ../</span><br><span class="line">➜  github.io ✗ hexo init </span><br><span class="line">➜  github.io ✗ mv ../.git ./</span><br></pre></td></tr></table></figure>
-<h4 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h4><p>目录结构如下：</p>
+<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><p>目录结构如下：</p>
 <ul>
 <li><code>_config.yml</code> 是 Hexo 的配置文件，你的自定义配置都应该在该文件中修改</li>
 <li><code>scaffolds/</code> 文件夹保存了 hexo 生成文章的模版文件</li>
@@ -519,7 +517,7 @@
 <li><code>public/</code> 生成的静态文件，包括图片、Tags、Categories 等都保存在这里。执行 <code>hexo generate</code> 生成，<code>hexo clean</code> 则会清空该文件夹。部署到 GitHub Pages 上的亦即该文件夹下的内容。</li>
 </ul>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜  github.io git:(hexo) ls -F         </span><br><span class="line">_admin-config.yml  node_modules/      public/            themes/</span><br><span class="line">_config.yml        package-lock.json  scaffolds/         yarn.lock</span><br><span class="line">db.json            package.json       <span class="built_in">source</span>/</span><br></pre></td></tr></table></figure>
-<h4 id="部署到-GitHub"><a href="#部署到-GitHub" class="headerlink" title="部署到 GitHub"></a>部署到 GitHub</h4><p>最开始 source/ 中会自带一篇介绍 Hexo 的文章，我们可以直接拿过来测试部署是否成功。</p>
+<h3 id="部署到-GitHub"><a href="#部署到-GitHub" class="headerlink" title="部署到 GitHub"></a>部署到 GitHub</h3><p>最开始 source/ 中会自带一篇介绍 Hexo 的文章，我们可以直接拿过来测试部署是否成功。</p>
 <p>Hexo 支持本地启动，命令为：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s</span><br></pre></td></tr></table></figure></p>
 <p>启动后访问 <code>http://localhost:4000</code>，你应该可以看到自带的那篇文章。</p>
 <p>为部署到 GitHub Pages 上，我们还需要做两件事：<strong>安装依赖</strong>和<strong>修改配置</strong>。</p>
@@ -543,7 +541,7 @@
 <li>给每篇文章加上 Hexo 规定的 header，包括 Title、创建日期、Tags；由于 Ghost 博客不支持分类，所以 categories 保留默认为空。</li>
 <li>按照 Hexo 的规定，创建与文章标题一致的文件夹用于存放文章中的图片，并更换文章中图片的 Markdown 链接。</li>
 </ul>
-<p><img src="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p269" alt="7292889b7bb90233a1ac2dd1ac2cd97a.png"></p>
+<p><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/4.png" alt="7292889b7bb90233a1ac2dd1ac2cd97a.png"></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://hexo.io/zh-cn/index.html" target="_blank" rel="noopener">Hexo官网</a></li>
 <li><a href="https://theme-next.org/docs/getting-started/" target="_blank" rel="noopener">Next官方文档</a> </li>
@@ -2819,7 +2817,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">30</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">32</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
