@@ -63,7 +63,7 @@ categories: []
 
 - 首先一段整洁易读的代码应该层次分明，如果没想到重构，我们可能会使用注释和换行将代码分段
 
-    ```
+    ```java
     // get connection
     Class.forName(DRIVER_CLASS);
     c = DriverManager.getConnection(DB_URL, USER, PASSWORD);
@@ -102,7 +102,7 @@ categories: []
 
 - 在上述的抽象类 JdbcTemplate 中，我们的模版方法就应该是`populate()`方法
 
-    ```
+    ```java
     public void populate() throws Exception {
         Connection connection = null;
         try {

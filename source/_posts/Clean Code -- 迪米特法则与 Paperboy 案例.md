@@ -132,7 +132,7 @@ categories: []
 
 - 那么，如下代码是否这样的残骸呢？
     
-    ```
+    ```java
     str.split("&")
         .stream()
         .map(str -> str.contains(elementName) ? str.replace(elementName + "=", "") : "")
