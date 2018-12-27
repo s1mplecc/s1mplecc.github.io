@@ -1,8 +1,8 @@
 ---
-title: Spring Cloud集成GitHub第三方认证
+title: Spring Cloud 集成 GitHub 第三方认证
 date: 2018-04-13T07:23:14.000Z
 tags: ['Spring Cloud', 'OAuth']
-categories: []
+categories: [Coding]
 ---
 ## Preface
 

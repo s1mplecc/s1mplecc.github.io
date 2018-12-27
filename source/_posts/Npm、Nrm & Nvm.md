@@ -2,7 +2,7 @@
 title: Npm、Nrm & Nvm
 date: 2017-12-27T03:01:29.000Z
 tags: ['JavaScript', 'Node.js']
-categories: []
+categories: [Ops]
 ---
 ## Npm
 

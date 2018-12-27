@@ -1,8 +1,8 @@
 ---
-title: 构建你的Docker镜像
+title: 构建你的 Docker 镜像
 date: 2017-11-02T05:44:16.000Z
-tags: ['Linux', 'Server', 'Docker']
-categories: []
+tags: ['Server', 'Docker']
+categories: [Ops]
 ---
 ## Preface
 

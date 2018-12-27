@@ -1,8 +1,8 @@
 ---
-title: 安装 JDK&Tomcat
+title: 安装 JDK & Tomcat
 date: 2017-11-02T14:17:06.000Z
-tags: ['Linux', 'Java']
-categories: []
+tags: ['Server', 'Java']
+categories: [Ops]
 ---
 ## Preface
 

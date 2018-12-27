@@ -2,7 +2,7 @@
 title: Git 进阶教程
 date: 2018-09-18T02:02:04.000Z
 tags: ['Git']
-categories: []
+categories: [Concepts]
 ---
 ## 基本概念
 

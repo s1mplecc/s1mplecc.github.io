@@ -1,8 +1,8 @@
 ---
-title: JavaScript异步编程的发展
+title: JavaScript 异步编程的发展
 date: 2018-04-27T02:47:39.000Z
 tags: ['JavaScript']
-categories: []
+categories: [Languages]
 ---
 ## Preface
 

@@ -1,8 +1,8 @@
 ---
-title: 部署Ghost Blog
+title: 部署 Ghost Blog
 date: 2017-11-01T05:08:37.000Z
-tags: ['Linux', 'Server']
-categories: []
+tags: ['Server']
+categories: [Ops]
 ---
 ## Preface
 

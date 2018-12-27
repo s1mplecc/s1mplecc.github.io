@@ -1,8 +1,8 @@
 ---
-title: Java泛型之类型擦除
+title: Java 泛型之类型擦除
 date: 2018-02-27T01:47:58.000Z
 tags: ['Java']
-categories: []
+categories: [Languages]
 ---
 ## Preface
 

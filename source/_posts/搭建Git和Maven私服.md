@@ -1,8 +1,8 @@
 ---
-title: 搭建Git和Maven私服
+title: 搭建 Git 和 Maven 私服
 date: 2017-11-21T04:52:17.000Z
-tags: ['Linux', 'Server', 'Git', 'Maven']
-categories: []
+tags: ['Server', 'Git', 'Maven']
+categories: [Ops]
 ---
 ## Preface
 

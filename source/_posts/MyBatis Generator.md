@@ -2,7 +2,7 @@
 title: MyBatis Generator
 date: 2017-11-11T06:20:43.000Z
 tags: ['Maven', 'Mybatis', 'Spring']
-categories: []
+categories: [Coding]
 ---
 ## Preface
 

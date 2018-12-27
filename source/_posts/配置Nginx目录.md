@@ -1,8 +1,8 @@
 ---
-title: 配置Nginx目录
+title: 配置 Nginx 目录
 date: 2017-11-19T02:07:54.000Z
-tags: ['Linux', 'Server']
-categories: []
+tags: ['Server']
+categories: [Ops]
 ---
 ## Preface
 

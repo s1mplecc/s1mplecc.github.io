@@ -1,8 +1,8 @@
 ---
-title: Git命令总结
+title: Git 命令总结
 date: 2017-11-28T03:03:52.000Z
-tags: ['Linux', 'Git']
-categories: []
+tags: ['Git']
+categories: [Concepts]
 ---
 ## Preface
 

@@ -2,7 +2,7 @@
 title: Vim 配置
 date: 2017-12-02T03:54:48.000Z
 tags: ['Linux']
-categories: []
+categories: [Ops]
 ---
 > 全局配置 **/usr/share/vim/vimrc**，不建议修改。建议修改当前用户配置 **~/.vimrc**，加载配置时会覆盖全局配置。
 

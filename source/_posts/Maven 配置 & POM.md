@@ -2,7 +2,7 @@
 title: Maven 配置 & POM
 date: 2017-12-05T02:00:52.000Z
 tags: ['Maven']
-categories: []
+categories: [Coding]
 ---
 > 关于**Maven**的**settings.xml**以及**pom.xml**的介绍
 

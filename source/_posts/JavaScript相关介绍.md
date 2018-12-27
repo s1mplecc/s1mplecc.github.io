@@ -1,8 +1,8 @@
 ---
-title: JavaScript相关介绍
+title: JavaScript 相关介绍
 date: 2017-12-26T12:37:23.000Z
 tags: ['JavaScript', 'Node.js']
-categories: []
+categories: [Languages]
 ---
 ## Preface
 

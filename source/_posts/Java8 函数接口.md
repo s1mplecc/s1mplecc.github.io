@@ -2,7 +2,7 @@
 title: Java8 函数接口
 date: 2018-11-16T12:33:17.000Z
 tags: ['Java', 'FP']
-categories: []
+categories: [Languages]
 ---
 ## 函数接口
 

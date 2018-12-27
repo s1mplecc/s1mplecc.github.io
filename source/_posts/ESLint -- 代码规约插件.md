@@ -2,7 +2,7 @@
 title: ESLint -- 代码规约插件
 date: 2018-04-04T02:47:12.000Z
 tags: ['JavaScript']
-categories: []
+categories: [Coding]
 ---
 ## Preface
 

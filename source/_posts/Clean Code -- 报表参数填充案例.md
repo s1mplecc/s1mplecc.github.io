@@ -2,7 +2,7 @@
 title: Clean Code -- 报表参数填充案例
 date: 2018-05-07T13:39:03.000Z
 tags: ['Clean Code', 'Refactoring']
-categories: []
+categories: [Coding]
 ---
 ## Preface
 

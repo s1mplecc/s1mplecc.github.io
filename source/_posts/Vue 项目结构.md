@@ -2,7 +2,7 @@
 title: Vue 项目结构
 date: 2017-12-14T02:11:19.000Z
 tags: ['Vue', 'JavaScript', 'Web', 'Front-end']
-categories: []
+categories: [Coding]
 ---
 ## Preface
 

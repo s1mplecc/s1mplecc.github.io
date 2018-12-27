@@ -2,7 +2,7 @@
 title: Clean Code -- 迪米特法则与 Paperboy 案例
 date: 2018-05-04T05:36:05.000Z
 tags: ['Clean Code', 'Refactoring']
-categories: []
+categories: [Coding]
 ---
 ## Preface
 

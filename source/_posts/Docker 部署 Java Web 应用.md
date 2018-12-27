@@ -1,8 +1,8 @@
 ---
 title: Docker 部署 Java Web 应用
 date: 2017-11-04T05:42:30.000Z
-tags: ['Linux', 'Server', 'Docker', 'Java']
-categories: []
+tags: ['Server', 'Docker', 'Java']
+categories: [Ops]
 ---
 ## Preface 
 

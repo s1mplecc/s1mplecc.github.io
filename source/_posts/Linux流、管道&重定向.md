@@ -1,8 +1,8 @@
 ---
-title: Linux流、管道&重定向
+title: Linux 流、管道&重定向
 date: 2017-12-27T12:32:23.000Z
 tags: ['Linux']
-categories: []
+categories: [Ops]
 ---
 ## 标准I/O流
 

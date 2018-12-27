@@ -2,7 +2,7 @@
 title: Git Flow 模型以及工具的使用
 date: 2018-07-03T08:11:51.000Z
 tags: ['Git']
-categories: []
+categories: [Concepts]
 ---
 ## Git Flow 是什么？
 

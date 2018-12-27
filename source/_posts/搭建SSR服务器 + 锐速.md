@@ -1,8 +1,8 @@
 ---
-title: 搭建SSR服务器 + 锐速
+title: 搭建 SSR 服务器 + 锐速
 date: 2018-08-30T01:47:13.000Z
 tags: ['Server']
-categories: []
+categories: [Ops]
 ---
 ## Prerequisites
 

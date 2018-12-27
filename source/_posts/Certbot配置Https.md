@@ -1,8 +1,8 @@
 ---
-title: Certbot配置Https
+title: Certbot 配置 Https
 date: 2017-11-06T04:04:46.000Z
-tags: ['Linux', 'Server', 'Network', 'Security']
-categories: []
+tags: ['Server', 'Network', 'Security']
+categories: [Ops]
 ---
 ## Preface
 

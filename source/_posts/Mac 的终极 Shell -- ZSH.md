@@ -2,7 +2,7 @@
 title: Mac 的终极 Shell -- ZSH
 date: 2018-07-30T07:46:19.000Z
 tags: ['Linux']
-categories: []
+categories: [Ops]
 ---
 ## Preface
 

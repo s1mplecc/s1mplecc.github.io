@@ -1,8 +1,8 @@
 ---
-title: Linux文件结构
+title: Linux 文件结构
 date: 2018-01-30T02:28:54.000Z
 tags: ['Linux']
-categories: []
+categories: [Ops]
 ---
 ## Preface
 

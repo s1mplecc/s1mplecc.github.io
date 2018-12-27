@@ -2,7 +2,7 @@
 title: Clean Code -- PartDB 案例与模版方法模式
 date: 2018-05-10T01:24:34.000Z
 tags: ['Clean Code', 'Refactoring']
-categories: []
+categories: [Coding]
 ---
 ## Preface
 

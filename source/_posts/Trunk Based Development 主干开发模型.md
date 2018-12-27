@@ -2,7 +2,7 @@
 title: Trunk Based Development 主干开发模型
 date: 2018-09-27T02:35:29.000Z
 tags: ['Git']
-categories: []
+categories: [Concepts]
 ---
 ## Preface
 

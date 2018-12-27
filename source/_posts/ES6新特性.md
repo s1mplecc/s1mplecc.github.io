@@ -1,8 +1,8 @@
 ---
-title: ES6新特性
+title: ES6 新特性
 date: 2017-12-29T05:51:55.000Z
 tags: ['JavaScript']
-categories: []
+categories: [Languages]
 ---
 ## Preface
 

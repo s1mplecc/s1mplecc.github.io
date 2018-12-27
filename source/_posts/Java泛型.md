@@ -1,8 +1,8 @@
 ---
-title: Java泛型
+title: Java 泛型
 date: 2018-02-28T06:01:53.000Z
 tags: ['Java']
-categories: []
+categories: [Languages]
 ---
 ## Preface
 

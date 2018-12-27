@@ -1,8 +1,8 @@
 ---
-title: 离线安装Nginx
+title: 离线安装 Nginx
 date: 2018-01-22T05:22:55.000Z
 tags: ['Server', 'Nginx']
-categories: []
+categories: [Ops]
 ---
 ## Preface
 

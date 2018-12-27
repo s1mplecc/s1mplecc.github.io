@@ -1,8 +1,8 @@
 ---
-title: 探究HTTP协议
+title: 探究 HTTP 协议
 date: 2017-12-25T01:39:59.000Z
-tags: ['Web', 'Linux', 'Network']
-categories: []
+tags: ['Web', 'Network']
+categories: [Concepts]
 ---
 ## Preface
 

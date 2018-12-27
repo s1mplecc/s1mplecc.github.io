@@ -2,7 +2,7 @@
 title: 结合案例使用 Java 注解和反射
 date: 2018-11-29T04:53:50.000Z
 tags: ['Java']
-categories: []
+categories: [Coding]
 ---
 ## 前言
 

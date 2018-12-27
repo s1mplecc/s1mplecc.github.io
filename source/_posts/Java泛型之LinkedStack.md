@@ -1,8 +1,8 @@
 ---
-title: Java泛型之LinkedStack
+title: Java 泛型之 LinkedStack
 date: 2018-02-24T03:38:55.000Z
 tags: ['Java', 'Data Structure']
-categories: []
+categories: [Coding]
 ---
 ## Preface
 
