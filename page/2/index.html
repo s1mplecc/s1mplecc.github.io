@@ -367,6 +367,246 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/09/18/Git 进阶教程/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/09/18/Git 进阶教程/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/2/index.html">Git 进阶教程</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-18 02:02:04" itemprop="dateCreated datePublished" datetime="2018-09-18T02:02:04+08:00">2018-09-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-27 10:52:55" itemprop="dateModified" datetime="2018-12-27T10:52:55+08:00">2018-12-27</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/18/Git 进阶教程/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/09/18/Git 进阶教程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.9k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><blockquote>
+<p>你的本地仓库由 Git 维护的三棵「树」组成。第一个是你的<strong>工作目录（Working dir）</strong>，它持有实际文件，即你所见的；第二个是<strong>缓存区（Stage or Index）</strong>，它像个缓存区域，临时保存你的改动；第三个是<strong>提交历史（Commit history）</strong>，包含的 HEAD 指针指向你最近一次 commit 的引用。关于工作区和缓存区概念可参考 <a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000" target="_blank" rel="noopener">廖雪峰的教程</a></p>
+</blockquote>
+<p><img src="/2018/09/18/Git 进阶教程/0.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f62617369632d75736167652e737667-1"></p>
+<p>上面的四条命令在工作目录、stage 缓存（也叫做索引）和 commit 历史之间复制文件。</p>
+<ul>
+<li><code>git add files</code> 把工作目录中的文件加入 stage 缓存</li>
+<li><code>git commit</code> 把 stage 缓存生成一次 commit，并加入 commit 历史</li>
+<li><code>git reset -- files</code> 撤销最后一次 git add files，你也可以用 git reset 撤销所有 stage 缓存文件</li>
+<li><code>git checkout -- files</code> 把文件从 stage 缓存复制到工作目录，用来丢弃本地修改</li>
+</ul>
+<h2 id="Merge"><a href="#Merge" class="headerlink" title="Merge"></a>Merge</h2><p><code>git merge</code> 命令把不同分支合并起来。合并前，索引必须和当前提交相同。<strong><code>git merge other</code> 用于将 other 分支上的提交合并到当前分支</strong>。</p>
+<p>如果另一个分支是当前提交的祖父节点，那么合并命令将什么也不做。另一种情况是如果当前提交是另一个分支的祖父节点，就导致 <strong>fast-forward</strong> 合并，HEAD 指针只是简单的移动。<br><img src="/2018/09/18/Git 进阶教程/1.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652d66662e737667"></p>
+<p>否则就是一次真正的合并。默认把当前提交（<em>ed489</em> 如下所示）和另一个提交（<em>33104</em>）以及他们的共同祖父节点（<em>b325c</em>）进行一次<a href="https://en.wikipedia.org/wiki/Merge_(version_control" target="_blank" rel="noopener">三方合并</a>#Three-way_merge)。结果是先保存当前目录和索引，然后和父节点 <em>33104</em> 一起做一次<strong>新提交</strong>。<br><img src="/2018/09/18/Git 进阶教程/2.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652e737667"></p>
+<h2 id="Cherry-Pick"><a href="#Cherry-Pick" class="headerlink" title="Cherry Pick"></a>Cherry Pick</h2><p><code>git cherry-pick</code> 命令「复制」一个提交节点并在当前分支做一次完全一样的新提交。</p>
+<p><img src="/2018/09/18/Git 进阶教程/3.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6368657272792d7069636b2e737667"></p>
+<h2 id="Rebase"><a href="#Rebase" class="headerlink" title="Rebase"></a>Rebase</h2><p><code>git rebase</code> 是合并命令的另一种选择。merge 把两个分支合并进行一次新提交，提交历史不是线性的。rebase 在当前分支上重演另一个分支的历史，<strong>提交历史是线性的</strong>。</p>
+<p><img src="/2018/09/18/Git 进阶教程/4.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f7265626173652e737667"></p>
+<p>上面的命令都在 <em>topic</em> 分支中进行，执行 <code>git rebase master</code> 意味着将 <em>topic</em> 分支基于  <em>master</em> 分支进行重演，在 <em>da985</em> 后附加对应于 <em>169a6</em> 和 <em>2c33a</em> 的两次新提交，所以提交历史是线性的。</p>
+<h3 id="Difference-between-rebase-amp-merge"><a href="#Difference-between-rebase-amp-merge" class="headerlink" title="Difference between rebase &amp; merge"></a>Difference between rebase &amp; merge</h3><ul>
+<li><code>git rebase master</code>  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">      A---B topic</span><br><span class="line">     /</span><br><span class="line">D---E---F---G master</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">              A<span class="string">'--B'</span> topic</span><br><span class="line">             /</span><br><span class="line">D---E---F---G master</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><code>git merge master</code>  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">      A---B topic</span><br><span class="line">     /</span><br><span class="line">D---E---F---G master</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      A---B---H topic</span><br><span class="line">     /       / </span><br><span class="line">D---E---F---G master</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>rebase 最大的好处是你的项目历史会非常整洁的线性，它不像 merge 那样引入不必要的合并提交。但同时，rebase 也会带来两个后果：安全性和可跟踪性。使用时要遵守 <strong>rebase 的黄金法则：绝不要在公共的分支上使用它</strong>。可跟踪性是指 rebase 不会有合并提交中附带的信息，你看不到 <em>topic</em> 分支中并入了 <em>master</em> 的哪些更改。</p>
+</blockquote>
+<h2 id="Reset"><a href="#Reset" class="headerlink" title="Reset"></a>Reset</h2><p><code>git reset</code> 命令把当前分支指向另一个位置，并且有选择的变动工作目录和索引。如果<strong>你的更改还没有共享给别人</strong>，reset 是撤销这些更改的简单方法。当你开发一个功能的时候发现「糟糕，我做了什么？我应该重新来过！」时，reset 就像是 <code>go-to</code> 命令一样。</p>
+<p><img src="/2018/09/18/Git 进阶教程/5.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f72657365742d636f6d6d69742e737667"></p>
+<p>还可以通过传入参数来修改你的缓存区或工作目录：</p>
+<ul>
+<li><code>--soft</code> 缓存区和工作目录都不会被改变</li>
+<li><code>--mixed</code> 默认选项。缓存区同步到你指定的提交，但工作目录不受影响</li>
+<li><code>--hard</code> 缓存区和工作目录都同步到你指定的提交</li>
+</ul>
+<p>把这些参数想成定义 <code>git reset</code> 操作的<strong>作用域</strong>就容易理解多了。拿上图举例来说，如果执行 <code>git reset --soft HEAD~3</code>，那么文件不会被修改，后三次提交被 <code>git add</code> 添加到暂存区，相当于只撤销了 <code>git commit</code>；<code>git reset --mixed HEAD~3</code> 则文件不会被修改，但后三次提交没有添加到暂存区；<code>git reset --hard HEAD~3</code> 则文件会被回退到 <em>b325c</em> 时的状态。</p>
+<h2 id="Revert"><a href="#Revert" class="headerlink" title="Revert"></a>Revert</h2><p><strong>revert 撤销一个提交的同时会创建一个新的提交</strong>。这是一个安全的方法，因为它不会重写提交历史。比如，下图执行<code>git revert HEAD~2</code>会创建一个新的提交来撤销前两个提交的更改，然后把新的提交加入提交历史。</p>
+<p><img src="/2018/09/18/Git 进阶教程/6.svg" alt="06"></p>
+<p>相比 <code>git reset</code>，它不会改变现在的提交历史。因此，<strong><code>git revert</code> 可以用在公共分支上，<code>git reset</code> 应该用在私有分支上</strong>。你也可以把 <code>git revert</code> 用作撤销已经 push 的更改，而 <code>git reset</code> 用来撤销已经 commit 但没有 push 的更改，或者 <code>git reset HEAD</code> 撤销没有 commit 的更改。</p>
+<h2 id="Checkout"><a href="#Checkout" class="headerlink" title="Checkout"></a>Checkout</h2><p><strong>checkout 命令用于从历史提交（或者暂存区域）中拷贝文件到工作目录，也可用于切换分支</strong>。</p>
+<p>当给出一个（本地）分支时，那么 <em>HEAD</em> 指针将指向那个分支，也就是说，我们「切换」到那个分支了。<strong>stage 缓存和工作目录中的内容会和 <em>HEAD</em> 对应的提交节点一致</strong>。</p>
+<p><img src="/2018/09/18/Git 进阶教程/7.svg" alt="a"></p>
+<p>当指定的是一个标签、远程分支、SHA-1 值或者是像 master~3 类似的东西，就得到一个<strong>匿名分支</strong>，又称作 <strong>detached HEAD（被分离的 HEAD 标识）</strong>。这样可以很方便地在历史版本之间互相切换。比如说你想要编译 1.2.1 版本，你可以运行 <code>git checkout v1.2.1</code>（这是一个标签 tag<br>，而非分支名），编译，安装，然后切换回原先分支。</p>
+<p><img src="/2018/09/18/Git 进阶教程/8.svg" alt="b"></p>
+<h4 id="Detached-HEAD"><a href="#Detached-HEAD" class="headerlink" title="Detached HEAD"></a>Detached HEAD</h4><p>当提交操作涉及到 detached HEAD 时，其行为会略有不同。<em>HEAD</em> 处于分离状态（不依附于任一分支）时，提交操作可以正常进行，但是不会更新任何已命名的分支。你可以认为这是在更新一个匿名分支。</p>
+<p><img src="/2018/09/18/Git 进阶教程/9.svg" alt="c"></p>
+<p>一旦此后你切换到别的分支，比如说 <em>master</em>，那么这个提交节点（可能）再也不会被引用到，将会被丢弃掉。</p>
+<p><img src="/2018/09/18/Git 进阶教程/10.svg" alt="d"></p>
+<p>但是，如果你想保存这个状态，可以用命令 <code>git checkout -b name</code> 来创建一个新的分支。</p>
+<p><img src="/2018/09/18/Git 进阶教程/11.svg" alt="e"></p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://github.com/geeeeeeeeek/git-recipes" target="_blank" rel="noopener">git-recipes —— GitHub 8k star 的高质量教程</a></li>
+<li><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing" target="_blank" rel="noopener">Merging vs. Rebasing</a></li>
+<li><a href="https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting" target="_blank" rel="noopener">Resetting, Checking Out &amp; Reverting</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/08/30/搭建SSR服务器 + 锐速/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -429,7 +669,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
+                <time title="修改时间：2018-12-27 10:52:55" itemprop="dateModified" datetime="2018-12-27T10:52:55+08:00">2018-12-27</time>
               
             
           </span>
@@ -674,7 +914,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
+                <time title="修改时间：2018-12-27 10:52:55" itemprop="dateModified" datetime="2018-12-27T10:52:55+08:00">2018-12-27</time>
               
             
           </span>
@@ -912,7 +1152,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
+                <time title="修改时间：2018-12-27 10:52:55" itemprop="dateModified" datetime="2018-12-27T10:52:55+08:00">2018-12-27</time>
               
             
           </span>
@@ -1171,7 +1411,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
+                <time title="修改时间：2018-12-27 10:52:55" itemprop="dateModified" datetime="2018-12-27T10:52:55+08:00">2018-12-27</time>
               
             
           </span>
@@ -1465,7 +1705,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
+                <time title="修改时间：2018-12-27 10:52:55" itemprop="dateModified" datetime="2018-12-27T10:52:55+08:00">2018-12-27</time>
               
             
           </span>
@@ -1724,7 +1964,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
+                <time title="修改时间：2018-12-27 10:52:55" itemprop="dateModified" datetime="2018-12-27T10:52:55+08:00">2018-12-27</time>
               
             
           </span>
@@ -2011,7 +2251,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
+                <time title="修改时间：2018-12-27 10:52:55" itemprop="dateModified" datetime="2018-12-27T10:52:55+08:00">2018-12-27</time>
               
             
           </span>
@@ -2284,7 +2524,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-25 11:19:03" itemprop="dateModified" datetime="2018-12-25T11:19:03+08:00">2018-12-25</time>
+                <time title="修改时间：2018-12-27 10:52:55" itemprop="dateModified" datetime="2018-12-27T10:52:55+08:00">2018-12-27</time>
               
             
           </span>
@@ -2528,7 +2768,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-25 11:06:55" itemprop="dateModified" datetime="2018-12-25T11:06:55+08:00">2018-12-25</time>
+                <time title="修改时间：2018-12-27 10:52:55" itemprop="dateModified" datetime="2018-12-27T10:52:55+08:00">2018-12-27</time>
               
             
           </span>
@@ -2681,262 +2921,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/2/index.html">Clean Code -- 迪米特法则与 Paperboy 案例</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-05-04 05:36:05" itemprop="dateCreated datePublished" datetime="2018-05-04T05:36:05+08:00">2018-05-04</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-25 11:19:01" itemprop="dateModified" datetime="2018-12-25T11:19:01+08:00">2018-12-25</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">4.8k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍<strong>迪米特法则</strong>、<strong>信息专家模式</strong>，并结合案例实操在 <strong>IntelliJ IDEA</strong> 中如何重构代码。本文大部分内容转载自张总博客: <a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构</a></p>
-</blockquote>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目</li>
-<li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，clone 下代码进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 Cmd + D 查看<strong>代码差异</strong></li>
-<li><p><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 Cmd 替换成 Ctrl，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Ctrl + T // 重构菜单</span><br><span class="line">Shift + F6 // 重命名方法、属性、文件</span><br><span class="line">F6 // 移动方法（move method）</span><br><span class="line">Cmd + Alt + M // 提取方法（extract method）</span><br><span class="line">Cmd + Alt + V // 提取变量（extract variable）</span><br><span class="line">Cmd + Alt + C // 提取常量（extract constant）</span><br><span class="line">Cmd + Alt + N // 内联（Inline），与 extract 相反</span><br><span class="line"></span><br><span class="line">Cmd + 9 // 打开 Version Control</span><br><span class="line">Cmd + D // 查看文件差异（show difference）</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="迪米特法则"><a href="#迪米特法则" class="headerlink" title="迪米特法则"></a>迪米特法则</h2><ul>
-<li>在面向对象设计的世界里，有一个寻常却又常常为人所忽略的原则——<strong>迪米特法则（Law of Demeter）</strong>。这个原则认为，任何一个对象或者方法，它应该只能调用下列对象：    <ul>
-<li>该对象本身</li>
-<li>作为参数传进来的对象（也可以是该对象的字段）</li>
-<li>在方法内创建的对象</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>这个原则用以指导正确的<strong>对象协作</strong>，分清楚哪些对象应该产生协作，哪些对象则对于该对象而言，又应该是无知的</p>
-</blockquote>
-<h2 id="代码案例及分析"><a href="#代码案例及分析" class="headerlink" title="代码案例及分析"></a>代码案例及分析</h2><ul>
-<li><p>如何理解这个原则？我们可以看看 David Bock 就该原则给出的一个<a href="https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/paper-boy/demeter.pdf" target="_blank" rel="noopener">绝佳案例</a>。假设一个超市购物的场景，顾客（Customer）到收银台结账，收银员（Paperboy）负责收钱。我们来看看代码：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String firstName;</span><br><span class="line">    <span class="keyword">private</span> String lastName;</span><br><span class="line">    <span class="keyword">private</span> Wallet myWallet;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> firstName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getLastName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> lastName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Wallet <span class="title">getWallet</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> myWallet;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Wallet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> value;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">getTotalMoney</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTotalMoney</span><span class="params">(<span class="keyword">float</span> newValue)</span> </span>&#123;</span><br><span class="line">        value = newValue;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addMoney</span><span class="params">(<span class="keyword">float</span> deposit)</span> </span>&#123;</span><br><span class="line">        value += deposit;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">subtractMoney</span><span class="params">(<span class="keyword">float</span> debit)</span> </span>&#123;</span><br><span class="line">        value -= debit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Paperboy</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">(Customer myCustomer, <span class="keyword">float</span> payment)</span> </span>&#123;</span><br><span class="line">        Wallet theWallet = myCustomer.getWallet();</span><br><span class="line">        <span class="keyword">if</span> (theWallet.getTotalMoney() &gt; payment) &#123;</span><br><span class="line">            theWallet.subtractMoney(payment);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//money not enough</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>让我们将 Paperboy 中<code>charge()</code>方法的代码翻译成这幕小话剧的对白。</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">“把钱包交出来!”收银员算出顾客要买的商品总价后，“温柔”地对顾客说道。</span><br><span class="line">顾客言听计从，赶紧将钱包掏出来，恭恭敬敬地递给收银员。</span><br><span class="line">接过钱包，收银员毫不客气地打开，检查里面的钱够不够。噢，不错，钱够了。收银员从钱包取出钱，心满意足地笑了。</span><br></pre></td></tr></table></figure>
-<p>  如果你是顾客，你敢去这样的超市 shopping 吗？</p>
-</li>
-</ul>
-<blockquote>
-<p>对于 Paperboy 而言，Wallet 不满足迪米特法则三个条件中的任何一个，因此，<strong>不应该让 Paperboy 与 Wallet 对象进行直接交互</strong>。若从<strong>拟人化</strong>的角度思考，则 Wallet 其实属于 Customer 的<strong>隐私</strong>。如此重要的隐私，怎么能直接交给收银员这个陌生人呢？这里所谓的“隐私”，可以视为是“数据”，是“信息”，是“知识”，因此我们往往又将迪米特法则称之为“<strong>最小知识法则</strong>”。</p>
-</blockquote>
-<ul>
-<li>当我们理解“最小知识法则”时，又可以从<strong>职责</strong>的角度去思考以上代码。对于收银员角色，他的职责应该是负责收钱，而不用去管钱包里的钱够不够，如果够了怎么办，如果不够又该怎么办，这些统统都不属于他的职责。设想一下，当超市里人流如织，大家都在购买商品时，如果每一个收银员都要承担这般的职责时，会出现什么样的景象？所以“最小知识法则”乃善法，在对象社区中，我们就应该刻意减少对象之间彼此深入的了解。了解最小的知识，就意味着依赖最小，彼此产生的影响就会最小。这实际上是 <strong>KISS（keep it simple and stupid）</strong> 原则的体现。</li>
-</ul>
-<blockquote>
-<p><strong>信息专家模式</strong>告诉我们：“信息的持有者即为操作该信息的专家”。对于对象，所谓<strong>信息就是该对象内部的字段</strong>。在上述的例子中，Wallet 是 Customer 的字段，那么操作 Wallet 的行为自然就应该分配给 Customer 了。这是题中应有之义。“信息专家模式”其实是面向对象最重要原则“<strong>数据与行为应该封装在一起</strong>”的别名。若在领域建模时能遵循该原则，则可以规避我们设计出贫血模型。</p>
-</blockquote>
-<h2 id="Refactoring"><a href="#Refactoring" class="headerlink" title="Refactoring"></a>Refactoring</h2><ul>
-<li><p>如何修改以上代码？注意，<code>charge()</code>行为仍然属于 Paperboy 的职责，因此我们不应该将该方法整体搬迁到 Customer 中，而应该先进行<strong>方法的提取</strong>，选中代码块，使用 <strong>Cmd + Alt + M</strong> 快捷键提取方法。这块代码执行的是支付的步骤，所以命名为<code>pay()</code><br><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/0.png" alt="781D2706-3961-4C77-ACF8-8BDDCE21B17E"></p>
-</li>
-<li><p>提取后的<code>charge()</code>在接收方法请求后，转而将请求<strong>委派</strong>给了<code>pay()</code>方法。我们可以这样理解：在抽象层面，收款是收银员的职责；在实现层面，是<code>pay()</code>方法支持了收款行为，该实现归属于顾客<br><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/1.png" alt="1AF2B42F-7B13-4284-AF03-9C1D5C5FE0A1"></p>
-</li>
-<li><p>观察<code>pay()</code>方法，我们发现该方法操作的数据皆来自 Customer。我们嗅到了一种坏味道，即 Martin Fowler 所谓的“<strong>特性依恋（Feature Envy）</strong>”。对于该坏味道，老马是这样阐释的：“函数对某个类的兴趣高过对自己所处类的兴趣”。不要再嫉妒了，桥归桥，路归路，让方法回到自己最喜欢的地方吧。运用“<strong>Move Method</strong>”重构手法，将<code>pay()</code>方法移动到 Customer 中。</p>
-</li>
-<li><p>光标在方法签名或方法体中都可，按下 <strong>F6</strong>，IDEA 会根据方法的入参，智能的提示将方法移动到哪个类中，这里只能是 Customer。还要注意方法的访问权限，默认是 Escalate 往上提升一级，这里选择 Public<br><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/2.png" alt="2C6EA6D7-A330-4E90-8B2A-54223072A47A"></p>
-</li>
-<li><p>操作之后，<code>pay()</code>方法移动到 Customer 中<br><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/3.png" alt="F92C14F0-6693-4154-8A6D-F71AB14BF0E2"></p>
-</li>
-<li><p>在将方法移到正确的位置后，我们发现暴露的<code>getWallet()</code>方法根本就没有意义。更何况，将钱包裸露出去，难道是想要炫富吗？还是低调一点为好，隐藏自己的“隐私”，总好过被人觊觎而招来飞来横祸之险。于是，<strong>内联（inline）</strong> 之。将光标放在<code>getWallet()</code>上，按下 <strong>Cmd + Alt + N</strong><br><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/4.png" alt="563C9626-A71E-4DC7-A8DC-BA4DA530EF64"></p>
-</li>
-<li><p><code>getWallet()</code>方法被删除，并被替换为 Customer 的字段<code>myWallet</code>。那现在声明的<code>theWallet</code>就是多余的，继续内联<br><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/5.png" alt="28E463A5-F36A-4250-8611-36BDACF80FCE"></p>
-</li>
-<li><p>最后，重构过的代码应该是这样的。阅读代码一目了然，Paperboy 进行收银，并委派给顾客进行实际的支付，即掏钱包，数钱，付钱。<br><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/6.png" alt="3CA41F80-0556-42F3-8E16-5AEEC39332A3"><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/7.png" alt="E66E7919-9391-4046-8CB4-C46555E561A8"></p>
-</li>
-</ul>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
-<p>判断一段代码是否违背了迪米特法则，有一个小窍门，就是看调用代码是否出现形如<code>a.m1().m2().m3().m4()</code>之类的代码。这种代码在 Martin Fowler《重构》一书中，被名为“<strong>消息链条(Message Chain)</strong>”，有人更加夸张地名其为“火车残骸”。车祸现场啊，真是惨不忍睹。</p>
-</blockquote>
-<ul>
-<li><p>实际上未重构前的代码即是一种消息链条，在<code>charge()</code>方法中实际执行的是<code>myCustomer.getWallet().subtractMoney(payment)</code>，先获取 Customer 的 Wallet，再执行 Wallet 的扣钱方法</p>
-</li>
-<li><p>那么，如下代码是否这样的残骸呢？</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">str.split(<span class="string">"&amp;"</span>)</span><br><span class="line">    .stream()</span><br><span class="line">    .map(str -&gt; str.contains(elementName) ? str.replace(elementName + <span class="string">"="</span>, <span class="string">""</span>) : <span class="string">""</span>)</span><br><span class="line">    .filter(str -&gt; !str.isEmpty())</span><br><span class="line">    .reduce(<span class="string">""</span>, (a, b) -&gt; a + <span class="string">","</span> + b);</span><br></pre></td></tr></table></figure>
-<p>  不是的。这样的代码我们一般称之为“流畅接口或连贯接口（Fluent Interface）”。二者的区别在于<strong>观察形成链条的每个方法返回的是别的对象，还是对象自身。如果返回的是别的对象，就是消息链条</strong>。所谓<code>m1().m2().m3().m4()</code>的调用，其实是调用者不需要也不想知道的“知识”，把这些中间过程的细节暴露出来没有意义，调用者关心的是最终结果；而上述代码中的<code>map()</code>与<code>filter()</code>等方法其实返回的还是 Stream 类。这一调用方式其初衷并非告知中间过程的细节，而是一种声明式的 DSL 表达，调用者可以自由地组合它们。</p>
-</li>
-</ul>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构 – 张逸</a></li>
-<li><a href="https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/paper-boy/demeter.pdf" target="_blank" rel="noopener">The Paperboy, The Wallet, and The Law Of Demeter –  David Bock</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2986,25 +2970,12 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">56</span>
+                    <span class="site-state-item-count">57</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
               
 
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  <a href="/categories/index.html">
-                    
-                    
-                      
-                    
-                    <span class="site-state-item-count">0</span>
-                    <span class="site-state-item-name">分类</span>
-                  </a>
-                </div>
               
 
               
