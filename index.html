@@ -412,12 +412,24 @@
                 
               
 
-              <time title="创建时间：2018-12-27 13:45:37 / 修改时间：21:05:14" itemprop="dateCreated datePublished" datetime="2018-12-27T13:45:37+08:00">2018-12-27</time>
+              <time title="创建时间：2018-12-27 13:45:37" itemprop="dateCreated datePublished" datetime="2018-12-27T13:45:37+08:00">2018-12-27</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-28 15:59:30" itemprop="dateModified" datetime="2018-12-28T15:59:30+08:00">2018-12-28</time>
               
             
           </span>
@@ -500,21 +512,27 @@
         
           
             <h2 id="为什么迁移"><a href="#为什么迁移" class="headerlink" title="为什么迁移"></a>为什么迁移</h2><h3 id="Ghost"><a href="#Ghost" class="headerlink" title="Ghost"></a>Ghost</h3><p>优点：</p>
-<pre><code>1. 支持在线编辑文章，随时更新随时发布。
-2. 图片上传方便，直接拷贝到正文即可，会自动上传到服务器并生成 Markdown 链接。
-3. 支持多人同时使用，可以用作团队博客。
-</code></pre><p>缺点：</p>
-<pre><code>1. 需要在服务器上部署 Ghost。
-2. 本地和服务器端文章同步麻烦（这也是我换用 Hexo 的主要原因）。
-3. 不支持离线编辑文章。虽说这个可以本地写完了再一次性拷贝到服务器上，但这又回到了第 2 点。
-4. Themes 配置麻烦，不够统一。我记得 Kaldorei 主题还是我千辛万苦才搜罗到的，还得每次修改完源码后压缩上传（调样式的时候调的我头疼）。
-</code></pre><p><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/0.png" alt="dbdd8ad99f065192aa340cf474709b2d.png"><br><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/1.png" alt="fa0a3c8ae59030f8e5ef80a9b04d8c7d.png"></p>
+<ol>
+<li>支持在线编辑文章，随时更新随时发布。</li>
+<li>图片上传方便，直接拷贝到正文即可，会自动上传到服务器并生成 Markdown 链接。</li>
+<li>支持多人同时使用，可以用作团队博客。</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>需要在服务器上部署 Ghost。</li>
+<li>本地和服务器端文章同步麻烦（这也是我换用 Hexo 的主要原因）。</li>
+<li>不支持离线编辑文章。虽说这个可以本地写完了再一次性拷贝到服务器上，但这又回到了第 2 点。</li>
+<li>Themes 配置麻烦，不够统一。我记得 Kaldorei 主题还是我千辛万苦才搜罗到的，还得每次修改完源码后压缩上传（调样式的时候调的我头疼）。</li>
+</ol>
+<p><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/0.png" alt="dbdd8ad99f065192aa340cf474709b2d.png"><br><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/1.png" alt="fa0a3c8ae59030f8e5ef80a9b04d8c7d.png"></p>
 <h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><p>优点：</p>
-<pre><code>1. 文档本地化。在本地编写博客，一条指令即可生成静态网页（具体体现就是你在 `source/_posts` 下编写 Markdown，写完了执行 `hexo g` 就可以生成样式美观的 `index.html`）。
-2. 一条指令即可部署到 GitHub Pages，不需要额外的服务器（配合第 1 条超级好用好嘛！）。
-3. 丰富的插件和主题，配置也统一化了。比如图中我使用的 Next 主题，主题的配置修改 `theme/next/_config.yml`；Hexo 的配置修改主目录的 `_config.yml` 即可。
-4. 图片上传还算方便。在与文章同名的文件夹下保存图片即可。这个下面会细说。
-</code></pre><p><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/2.png" alt="6bc65c0ff0fb6d62ea90ce4c35c04ac9.png"><br><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/3.png" alt="8b1c5aa127adbfef220cfb30a6d55e1d.png"></p>
+<ol>
+<li>文档本地化。在本地编写博客，一条指令即可生成静态网页（具体体现就是你在 <code>source/_posts</code> 下编写 Markdown，写完了执行 <code>hexo g</code> 就可以生成样式美观的 <code>index.html</code>）。</li>
+<li>一条指令即可部署到 GitHub Pages，不需要额外的服务器（配合第 1 条超级好用好嘛！）。</li>
+<li>丰富的插件和主题，配置也统一化了。比如图中我使用的 Next 主题，主题的配置修改 <code>theme/next/_config.yml</code>；Hexo 的配置修改主目录的 <code>_config.yml</code> 即可。</li>
+<li>图片上传还算方便。在与文章同名的文件夹下保存图片即可。这个下面会细说。</li>
+</ol>
+<p><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/2.png" alt="6bc65c0ff0fb6d62ea90ce4c35c04ac9.png"><br><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/3.png" alt="8b1c5aa127adbfef220cfb30a6d55e1d.png"></p>
 <h2 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h2><h3 id="创建-GitHub-Pages-仓库"><a href="#创建-GitHub-Pages-仓库" class="headerlink" title="创建 GitHub Pages 仓库"></a>创建 GitHub Pages 仓库</h3><p>GitHub Pages 是面向用户、组织和项目开放的公共静态页面搭建托管服务，站点可以被免费托管在 GitHub 上，你可以选择使用 GitHub Pages 默认提供的域名 <code>github.io</code> 或者自定义域名来发布站点。</p>
 <p>GitHub Pages 分为两类，用户主页和项目主页。我们需要部署的是用户主页。需要在 GitHub 上新建一个仓库，<strong>仓库名必须为</strong> <code>${github-username}.github.io</code>，这样才会被识别为用户主页。用户主页是唯一的，填其他名称只会被当成普通项目。通过 <code>https://${github-username}.github.io</code> 进行访问。</p>
 <h3 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h3><p>GitHub Pages 会自动部署静态网页文件，并<strong>将 master 分支作为部署的默认分支</strong>。为将静态网页和源文件（包含文章、主题等）分离开，强烈建议创建新分支。<code>git checkout -b hexo</code> 创建 hexo 分支。<strong>应当只将 master 分支当作静态网页的发布分支，而文档编辑和 Hexo 命令操作等都在 hexo 分支上完成</strong>。这样在执行 <code>hexo generate -deploy</code> 时就会将生成的静态文件（整个 <code>public</code> 文件夹）发布到 GitHub 的 master 分支上。</p>
