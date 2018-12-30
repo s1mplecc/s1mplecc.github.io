@@ -126,7 +126,7 @@
 <meta property="og:image" content="https://s1mplecc.github.io/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/3.png">
 <meta property="og:image" content="https://s1mplecc.github.io/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/5.png">
 <meta property="og:image" content="https://s1mplecc.github.io/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/4.png">
-<meta property="og:updated_time" content="2018-12-30T11:45:38.601Z">
+<meta property="og:updated_time" content="2018-12-30T12:00:37.813Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="迁移 Ghost 博客至 Hexo 并使用 GitHub Pages 部署">
 <meta name="twitter:description" content="为什么迁移Ghost优点：  支持在线编辑文章，随时更新随时发布。 图片上传方便，直接拷贝到正文即可，会自动上传到服务器并生成 Markdown 链接。 支持多人同时使用，可以用作团队博客。  缺点：  需要在服务器上部署 Ghost。 本地和服务器端文章同步麻烦（这也是我换用 Hexo 的主要原因）。 不支持离线编辑文章。虽说这个可以本地写完了再一次性拷贝到服务器上，但这又回到了第 2 点。 T">
@@ -434,7 +434,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-30 19:45:38" itemprop="dateModified" datetime="2018-12-30T19:45:38+08:00">2018-12-30</time>
+                <time title="修改时间：2018-12-30 20:00:37" itemprop="dateModified" datetime="2018-12-30T20:00:37+08:00">2018-12-30</time>
               
             
           </span>
@@ -490,7 +490,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">4.5k</span>
+                <span title="本文字数">4.7k</span>
               
 
               
@@ -570,7 +570,11 @@
 <p><strong>启用 Next 主题</strong>，修改 Hexo 的 <code>_config.yml</code><br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># theme: landscape</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br></pre></td></tr></table></figure></p>
 <p>v6.0 版本以上的 <a href="https://theme-next.org/docs/getting-started/" target="_blank" rel="noopener">Next官方文档</a> 也做了迁移，描述的很详细，包含了主题设置、三方服务和插件的配置等。所有要找的 <code>themes/next/_config.yml</code> 中的配置项在官方文档中都能找到。</p>
 <h2 id="更换域名"><a href="#更换域名" class="headerlink" title="更换域名"></a>更换域名</h2><p>部署到 GitHub Pages 上会提供 <code>https://${github-username}.github.io</code> 默认的域名以供访问。除此之外，GitHub Pages 也提供绑定个性域名的功能。</p>
-<p>首先，你需要在阿里云万网、腾讯云或者 GoDaddy 上购买域名，然后<strong>配置域名解析</strong>（我选择 GoDaddy 是因为它不需要备案）。下表是我的个人域名 <code>s1mple.xyz</code> 的配置项。其中 CNAME 项用于将所有 <code>*.s1mple.xyz</code> 但不包括 <code>s1mple.xyz</code> 的访问路由到 <code>s1mplecc.github.io</code>，所以还需要配置 A 项将 <code>s1mple.xyz</code> 路由到 <code>192.30.252.153</code>。此值通过 <code>ping s1mplecc.github.io</code> 即可获得。</p>
+<p>首先，你需要在阿里云万网、腾讯云或者 GoDaddy 上购买域名（我选择 GoDaddy 是因为它不需要备案），然后<strong>配置域名解析</strong>。下表是我的个性域名 <code>s1mple.xyz</code> 的配置项。其中：</p>
+<ul>
+<li>CNAME 项用于将所有 <code>*.s1mple.xyz</code> 包含三级域名（不包括 <code>s1mple.xyz</code>）的访问路由到 <code>s1mplecc.github.io</code>。</li>
+<li>A 项将二级域名 <code>s1mple.xyz</code> 路由到 <code>192.30.252.153</code>。此值可通过 <code>ping s1mplecc.github.io</code> 获得。</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -597,7 +601,9 @@
 </tr>
 </tbody>
 </table>
-<p>第二步，在 GitHub Pages 项目的配置中<strong>绑定个人域名</strong>，记得将 Enforce HTTPS 选项勾选上，GitHub 提供免费的 HTTPS 服务。保存成功后如下图提示即可通过 <code>https://s1mple.xyz</code> 访问。</p>
+<p>第二步，在本地 Hexo 的 <code>source</code> 文件夹下添加<strong>名为 CNAME 的文件</strong>，内容为个性域名地址，比如我的 <code>s1mple.xyz</code>。并执行 <code>hexo g -d</code> 部署到服务器。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">'s1mple.xyz'</span> &gt; ./<span class="built_in">source</span>/CNAME</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
+<p>第三步，在 GitHub Pages 项目的配置中<strong>绑定个人域名</strong>，记得将 Enforce HTTPS 选项勾选上（GitHub 提供免费的 HTTPS 服务）。保存成功后如下图提示即可通过 <code>https://s1mple.xyz</code> 访问。</p>
 <p><img src="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/5.png" alt="5"></p>
 <h2 id="图片引用"><a href="#图片引用" class="headerlink" title="图片引用"></a>图片引用</h2><p>当项目中只用到少量图片时，可以将图片统一放在 <code>source/images</code> 文件夹中，通过绝对路径访问。比如头像。</p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Markdown</span></span><br><span class="line"><span class="string">![avatar](/images/avatar.jpeg)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># themes/next/_config.yml</span></span><br><span class="line"><span class="attr">avatar:</span></span><br><span class="line"><span class="attr">  url:</span> <span class="string">/images/avatar.jpeg</span></span><br></pre></td></tr></table></figure>
