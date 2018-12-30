@@ -120,7 +120,7 @@
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="前言Optional 是 Java8 引入的一个重要特性，它是一个容器，里面装着一个可能为空可能不为空的对象。在它出现之前，为避免空指针异常我们可能会这样编码： 123456789101112public String getLastFour(Employee employee) &amp;#123;    if(employee != null) &amp;#123;        Address addres">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-27T12:44:24.458Z">
+<meta property="og:updated_time" content="2018-12-30T12:35:21.777Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java8 Optional 源码阅读">
 <meta name="twitter:description" content="前言Optional 是 Java8 引入的一个重要特性，它是一个容器，里面装着一个可能为空可能不为空的对象。在它出现之前，为避免空指针异常我们可能会这样编码： 123456789101112public String getLastFour(Employee employee) &amp;#123;    if(employee != null) &amp;#123;        Address addres">
@@ -427,7 +427,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-27 20:44:24" itemprop="dateModified" datetime="2018-12-27T20:44:24+08:00">2018-12-27</time>
+                <time title="修改时间：2018-12-30 20:35:21" itemprop="dateModified" datetime="2018-12-30T20:35:21+08:00">2018-12-30</time>
               
             
           </span>
@@ -550,14 +550,10 @@
 <p>其实 Optional 的核心在于提供的 <code>empty()</code> 单例，使得如上代码整条链路不会在某一步中断抛出空指针异常，而是只要其中一步值为空后，<code>Optional.empty()</code> <strong>将在这条链路上继续向下传播</strong>，直到最后 <code>orElse()</code> 等方法指名默认处理并跳出容器。</p>
 <p>Optional 源码时有诸多值得我们借鉴取经的地方，诸如：</p>
 <ul>
-<li><p>Monad 容器的思想。容器接收一个值，进行函数操作后依然返回该容器，比如 <code>map</code>、<code>flatMap</code>、<code>filter</code>。这就使得我们可以随意组合以上方法，编写函数式风格的代码。类似的还有 Java 8 的 <code>Stream</code> 接口。</p>
-</li>
-<li><p>提供 <code>Optional.empty()</code> 类似空对象模式的空值单例。</p>
-</li>
-<li><p>严谨的编码，源码中有许多 <code>Objects.requireNonNull()</code> 对极端情况进行验证，比如 <code>flatMap</code> 方法中的 <code>Objects.requireNonNull(mapper);</code> 和 <code>Optional.ofNullable(mapper.apply(value));</code> 对于入参函数不为空和调用 <code>apply()</code> 后返回值不为空的验证。</p>
-</li>
-<li><p>API 的全面性，当容器中没有你期待的值时提供 <code>orElse</code>、<code>orElseGet</code>、<code>orElseThrow</code> 等其他处理手段，不管是设置默认值还是抛出异常，API 都考虑到了。</p>
-</li>
+<li>Monad 容器的思想。容器接收一个值，进行函数操作后依然返回该容器，比如 <code>map</code>、<code>flatMap</code>、<code>filter</code>。这就使得我们可以随意组合以上方法，编写函数式风格的代码。类似的还有 Java 8 的 <code>Stream</code> 接口。</li>
+<li>提供 <code>Optional.empty()</code> 类似空对象模式的空值单例。</li>
+<li>严谨的编码，源码中有许多 <code>Objects.requireNonNull()</code> 对极端情况进行验证，比如 <code>flatMap</code> 方法中的 <code>Objects.requireNonNull(mapper);</code> 和 <code>Optional.ofNullable(mapper.apply(value));</code> 对于入参函数不为空和调用 <code>apply()</code> 后返回值不为空的验证。</li>
+<li>API 的全面性，当容器中没有你期待的值时提供 <code>orElse</code>、<code>orElseGet</code>、<code>orElseThrow</code> 等其他处理手段，不管是设置默认值还是抛出异常，API 都考虑到了。</li>
 </ul>
 <p>目前在一些 ORM 框架中也加入了 Optional 的支持，比如 Hibernate 从 5.2 版本后提供 <code>loadOptional()</code> 方法返回 <code>Optional&lt;T&gt;</code> 类型。有兴趣的可以自己去研究。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
