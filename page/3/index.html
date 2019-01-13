@@ -367,6 +367,254 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/05/07/Clean Code -- 报表参数填充案例/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/07/Clean Code -- 报表参数填充案例/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/3/index.html">Clean Code -- 报表参数填充案例</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-07 13:39:03" itemprop="dateCreated datePublished" datetime="2018-05-07T13:39:03+08:00">2018-05-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-27 20:41:05" itemprop="dateModified" datetime="2018-12-27T20:41:05+08:00">2018-12-27</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/07/Clean Code -- 报表参数填充案例/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/07/Clean Code -- 报表参数填充案例/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.9k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。<a href="https://s1mple.xyz/clean-code-1/" target="_blank" rel="noopener">上一篇</a>我们介绍了<strong>迪米特法则（最小知识法则）</strong>、<strong>信息专家模式：数据和行为应该封装在一起</strong>，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过<strong>报表参数填充</strong>的案例来加深理解，并见识 IDEA 中更为强大的重构功能</p>
+</blockquote>
+<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
+<li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目</li>
+<li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，clone 下代码进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 Cmd + D 查看<strong>代码差异</strong></li>
+<li><p><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 Cmd 替换成 Ctrl，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Shift + F6 // 重命名方法、属性、文件</span><br><span class="line">F6 // 移动方法（move method）</span><br><span class="line">Cmd + Shift + ⬆️/ ⬇️ // 上下移动声明体（statement）</span><br><span class="line">Cmd + Alt + ⬆️/ ⬇️ // 上下移动代码行</span><br><span class="line">Cmd + Alt + M // 提取方法（extract method）</span><br><span class="line">Cmd + Alt + N // 内联（Inline），与 extract 相反</span><br><span class="line">Cmd + Alt + L // 格式化代码</span><br><span class="line"></span><br><span class="line">Alt + Enter // IDEA 的智能辅助</span><br><span class="line">Ctrl + T // 重构菜单</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="案例：报表系统之参数处理"><a href="#案例：报表系统之参数处理" class="headerlink" title="案例：报表系统之参数处理"></a>案例：报表系统之参数处理</h2><blockquote>
+<p>在示例项目中，需要对客户发出的 Web 请求进行处理，获得需要的参数。参数的值放在 Request 中，实现根据配置文件获得了参数的类型信息。根据项目需求，将参数划分为三种：</p>
+<ol>
+<li>单一参数（SimpleParameter）</li>
+<li>元素项参数（ItemParameter）</li>
+<li>表参数（TableParameter）</li>
+</ol>
+<p>因为参数的属性是在配置文件中已经配好，所以定义了 ParameterGraph 对象。它能够读取参数的配置信息，并根据参数的类型创建不同的参数类，这些参数类共同实现了 Parameter 接口。</p>
+</blockquote>
+<ul>
+<li><p>最初的实现代码为：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ParameterCollector</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fillParameters</span><span class="params">(ServletHttpRequest request, ParameterGraph parameterGraph)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (Parameter para : parameterGraph.getParmaeters()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (para <span class="keyword">instanceof</span> SimpleParameter) &#123;</span><br><span class="line">                SimpleParameter simplePara = (SimpleParameter) para;</span><br><span class="line">                String[] values = request.getParameterValues(simplePara.getName());</span><br><span class="line">                simplePara.setValue(values);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (para <span class="keyword">instanceof</span> ItemParameter) &#123;</span><br><span class="line">                    ItemParameter itemPara = (ItemParameter) para;</span><br><span class="line">                    <span class="keyword">for</span> (Item item : itemPara.getItems()) &#123;</span><br><span class="line">                        String[] values = request.getParameterValues(item.getName());</span><br><span class="line">                        item.setValues(values);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    TableParameter tablePara = (TableParameter) para;</span><br><span class="line">                    String[] rows =</span><br><span class="line">                            request.getParameterValues(tablePara.getRowName());</span><br><span class="line">                    String[] columns =</span><br><span class="line">                            request.getParameterValues(tablePara.getColumnName());</span><br><span class="line">                    String[] dataCells =</span><br><span class="line">                            request.getParameterValues(tablePara.getDataCellName());</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">int</span> columnSize = columns.length;</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; rows.length; i++) &#123;</span><br><span class="line">                        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; columns.length; j++) &#123;</span><br><span class="line">                            TableParameterElement element = <span class="keyword">new</span> TableParameterElement();</span><br><span class="line">                            element.setRow(rows[i]);</span><br><span class="line">                            element.setColumn(columns[j]);</span><br><span class="line">                            element.setDataCell(dataCells[columnSize * i + j]);</span><br><span class="line">                            tablePara.addElement(element);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>观察代码，<code>if statement</code>中的三段代码块其实做的都是<strong>填充参数</strong>的事，只不过用<code>instanceof</code>判断了参数类型再执行对应的填充操作。结合之前的 Paperboy 案例，与 Wallet 打交道的应该是 Customer 而不是 Paperboy。上述代码明显也违反了迪米特法则，<strong>参数填充的行为应该交由参数类完成而不是 ParameterCollector</strong></li>
+</ul>
+<h2 id="Refactoring"><a href="#Refactoring" class="headerlink" title="Refactoring"></a>Refactoring</h2><ul>
+<li><p>基于代码重用的思想，先将三段代码 <strong>提取方法（Cmd + Alt + M）</strong>，并分别取名为<code>fillSimplePara()</code>、<code>fillItemPara()</code>、<code>fillTablePara()</code>，重构后的方法顺序可能有所差异，可以在方法签名上使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 快捷键移动方法顺序，使之符合正常的阅读习惯<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/0.png" alt="A6C5B629-ACC6-458A-8379-852021771E83"></p>
+</li>
+<li><p>提取了方法后，这一幕是不是似曾相识？之前的 Paperboy 案例中，我们从<code>charge()</code>方法中提取了<code>pay()</code>方法，意识到<code>pay()</code>方法应该归属于 Customer 而不是 Paperboy。这里就要再次强调：<strong>数据和行为应该封装在一起</strong>。显然，ParameterCollector 这个类不应该关注如何填充参数，而是应该收到<code>fillParameters()</code>请求后<strong>委派</strong>给各个 Parameter 类完成填充操作。所以我们采取“<strong>Move Method</strong>”重构手法（<strong>F6</strong>）<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/1.png" alt="17C89C7E-DA4F-4914-AA2A-5F6C8DE8845E">注意，IDEA 通过入参智能提示可以将方法移动到两个类中，显然应该选择 SimpleParameter，同时，方法的访问权限应为 public。接下来分别将<code>fillItemPara()</code>和<code>fillTablePara()</code>方法移动至 ItemParameter 和 TableParameter 中<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/2.png" alt="8FB216EF-394B-42F3-B556-6EC576224FE7"></p>
+</li>
+<li><p>观察上图你会发现，原先的方法有两个参数，但由于我们移动了方法到对应的 Parameter 类中，第二个参数直接变成了用<code>this</code>引用当前对象。<code>ItemParameter itemPara = this;</code>这一步是多余的，直接使用<strong>内联（Cmd + Alt + N</strong>）消除。然后呢，别着急，我们想一想，既然 SimpleParameter、ItemParameter、TableParameter 三个类都有接收一个 request 参数的填充方法，而且他们都实现了 Parameter 接口，那我们为什么不将方法提到接口中，让其他三个类去重写呢？所以接下来先把方法都重命名为<code>fill()</code>，使用 <strong>Shift + F6</strong>进行重命名<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/3.png" alt="74F483BA-13C8-4769-9E94-290369E2B41B-1"></p>
+</li>
+<li><p>接着，不要傻乎乎的去 Parameter 接口中手写<code>fill()</code>抽象方法，还是有快捷键的！那就是 “<strong>Pull Members Up</strong>”重构手法，说真的，当时看张总演示我就震惊了！选中方法，使用 <strong>Ctrl + T</strong> 调出重构菜单，输入一个 pull 你就能看到提示了<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/4.png" alt="C477A0C4-7E53-4C85-BE02-4A37697680B5"></p>
+</li>
+<li><p>IDEA 会提示你将<code>pull()</code>方法提升至 Parameter 接口中并 make abstract<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/5.png" alt="9E0BC21E-0DFB-47AF-8B9E-C99900755E7F"></p>
+</li>
+<li><p>我们看看重构后的效果，甚至于 ItemParameter 的<code>fill()</code>方法还已经帮你添加了<code>@Override</code>注解，但是剩下的两个 Parameter 类中的<code>fill()</code>方法还需要你手动的添加注解<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/6.png" alt="0007121B-DCAA-4629-B1EB-911959D12455"> <img src="/2018/05/07/Clean Code -- 报表参数填充案例/7.png" alt="FE508CEB-BABF-4D6F-830E-A6C126BCD693"></p>
+</li>
+<li><p>最后我们回到 ParameterCollector 类，使用 IDEA 的<strong>智能辅助</strong>快捷键（<strong>Alt + Enter</strong>）去 Cleanup code 删除多余的类型转换<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/8.png" alt="5A6909D5-21DC-45BB-B3F0-02ECE946EC10"></p>
+</li>
+<li><p>然后，你就会发现，<code>if statement</code>也是多余的，删除后，<strong>Cmd + Alt + L</strong> 格式化代码<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/9.png" alt="91715C62-8438-4C16-BE77-0C821007877A"></p>
+</li>
+</ul>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
+<p>如此，重构过的代码，可谓是层次清晰、一目了然，可比原来一坨堆在 ParameterCollector 中要美观多了。在重构的过程中，我们意识到，<strong>填充参数的行为应该交由它的专家，即各个 Parameter 类管理</strong>，移动方法后，又意识到既然都实现了 Parameter 接口，就应当使用 Java 接口的特性将<code>fill()</code>提升到 Parameter 接口中成为一个抽象方法。至此，<code>if</code>语句和<code>instanceof</code>也都不需要了，交由 JVM 在运行时识别类类型即可。所以说，<strong>重构的过程还可以帮助程序员梳理编码过程，进行合理的抽象和封装</strong>。当然，没有实践的空想理论是不行的，牢记 IDEA 的快捷键，将重构养成习惯，不时来一波亮瞎狗眼的骚操作，岂不美滋滋？</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2931,320 +3179,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/02/27/Java泛型之类型擦除/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/02/27/Java泛型之类型擦除/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/3/index.html">Java 泛型之类型擦除</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-02-27 01:47:58" itemprop="dateCreated datePublished" datetime="2018-02-27T01:47:58+08:00">2018-02-27</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-27 20:58:56" itemprop="dateModified" datetime="2018-12-27T20:58:56+08:00">2018-12-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/02/27/Java泛型之类型擦除/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/02/27/Java泛型之类型擦除/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">4.8k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>Java SE5 的重大变化之一就是加入了<strong>泛型</strong>，实现了参数化类型，使得代码可以适用于多种类型。但由于兼容旧版本的考虑，不得不作出了一些牺牲，比如<strong>擦除</strong>，使得泛型使用受到一定局限。本文简要介绍了 Java 泛型以及类型擦除的概念和使用</p>
-</blockquote>
-<h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><blockquote>
-<p><strong>Java泛型</strong> (<strong>Generics</strong>) 是 JDK5 引入的新特性，允许在定义类和接口的时候使用<strong>类型参数</strong> (<strong>Type Parameter</strong>)。声明的类型参数在使用时用具体的类型来替换。泛型最主要的应用是在 JDK5 中的新<strong>集合类</strong>框架中。</p>
-</blockquote>
-<ul>
-<li><p>通过泛型，大大提升了集合类的<strong>可复用性</strong>，你可以定义一个装字符串的 ArrayList，也可以定义一个装整型的 ArrayList</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;String&gt; als = new ArrayList&lt;&gt;();</span><br><span class="line">als.add(&quot;aaa&quot;);</span><br><span class="line"></span><br><span class="line">ArrayList&lt;Integer&gt; ali = new ArrayList&lt;&gt;();</span><br><span class="line">ali.add(1); </span><br><span class="line">ali.add(&quot;aaa&quot;);  // error</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li>自定义泛型类可以参考我的上一篇博客，<a href="https://s1mple.xyz/java-generics-linkedstack/" target="_blank" rel="noopener">Java泛型之LinkedStack</a></li>
-</ul>
-<h3 id="使用泛型需要注意"><a href="#使用泛型需要注意" class="headerlink" title="使用泛型需要注意"></a>使用泛型需要注意</h3><hr>
-<blockquote>
-<p>泛型的引入可以解决之前的集合类框架在使用过程中经常出现的运行时类型错误，因为编译器可以在编译时就发现很多明显的错误。但无奈的是，为了保证与旧版本的<strong>兼容性</strong>，Java 泛型的实现上存在着一些不够优雅的地方。</p>
-</blockquote>
-<ul>
-<li><p>开发人员在使用泛型的时候，很容易根据自己的直觉而犯一些错误</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;Object&gt; list) &#123;</span><br><span class="line">    // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<pre><code>这个方法接收`ArrayList&lt;Object&gt;`作为形参，但是如果尝试传入一个`ArrayList&lt;String&gt;`对象，却发现无法通过编译
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void test()&#123;</span><br><span class="line">    testGenerics(new ArrayList&lt;String&gt;()); // 编译错误!!!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-虽然从直觉上来说，Object 是 String 的父类，这种类型转换应该是合理的。但是实际上这会产生**隐含的类型转换**问题，因此编译器直接就禁止这样的行为
-</code></pre><h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h2><blockquote>
-<p>使用泛型的时候加上的类型参数，会被编译器在<strong>编译时</strong>去掉(擦除)。这个过程就称为<strong>类型擦除</strong> (<strong>Type Erasure</strong>) 。如在代码中定义的<code>List&lt;Object&gt;</code>和<code>List&lt;String&gt;</code>等类型，在编译之后都会变成 List 。</p>
-</blockquote>
-<blockquote>
-<p>可以说，类型擦除这个令人困惑的 Java 特性，完全是历史遗留问题导致的。因为 JDK5 之前没有泛型，为了旧代码能够正常运行，Java 泛型必须要在编译器层次将类型擦除，所导致的严酷事实就是：<strong>在泛型代码内部，无法获得任何有关泛型参数类型的信息。</strong></p>
-</blockquote>
-<p>很多泛型的特性都与类型擦除的存在有关，包括：</p>
-<ul>
-<li><p><strong>泛型类并没有自己独有的 Class 类对象。</strong> 比如并不存在<code>List&lt;String&gt;.class</code>或是<code>List&lt;Integer&gt;.class</code>，而只有<code>List.class</code></p>
-</li>
-<li><p><strong>静态变量是被泛型类的所有实例所共享的。</strong> 对于声明为<code>MyClass&lt;T&gt;</code>的类，访问其中的静态变量的方法仍然是<code>MyClass.myStaticVar</code>。不管是通过<code>new MyClass&lt;String&gt;</code>还是<code>new MyClass&lt;Integer&gt;</code>创建的对象，都是共享一个静态变量</p>
-</li>
-<li><p><strong>泛型的参数类型不能用于 Java异常处理的<code>catch</code>语句中。</strong> 因为异常处理是由 JVM 在运行时刻来进行的。由于类型信息被擦除，JVM 是无法区分两个异常类型<code>MyException&lt;String&gt;</code>和<code>MyException&lt;Integer&gt;</code>的。对于 JVM 来说，它们都是<code>MyException</code>类型的。也就无法执行与异常对应的<code>catch</code>语句</p>
-</li>
-</ul>
-<blockquote>
-<p>简单来说就是：<strong>泛型的类型信息在编译阶段被擦除，运行时刻任何获取泛型参数类型信息的行为都是非法的。</strong> </p>
-</blockquote>
-<h3 id="编译器的类型检查"><a href="#编译器的类型检查" class="headerlink" title="编译器的类型检查"></a>编译器的类型检查</h3><hr>
-<blockquote>
-<p>了解了类型擦除机制之后，就会明白<strong>编译器承担了全部的类型检查工作</strong>。编译器禁止某些泛型的使用方式，正是为了确保类型的安全性。</p>
-</blockquote>
-<ul>
-<li><p>继续用上例代码来做演示</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;Object&gt; list) &#123;</span><br><span class="line">    list.add(1); // 合法</span><br><span class="line">    list.add(&quot;aaa&quot;); // 合法</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void test()&#123;</span><br><span class="line">    testGenerics(new ArrayList&lt;String&gt;()); // 编译错误!!!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  不难理解，为了避免<code>ArrayList&lt;String&gt;</code>中添加一个 Integer 类型的对象，编译器干脆禁止了这样的行为。编译器会尽可能的检查可能存在的类型安全问题。对于确定是违反相关原则的地方，会给出编译错误。当编译器无法判断类型的使用是否正确的时候，会给出警告信息。</p>
-</li>
-</ul>
-<h3 id="通配符与上下界"><a href="#通配符与上下界" class="headerlink" title="通配符与上下界"></a>通配符与上下界</h3><hr>
-<blockquote>
-<p>在使用泛型类的时候，既可以指定一个具体的类型，如<code>List&lt;String&gt;</code>就声明了具体的类型是 String，也可以用 <strong>通配符<code>?</code></strong> 来表示未知类型，比如<code>List&lt;?&gt;</code>。通配符所代表的其实是<strong>一组类型</strong>，但具体的类型<strong>暂时未知</strong>，而是在<strong>使用时再确定</strong>。</p>
-</blockquote>
-<ul>
-<li><p><code>List&lt;?&gt;</code>不同于<code>List&lt;Object&gt;</code>的地方是，<code>List&lt;Object&gt;</code>实际上确定了参数类型是 Object 及其子类。而<code>List&lt;?&gt;</code>则其中所包含的元素类型是不确定。使用时可以用<code>List&lt;String&gt;</code>或<code>List&lt;Integer&gt;</code>替换。如果它包含了 String 的话，往里面添加 Integer 类型的元素就是错误的</p>
-</li>
-<li><p>请看如下代码</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;?&gt; list) &#123;</span><br><span class="line">    list.add(&quot;aaa&quot;); // 编译错误!!!</span><br><span class="line">    </span><br><span class="line">    Object obj = list.get(0); // 合法</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void test()&#123;</span><br><span class="line">    ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line">    list.add(&quot;aaa&quot;);</span><br><span class="line">    testGenerics(list); // 合法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  上述代码有如下几点要注意：</p>
-<ol>
-<li>因为通配符<code>?</code>类型未知，所以为了避免运行时类型错误，<code>list.add(&quot;aaa&quot;)</code>编译不会通过</li>
-<li>虽然类型未知，但肯定是 Object 及其子类，所以<strong>通配符代表的元素可以用 Object 来引用。</strong></li>
-<li>向<code>testGenerics()</code>方法传入的是<code>ArrayList&lt;String&gt;</code>类型的，并且编译通过。即使用时声明具体类型</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<p>由于<code>List&lt;?&gt;</code>中的元素只能用 Object 来引用，显然在需要更精细的类型时并不适用。在这些情况下，可以使用<strong>上下界</strong>来限制未知类型的范围。</p>
-</blockquote>
-<ul>
-<li><p><code>List&lt;? extends Number&gt;</code>说明 List 中可能包含的元素类型是 Number 及其<strong>子类</strong>。</p>
-</li>
-<li><p><code>List&lt;? super Number&gt;</code>则说明 List 中包含的是 Number 及其<strong>父类</strong>。</p>
-</li>
-<li><p>当使用<code>extends</code>引入了上界之后，在使用类型的时候就可以<strong>使用上界类中定义的方法</strong>。查看如下的例子</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public static void testGenerics(ArrayList&lt;? extends Number&gt; list) &#123;</span><br><span class="line">    Number number = list.get(0);</span><br><span class="line">    System.out.println(number.intValue());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    ArrayList&lt;Double&gt; doubles = new ArrayList&lt;&gt;();</span><br><span class="line">    doubles.add(2.33333);</span><br><span class="line">    testGenerics(doubles); // 运行输出结果：2 </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  形参改为<code>&lt;? extends Number&gt;</code>后，可以看到如下两个性质：</p>
-<ol>
-<li>可以使用 Number 引用</li>
-<li>在<code>testGenerics()</code>方法中可以调用 Number 类的<code>intValue()</code>方法</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<p>上述代码中，我们为了调用<code>intValue()</code>方法，必须给定泛型类的边界，以告诉编译器只能接受遵循这个边界的类型。这里重用了 <strong>extends</strong> 关键字。这样在编译时， <strong>泛型类型参数将擦除到它的第一个边界</strong>，即 Number，这样就可以调用<code>intValue()</code>方法了。</p>
-</blockquote>
-<h3 id="类型系统"><a href="#类型系统" class="headerlink" title="类型系统"></a>类型系统</h3><hr>
-<blockquote>
-<p>引入泛型之后的类型系统增加了<strong>两个维度</strong>：一个是<strong>类型参数自身</strong>的继承体系结构，另外一个是<strong>泛型类或接口自身</strong>的继承体系结构。第一个指的是对于<code>List&lt;String&gt;</code>和<code>List&lt;Object&gt;</code>这样的情况，类型参数 String 继承自 Object 。而第二种指的是<code>List&lt;String&gt;</code>和<code>Collection&lt;String&gt;</code>这种情况。对于这个类型系统，有如下的一些规则：</p>
-</blockquote>
-<ul>
-<li><p>相同类型参数的泛型类的关系取决于泛型类自身的继承体系结构。即<code>List&lt;String&gt;</code>是<code>Collection&lt;String&gt;</code>的子类型，<code>List&lt;String&gt;</code>可以替换<code>Collection&lt;String&gt;</code>。这种情况也适用于带有上下界的类型声明。</p>
-</li>
-<li><p>当泛型类的类型声明中使用了通配符的时候， 其子类型可以在两个维度上分别展开。如对<code>Collection&lt;? extends Number&gt;</code>来说，其子类型可以在 Collection 这个维度上展开，即<code>List&lt;? extends Number&gt;</code>和<code>Set&lt;? extends Number&gt;</code>等；也可以在 Number 这个层次上展开，即<code>Collection&lt;Double&gt;</code>和<code>Collection&lt;Integer&gt;</code>等。如此循环下去，<code>ArrayList&lt;Long&gt;</code>和<code>HashSet&lt;Double&gt;</code>等也都算是<code>Collection&lt;? extends Number&gt;</code>的子类型。</p>
-</li>
-<li><p>如果泛型类中包含多个类型参数，则对于每个类型参数分别应用上面的规则。</p>
-</li>
-</ul>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
-<p>Java泛型确实有些让人困惑的特性，让它使用起来不如 C++ 这种最开始就囊括了泛型的语言舒服。这也是任何有历史的编程语言所需要承担的历史包袱，后续的版本更新会被早期的设计缺陷所拖累。正是这样，如果一门语言长久的停留在过去，必然会被新的语言取代。</p>
-</blockquote>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li>《Java 编程思想》</li>
-<li><a href="http://www.infoq.com/cn/articles/cf-java-generics" target="_blank" rel="noopener">Java深度历险——Java泛型
-</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3294,7 +3228,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">57</span>
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3306,12 +3240,6 @@
                 <div class="site-state-item site-state-categories">
                   <a href="/categories/index.html">
                     
-                    
-                      
-                    
-                      
-                    
-                      
                     
                       
                     
@@ -3335,8 +3263,6 @@
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
-                    
-                      
                     
                       
                     
@@ -3467,7 +3393,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
