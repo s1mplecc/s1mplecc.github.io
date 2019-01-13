@@ -293,11 +293,8 @@ Optional.ofNullable(people)
 Optional 源码时有诸多值得我们借鉴取经的地方，诸如：
 
 - Monad 容器的思想。容器接收一个值，进行函数操作后依然返回该容器，比如 `map`、`flatMap`、`filter`。这就使得我们可以随意组合以上方法，编写函数式风格的代码。类似的还有 Java 8 的 `Stream` 接口。
-
 - 提供 `Optional.empty()` 类似空对象模式的空值单例。
-
 - 严谨的编码，源码中有许多 `Objects.requireNonNull()` 对极端情况进行验证，比如 `flatMap` 方法中的 `Objects.requireNonNull(mapper);` 和 `Optional.ofNullable(mapper.apply(value));` 对于入参函数不为空和调用 `apply()` 后返回值不为空的验证。
-
 - API 的全面性，当容器中没有你期待的值时提供 `orElse`、`orElseGet`、`orElseThrow` 等其他处理手段，不管是设置默认值还是抛出异常，API 都考虑到了。
 
 目前在一些 ORM 框架中也加入了 Optional 的支持，比如 Hibernate 从 5.2 版本后提供 `loadOptional()` 方法返回 `Optional<T>` 类型。有兴趣的可以自己去研究。

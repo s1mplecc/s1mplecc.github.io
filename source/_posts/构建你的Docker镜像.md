@@ -18,12 +18,14 @@ categories: [Ops]
 > 2.官网下载速度较慢，推荐DaoCloud仓库，和官网同步更新的 https://hub.daocloud.io/
 
 - 下载ubuntu基础镜像，冒号后是标签
+    
     ```
     docker pull daocloud.io/library/ubuntu:16.04
     ```
     执行`docker images`查看已下载的镜像
   
 - 创建容器实例，返回容器ID。`-d`后台运行
+    
     ```
     docker run -d -it daocloud.io/library/ubuntu:16.04
     ```
@@ -32,18 +34,21 @@ categories: [Ops]
 ## Build Your Image
 
 - 进入容器，ID输入可区分的几位就可以了
+    
     ```
     docker exec -it 4e bash
     ```
     可以看到在容器中有一套全新的目录结构，与宿主机是隔离的。
     
 - 安装vim
+    
     ```
     apt-get update
     apt-get install vim
     ```
 
 - 更改软件源为阿里云源
+    
     ```
     cd /etc/apt/
     cp sources.list sources.list_backup 
@@ -51,6 +56,7 @@ categories: [Ops]
     ```
 
 - `vim sources.list`将如下内容加入文件
+    
     ```
     deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial main
     deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial main
@@ -75,24 +81,36 @@ categories: [Ops]
 ## Push It !
 
 - `exit`或者`ctrl+d`退出当前容器，`docker ps`查看容器ID
+
 - 根据容器创建一个新的镜像，不加标签默认**latest**
+    
     ```
     docker commit 4e s1mple1995/java-web-env
-    ``` 
+    ```
+
 - 在`push`前需要在[docker官网](https://cloud.docker.com/)注册账户，用于存放自己的镜像
+
 - 在**Docker Cloud**中**create repository**，镜像名要和服务器中的镜像名一致，不一致可以使用如下命令
+    
     ```
     docker tag local-image:tagname new-repo:tagname
     ```
+
+
 - 在服务器端登录
+    
     ```
     docker login
     ```
+
 - 执行push命令，等待上传完成
+    
     ```
     docker push s1mple1995/java-web-env
     ```
+
 - 现在你的镜像已经存放在Docker Cloud云端了，搜索你的镜像，随时随地可以pull下来。
+    
     ```
     docker search s1mple1995
     ```
@@ -101,9 +119,11 @@ categories: [Ops]
 
 1. Docker的镜像管理很像git的版本控制。
 2. 你也可以使用阿里云的容器镜像服务。如果你的服务器是阿里云的ECS，可以使用内网传输，速度非常快。
+    
     ```
     docker login registry-vpc.cn-hangzhou.aliyuncs.com
     ```
+
 3. [我的官方仓库链接](https://cloud.docker.com/swarm/s1mple1995/repository/list)
 
 
