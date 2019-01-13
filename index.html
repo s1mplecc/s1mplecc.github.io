@@ -412,7 +412,7 @@
                 
               
 
-              <time title="创建时间：2019-01-13 18:10:44 / 修改时间：18:22:57" itemprop="dateCreated datePublished" datetime="2019-01-13T18:10:44+08:00">2019-01-13</time>
+              <time title="创建时间：2019-01-13 18:10:44 / 修改时间：19:06:21" itemprop="dateCreated datePublished" datetime="2019-01-13T18:10:44+08:00">2019-01-13</time>
             
 
             
@@ -500,14 +500,14 @@
 <p>显然作为 API 来说这太为繁琐，所以 SLF4J 提供了新的 API，方便开发者使用:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger.debug(<span class="string">"start process request, url: &#123;&#125;"</span>, url);</span><br></pre></td></tr></table></figure>
 <p>这样的话，在不输出 log 的时候避免了字符串拼接的开销；在输出的时候需要做一个字符串 format，代价比手工拼接字符串大一些，但是可以接受。</p>
-<p>而 Logback 则是作为 Log4j 的继承者来开发的，提供了性能更好的实现，异步 logger，Filter等更多的特性。</p>
+<p>而 Logback 则是作为 Log4j 的取缔者来开发的，提供了性能更好的实现，以及异步 logger，Filter 等更多的特性。</p>
 <h3 id="Log4j2"><a href="#Log4j2" class="headerlink" title="Log4j2"></a>Log4j2</h3><p>现在有了更好的 SLF4J 和 Logback 正慢慢取代 JCL 和 Log4j，然而维护 Log4j 的人不想坐视用户一点点被 SLF4J /Logback 蚕食，所以 Log4j2 诞生了。Log4j2 和 Log4j1.x 并不兼容，设计上很大程度上模仿了 SLF4J/Logback，性能上也获得了很大的提升。Log4j2 也做了 Facade/Implementation 分离的设计，分成了 log4j-api 和 log4j-core。</p>
 <h2 id="Facade-amp-Implementation"><a href="#Facade-amp-Implementation" class="headerlink" title="Facade &amp; Implementation"></a>Facade &amp; Implementation</h2><p>JCL、SLF4J 和 Log4j2 日志框架都使用了 GoF 设计模式中的门面模式（<strong>Facade Pattern</strong>），将接口和实现分离，定义统一的接口，而实现可以由用户自由选择。现在我们有了三个流行的 Log Facade，以及多个 Log Implementation，那么该如何配合使用呢？</p>
 <h3 id="SLF4J"><a href="#SLF4J" class="headerlink" title="SLF4J"></a>SLF4J</h3><p>Gülcü 是个追求完美的人，他决定让 SLF4J 和这些 Log 之间都能够方便的互相替换，所以做了各种 <strong>Adapter</strong> 和 <strong>Bridge</strong> 来连接:</p>
 <p><img src="/2019/01/13/Java-日志二三事/0.jpg" alt="0a9ca27a6fcb038fca91153b1147e5cc.jpeg"></p>
 <p>有趣的是，唯独没有 slf4j-over-log4j2 的桥接库，而且 log4j-to-slf4j 和 log4j-slf4j-impl 也是由 Apache 自己开发的。</p>
 <p>slf4j-api 只是 Log Facade 的依赖，添加了该依赖意味着在编码时你能够使用 <code>Logger log = LoggerFactory.getLogger(Main.class);</code> 和 <code>log.info(&quot;hello, {}&quot;, &quot;world&quot;);</code> 这种方式。除此之外，还需要添加 Log Implementation 的依赖。</p>
-<p>下图是 <a href="https://www.slf4j.org/manual.html" target="_blank" rel="noopener">SLF4J官网</a> 介绍可以绑定的日志实现框架。其中 slf4j-simple 是为小项目提供的简单实现，logback-classic 是官方的原生实现，不需要额外的适配器。而 <code>slf4j-log4j12</code> 和 <code>slf4j-jdk14</code> 分别是适配到 Log4j 和 JUL 的依赖，JUL 由于是 JDK 自带所以不需要额外依赖，而 Log4j 还需要自己的底层实现依赖。</p>
+<p>下图是 <a href="https://www.slf4j.org/manual.html" target="_blank" rel="noopener">SLF4J官网</a> 介绍可以绑定的日志实现框架。其中 slf4j-simple 是为小项目提供的简单实现；logback-classic 是官方的原生实现，不需要额外的适配器。而 <code>slf4j-log4j12</code> 和 <code>slf4j-jdk14</code> 分别是适配到 Log4j 和 JUL 的依赖，JUL 由于是 JDK 自带所以不需要额外依赖，而 Log4j 则还需要添加自己的底层实现依赖。</p>
 <p><img src="/2019/01/13/Java-日志二三事/1.png" alt="b7d8f119aca4c91e4d72283f7198148f.png"></p>
 <p>下面这张图展示了 SLF4J 绑定不同日志实现框架需要的依赖：</p>
 <p><img src="/2019/01/13/Java-日志二三事/2.png" alt="d8261ab119309917e25180ef0ae42abe.png"></p>
@@ -536,7 +536,7 @@
 <p><img src="/2019/01/13/Java-日志二三事/4.png" alt="c5b42a899b63e265a3e2f4300d443ecb.png"></p>
 <p>所以综上所诉，个人的看法是：<strong>如果对性能有要求，且 Log Implementation 想选用 Log4j2 的话，推荐 Log Facade 直接使用 Log4j2 API</strong>。</p>
 <h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><h3 id="总是使用-Log-Facade，而不是具体-Log-Implementation"><a href="#总是使用-Log-Facade，而不是具体-Log-Implementation" class="headerlink" title="总是使用 Log Facade，而不是具体 Log Implementation"></a>总是使用 Log Facade，而不是具体 Log Implementation</h3><p>正如之前所说的，使用 Log Facade 可以方便的切换具体的日志实现。而且，如果依赖多个项目，使用了不同的 Log Facade，还可以方便的通过 Adapter 转接到同一个实现上。如果依赖项目使用了多个不同的日志实现，就麻烦的多了。</p>
-<p>具体来说，现在<strong>推荐使用 Log4j-API 或者 SLF4j</strong>，不推荐继续使用 JCL。</p>
+<p>具体来说，现在<strong>推荐使用 Log4j2 API 或者 SLF4j</strong>，不推荐继续使用 JCL。</p>
 <h3 id="只添加一个-Log-Implementation-依赖"><a href="#只添加一个-Log-Implementation-依赖" class="headerlink" title="只添加一个 Log Implementation 依赖"></a>只添加一个 Log Implementation 依赖</h3><p>毫无疑问，项目中应该只使用一个具体的 Log Implementation，<strong>建议使用 Logback 或者 Log4j2</strong>。如果有依赖的项目中，使用的 Log Facade 不支持直接使用当前的 Log Implementation，就添加合适的桥接器依赖。</p>
 <h3 id="总是为-Log-Implementation-依赖设置-optional-和-runtime-scope"><a href="#总是为-Log-Implementation-依赖设置-optional-和-runtime-scope" class="headerlink" title="总是为 Log Implementation 依赖设置 optional 和 runtime scope"></a>总是为 Log Implementation 依赖设置 optional 和 runtime scope</h3><p>在项目中，Log Implementation 的依赖强烈建议设置为 runtime scope，并且设置为 optional。例如项目中使用了 SLF4J 作为 Log Facade，然后想使用 Logback 作为 Implementation，那么使用 POM 文件应该这么写：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;slf4j.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>ch.qos.logback<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>logback-classic<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;logback.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
