@@ -367,6 +367,232 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/10/10/API设计心得/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/10/10/API设计心得/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/2/index.html">API 设计心得</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-10 06:19:11" itemprop="dateCreated datePublished" datetime="2018-10-10T06:19:11+08:00">2018-10-10</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-23 14:05:15" itemprop="dateModified" datetime="2019-01-23T14:05:15+08:00">2019-01-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Design/" itemprop="url" rel="index"><span itemprop="name">Design</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/10/API设计心得/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/10/10/API设计心得/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.1k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>最近我在项目中单独编码了加载配置的模块，并提供给团队里的其他开发者使用。在设计 API 时有些心得体会，遂有了此博客记录下来。</p>
+</blockquote>
+<h2 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h2><p>截取了部分项目结构，大致如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config module</span></span><br><span class="line"></span><br><span class="line">├── ConfigFactory.java</span><br><span class="line">├── YamlConverter.java</span><br><span class="line">└── core</span><br><span class="line">    ├── AbstractConfig.java</span><br><span class="line">    ├── Config.java</span><br><span class="line">    ├── ConfigFile.java</span><br><span class="line">    ├── ConfigLoader.java</span><br><span class="line">    ├── ...</span><br><span class="line">    └── exceptions</span><br><span class="line">        ├── ConfigFileNotFoundException.java</span><br><span class="line">        ├── UnsupportedFileTypeException.java</span><br><span class="line">        └── ...</span><br></pre></td></tr></table></figure>
+<p><code>ConfigFactory</code> 和 <code>YamlConverter</code> 都是对外提供 API 的类，故放在最外层目录下，另外有个 <strong>core</strong> 的文件夹，存放间接使用到的类。类似于操作系统和用户 UI 界面，内核 core 封装你的实现，不暴露给用户，可以非常复杂。外层的 API 提供给用户使用，应该尽量满足<strong>不变</strong>的原则，即<strong>隔离变化</strong>，为了避免升级后用户需要改动代码。</p>
+<h2 id="易用性"><a href="#易用性" class="headerlink" title="易用性"></a>易用性</h2><p>API 应该保持简单易用，尽量可以<strong>望文知义</strong>。由于现在的 IDE 都有智能感知，会自动提示可调用的方法，一个设计优秀的 API 应该<strong>方法名即能显示用途</strong>，再不济，用户跟进方法阅读注释或者源码也应知道如何使用。<strong>能避免用户必须查阅文档才知道如何使用的应当尽量避免</strong>。</p>
+<p>提高易用性可以从如下几各方面：</p>
+<h4 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a><strong>静态方法</strong></h4><p>静态方法不需要实例化，一些工具类就大量运用静态方法，比如 Apache 的 StringUtils 字符串处理工具类，<code>StringUtils.isEmpty()、StringUtils.upperCase()</code> 等几乎所有方法都是 <code>static</code> 的。</p>
+<h4 id="Fluent-Interface"><a href="#Fluent-Interface" class="headerlink" title="Fluent Interface"></a><strong>Fluent Interface</strong></h4><p>流畅接口符合人的阅读习惯，比如 jOOQ 数据库映射库，使用流畅接口模拟 SQL。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">create.selectFrom(a)</span><br><span class="line">      .where(exists(selectOne()</span><br><span class="line">                 .from(BOOK)</span><br><span class="line">                 .where(BOOK.STATUS.equal(BOOK_STATUS.SOLD_OUT))</span><br><span class="line">                 .and(BOOK.AUTHOR_ID.equal(a.ID))));</span><br></pre></td></tr></table></figure>
+<h4 id="命名"><a href="#命名" class="headerlink" title="命名"></a><strong>命名</strong></h4><p>不管是类名、方法名还是参数名，好的命名应该<strong>语义清晰简单</strong>、<strong>符合直觉</strong>、<strong>易于记忆</strong>和<strong>引导用户</strong>，应尽量简单或使用业界常用的命名，比如我在编写 config 模块时借鉴了 Typesafe，它的 API 这样使用：<code>ConfigFactory.load(String resourceBasename)</code>，清晰明了，并且我知道入参是基于 resource 相对路径的文件名。</p>
+<p><strong>不要重复局部命名</strong>。在有上下文环境的调用中，减少不必要的描述可以提高 API 的精简和清晰度。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">  <span class="comment">// good</span></span><br><span class="line">  setName() &#123;&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// bad</span></span><br><span class="line">  setUserName() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="封装"><a href="#封装" class="headerlink" title="封装"></a><strong>封装</strong></h4><p>使用 Java 的访问控制修饰符 <code>private、default、protected</code> 对方法访问权限进行限定，该隐藏的隐藏，仅暴露对外公开接口。这样在 IDE 智能提示时也方便用户快速定位方法。</p>
+<h2 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h2><p>良好的 API 设计利于未来的版本升级——升级带来的用户兼容性成本较低，或者框架开发者的兼容性包袱较轻。</p>
+<p>为了将来的兼容性考虑，设计 API 时建议考虑这些因素：</p>
+<h4 id="不要提前公开-API"><a href="#不要提前公开-API" class="headerlink" title="不要提前公开 API"></a><strong>不要提前公开 API</strong></h4><p>如果你的某个 API 是为将来预留的，那么不要开放，因为你不清楚未来的设计需求是怎样的，提前公开的 API 在将来改变的可能性非常高。</p>
+<h4 id="预留足够的扩展点"><a href="#预留足够的扩展点" class="headerlink" title="预留足够的扩展点"></a><strong>预留足够的扩展点</strong></h4><p>没有良好扩展性的 API 通常会因为频繁的需求变更而导致 API 间接变化，这都是兼容性成本。如果在良好的设计下预留了足够的扩展点，那么这样的 API 能够应对未来一段时间内未知的需求变化，使得 API 变化在可控范围内。</p>
+<p>要预留扩展点就意味着通常应该<strong>使用接口或者抽象</strong>的概念来描述 API，建议用清晰定位的接口替代具体的类型。</p>
+<h4 id="明确的-API-迁移说明"><a href="#明确的-API-迁移说明" class="headerlink" title="明确的 API 迁移说明"></a><strong>明确的 API 迁移说明</strong></h4><p>如果某个 API 过时了，也不建议删除它；应该标记为过时，Java 中使用 <code>@Deprecated</code> 注解，并告诉使用者新的 API 是什么。当然如果这个 API 会导致出现不可接受的问题，也可以标记它无法通过编译。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://walterlv.com/post/framework-api-design.html#%E4%B8%80%E8%87%B4%E6%80%A7" target="_blank" rel="noopener">好的框架需要好的 API 设计 —— API 设计的六个原则
+</a></li>
+<li><a href="https://www.cnblogs.com/zfc2201/p/3423370.html" target="_blank" rel="noopener">接口设计六大原则</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/09/27/Trunk Based Development 主干开发模型/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2841,268 +3067,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/2/index.html">Clean Code -- PartDB 案例与模版方法模式</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-05-10 01:24:34" itemprop="dateCreated datePublished" datetime="2018-05-10T01:24:34+08:00">2018-05-10</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-27 20:41:00" itemprop="dateModified" datetime="2018-12-27T20:41:00+08:00">2018-12-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/10/Clean Code -- PartDB 案例与模版方法模式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">5.2k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。<a href="https://s1mple.xyz/clean-code-2/" target="_blank" rel="noopener">上一篇</a>我们通过报表参数填充案例复习了<strong>迪米特法则（最小知识法则）</strong>、<strong>信息专家模式：数据和行为应该封装在一起</strong>。本篇我们将通过 PartDB 案例来见识 IDEA 中 <strong>Extract Superclass</strong> 等强大的重构功能，以及与案例相关的设计模式：<strong>模版方法模式</strong></p>
-</blockquote>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目</li>
-<li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，clone 下代码进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 Cmd + D 查看<strong>代码差异</strong></li>
-<li><p><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 Cmd 替换成 Ctrl，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Shift + F6 // 重命名方法、属性、文件</span><br><span class="line">Cmd + Alt + M // 提取方法（extract method）</span><br><span class="line">Cmd + Alt + N // 内联（Inline），与 extract 相反</span><br><span class="line">Cmd + Shift + ⬆️/ ⬇️ // 上下移动声明体（statement）  </span><br><span class="line"></span><br><span class="line">Ctrl + T // 重构菜单</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="案例代码"><a href="#案例代码" class="headerlink" title="案例代码"></a>案例代码</h2><ul>
-<li><p>我们定义好了一个汽车零件类 Part，现在要通过 PartDB 去访问数据库执行<code>select * from part</code>，并将返回结果填充成一个 PartList</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PartDB</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DRIVER_CLASS = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DB_URL = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String USER = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String PASSWORD = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SQL_SELECT_PARTS = <span class="string">"select * from part"</span>;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Part&gt; partList = <span class="keyword">new</span> ArrayList&lt;Part&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">populate</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Connection c = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Class.forName(DRIVER_CLASS);</span><br><span class="line">            c = DriverManager.getConnection(DB_URL, USER, PASSWORD);</span><br><span class="line">            Statement stmt = c.createStatement();</span><br><span class="line">            ResultSet rs = stmt.executeQuery(SQL_SELECT_PARTS);</span><br><span class="line">            <span class="keyword">while</span> (rs.next()) &#123;</span><br><span class="line">                Part p = <span class="keyword">new</span> Part();</span><br><span class="line">                p.setName(rs.getString(<span class="string">"name"</span>));</span><br><span class="line">                p.setBrand(rs.getString(<span class="string">"brand"</span>));</span><br><span class="line">                p.setRetailPrice(rs.getDouble(<span class="string">"retail_price"</span>));</span><br><span class="line">                partList.add(p);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            c.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li>上述代码大概是每一个 Java 程序员都会接触到的：使用 JDBC 访问数据库。加载驱动、创立连接、执行 SQL 返回结果集并且填充到 Java 类中。显然，如果每一步都需要我们手动编写，那若是新增了一个类，比如 CustomerDB 是不是还要去 getConnection 等等，这必然会造成许多<strong>冗余代码</strong>。而现在许多的持久层框架，例如 MyBatis、Hibernate 都是基于 JDBC 进行再封装，避免了重复繁琐的工作。下面我们看看如何重构上述代码。</li>
-</ul>
-<h2 id="Refactoring"><a href="#Refactoring" class="headerlink" title="Refactoring"></a>Refactoring</h2><ul>
-<li><p>首先一段整洁易读的代码应该层次分明，如果没想到重构，我们可能会使用注释和换行将代码分段</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// get connection</span></span><br><span class="line">Class.forName(DRIVER_CLASS);</span><br><span class="line">c = DriverManager.getConnection(DB_URL, USER, PASSWORD);</span><br><span class="line"></span><br><span class="line"><span class="comment">// get result set</span></span><br><span class="line">Statement stmt = c.createStatement();</span><br><span class="line">ResultSet rs = stmt.executeQuery(SQL_SELECT_PARTS);</span><br><span class="line"></span><br><span class="line"><span class="comment">// populate parts entity</span></span><br><span class="line"><span class="keyword">while</span> (rs.next()) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>然而，在学会重构之后，我们要习惯使用方法名产生注释的效果，<strong>注释不是越多越好，而要少而精，不必要的注释就不要</strong>。使用 <strong>提取方法（Cmd + Alt + M）</strong> 重构代码，并使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 移动方法顺序<br><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/0.png" alt="25C7F4CD-951E-4B05-8A98-5A0433520EDA">注意我这里将<code>c</code>重命名（<strong>Shift + F6</strong>）为<code>connection</code>，<strong>命名要遵循在表达清楚业务含义的同时尽可能的短</strong>，<code>rs</code>、<code>err</code>甚至<code>e</code>这种因为频繁使用，基本上可以望文生义，所以可采用业界统一认可的缩写。但<code>c</code>这种命名，一旦代码量增多后，就可能带来阅读上的困扰，应当避免。顺便说一下，应该使用<code>populateParts()</code>而不是<code>populatePartList()</code>这种命名，因为<strong>命名应该站在功能层面，不应该暴露技术实现</strong>，万一哪一天，你改成 Set 了呢？</p>
-</li>
-<li><p>我们来观察提取出的三个方法。<code>getConnection()</code>创建数据库连接，在抽象层面与业务无关的，实现层面我们暂不考虑用户自定义情况（实际上应该由配置文件读入），所以实现层面也与业务无关。<code>getResultSet()</code>执行 SQL 获取结果集，在抽象层面与业务无关。实现层面上由于<code>SQL_SELECT_PARTS</code>所以与业务强耦合。我们可以使用 <strong>Cmd + Alt + N</strong> ，将<code>select * from part</code> SQL 语句<strong>内联</strong>，再提取<code>getSql()</code>方法（<strong>Cmd + Alt + M</strong>）<br><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/1.png" alt="953ECD52-3430-4BFD-A662-24E78BCAF755"></p>
-</li>
-<li><p>如此一来，<code>getResultSet()</code>在实现层面也与业务无关了。而<code>getSql()</code>方法在抽象层面与业务无关，在实现层面就与业务有关了。<code>populateParts()</code>这个名字容易让人产生误解，我们将其重命名为<code>populateEntities()</code>，这样，它在抽象层面也与业务无关，而在实现层面与业务有关。为什么我一再强调<strong>抽象层面</strong>和<strong>实现层面</strong>与<strong>业务</strong>的关系，就是为了让方法变得纯粹。这也是软件设计中一种重要的设计思维：<strong>关注点分离</strong>，目的是将<strong>解决特定领域问题的代码从业务逻辑中独立出来，业务逻辑的代码中不再含有针对特定领域问题代码的调用，业务逻辑同特定领域问题的关系通过侧面来封装、维护，这样原本分散在在整个应用程序中的变动就可以很好的管理起来</strong>。比方有一个函数叫做<code>CreateNewCustomer()</code>，那么该函数只与客户的数据（属性）打交道，而给新客户自动发优惠券的动作就不能放到这个函数里面</p>
-</li>
-<li><p>现在，我们所有的方法都在抽象层面与业务无关，只有<code>getSql()</code>和<code>populateEntities()</code>在实现层面与业务有关。至此，我们拨开重重迷雾，冰山的一角轰然显现！既然大家都在抽象层面与业务无关，我们就应该<strong>抽象出更高阶的抽象类</strong>，这里就用到了 <strong>Extract Superclass</strong> 这个神奇的重构手法</p>
-</li>
-<li><p>使用 <strong>Ctrl + T</strong> 调出重构菜单，输入 super 就可以看到 Extract Superclass 的提示，敲击回车<br><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/2.png" alt="F0675E41-8516-4FC3-96BB-928AB1060D40">注意需要勾选组成父类的成员，这里除了最后一个<code>partList</code>是业务独有的，其他全勾选上，而<code>getSql()</code>和<code>populateEntities()</code>方法因为具体实现与业务相关，就应该是子类去重写，所以应当勾选上 Make abstract</p>
-</li>
-<li><p>我们看看重构后的代码，简直太神奇了对不对！<br><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/3.png" alt="68B462DA-CB1F-41FD-A519-6576CF7BD2FE"><img src="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/4.png" alt="CC64100D-FC25-4825-85DD-83AECC318E86"></p>
-</li>
-<li><p>为什么我在提取父类时直接将父类命名为 JdbcTemplate，大家应该不难想到，我们重构完成的抽象父类，就是一个最简化的 JdbcTemplate。许多框架亦是如此诞生的，使用者使用时让自己的业务实体类去继承这个模版类，重写业务相关方法。这也是软件设计模式中非常著名的<strong>模版方法模式</strong></p>
-</li>
-</ul>
-<h2 id="模版方法模式"><a href="#模版方法模式" class="headerlink" title="模版方法模式"></a>模版方法模式</h2><blockquote>
-<p>模板方法模式说白了就是：<strong>定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤</strong>。代表具体逻辑步骤的方法称做<strong>基本方法(primitive method)</strong>；而将基本方法汇总穿成一条线的方法叫做<strong>模板方法(template method)</strong>，这个设计模式的名字也是由此而来。 </p>
-</blockquote>
-<ul>
-<li><p>在上述的抽象类 JdbcTemplate 中，我们的模版方法就应该是<code>populate()</code>方法</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">populate</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    Connection connection = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        connection = getConnection();</span><br><span class="line">        ResultSet rs = getResultSet(connection);</span><br><span class="line">        populateEntities(rs);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  类似于写信的模版，类似“尊敬的xxx”、“此致，敬礼”这种千篇一律的套话我们可以定义一个模版，而需要差异化书写的只是信的内容。在<code>populate()</code>中，骨架已经搭好：先创建数据库连接，再执行 SQL 返回结果集，最后填充实体类。所以这里能看出，<strong>模版方法展现了框架的生命周期</strong>。为防止恶意操作，一般模板方法都会加上<code>final</code>关键字，不允许用户重写模版方法</p>
-</li>
-<li><p>基本方法又可以分为三种：抽象方法、具体方法和钩子方法。</p>
-<ul>
-<li><strong>抽象方法(Abstract Method)</strong>：一个抽象方法由抽象类声明，由具体子类实现。在 Java 语言里抽象方法以<code>abstract</code>关键字标识。</li>
-<li><strong>具体方法(Concrete Method)</strong>：一个具体方法由抽象类声明并实现，而子类并不实现或置换。可以添加<code>final</code>关键字做强约束不可重写，比如<code>getResultSet()</code></li>
-<li><strong>钩子方法(Hook Method)</strong>：一个钩子方法由抽象类声明并实现，而子类会加以扩展。通常抽象类给出的实现是一个<strong>空实现</strong>，作为方法的默认实现。譬如有些框架的<code>init()</code>方法，用户可以实现也可以不实现，定义成<code>abstract</code>就不合适，所以框架会给个空方法</li>
-</ul>
-</li>
-</ul>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
-<p>讲真的，我在工作当中也使用过 MongoTemplate、RedisTemplate 诸如此类，还从未仔细想过这些类为什么这样命名，不该，不该。直到这次张总通过 IDEA 强大的 <strong>Extract Superclass</strong> 重构手法，给我们展示一个 JdbcTemplate 如何浮出水面的过程，实在是醍醐灌顶，豁然开朗。有兴趣的同学可以看看这些框架的源代码，加深对模版方法模式的理解。</p>
-</blockquote>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="http://www.runoob.com/design-pattern/template-pattern.html" target="_blank" rel="noopener">模版方法模式</a></li>
-<li><a href="http://www.cnblogs.com/java-my-life/archive/2012/05/14/2495235.html" target="_blank" rel="noopener">《JAVA与模式》之模板方法模式</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Separation_of_concerns#Internet_protocol_stack" target="_blank" rel="noopener">Separation of concerns - Wiki</a></li>
-<li><a href="http://www.cnblogs.com/asis/p/architecture-Soc.html" target="_blank" rel="noopener">架构漫谈系列之关注点分离</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3175,9 +3139,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3256,9 +3218,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">34</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
