@@ -369,6 +369,266 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/26/JavaScript相关介绍/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/12/26/JavaScript相关介绍/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">JavaScript 相关介绍</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-12-26 12:37:23" itemprop="dateCreated datePublished" datetime="2017-12-26T12:37:23+08:00">2017-12-26</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-27 20:58:45" itemprop="dateModified" datetime="2018-12-27T20:58:45+08:00">2018-12-27</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/26/JavaScript相关介绍/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/26/JavaScript相关介绍/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p><strong>JavaScript</strong>是目前前端开发中最流行的语言，在学习的过程中会遇到各种<strong>JS</strong>有关的名词。本文章的主要目的是介绍<strong>ECMAScript</strong>(or <strong>ES</strong>)、<strong>CommonJS</strong>、<strong>Node.js</strong>、<strong>Vue.js</strong>或<strong>AngularJS</strong>等与<strong>JavaScript</strong>之间的联系</p>
+</blockquote>
+<hr>
+<h2 id="ECMAScript"><a href="#ECMAScript" class="headerlink" title="ECMAScript"></a>ECMAScript</h2><blockquote>
+<p><strong>ECMAScript</strong>和<strong>JavaScript</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>（另外的实现还有<strong>Jscript</strong> 和<strong>ActionScript</strong>等）</p>
+</blockquote>
+<ul>
+<li><p><strong>JavaScript</strong>的创造者<strong>Netscape</strong>公司，将<strong>JavaScript</strong>提交给国际标准化组织<strong>ECMA</strong>，希望这种语言能够成为国际标准，标准委员会最终决定，标准在每年的6月份正式发布一次，作为当年的正式版本</p>
+</li>
+<li><p>目前的几乎所有的浏览器（不包括低版本的IE），都已经支持<strong>ES5</strong>了，而写代码时最好采用<strong>ES6</strong>语法（毕竟语法糖写起来更舒服，还添加了很多必要的新特性，而且浏览器全面支持<strong>ES6</strong>是迟早的事）。不用担心浏览器不能识别新语法，<strong>Bable</strong>就是用来解决这种问题的工具</p>
+</li>
+<li><p><strong>Babel</strong>是一个广泛使用的<strong>ES6</strong>转码器，可以将<strong>ES6</strong>代码转为<strong>ES5</strong>代码，从而在浏览器环境运行</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 转码前</span><br><span class="line">input.map(item =&gt; item + 1);</span><br><span class="line"></span><br><span class="line">// 转码后</span><br><span class="line">input.map(function (item) &#123;</span><br><span class="line">  return item + 1;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><blockquote>
+<p>在介绍<strong>CommonJS</strong>之前有必要先介绍一下<strong>Node.js</strong></p>
+</blockquote>
+<ul>
+<li><p>首先明确一点，<strong>JavaScript</strong>和<strong>Python</strong>一样，是一种脚本语言，或者是<strong>解释型语言</strong>，和<strong>C、C++</strong> 这种需要编译成可执行文件再运行的语言不同，它的运行只需要解释器能够解释执行即可，而不需要编译器。<strong>浏览器</strong>就包含了解释执行网页中的<strong>JavaScript</strong>代码的功能</p>
+</li>
+<li><p>伴随着互联网和<strong>JavaScript</strong>语言的快速发展，人们不仅仅局限于拿JS来做前端开发，所以<strong>Node.js</strong>随之应运而生</p>
+</li>
+<li><p><strong>Node.js</strong>作为一个后端的<strong>Javascrip</strong>t运行环境（解释器），这意味着你可以编写系统级或者服务器端的<strong>Javascript</strong>代码，交给<strong>Node.js</strong>来解释执行</p>
+</li>
+<li><p><strong>Node.js</strong>采用了<strong>Google Chrome</strong>浏览器的V8引擎（<strong>C++编写</strong>），性能很好，同时还提供了很多系统级的API，如文件操作、网络编程等。浏览器端的<strong>Javascript</strong>代码在运行时会受到各种安全性的限制，对客户系统的操作有限。相比之下，<strong>Node.js</strong>则是一个全面的后台运行时，基于<strong>Javascript</strong>提供了其他语言能够实现的许多功能</p>
+</li>
+</ul>
+<hr>
+<h2 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h2><blockquote>
+<p>可以说<strong>CommonJS</strong>和<strong>Node.js</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong></p>
+</blockquote>
+<ul>
+<li><p><strong>ECMAScript</strong>提供核心语言功能，浏览器端的<strong>JavaScript实现</strong>包括了<strong>ES核心</strong>、<strong>DOM</strong>(or <strong>Document Object Model</strong>)和<strong>BOM</strong>(or <strong>Browser Object Model</strong>)，所以你在浏览器的<strong>JS</strong>控制台可以使用<code>document、window、alert...</code>等有关<strong>DOM</strong>和<strong>BOM</strong>的操作</p>
+</li>
+<li><p>而<strong>CommonJS</strong>主要为<strong>非浏览器的应用</strong>定义一套API（比如<strong>Node</strong>应用），从而填补了空白。它的终极目标是提供一个类似<strong>Python、Ruby</strong>和<strong>Java</strong>的<strong>标准库</strong></p>
+</li>
+<li><p>可以看到在<strong>Node</strong>环境中没有定义<code>alert</code>和<code>document</code>，因为<strong>Node</strong>不关心<strong>DOM</strong>和<strong>BOM</strong>操作</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; alert(&apos;!!!&apos;)</span><br><span class="line">ReferenceError: alert is not defined</span><br><span class="line">&gt; document</span><br><span class="line">ReferenceError: document is not defined</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>但是它可以调用读取文件的函数，读取出了<code>a.txt</code>中的<code>Hello!</code>并打印，这是浏览器做不到也不应该去做的</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; const fs = require(&apos;fs&apos;);                 </span><br><span class="line">&gt; const content = fs.readFileSync(&apos;./a.txt&apos;,&apos;utf-8&apos;);</span><br><span class="line">&gt; console.log(content);</span><br><span class="line">hello!</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="Vue-js、AngularJS…"><a href="#Vue-js、AngularJS…" class="headerlink" title="Vue.js、AngularJS…"></a>Vue.js、AngularJS…</h2><blockquote>
+<p>这些没什么好说的，之所以带上<strong>JS</strong>就是因为它们是用<strong>JavaScript</strong>语言开发的框架，实际上就是个<strong>JS库</strong>，用于简化我们前端代码的编写</p>
+</blockquote>
+<ul>
+<li>至于为什么使用<strong>Vue.js</strong>这些框架需要安装<strong>Node.js</strong>，原因也很简单，因为很多工具（比如<strong>Babel、webpack</strong>）都是用<strong>Node</strong>开发出来的，这也是你为什么可以用<code>npm</code>安装的原因</li>
+</ul>
+<hr>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="http://es6.ruanyifeng.com/#docs/intro" target="_blank" rel="noopener">ECMAScript6简介 - 阮一峰</a></li>
+<li><a href="http://www.commonjs.org/" target="_blank" rel="noopener">CommonJS官网</a></li>
+<li><a href="https://nodejs.org/en/" target="_blank" rel="noopener">Node.js官网</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/25/探究HTTP协议/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2764,243 +3024,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/19/配置Nginx目录/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/11/19/配置Nginx目录/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">配置 Nginx 目录</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-11-19 02:07:54" itemprop="dateCreated datePublished" datetime="2017-11-19T02:07:54+08:00">2017-11-19</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-27 20:55:26" itemprop="dateModified" datetime="2018-12-27T20:55:26+08:00">2018-12-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/19/配置Nginx目录/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/19/配置Nginx目录/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">1.5k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>配置Nginx目录，可以很方便的下载镜像，查看文件等等</p>
-</blockquote>
-<ul>
-<li>效果图<br><img src="/2017/11/19/配置Nginx目录/0.png" alt="-----2017-11-19---10.54.27"></li>
-</ul>
-<h2 id="Configure-Nginx"><a href="#Configure-Nginx" class="headerlink" title="Configure Nginx"></a>Configure Nginx</h2><ul>
-<li><p>前往nginx配置目录</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/nginx/sites-enabled</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>vi dir_80.conf</code>添加配置文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    listen [::]:80;</span><br><span class="line"></span><br><span class="line">    server_name dir.s1mple.info www.dir.s1mple.info;</span><br><span class="line">    root /var/www/html;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $http_host;</span><br><span class="line">        autoindex on;</span><br><span class="line">        autoindex_exact_size off;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    listen 443 ssl; # managed by Certbot</span><br><span class="line">    ssl_certificate /etc/letsencrypt/live/s1mple.info/fullchain.pem; # managed by Certbot</span><br><span class="line">    ssl_certificate_key /etc/letsencrypt/live/s1mple.info/privkey.pem; # managed by Certbot</span><br><span class="line">    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot</span><br><span class="line"></span><br><span class="line">    # Redirect non-https traffic to https</span><br><span class="line">    if ($scheme != &quot;https&quot;) &#123;</span><br><span class="line">        return 301 https://$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><code>service nginx restart</code>重启nginx服务</li>
-</ul>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ol>
-<li>监听80端口，域名为dir.s1mple.info和<a href="http://www.dir.s1mple.info" target="_blank" rel="noopener">www.dir.s1mple.info</a></li>
-<li>根目录为/var/www/html</li>
-<li><strong>autoindex on</strong>打开目录浏览功能</li>
-<li><strong>autoindex_exact_size</strong>默认为on，显示文件确切大小，单位bytes，改为off后显示大概大小，单位kB或者MB或者GB</li>
-<li>剩下的是<strong>Certbot</strong>重定位https的配置</li>
-</ol>
-<h2 id="Configure-Certbot"><a href="#Configure-Certbot" class="headerlink" title="Configure Certbot"></a>Configure Certbot</h2><ul>
-<li>重新配置Certbot  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certbot run</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>它会自动检测nginx的配置文件<br><img src="/2017/11/19/配置Nginx目录/1.png" alt="-----2017-11-19---10.31.17"></p>
-</li>
-<li><p>提示已经存在证书，并且已经配置了一些域名，询问是否扩充，选择E<br><img src="/2017/11/19/配置Nginx目录/2.png" alt="-----2017-11-19---10.32.45"></p>
-</li>
-<li><p>询问是否将HTTP重定位到HTTPS，选择2是所有请求均重定位到HTTPS<br><img src="/2017/11/19/配置Nginx目录/3.png" alt="-----2017-11-19---10.38.24"></p>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3052,7 +3075,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">58</span>
+                    <span class="site-state-item-count">59</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3075,7 +3098,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3152,7 +3177,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">32</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">34</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

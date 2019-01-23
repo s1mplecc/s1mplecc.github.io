@@ -1213,6 +1213,231 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/23/Fluent Interface —— Martin Fowler 博客译文/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/01/23/Fluent Interface —— Martin Fowler 博客译文/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">Fluent Interface —— Martin Fowler 博客译文</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-01-23 20:41:09" itemprop="dateCreated datePublished" datetime="2018-01-23T20:41:09+08:00">2018-01-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-23 14:04:54" itemprop="dateModified" datetime="2019-01-23T14:04:54+08:00">2019-01-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Translations/" itemprop="url" rel="index"><span itemprop="name">Translations</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/23/Fluent Interface —— Martin Fowler 博客译文/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/01/23/Fluent Interface —— Martin Fowler 博客译文/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">3.4k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="译文"><a href="#译文" class="headerlink" title="译文"></a>译文</h2><p>几个月前我和 Eric Evans 进行了一次讨论会，他谈到一种接口的设计风格，我们称之为流畅接口（Fluent Interface）。它不是一种常见的风格，但我们觉得应该广为人知。描述它的最直观的方式就是例子。</p>
+<p>最简单的例子可能就来自 Eric 编写的 <a href="http://timeandmoney.sourceforge.net/" target="_blank" rel="noopener">TimeAndMoney Library</a>。为了指定一段时间间隔，我们通常这么做：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TimePoint fiveOClock, sixOClock;</span><br><span class="line">...</span><br><span class="line">TimeInterval meetingTime = <span class="keyword">new</span> TimeInterval(fiveOClock, sixOClock);</span><br></pre></td></tr></table></figure>
+<p>但是 TimeAndMoney 库的使用者会这样做：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TimeInterval meetingTime = fiveOClock.until(sixOClock);</span><br></pre></td></tr></table></figure>
+<p>下面我继续演示“客户下订单”这个例子。一个订单包含多个订单项，每个订单项包含商品项和购买的数量。在提交订单时一个订单项应当是可跳过的，这意味着我更希望在没有此订单项（缺货）的情况下提交订单，而不是推迟提交整个订单。所以这里可以给整个订单一个“急促（rush）”的状态标识。</p>
+<p>要实现上述功能，最常见的编码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeNormal</span><span class="params">(Customer customer)</span> </span>&#123;</span><br><span class="line">    Order o1 = <span class="keyword">new</span> Order();</span><br><span class="line">    customer.addOrder(o1);</span><br><span class="line">    OrderLine line1 = <span class="keyword">new</span> OrderLine(<span class="number">6</span>, Product.find(<span class="string">"TAL"</span>));</span><br><span class="line">    o1.addLine(line1);</span><br><span class="line">    OrderLine line2 = <span class="keyword">new</span> OrderLine(<span class="number">5</span>, Product.find(<span class="string">"HPK"</span>));</span><br><span class="line">    o1.addLine(line2);</span><br><span class="line">    OrderLine line3 = <span class="keyword">new</span> OrderLine(<span class="number">3</span>, Product.find(<span class="string">"LGV"</span>));</span><br><span class="line">    o1.addLine(line3);</span><br><span class="line">    line2.setSkippable(<span class="keyword">true</span>);</span><br><span class="line">    o1.setRush(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本质上我们创建了多个对象然后将它们组装在一起。如果无法在构造函数中设置所有内容，那么就需要创建临时变量来帮助我们完成组装 —— 尤其是将集合项添加到集合中。</p>
+<p>下面是使用流畅接口实现相同的组装：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeFluent</span><span class="params">(Customer customer)</span> </span>&#123;</span><br><span class="line">    customer.newOrder()</span><br><span class="line">            .with(<span class="number">6</span>, <span class="string">"TAL"</span>)</span><br><span class="line">            .with(<span class="number">5</span>, <span class="string">"HPK"</span>).skippable()</span><br><span class="line">            .with(<span class="number">3</span>, <span class="string">"LGV"</span>)</span><br><span class="line">            .priorityRush();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关于这种风格最重要的一点就是，基于 Internal DomainSpecificLanguage 将要做的事沿着一条线进行编码（译者注：Domain Specific Language，DSL，领域专用语言）。实际上这也是为什么我们选择用 “Fluent” 一词来描述它，在很多方面这两个术语是同义词。<strong>这种 API 被设计为可读的和流式的，这种流畅性的代价是在设计和构建 API 时需要花更多的功夫</strong>。构造函数、setter 和 add 方法的 API 简单且容易编写，但要想提供一个漂亮的流畅接口则需要更多的思考。</p>
+<p>事实上，刚才我想用在 Calgary 咖啡店吃早餐的时间完成这个小例子的编码，但是我搞砸了，看来好的流畅接口需要花费一些时间去实现。如果你想找一个比较成熟的例子，可以看看 <a href="http://jmock.org/" target="_blank" rel="noopener">JMock</a>。与任何 mocking 库一样，JMock 需要创建复杂的行为规范。在过去几年中已经构建了许多 mocking 库，而 JMock 的这个则包含了非常漂亮的流畅接口，使用体验非常好。这是它的一个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mock.expects(once())</span><br><span class="line">    .method(<span class="string">"m"</span>)</span><br><span class="line">    .with(or(stringContains(<span class="string">"hello"</span>), stringContains(<span class="string">"howdy"</span>)));</span><br></pre></td></tr></table></figure>
+<p>我看到 Steve Freeman 和 Nat Price 在 <a href="https://www.martinfowler.com/bliki/JAOO2005.html" target="_blank" rel="noopener">JAOO2005</a> 上就 JMock API 的演变发表了精彩的演讲，演讲相关的内容他们已经发表到一篇 <a href="http://www.mockobjects.com/files/evolving_an_edsl.ooplsa2006.pdf" target="_blank" rel="noopener">OOPSLA论文</a> 上。</p>
+<p>到目前为止，我们看到用于创建对象配置的流畅接口通常会涉及到 <a href="https://en.wikipedia.org/wiki/Value_object" target="_blank" rel="noopener">值对象</a>。我不确定这是否属于流畅接口的一个定义特征，虽然我怀疑它们出现在声明性上下文中有某种关联。对我们而言，<strong>流畅性的关键考验在于领域特定语言的质量</strong>。API 使用起来越像流式的语言，它就越流畅。</p>
+<p>像这样构建一个流畅接口会导致一些不符合使用习惯的 API。其中最明显的一个就是 setter 会有返回值（在订单示例中，<code>with</code> 方法为订单添加一个订单项并返回整个订单），而惯例是修改性质的方法返回 <code>void</code>，因为这样遵循 <a href="https://martinfowler.com/bliki/CommandQuerySeparation.html" target="_blank" rel="noopener">CommandQuerySeparation</a> 原则（译者注：CQS，命令查询分离原则）。这个约定确实妨碍了流畅接口，所以我倾向于暂不遵循这个惯例。</p>
+<p>你应该<strong>根据流畅接口的下一个行为（fluent action）去选择返回类型</strong>。JMock 提出了一个重点：根据接下来的需要改变其返回类型。<strong>这种风格的一个很好的优点是方法补完后（intellisense）有助于告诉你接下来要键入什么 —— 有点像 IDE 中的智能提示</strong>。总的来说，我发现动态语言对于 DSL 来说效果更好，因为它们的语法往往更简洁。但是，使用方法补完是静态语言的一个优点。</p>
+<p>流畅接口定义的方法的一个问题是它们可能名不符实。举个例子，你去查看 <code>with</code> 方法的文档可能并没有什么意义，因为这个方法的实现和 <code>with</code> 并没有什么关联。我承认光就方法的命名来说这不是一个好的命名，因为它根本不能表达该方法实际做了什么。只有在流畅行为的上下文中这种命名才能显示出它的优势（译者注：这点我在编码时也深有体会，流畅接口的方法实现与方法命名常常做的是两回事，比如说把值对象传递下去）。解决此问题的一种可能的方法是只在此上下文中使用 builder 对象（译者注：可以参考 Builder Pattern，比如 <code>new BankAccount.Builder(4567L).withOwner(&quot;Homer&quot;).atBranch(&quot;Springfield&quot;).build();</code>，只在最后一步 <code>build()</code> 中进行构建）。</p>
+<p>Eric 提到的一点是，到目前为止，他使用并看到了流畅的接口大多是关于值对象的配置。值对象不具有领域意义的标识（Identity），因此你可以轻松创建并丢弃它们。所以接口的流畅度取决于使用旧值构造新值。从这个意义上讲，订单案例并不典型，因为它属于 <a href="https://www.martinfowler.com/bliki/EvansClassification.html" target="_blank" rel="noopener">EvansClassification</a> 中的实体对象（Entity）。（译者注：Evans Classification，Evans 关于领域对象的分类 Entity、Value Object 和 Service）</p>
+<p>目前为止我还没有看到很多的流畅接口，可以得出结论，我们对它们的优缺点了解还不够。所以任何使用它们的劝告都只能是初步的 —— 但我认为它们已经成熟，可以进行更多的尝试。</p>
+<p><a href="https://bofh.org.uk/2005/12/21/fluent-interfaces/" target="_blank" rel="noopener">Piers Cawley</a> 对本文有一个很好的跟进。</p>
+<p><strong>更新</strong>（2008年6月23日）。自从我写这篇文章以来，这个术语被广泛使用，这给了我一种令人愉快的满足感。在我一直在研究的书中，我已经提炼了关于流畅接口和内部 DSLs 的想法。我也注意到了一个常见的误解 —— 很多人似乎将流畅接口与方法链（Method Chaining）等同起来。当然链式接口是使用了流畅接口的一种常用的技术，但真正的流畅接口远不止于此。</p>
+<p>我上面展示的 JMock 示例使用了方法链，但同时也使用嵌套函数和对象作用域。</p>
+<h2 id="原文链接"><a href="#原文链接" class="headerlink" title="原文链接"></a>原文链接</h2><p><a href="https://www.martinfowler.com/bliki/FluentInterface.html" target="_blank" rel="noopener">Fluent Interface</a>，Matrin Fowler 博客，发表于 2005 年 12 月 20 日。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/22/离线安装Nginx/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -3065,265 +3290,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/26/JavaScript相关介绍/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/12/26/JavaScript相关介绍/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">JavaScript 相关介绍</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-12-26 12:37:23" itemprop="dateCreated datePublished" datetime="2017-12-26T12:37:23+08:00">2017-12-26</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-27 20:58:45" itemprop="dateModified" datetime="2018-12-27T20:58:45+08:00">2018-12-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/12/26/JavaScript相关介绍/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/12/26/JavaScript相关介绍/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">2k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p><strong>JavaScript</strong>是目前前端开发中最流行的语言，在学习的过程中会遇到各种<strong>JS</strong>有关的名词。本文章的主要目的是介绍<strong>ECMAScript</strong>(or <strong>ES</strong>)、<strong>CommonJS</strong>、<strong>Node.js</strong>、<strong>Vue.js</strong>或<strong>AngularJS</strong>等与<strong>JavaScript</strong>之间的联系</p>
-</blockquote>
-<hr>
-<h2 id="ECMAScript"><a href="#ECMAScript" class="headerlink" title="ECMAScript"></a>ECMAScript</h2><blockquote>
-<p><strong>ECMAScript</strong>和<strong>JavaScript</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>（另外的实现还有<strong>Jscript</strong> 和<strong>ActionScript</strong>等）</p>
-</blockquote>
-<ul>
-<li><p><strong>JavaScript</strong>的创造者<strong>Netscape</strong>公司，将<strong>JavaScript</strong>提交给国际标准化组织<strong>ECMA</strong>，希望这种语言能够成为国际标准，标准委员会最终决定，标准在每年的6月份正式发布一次，作为当年的正式版本</p>
-</li>
-<li><p>目前的几乎所有的浏览器（不包括低版本的IE），都已经支持<strong>ES5</strong>了，而写代码时最好采用<strong>ES6</strong>语法（毕竟语法糖写起来更舒服，还添加了很多必要的新特性，而且浏览器全面支持<strong>ES6</strong>是迟早的事）。不用担心浏览器不能识别新语法，<strong>Bable</strong>就是用来解决这种问题的工具</p>
-</li>
-<li><p><strong>Babel</strong>是一个广泛使用的<strong>ES6</strong>转码器，可以将<strong>ES6</strong>代码转为<strong>ES5</strong>代码，从而在浏览器环境运行</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 转码前</span><br><span class="line">input.map(item =&gt; item + 1);</span><br><span class="line"></span><br><span class="line">// 转码后</span><br><span class="line">input.map(function (item) &#123;</span><br><span class="line">  return item + 1;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><blockquote>
-<p>在介绍<strong>CommonJS</strong>之前有必要先介绍一下<strong>Node.js</strong></p>
-</blockquote>
-<ul>
-<li><p>首先明确一点，<strong>JavaScript</strong>和<strong>Python</strong>一样，是一种脚本语言，或者是<strong>解释型语言</strong>，和<strong>C、C++</strong> 这种需要编译成可执行文件再运行的语言不同，它的运行只需要解释器能够解释执行即可，而不需要编译器。<strong>浏览器</strong>就包含了解释执行网页中的<strong>JavaScript</strong>代码的功能</p>
-</li>
-<li><p>伴随着互联网和<strong>JavaScript</strong>语言的快速发展，人们不仅仅局限于拿JS来做前端开发，所以<strong>Node.js</strong>随之应运而生</p>
-</li>
-<li><p><strong>Node.js</strong>作为一个后端的<strong>Javascrip</strong>t运行环境（解释器），这意味着你可以编写系统级或者服务器端的<strong>Javascript</strong>代码，交给<strong>Node.js</strong>来解释执行</p>
-</li>
-<li><p><strong>Node.js</strong>采用了<strong>Google Chrome</strong>浏览器的V8引擎（<strong>C++编写</strong>），性能很好，同时还提供了很多系统级的API，如文件操作、网络编程等。浏览器端的<strong>Javascript</strong>代码在运行时会受到各种安全性的限制，对客户系统的操作有限。相比之下，<strong>Node.js</strong>则是一个全面的后台运行时，基于<strong>Javascript</strong>提供了其他语言能够实现的许多功能</p>
-</li>
-</ul>
-<hr>
-<h2 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h2><blockquote>
-<p>可以说<strong>CommonJS</strong>和<strong>Node.js</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong></p>
-</blockquote>
-<ul>
-<li><p><strong>ECMAScript</strong>提供核心语言功能，浏览器端的<strong>JavaScript实现</strong>包括了<strong>ES核心</strong>、<strong>DOM</strong>(or <strong>Document Object Model</strong>)和<strong>BOM</strong>(or <strong>Browser Object Model</strong>)，所以你在浏览器的<strong>JS</strong>控制台可以使用<code>document、window、alert...</code>等有关<strong>DOM</strong>和<strong>BOM</strong>的操作</p>
-</li>
-<li><p>而<strong>CommonJS</strong>主要为<strong>非浏览器的应用</strong>定义一套API（比如<strong>Node</strong>应用），从而填补了空白。它的终极目标是提供一个类似<strong>Python、Ruby</strong>和<strong>Java</strong>的<strong>标准库</strong></p>
-</li>
-<li><p>可以看到在<strong>Node</strong>环境中没有定义<code>alert</code>和<code>document</code>，因为<strong>Node</strong>不关心<strong>DOM</strong>和<strong>BOM</strong>操作</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; alert(&apos;!!!&apos;)</span><br><span class="line">ReferenceError: alert is not defined</span><br><span class="line">&gt; document</span><br><span class="line">ReferenceError: document is not defined</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>但是它可以调用读取文件的函数，读取出了<code>a.txt</code>中的<code>Hello!</code>并打印，这是浏览器做不到也不应该去做的</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; const fs = require(&apos;fs&apos;);                 </span><br><span class="line">&gt; const content = fs.readFileSync(&apos;./a.txt&apos;,&apos;utf-8&apos;);</span><br><span class="line">&gt; console.log(content);</span><br><span class="line">hello!</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="Vue-js、AngularJS…"><a href="#Vue-js、AngularJS…" class="headerlink" title="Vue.js、AngularJS…"></a>Vue.js、AngularJS…</h2><blockquote>
-<p>这些没什么好说的，之所以带上<strong>JS</strong>就是因为它们是用<strong>JavaScript</strong>语言开发的框架，实际上就是个<strong>JS库</strong>，用于简化我们前端代码的编写</p>
-</blockquote>
-<ul>
-<li>至于为什么使用<strong>Vue.js</strong>这些框架需要安装<strong>Node.js</strong>，原因也很简单，因为很多工具（比如<strong>Babel、webpack</strong>）都是用<strong>Node</strong>开发出来的，这也是你为什么可以用<code>npm</code>安装的原因</li>
-</ul>
-<hr>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><a href="http://es6.ruanyifeng.com/#docs/intro" target="_blank" rel="noopener">ECMAScript6简介 - 阮一峰</a></li>
-<li><a href="http://www.commonjs.org/" target="_blank" rel="noopener">CommonJS官网</a></li>
-<li><a href="https://nodejs.org/en/" target="_blank" rel="noopener">Node.js官网</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3373,7 +3339,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">58</span>
+                    <span class="site-state-item-count">59</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3396,7 +3362,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3473,7 +3441,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">32</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">34</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
