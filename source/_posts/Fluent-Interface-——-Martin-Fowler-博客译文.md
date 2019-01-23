@@ -1,8 +1,8 @@
 ---
 title: Fluent Interface —— Martin Fowler 博客译文
-date: 2018-01-23T20:41:09.000Z
 tags: [DSL, API Design]
 categories: [Translations]
+date: 2019-01-23 14:15:45
 ---
 ## 译文
 
