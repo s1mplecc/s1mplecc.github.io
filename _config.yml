@@ -23,6 +23,7 @@ source_dir: source
 public_dir: public
 tag_dir: tags
 archive_dir: archives
+history_dir: history
 category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
@@ -85,6 +86,16 @@ theme: next
 post_copyright:
   enable: true
   license: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a>
+
+# RSS
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  hub:
+  content:
+  content_limit:
+  content_limit_delim: ' '
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
