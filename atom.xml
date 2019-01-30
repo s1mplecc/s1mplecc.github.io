@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>s1mple的博客</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://s1mplecc.github.io/"/>
+  <updated>2019-01-23T06:16:06.216Z</updated>
+  <id>https://s1mplecc.github.io/</id>
+  
+  <author>
+    <name>s1mple</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Fluent Interface —— Martin Fowler 博客译文</title>
+    <link href="https://s1mplecc.github.io/2019/01/23/Fluent-Interface-%E2%80%94%E2%80%94-Martin-Fowler-%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/"/>
+    <id>https://s1mplecc.github.io/2019/01/23/Fluent-Interface-——-Martin-Fowler-博客译文/</id>
+    <published>2019-01-23T06:15:45.000Z</published>
+    <updated>2019-01-23T06:16:06.216Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Translations" scheme="https://s1mplecc.github.io/categories/Translations/"/>
+    
+    
+      <category term="API Design" scheme="https://s1mplecc.github.io/tags/API-Design/"/>
+    
+      <category term="DSL" scheme="https://s1mplecc.github.io/tags/DSL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java 日志二三事</title>
+    <link href="https://s1mplecc.github.io/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/"/>
+    <id>https://s1mplecc.github.io/2019/01/13/Java-日志二三事/</id>
+    <published>2019-01-13T10:10:44.000Z</published>
+    <updated>2019-01-13T11:07:22.075Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Concepts" scheme="https://s1mplecc.github.io/categories/Concepts/"/>
+    
+    
+      <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>迁移 Ghost 博客至 Hexo 并使用 GitHub Pages 部署</title>
+    <link href="https://s1mplecc.github.io/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/"/>
+    <id>https://s1mplecc.github.io/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/</id>
+    <published>2018-12-27T05:45:37.000Z</published>
+    <updated>2018-12-30T12:31:10.909Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Ops" scheme="https://s1mplecc.github.io/categories/Ops/"/>
+    
+    
+      <category term="Hexo" scheme="https://s1mplecc.github.io/tags/Hexo/"/>
+    
+      <category term="Ghost" scheme="https://s1mplecc.github.io/tags/Ghost/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>50行代码实现一个并发的 Python 爬虫程序</title>
+    <link href="https://s1mplecc.github.io/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/"/>
+    <id>https://s1mplecc.github.io/2018/12/03/50行代码实现一个并发的 Python 爬虫程序/</id>
+    <published>2018-12-03T05:41:09.000Z</published>
+    <updated>2018-12-27T12:40:43.885Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Coding" scheme="https://s1mplecc.github.io/categories/Coding/"/>
+    
+    
+      <category term="Python" scheme="https://s1mplecc.github.io/tags/Python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>结合案例使用 Java 注解和反射</title>
+    <link href="https://s1mplecc.github.io/2018/11/29/%E7%BB%93%E5%90%88%E6%A1%88%E4%BE%8B%E4%BD%BF%E7%94%A8%20Java%20%E6%B3%A8%E8%A7%A3%E5%92%8C%E5%8F%8D%E5%B0%84/"/>
+    <id>https://s1mplecc.github.io/2018/11/29/结合案例使用 Java 注解和反射/</id>
+    <published>2018-11-28T20:53:50.000Z</published>
+    <updated>2018-12-27T12:50:38.044Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Coding" scheme="https://s1mplecc.github.io/categories/Coding/"/>
+    
+    
+      <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java8 Optional 源码阅读</title>
+    <link href="https://s1mplecc.github.io/2018/11/27/Java8%20Optional%20%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/"/>
+    <id>https://s1mplecc.github.io/2018/11/27/Java8 Optional 源码阅读/</id>
+    <published>2018-11-27T05:26:41.000Z</published>
+    <updated>2018-12-30T12:35:21.777Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Languages" scheme="https://s1mplecc.github.io/categories/Languages/"/>
+    
+    
+      <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
+    
+      <category term="FP" scheme="https://s1mplecc.github.io/tags/FP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java8 函数接口</title>
+    <link href="https://s1mplecc.github.io/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/"/>
+    <id>https://s1mplecc.github.io/2018/11/16/Java8 函数接口/</id>
+    <published>2018-11-16T04:33:17.000Z</published>
+    <updated>2018-12-27T12:44:30.820Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Languages" scheme="https://s1mplecc.github.io/categories/Languages/"/>
+    
+    
+      <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
+    
+      <category term="FP" scheme="https://s1mplecc.github.io/tags/FP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>单例模式</title>
+    <link href="https://s1mplecc.github.io/2018/11/12/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/"/>
+    <id>https://s1mplecc.github.io/2018/11/12/单例模式/</id>
+    <published>2018-11-12T05:42:03.000Z</published>
+    <updated>2018-12-27T12:49:23.255Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Concepts" scheme="https://s1mplecc.github.io/categories/Concepts/"/>
+    
+    
+      <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
+    
+      <category term="Design Pattern" scheme="https://s1mplecc.github.io/tags/Design-Pattern/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java 网络爬虫</title>
+    <link href="https://s1mplecc.github.io/2018/11/05/Java%20%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/"/>
+    <id>https://s1mplecc.github.io/2018/11/05/Java 网络爬虫/</id>
+    <published>2018-11-05T05:15:21.000Z</published>
+    <updated>2018-12-27T12:44:15.518Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Coding" scheme="https://s1mplecc.github.io/categories/Coding/"/>
+    
+    
+      <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HTTPS &amp; SSH 协议</title>
+    <link href="https://s1mplecc.github.io/2018/10/11/HTTPS%20&amp;%20SSH%20%E5%8D%8F%E8%AE%AE/"/>
+    <id>https://s1mplecc.github.io/2018/10/11/HTTPS &amp; SSH 协议/</id>
+    <published>2018-10-10T19:14:36.000Z</published>
+    <updated>2018-12-27T12:43:31.337Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Concepts" scheme="https://s1mplecc.github.io/categories/Concepts/"/>
+    
+    
+      <category term="Network" scheme="https://s1mplecc.github.io/tags/Network/"/>
+    
+      <category term="Security" scheme="https://s1mplecc.github.io/tags/Security/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>API 设计心得</title>
+    <link href="https://s1mplecc.github.io/2018/10/10/API%E8%AE%BE%E8%AE%A1%E5%BF%83%E5%BE%97/"/>
+    <id>https://s1mplecc.github.io/2018/10/10/API设计心得/</id>
+    <published>2018-10-09T22:19:11.000Z</published>
+    <updated>2019-01-23T06:05:15.858Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Design" scheme="https://s1mplecc.github.io/categories/Design/"/>
+    
+    
+      <category term="API Design" scheme="https://s1mplecc.github.io/tags/API-Design/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Trunk Based Development 主干开发模型</title>
+    <link href="https://s1mplecc.github.io/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/"/>
+    <id>https://s1mplecc.github.io/2018/09/27/Trunk Based Development 主干开发模型/</id>
+    <published>2018-09-26T18:35:29.000Z</published>
+    <updated>2018-12-27T12:47:26.821Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Concepts" scheme="https://s1mplecc.github.io/categories/Concepts/"/>
+    
+    
+      <category term="Git" scheme="https://s1mplecc.github.io/tags/Git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Git 进阶教程</title>
+    <link href="https://s1mplecc.github.io/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/"/>
+    <id>https://s1mplecc.github.io/2018/09/18/Git 进阶教程/</id>
+    <published>2018-09-17T18:02:04.000Z</published>
+    <updated>2018-12-27T12:43:24.763Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Concepts" scheme="https://s1mplecc.github.io/categories/Concepts/"/>
+    
+    
+      <category term="Git" scheme="https://s1mplecc.github.io/tags/Git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>搭建 SSR 服务器 + 锐速</title>
+    <link href="https://s1mplecc.github.io/2018/08/30/%E6%90%AD%E5%BB%BASSR%E6%9C%8D%E5%8A%A1%E5%99%A8%20+%20%E9%94%90%E9%80%9F/"/>
+    <id>https://s1mplecc.github.io/2018/08/30/搭建SSR服务器 + 锐速/</id>
+    <published>2018-08-29T17:47:13.000Z</published>
+    <updated>2018-12-27T12:58:09.595Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Ops" scheme="https://s1mplecc.github.io/categories/Ops/"/>
+    
+    
+      <category term="Server" scheme="https://s1mplecc.github.io/tags/Server/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Mac 的终极 Shell -- ZSH</title>
+    <link href="https://s1mplecc.github.io/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/"/>
+    <id>https://s1mplecc.github.io/2018/07/30/Mac 的终极 Shell -- ZSH/</id>
+    <published>2018-07-29T23:46:19.000Z</published>
+    <updated>2018-12-27T12:45:41.795Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Ops" scheme="https://s1mplecc.github.io/categories/Ops/"/>
+    
+    
+      <category term="Linux" scheme="https://s1mplecc.github.io/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java 异常处理之 Web 案例</title>
+    <link href="https://s1mplecc.github.io/2018/07/19/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B9%8B%20Web%20%E6%A1%88%E4%BE%8B/"/>
+    <id>https://s1mplecc.github.io/2018/07/19/Java 异常处理之 Web 案例/</id>
+    <published>2018-07-19T00:00:23.000Z</published>
+    <updated>2018-12-27T12:44:10.123Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Coding" scheme="https://s1mplecc.github.io/categories/Coding/"/>
+    
+    
+      <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
+    
+      <category term="Web" scheme="https://s1mplecc.github.io/tags/Web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java 异常处理</title>
+    <link href="https://s1mplecc.github.io/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/"/>
+    <id>https://s1mplecc.github.io/2018/07/16/Java 异常处理/</id>
+    <published>2018-07-15T21:21:06.000Z</published>
+    <updated>2018-12-27T12:43:38.585Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Languages" scheme="https://s1mplecc.github.io/categories/Languages/"/>
+    
+    
+      <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Git Flow 模型以及工具的使用</title>
+    <link href="https://s1mplecc.github.io/2018/07/03/Git%20Flow%20%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <id>https://s1mplecc.github.io/2018/07/03/Git Flow 模型以及工具的使用/</id>
+    <published>2018-07-03T00:11:51.000Z</published>
+    <updated>2018-12-27T12:43:13.228Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Concepts" scheme="https://s1mplecc.github.io/categories/Concepts/"/>
+    
+    
+      <category term="Git" scheme="https://s1mplecc.github.io/tags/Git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>迁移 Ghost 博客并使用 Docker  部署</title>
+    <link href="https://s1mplecc.github.io/2018/06/24/%E8%BF%81%E7%A7%BB%20Ghost%20%E5%8D%9A%E5%AE%A2%E5%B9%B6%E4%BD%BF%E7%94%A8%20Docker%20%20%E9%83%A8%E7%BD%B2/"/>
+    <id>https://s1mplecc.github.io/2018/06/24/迁移 Ghost 博客并使用 Docker  部署/</id>
+    <published>2018-06-24T06:30:15.000Z</published>
+    <updated>2018-12-27T12:50:42.250Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Ops" scheme="https://s1mplecc.github.io/categories/Ops/"/>
+    
+    
+      <category term="Server" scheme="https://s1mplecc.github.io/tags/Server/"/>
+    
+      <category term="Docker" scheme="https://s1mplecc.github.io/tags/Docker/"/>
+    
+      <category term="Nginx" scheme="https://s1mplecc.github.io/tags/Nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>函数式编程</title>
+    <link href="https://s1mplecc.github.io/2018/05/24/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/"/>
+    <id>https://s1mplecc.github.io/2018/05/24/函数式编程/</id>
+    <published>2018-05-23T22:47:25.000Z</published>
+    <updated>2018-12-27T12:49:09.065Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Concepts" scheme="https://s1mplecc.github.io/categories/Concepts/"/>
+    
+    
+      <category term="FP" scheme="https://s1mplecc.github.io/tags/FP/"/>
+    
+  </entry>
+  
+</feed>
