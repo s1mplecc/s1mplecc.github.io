@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="问题图中有一个无向图，其中圈内数字代表一个地点，边线上的数字代表长度 Le（双向相同）。机场一辆小型VIP电动摆渡车在起点 A，要去 3 个贵宾厅（V1，V2，V3）接贵宾（每个贵宾厅限1个VIP），送到 3 个对应航班机位（S1，S2，S3），即 V1 至 S1，V2 至 S2，V3 至 S3。VIP 电动摆渡车同时最多装下 2 个 VIP。  要求：VIP 电动摆渡车该怎么走路径最短？这个最短">
+<meta name="keywords" content="Algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一道有趣的路径规划算法题（Java 版）">
+<meta property="og:url" content="https://s1mplecc.github.io/2019/02/15/一道有趣的路径规划算法题（Java-版）/index.html">
+<meta property="og:site_name" content="s1mple的博客">
+<meta property="og:description" content="问题图中有一个无向图，其中圈内数字代表一个地点，边线上的数字代表长度 Le（双向相同）。机场一辆小型VIP电动摆渡车在起点 A，要去 3 个贵宾厅（V1，V2，V3）接贵宾（每个贵宾厅限1个VIP），送到 3 个对应航班机位（S1，S2，S3），即 V1 至 S1，V2 至 S2，V3 至 S3。VIP 电动摆渡车同时最多装下 2 个 VIP。  要求：VIP 电动摆渡车该怎么走路径最短？这个最短">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2019/02/15/一道有趣的路径规划算法题（Java-版）/1.jpg">
+<meta property="og:image" content="https://s1mplecc.github.io/2019/02/15/一道有趣的路径规划算法题（Java-版）/2.jpeg">
+<meta property="og:image" content="https://s1mplecc.github.io/2019/02/15/一道有趣的路径规划算法题（Java-版）/3.png">
+<meta property="og:updated_time" content="2019-02-15T07:18:21.665Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一道有趣的路径规划算法题（Java 版）">
+<meta name="twitter:description" content="问题图中有一个无向图，其中圈内数字代表一个地点，边线上的数字代表长度 Le（双向相同）。机场一辆小型VIP电动摆渡车在起点 A，要去 3 个贵宾厅（V1，V2，V3）接贵宾（每个贵宾厅限1个VIP），送到 3 个对应航班机位（S1，S2，S3），即 V1 至 S1，V2 至 S2，V3 至 S3。VIP 电动摆渡车同时最多装下 2 个 VIP。  要求：VIP 电动摆渡车该怎么走路径最短？这个最短">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2019/02/15/一道有趣的路径规划算法题（Java-版）/1.jpg">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://s1mplecc.github.io/2019/02/15/一道有趣的路径规划算法题（Java-版）/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>一道有趣的路径规划算法题（Java 版） | s1mple的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">s1mple的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2019/02/15/一道有趣的路径规划算法题（Java-版）/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">一道有趣的路径规划算法题（Java 版）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-15 15:09:14 / 修改时间：15:18:21" itemprop="dateCreated datePublished" datetime="2019-02-15T15:09:14+08:00">2019-02-15</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/15/一道有趣的路径规划算法题（Java-版）/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/02/15/一道有趣的路径规划算法题（Java-版）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">8.7k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>图中有一个无向图，其中圈内数字代表一个地点，边线上的数字代表长度 Le（双向相同）。机场一辆小型VIP电动摆渡车在起点 A，要去 3 个贵宾厅（V1，V2，V3）接贵宾（每个贵宾厅限1个VIP），送到 3 个对应航班机位（S1，S2，S3），即 V1 至 S1，V2 至 S2，V3 至 S3。VIP 电动摆渡车同时最多装下 2 个 VIP。</p>
+<p><img src="/2019/02/15/一道有趣的路径规划算法题（Java-版）/1.jpg" alt="ff858a30049f1753177d2691a50f09b1.jpeg"></p>
+<p><strong>要求</strong>：VIP 电动摆渡车该怎么走路径最短？这个最短路径的长度是多少？这里 A 是出发点，最后一个 VIP（不限次序）送达地为终点。为了简化问题，假设贵宾厅VIP已在贵宾厅等候上车，VIP 电动摆渡车在接送期间不用等待。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>看到最短路径，不难想到 Dijkstra 等最短路径算法，这些算法用于求出一个图（Graph）中任意两个顶点（Vertex）的最短距离。但是本文待求解的问题不止于此，而是包含起始点 A 在内的 7 个点（A、V1、V2、V3、S1、S2、S3），我们需要先<strong>规划路线</strong>使得摆渡车依次通过这 7 个点，再求出这些路线中的最短路线。</p>
+<p>综上所诉，该问题被拆解为以下两步：<br>第一步，<strong>列出从 A 出发经由其余 6 个点的所有可能的路线</strong>。<br>第二步，<strong>对于给定的任意两个点，求出它们之间的最短路径</strong>（例如给定 A、V2 两个点，可得从 A 到 V2 的最短路径为 2 -&gt; 6 -&gt; 7）。<br>然后对于每条路线，计算每一段（即两个点之间）的最短路径即可得到整条路线的最短路径。</p>
+<p>由此，可以看出本题涉及两个算法，即第一步中的<strong>排序算法</strong>，和第二步中的<strong>最短路径算法</strong>。</p>
+<h2 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h2><p>我们需要对 V1、V2、V3、S1、S2、S3 六个点进行排序。当然为满足题目的要求，排序得出的路线必须满足以下几个条件：</p>
+<ol>
+<li><strong>第一个点必须是 V，最后一个点必须是 S</strong></li>
+<li>因为摆渡车最多载两个，所以<strong>不能出现连续的三个 V</strong></li>
+<li>为确保将用户送达目的点，<strong>对应的 V 不能排在对应的 S 后面</strong>，比如不能排出 S1 … V1</li>
+</ol>
+<h3 id="建模"><a href="#建模" class="headerlink" title="建模"></a>建模</h3><p><strong>Point</strong>，枚举类，对应着包括起点 A 在内的七个点。阔号中的整数类型表示点在图中的索引。同时基于 Java 面向对象的思想，赋予它一些验证方法以验证当前路径是否符合上述三个条件。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Point &#123;</span><br><span class="line">    A(<span class="number">2</span>, START),</span><br><span class="line">    V1(<span class="number">3</span>, VIP),</span><br><span class="line">    V2(<span class="number">7</span>, VIP),</span><br><span class="line">    V3(<span class="number">4</span>, VIP),</span><br><span class="line">    S1(<span class="number">12</span>, DESTINATION),</span><br><span class="line">    S2(<span class="number">11</span>, DESTINATION),</span><br><span class="line">    S3(<span class="number">13</span>, DESTINATION);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> index;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Type type;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">index</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> index; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isV</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isS</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Point <span class="title">matchedV</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">enum</span> Type &#123;</span><br><span class="line">        VIP, DESTINATION, START</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Route</strong>，对应着路线，下面粘贴了部分代码，包括验证当前路线是否合法的 <code>isLegal()</code> 方法，路径上追加点的 <code>add(Point)</code> 方法，以及预留的 <code>minDistance()</code> 方法用于计算这条路径的最短距离。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Route</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> List&lt;Point&gt; route;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isLegal</span><span class="params">()</span> </span>&#123; ... &#125;   </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Point point)</span> </span>&#123; ... &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minDistance</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h3><p>排序算法的核心思路是：</p>
+<ol>
+<li>首先需要一个容器用于所有装符合条件的 Route。</li>
+<li>Route 用来装当前<strong>已入队列</strong>的 Point。</li>
+<li>Remain Points Container 用于存放<strong>尚未入队列</strong>的 Point。</li>
+<li>从 Remain Points Container <strong>依次拿出一个 Point，追加入 Route，判断是否合法</strong>，合法则继续，不合法则退出。</li>
+<li>第 4 步是一个<strong>递归</strong>的步骤，如下图，假设第一个点装入了 V1，第二个点在装入的时候可以装入 V2、V3、S1、S2、S3，其中 S2、S3 因为不合法而终止递归，剩下的 V2、V3、S1 三个点 fork 出三种情况继续向下递归。</li>
+<li>直到 Route 将六个点全部装入后，将该 Route 加入第 1 步的容器中。</li>
+</ol>
+<p><img src="/2019/02/15/一道有趣的路径规划算法题（Java-版）/2.jpeg" alt="3921ebbd368ce17e79a7b2f574d7673c.jpeg"></p>
+<p><strong>RouteGenerator</strong> 类，用于生成所有符合条件的路线。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RouteGenerator</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Route&gt; routes = <span class="keyword">new</span> ArrayList&lt;&gt;(); <span class="comment">// 第 1 步的容器</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Route&gt; <span class="title">generate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        fork(<span class="keyword">new</span> Route(), List.of(V1, V2, V3, S1, S2, S3));</span><br><span class="line">        <span class="keyword">return</span> routes;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">fork</span><span class="params">(<span class="keyword">final</span> Route route, <span class="keyword">final</span> List&lt;Point&gt; remain)</span> </span>&#123; <span class="comment">// 入参分别对应 2、3 步</span></span><br><span class="line">        <span class="keyword">if</span> (!route.isLegal()) &#123; <span class="comment">// 判断是否合法，不合法则中断递归</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (route.size() == <span class="number">6</span>) &#123; <span class="comment">// 当六个点全部装入后，将该路线加入第 1 步的容器并中断递归</span></span><br><span class="line">            routes.add(route); </span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; remain.size(); i++) &#123;</span><br><span class="line">            List&lt;Point&gt; temp = Lists.newArrayList(remain);</span><br><span class="line">            Point next = temp.remove(i); <span class="comment">// 从未入队列的点中选出一个加入路线</span></span><br><span class="line">            Route route1 = route.copy();</span><br><span class="line">            route1.add(next);</span><br><span class="line"></span><br><span class="line">            fork(route1, temp); <span class="comment">// 递归调用</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h3><p>排序后得到结果，一共 54 种符合条件的情况。算法耗时在 40ms 左右。该算法相较于全排列后再进行筛选，可以避免创建不必要的对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">A -&gt; V1 -&gt; V2 -&gt; S1 -&gt; V3 -&gt; S2 -&gt; S3</span><br><span class="line">A -&gt; V1 -&gt; V2 -&gt; S1 -&gt; V3 -&gt; S3 -&gt; S2</span><br><span class="line">A -&gt; V1 -&gt; V2 -&gt; S1 -&gt; S2 -&gt; V3 -&gt; S3</span><br><span class="line">...</span><br><span class="line">A -&gt; V2 -&gt; V3 -&gt; S3 -&gt; V1 -&gt; S1 -&gt; S2</span><br><span class="line">A -&gt; V2 -&gt; V3 -&gt; S3 -&gt; V1 -&gt; S2 -&gt; S1</span><br><span class="line">A -&gt; V2 -&gt; V3 -&gt; S3 -&gt; S2 -&gt; V1 -&gt; S1</span><br><span class="line">...</span><br><span class="line">A -&gt; V3 -&gt; S3 -&gt; V2 -&gt; V1 -&gt; S1 -&gt; S2</span><br><span class="line">A -&gt; V3 -&gt; S3 -&gt; V2 -&gt; V1 -&gt; S2 -&gt; S1</span><br><span class="line">A -&gt; V3 -&gt; S3 -&gt; V2 -&gt; S2 -&gt; V1 -&gt; S1</span><br></pre></td></tr></table></figure>
+<h2 id="最短路径算法"><a href="#最短路径算法" class="headerlink" title="最短路径算法"></a>最短路径算法</h2><p>本题中的最短路径算法我选用的 Dijkstra 算法，亦就是大学数据结构课程中最为常知的最短路径算法。算法的详细步骤这里就不再赘述了，可以参考一篇博客 <a href="http://wiki.jikexueyuan.com/project/easy-learn-algorithm/dijkstra.html" target="_blank" rel="noopener">Dijkstra最短路算法
+</a>。</p>
+<h3 id="建模-1"><a href="#建模-1" class="headerlink" title="建模"></a>建模</h3><p>Dijkstra 算法的核心建模思想是使用一个二维数组，记录每个顶点到其他顶点的距离，如果不能直达，则设为 ∞。那么本题的图可以使用如下二维数组来表示，由于是无向图，所以关于对角线对称。</p>
+<p><img src="/2019/02/15/一道有趣的路径规划算法题（Java-版）/3.png" alt="afe039363dc9b79e775321fa5a6dee22.png"></p>
+<p>反应在 Java 代码中则是如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Graph</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> I = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INFINITY = I;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// todo: maybe read from graph with python</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[][] matrix() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[][]&#123;</span><br><span class="line"><span class="comment">//               1  2  3  4  5  6  7  8  9  10 11 12 13 14 15</span></span><br><span class="line">                &#123;<span class="number">0</span>, <span class="number">1</span>, I, I, <span class="number">1</span>, I, I, I, I, I, I, I, I, I, I&#125;, <span class="comment">// 1</span></span><br><span class="line">                &#123;<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>, I, I, <span class="number">2</span>, I, I, I, I, I, I, I, I, I&#125;, <span class="comment">// 2</span></span><br><span class="line">                &#123;I, <span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>, I, I, I, <span class="number">2</span>, I, I, I, I, I, I, I&#125;, <span class="comment">// 3</span></span><br><span class="line">                &#123;I, I, <span class="number">1</span>, <span class="number">0</span>, I, I, I, I, I, I, I, I, I, I, <span class="number">3</span>&#125;, <span class="comment">// 4</span></span><br><span class="line">                &#123;<span class="number">1</span>, I, I, I, <span class="number">0</span>, <span class="number">1</span>, I, I, <span class="number">1</span>, I, I, I, I, I, I&#125;, <span class="comment">// 5</span></span><br><span class="line">                &#123;I, <span class="number">2</span>, I, I, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, I, I, I, I, I, I, I, I&#125;, <span class="comment">// 6</span></span><br><span class="line">                &#123;I, I, I, I, I, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, I, <span class="number">1</span>, I, I, I, I, I&#125;, <span class="comment">// 7</span></span><br><span class="line">                &#123;I, I, <span class="number">2</span>, I, I, I, <span class="number">1</span>, <span class="number">0</span>, I, I, <span class="number">1</span>, I, I, I, I&#125;, <span class="comment">// 8</span></span><br><span class="line">                &#123;I, I, I, I, <span class="number">1</span>, I, I, I, <span class="number">0</span>, <span class="number">3</span>, I, <span class="number">2</span>, I, I, I&#125;, <span class="comment">// 9</span></span><br><span class="line">                &#123;I, I, I, I, I, I, <span class="number">1</span>, I, <span class="number">3</span>, <span class="number">0</span>, <span class="number">1</span>, I, <span class="number">2</span>, I, I&#125;, <span class="comment">// 10</span></span><br><span class="line">                &#123;I, I, I, I, I, I, I, <span class="number">1</span>, I, <span class="number">1</span>, <span class="number">0</span>, I, I, <span class="number">1</span>, I&#125;, <span class="comment">// 11</span></span><br><span class="line">                &#123;I, I, I, I, I, I, I, I, <span class="number">2</span>, I, I, <span class="number">0</span>, <span class="number">2</span>, I, I&#125;, <span class="comment">// 12</span></span><br><span class="line">                &#123;I, I, I, I, I, I, I, I, I, <span class="number">2</span>, I, <span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>, I&#125;, <span class="comment">// 13</span></span><br><span class="line">                &#123;I, I, I, I, I, I, I, I, I, I, <span class="number">1</span>, I, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>&#125;, <span class="comment">// 14</span></span><br><span class="line">                &#123;I, I, I, <span class="number">3</span>, I, I, I, I, I, I, I, I, I, <span class="number">1</span>, <span class="number">0</span>&#125;, <span class="comment">// 15</span></span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="算法实现-1"><a href="#算法实现-1" class="headerlink" title="算法实现"></a>算法实现</h3><p>Dijkstra 算法的核心思想是：每次找到离源点最近的一个顶点，然后以该顶点为中心进行扩展，最终得到源点到其余所有点的最短路径。基本步骤如下：</p>
+<ol>
+<li>使用一个 <code>dis[]</code> 数组记录源点到其余所有点的最短路径。初始化为 matrix 二维数组的对应行。</li>
+<li>将所有的顶点分为两部分：已知最短路程的顶点集合 P 和未知最短路径的顶点集合 Q。最开始，已知最短路径的顶点集合 P 中只有源点一个顶点。我们这里用一个  <code>book[]</code> 数组来记录哪些点在集合 P 中。例如对于某个顶点 i，如果 <code>book[i]</code> 为 1 则表示这个顶点在集合 P 中，如果 <code>book[i]</code> 为 0 则表示这个顶点在集合 Q 中。</li>
+<li>在集合 Q 的所有顶点中选择一个离源点 s 最近的顶点 u（即 <code>dis[u]</code> 最小）加入到集合 P。并考察所有以点 u 为起点的边，对每一条边进行松弛操作。例如存在一条从 u 到 v 的边，使得 <code>s -&gt; u -&gt; v</code> 的长度 <code>dis[u] + e[u][v]</code> 比目前已知的 <code>dis[v]</code> 的值更小，那么我们就可以用新值来更新当前 <code>dis[v]</code> 中的值（即<strong>松弛</strong>）。</li>
+<li>重复第 3 步，如果集合 Q 为空，算法结束。最终 dis 数组中的值就是源点到所有顶点的最短路径。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Dijkstra</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span>[][] e;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Dijkstra</span><span class="params">(Graph graph)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.e = graph.matrix();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">min</span><span class="params">(<span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = e[<span class="number">0</span>].length;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// init dis[]</span></span><br><span class="line">        <span class="keyword">int</span>[] dis = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        System.arraycopy(e[start - <span class="number">1</span>], <span class="number">0</span>, dis, <span class="number">0</span>, n);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// init book[]</span></span><br><span class="line">        <span class="keyword">int</span>[] book = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        book[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> min = INFINITY;</span><br><span class="line">            <span class="keyword">int</span> u = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (book[j] == <span class="number">0</span> &amp;&amp; dis[j] &lt; min) &#123;</span><br><span class="line">                    min = dis[j];</span><br><span class="line">                    u = j;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            book[u] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> v = <span class="number">0</span>; v &lt; n; v++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (e[u][v] &lt; INFINITY) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (dis[v] &gt; dis[u] + e[u][v]) &#123;</span><br><span class="line">                        dis[v] = dis[u] + e[u][v];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> dis[end - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 Dijkstra 算法我有想过使用缓存 Cache 去进行优化，为了避免重复计算两个点之间的最短距离，但实际上效果反而不好，其实这是一种空间换时间的取舍，虽然不用重复计算，但是需要额外的空间存储已计算过的路径。然而在本题中并不适用这种优化。</p>
+<h3 id="运行结果-1"><a href="#运行结果-1" class="headerlink" title="运行结果"></a>运行结果</h3><p>结合 Dijkstra 算法，我们可以补全之前 Route 类中预留的 <code>minDistance()</code> 方法的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Route.class</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minDistance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    AtomicReference&lt;Point&gt; pre = <span class="keyword">new</span> AtomicReference&lt;&gt;(Point.A);</span><br><span class="line">    <span class="keyword">return</span> route.stream()</span><br><span class="line">            .map(p -&gt; &#123;</span><br><span class="line">                <span class="keyword">int</span> min = dijkstra.min(pre.get().index(), p.index());</span><br><span class="line">                pre.set(p);</span><br><span class="line">                <span class="keyword">return</span> min;</span><br><span class="line">            &#125;)</span><br><span class="line">            .reduce(<span class="number">0</span>, (i1, i2) -&gt; i1 + i2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后在主方法中运行可得答案，运行耗时在 100ms 左右。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> before = System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">    List&lt;Route&gt; routes = <span class="keyword">new</span> RouteGenerator().generate();</span><br><span class="line">    routes.forEach(route -&gt; System.out.println(route + <span class="string">" 最短路径长度: "</span> + route.minDistance()));</span><br><span class="line">    Route shortestRoute = routes.stream().min(Comparator.comparing(Route::minDistance)).get();</span><br><span class="line">    System.out.println(String.format(<span class="string">"\n其中最短路径为 %s, 路径长度为 %s."</span>, shortestRoute, shortestRoute.minDistance()));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> after = System.currentTimeMillis();</span><br><span class="line">    System.out.println(<span class="string">"运行耗时:"</span> + (after - before) + <span class="string">"ms."</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 其中最短路径为 A -&gt; V2 -&gt; S2 -&gt; V1 -&gt; V3 -&gt; S3 -&gt; S1, 路径长度为 16.</span></span><br><span class="line"><span class="comment">// 运行耗时:108ms.</span></span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文主要是想向大家展示 Java <strong>面向对象处理问题</strong>的优势。虽然可能代码量会多一些，但是在重构和梳理编码过程的时候，这种面向对象的思想无疑会带来很多好处。例如本文中 Route、Point、Graph 这些类的建模相较于面向过程编码更符合人的直觉；以及<strong>为避免贫血对象，我们赋予类丰富的行为</strong>，例如一些验证方法、<code>minDistance()</code> 等方法；同时还要多写<strong>单元测试</strong>，这样可以随时验证算法的正确性，而不用等到编码完成的最后再去肉眼比对结果。</p>
+<p>代码已经上传到 <a href="https://github.com/s1mplecc/route-plan" target="_blank" rel="noopener">GitHub</a> 上，包含了相对全面的单元测试，需要注意的是使用的 Java 11 版本。以后可能会使用 Python 编码实现，再比较两种语言的优劣势。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/23/Fluent-Interface-——-Martin-Fowler-博客译文/" rel="next" title="Fluent Interface —— Martin Fowler 博客译文">
+                <i class="fa fa-chevron-left"></i> Fluent Interface —— Martin Fowler 博客译文
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+            
+              <p class="site-author-name" itemprop="name">s1mple</p>
+              <p class="site-description motion-element" itemprop="description">清风不问过路客，岁月不负有心人</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/s1mplecc" title="GitHub &rarr; https://github.com/s1mplecc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:s1mple951205@gmail.com" title="E-Mail &rarr; mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排序算法"><span class="nav-number">3.</span> <span class="nav-text">排序算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#建模"><span class="nav-number">3.1.</span> <span class="nav-text">建模</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法实现"><span class="nav-number">3.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行结果"><span class="nav-number">3.3.</span> <span class="nav-text">运行结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最短路径算法"><span class="nav-number">4.</span> <span class="nav-text">最短路径算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#建模-1"><span class="nav-number">4.1.</span> <span class="nav-text">建模</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法实现-1"><span class="nav-number">4.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行结果-1"><span class="nav-number">4.3.</span> <span class="nav-text">运行结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">s1mple</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://s1mple.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://s1mplecc.github.io/2019/02/15/一道有趣的路径规划算法题（Java-版）/';
+        this.page.identifier = '2019/02/15/一道有趣的路径规划算法题（Java-版）/';
+        this.page.title = '一道有趣的路径规划算法题（Java 版）';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://s1mple.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

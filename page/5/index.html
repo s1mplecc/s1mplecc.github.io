@@ -371,6 +371,296 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/27/Npm、Nrm & Nvm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/12/27/Npm、Nrm & Nvm/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Npm、Nrm & Nvm</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-12-27 03:01:29" itemprop="dateCreated datePublished" datetime="2017-12-27T03:01:29+08:00">2017-12-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-27 20:46:40" itemprop="dateModified" datetime="2018-12-27T20:46:40+08:00">2018-12-27</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/27/Npm、Nrm & Nvm/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/27/Npm、Nrm & Nvm/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.9k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Npm"><a href="#Npm" class="headerlink" title="Npm"></a>Npm</h2><blockquote>
+<p><strong>Npm</strong>(or <strong>Node Package Manager</strong>)，<strong>Node</strong> 依赖包管理器，官方或权威机构提供了一个公共的软件源（类似 <strong>Homebrew、yum</strong>），可方便我们下载并管理 <strong>JavaScript</strong> 依赖</p>
+</blockquote>
+<ul>
+<li><p>安装了 <strong>Node</strong> 就包含了 <strong>Npm</strong> 的安装</p>
+</li>
+<li><p>安装依赖，<code>-g</code>参数表示全局安装，不带参数则安装在当前目录</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install lodash</span><br><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可查看已安装的全局依赖（默认安装到<code>/usr/local/lib/node_modules</code>目录下），<code>--depth</code>显示的树深度，不加<code>-g</code>参数查看当前目录安装的依赖</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ npm ls -g --depth=0</span><br><span class="line">/usr/local/lib</span><br><span class="line">├── npm@5.6.0</span><br><span class="line">├── nrm@1.0.2</span><br><span class="line">└── vue-cli@2.9.2</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>卸载依赖</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm rm lodash</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>搜索某个依赖，以及显示某个依赖的具体信息，另外经测试，只有官方的源可以<code>search</code>，其他源未做相应支持</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm search lodash</span><br><span class="line">npm [view|show|info] lodash</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>npm config ls</code>查看配置信息，<code>-l</code>参数查看详细配置</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">➜ npm config ls</span><br><span class="line">; cli configs</span><br><span class="line">metrics-registry = &quot;https://registry.npmjs.org/&quot;</span><br><span class="line">scope = &quot;&quot;</span><br><span class="line">user-agent = &quot;npm/5.6.0 node/v9.3.0 darwin x64&quot;</span><br><span class="line"></span><br><span class="line">; userconfig /Users/s1mple/.npmrc</span><br><span class="line">registry = &quot;https://registry.npmjs.org/&quot;</span><br><span class="line"></span><br><span class="line">; builtin config undefined</span><br><span class="line">prefix = &quot;/usr/local&quot;</span><br><span class="line"></span><br><span class="line">; node bin location = /usr/local/Cellar/node/9.3.0_1/bin/node</span><br><span class="line">; cwd = /Users/s1mple/WebstormProjects/vue/table</span><br><span class="line">; HOME = /Users/s1mple</span><br><span class="line">; &quot;npm config ls -l&quot; to show all defaults.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>默认软件源为国外的官方软件源，速度较慢，可修改为国内软件源，比如淘宝</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Npm</strong> 还可以登录，需要先在官网注册一个账号，然后<code>npm login</code>登录，就可以将自己写的依赖<code>publish</code>上去，有点类似于 <strong>Docker</strong> 的个人仓库，网站地址为<code>https://www.npmjs.com/~{username}</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.npmjs.com/~s1mple</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>另外，还有一些命令简写，比如<code>i</code>代替<code>install</code>，<code>rm</code>代替<code>uninstall</code>，执行<code>npm -l</code>查看那些命令下面有哪些 <strong>alias</strong></p>
+</li>
+</ul>
+<hr>
+<h2 id="Nrm"><a href="#Nrm" class="headerlink" title="Nrm"></a>Nrm</h2><blockquote>
+<p><strong>Nrm</strong>(or <strong>Npm Registry Manager</strong>)，<strong>Npm</strong> 注册处管理器，方便我们切换软件源</p>
+</blockquote>
+<ul>
+<li><p>全局安装 <strong>nrm</strong></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i -g nrm</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>nrm</strong> 内置了一些软件源，带<code>*</code>星号的表示当前使用的软件源，当然也可以使用<code>nrm current</code>查看</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">➜ nrm ls</span><br><span class="line"></span><br><span class="line">* npm ---- https://registry.npmjs.org/</span><br><span class="line">  cnpm --- http://r.cnpmjs.org/</span><br><span class="line">  taobao - https://registry.npm.taobao.org/</span><br><span class="line">  nj ----- https://registry.nodejitsu.com/</span><br><span class="line">  rednpm - http://registry.mirror.cqupt.edu.cn/</span><br><span class="line">  npmMirror  https://skimdb.npmjs.com/registry/</span><br><span class="line">  edunpm - http://registry.enpmjs.org/</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>切换软件源，比如换成 <strong>taobao</strong> 的</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ nrm use taobao</span><br><span class="line"></span><br><span class="line">    Registry has been set to: https://registry.npm.taobao.org/</span><br></pre></td></tr></table></figure>
+<p>  其实就是修改了<code>~/.npmrc</code>中的<code>registry=...</code></p>
+</li>
+<li><p>可以执行<code>nrm test</code>测试网络延迟</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ nrm test npm</span><br><span class="line"></span><br><span class="line">* npm ---- 2608ms</span><br><span class="line"></span><br><span class="line">➜  ~ nrm test taobao</span><br><span class="line"></span><br><span class="line">  taobao - 246ms</span><br><span class="line"></span><br><span class="line">➜  ~ nrm test cnpm</span><br><span class="line"></span><br><span class="line">  cnpm --- 256ms</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>npm home taobao</code>打开对应源的官方网站</p>
+</li>
+</ul>
+<hr>
+<h2 id="Nvm"><a href="#Nvm" class="headerlink" title="Nvm"></a>Nvm</h2><blockquote>
+<p><strong>Nvm</strong>(or <strong>Node Version Manager</strong>)，Github 上一位大神写的<strong>Node</strong> 版本管理器，可以安装、管理不同版本 <strong>Node</strong> 并进行切换</p>
+</blockquote>
+<ul>
+<li><p>安装，完成后重启终端</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash</span><br></pre></td></tr></table></figure>
+<p>  这个脚本克隆了 <strong>nvm repository</strong> 到<code>~/.nvm</code>并在<code>~/.bash_profile, ~/.zshrc, ~/.profile, ~/.bashrc</code>中加入环境变量</p>
+</li>
+<li><p>安装最新的 <strong>Node</strong></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm install node</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">Now using node v9.3.0 (npm v5.5.1)</span><br><span class="line">Creating default alias: default -&gt; node (-&gt; v9.3.0)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>或安装指定版本，执行<code>nvm ls-remote</code>可列出所有可以安装的版本</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm install 8.9.3</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>查看已安装 <strong>Node</strong> 版本</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm ls</span><br><span class="line">-&gt;       v8.9.3</span><br><span class="line">         v9.3.0</span><br><span class="line">         system</span><br><span class="line">default -&gt; node (-&gt; v9.3.0)</span><br><span class="line">node -&gt; stable (-&gt; v9.3.0) (default)</span><br><span class="line">stable -&gt; 9.3 (-&gt; v9.3.0) (default)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>箭头指向当前使用的版本，切换版本</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm use 9.3.0</span><br><span class="line">Now using node v9.3.0 (npm v5.5.1)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>还可以指定默认的Node版本</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm alias default 8.9.3</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://docs.npmjs.com/" target="_blank" rel="noopener">npm 官方文档</a></li>
+<li><a href="https://github.com/creationix/nvm/blob/master/README.md" target="_blank" rel="noopener">nvm Github官方手册</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/26/JavaScript相关介绍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2703,329 +2993,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/21/搭建Git和Maven私服/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/11/21/搭建Git和Maven私服/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">搭建 Git 和 Maven 私服</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-11-21 04:52:17" itemprop="dateCreated datePublished" datetime="2017-11-21T04:52:17+08:00">2017-11-21</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-27 20:59:56" itemprop="dateModified" datetime="2018-12-27T20:59:56+08:00">2018-12-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/21/搭建Git和Maven私服/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/21/搭建Git和Maven私服/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">3.3k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>应公司需求，搭建Git和Maven的企业私服，Maven私服使用Nexus搭建。</p>
-</blockquote>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li>一台服务器，4核8G、1TB硬盘，Ubuntu 16.04</li>
-<li>apache-maven-3.5.2-bin.tar.gz</li>
-<li>nexus-3.6.1-02-unix.tar.gz，<a href="https://www.sonatype.com/download-oss-sonatype" target="_blank" rel="noopener">官网下载</a></li>
-<li>jdk-8u151-linux-x64.tar.gz</li>
-</ul>
-<h2 id="搭建Git"><a href="#搭建Git" class="headerlink" title="搭建Git"></a>搭建Git</h2><ul>
-<li><p>安装Git，<code>git --version</code>查看版本</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建git用户，该命令会创建git组、git用户，并设置<code>/home/git</code>为用户目录</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adduser git</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>为了安全，禁止git用户bash登录，<code>vi /etc/passwd</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git:x:1001:1001:,,,:/home/git:/bin/bash</span><br></pre></td></tr></table></figure>
-<p>  修改为</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git:x:1001:1001:,,,:/home/git:/usr/bin/git-shell</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
-<p><strong>git-shell :</strong> 提供了受限的git访问，只允许<strong>push/pull</strong>命令，官网解释：<br>This is a login shell for SSH accounts to provide restricted Git access. It permits execution only of server-side Git commands implementing the pull/push functionality, plus custom commands present in a subdirectory named git-shell-commands in the user’s home directory.</p>
-</blockquote>
-<h2 id="测试Git"><a href="#测试Git" class="headerlink" title="测试Git"></a>测试Git</h2><ul>
-<li><p>在<code>/opt</code>创建文件夹，<code>mkdir git-repo</code>，并<code>cd</code>进去</p>
-</li>
-<li><p>初始化一个Git仓库，在当前目录下生成了一个空的Git仓库，包含了一些初始文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init --bare helloworld.git</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li>更改权限  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown -R git:git helloworld.git</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>将用户的ssh公钥加入到<code>/home/git/.ssh/authorized_keys</code>中，并重启sshd服务</p>
-</li>
-<li><p>在<strong>本地机器</strong>上将其<strong>clone</strong>下来</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@&#123;IP&#125;:/opt/git-repo/helloworld.git</span><br></pre></td></tr></table></figure>
-<p>  会发现当前目录下多了个名为helloworld的文件夹</p>
-</li>
-<li><p>现在我们添加一个文件，测试将其push到服务器上</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">touch abc.txt</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;first commit&quot;</span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="搭建Maven私服"><a href="#搭建Maven私服" class="headerlink" title="搭建Maven私服"></a>搭建Maven私服</h2><blockquote>
-<p>Nexus是目前Sonatype公司开发的搭建Maven企业级私服的工具，有付费版本<strong>Pro</strong>和开源版本<strong>OSS</strong> (Open Source Software)</p>
-</blockquote>
-<ul>
-<li><p>上传jdk、maven和nexus的tar包并解压改名，如下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@git-maven:/opt# ls</span><br><span class="line">git-repo  jdk  maven  nexus sonatype-work</span><br></pre></td></tr></table></figure>
-<p>  其中<code>sonatype-work</code>文件夹用于存放私服的配置，日志文件和依赖包</p>
-</li>
-<li><p>修改环境变量，<code>vi /etc/profile</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># maven</span><br><span class="line">export M3_HOME=/opt/maven</span><br><span class="line">export PATH=$M3_HOME/bin:$PATH</span><br><span class="line"></span><br><span class="line"># jdk</span><br><span class="line">export JAVA_HOME=/opt/jdk</span><br><span class="line">export JRE_HOME=$&#123;JAVA_HOME&#125;/jre</span><br><span class="line">export CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib:$&#123;JRE_HOME&#125;/lib</span><br><span class="line">export PATH=$&#123;JAVA_HOME&#125;/bin:$PATH</span><br><span class="line"></span><br><span class="line"># nexus</span><br><span class="line">export PATH=/opt/nexus/bin:$PATH</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li>使环境变量生效，<code>source /etc/profile</code>，现在可以执行<code>nexus</code>命令查看它的一些操作，如下  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Usage: nexus &#123; console | start | stop | restart | status | dump &#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>nexus不建议使用root用户启动，所以我们新建nexus用户，<code>adduser nexus</code>。<strong>注意</strong>，关于nexus的操作最好都在nexus用户下执行</p>
-</li>
-<li><p>切换到nexus用户，<code>su - nexus</code>，启动nexus</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nexus start</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li>如果已正常启动，访问<code>{IP}:8081</code>即可前往控制台，8081为nexus默认端口，默认用户名admin，密码admin123，可在控制台中修改密码<br><img src="/2017/11/21/搭建Git和Maven私服/0.png" alt="-----2017-11-22---4.40.57"></li>
-</ul>
-<h4 id="Tips-1"><a href="#Tips-1" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
-<p>其中<strong>maven-public</strong>是一个组，包含了<strong>maven-central</strong>(代理中央仓库，存放依赖构件)、<strong>maven-releases</strong>(存放发行版本)、<strong>maven-snapshots</strong>(存放快照版本)。</p>
-</blockquote>
-<h2 id="导入依赖包"><a href="#导入依赖包" class="headerlink" title="导入依赖包"></a>导入依赖包</h2><ul>
-<li><a href="http://mvnrepository.com/" target="_blank" rel="noopener">Maven中央仓库网址</a></li>
-</ul>
-<blockquote>
-<p>现在已经成功部署了Nexus。可以通过配置你的项目，使其从你的私服上拉取依赖包，如果拉取不到，它会到Maven中央仓库拉取依赖并保存在服务器上</p>
-</blockquote>
-<ul>
-<li>新建Maven项目，修改<code>pom.xml</code>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;repositories&gt;</span><br><span class="line">    &lt;repository&gt;</span><br><span class="line">        &lt;id&gt;nexus&lt;/id&gt;</span><br><span class="line">        &lt;name&gt;nexus&lt;/name&gt;</span><br><span class="line">        &lt;url&gt;http://&#123;IP&#125;:8081/repository/maven-public/&lt;/url&gt;</span><br><span class="line">    &lt;/repository&gt;</span><br><span class="line">&lt;/repositories&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>在<code>&lt;dependencies&gt;</code>中添加你需要的依赖，执行<code>mvn package</code>打包项目即可</p>
-</li>
-<li><p>控制台上查看服务器上已经存储的依赖包<br><img src="/2017/11/21/搭建Git和Maven私服/1.png" alt="-----2017-11-22---4.41.17"></p>
-</li>
-</ul>
-<h2 id="搭建GitLab"><a href="#搭建GitLab" class="headerlink" title="搭建GitLab"></a>搭建GitLab</h2><ul>
-<li><a href="https://mirror.tuna.tsinghua.edu.cn/help/gitlab-ce/" target="_blank" rel="noopener">清华大学开源软件镜像站</a></li>
-</ul>
-<blockquote>
-<p>有空搭了个Gitlab，可以方便管理项目和成员公钥。但是运行GitLab对服务器内存的要求较高。官网明确要求内存至少4G</p>
-</blockquote>
-<ul>
-<li>信任GitLab的GPG公钥  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://packages.gitlab.com/gpg.key 2&gt; /dev/null | sudo apt-key add - &amp;&gt;/dev/null</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li>添加清华的镜像源，<code>touch /etc/apt/sources.list.d/gitlab-ce.list</code>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/ubuntu xenial main</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>安装gitlab-ce</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install gitlab-ce</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改GitLab的Url，<code>vi /etc/gitlab/gitlab.rb</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">external_url &apos;http://&#123;domain or IP&#125;&apos;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动GitLab</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<blockquote>
-<p>访问你的Url进行注册登录即可，可以创建Groups、Projects，并添加你的SSH公钥。另外修改root用户密码参考文章：<a href="http://blog.csdn.net/yin138/article/details/51394868" target="_blank" rel="noopener">http://blog.csdn.net/yin138/article/details/51394868</a></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3077,7 +3044,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-count">60</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3183,7 +3150,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">34</span>
+                      
+                    
+                    <span class="site-state-item-count">35</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
