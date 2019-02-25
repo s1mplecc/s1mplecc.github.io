@@ -371,6 +371,303 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/27/Linux流、管道&重定向/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/12/27/Linux流、管道&重定向/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Linux 流、管道&重定向</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-12-27 12:32:23" itemprop="dateCreated datePublished" datetime="2017-12-27T12:32:23+08:00">2017-12-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-27 20:59:10" itemprop="dateModified" datetime="2018-12-27T20:59:10+08:00">2018-12-27</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/27/Linux流、管道&重定向/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/27/Linux流、管道&重定向/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">3.3k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="标准I-O流"><a href="#标准I-O流" class="headerlink" title="标准I/O流"></a>标准I/O流</h2><blockquote>
+<p><strong>Linux shell</strong>（比如<strong>Bash</strong>）可以接收和发送字符序列或字符流形式的输入和输出。无论实际的字符流是来自还是来自文件，键盘，显示器上的窗口或其他IO设备，字符流都可以通过<strong>文件IO</strong>技术进行访问</p>
+</blockquote>
+<ul>
+<li><p><strong>Linux shell</strong>使用3种<strong>标准的I/O流</strong>，每种流都与一个<strong>文件描述符</strong></p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span><span class="built_in">stdout</span>   <span class="comment">//标准输出流，它显示命令运行的输出，文件描述符为 1</span></span><br><span class="line"><span class="number">2.</span><span class="built_in">stderr</span>   <span class="comment">//标准错误流，它显示命令运行的错误输出，文件描述符为 2</span></span><br><span class="line"><span class="number">3.</span><span class="built_in">stdin</span>    <span class="comment">//标准输入流，它为命令提供输入，文件描述符为 0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>输入流通常通过终端敲击键盘为程序提供输入。输出流通常向终端输出显示文本字符</p>
+</li>
+<li><p>Linux内核采用文件描述符（<strong>file descriptor</strong>）来访问文件。文件描述符是<strong>非负整数</strong>。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件</p>
+</li>
+<li><p>一条Linux命令执行的流程图<br><img src="/2017/12/27/Linux流、管道&重定向/0.png" alt="linuxcom"></p>
+</li>
+</ul>
+<hr>
+<h2 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h2><blockquote>
+<p>在Linux命令行模式中，如果命令所需的输入不是来自键盘，而是来自指定的文件，这就是输入重定向。同理，命令的输出也可以不显示在屏幕上，而是写入到指定文件中，这就是输出重定向</p>
+</blockquote>
+<h3 id="“-gt-“"><a href="#“-gt-“" class="headerlink" title="“ &gt; “"></a>“ &gt; “</h3><ul>
+<li><p>格式<code>{stdout|stderr} &gt; filename</code></p>
+</li>
+<li><p>使用<code>&gt;</code>符号将左侧输出重定向到一个文件中</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ echo &quot;hello&quot; &gt; a.txt</span><br><span class="line">➜ cat a.txt</span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+<p>  该命令将<code>hello</code>添加到<code>a.txt</code>中，如果文件不存在则创建它，如果存在则<strong>覆盖</strong></p>
+</li>
+<li><p>还可以这样</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜ ls | grep &quot;**.png&quot; &gt; a.txt</span><br><span class="line">➜ cat a.txt </span><br><span class="line">arguments.png</span><br><span class="line">mvvm.png</span><br><span class="line">nrm-test.png</span><br><span class="line">require.png</span><br></pre></td></tr></table></figure>
+<p>  该命令将左侧命令的标准输出重定向到<code>a.txt</code>文件中</p>
+</li>
+<li><p>使用<code>/dev/null</code>清空文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /dev/null &gt; a.txt</span><br></pre></td></tr></table></figure>
+<p>  <code>/dev/null</code>相当于Linux的黑洞文件，永远为空</p>
+</li>
+</ul>
+<h3 id="“-gt-gt-“"><a href="#“-gt-gt-“" class="headerlink" title="“ &gt;&gt; “"></a>“ &gt;&gt; “</h3><ul>
+<li><p>格式<code>{stdout|stderr} &gt;&gt; filename</code></p>
+</li>
+<li><p><code>&gt;&gt;</code>符号和<code>&gt;</code>符号作用差不多，如果文件不存在则创建，存在则<strong>追加</strong>内容到文件尾，不会覆盖</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜ cat a.txt</span><br><span class="line">hello</span><br><span class="line">➜ echo &quot;world&quot; &gt;&gt; a.txt</span><br><span class="line">➜ cat a.txt</span><br><span class="line">hello</span><br><span class="line">world</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="“-lt-“"><a href="#“-lt-“" class="headerlink" title="“ &lt; “"></a>“ &lt; “</h3><ul>
+<li><p>格式<code>{command} &lt; filename</code></p>
+</li>
+<li><p>将文件的内容作为标准输入，传给左边的命令处理</p>
+</li>
+<li><p>将字符<code>o</code>替换为<code>x</code>，但是源文件并不会改动</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜ tr &apos;o&apos; &apos;x&apos; &lt; a.txt</span><br><span class="line">hellx</span><br><span class="line">wxrld</span><br><span class="line">➜ cat a.txt </span><br><span class="line">hello</span><br><span class="line">world</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>或者之前博客提到的用<code>nc</code>来传输文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nc -l &#123;port&#125; &gt; filename // 接收端</span><br><span class="line">nc &#123;接受者IP&#125; &#123;port&#125; &lt; filename // 发送端</span><br></pre></td></tr></table></figure>
+<p>  发送端将文件作为标准输入传输给接受端，再由接收端写入文件</p>
+</li>
+</ul>
+<hr>
+<h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><blockquote>
+<p>管道命令操作符：<strong>|</strong> ，它能将前面一个命令传出的标准输出(<strong>stdout</strong>)，作为标准输入(<strong>stdin</strong>)传给下一条命令。相比于重定向，管道符号两边都是<strong>可独立执行</strong>的命令，通常用于命令间<strong>传递参数</strong>，而重定位符号的右边必须是<strong>文件名</strong></p>
+</blockquote>
+<ul>
+<li><p>流程图<br><img src="/2017/12/27/Linux流、管道&重定向/1.png" alt="pipe"></p>
+</li>
+<li><p>先来看这条命令</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ ls | grep &quot;**.png&quot;</span><br><span class="line">arguments.png</span><br><span class="line">mvvm.png</span><br><span class="line">nrm-test.png</span><br><span class="line">require.png</span><br></pre></td></tr></table></figure>
+<p>  <code>ls</code>列出当前目录下所有非隐藏文件，作为标准输入传给<code>grep</code>去过滤出以<code>.png</code>结尾的文件</p>
+</li>
+<li><p>现在我用<strong>IDEA</strong>启动了一个<strong>Spring Boot</strong>项目</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java</span><br><span class="line">  501  6292  6030   0 11:00PM ttys000    0:11.42 /usr/bin/java -jar /Users/s1mple/Library/Mobile Documents/com~apple~CloudDocs/Works/testvue/target/testvue-0.0.1-SNAPSHOT.jar</span><br><span class="line">  501  6324  6224   0 11:05PM ttys001    0:00.00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn java</span><br></pre></td></tr></table></figure>
+<p>  执行这条命令后终端打印出<strong>Java</strong>进程信息，进程号<strong>6292</strong>。下面一个是<strong>grep</strong>进程，无关紧要</p>
+</li>
+<li><p>接下来我想结合管道命令<code>kill</code>掉这个<strong>Java</strong>进程</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java | grep -v grep | awk &apos;&#123;print $2&#125;&apos; | xargs kill -9   </span><br><span class="line">➜ ps -ef | grep java</span><br><span class="line">  501  6352  6224   0 11:11PM ttys001    0:00.00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn java</span><br></pre></td></tr></table></figure>
+<p>  只剩下<strong>grep</strong>进程了，<strong>IDEA</strong>控制台也显示 <strong>“Process finished with exit code 137 (interrupted by signal 9: SIGKILL)”</strong> ，该进程已经被<code>kill</code>了，其实相当于执行了<code>kill -9 6292</code></p>
+</li>
+<li><p>这个命令看上去很长但是不要害怕，它无非是多个命令组合在一起。我之所以想说这个是因为在<strong>Tomcat</strong>的运行脚本<code>catalina.sh</code>中看到了用于停止<strong>Tomcat</strong>的类似的命令</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java | grep -v grep | awk &apos;&#123;print $2&#125;&apos; | xargs kill -9</span><br></pre></td></tr></table></figure>
+<p>  <code>ps -ef</code>列出所有进程传递给<code>grep java</code>过滤出包含<strong>java</strong>关键字的进程，再传递给<code>grep -v grep</code>剔除包含<strong>grep</strong>关键字的进程，<code>awk &#39;{print $2}&#39;</code>扫描输入获取第二个参数即进程号<strong>6292</strong>，再作为<strong>xargs</strong>参数传递给<code>xargs kill -9</code>最终杀掉进程</p>
+</li>
+<li><p>很多时候比如说再写<strong>shell</strong>脚本时确实这样用，因为进程号是动态分配的，不能写死，只能通过一些手段动态获取进程号再进行<strong>参数传递</strong></p>
+</li>
+</ul>
+<hr>
+<h2 id="命令替换"><a href="#命令替换" class="headerlink" title="命令替换"></a>命令替换</h2><blockquote>
+<p>另外简单提一下<strong>命令替换</strong>。在Linux命令行模式下，当遇到一对 <strong>``</strong> 时，将首先执行 <strong>`</strong> 中间包含的命令，然后将其输出结果作为参数代入命令行中，这就是命令替换了。它<strong>将一个命令的输出作为另外一个命令的参数</strong></p>
+</blockquote>
+<ul>
+<li><p>过滤出<code>.*rc</code>的文件，将文件中的内容统一输出到<code>rc.txt</code>中</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ cat `ls -a | grep &quot;.*rc&quot;` &gt; ./Desktop/rc.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>上诉命令和下面这条起一个作用</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ ls -a | grep &quot;.*rc&quot; | xargs cat &gt; ./Desktop/rc.txt</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://www.ibm.com/developerworks/linux/library/l-lpic1-103-4/index.html" target="_blank" rel="noopener">Streams, pipes, and redirects</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/27/Npm、Nrm & Nvm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2704,300 +3001,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/28/Git命令总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/11/28/Git命令总结/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Git 命令总结</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-11-28 03:03:52" itemprop="dateCreated datePublished" datetime="2017-11-28T03:03:52+08:00">2017-11-28</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-27 20:54:06" itemprop="dateModified" datetime="2018-12-27T20:54:06+08:00">2018-12-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/28/Git命令总结/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/28/Git命令总结/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">2.8k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>Git是目前世界上最先进的分布式版本控制系统，Linus花了两周时间用C写出来的。。。相比较CVS及SVN这种老式的集中式版本控制系统，要更加灵活方便，也更安全稳定。强烈推荐<a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" target="_blank" rel="noopener">Git教程-廖雪峰的官方网站</a></p>
-</blockquote>
-<ul>
-<li><strong>集中式</strong>：版本库是放在中央服务器中，需要联网才能工作</li>
-<li><strong>分布式</strong>：没有中央服务器，每个人电脑上有个完整的版本仓库，可以本地修改代码再联网提交到Git服务器上，Git服务器作用仅仅“交换”大家的修改即代码同步。Git还拥有极其强大的分支管理。</li>
-</ul>
-<h2 id="Git-Commands"><a href="#Git-Commands" class="headerlink" title="Git Commands"></a>Git Commands</h2><ul>
-<li>常用命令pdf文档 <a href="https://dir.s1mple.xyz/git-cheatsheet.pdf" target="_blank" rel="noopener">git-cheatsheet</a></li>
-</ul>
-<h3 id="Create-Repository"><a href="#Create-Repository" class="headerlink" title="Create Repository"></a>Create Repository</h3><blockquote>
-<p>始终要记住你的本地和Git服务器上都存在版本仓库，你的日常工作就是做这两个仓库的同步而已。有两种方式创建版本库</p>
-</blockquote>
-<ul>
-<li><p>直接从Git服务器上克隆一个仓库下来，可以通过<strong>ssh</strong>或<strong>http</strong>的方式。ssh需要将你的公钥存放在Git服务器上，而http不需要但是速度会比ssh慢。</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone git@github.com:s1mpleinfo/MyHashMap.git</span><br><span class="line">git clone https://github.com/s1mplecc/MyHashMap.git</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>  从远程库克隆下来的是完整的版本库，含有<code>.git</code>文件夹，其下的<code>config</code>文件夹包括了本仓库的配置信息。包含了url、远程库的名字以及分支等<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[remote &quot;origin&quot;]</span><br><span class="line">    url = git@github.com:s1mpleinfo/MyHashMap.git</span><br><span class="line">    fetch = +refs/heads/*:refs/remotes/origin/*</span><br><span class="line">[branch &quot;master&quot;]</span><br><span class="line">    remote = origin</span><br><span class="line">    merge = refs/heads/master</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li><p><code>git init</code>将当前目录初始化为Git可以管理的仓库。可以看到在当前目录下生成了<code>.git</code>文件夹。</p>
-<p>初始化后的仓库需要绑定Git服务器上的版本库，<strong>origin</strong>是版本库默认的名字</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin git@github.com:s1mpleinfo/MyHashMap.git</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="Submit-Changes"><a href="#Submit-Changes" class="headerlink" title="Submit Changes"></a>Submit Changes</h3><ul>
-<li><p><code>git status</code>查看当前版本库的状态</p>
-</li>
-<li><p><code>git add .</code>将修改提交到暂存区。<code>.</code>表示当前目录下所有修改了的文件，当然也可以指定某个文件。</p>
-</li>
-<li><p>将暂存区的所有内容提交到当前分支，默认分支即Git为我们自动创建的<strong>master</strong>分支。<code>-m</code>参数后面接提交的message</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &quot;balabala&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将当前分支提交到远程库中，<code>-u</code>第一次使用时将本地的master分支绑定到远程库的master分支，以后可以省略不加</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>从远程库拉取修改</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4></li>
-<li><p>说到<code>add</code>不得不提<code>.gitignore</code>这个文件，它的作用是忽略一些文件的提交，比如IDEA工具生成的<code>.idea</code>文件、编译生成的<code>target</code>文件等等。关于<code>.gitignore</code>的编写github上都有现成的模版。另外IDEA上可以安装<strong>ignore</strong>插件。</p>
-</li>
-<li><p>实际上日常中我们用到最多的应该就是上述命令了。本质上本地与远程版本库的同步就是记录下每次的<strong>修改信息</strong>。Git会帮我们记录下每次提交的修改，方便我们进行同步、回退以及合并。</p>
-</li>
-</ul>
-<h3 id="Commit-History"><a href="#Commit-History" class="headerlink" title="Commit History"></a>Commit History</h3><blockquote>
-<p>正是Git帮我们记录了每次提交的修改，我们可以通过命令查看历史信息，甚至每次做了什么修改</p>
-</blockquote>
-<ul>
-<li><p><code>git log</code>查看提交历史，每条记录有一个唯一的id用于标识，使用时可以使用可以唯一表示的前几位。添加参数<code>-p &lt;file&gt;/&lt;commit id&gt;</code>查看指定文件或某次commit的历史信息</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">commit 24345a1a74184f99eb32202bfcc1cd0fd6ac945d (HEAD -&gt; master)</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:33:56 2017 +0800</span><br><span class="line"></span><br><span class="line">    second commit</span><br><span class="line"></span><br><span class="line">commit b90b6da1573d55ef59a900d435d903e41667f61e</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:31:43 2017 +0800</span><br><span class="line"></span><br><span class="line">    first commit</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>git diff b90b6da</code>查看某次提交后与当前版本的区别，可以看到我在文本中添加了一行second</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@@ -1 +1,2 @@</span><br><span class="line"> first</span><br><span class="line">+second</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><code>git reflog</code>查看命令操作历史</li>
-</ul>
-<h3 id="Undo-Changes"><a href="#Undo-Changes" class="headerlink" title="Undo Changes"></a>Undo Changes</h3><blockquote>
-<p>你可能会遇到这种情况，提交了某次修改又后悔了，Git提供了回退到某次提交的操作</p>
-</blockquote>
-<ul>
-<li><p><code>reset</code>命令回退到指定的某个版本，<code>HEAD</code>表示当前版本，<code>HEAD^</code>表示上一个版本。也可以用commit id</p>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard HEAD^</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>如果你修改了某个文件，还没有<code>add</code>，可以舍弃这次修改</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -- &lt;file&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>如果你已经<code>commit</code>了，也可以还原回去</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git revert &lt;commit id&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="Tips-1"><a href="#Tips-1" class="headerlink" title="Tips"></a>Tips</h4></li>
-<li><p>Git将提交记录（节点）串成一条线，<strong>HEAD</strong>就是一指向当前版本的指针，做回退操作其实就是这个指针在这条线上的节点间移动。牢记：<strong>Git跟踪并管理的是修改，而非文件</strong></p>
-</li>
-<li><p>revert与reset的区别是，revert会生成一次新的提交去移除某些提交，在节点线上还是向前走的。而reset是把HEAD指针后移到指定节点，直接从这个节点走出新的一条线。<a href="http://www.cnblogs.com/houpeiyong/p/5890748.html" target="_blank" rel="noopener">代码回滚：git reset、git checkout和git revert区别和联系</a></p>
-</li>
-</ul>
-<h3 id="Git-Branches"><a href="#Git-Branches" class="headerlink" title="Git Branches"></a>Git Branches</h3><blockquote>
-<p>Git 分支可以参考我的另一篇博客 <a href="https://s1mple.xyz/git-flow/" target="_blank" rel="noopener">Git Flow 模型以及工具的使用</a>。Git Flow 是一种构建在 Git 之上的软件开发模型。通过利用 Git 创建和管理分支的能力，为每个分支设定具有特定的含义名称，并将软件生命周期中的各类活动归并到不同的分支上，实现了软件开发过程不同阶段的相互隔离</p>
-</blockquote>
-<h2 id="Postscripts"><a href="#Postscripts" class="headerlink" title="Postscripts"></a>Postscripts</h2><blockquote>
-<p>Git命令还有很多，常用的大概就是这些，如果能将这些使用的很溜，那工作上遇到的问题一般都可以解决了。其实常用命令都可以在IDEA中设置快捷键，使用起来更加方便。</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -3044,7 +3052,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-count">61</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

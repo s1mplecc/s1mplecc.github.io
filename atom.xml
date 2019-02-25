@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://s1mplecc.github.io/"/>
-  <updated>2019-02-15T07:18:21.665Z</updated>
+  <updated>2019-02-25T13:38:30.929Z</updated>
   <id>https://s1mplecc.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>代理模式</title>
+    <link href="https://s1mplecc.github.io/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/"/>
+    <id>https://s1mplecc.github.io/2019/02/25/代理模式/</id>
+    <published>2019-02-25T13:35:58.000Z</published>
+    <updated>2019-02-25T13:38:30.929Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Design" scheme="https://s1mplecc.github.io/categories/Design/"/>
+    
+    
+      <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
+    
+      <category term="Design Pattern" scheme="https://s1mplecc.github.io/tags/Design-Pattern/"/>
+    
+  </entry>
   
   <entry>
     <title>一道有趣的路径规划算法题（Java 版）</title>
@@ -521,36 +549,6 @@
     
     
       <category term="Git" scheme="https://s1mplecc.github.io/tags/Git/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>迁移 Ghost 博客并使用 Docker  部署</title>
-    <link href="https://s1mplecc.github.io/2018/06/24/%E8%BF%81%E7%A7%BB%20Ghost%20%E5%8D%9A%E5%AE%A2%E5%B9%B6%E4%BD%BF%E7%94%A8%20Docker%20%20%E9%83%A8%E7%BD%B2/"/>
-    <id>https://s1mplecc.github.io/2018/06/24/迁移 Ghost 博客并使用 Docker  部署/</id>
-    <published>2018-06-24T06:30:15.000Z</published>
-    <updated>2018-12-27T12:50:42.250Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-      <category term="Ops" scheme="https://s1mplecc.github.io/categories/Ops/"/>
-    
-    
-      <category term="Server" scheme="https://s1mplecc.github.io/tags/Server/"/>
-    
-      <category term="Docker" scheme="https://s1mplecc.github.io/tags/Docker/"/>
-    
-      <category term="Nginx" scheme="https://s1mplecc.github.io/tags/Nginx/"/>
     
   </entry>
   

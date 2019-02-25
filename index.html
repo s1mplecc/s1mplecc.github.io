@@ -369,6 +369,254 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2019/02/25/代理模式/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/02/25/代理模式/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">代理模式</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-25 21:35:58 / 修改时间：21:38:30" itemprop="dateCreated datePublished" datetime="2019-02-25T21:35:58+08:00">2019-02-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Design/" itemprop="url" rel="index"><span itemprop="name">Design</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/25/代理模式/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/02/25/代理模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">7.7k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>代理模式（Proxy Pattern）是一种常见的设计模式，也是 GoF 提出的 23 种设计模式中的一种，属于结构型设计模式。<strong>它使用代理对象完成用户请求，屏蔽用户对真实对象的访问</strong>。代理模式用处很多，本文主要介绍如何使用代理模式实现<strong>延迟加载</strong>和<strong>面向切面编程</strong>，并着重介绍动态代理的几种实现方式。本文涉及到的示例代码以上传到 <a href="https://github.com/s1mplecc/proxy-pattern-demo" target="_blank" rel="noopener">GitHub</a> 上。</p>
+<h2 id="角色以及职责"><a href="#角色以及职责" class="headerlink" title="角色以及职责"></a>角色以及职责</h2><p>代理模式中的几个角色：</p>
+<ul>
+<li><strong>Subject</strong>，接口，定义了代理类和被代理类对外暴露的方法。代理类和被代理类都需要实现该接口。</li>
+<li><strong>RealSubject</strong>，真实对象（被代理类），真正实现功能的对象。</li>
+<li><strong>Proxy</strong>，代理类，用来<strong>封装</strong>真实对象。</li>
+</ul>
+<p><img src="/2019/02/25/代理模式/0.png" alt="0d73af744af2fd7ecfd3326888c3d69b.png"></p>
+<h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><p>代理模式通常用于解决以下几类问题：</p>
+<ul>
+<li><strong>需要控制对象的访问权限</strong></li>
+<li><strong>需要扩展一个对象的功能</strong></li>
+</ul>
+<p>对此，代理模式使用 Proxy 封装真实对象，以达到控制真实对象的访问权限，并在此基础上提供额外功能。代理模式有以下几个典型的应用场景：</p>
+<ul>
+<li>远程代理，在分布式对象通信中，使用一个本地对象代表远程对象（分属不同地址空间）。本地对象是远程对象的代理，本地对象上的方法调用将导致远程对象上的方法调用。一个例子是 ATM 实现，其中 ATM 可以保存位于远程服务器上的银行信息的代理对象。</li>
+<li>虚拟代理，如果一个对象很复杂或很重，可以使用虚拟代理。比如当图像很大时，可以按需的去加载用到的部分（亦即<strong>延迟加载</strong>）。</li>
+<li>保护代理，可以控制资源的访问权限</li>
+</ul>
+<h2 id="延迟加载"><a href="#延迟加载" class="headerlink" title="延迟加载"></a>延迟加载</h2><p>我们先来看看如何使用代理模式进行延迟加载。假设现在有一个数据库查询类 DBQuery，它执行查询返回一个字符串。由于数据查询需要连接数据库，所以在构造时会比较耗时。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBQuery</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DBQuery</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Thread.sleep(<span class="number">1000</span>); <span class="comment">// create datebase connection</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">query</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"query result"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>正常情况下，如果在程序启动的时候我们就去 new 这个对象，一旦存在大量类似的操作，系统的启动速度必定会受影响。而采用代理类替代 DBQuery，可以做到轻量级启动。</p>
+<p>首先需要创建一个接口，对应着代理模式角色中的 Subject：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IDBQuery</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">query</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>真实对象 DBQuery 和代理类 DBQueryProxy 都需要实现这个接口。<strong>在代理类内部封装了真实对象，实际调用时使用委派（Delegation）调用被代理类的方法</strong>。这也是代理模式的核心所在。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBQueryProxy</span> <span class="keyword">implements</span> <span class="title">IDBQuery</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> DBQuery dbQuery;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">query</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (dbQuery == <span class="keyword">null</span>) &#123;</span><br><span class="line">            dbQuery = <span class="keyword">new</span> DBQuery();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dbQuery.query();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样在启动时初始化代理类，由于代理类 DBQueryProxy 的构造函数什么也没做，所以启动是相当迅速的（下述代码第 1 步）。而真正查询数据库（第 2 步）时才创建 DBQuery 对象执行耗时操作，从而实现了<strong>需要的时候才加载</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    IDBQuery query = <span class="keyword">new</span> DBQueryProxy(); <span class="comment">// 1</span></span><br><span class="line">    query.query(); <span class="comment">// 2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><p>现在来考虑一件事，如果需要在查询语句的前后添加日志该怎么做？在没有代理类之前，我们可能只能在真实对象中添加两行日志。但严格来说，日志记录不属于 DBQuery 的职责，它破坏了类的纯粹性（违背了迪米特法则）。所以现在有了代理类 DBQueryProxy，我们理所因当的应该将日志记录放在代理类中。即如下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBQueryProxy</span> <span class="keyword">implements</span> <span class="title">IDBQuery</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">query</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (dbQuery == <span class="keyword">null</span>) &#123;</span><br><span class="line">            dbQuery = <span class="keyword">new</span> DBQuery();</span><br><span class="line">            log.info(<span class="string">"Create database connection."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        String result = dbQuery.query();</span><br><span class="line">        log.info(<span class="string">"Query response is &#123;&#125;."</span>, result);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样就可以将日志功能与 DBQuery 解耦，我们做到了将业务功能与系统级功能解耦，但这还不够。我们实现解耦的方式是采用的<strong>静态代理</strong>，即代码在编译前就得写死了。虽然静态代理可以做到在不修改目标对象的功能前提下，对目标功能扩展，但它的缺点也显而易见，就是代码的冗余。一个 DBQuery，就需要一个代理类，那如果有一千个 DBQuery 难道要写一千个代理类吗？</p>
+<p><strong>AOP（Aspect Oriented Programming）</strong>，面向切面编程的出现就是为了解决这类问题。它通过<strong>预编译</strong>方式和运行期<strong>动态代理</strong>实现程序功能的统一维护。最为人熟知的应该就是 Spring AOP 了。在 Spring 中提供了面向切面编程的丰富支持，允许<strong>通过分离应用的业务逻辑与系统级服务进行内聚性的开发</strong>。业务对象只做它应该做的 —— 完成业务逻辑 —— 仅此而已。它们并不负责其它的系统级关注点，诸如日志记录，性能统计，安全控制，事务处理，异常处理等。通过这种分离我们可以做到改变系统级服务代码时不影响业务代码的逻辑。</p>
+<p>关于预编译的方式就不多说了，它的典型代表是 AspectJ，它需要专门的 Java 编译器将系统级代码织入业务代码中。除此之外，还可以通过运行时织入，也就是动态代理。<strong>Spring AOP 就构建在动态代理基础之上</strong>。</p>
+<h2 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h2><p><strong>动态代理使用字节码动态生成加载技术，在运行时生成并加载类</strong>。与静态代理相比，动态代理有诸多好处。首先，不需要为真实主题创建一个形式上完全一样的封装类，假如主题接口中方法很多，为每个方法重写一个代理方法也是非常麻烦的事，一旦接口发生变更，意味着真实主题与代理类都要修改，不利于系统维护；其次，使用动态代理的生成方法可以指定代理类的执行逻辑，从而提升系统的灵活性。</p>
+<p>生成动态代理的方式很多，包括 JDK 自带的动态代理、<strong>CGLIB</strong>、<strong>Javassist</strong> 等，本文只介绍前两种的使用方式。</p>
+<h3 id="JDK-动态代理"><a href="#JDK-动态代理" class="headerlink" title="JDK 动态代理"></a>JDK 动态代理</h3><p>JDK 从 1.3 开始提供了对动态代理的支持，它可以动态的创建代理类并动态的处理对所代理方法的调用。在动态代理上所做的所有调用都会被重定向到单一的<strong>调用处理器</strong>上，它的工作是揭示调用的类型并确定相应的对策。</p>
+<p>调用处理器需要实现 InvocationHandler 接口，重写 invoke 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicProxyHandler</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(DynamicProxyHandler.class);</span><br><span class="line">    <span class="keyword">private</span> Object proxied;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DynamicProxyHandler</span><span class="params">(Object proxied)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.proxied = proxied;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        log.info(<span class="string">"Dynamic proxy &#123;&#125; class &#123;&#125;() method."</span>, proxied.getClass().getSimpleName(), method.getName());</span><br><span class="line">        Object invoke = method.invoke(proxied, args);</span><br><span class="line">        log.info(<span class="string">"result is &#123;&#125;."</span>,invoke);</span><br><span class="line">        <span class="keyword">return</span> invoke;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面代码在 main 方法中生成了一个实现了 IDBQuery 接口的代理类，代理类的内部逻辑由 DynamicProxyHandler 决定。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    IDBQuery proxy = (IDBQuery) Proxy.newProxyInstance(</span><br><span class="line">            IDBQuery.class.getClassLoader(),</span><br><span class="line">            <span class="keyword">new</span> Class[]&#123;IDBQuery.class&#125;,</span><br><span class="line">            <span class="keyword">new</span> DynamicProxyHandler(<span class="keyword">new</span> DBQuery()));</span><br><span class="line">    proxy.query();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// [main] INFO DynamicProxyHandler - Dynamic proxy DBQuery class query() method.</span></span><br><span class="line"><span class="comment">// [main] INFO DynamicProxyHandler - result is query result.</span></span><br></pre></td></tr></table></figure>
+<p>通过调用静态方法 <code>Proxy.newProxyInstance()</code> 可以创建动态代理，该方法需要得到一个类加载器（通常可以从已经被加载的对象中获取其类加载器，然后传递给它），一个你希望该代理实现的接口列表（不是类或抽象类），以及 InvocationHandler 接口的一个实现。动态代理可以将所有调用重定向到调用处理器，因此通常会向调用处理器的构造器传入一个“实际”对象的引用，从而使得调用处理器在执行其中介任务时，可以将请求转发。</p>
+<p>invoke 方法中传入了代理对象（即参数 proxy）以备你需要区分请求的来源，但在多数情况下你并不关心这一点。然而，在 invoke 内部，在代理上调用方法需要格外当心，因为对接口的调用将被重定向为对代理的调用。通常，你会执行被代理的操作，然后使用 <code>method.invoke()</code> 将请求转发给被代理对象，并传入必需的参数。</p>
+<h3 id="CGLIB-动态代理"><a href="#CGLIB-动态代理" class="headerlink" title="CGLIB 动态代理"></a>CGLIB 动态代理</h3><p>Java 提供的动态代理使用简单，它内置在 JDK 中，因此不需要引入第三方 Jar 包，但相对功能较弱。除此之外，CGLIB 动态代理库为 JDK 的动态代理提供了很好的补充，并且性能更好。</p>
+<p><strong>CGLIB 为没有实现接口的类提供代理</strong>，它针对代理的类，动态生成一个子类，然后子类覆盖代理类中的方法。如果是 private 或是 final 类修饰的方法，则不会被重写。通常可以使用 Java 的动态代理创建代理，但当要代理的类没有实现接口或者为了更好的性能，CGLIB 是一个好的选择。</p>
+<p>CGLIB 作为一个开源项目，其代码托管在 <a href="https://github.com/cglib/cglib" target="_blank" rel="noopener">GitHub</a> 上。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CglibProxy</span> <span class="keyword">implements</span> <span class="title">MethodInterceptor</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object target;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CglibProxy</span><span class="params">(Object target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object o, Method method, Object[] objects, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"cglib proxy begin"</span>);</span><br><span class="line">        Object result = method.invoke(target, objects);</span><br><span class="line">        System.out.println(result + <span class="string">"\ncglib proxy end"</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">getProxy</span><span class="params">(Object target)</span> </span>&#123;</span><br><span class="line">        Enhancer enhancer = <span class="keyword">new</span> Enhancer();</span><br><span class="line">        enhancer.setSuperclass(target.getClass());</span><br><span class="line">        enhancer.setCallback(<span class="keyword">new</span> CglibProxy(target));</span><br><span class="line">        <span class="keyword">return</span> enhancer.create();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        DBQuery proxy = (DBQuery) CglibProxy.getProxy(<span class="keyword">new</span> DBQuery());</span><br><span class="line">        proxy.query();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// cglib proxy begin</span></span><br><span class="line"><span class="comment">// query result</span></span><br><span class="line"><span class="comment">// cglib proxy end</span></span><br></pre></td></tr></table></figure>
+<p>与 JDK 自带的代理类似，基于 CGLIB 的代理类需要实现 MethodInterceptor 接口，重写 intercept 方法。使用 Enhancer 生成需要被代理的类的子类的实例。</p>
+<p>在 Spring 的 AOP 编程中，如果加入容器的目标对象有实现接口，使用 JDK 代理。如果目标对象没有实现接口，则使用 CGLIB 代理。</p>
+<h3 id="Hibernate-对动态代理的应用"><a href="#Hibernate-对动态代理的应用" class="headerlink" title="Hibernate 对动态代理的应用"></a>Hibernate 对动态代理的应用</h3><p>动态代理的一个经典应用就是 Hibernate 框架。当 Hibernate 加载实体 Bean 时，并不会一次性将数据库所有的数据都装载，而是采用延迟加载的机制，以提高系统的性能。这里以属性的延迟加载为例，展示 Hibernate 是如何使用动态代理的。</p>
+<p>从数据库载入 ID 为 1 的 User 用户，并且打印它的类名、父类名、实现的接口名。最后调用 getName 方法取得数据库数据。演示代码采用的 Hibernate 版本为 3.2.6，不同的 Hibernate 版本实现会有差异。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">User user = (User)sessionFactory.getSession().load(User.class, <span class="number">1</span>);</span><br><span class="line">System.out.println(<span class="string">"Class name: "</span> + user.getClass().getName());</span><br><span class="line">System.out.println(<span class="string">"Superclass name: "</span> + user.getClass().getSuperclass().getName());</span><br><span class="line"><span class="keyword">for</span> (Class&lt;?&gt; anInterface : user.getClass().getInterfaces()) &#123;</span><br><span class="line">    System.out.println(<span class="string">"Interface name: "</span> + anInterface.getName());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"\n"</span> + user.getName());</span><br></pre></td></tr></table></figure>
+<p>程序输出如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Class name: com.github.s1mplecc.gof.proxy.User$EnhancerByCGLIB$N8wfgVhe</span><br><span class="line">Superclass name: com.github.s1mplecc.gof.proxy.User</span><br><span class="line">Interface name: org.hibernate.proxy.HibernateProxy</span><br><span class="line"></span><br><span class="line">Hibernate: select user0_.id as id1_0_0_, user0_.name as name2_0_0_ from t_user user0_ where user0_.id=?</span><br><span class="line">Geym</span><br></pre></td></tr></table></figure>
+<p>从输出来看，load 方法加载出的 User 类并不是我们定义的 User 类，而是名为 <code>com.github.s1mplecc.gof.proxy.User$EnhancerByCGLIB$N8wfgVhe</code> 的类。从名称上可以推测它是使用 CGLIB 的 Enhancer 生成的动态类。该类的父类才是我们自定义的 User 类，此外，它还实现了 HibernateProxy 接口。由此可见，<strong>Hibernate 使用一个动态代理生成的子类替代用户定义的类</strong>。只有在真正使用对象数据时，才去数据库加载实际的数据。从输出结果来看，在调用 getName 方法之前从未输出过一条 SQL 语句，这说明 User 对象被加载时根本没有访问数据库。Hibernate 正是用这种方式实现了延迟加载。</p>
+<p>另外，由于 CGLIB 停止维护很长一段时间了，Hibernate 从 3.5.5 版本开始弃用 CGLIB 而使用 Javassist。感兴趣的同学可以自行下去研究。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://en.wikipedia.org/wiki/Proxy_pattern" target="_blank" rel="noopener">Proxy pattern —— Wiki</a></li>
+<li>《Java 编程思想》</li>
+<li>《Java 程序性能优化 —— 让你的 Java 程序更快、更稳定》</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2019/02/15/一道有趣的路径规划算法题（Java-版）/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2709,249 +2957,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/05/Java 网络爬虫/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/11/05/Java 网络爬虫/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">Java 网络爬虫</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-05 13:15:21" itemprop="dateCreated datePublished" datetime="2018-11-05T13:15:21+08:00">2018-11-05</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-27 20:44:15" itemprop="dateModified" datetime="2018-12-27T20:44:15+08:00">2018-12-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/11/05/Java 网络爬虫/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/05/Java 网络爬虫/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">4.9k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><p>很早之前写过一个 Java 的爬虫程序，可以爬取笔趣阁上的小说。最近突然有爬点书看看的想法，遂翻到原先的代码，简直不忍直视。好在现在编码能力有所提升，而且团队内一直强调重构的重要性，所以重新拾起这个爬虫程序，好好重构一番。代码已上传至 <a href="https://github.com/s1mplecc/web-crawler" target="_blank" rel="noopener">GitHub</a></p>
-<p>本文主要讲讲：</p>
-<ol>
-<li>使用 <strong>Gradle</strong> 构建项目时遇到的问题以及解决办法</li>
-<li>使用 JDK8 的特性如何简便地进行<strong>并行开发</strong></li>
-<li>写爬虫时的思路</li>
-</ol>
-<h2 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h2><p>不得不说，Gradle 让我眼前一亮，相比 Maven，它抛弃了冗余繁琐的 XML 格式，使用语法精炼的 <strong>Groovy</strong>，以下就是我的项目构建文件 <strong>build.gradle</strong> 的全部内容，相当于 Maven 的 pom.xml，清爽简短但重要的信息一点不少。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">'java'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">group <span class="string">'xyz.s1mple.crawler'</span></span><br><span class="line">version <span class="string">'1.0-SNAPSHOT'</span></span><br><span class="line"></span><br><span class="line">sourceCompatibility = <span class="number">1.8</span></span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenLocal()</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    testImplementation <span class="string">'org.junit.jupiter:junit-jupiter-api:5.3.1'</span></span><br><span class="line">    testRuntimeOnly <span class="string">'org.junit.jupiter:junit-jupiter-engine:5.3.1'</span></span><br><span class="line">    testCompile <span class="string">'org.assertj:assertj-core:3.11.1'</span></span><br><span class="line">    compile <span class="string">'org.slf4j:slf4j-api:1.7.25'</span></span><br><span class="line">    runtime <span class="string">'org.slf4j:slf4j-simple:1.7.25'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">test &#123;</span><br><span class="line">    useJUnitPlatform()</span><br><span class="line"></span><br><span class="line">    testLogging &#123;</span><br><span class="line">        events <span class="string">"passed"</span>, <span class="string">"skipped"</span>, <span class="string">"failed"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在上面的配置文件中我们可以发现，Gradle 沿用了 Maven 的中央仓库，同时还可以设置 Maven 本地仓库，同时 Gradle 项目生成的构件也可以发布到 Maven 仓库供他人使用，这一点也是支撑 Gradle 快速发展的重要一点。</p>
-<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>关于安装，我使用的 IDE 是 IntelliJ IDEA，使用内置的 Gradle 也可，但最好是下载安装全局的 Gradle，这样可以随时随地跑 Gradle 命令。Mac 下安装十分方便。其他系统如何安装可以在 <a href="https://gradle.org/install/#with-a-package-manager" target="_blank" rel="noopener">Gradle官网</a> 上找到。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install gradle</span><br></pre></td></tr></table></figure>
-<h4 id="JUnit5"><a href="#JUnit5" class="headerlink" title="JUnit5"></a>JUnit5</h4><p>在使用 Gradle 的时候我遇到了一个问题：明明添加了 JUnit5 也就是 jupiter 的依赖，为什么使用 <code>gradle test</code> 命令没用任何输出。这个问题在我将依赖换回 Junit4 时得到解决，也就是说果然是配置的问题。在 build.gradle 中添加如下配置即可。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    testImplementation <span class="string">'org.junit.jupiter:junit-jupiter-api:5.3.1'</span></span><br><span class="line">    testRuntimeOnly <span class="string">'org.junit.jupiter:junit-jupiter-engine:5.3.1'</span></span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">test &#123;</span><br><span class="line">    useJUnitPlatform()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>还可以添加 <code>testLogging</code>。再运行命令有如下输出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  web-crawler git:(master) ✗ gradle clean test</span><br><span class="line"></span><br><span class="line">&gt; Task :test</span><br><span class="line"></span><br><span class="line">xyz.s1mple.crawler.HtmlParserTest &gt; should_parse_novel_content_from_html() PASSED</span><br><span class="line"></span><br><span class="line">xyz.s1mple.crawler.HtmlParserTest &gt; should_parse_novel_title_from_html() PASSED</span><br><span class="line"></span><br><span class="line">xyz.s1mple.crawler.HtmlParserTest &gt; should_parse_chapter_uris_from_html() PASSED</span><br><span class="line"></span><br><span class="line">BUILD SUCCESSFUL in 1s</span><br></pre></td></tr></table></figure></p>
-<h2 id="并行"><a href="#并行" class="headerlink" title="并行"></a>并行</h2><p>Java 多线程编程是越来越容易了，从最早的 Thread，Runnable 到 JDK5 的ExecutorService 到 JDK7 的 ForkJoin 框架。现在 JDK8 又提供了<strong>并行流</strong>（<strong>parallelStream</strong>）来简化这一过程。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; cost = Lists.newArrayList(<span class="number">1</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">34</span>);</span><br><span class="line"><span class="keyword">long</span> total = cost.parallelStream()</span><br><span class="line">                    .map(x -&gt; x += <span class="number">1</span>)</span><br><span class="line">                    .reduce((y, z) -&gt; y + z)</span><br><span class="line">                    .get();</span><br></pre></td></tr></table></figure>
-<p>在 parallelStream 中默认线程池大小是机器的 CPU 核数。<strong>默认情况下，所有的 Fork/Join 任务都会共用同一个线程池，线程的数量等于CPU的核数</strong>。所以在未手动设置线程池数量的情况下我的电脑会启动 4 个线程，而爬虫的瓶颈在于网络 I/O 不在 CPU，所以果断自定义线程数。效果也十分显著，爬取两千多章的时间从原先的两分多钟变为 20s。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> ForkJoinPool pool = <span class="keyword">new</span> ForkJoinPool(PARALLELISM_LEVEL);</span><br><span class="line">pool.submit(() -&gt; urls.parallelStream()</span><br><span class="line">        .map(url -&gt; htmlParser.parseContent(urlReader.read(url)))</span><br><span class="line">        .reduce((x, y) -&gt; x + y)</span><br><span class="line">        .orElse(<span class="string">""</span>))</span><br><span class="line">        .get();</span><br></pre></td></tr></table></figure>
-<p>需要注意两点：</p>
-<ol>
-<li><code>pool.submit()</code> 该方法为<strong>懒加载</strong>，如果<strong>不调用它的结果则实际不会执行</strong>，最后 <code>.get()</code> 获取执行结果。</li>
-<li><code>.reduce((x, y) -&gt; x + y)</code> 这一步貌似会有很多字符串拼接影响效率，实则底层会使用 <code>StringBuilder</code> 或 <code>StringBuffer</code> 帮你做了性能优化</li>
-</ol>
-<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>关于并行数对爬虫程序的性能影响，实际测试时受网络波动的影响，测试数据可能波动较大，连接每个 Url 的耗时在 50ms ～ 1000ms 波动区间。为减少网络不稳定带来的影响，以下测试分为 100 章、1000 章两个数量级，进行不同并行等级的循环测试，测试 3 轮，时间单位为秒。</p>
-<p><strong>数量级：103 章</strong><br>| PARALLELISM_LEVEL | 1 | 4 | 16 | 64 | 256 |<br>|:–:|:–:|:–:|:–:|:–:|:–:|<br>| 第1次测试 |9|5|2|2|2|<br>| 第2次测试 |8|4|2|2|2|<br>| 第3次测试 |9|3|2|2|3|</p>
-<p><strong>数量级：1180 章</strong><br>| PARALLELISM_LEVEL | 4 | 8 | 16 | 32 | 64 | 128 | 256 |<br>|:–:|:–:|:–:|:–:|:–:|:–:|:–:|:–:|<br>| 第1次测试 |28|16|10|13|12|12|11|<br>| 第2次测试 |23|16|14|11|12|12|14|<br>| 第3次测试 |25|29|14|13|29|20|20|</p>
-<h2 id="爬虫思路"><a href="#爬虫思路" class="headerlink" title="爬虫思路"></a>爬虫思路</h2><p>最后说一说自己写这个爬虫时的思路，也算是解决问题的入手点。主要的解析类为 HtmlParser ，负责解析 Html。其实这个程序就是通过 Html 源码解析小说名 Title、小说所含所有章节的 Url、小说每一章的内容，最后将内容 reduce 写入文件。</p>
-<h4 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h4><p>解析小说章节目录网址 Html 源码的 <code>&lt;h1&gt;...&lt;/h1&gt;</code> 标签中的值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 章节目录网址</span><br><span class="line">http://www.biquge.cm/9/9422/</span><br><span class="line"></span><br><span class="line">// html</span><br><span class="line">&lt;h1&gt;大道朝天&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">// after parse</span><br><span class="line">大道朝天</span><br></pre></td></tr></table></figure>
-<h4 id="Chapter-URIs"><a href="#Chapter-URIs" class="headerlink" title="Chapter URIs"></a>Chapter URIs</h4><p>解析小说章节目录网址 Html 源码的 <code>&lt;div id=&quot;list&quot;&gt;...&lt;/div&gt;</code> 中包含的 <code>&lt;a href=&quot;...&quot;&gt;</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 章节目录网址</span><br><span class="line">http://www.biquge.cm/9/9422/</span><br><span class="line"></span><br><span class="line">// html</span><br><span class="line">&lt;div id=&quot;list&quot;&gt;</span><br><span class="line">&lt;dl&gt;&lt;dd&gt;&lt;a href=&quot;/9/9422/6927857.html&quot;&gt;第一章 三千里禁&lt;/a&gt;&lt;/dd&gt;</span><br><span class="line">&lt;dd&gt;&lt;a href=&quot;/9/9422/6927858.html&quot;&gt;第二章 斩天一剑&lt;/a&gt;&lt;/dd&gt;</span><br><span class="line">&lt;dd&gt;&lt;a href=&quot;/9/9422/6927859.html&quot;&gt;第三章 再次踏进那条河的白衣少年&lt;/a&gt;&lt;/dd&gt;</span><br><span class="line">...</span><br><span class="line">&lt;/dl&gt;&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">// after parse</span><br><span class="line">[&quot;/9/9422/6927859.html&quot;, &quot;/9/9422/6927858.html&quot;, &quot;/9/9422/6927857.html&quot; ...]</span><br></pre></td></tr></table></figure>
-<h4 id="Content"><a href="#Content" class="headerlink" title="Content"></a>Content</h4><p>根据 Chapter URIs 解析每一章的内容，最后拼接在一起写入文件。根据 <code>&lt;div id=&quot;content&quot;&gt;...&lt;/div&gt;</code> 解析，<code>&amp;nbsp;</code> 替换为空格，<code>&lt;br /&gt;</code> 替换为换行符</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 某一章的网址</span><br><span class="line">http://www.biquge.cm/9/9422/6927857.html</span><br><span class="line"></span><br><span class="line">// html</span><br><span class="line">&lt;div id=&quot;content&quot;&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;朝天大陆南方，一片青山绵延数千里，数百秀峰终年隐在云雾中。&lt;br /&gt;</span><br><span class="line">&lt;br /&gt;</span><br><span class="line">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;天下第一修行大派青山宗便在此间，普通人极难一睹真容。&lt;br /&gt;</span><br><span class="line">&lt;br /&gt;</span><br><span class="line">...</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">// after parse</span><br><span class="line"></span><br><span class="line">    朝天大陆南方，一片青山绵延数千里，数百秀峰终年隐在云雾中。</span><br><span class="line">    </span><br><span class="line">    天下第一修行大派青山宗便在此间，普通人极难一睹真容。</span><br></pre></td></tr></table></figure>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="http://www.infoq.com/cn/news/2011/04/xxb-maven-6-gradle" target="_blank" rel="noopener">Gradle，构建工具的未来？</a></li>
-<li><a href="https://medium.com/@jonashavers/how-to-use-junit-5-with-gradle-fb7c5c3286cc" target="_blank" rel="noopener">How to use JUnit 5 with Gradle</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2996,7 +3006,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-count">61</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

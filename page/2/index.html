@@ -369,6 +369,244 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/05/Java 网络爬虫/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/05/Java 网络爬虫/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/2/index.html">Java 网络爬虫</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-05 13:15:21" itemprop="dateCreated datePublished" datetime="2018-11-05T13:15:21+08:00">2018-11-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-27 20:44:15" itemprop="dateModified" datetime="2018-12-27T20:44:15+08:00">2018-12-27</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/05/Java 网络爬虫/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/05/Java 网络爬虫/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.9k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><p>很早之前写过一个 Java 的爬虫程序，可以爬取笔趣阁上的小说。最近突然有爬点书看看的想法，遂翻到原先的代码，简直不忍直视。好在现在编码能力有所提升，而且团队内一直强调重构的重要性，所以重新拾起这个爬虫程序，好好重构一番。代码已上传至 <a href="https://github.com/s1mplecc/web-crawler" target="_blank" rel="noopener">GitHub</a></p>
+<p>本文主要讲讲：</p>
+<ol>
+<li>使用 <strong>Gradle</strong> 构建项目时遇到的问题以及解决办法</li>
+<li>使用 JDK8 的特性如何简便地进行<strong>并行开发</strong></li>
+<li>写爬虫时的思路</li>
+</ol>
+<h2 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h2><p>不得不说，Gradle 让我眼前一亮，相比 Maven，它抛弃了冗余繁琐的 XML 格式，使用语法精炼的 <strong>Groovy</strong>，以下就是我的项目构建文件 <strong>build.gradle</strong> 的全部内容，相当于 Maven 的 pom.xml，清爽简短但重要的信息一点不少。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">'java'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">group <span class="string">'xyz.s1mple.crawler'</span></span><br><span class="line">version <span class="string">'1.0-SNAPSHOT'</span></span><br><span class="line"></span><br><span class="line">sourceCompatibility = <span class="number">1.8</span></span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenLocal()</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    testImplementation <span class="string">'org.junit.jupiter:junit-jupiter-api:5.3.1'</span></span><br><span class="line">    testRuntimeOnly <span class="string">'org.junit.jupiter:junit-jupiter-engine:5.3.1'</span></span><br><span class="line">    testCompile <span class="string">'org.assertj:assertj-core:3.11.1'</span></span><br><span class="line">    compile <span class="string">'org.slf4j:slf4j-api:1.7.25'</span></span><br><span class="line">    runtime <span class="string">'org.slf4j:slf4j-simple:1.7.25'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">test &#123;</span><br><span class="line">    useJUnitPlatform()</span><br><span class="line"></span><br><span class="line">    testLogging &#123;</span><br><span class="line">        events <span class="string">"passed"</span>, <span class="string">"skipped"</span>, <span class="string">"failed"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的配置文件中我们可以发现，Gradle 沿用了 Maven 的中央仓库，同时还可以设置 Maven 本地仓库，同时 Gradle 项目生成的构件也可以发布到 Maven 仓库供他人使用，这一点也是支撑 Gradle 快速发展的重要一点。</p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>关于安装，我使用的 IDE 是 IntelliJ IDEA，使用内置的 Gradle 也可，但最好是下载安装全局的 Gradle，这样可以随时随地跑 Gradle 命令。Mac 下安装十分方便。其他系统如何安装可以在 <a href="https://gradle.org/install/#with-a-package-manager" target="_blank" rel="noopener">Gradle官网</a> 上找到。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install gradle</span><br></pre></td></tr></table></figure>
+<h4 id="JUnit5"><a href="#JUnit5" class="headerlink" title="JUnit5"></a>JUnit5</h4><p>在使用 Gradle 的时候我遇到了一个问题：明明添加了 JUnit5 也就是 jupiter 的依赖，为什么使用 <code>gradle test</code> 命令没用任何输出。这个问题在我将依赖换回 Junit4 时得到解决，也就是说果然是配置的问题。在 build.gradle 中添加如下配置即可。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    testImplementation <span class="string">'org.junit.jupiter:junit-jupiter-api:5.3.1'</span></span><br><span class="line">    testRuntimeOnly <span class="string">'org.junit.jupiter:junit-jupiter-engine:5.3.1'</span></span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">test &#123;</span><br><span class="line">    useJUnitPlatform()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>还可以添加 <code>testLogging</code>。再运行命令有如下输出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  web-crawler git:(master) ✗ gradle clean test</span><br><span class="line"></span><br><span class="line">&gt; Task :test</span><br><span class="line"></span><br><span class="line">xyz.s1mple.crawler.HtmlParserTest &gt; should_parse_novel_content_from_html() PASSED</span><br><span class="line"></span><br><span class="line">xyz.s1mple.crawler.HtmlParserTest &gt; should_parse_novel_title_from_html() PASSED</span><br><span class="line"></span><br><span class="line">xyz.s1mple.crawler.HtmlParserTest &gt; should_parse_chapter_uris_from_html() PASSED</span><br><span class="line"></span><br><span class="line">BUILD SUCCESSFUL in 1s</span><br></pre></td></tr></table></figure></p>
+<h2 id="并行"><a href="#并行" class="headerlink" title="并行"></a>并行</h2><p>Java 多线程编程是越来越容易了，从最早的 Thread，Runnable 到 JDK5 的ExecutorService 到 JDK7 的 ForkJoin 框架。现在 JDK8 又提供了<strong>并行流</strong>（<strong>parallelStream</strong>）来简化这一过程。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; cost = Lists.newArrayList(<span class="number">1</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">34</span>);</span><br><span class="line"><span class="keyword">long</span> total = cost.parallelStream()</span><br><span class="line">                    .map(x -&gt; x += <span class="number">1</span>)</span><br><span class="line">                    .reduce((y, z) -&gt; y + z)</span><br><span class="line">                    .get();</span><br></pre></td></tr></table></figure>
+<p>在 parallelStream 中默认线程池大小是机器的 CPU 核数。<strong>默认情况下，所有的 Fork/Join 任务都会共用同一个线程池，线程的数量等于CPU的核数</strong>。所以在未手动设置线程池数量的情况下我的电脑会启动 4 个线程，而爬虫的瓶颈在于网络 I/O 不在 CPU，所以果断自定义线程数。效果也十分显著，爬取两千多章的时间从原先的两分多钟变为 20s。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> ForkJoinPool pool = <span class="keyword">new</span> ForkJoinPool(PARALLELISM_LEVEL);</span><br><span class="line">pool.submit(() -&gt; urls.parallelStream()</span><br><span class="line">        .map(url -&gt; htmlParser.parseContent(urlReader.read(url)))</span><br><span class="line">        .reduce((x, y) -&gt; x + y)</span><br><span class="line">        .orElse(<span class="string">""</span>))</span><br><span class="line">        .get();</span><br></pre></td></tr></table></figure>
+<p>需要注意两点：</p>
+<ol>
+<li><code>pool.submit()</code> 该方法为<strong>懒加载</strong>，如果<strong>不调用它的结果则实际不会执行</strong>，最后 <code>.get()</code> 获取执行结果。</li>
+<li><code>.reduce((x, y) -&gt; x + y)</code> 这一步貌似会有很多字符串拼接影响效率，实则底层会使用 <code>StringBuilder</code> 或 <code>StringBuffer</code> 帮你做了性能优化</li>
+</ol>
+<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>关于并行数对爬虫程序的性能影响，实际测试时受网络波动的影响，测试数据可能波动较大，连接每个 Url 的耗时在 50ms ～ 1000ms 波动区间。为减少网络不稳定带来的影响，以下测试分为 100 章、1000 章两个数量级，进行不同并行等级的循环测试，测试 3 轮，时间单位为秒。</p>
+<p><strong>数量级：103 章</strong><br>| PARALLELISM_LEVEL | 1 | 4 | 16 | 64 | 256 |<br>|:–:|:–:|:–:|:–:|:–:|:–:|<br>| 第1次测试 |9|5|2|2|2|<br>| 第2次测试 |8|4|2|2|2|<br>| 第3次测试 |9|3|2|2|3|</p>
+<p><strong>数量级：1180 章</strong><br>| PARALLELISM_LEVEL | 4 | 8 | 16 | 32 | 64 | 128 | 256 |<br>|:–:|:–:|:–:|:–:|:–:|:–:|:–:|:–:|<br>| 第1次测试 |28|16|10|13|12|12|11|<br>| 第2次测试 |23|16|14|11|12|12|14|<br>| 第3次测试 |25|29|14|13|29|20|20|</p>
+<h2 id="爬虫思路"><a href="#爬虫思路" class="headerlink" title="爬虫思路"></a>爬虫思路</h2><p>最后说一说自己写这个爬虫时的思路，也算是解决问题的入手点。主要的解析类为 HtmlParser ，负责解析 Html。其实这个程序就是通过 Html 源码解析小说名 Title、小说所含所有章节的 Url、小说每一章的内容，最后将内容 reduce 写入文件。</p>
+<h4 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h4><p>解析小说章节目录网址 Html 源码的 <code>&lt;h1&gt;...&lt;/h1&gt;</code> 标签中的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 章节目录网址</span><br><span class="line">http://www.biquge.cm/9/9422/</span><br><span class="line"></span><br><span class="line">// html</span><br><span class="line">&lt;h1&gt;大道朝天&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">// after parse</span><br><span class="line">大道朝天</span><br></pre></td></tr></table></figure>
+<h4 id="Chapter-URIs"><a href="#Chapter-URIs" class="headerlink" title="Chapter URIs"></a>Chapter URIs</h4><p>解析小说章节目录网址 Html 源码的 <code>&lt;div id=&quot;list&quot;&gt;...&lt;/div&gt;</code> 中包含的 <code>&lt;a href=&quot;...&quot;&gt;</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 章节目录网址</span><br><span class="line">http://www.biquge.cm/9/9422/</span><br><span class="line"></span><br><span class="line">// html</span><br><span class="line">&lt;div id=&quot;list&quot;&gt;</span><br><span class="line">&lt;dl&gt;&lt;dd&gt;&lt;a href=&quot;/9/9422/6927857.html&quot;&gt;第一章 三千里禁&lt;/a&gt;&lt;/dd&gt;</span><br><span class="line">&lt;dd&gt;&lt;a href=&quot;/9/9422/6927858.html&quot;&gt;第二章 斩天一剑&lt;/a&gt;&lt;/dd&gt;</span><br><span class="line">&lt;dd&gt;&lt;a href=&quot;/9/9422/6927859.html&quot;&gt;第三章 再次踏进那条河的白衣少年&lt;/a&gt;&lt;/dd&gt;</span><br><span class="line">...</span><br><span class="line">&lt;/dl&gt;&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">// after parse</span><br><span class="line">[&quot;/9/9422/6927859.html&quot;, &quot;/9/9422/6927858.html&quot;, &quot;/9/9422/6927857.html&quot; ...]</span><br></pre></td></tr></table></figure>
+<h4 id="Content"><a href="#Content" class="headerlink" title="Content"></a>Content</h4><p>根据 Chapter URIs 解析每一章的内容，最后拼接在一起写入文件。根据 <code>&lt;div id=&quot;content&quot;&gt;...&lt;/div&gt;</code> 解析，<code>&amp;nbsp;</code> 替换为空格，<code>&lt;br /&gt;</code> 替换为换行符</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 某一章的网址</span><br><span class="line">http://www.biquge.cm/9/9422/6927857.html</span><br><span class="line"></span><br><span class="line">// html</span><br><span class="line">&lt;div id=&quot;content&quot;&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;朝天大陆南方，一片青山绵延数千里，数百秀峰终年隐在云雾中。&lt;br /&gt;</span><br><span class="line">&lt;br /&gt;</span><br><span class="line">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;天下第一修行大派青山宗便在此间，普通人极难一睹真容。&lt;br /&gt;</span><br><span class="line">&lt;br /&gt;</span><br><span class="line">...</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">// after parse</span><br><span class="line"></span><br><span class="line">    朝天大陆南方，一片青山绵延数千里，数百秀峰终年隐在云雾中。</span><br><span class="line">    </span><br><span class="line">    天下第一修行大派青山宗便在此间，普通人极难一睹真容。</span><br></pre></td></tr></table></figure>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="http://www.infoq.com/cn/news/2011/04/xxb-maven-6-gradle" target="_blank" rel="noopener">Gradle，构建工具的未来？</a></li>
+<li><a href="https://medium.com/@jonashavers/how-to-use-junit-5-with-gradle-fb7c5c3286cc" target="_blank" rel="noopener">How to use JUnit 5 with Gradle</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/10/11/HTTPS & SSH 协议/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2701,316 +2939,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/06/24/迁移 Ghost 博客并使用 Docker  部署/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/06/24/迁移 Ghost 博客并使用 Docker  部署/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/2/index.html">迁移 Ghost 博客并使用 Docker  部署</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-06-24 14:30:15" itemprop="dateCreated datePublished" datetime="2018-06-24T14:30:15+08:00">2018-06-24</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-27 20:50:42" itemprop="dateModified" datetime="2018-12-27T20:50:42+08:00">2018-12-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/06/24/迁移 Ghost 博客并使用 Docker  部署/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/06/24/迁移 Ghost 博客并使用 Docker  部署/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">5.9k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>因为阿里云服务器在七月初即将过期，以及生活上的一些琐事，博客已经近一个月没有更新了。考虑到十月份域名也将过期，以及阿里云非学生用户太贵，遂考虑国外的云服务器 <a href="https://www.vultr.com/" target="_blank" rel="noopener">Vultr</a>，优点是绑定域名不需要备案，以及按时计费也很方便，缺点是国内访问网速确实比不上阿里云，但同时也跟同学了解到可以使用<strong>锐速</strong>进行优化，这个以后再研究。此外，为将来迁移方便，使用 <strong>Docker</strong> 重新部署 Ghost 博客并制作成镜像上传到云端。这也算我迁移博客后的第一篇文章了。</p>
-</blockquote>
-<h2 id="Prefaring"><a href="#Prefaring" class="headerlink" title="Prefaring"></a>Prefaring</h2><ul>
-<li><p>在 Vultr 的 Servers 界面先新增一个实例，如果能抢到每月 $2.5 的服务器是最好的，然而我没有抢到，所以选择了每月 $5 的服务器，系统为 Ubuntu 16.04，机房在新加坡</p>
-</li>
-<li><p>在添加实例成功后第一件事是<code>ping</code>一下公网 IP 是否是通的，有些时候分配的 IP 是被大陆给墙了的。<code>ping</code>通后我习惯的首件要事就是添加我的 ssh 公钥以及修改 ssh 的一些策略，比如修改默认端口号、禁用密码登陆之类的，一切都是为安全考虑（吃了第一次的亏，一夜之间异常登陆三十次）</p>
-</li>
-<li><p>迁移 Ghost 博客之前需要先将原先服务器上的相关文件下载到本地，再上传到新的服务器上。主要包含文章内容，图片以及主题。所幸 Ghost 博客提供了 Export/Import 功能，而且是所有文件导出到一个大 Json 文件中，很方便迁移<br><img src="/2018/06/24/迁移 Ghost 博客并使用 Docker  部署/0.png" alt="14070DA1-C3CD-4A9F-AE52-D4D2DE4A2CDB">主题也很方便，我之前就将代码上传至 <a href="https://github.com/s1mplecc/ghost-theme-kaldorei" target="_blank" rel="noopener">GitHub</a>，克隆下来压缩上传就行。图片稍微麻烦点，需要将 Ghost 目录下的整个<code>content/images</code>文件夹<code>scp</code>到本地，再<code>scp</code>到 Vultr 服务器上，可能要花些时间</p>
-</li>
-<li><p>接下来去修改你的域名设置，我是在 <a href="https://sg.godaddy.com/zh" target="_blank" rel="noopener">GoDaddy</a> 上购买的域名，所以去狗爹网修改配置如下<br><img src="/2018/06/24/迁移 Ghost 博客并使用 Docker  部署/1.png" alt="64F8A358-E544-4FA3-819C-7F38F5327A5A"></p>
-</li>
-<li><p>准备工作已经做好，剩下的就是在新服务器上搭建环境和部署博客了。必要的东西也就三个，Nginx 用于做端口映射，Docker 用于运行 Ghost 容器，Certbot 用来配置 Https。Nginx 在 Ubuntu 上安装很简单，使用<code>apt-get</code>命令即可。Certbot 安装在我的另一篇博客<a href="https://s1mple.xyz/configure-https-with-certbot/" target="_blank" rel="noopener">Certbot配置Https</a>中有详细介绍。我们着重介绍一下如何安装 Docker</p>
-</li>
-</ul>
-<h2 id="Installing-Docker"><a href="#Installing-Docker" class="headerlink" title="Installing Docker"></a>Installing Docker</h2><blockquote>
-<p>参考 <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/" target="_blank" rel="noopener">Docker官方网站</a>，选择自己的操作系统，我的是 Ubuntu 16.04</p>
-</blockquote>
-<ul>
-<li><p>Update the apt package index, Install packages to allow apt to use a repository over HTTPS</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install \</span><br><span class="line">    apt-transport-https \</span><br><span class="line">    ca-certificates \</span><br><span class="line">    curl \</span><br><span class="line">    software-properties-common</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>Add Docker’s official GPG key</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>Set up the stable repository</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sudo add-apt-repository \</span><br><span class="line">   &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu \</span><br><span class="line">   $(lsb_release -cs) \</span><br><span class="line">   stable&quot;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>Install the latest version of Docker CE</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install docker-ce</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="Deploying-Ghost"><a href="#Deploying-Ghost" class="headerlink" title="Deploying Ghost"></a>Deploying Ghost</h2><ul>
-<li><p>拉取 Ghost 最新的 Docker 镜像</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker pull ghost</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>运行一个容器实例，<code>-d</code>后台运行，<code>-p 2368:2368</code>绑定宿主机 2368 端口至容器内 2368 端口（必须显式的绑定，不然不会自动映射），这也是 Ghost 默认占用的端口号</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker run -d -p 2368:2368 ghost</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>运行后访问<code>{IP}:2368</code>可以成功进入 Ghost 主页，但是现在还有一些问题，就是点击 Home 键跳转的地址为 localhost:2368，我们需要进入到容器内部修改 Ghost 配置文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker exec -it 16 bash</span><br></pre></td></tr></table></figure>
-<p>  上述命令表示以交互式终端执行容器的<code>bash</code>命令，其中 16 是刚才启动的容器 ID 前两位，可以使用<code>docker ps</code>查看，通常使用可以唯一标识的前几位即可</p>
-</li>
-<li><p>进入容器后默认在<code>/var/lib/ghost</code>即 Ghost 安装路径下，修改其下的<code>config.production.json</code>配置文件，其实该文件链接到<code>config.development.json</code>，所以修改哪一个都一样，只需要修改 url 和 server 即可</p>
-  <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">"url": "https://s1mple.xyz",</span><br><span class="line">"server": &#123;</span><br><span class="line">    "port": 2368,</span><br><span class="line">    "host": "0.0.0.0"</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<p>  退出容器后使用<code>docker restart 16</code>重启容器</p>
-</li>
-<li><p>主题可以在网页上直接上传。图片还需要我们拷贝到容器中，使用如下命令</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker cp images/ 16:/var/lib/ghost/content</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="Nginx-amp-Https"><a href="#Nginx-amp-Https" class="headerlink" title="Nginx &amp; Https"></a>Nginx &amp; Https</h2><blockquote>
-<p>至此，我们的博客已经算迁移完毕，接下来还剩下两个步骤：1. 配置 Nginx 80 端口转发到 2368 端口；2. 使用 Certbot 配置 Https。</p>
-</blockquote>
-<h4 id="Configuring-Nginx"><a href="#Configuring-Nginx" class="headerlink" title="Configuring Nginx"></a>Configuring Nginx</h4><ul>
-<li><p>前往 <code>/etc/nginx/conf.d/</code> 目录中创建 ghost.conf 配置文件，配置如下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">server &#123;                                                                                  </span><br><span class="line">    server_name s1mple.info www.s1mple.info;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $http_host;</span><br><span class="line">        proxy_pass http://127.0.0.1:2368;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location ~ /.well-known &#123;</span><br><span class="line">        allow all;</span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    client_max_body_size 50m;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  保存退出后，<code>service nginx restart</code> 重启 Nginx 服务</p>
-</li>
-</ul>
-<h4 id="Configuring-Https"><a href="#Configuring-Https" class="headerlink" title="Configuring Https"></a>Configuring Https</h4><ul>
-<li><p>使用 Certbot 工具配置 Https，如何安装运行可以参考我的另一篇博客<a href="https://s1mple.xyz/configure-https-with-certbot/" target="_blank" rel="noopener"><br>Certbot配置Https</a>。实际上它会读取 Nginx 配置文件并修改它们，可以发现，配置完成后的 ghost.conf 多了如下一些内容，其中就包括重定位到 Https 端口 443</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    # 省略...</span><br><span class="line"></span><br><span class="line">    listen [::]:443 ssl ipv6only=on; # managed by Certbot</span><br><span class="line">    listen 443 ssl; # managed by Certbot</span><br><span class="line">    ssl_certificate /etc/letsencrypt/live/s1mple.info/fullchain.pem; # managed by Certbot</span><br><span class="line">    ssl_certificate_key /etc/letsencrypt/live/s1mple.info/privkey.pem; # managed by Certbot</span><br><span class="line">    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    if ($host = www.s1mple.info) &#123;</span><br><span class="line">        return 301 https://$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    if ($host = s1mple.info) &#123;</span><br><span class="line">        return 301 https://$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line">    listen 80; </span><br><span class="line">    listen [::]:80;</span><br><span class="line"></span><br><span class="line">    server_name s1mple.info www.s1mple.info;</span><br><span class="line">    return 404; # managed by Certbot</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  大功告成！现在就可以通过 <a href="https://s1mple.xyz" target="_blank" rel="noopener">https://s1mple.xyz</a> 访问我的博客网站了！</p>
-</li>
-</ul>
-<h2 id="Docker-image"><a href="#Docker-image" class="headerlink" title="Docker image"></a>Docker image</h2><blockquote>
-<p>接下来我们将经过修改的容器（包含文章、图片、Kaldorei 主题、修改后的配置文件）提交为一个镜像，上传到云端。以后迁移直接<code>pull</code>下来即可。可以参考我之前的博客 <a href="https://s1mple.xyz/build-docker-images/" target="_blank" rel="noopener">构建你的Docker镜像</a></p>
-</blockquote>
-<ul>
-<li><p>首先需要在 <a href="https://cloud.docker.com/" target="_blank" rel="noopener">Docker Cloud官网</a> 注册自己的账号，然后在服务器使用命令登陆</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker login</span><br><span class="line">Login with your Docker ID to push and pull images from Docker Hub. If you don&apos;t have a Docker ID, head over to https://hub.docker.com to create one.</span><br><span class="line">// username</span><br><span class="line">// password</span><br><span class="line">Login Succeeded</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>在 Docker Cloud 中创建一个新的仓库，命名为 myghost 。将当前容器提交为一个镜像，不加标签默认 latest</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker commit 16 s1mple1995/myghost</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>查看本地的 Docker 镜像，有两个，一个是原始的 ghost 镜像，一个是刚刚提交的镜像</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker images</span><br><span class="line">REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">s1mple1995/myghost   latest              e11def1af177        15 seconds ago      613MB</span><br><span class="line">ghost                latest              a375d6b66f06        4 weeks ago         574MB</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>将镜像<code>push</code>到云端，等待上传完成</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker push s1mple1995/myghost</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>现在镜像已经存放在 Docker Cloud 云端了，搜索你的镜像，随时随地可以<code>pull</code>下来</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker search s1mple1995</span><br><span class="line">NAME                      DESCRIPTION                    STARS               OFFICIAL            AUTOMATED</span><br><span class="line">s1mple1995/get-started    学习初步使用                         1                                       </span><br><span class="line">s1mple1995/java-web-env   Java Web程序的运行环境                0                                       </span><br><span class="line">s1mple1995/jpress         jpress blog                    0                                       </span><br><span class="line">s1mple1995/ubuntu         基于官方ubuntu镜像，更改为阿里云软件源，并安…     0                                       </span><br><span class="line">s1mple1995/myghost        我的 Ghost 镜像，包含了文章、图片和主题（ Ka…   0</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
-<p>总的来说，使用 Docker 部署 Ghost 的话可以方便许多。而且制作成镜像上传到云端的话，以后可以直接<code>pull</code>下来，图片、文章、主题都在镜像中了，顶多是更换域名要修改 Ghost 的配置文件。除此之外，更换域名后文章中的域名也需要全量替换，这个我打算以后要换域名的时候写个 Python 脚本来完成。</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -3055,7 +2988,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-count">61</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
