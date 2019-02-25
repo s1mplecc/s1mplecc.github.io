@@ -414,7 +414,7 @@
                 
               
 
-              <time title="创建时间：2019-02-25 21:35:58 / 修改时间：21:38:30" itemprop="dateCreated datePublished" datetime="2019-02-25T21:35:58+08:00">2019-02-25</time>
+              <time title="创建时间：2019-02-25 21:35:58 / 修改时间：21:41:40" itemprop="dateCreated datePublished" datetime="2019-02-25T21:35:58+08:00">2019-02-25</time>
             
 
             
@@ -502,7 +502,7 @@
         
           
             <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>代理模式（Proxy Pattern）是一种常见的设计模式，也是 GoF 提出的 23 种设计模式中的一种，属于结构型设计模式。<strong>它使用代理对象完成用户请求，屏蔽用户对真实对象的访问</strong>。代理模式用处很多，本文主要介绍如何使用代理模式实现<strong>延迟加载</strong>和<strong>面向切面编程</strong>，并着重介绍动态代理的几种实现方式。本文涉及到的示例代码以上传到 <a href="https://github.com/s1mplecc/proxy-pattern-demo" target="_blank" rel="noopener">GitHub</a> 上。</p>
-<h2 id="角色以及职责"><a href="#角色以及职责" class="headerlink" title="角色以及职责"></a>角色以及职责</h2><p>代理模式中的几个角色：</p>
+<h2 id="角色及职责"><a href="#角色及职责" class="headerlink" title="角色及职责"></a>角色及职责</h2><p>代理模式中的几个角色：</p>
 <ul>
 <li><strong>Subject</strong>，接口，定义了代理类和被代理类对外暴露的方法。代理类和被代理类都需要实现该接口。</li>
 <li><strong>RealSubject</strong>，真实对象（被代理类），真正实现功能的对象。</li>
@@ -518,7 +518,7 @@
 <ul>
 <li>远程代理，在分布式对象通信中，使用一个本地对象代表远程对象（分属不同地址空间）。本地对象是远程对象的代理，本地对象上的方法调用将导致远程对象上的方法调用。一个例子是 ATM 实现，其中 ATM 可以保存位于远程服务器上的银行信息的代理对象。</li>
 <li>虚拟代理，如果一个对象很复杂或很重，可以使用虚拟代理。比如当图像很大时，可以按需的去加载用到的部分（亦即<strong>延迟加载</strong>）。</li>
-<li>保护代理，可以控制资源的访问权限</li>
+<li>保护代理，可以控制资源的访问权限。</li>
 </ul>
 <h2 id="延迟加载"><a href="#延迟加载" class="headerlink" title="延迟加载"></a>延迟加载</h2><p>我们先来看看如何使用代理模式进行延迟加载。假设现在有一个数据库查询类 DBQuery，它执行查询返回一个字符串。由于数据查询需要连接数据库，所以在构造时会比较耗时。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBQuery</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DBQuery</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Thread.sleep(<span class="number">1000</span>); <span class="comment">// create datebase connection</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">query</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"query result"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
