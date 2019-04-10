@@ -112,27 +112,22 @@
 
 
 
-  <meta name="description" content="Preface 该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍迪米特法则、信息专家模式，并结合案例实操在 IntelliJ IDEA 中如何重构代码。本文大部分内容转载自张总博客: 迪米特法则与重构  Prerequisites IntelliJ IDEA，相比 Eclipse，IDEA 在重构方面十">
-<meta name="keywords" content="Clean Code,Refactoring">
+  <meta name="description" content="声明本教程也是由于本人平时工作学习有 Google 的需求，所以就自己搭了一个梯子，并记录了搭建的过程方便以后重搭。大家自己搭建后就同学、家人间小规模使用就好了，这样网速较快也不容易被封。严禁用于商业用途！ 准备 VPS 服务器，需要选择国外的，推荐 Vultr，速度不错、稳定且性价比高，按小时计费，能够随时开通和删除服务器。操作系统选择 CentOS 6，为了更换内核方便不宜选择版本过高的操作系">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Clean Code -- 迪米特法则与 Paperboy 案例">
-<meta property="og:url" content="https://s1mplecc.github.io/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/index.html">
+<meta property="og:title" content="搭建 SSR 科学上网">
+<meta property="og:url" content="https://s1mplecc.github.io/2019/04/10/搭建-SSR-科学上网/index.html">
 <meta property="og:site_name" content="s1mple的博客">
-<meta property="og:description" content="Preface 该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍迪米特法则、信息专家模式，并结合案例实操在 IntelliJ IDEA 中如何重构代码。本文大部分内容转载自张总博客: 迪米特法则与重构  Prerequisites IntelliJ IDEA，相比 Eclipse，IDEA 在重构方面十">
+<meta property="og:description" content="声明本教程也是由于本人平时工作学习有 Google 的需求，所以就自己搭了一个梯子，并记录了搭建的过程方便以后重搭。大家自己搭建后就同学、家人间小规模使用就好了，这样网速较快也不容易被封。严禁用于商业用途！ 准备 VPS 服务器，需要选择国外的，推荐 Vultr，速度不错、稳定且性价比高，按小时计费，能够随时开通和删除服务器。操作系统选择 CentOS 6，为了更换内核方便不宜选择版本过高的操作系">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/04/Clean%20Code%20--%20迪米特法则与%20Paperboy%20案例/0.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/04/Clean%20Code%20--%20迪米特法则与%20Paperboy%20案例/1.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/04/Clean%20Code%20--%20迪米特法则与%20Paperboy%20案例/2.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/04/Clean%20Code%20--%20迪米特法则与%20Paperboy%20案例/3.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/04/Clean%20Code%20--%20迪米特法则与%20Paperboy%20案例/4.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/04/Clean%20Code%20--%20迪米特法则与%20Paperboy%20案例/5.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/04/Clean%20Code%20--%20迪米特法则与%20Paperboy%20案例/6.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/04/Clean%20Code%20--%20迪米特法则与%20Paperboy%20案例/7.png">
-<meta property="og:updated_time" content="2018-12-27T12:41:08.529Z">
+<meta property="og:image" content="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p316">
+<meta property="og:image" content="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p318">
+<meta property="og:image" content="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p317">
+<meta property="og:image" content="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p320">
+<meta property="og:updated_time" content="2019-04-10T07:04:21.522Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Clean Code -- 迪米特法则与 Paperboy 案例">
-<meta name="twitter:description" content="Preface 该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍迪米特法则、信息专家模式，并结合案例实操在 IntelliJ IDEA 中如何重构代码。本文大部分内容转载自张总博客: 迪米特法则与重构  Prerequisites IntelliJ IDEA，相比 Eclipse，IDEA 在重构方面十">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2018/05/04/Clean%20Code%20--%20迪米特法则与%20Paperboy%20案例/0.png">
+<meta name="twitter:title" content="搭建 SSR 科学上网">
+<meta name="twitter:description" content="声明本教程也是由于本人平时工作学习有 Google 的需求，所以就自己搭了一个梯子，并记录了搭建的过程方便以后重搭。大家自己搭建后就同学、家人间小规模使用就好了，这样网速较快也不容易被封。严禁用于商业用途！ 准备 VPS 服务器，需要选择国外的，推荐 Vultr，速度不错、稳定且性价比高，按小时计费，能够随时开通和删除服务器。操作系统选择 CentOS 6，为了更换内核方便不宜选择版本过高的操作系">
+<meta name="twitter:image" content="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p316">
 
 
 
@@ -141,7 +136,7 @@
 
 
 
-  <link rel="canonical" href="https://s1mplecc.github.io/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2019/04/10/搭建-SSR-科学上网/">
 
 
 
@@ -151,7 +146,7 @@
   };
 </script>
 
-  <title>Clean Code -- 迪米特法则与 Paperboy 案例 | s1mple的博客</title>
+  <title>搭建 SSR 科学上网 | s1mple的博客</title>
   
 
 
@@ -379,7 +374,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2019/04/10/搭建-SSR-科学上网/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -396,7 +391,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Clean Code -- 迪米特法则与 Paperboy 案例
+          <h1 class="post-title" itemprop="name headline">搭建 SSR 科学上网
               
             
           </h1>
@@ -421,24 +416,12 @@
                 
               
 
-              <time title="创建时间：2018-05-04 05:36:05" itemprop="dateCreated datePublished" datetime="2018-05-04T05:36:05+08:00">2018-05-04</time>
+              <time title="创建时间：2019-04-10 15:02:32 / 修改时间：15:04:21" itemprop="dateCreated datePublished" datetime="2019-04-10T15:02:32+08:00">2019-04-10</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-27 20:41:08" itemprop="dateModified" datetime="2018-12-27T20:41:08+08:00">2018-12-27</time>
               
             
           </span>
@@ -455,7 +438,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
 
                 
                 
@@ -470,9 +453,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/#comments" itemprop="discussionUrl">
+                <a href="/2019/04/10/搭建-SSR-科学上网/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/04/10/搭建-SSR-科学上网/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -494,7 +477,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">4.8k</span>
+                <span title="本文字数">1.4k</span>
               
 
               
@@ -518,79 +501,42 @@
       
 
       
-        <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍<strong>迪米特法则</strong>、<strong>信息专家模式</strong>，并结合案例实操在 <strong>IntelliJ IDEA</strong> 中如何重构代码。本文大部分内容转载自张总博客: <a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构</a></p>
-</blockquote>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目</li>
-<li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，clone 下代码进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 Cmd + D 查看<strong>代码差异</strong></li>
-<li><p><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 Cmd 替换成 Ctrl，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Ctrl + T // 重构菜单</span><br><span class="line">Shift + F6 // 重命名方法、属性、文件</span><br><span class="line">F6 // 移动方法（move method）</span><br><span class="line">Cmd + Alt + M // 提取方法（extract method）</span><br><span class="line">Cmd + Alt + V // 提取变量（extract variable）</span><br><span class="line">Cmd + Alt + C // 提取常量（extract constant）</span><br><span class="line">Cmd + Alt + N // 内联（Inline），与 extract 相反</span><br><span class="line"></span><br><span class="line">Cmd + 9 // 打开 Version Control</span><br><span class="line">Cmd + D // 查看文件差异（show difference）</span><br></pre></td></tr></table></figure>
+        <h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>本教程也是由于本人平时工作学习有 Google 的需求，所以就自己搭了一个梯子，并记录了搭建的过程方便以后重搭。大家自己搭建后就同学、家人间小规模使用就好了，这样网速较快也不容易被封。<strong>严禁用于商业用途！</strong></p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><ul>
+<li><p><strong>VPS 服务器</strong>，需要选择国外的，推荐 <a href="https://www.vultr.com/" target="_blank" rel="noopener">Vultr</a>，速度不错、稳定且性价比高，按小时计费，能够随时开通和删除服务器。<strong>操作系统选择 CentOS 6</strong>，为了更换内核方便不宜选择版本过高的操作系统。</p>
+</li>
+<li><p>MacOS 自带的 Terminal，或者 Windows 的 XShell。用于 ssh 连接远程服务器并执行命令。</p>
+</li>
+<li><p><strong>ShadowsocksR 客户端</strong>，简称 SSR，是 Shadowsocks 的增强版，在其基础上增加了一些数据混淆方式。SSR 下载地址：<a href="https://github.com/shadowsocksr-backup/ShadowsocksX-NG/releases" target="_blank" rel="noopener">Mac 版</a>，<a href="https://github.com/shadowsocksr-backup/shadowsocksr-csharp/releases" target="_blank" rel="noopener">Windows 版</a>。</p>
 </li>
 </ul>
-<h2 id="迪米特法则"><a href="#迪米特法则" class="headerlink" title="迪米特法则"></a>迪米特法则</h2><ul>
-<li>在面向对象设计的世界里，有一个寻常却又常常为人所忽略的原则——<strong>迪米特法则（Law of Demeter）</strong>。这个原则认为，任何一个对象或者方法，它应该只能调用下列对象：    <ul>
-<li>该对象本身</li>
-<li>作为参数传进来的对象（也可以是该对象的字段）</li>
-<li>在方法内创建的对象</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>这个原则用以指导正确的<strong>对象协作</strong>，分清楚哪些对象应该产生协作，哪些对象则对于该对象而言，又应该是无知的</p>
-</blockquote>
-<h2 id="代码案例及分析"><a href="#代码案例及分析" class="headerlink" title="代码案例及分析"></a>代码案例及分析</h2><ul>
-<li><p>如何理解这个原则？我们可以看看 David Bock 就该原则给出的一个<a href="https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/paper-boy/demeter.pdf" target="_blank" rel="noopener">绝佳案例</a>。假设一个超市购物的场景，顾客（Customer）到收银台结账，收银员（Paperboy）负责收钱。我们来看看代码：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String firstName;</span><br><span class="line">    <span class="keyword">private</span> String lastName;</span><br><span class="line">    <span class="keyword">private</span> Wallet myWallet;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> firstName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getLastName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> lastName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Wallet <span class="title">getWallet</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> myWallet;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Wallet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> value;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">getTotalMoney</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTotalMoney</span><span class="params">(<span class="keyword">float</span> newValue)</span> </span>&#123;</span><br><span class="line">        value = newValue;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addMoney</span><span class="params">(<span class="keyword">float</span> deposit)</span> </span>&#123;</span><br><span class="line">        value += deposit;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">subtractMoney</span><span class="params">(<span class="keyword">float</span> debit)</span> </span>&#123;</span><br><span class="line">        value -= debit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Paperboy</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">(Customer myCustomer, <span class="keyword">float</span> payment)</span> </span>&#123;</span><br><span class="line">        Wallet theWallet = myCustomer.getWallet();</span><br><span class="line">        <span class="keyword">if</span> (theWallet.getTotalMoney() &gt; payment) &#123;</span><br><span class="line">            theWallet.subtractMoney(payment);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//money not enough</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>让我们将 Paperboy 中<code>charge()</code>方法的代码翻译成这幕小话剧的对白。</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">“把钱包交出来!”收银员算出顾客要买的商品总价后，“温柔”地对顾客说道。</span><br><span class="line">顾客言听计从，赶紧将钱包掏出来，恭恭敬敬地递给收银员。</span><br><span class="line">接过钱包，收银员毫不客气地打开，检查里面的钱够不够。噢，不错，钱够了。收银员从钱包取出钱，心满意足地笑了。</span><br></pre></td></tr></table></figure>
-<p>  如果你是顾客，你敢去这样的超市 shopping 吗？</p>
-</li>
-</ul>
-<blockquote>
-<p>对于 Paperboy 而言，Wallet 不满足迪米特法则三个条件中的任何一个，因此，<strong>不应该让 Paperboy 与 Wallet 对象进行直接交互</strong>。若从<strong>拟人化</strong>的角度思考，则 Wallet 其实属于 Customer 的<strong>隐私</strong>。如此重要的隐私，怎么能直接交给收银员这个陌生人呢？这里所谓的“隐私”，可以视为是“数据”，是“信息”，是“知识”，因此我们往往又将迪米特法则称之为“<strong>最小知识法则</strong>”。</p>
-</blockquote>
-<ul>
-<li>当我们理解“最小知识法则”时，又可以从<strong>职责</strong>的角度去思考以上代码。对于收银员角色，他的职责应该是负责收钱，而不用去管钱包里的钱够不够，如果够了怎么办，如果不够又该怎么办，这些统统都不属于他的职责。设想一下，当超市里人流如织，大家都在购买商品时，如果每一个收银员都要承担这般的职责时，会出现什么样的景象？所以“最小知识法则”乃善法，在对象社区中，我们就应该刻意减少对象之间彼此深入的了解。了解最小的知识，就意味着依赖最小，彼此产生的影响就会最小。这实际上是 <strong>KISS（keep it simple and stupid）</strong> 原则的体现。</li>
-</ul>
-<blockquote>
-<p><strong>信息专家模式</strong>告诉我们：“信息的持有者即为操作该信息的专家”。对于对象，所谓<strong>信息就是该对象内部的字段</strong>。在上述的例子中，Wallet 是 Customer 的字段，那么操作 Wallet 的行为自然就应该分配给 Customer 了。这是题中应有之义。“信息专家模式”其实是面向对象最重要原则“<strong>数据与行为应该封装在一起</strong>”的别名。若在领域建模时能遵循该原则，则可以规避我们设计出贫血模型。</p>
-</blockquote>
-<h2 id="Refactoring"><a href="#Refactoring" class="headerlink" title="Refactoring"></a>Refactoring</h2><ul>
-<li><p>如何修改以上代码？注意，<code>charge()</code>行为仍然属于 Paperboy 的职责，因此我们不应该将该方法整体搬迁到 Customer 中，而应该先进行<strong>方法的提取</strong>，选中代码块，使用 <strong>Cmd + Alt + M</strong> 快捷键提取方法。这块代码执行的是支付的步骤，所以命名为<code>pay()</code><br><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/0.png" alt="781D2706-3961-4C77-ACF8-8BDDCE21B17E"></p>
-</li>
-<li><p>提取后的<code>charge()</code>在接收方法请求后，转而将请求<strong>委派</strong>给了<code>pay()</code>方法。我们可以这样理解：在抽象层面，收款是收银员的职责；在实现层面，是<code>pay()</code>方法支持了收款行为，该实现归属于顾客<br><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/1.png" alt="1AF2B42F-7B13-4284-AF03-9C1D5C5FE0A1"></p>
-</li>
-<li><p>观察<code>pay()</code>方法，我们发现该方法操作的数据皆来自 Customer。我们嗅到了一种坏味道，即 Martin Fowler 所谓的“<strong>特性依恋（Feature Envy）</strong>”。对于该坏味道，老马是这样阐释的：“函数对某个类的兴趣高过对自己所处类的兴趣”。不要再嫉妒了，桥归桥，路归路，让方法回到自己最喜欢的地方吧。运用“<strong>Move Method</strong>”重构手法，将<code>pay()</code>方法移动到 Customer 中。</p>
-</li>
-<li><p>光标在方法签名或方法体中都可，按下 <strong>F6</strong>，IDEA 会根据方法的入参，智能的提示将方法移动到哪个类中，这里只能是 Customer。还要注意方法的访问权限，默认是 Escalate 往上提升一级，这里选择 Public<br><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/2.png" alt="2C6EA6D7-A330-4E90-8B2A-54223072A47A"></p>
-</li>
-<li><p>操作之后，<code>pay()</code>方法移动到 Customer 中<br><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/3.png" alt="F92C14F0-6693-4154-8A6D-F71AB14BF0E2"></p>
-</li>
-<li><p>在将方法移到正确的位置后，我们发现暴露的<code>getWallet()</code>方法根本就没有意义。更何况，将钱包裸露出去，难道是想要炫富吗？还是低调一点为好，隐藏自己的“隐私”，总好过被人觊觎而招来飞来横祸之险。于是，<strong>内联（inline）</strong> 之。将光标放在<code>getWallet()</code>上，按下 <strong>Cmd + Alt + N</strong><br><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/4.png" alt="563C9626-A71E-4DC7-A8DC-BA4DA530EF64"></p>
-</li>
-<li><p><code>getWallet()</code>方法被删除，并被替换为 Customer 的字段<code>myWallet</code>。那现在声明的<code>theWallet</code>就是多余的，继续内联<br><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/5.png" alt="28E463A5-F36A-4250-8611-36BDACF80FCE"></p>
-</li>
-<li><p>最后，重构过的代码应该是这样的。阅读代码一目了然，Paperboy 进行收银，并委派给顾客进行实际的支付，即掏钱包，数钱，付钱。<br><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/6.png" alt="3CA41F80-0556-42F3-8E16-5AEEC39332A3"><img src="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/7.png" alt="E66E7919-9391-4046-8CB4-C46555E561A8"></p>
-</li>
-</ul>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
-<p>判断一段代码是否违背了迪米特法则，有一个小窍门，就是看调用代码是否出现形如<code>a.m1().m2().m3().m4()</code>之类的代码。这种代码在 Martin Fowler《重构》一书中，被名为“<strong>消息链条(Message Chain)</strong>”，有人更加夸张地名其为“火车残骸”。车祸现场啊，真是惨不忍睹。</p>
-</blockquote>
-<ul>
-<li><p>实际上未重构前的代码即是一种消息链条，在<code>charge()</code>方法中实际执行的是<code>myCustomer.getWallet().subtractMoney(payment)</code>，先获取 Customer 的 Wallet，再执行 Wallet 的扣钱方法</p>
-</li>
-<li><p>那么，如下代码是否这样的残骸呢？</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">str.split(<span class="string">"&amp;"</span>)</span><br><span class="line">    .stream()</span><br><span class="line">    .map(str -&gt; str.contains(elementName) ? str.replace(elementName + <span class="string">"="</span>, <span class="string">""</span>) : <span class="string">""</span>)</span><br><span class="line">    .filter(str -&gt; !str.isEmpty())</span><br><span class="line">    .reduce(<span class="string">""</span>, (a, b) -&gt; a + <span class="string">","</span> + b);</span><br></pre></td></tr></table></figure>
-<p>  不是的。这样的代码我们一般称之为“流畅接口或连贯接口（Fluent Interface）”。二者的区别在于<strong>观察形成链条的每个方法返回的是别的对象，还是对象自身。如果返回的是别的对象，就是消息链条</strong>。所谓<code>m1().m2().m3().m4()</code>的调用，其实是调用者不需要也不想知道的“知识”，把这些中间过程的细节暴露出来没有意义，调用者关心的是最终结果；而上述代码中的<code>map()</code>与<code>filter()</code>等方法其实返回的还是 Stream 类。这一调用方式其初衷并非告知中间过程的细节，而是一种声明式的 DSL 表达，调用者可以自由地组合它们。</p>
-</li>
-</ul>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构 – 张逸</a></li>
-<li><a href="https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/paper-boy/demeter.pdf" target="_blank" rel="noopener">The Paperboy, The Wallet, and The Law Of Demeter –  David Bock</a></li>
+<h2 id="部署SSR服务端"><a href="#部署SSR服务端" class="headerlink" title="部署SSR服务端"></a>部署SSR服务端</h2><p>执行 <code>ssh root@{IP}</code> 连接上 VPS 服务器，并安装 SSR 服务端一件部署脚本</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget</span><br><span class="line"></span><br><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; bash ssr.sh</span><br></pre></td></tr></table></figure>
+<p>等待下载完成后出现如下界面，按照提示一步步进行配置</p>
+<p><img src="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p316" alt="6e65c95d5ad590eec8be684361594373.png"></p>
+<p>依次会配置：</p>
+<ol>
+<li>端口和密码（端口建议设置 1000 ～ 65535 之间）</li>
+<li>加密方式（随意）</li>
+<li>协议插件（随意）</li>
+<li>是否兼容原版 SS 客户端（即兼容没有协议和混淆的客户端，建议选 N）</li>
+<li>每个端口的连接设备数限制、速度限制（auth_* 系列协议，并且不兼容原版时才有效）</li>
+</ol>
+<p>配置完成后等待部署完成，终端会打印配置信息，这些就是需要在 SSR 客户端填入的配置。现在可以直接进入下一个章节：配置SSR客户端。</p>
+<p><img src="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p318" alt="6a90ecf445798cb2c69a8bc05abd0a0a.png"></p>
+<h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><p>默认情况下部署的是单端口模式，即多人共享一个端口。可以切换为多端口模式，一个用户一个端口，方便管理。直接执行 <code>bash ssr.sh</code> 键入 9 即可。</p>
+<p>此外，键入 7 你可以随时修改 SSR 服务端的配置，以及在多端口模式下添加新用户，为他们分配新的端口号和密码。</p>
+<p><img src="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p317" alt="17f12e5ebc74a4105bacbeb69662a1f0.png"></p>
+<h2 id="配置SSR客户端"><a href="#配置SSR客户端" class="headerlink" title="配置SSR客户端"></a>配置SSR客户端</h2><p>打开 SSR 客户端，按照服务端的配置填入对应配置。</p>
+<p><img src="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p320" alt="7a34639c35446ec3808356b7eef07dc4.png"></p>
+<p>至此就可以翻墙了，但网速很慢，可以使用锐速进行加速。锐速也有一键部署脚本，加速后对速度的提升很明显，所以推荐部署加速脚本。该加速方法是开机自动启动，部署一次就可以了。</p>
+<h2 id="锐速加速"><a href="#锐速加速" class="headerlink" title="锐速加速"></a>锐速加速</h2><h3 id="更换操作系统内核"><a href="#更换操作系统内核" class="headerlink" title="更换操作系统内核"></a>更换操作系统内核</h3><p>安装锐速前需要先更换操作系统内核，下载更换内核脚本并执行</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget</span><br><span class="line"></span><br><span class="line">wget --no-check-certificate https://blog.asuhu.com/sh/ruisu.sh &amp;&amp; bash ruisu.sh</span><br></pre></td></tr></table></figure>
+<p>成功替换内核后服务器会自动重启。等待重启完成后，重连服务器。</p>
+<h3 id="一键安装锐速"><a href="#一键安装锐速" class="headerlink" title="一键安装锐速"></a>一键安装锐速</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/91yun/serverspeeder/master/serverspeeder-all.sh &amp;&amp; bash serverspeeder-all.sh</span><br></pre></td></tr></table></figure>
+<p>等待安装完成即可体验飞一般的上网速度。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://github.com/Alvin9999/new-pac/wiki/%E8%87%AA%E5%BB%BAss%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%95%99%E7%A8%8B" target="_blank" rel="noopener">自建ss服务器教程</a>    </li>
 </ul>
 
       
@@ -613,14 +559,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Clean-Code/" rel="tag"># Clean Code</a>
-          
-            <a href="/tags/Refactoring/" rel="tag"># Refactoring</a>
-          
-        </div>
-      
 
       
       
@@ -630,8 +568,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/27/JavaScript异步编程的发展/" rel="next" title="JavaScript 异步编程的发展">
-                <i class="fa fa-chevron-left"></i> JavaScript 异步编程的发展
+              <a href="/2019/02/25/代理模式/" rel="next" title="代理模式">
+                <i class="fa fa-chevron-left"></i> 代理模式
               </a>
             
           </div>
@@ -639,10 +577,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/07/Clean Code -- 报表参数填充案例/" rel="prev" title="Clean Code -- 报表参数填充案例">
-                Clean Code -- 报表参数填充案例 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -897,7 +831,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prerequisites"><span class="nav-number">2.</span> <span class="nav-text">Prerequisites</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#迪米特法则"><span class="nav-number">3.</span> <span class="nav-text">迪米特法则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码案例及分析"><span class="nav-number">4.</span> <span class="nav-text">代码案例及分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Refactoring"><span class="nav-number">5.</span> <span class="nav-text">Refactoring</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-number">6.</span> <span class="nav-text">Conclusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">7.</span> <span class="nav-text">References</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#声明"><span class="nav-number">1.</span> <span class="nav-text">声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备"><span class="nav-number">2.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署SSR服务端"><span class="nav-number">3.</span> <span class="nav-text">部署SSR服务端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改配置"><span class="nav-number">3.1.</span> <span class="nav-text">修改配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置SSR客户端"><span class="nav-number">4.</span> <span class="nav-text">配置SSR客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锐速加速"><span class="nav-number">5.</span> <span class="nav-text">锐速加速</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#更换操作系统内核"><span class="nav-number">5.1.</span> <span class="nav-text">更换操作系统内核</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一键安装锐速"><span class="nav-number">5.2.</span> <span class="nav-text">一键安装锐速</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
@@ -1065,9 +999,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/';
-        this.page.identifier = '2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/';
-        this.page.title = 'Clean Code -- 迪米特法则与 Paperboy 案例';
+        this.page.url = 'https://s1mplecc.github.io/2019/04/10/搭建-SSR-科学上网/';
+        this.page.identifier = '2019/04/10/搭建-SSR-科学上网/';
+        this.page.title = '搭建 SSR 科学上网';
         };
       function loadComments () {
         var d = document, s = d.createElement('script');

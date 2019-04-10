@@ -369,6 +369,231 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2019/04/10/搭建-SSR-科学上网/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/04/10/搭建-SSR-科学上网/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">搭建 SSR 科学上网</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-10 15:02:32 / 修改时间：15:04:21" itemprop="dateCreated datePublished" datetime="2019-04-10T15:02:32+08:00">2019-04-10</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/04/10/搭建-SSR-科学上网/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/04/10/搭建-SSR-科学上网/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">1.4k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>本教程也是由于本人平时工作学习有 Google 的需求，所以就自己搭了一个梯子，并记录了搭建的过程方便以后重搭。大家自己搭建后就同学、家人间小规模使用就好了，这样网速较快也不容易被封。<strong>严禁用于商业用途！</strong></p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><ul>
+<li><p><strong>VPS 服务器</strong>，需要选择国外的，推荐 <a href="https://www.vultr.com/" target="_blank" rel="noopener">Vultr</a>，速度不错、稳定且性价比高，按小时计费，能够随时开通和删除服务器。<strong>操作系统选择 CentOS 6</strong>，为了更换内核方便不宜选择版本过高的操作系统。</p>
+</li>
+<li><p>MacOS 自带的 Terminal，或者 Windows 的 XShell。用于 ssh 连接远程服务器并执行命令。</p>
+</li>
+<li><p><strong>ShadowsocksR 客户端</strong>，简称 SSR，是 Shadowsocks 的增强版，在其基础上增加了一些数据混淆方式。SSR 下载地址：<a href="https://github.com/shadowsocksr-backup/ShadowsocksX-NG/releases" target="_blank" rel="noopener">Mac 版</a>，<a href="https://github.com/shadowsocksr-backup/shadowsocksr-csharp/releases" target="_blank" rel="noopener">Windows 版</a>。</p>
+</li>
+</ul>
+<h2 id="部署SSR服务端"><a href="#部署SSR服务端" class="headerlink" title="部署SSR服务端"></a>部署SSR服务端</h2><p>执行 <code>ssh root@{IP}</code> 连接上 VPS 服务器，并安装 SSR 服务端一件部署脚本</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget</span><br><span class="line"></span><br><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; bash ssr.sh</span><br></pre></td></tr></table></figure>
+<p>等待下载完成后出现如下界面，按照提示一步步进行配置</p>
+<p><img src="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p316" alt="6e65c95d5ad590eec8be684361594373.png"></p>
+<p>依次会配置：</p>
+<ol>
+<li>端口和密码（端口建议设置 1000 ～ 65535 之间）</li>
+<li>加密方式（随意）</li>
+<li>协议插件（随意）</li>
+<li>是否兼容原版 SS 客户端（即兼容没有协议和混淆的客户端，建议选 N）</li>
+<li>每个端口的连接设备数限制、速度限制（auth_* 系列协议，并且不兼容原版时才有效）</li>
+</ol>
+<p>配置完成后等待部署完成，终端会打印配置信息，这些就是需要在 SSR 客户端填入的配置。现在可以直接进入下一个章节：配置SSR客户端。</p>
+<p><img src="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p318" alt="6a90ecf445798cb2c69a8bc05abd0a0a.png"></p>
+<h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><p>默认情况下部署的是单端口模式，即多人共享一个端口。可以切换为多端口模式，一个用户一个端口，方便管理。直接执行 <code>bash ssr.sh</code> 键入 9 即可。</p>
+<p>此外，键入 7 你可以随时修改 SSR 服务端的配置，以及在多端口模式下添加新用户，为他们分配新的端口号和密码。</p>
+<p><img src="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p317" alt="17f12e5ebc74a4105bacbeb69662a1f0.png"></p>
+<h2 id="配置SSR客户端"><a href="#配置SSR客户端" class="headerlink" title="配置SSR客户端"></a>配置SSR客户端</h2><p>打开 SSR 客户端，按照服务端的配置填入对应配置。</p>
+<p><img src="evernotecid://158BCD08-F1F3-43B5-914B-4EB5ADC3ABA7/appyinxiangcom/18284037/ENResource/p320" alt="7a34639c35446ec3808356b7eef07dc4.png"></p>
+<p>至此就可以翻墙了，但网速很慢，可以使用锐速进行加速。锐速也有一键部署脚本，加速后对速度的提升很明显，所以推荐部署加速脚本。该加速方法是开机自动启动，部署一次就可以了。</p>
+<h2 id="锐速加速"><a href="#锐速加速" class="headerlink" title="锐速加速"></a>锐速加速</h2><h3 id="更换操作系统内核"><a href="#更换操作系统内核" class="headerlink" title="更换操作系统内核"></a>更换操作系统内核</h3><p>安装锐速前需要先更换操作系统内核，下载更换内核脚本并执行</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget</span><br><span class="line"></span><br><span class="line">wget --no-check-certificate https://blog.asuhu.com/sh/ruisu.sh &amp;&amp; bash ruisu.sh</span><br></pre></td></tr></table></figure>
+<p>成功替换内核后服务器会自动重启。等待重启完成后，重连服务器。</p>
+<h3 id="一键安装锐速"><a href="#一键安装锐速" class="headerlink" title="一键安装锐速"></a>一键安装锐速</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/91yun/serverspeeder/master/serverspeeder-all.sh &amp;&amp; bash serverspeeder-all.sh</span><br></pre></td></tr></table></figure>
+<p>等待安装完成即可体验飞一般的上网速度。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://github.com/Alvin9999/new-pac/wiki/%E8%87%AA%E5%BB%BAss%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%95%99%E7%A8%8B" target="_blank" rel="noopener">自建ss服务器教程</a>    </li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2019/02/25/代理模式/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2736,227 +2961,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/12/单例模式/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/11/12/单例模式/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">单例模式</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-12 13:42:03" itemprop="dateCreated datePublished" datetime="2018-11-12T13:42:03+08:00">2018-11-12</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-01-31 10:07:27" itemprop="dateModified" datetime="2019-01-31T10:07:27+08:00">2019-01-31</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Design/" itemprop="url" rel="index"><span itemprop="name">Design</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/11/12/单例模式/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/12/单例模式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">3.1k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><p>单例模式为GOF设计模式中的一种，当我们创建的对象需要昂贵的资源，且该对象又被频繁使用，同时，这个对象的状态是共享的，为了避免资源的浪费以及加载资源的时间，我们往往会引入单例模式。因此，要实现单例模式，其核心就是要<strong>在已有该类的实例前提下，阻止其他开发人员再创建类的新实例</strong>。</p>
-<p>在Java语言中，通常提供了如下几种单例模式的实现方式。</p>
-<h4 id="懒汉模式"><a href="#懒汉模式" class="headerlink" title="懒汉模式"></a>懒汉模式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingletonDemo instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>通过提供一个静态的对象 <code>instance</code>，利用 <code>private</code> 权限的构造方法和 <code>getInstance()</code> 方法来给予访问者一个单例。缺点是，没有考虑到线程安全，可能存在多个访问者同时访问，并同时构造了多个对象的问题。之所以叫做懒汉模式，主要是因为此种方法可以非常明显的 <strong>lazy loading</strong>。针对懒汉模式<strong>线程不安全</strong>的问题，我们自然想到了，在 <code>getInstance()</code> 方法前加锁，于是就有了第二种实现。</p>
-<h4 id="线程安全的懒汉模式"><a href="#线程安全的懒汉模式" class="headerlink" title="线程安全的懒汉模式"></a>线程安全的懒汉模式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingletonDemo instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然而并发其实是一种特殊情况，大多时候这个锁占用的额外资源都浪费了，这种打补丁方式写出来的结构效率很低。</p>
-<h4 id="饿汉模式"><a href="#饿汉模式" class="headerlink" title="饿汉模式"></a>饿汉模式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingletonDemo instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singleton has loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hello"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>由于 <code>instance</code> 成员变量使用 <code>static</code> 修饰，在 JVM 首次加载该类时单例对象 <code>instance</code> 会被创建并<strong>常驻内存</strong>，所以是线程安全的。但显然，这种方法没有起到 lazy loading 的效果。举个例子，也许你只想调用 <code>SingletonDemo.printHello()</code> 方法，但同时打印了 ”Singleton has loaded“，这可能是你不想见到的。</p>
-<p>所以我们引入静态类内部加载的方式，也算是单例模式较为完善的解决方案。</p>
-<h4 id="静态类内部加载"><a href="#静态类内部加载" class="headerlink" title="静态类内部加载"></a>静态类内部加载</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingletonHolder.instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> SingletonDemo instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用<strong>私有内部类</strong>的好处是，静态内部类不会在单例加载时就加载，而是在调用 <code>getInstance()</code> 方法时才进行加载。且单例的创建是在 SingletonHolder 被 JVM 加载时完成，故而也是线程安全的。因此该方法兼备了以上两种实现的优点。</p>
-<h4 id="双重校验锁法"><a href="#双重校验锁法" class="headerlink" title="双重校验锁法"></a>双重校验锁法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> SingletonDemo instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singletonhasloaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (SingletonDemo.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>接下来我解释一下在并发时，双重校验锁法会有怎样的情景：</p>
-<ul>
-<li>STEP 1. 线程A访问 <code>getInstance()</code> 方法，因为单例还没有实例化，所以进入了锁定块。</li>
-<li>STEP 2. 线程B访问 <code>getInstance()</code> 方法，因为单例还没有实例化，得以访问接下来代码块，而接下来代码块已经被线程1锁定。</li>
-<li>STEP 3. 线程A进入下一判断，因为单例还没有实例化，所以进行单例实例化，成功实例化后退出代码块，解除锁定。</li>
-<li>STEP 4. 线程B进入接下来代码块，锁定线程，进入下一判断，因为已经实例化，退出代码块，解除锁定。</li>
-<li>STEP 5. 线程A初始化并获取到了单例实例并返回，线程B获取了在线程A中初始化的单例。</li>
-</ul>
-<p>理论上双重校验锁法是线程安全的，并且，这种方法实现了lazy loading。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3006,7 +3010,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">61</span>
+                    <span class="site-state-item-count">62</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

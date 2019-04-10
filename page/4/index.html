@@ -369,6 +369,302 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/03/16/Redis五种数据类型/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/03/16/Redis五种数据类型/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">Redis 五种数据类型</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-03-16 08:27:36" itemprop="dateCreated datePublished" datetime="2018-03-16T08:27:36+08:00">2018-03-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-27 20:59:20" itemprop="dateModified" datetime="2018-12-27T20:59:20+08:00">2018-12-27</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/16/Redis五种数据类型/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/03/16/Redis五种数据类型/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">7.5k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>本文介绍 Redis 的五种数据类型，并结合<code>redis-cli</code>和 Koa 应用演示如何与 Redis 的五种数据类型进行 CRUD 操作，在文章最后还有关于<strong>过期时间设置</strong>的介绍</p>
+</blockquote>
+<ul>
+<li>代码已上传至 <a href="https://github.com/s1mplecc/koa-redis-example" target="_blank" rel="noopener">GitHub</a></li>
+<li>Node 框架使用 Koa2，与 Redis 的操作都使用 Restful API 的形式展现，使用 Postman 测试接口</li>
+<li>使用的依赖为<code>ioredis</code>，执行<code>npm i ioredis</code>即可安装依赖。之前有尝试<code>noderedis</code>，但是在服务器上部署运行有连接不上 Redis 的 Bug 出现</li>
+</ul>
+<h2 id="Data-Type"><a href="#Data-Type" class="headerlink" title="Data Type"></a>Data Type</h2><blockquote>
+<p>Redis 通常被称为<strong>数据结构服务器</strong>，因为它提供了五种数据类型用于数据存储，包括 <strong>String</strong> 字符串、<strong>Hash</strong> 哈希、<strong>List</strong> 列表、<strong>Set</strong> 集合、<strong>Zset</strong> 有序集合</p>
+</blockquote>
+<h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><blockquote>
+<p>Redis String 是 Redis 最基本的类型，用于保存字符串类型的 Key-Value 键值对</p>
+</blockquote>
+<ul>
+<li><p><code>redis-cli</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SET string:s1 hello</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; GET string:s1</span><br><span class="line">&quot;hello&quot;</span><br><span class="line">127.0.0.1:6379&gt; DEL string:s1</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p><code>contollers/string.js</code></p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> router = <span class="built_in">require</span>(<span class="string">'koa-router'</span>)()</span><br><span class="line"><span class="keyword">const</span> redis = <span class="built_in">require</span>(<span class="string">'../config/redis'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> setString = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.set(<span class="string">'string:s1'</span>, <span class="string">'hello world'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> getString = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.get(<span class="string">'string:s1'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> delString = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.del(<span class="string">'string:s1'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/string'</span>, setString)</span><br><span class="line">router.get(<span class="string">'/string'</span>, getString)</span><br><span class="line">router.delete(<span class="string">'/string'</span>, delString)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = router</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h3><blockquote>
+<p>Redis Hash 是一个 String 类型的 Field-Value 映射表，类似于 Java 的 HashMap，特别适合用于<strong>存储对象</strong>。</p>
+</blockquote>
+<ul>
+<li><p><code>redis-cli</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; HMSET hash:hash1 name &quot;jack&quot; age 10 score 90</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; HGET hash:hash1 name</span><br><span class="line">&quot;jack&quot;</span><br><span class="line">127.0.0.1:6379&gt; HGETALL hash:hash1</span><br><span class="line">1) &quot;name&quot;</span><br><span class="line">2) &quot;jack&quot;</span><br><span class="line">3) &quot;age&quot;</span><br><span class="line">4) &quot;10&quot;</span><br><span class="line">5) &quot;score&quot;</span><br><span class="line">6) &quot;90&quot;</span><br><span class="line">127.0.0.1:6379&gt; HDEL hash:hash1 name age</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; HGETALL hash:hash1</span><br><span class="line">1) &quot;score&quot;</span><br><span class="line">2) &quot;90&quot;</span><br><span class="line">127.0.0.1:6379&gt; DEL hash:hash1</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
+<p>  需要特别注意的是，<code>HGETALL key</code>命令用于获取键的映射列表，<code>HGETALL key field</code>用于获取某个字段的值，<code>HDEL key field</code>用于删除键的某个字段，<code>DEL key</code>才是删除整个键</p>
+</li>
+<li><p><code>contollers/hash.js</code></p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> setHash = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> student = &#123;</span><br><span class="line">    name: <span class="string">'Jack'</span>,</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    score: <span class="number">90</span></span><br><span class="line">  &#125;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.hmset(<span class="string">'hash:hash1'</span>, student)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> getHashAll = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.hgetall(<span class="string">'hash:hash1'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> getHashByField = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.hget(<span class="string">'hash:hash1'</span>, ctx.params.field)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> delHash = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.del(<span class="string">'hash:hash1'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> delHashByField = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.hdel(<span class="string">'hash:hash1'</span>, ctx.params.field)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/hash'</span>, setHash)</span><br><span class="line">router.get(<span class="string">'/hash'</span>, getHashAll)</span><br><span class="line">router.get(<span class="string">'/hash/:field'</span>, getHashByField)</span><br><span class="line">router.delete(<span class="string">'/hash'</span>, delHash)</span><br><span class="line">router.delete(<span class="string">'/hash/:field'</span>, delHashByField)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><blockquote>
+<p>Redis 列表是简单的字符串列表，<strong>按照插入顺序排序</strong>。你可以添加一个元素到列表的头部（左边）或者尾部（右边），列表中的<strong>元素可以重复</strong></p>
+</blockquote>
+<ul>
+<li><p><code>redis-cli</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; LPUSH list:list1 hello</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; LPUSH list:list1 world my friend</span><br><span class="line">(integer) 4</span><br><span class="line">127.0.0.1:6379&gt; RPUSH list:list1 right push</span><br><span class="line">(integer) 6</span><br><span class="line">127.0.0.1:6379&gt; LLEN list:list1</span><br><span class="line">(integer) 6</span><br><span class="line">127.0.0.1:6379&gt; LRANGE list:list1 0 5</span><br><span class="line">1) &quot;friend&quot;</span><br><span class="line">2) &quot;my&quot;</span><br><span class="line">3) &quot;world&quot;</span><br><span class="line">4) &quot;hello&quot;</span><br><span class="line">5) &quot;right&quot;</span><br><span class="line">6) &quot;push&quot;</span><br><span class="line">127.0.0.1:6379&gt; LPOP list:list1</span><br><span class="line">&quot;friend&quot;</span><br><span class="line">127.0.0.1:6379&gt; RPOP list:list1</span><br><span class="line">&quot;push&quot;</span><br><span class="line">127.0.0.1:6379&gt; LINDEX list:list1 2</span><br><span class="line">&quot;hello&quot;</span><br></pre></td></tr></table></figure>
+<p>  <code>LPUSH</code>添加到列表头部（Left Push），<code>RPUSH</code>添加到列表头部（Right Push）。相应的，<code>LPOP</code>和<code>RPOP</code>即从列表头和列表尾移除一个元素并获取该值。</p>
+</li>
+<li><p><code>LREM</code>根据参数<code>count</code>的值，移除列表中与参数 value 相等的元素</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">count &gt; 0 : 从表头开始向表尾搜索，移除与 value 相等的元素，数量为 count 。</span><br><span class="line">count &lt; 0 : 从表尾开始向表头搜索，移除与 value 相等的元素，数量为 count 的绝对值。</span><br><span class="line">count = 0 : 移除表中所有与 VALUE 相等的值。</span><br></pre></td></tr></table></figure>
+<p>  语法如下：<code>LREM key count value</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; LRANGE list:list1 0 100</span><br><span class="line">1) &quot;my&quot;</span><br><span class="line">2) &quot;world&quot;</span><br><span class="line">3) &quot;hello&quot;</span><br><span class="line">4) &quot;right&quot;</span><br><span class="line">5) &quot;hello&quot;</span><br><span class="line">6) &quot;foo&quot;</span><br><span class="line">7) &quot;hello&quot;</span><br><span class="line">127.0.0.1:6379&gt; LREM list:list1 -2 hello</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; LRANGE list:list1 0 100</span><br><span class="line">1) &quot;my&quot;</span><br><span class="line">2) &quot;world&quot;</span><br><span class="line">3) &quot;hello&quot;</span><br><span class="line">4) &quot;right&quot;</span><br><span class="line">5) &quot;foo&quot;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p><code>contollers/list.js</code></p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pushListAndGetAll = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">    redis.lpush(<span class="string">'list:list1'</span>, i)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">5</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    redis.rpush(<span class="string">'list:list1'</span>, i)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> length = <span class="keyword">await</span> redis.llen(<span class="string">'list:list1'</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'length'</span>, length)</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.lrange(<span class="string">'list:list1'</span>, <span class="number">0</span>, length)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> popList = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> lPopValue = <span class="keyword">await</span> redis.lpop(<span class="string">'list:list1'</span>)</span><br><span class="line">  <span class="keyword">const</span> rPopValue = <span class="keyword">await</span> redis.rpop(<span class="string">'list:list1'</span>)</span><br><span class="line">  ctx.body = &#123; lPopValue, rPopValue &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> deleteListByValue = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.lrem(<span class="string">'list:list1'</span>, <span class="number">0</span>, ctx.params.value)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/list'</span>, pushListAndGetAll)</span><br><span class="line">router.delete(<span class="string">'/list'</span>, popList)</span><br><span class="line">router.delete(<span class="string">'/list/:value'</span>, deleteListByValue)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><blockquote>
+<p>Redis 的 Set 是 String 类型的<strong>无序集合</strong>。集合是通过哈希表实现的，所以添加、删除、查找的复杂度都是 O(1)</p>
+</blockquote>
+<ul>
+<li><p><code>redis-cli</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SADD set:set1 hello</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; SADD set:set1 my friend hello world</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS set:set1</span><br><span class="line">1) &quot;hello&quot;</span><br><span class="line">2) &quot;world&quot;</span><br><span class="line">3) &quot;friend&quot;</span><br><span class="line">4) &quot;my&quot;</span><br><span class="line">127.0.0.1:6379&gt; SREM set:set1 my</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; SPOP set:set1</span><br><span class="line">&quot;hello&quot;</span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS set:set1</span><br><span class="line">1) &quot;world&quot;</span><br><span class="line">2) &quot;friend&quot;</span><br></pre></td></tr></table></figure>
+<p>  <code>SMEMBERS</code>返回集合中的所有成员，<code>SPOP</code>移除并返回集合中的一个随机元素，<code>SREM</code>移除集合中一个或多个成员</p>
+</li>
+<li><p><code>contollers/set.js</code></p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> addMembersAndGetAll = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  redis.sadd(<span class="string">'set:set1'</span>, <span class="string">'hello'</span>, <span class="string">'world'</span>, <span class="string">'my'</span>, <span class="string">'friend'</span>, <span class="string">'hello'</span>)</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.smembers(<span class="string">'set:set1'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> popRandomMember = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.spop(<span class="string">'set:set1'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> removeMemberByValue = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.srem(<span class="string">'set:set1'</span>, ctx.params.value)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/set'</span>, addMembersAndGetAll)</span><br><span class="line">router.delete(<span class="string">'/set/random'</span>, popRandomMember)</span><br><span class="line">router.delete(<span class="string">'/set/:value'</span>, removeMemberByValue)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Zset"><a href="#Zset" class="headerlink" title="Zset"></a>Zset</h3><blockquote>
+<p>Redis Zset，即有序集合（sorted set），和集合一样也是 String 类型元素的集合,且不允许重复的成员。不同的是每个元素都会关联一个 Double 类型的<strong>分数</strong> (<strong>Score</strong>)。Redis 正是通过分数来为集合中的成员进行从小到大的排序。有序集合的成员是唯一的,但分数却可以重复。</p>
+</blockquote>
+<ul>
+<li><p><code>redis-cli</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ZADD zset:zset1 1 a</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; ZADD zset:zset1 2 b 3 c 4 d 5 e</span><br><span class="line">(integer) 4</span><br><span class="line">127.0.0.1:6379&gt; ZRANGE zset:zset1 0 4</span><br><span class="line">1) &quot;a&quot;</span><br><span class="line">2) &quot;b&quot;</span><br><span class="line">3) &quot;c&quot;</span><br><span class="line">4) &quot;d&quot;</span><br><span class="line">5) &quot;e&quot;</span><br><span class="line">127.0.0.1:6379&gt; ZREM zset:zset1 c</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; ZRANK zset:zset1 d</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; ZSCORE zset:zset1 d</span><br><span class="line">&quot;4&quot;</span><br></pre></td></tr></table></figure>
+<p>  <code>ZREM</code>移除有序集合中的一个或多个成员，<code>ZRANK key member</code>返回有序集合中指定成员的索引，<code>ZSCORE</code>返回有序集中，成员的分数值</p>
+</li>
+<li><p><code>contollers/set.js</code></p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> addMembersAndGetAll = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> students = [[<span class="string">'Jack'</span>, <span class="number">99</span>], [<span class="string">'John'</span>, <span class="number">90</span>], [<span class="string">'Tony'</span>, <span class="number">88</span>], [<span class="string">'Helen'</span>, <span class="number">92</span>]]</span><br><span class="line">  students.forEach(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">    redis.zadd(<span class="string">'zset:zset1'</span>, item[<span class="number">1</span>], item[<span class="number">0</span>])</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">const</span> count = <span class="keyword">await</span> redis.zcard(<span class="string">'zset:zset1'</span>)</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.zrange(<span class="string">'zset:zset1'</span>, <span class="number">0</span>, count)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> removeMemberByValue = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.zrem(<span class="string">'zset:zset1'</span>, ctx.params.value)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/zset'</span>, addMembersAndGetAll)</span><br><span class="line">router.delete(<span class="string">'/zset/:value'</span>, removeMemberByValue)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Expire"><a href="#Expire" class="headerlink" title="Expire"></a>Expire</h2><blockquote>
+<p>在使用 Redis 的时候遇到了需要设置过期时间的情况，需要注意的是：<strong>Redis 只能针对最顶级的 KEY，也就是五种数据结构设置过期时间</strong>，而不能针对譬如 Hash 中的某一条映射设置。在设计数据存储类型时需要考虑到这点</p>
+</blockquote>
+<ul>
+<li><p>设置过期时间使用<code>EXPIRE</code>关键字，时间单位为秒(s)，时间到后，整个 hash:hash1 键将被删除</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; EXPIRE hash:hash1 60</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>可以使用<code>TTL</code>查看 KEY 的剩余过期时间，<code>TTL</code>为 -1 表示未设置过期时间</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; TTL hash:hash1</span><br><span class="line">(integer) 46</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="http://www.runoob.com/redis/redis-tutorial.html" target="_blank" rel="noopener">Redis 教程</a></li>
+<li><a href="http://www.redis.cn/commands/expire.html" target="_blank" rel="noopener">Redis 过期时间</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/03/16/Redis持久化/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2923,397 +3219,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/29/ES6新特性/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/12/29/ES6新特性/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">ES6 新特性</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-12-29 05:51:55" itemprop="dateCreated datePublished" datetime="2017-12-29T05:51:55+08:00">2017-12-29</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-27 20:58:27" itemprop="dateModified" datetime="2018-12-27T20:58:27+08:00">2018-12-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/12/29/ES6新特性/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/12/29/ES6新特性/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">6.9k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p><strong>ES6</strong>（or <strong>ECMAScript 6</strong>）规定了新一代的 <strong>JavaScript</strong> 语法，其中含有许多必要且实用的新特性。尤其是加入了一些<strong>语法糖</strong>使我们代码更简洁明了</p>
-</blockquote>
-<ul>
-<li><p>本文所有代码都在浏览器的 <strong>JavaScript</strong> 控制台或者 <strong>Node</strong> 环境下运行过，输出结果在<code>// result</code>注释下</p>
-</li>
-<li><p>目录结构如下，<strong>ES6新特性</strong>很多，随着接触和使用再慢慢补充</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">├─ Arrows</span><br><span class="line">├─ Let &amp; Const</span><br><span class="line">├─ Template Strings</span><br><span class="line">├─ Default、Rest &amp; Spread</span><br><span class="line">├─ For...of</span><br><span class="line">│   └─ forEach  </span><br><span class="line">├─ Destructuring</span><br><span class="line">├─ Classes</span><br><span class="line">└─ Modules</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="Arrows"><a href="#Arrows" class="headerlink" title="Arrows"></a>Arrows</h2><blockquote>
-<p><strong>箭头函数</strong>是使用 <strong>=&gt;</strong> 语法缩写的一个函数（相当于<strong>匿名函数</strong>），左边是参数，右边可以是表达式（<strong>expression</strong>）或者声明体（<strong>statement bodies</strong>）</p>
-</blockquote>
-<ul>
-<li><p><code>=&gt;</code>右边接表达式</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log([<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>].map(<span class="function"><span class="params">v</span> =&gt;</span> v + <span class="number">1</span>))</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line">[ <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span> ]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>=&gt;</code>右边接声明体</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log([<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>].forEach(<span class="function"><span class="params">v</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(v &gt; <span class="number">2</span>)&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(v)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;))</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>箭头函数可以和<strong>不定参数</strong>配合使用，下面代码定义了一个求和方法</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sum = <span class="function">(<span class="params">...nums</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> sumValue = <span class="number">0</span></span><br><span class="line">    nums.forEach(<span class="function"><span class="params">num</span> =&gt;</span> sumValue += num)</span><br><span class="line">    <span class="built_in">console</span>.log(sumValue)</span><br><span class="line">&#125;</span><br><span class="line">sum(<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>)</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">7</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>需要特别注意的是，箭头函数<strong>绑定this</strong>，这是和 <strong>function</strong> 定义是不同的</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> std = &#123;</span><br><span class="line">    birth: <span class="number">1990</span>,</span><br><span class="line">    getAge: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> _this = <span class="keyword">this</span></span><br><span class="line">        <span class="keyword">const</span> fn = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>().getFullYear() - _this.birth</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> fn()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">std.getAge()</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">28</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>传统的写法我需要特地定义个<code>_this</code>让它指向当前这个 <strong>std</strong> 对象，而箭头函数绑定了上下文的 <strong>this</strong>，即调用该 <strong>function</strong> 的对象 <strong>std</strong></p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">std = &#123;</span><br><span class="line">    birth: <span class="number">1990</span>,</span><br><span class="line">    getAge: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> fn = <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">new</span> <span class="built_in">Date</span>().getFullYear() - <span class="keyword">this</span>.birth <span class="comment">// this指向std对象</span></span><br><span class="line">        <span class="keyword">return</span> fn()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">std.getAge()</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">28</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="Let-Const"><a href="#Let-Const" class="headerlink" title="Let + Const"></a>Let + Const</h2><blockquote>
-<p>ES6 新增了两个绑定了<strong>块作用域</strong>的声明变量的关键字 <strong>let、const</strong></p>
-</blockquote>
-<ul>
-<li><p><code>let</code>用法和<code>var</code>一样，但是限定了作用域。因为在 <strong>JavaScript</strong> 中，<code>var</code>定义全局变量，所以能不用<code>var</code>的地方就不用</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  let a = 10</span><br><span class="line">  var b = 1</span><br><span class="line">&#125;</span><br><span class="line">// result</span><br><span class="line">a // ReferenceError: a is not defined.</span><br><span class="line">b // 1</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>const</code>声明一个只读的常量，并且必须<strong>初始化</strong>。一旦声明，常量的值就不能改变</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">const a // Missing initializer in const declaration</span><br><span class="line">const a = 1</span><br><span class="line">a = 2 // Assignment to constant variable.</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>阮一峰老师的<strong>ES6编程风格</strong>中明确指出在<code>let</code>和<code>const</code>之间，建议优先使用<code>const</code>，尤其是在<strong>全局环境</strong>，不应该设置变量，只应设置常量。<strong>const优于let原因如下:</strong></p>
-<blockquote>
-<p>一个是<strong>const</strong>可以提醒阅读程序的人，这个变量不应该改变；另一个是<strong>const</strong>比较符合<strong>函数式编程思想</strong>，运算不改变值，只是新建值，而且这样也有利于将来的分布式运算；最后一个原因是 <strong>JavaScript</strong> 编译器会对<strong>const</strong>进行优化，所以多使用<strong>const</strong>，有利于<strong>提高程序的运行效率</strong>，也就是说<strong>let</strong>和<strong>const</strong>的本质区别，其实是编译器内部的处理不同。<strong>所有的函数都应该设置为常量</strong></p>
-</blockquote>
-</li>
-</ul>
-<hr>
-<h2 id="Template-Strings"><a href="#Template-Strings" class="headerlink" title="Template Strings"></a>Template Strings</h2><blockquote>
-<p>ES6 引入了构造字符串的语法糖：<strong>模版字符串 `…`</strong>，使用<strong>反引号</strong>表示。它有两个作用，一是表示<strong>多行字符串</strong>，二是<strong>替换为绑定的变量值</strong></p>
-</blockquote>
-<ul>
-<li><p>多行字符串</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">`第一行</span></span><br><span class="line"><span class="string">第二行`</span>)</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line">第一行</span><br><span class="line">第二行</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>在模版字符串中使用<code>${property}</code>替换为属性的值</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> name = <span class="string">'Bob'</span>, time = <span class="string">'today'</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`Hello <span class="subst">$&#123;name&#125;</span>, how are you <span class="subst">$&#123;time&#125;</span>?`</span>)</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line">Hello Bob, how are you today?</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="Default-Rest-Spread"><a href="#Default-Rest-Spread" class="headerlink" title="Default + Rest + Spread"></a>Default + Rest + Spread</h2><blockquote>
-<p>参数的默认值、不定参数以及参数数组的展开</p>
-</blockquote>
-<ul>
-<li><p>函数的参数可以<strong>指定默认值</strong>，调用时如果未指定将使用默认值</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x, y = <span class="number">12</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x + y</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line">f(<span class="number">3</span>)</span><br><span class="line"><span class="number">15</span></span><br><span class="line">f(<span class="number">3</span>,<span class="number">4</span>)</span><br><span class="line"><span class="number">7</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>不定参数</strong>使用<code>...</code>表示，它取代了之前的 <strong>arguments</strong>，适用于更常见的需求。如下例中 <strong>y</strong> 是一个参数数组</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x, ...y</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x * y.length</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line">f(<span class="number">3</span>,<span class="string">'abc'</span>,<span class="number">10</span>)</span><br><span class="line"><span class="number">6</span></span><br><span class="line">f(<span class="number">3</span>,<span class="string">'abc'</span>,<span class="number">10</span>,<span class="string">'xyz'</span>)</span><br><span class="line"><span class="number">9</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>同时<code>...</code>还可以在函数调用时将数组转换成连续的参数</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x, y, z</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x + y + z</span><br><span class="line">&#125;</span><br><span class="line">f(...[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">6</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="for-…-of"><a href="#for-…-of" class="headerlink" title="for … of"></a>for … of</h2><blockquote>
-<p><strong>for … of</strong> 是 ES6 新加入的遍历循环的操作，而传统的 <strong>for … in</strong> 循环由于历史遗留问题，它遍历的实际上是对象的<strong>属性名</strong></p>
-</blockquote>
-<ul>
-<li><p>我们用<code>for ... in</code>遍历对象的<strong>属性名</strong>，需要用<code>o[prop]</code>来获取属性的值</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> o = &#123; <span class="attr">name</span>: <span class="string">'Jack'</span>, <span class="attr">age</span>: <span class="number">11</span>&#125;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> prop <span class="keyword">in</span> o) &#123; </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;prop&#125;</span> is <span class="subst">$&#123;o[prop]&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line">name is Jack</span><br><span class="line">age is <span class="number">11</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>同样的，<strong>Array</strong> 实际上也是一个对象，它的每个元素的索引被视为一个属性</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>,<span class="number">4</span>,<span class="number">9</span>]</span><br><span class="line">arr.name = <span class="string">'Jack'</span></span><br><span class="line"><span class="comment">// actually arr is an object</span></span><br><span class="line">(<span class="number">3</span>) [<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="attr">name</span>: <span class="string">"Jack"</span>]</span><br><span class="line"><span class="number">0</span>: <span class="number">1</span></span><br><span class="line"><span class="number">1</span>: <span class="number">4</span></span><br><span class="line"><span class="number">2</span>: <span class="number">9</span></span><br><span class="line">name: <span class="string">"Jack"</span></span><br><span class="line">length: <span class="number">3</span></span><br><span class="line">__proto__: <span class="built_in">Array</span>(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<p>  令人奇怪的是数组的长度还是3</p>
-</li>
-<li><p>我们使用<code>for ... in</code>去遍历数组，实际上<code>for ... in</code>遍历的是数组的<strong>下标索引</strong></p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> index <span class="keyword">in</span> arr) &#123; </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`数组第<span class="subst">$&#123;index&#125;</span>个是<span class="subst">$&#123;arr[index]&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//result</span></span><br><span class="line">数组第<span class="number">0</span>个是<span class="number">1</span></span><br><span class="line">数组第<span class="number">1</span>个是<span class="number">4</span></span><br><span class="line">数组第<span class="number">2</span>个是<span class="number">9</span></span><br><span class="line">数组第name个是Jack</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>ES6 引入<code>for ... of</code>循环，遍历的是集合本身的元素，可以用于遍历 <strong>Array、Set、Map</strong> 等</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> value <span class="keyword">of</span> arr) &#123; </span><br><span class="line">    <span class="built_in">console</span>.log(value)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">9</span></span><br></pre></td></tr></table></figure>
-<p>  可以看到我们的<code>name: &quot;Jack&quot;</code>被舍弃了，实际上也不推荐这种向数组添加属性的操作</p>
-</li>
-</ul>
-<h4 id="forEach"><a href="#forEach" class="headerlink" title="forEach"></a>forEach</h4><ul>
-<li><p>更好的方式是直接使用<code>iterable</code>内置的<code>forEach</code>方法，它接收一个函数，每次迭代就自动回调该函数</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">arr.forEach(<span class="function">(<span class="params">value,index</span>) =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;index&#125;</span> : <span class="subst">$&#123;value&#125;</span>`</span>))</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">0</span> : <span class="number">1</span></span><br><span class="line"><span class="number">1</span> : <span class="number">4</span></span><br><span class="line"><span class="number">2</span> : <span class="number">9</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>遍历一个 <strong>Map</strong></p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> m = <span class="keyword">new</span> <span class="built_in">Map</span>([[<span class="string">'Jack'</span>, <span class="number">11</span>], [<span class="string">'Tom'</span>, <span class="number">13</span>], [<span class="string">'John'</span>, <span class="number">10</span>]])</span><br><span class="line">m.forEach(<span class="function">(<span class="params">value, key, map</span>) =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;key&#125;</span> is <span class="subst">$&#123;value&#125;</span> years old.`</span>))</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line">Jack is <span class="number">11</span> years old.</span><br><span class="line">Tom is <span class="number">13</span> years old.</span><br><span class="line">John is <span class="number">10</span> years old.</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="Destructuring"><a href="#Destructuring" class="headerlink" title="Destructuring"></a>Destructuring</h2><blockquote>
-<p>ES6 允许按照一定模式，从数组和对象中提取值，对变量进行赋值，这被称为<strong>解构(Destructuring)</strong></p>
-</blockquote>
-<ul>
-<li><p>可以利用数组和解构，一次性给多个变量赋值。同时可以很方便的<strong>交换</strong>两个变量值</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [a, b] = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">a === <span class="number">1</span></span><br><span class="line">b === <span class="number">2</span></span><br><span class="line"><span class="comment">// 交换a、b的值</span></span><br><span class="line">[a, b] = [b, a]</span><br><span class="line">a === <span class="number">2</span></span><br><span class="line">b === <span class="number">1</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>也可以使用嵌套数组进行解构，左右两边的模版应该相同，不对应则变量值为<code>undefined</code></p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [x, [[y], z]] = [<span class="number">1</span>, [[<span class="number">2</span>], <span class="number">3</span>]]</span><br><span class="line">x === <span class="number">1</span></span><br><span class="line">y === <span class="number">2</span></span><br><span class="line">z === <span class="number">3</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p><code>...</code>被解构成一个数组</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [a,...rest] = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line">a === <span class="number">1</span></span><br><span class="line">rest === [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>解构还可以用于对象，<strong>需要注意:</strong> 数组的解构是按次序排列的，而对象的属性没有次序，所以<strong>变量必须与属性同名</strong></p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123; bar, foo &#125; = &#123; <span class="attr">foo</span>: <span class="string">"aaa"</span>, <span class="attr">bar</span>: <span class="string">"bbb"</span> &#125;</span><br><span class="line">foo === <span class="string">"aaa"</span></span><br><span class="line">bar === <span class="string">"bbb"</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>当不知道参数传入顺序时，可以将一组参数与变量名对应起来</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">&#123;x, y, z&#125;</span>) </span>&#123; </span><br><span class="line">    <span class="keyword">return</span> x + y - z </span><br><span class="line">&#125;</span><br><span class="line">f(&#123;<span class="attr">z</span>: <span class="number">3</span>, <span class="attr">y</span>: <span class="number">2</span>, <span class="attr">x</span>: <span class="number">1</span>&#125;)</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">0</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>非常适合提取 <strong>JSON</strong> 对象中的属性值</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> jsonData = &#123;</span><br><span class="line">  id: <span class="number">42</span>,</span><br><span class="line">  status: <span class="string">"OK"</span>,</span><br><span class="line">  data: [<span class="number">867</span>, <span class="number">5309</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123; id, status, data &#125; = jsonData</span><br><span class="line"><span class="built_in">console</span>.log(id, status, data)</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">42</span>, <span class="string">"OK"</span>, [<span class="number">867</span>, <span class="number">5309</span>]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>以及加载模块时</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; getTable, postLoginForm &#125; <span class="keyword">from</span> <span class="string">'api'</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="Classes"><a href="#Classes" class="headerlink" title="Classes"></a>Classes</h2><blockquote>
-<p>ES6 引入 <strong>class</strong> 关键字，是的原先对象原型(<strong>prototype</strong>)的写法变得更加直观、更像<strong>面向对象编程</strong>的语法，用法类似于 <strong>Java</strong> 中的 <strong>class</strong></p>
-</blockquote>
-<ul>
-<li><p>定义一个 <strong>Point</strong> 类，其中有个构造函数<code>constructor</code>，需要注意类中的函数不需要<code>function</code>关键字</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(x, y) &#123;</span><br><span class="line">    <span class="keyword">this</span>.x = x;</span><br><span class="line">    <span class="keyword">this</span>.y = y;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  toString() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`(<span class="subst">$&#123;<span class="keyword">this</span>.x&#125;</span>,<span class="subst">$&#123;<span class="keyword">this</span>.y&#125;</span>)`</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> p = <span class="keyword">new</span> Point(<span class="number">1</span>,<span class="number">2</span>) <span class="comment">// 生成实例</span></span><br><span class="line">p.toString()</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="string">"(1,2)"</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h2><blockquote>
-<p><strong>模块</strong>的引入是 ES6 的一大重要特性，我们可以将一个大程序拆成几个小文件，需要的时候再导入。ES6 之前是没有模块加载的功能的，社区制定了一些方案，比如 <strong>CommonJS</strong>的 <strong>require、module.exports</strong>。而 ES6 规定了模块加载的标准语法，并且 ES6 可以在<strong>编译时就完成模块加载</strong>，效率要比 <strong>CommonJS</strong> 模块的加载方式高</p>
-</blockquote>
-<ul>
-<li><p>下面代码我在<code>b.js</code>中导出了一个常量和一个函数，在<code>a.js</code>中导入</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// b.js</span><br><span class="line">module.exports = &#123;</span><br><span class="line">    pi: 3.14,</span><br><span class="line">    plusOne: v =&gt; v + 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// a.js</span><br><span class="line">const &#123; pi, plusOne &#125; = require(&apos;./b&apos;)</span><br><span class="line"></span><br><span class="line">console.log(pi)</span><br><span class="line">console.log(plusOne(10))</span><br><span class="line"></span><br><span class="line">// 执行 node a.js 输出结果</span><br><span class="line">3.14</span><br><span class="line">11</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在 ES6 中规定了模块导入导出的关键字<code>import、export</code>，使用方法如下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// b.js</span><br><span class="line">const pi = 3.14;</span><br><span class="line">const plusOne = v =&gt; v + 1;</span><br><span class="line"></span><br><span class="line">export &#123; pi, plusOne &#125;</span><br><span class="line"></span><br><span class="line">// a.js</span><br><span class="line">import &#123; pi, plusOne &#125; from &apos;./b&apos;;</span><br></pre></td></tr></table></figure>
-<p>  <code>import</code>大括号中变量名，必须与导出时声明的对外接口的<strong>名称相同</strong></p>
-</li>
-<li><p><code>export default</code>命令用于指定模块的<strong>默认输出</strong>，一个模块只能有一个默认输出，因此<code>export default</code>只能出现一次，所以<code>import</code>导入时可以不加大括号，名称也可以随意取。其实就想当于导出了一个 <strong>default</strong> 变量，将开平方的箭头函数<strong>赋值</strong>给它</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// b.js</span><br><span class="line">export default v =&gt; v * v</span><br><span class="line"></span><br><span class="line">// a.js</span><br><span class="line">import square from &apos;./b&apos;</span><br><span class="line">console.log(square(10))</span><br><span class="line"></span><br><span class="line">// result</span><br><span class="line">100</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>因此我们才可以这样引入第三方库</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import _ from &apos;lodash&apos;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<pre><code>&gt; 需要**特别注意**的是，目前 **Node** 和浏览器还未对 **import、export** 做支持，因为**V8引擎**暂不支持，但是不久的将来肯定会加入该语法。[Node官方文档](https://nodejs.org/dist/latest-v9.x/docs/api/esm.html#esm_unsupported) 也明确说明了不建议 **require** 而推荐使用标准的 **import** 并且等待最新的**V8引擎**的支持。可以使用 **Babel** 进行转码
-
-![512494CE-D620-4262-B2A2-CC5B351E6A3C](/0.png)
-</code></pre><hr>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="https://babeljs.io/learn-es2015/" target="_blank" rel="noopener">Babel官网 – Learn ES2015</a></li>
-<li><a href="http://es6.ruanyifeng.com/" target="_blank" rel="noopener">阮一峰 – ES6入门</a></li>
-<li><a href="https://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000" target="_blank" rel="noopener">廖雪峰 – JavaScript教程</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3363,7 +3268,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">61</span>
+                    <span class="site-state-item-count">62</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
