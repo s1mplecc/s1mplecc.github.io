@@ -445,32 +445,6 @@
   </entry>
   
   <entry>
-    <title>搭建 SSR 服务器 + 锐速</title>
-    <link href="https://s1mplecc.github.io/2018/08/30/%E6%90%AD%E5%BB%BASSR%E6%9C%8D%E5%8A%A1%E5%99%A8%20+%20%E9%94%90%E9%80%9F/"/>
-    <id>https://s1mplecc.github.io/2018/08/30/搭建SSR服务器 + 锐速/</id>
-    <published>2018-08-29T17:47:13.000Z</published>
-    <updated>2018-12-27T12:58:09.595Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-      <category term="Ops" scheme="https://s1mplecc.github.io/categories/Ops/"/>
-    
-    
-      <category term="Server" scheme="https://s1mplecc.github.io/tags/Server/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Mac 的终极 Shell -- ZSH</title>
     <link href="https://s1mplecc.github.io/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/"/>
     <id>https://s1mplecc.github.io/2018/07/30/Mac 的终极 Shell -- ZSH/</id>
@@ -547,6 +521,32 @@
     
     
       <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Git Flow 模型以及工具的使用</title>
+    <link href="https://s1mplecc.github.io/2018/07/03/Git%20Flow%20%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <id>https://s1mplecc.github.io/2018/07/03/Git Flow 模型以及工具的使用/</id>
+    <published>2018-07-03T00:11:51.000Z</published>
+    <updated>2018-12-27T12:43:13.228Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Concepts" scheme="https://s1mplecc.github.io/categories/Concepts/"/>
+    
+    
+      <category term="Git" scheme="https://s1mplecc.github.io/tags/Git/"/>
     
   </entry>
   
