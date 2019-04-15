@@ -123,7 +123,9 @@
 <meta property="og:image" content="https://s1mplecc.github.io/2019/04/10/搭建-SSR-科学上网/1.jpeg">
 <meta property="og:image" content="https://s1mplecc.github.io/2019/04/10/搭建-SSR-科学上网/2.jpeg">
 <meta property="og:image" content="https://s1mplecc.github.io/2019/04/10/搭建-SSR-科学上网/3.png">
-<meta property="og:updated_time" content="2019-04-10T07:21:18.299Z">
+<meta property="og:image" content="https://s1mplecc.github.io/2019/04/10/搭建-SSR-科学上网/4.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2019/04/10/搭建-SSR-科学上网/5.png">
+<meta property="og:updated_time" content="2019-04-15T05:48:55.448Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建 SSR 科学上网">
 <meta name="twitter:description" content="声明本教程也是由于本人平时工作学习有 Google 的需求，所以就自己搭了一个梯子，并记录了搭建的过程方便以后重搭。大家自己搭建后就同学、家人间小规模使用就好了，这样网速较快也不容易被封。严禁用于商业用途！ 准备 VPS 服务器，需要选择国外的，推荐 Vultr，速度不错、稳定且性价比高，按小时计费，能够随时开通和删除服务器。操作系统选择 CentOS 6，为了更换内核方便不宜选择版本过高的操作系">
@@ -416,12 +418,24 @@
                 
               
 
-              <time title="创建时间：2019-04-10 15:02:32 / 修改时间：15:21:18" itemprop="dateCreated datePublished" datetime="2019-04-10T15:02:32+08:00">2019-04-10</time>
+              <time title="创建时间：2019-04-10 15:02:32" itemprop="dateCreated datePublished" datetime="2019-04-10T15:02:32+08:00">2019-04-10</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-04-15 13:48:55" itemprop="dateModified" datetime="2019-04-15T13:48:55+08:00">2019-04-15</time>
               
             
           </span>
@@ -477,7 +491,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">1.4k</span>
+                <span title="本文字数">1.6k</span>
               
 
               
@@ -532,6 +546,11 @@
 <p>成功替换内核后服务器会自动重启。等待重启完成后，重连服务器。</p>
 <h3 id="一键安装锐速"><a href="#一键安装锐速" class="headerlink" title="一键安装锐速"></a>一键安装锐速</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/91yun/serverspeeder/master/serverspeeder-all.sh &amp;&amp; bash serverspeeder-all.sh</span><br></pre></td></tr></table></figure>
 <p>等待安装完成后即可体验飞一般的上网速度。</p>
+<h2 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h2><p>Vultr 提供方便快捷的快照 Snapshot 功能用于备份服务器。为防止服务器 IP 被封，我们可以备份服务器，方便将来重新部署。</p>
+<p>在 Vultr 用户界面的 Servers 中添加快照，快照创建需要一点时间</p>
+<p><img src="/2019/04/10/搭建-SSR-科学上网/4.png" alt="1d8690c7a6d4d85711e11f2485996ba8.png"></p>
+<p>将来在 Deploy new instance 新建实例时，服务器类型选择快照即可</p>
+<p><img src="/2019/04/10/搭建-SSR-科学上网/5.png" alt="1c652a6a3177df0e85958f81faa58043.png"></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://github.com/Alvin9999/new-pac/wiki/%E8%87%AA%E5%BB%BAss%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%95%99%E7%A8%8B" target="_blank" rel="noopener">自建ss服务器教程</a></li>
 </ul>
@@ -828,7 +847,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#声明"><span class="nav-number">1.</span> <span class="nav-text">声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备"><span class="nav-number">2.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署SSR服务端"><span class="nav-number">3.</span> <span class="nav-text">部署SSR服务端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改配置"><span class="nav-number">3.1.</span> <span class="nav-text">修改配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置SSR客户端"><span class="nav-number">4.</span> <span class="nav-text">配置SSR客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锐速加速"><span class="nav-number">5.</span> <span class="nav-text">锐速加速</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#更换操作系统内核"><span class="nav-number">5.1.</span> <span class="nav-text">更换操作系统内核</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一键安装锐速"><span class="nav-number">5.2.</span> <span class="nav-text">一键安装锐速</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#声明"><span class="nav-number">1.</span> <span class="nav-text">声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备"><span class="nav-number">2.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署SSR服务端"><span class="nav-number">3.</span> <span class="nav-text">部署SSR服务端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改配置"><span class="nav-number">3.1.</span> <span class="nav-text">修改配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置SSR客户端"><span class="nav-number">4.</span> <span class="nav-text">配置SSR客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锐速加速"><span class="nav-number">5.</span> <span class="nav-text">锐速加速</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#更换操作系统内核"><span class="nav-number">5.1.</span> <span class="nav-text">更换操作系统内核</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一键安装锐速"><span class="nav-number">5.2.</span> <span class="nav-text">一键安装锐速</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#备份"><span class="nav-number">6.</span> <span class="nav-text">备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
