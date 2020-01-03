@@ -120,7 +120,7 @@
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="前言该文档是我在团队中负责集成测试模块时为团队成员编写的 API 接口文档，这次拿过来修改了一下，并已经将业务无关的代码剥离出来上传到 GitHub 上。主要是向大家展示一种流畅接口设计框架代码的模式。 所谓流畅接口，可以参考我之前翻译的 Martin Flower 的博客译文。简单来说，流畅接口被设计为可读的和流式的，使用起来几乎和自然语言一般流畅，并且配合 IDE 的智能提示，易于 API 使">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-03T12:34:37.062Z">
+<meta property="og:updated_time" content="2020-01-03T12:40:41.073Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用流畅接口编写 Kafka 集成测试框架">
 <meta name="twitter:description" content="前言该文档是我在团队中负责集成测试模块时为团队成员编写的 API 接口文档，这次拿过来修改了一下，并已经将业务无关的代码剥离出来上传到 GitHub 上。主要是向大家展示一种流畅接口设计框架代码的模式。 所谓流畅接口，可以参考我之前翻译的 Martin Flower 的博客译文。简单来说，流畅接口被设计为可读的和流式的，使用起来几乎和自然语言一般流畅，并且配合 IDE 的智能提示，易于 API 使">
@@ -412,7 +412,7 @@
                 
               
 
-              <time title="创建时间：2020-01-03 19:26:40 / 修改时间：20:34:37" itemprop="dateCreated datePublished" datetime="2020-01-03T19:26:40+08:00">2020-01-03</time>
+              <time title="创建时间：2020-01-03 19:26:40 / 修改时间：20:40:41" itemprop="dateCreated datePublished" datetime="2020-01-03T19:26:40+08:00">2020-01-03</time>
             
 
             
@@ -498,7 +498,7 @@
 
       
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该文档是我在团队中负责集成测试模块时为团队成员编写的 API 接口文档，这次拿过来修改了一下，并已经将业务无关的代码剥离出来上传到 <a href="https://github.com/s1mplecc/kafka-integration-test" target="_blank" rel="noopener">GitHub</a> 上。主要是向大家展示一种流畅接口设计框架代码的模式。</p>
-<p>所谓流畅接口，可以参考我之前翻译的 Martin Flower 的博客译文。简单来说，流畅接口被设计为<strong>可读的</strong>和<strong>流式的</strong>，使用起来几乎和自然语言一般流畅，并且配合 IDE 的智能提示，易于 API 使用者的理解和使用。譬如下面我编写的集成测试用例：</p>
+<p>所谓流畅接口，可以参考我之前翻译的 Martin Flower 的<a href="https://s1mple.online/2019/01/23/Fluent-Interface-%E2%80%94%E2%80%94-Martin-Fowler-%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/" target="_blank" rel="noopener">博客译文</a>。简单来说，流畅接口被设计为<strong>可读的</strong>和<strong>流式的</strong>，使用起来几乎和自然语言一般流畅，并且配合 IDE 的智能提示，易于 API 使用者的理解和使用。譬如下面我编写的集成测试用例：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InboundToOutboundExampleJobTest</span> <span class="keyword">extends</span> <span class="title">JobIntegrationTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_send_ACTT_and_receive_trigger_event_from_kafka</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        kafkaSuite.send(<span class="keyword">new</span> ResourceFile(<span class="string">"sample/send/pek/ACTT.xml"</span>))</span><br><span class="line">                .toTopic()</span><br><span class="line">                .ofConfig(<span class="string">"inbound_imf"</span>);</span><br><span class="line"></span><br><span class="line">        SubjectEvent event = kafkaSuite</span><br><span class="line">                .await().latestOne()</span><br><span class="line">                .fromTopic()</span><br><span class="line">                .ofConfig(<span class="string">"trigger"</span>)</span><br><span class="line">                .toJavaObject(SubjectEvent.class);</span><br><span class="line"></span><br><span class="line">        assertThat(event.getEventName()).isEqualTo(<span class="string">"FLOP_ACTT"</span>);</span><br><span class="line">        assertThat(event.getGids().size()).isEqualTo(<span class="number">1</span>);</span><br><span class="line">        assertThat(event.getGids().get(<span class="number">0</span>)).isEqualTo(<span class="string">"PEK_80664162170310656"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>代码读起来非常明了，<code>KafkaSuite</code> 是我编写的 Kafka 集成测试套件，负责将 xml 文件发送至 Kafka 的一个 Topic 中，该 Topic 配置在配置文件中，对应着 <code>inbound_imf</code> 项。同时 <code>KafkaSuite</code> 监听另一个 Topic <code>trigger</code> 的最新一条消息并转换成 Java 对象，对结果进行验证（其间过程 xml 文件会被其他模块解析并经过一系列的业务处理）。</p>
 <p>上述代码中，<code>assertThat().isEqualTo()</code> 就是断言框架 <code>assertj</code> 的 API，它是一个非常优秀的流畅接口的框架，建议大家阅读其源代码。我在编写 Kafka 集成测试框架时就借鉴了这种编码模式。</p>
