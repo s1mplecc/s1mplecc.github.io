@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言该文档是我在团队中负责集成测试模块时为团队成员编写的 API 接口文档，这次拿过来修改了一下，并已经将业务无关的代码剥离出来上传到 GitHub 上。主要是向大家展示一种流畅接口设计框架代码的模式。 所谓流畅接口，可以参考我之前翻译的 Martin Flower 的博客译文。简单来说，流畅接口被设计为可读的和流式的，使用起来几乎和自然语言一般流畅，并且配合 IDE 的智能提示，易于 API 使">
+<meta name="keywords" content="API Design,Java,DSL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用流畅接口编写 Kafka 集成测试框架">
+<meta property="og:url" content="https://s1mplecc.github.io/2020/01/03/使用流畅接口编写-Kafka-集成测试框架/index.html">
+<meta property="og:site_name" content="s1mple的博客">
+<meta property="og:description" content="前言该文档是我在团队中负责集成测试模块时为团队成员编写的 API 接口文档，这次拿过来修改了一下，并已经将业务无关的代码剥离出来上传到 GitHub 上。主要是向大家展示一种流畅接口设计框架代码的模式。 所谓流畅接口，可以参考我之前翻译的 Martin Flower 的博客译文。简单来说，流畅接口被设计为可读的和流式的，使用起来几乎和自然语言一般流畅，并且配合 IDE 的智能提示，易于 API 使">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-03T12:34:37.062Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用流畅接口编写 Kafka 集成测试框架">
+<meta name="twitter:description" content="前言该文档是我在团队中负责集成测试模块时为团队成员编写的 API 接口文档，这次拿过来修改了一下，并已经将业务无关的代码剥离出来上传到 GitHub 上。主要是向大家展示一种流畅接口设计框架代码的模式。 所谓流畅接口，可以参考我之前翻译的 Martin Flower 的博客译文。简单来说，流畅接口被设计为可读的和流式的，使用起来几乎和自然语言一般流畅，并且配合 IDE 的智能提示，易于 API 使">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://s1mplecc.github.io/2020/01/03/使用流畅接口编写-Kafka-集成测试框架/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>使用流畅接口编写 Kafka 集成测试框架 | s1mple的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">s1mple的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/01/03/使用流畅接口编写-Kafka-集成测试框架/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用流畅接口编写 Kafka 集成测试框架
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-01-03 19:26:40 / 修改时间：20:34:37" itemprop="dateCreated datePublished" datetime="2020-01-03T19:26:40+08:00">2020-01-03</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Design/" itemprop="url" rel="index"><span itemprop="name">Design</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/03/使用流畅接口编写-Kafka-集成测试框架/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/03/使用流畅接口编写-Kafka-集成测试框架/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">9k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该文档是我在团队中负责集成测试模块时为团队成员编写的 API 接口文档，这次拿过来修改了一下，并已经将业务无关的代码剥离出来上传到 <a href="https://github.com/s1mplecc/kafka-integration-test" target="_blank" rel="noopener">GitHub</a> 上。主要是向大家展示一种流畅接口设计框架代码的模式。</p>
+<p>所谓流畅接口，可以参考我之前翻译的 Martin Flower 的博客译文。简单来说，流畅接口被设计为<strong>可读的</strong>和<strong>流式的</strong>，使用起来几乎和自然语言一般流畅，并且配合 IDE 的智能提示，易于 API 使用者的理解和使用。譬如下面我编写的集成测试用例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InboundToOutboundExampleJobTest</span> <span class="keyword">extends</span> <span class="title">JobIntegrationTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_send_ACTT_and_receive_trigger_event_from_kafka</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        kafkaSuite.send(<span class="keyword">new</span> ResourceFile(<span class="string">"sample/send/pek/ACTT.xml"</span>))</span><br><span class="line">                .toTopic()</span><br><span class="line">                .ofConfig(<span class="string">"inbound_imf"</span>);</span><br><span class="line"></span><br><span class="line">        SubjectEvent event = kafkaSuite</span><br><span class="line">                .await().latestOne()</span><br><span class="line">                .fromTopic()</span><br><span class="line">                .ofConfig(<span class="string">"trigger"</span>)</span><br><span class="line">                .toJavaObject(SubjectEvent.class);</span><br><span class="line"></span><br><span class="line">        assertThat(event.getEventName()).isEqualTo(<span class="string">"FLOP_ACTT"</span>);</span><br><span class="line">        assertThat(event.getGids().size()).isEqualTo(<span class="number">1</span>);</span><br><span class="line">        assertThat(event.getGids().get(<span class="number">0</span>)).isEqualTo(<span class="string">"PEK_80664162170310656"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码读起来非常明了，<code>KafkaSuite</code> 是我编写的 Kafka 集成测试套件，负责将 xml 文件发送至 Kafka 的一个 Topic 中，该 Topic 配置在配置文件中，对应着 <code>inbound_imf</code> 项。同时 <code>KafkaSuite</code> 监听另一个 Topic <code>trigger</code> 的最新一条消息并转换成 Java 对象，对结果进行验证（其间过程 xml 文件会被其他模块解析并经过一系列的业务处理）。</p>
+<p>上述代码中，<code>assertThat().isEqualTo()</code> 就是断言框架 <code>assertj</code> 的 API，它是一个非常优秀的流畅接口的框架，建议大家阅读其源代码。我在编写 Kafka 集成测试框架时就借鉴了这种编码模式。</p>
+<h2 id="集成测试"><a href="#集成测试" class="headerlink" title="集成测试"></a>集成测试</h2><p>代码目前完成了 Kafka 集成测试的发送和监听功能。我们的流处理框架采用的是 Flink，将任务分解为一个个 Job 独立运行，所以集成测试首先得启动 Job，并且加载包括 Kafka IP地址等相关配置。为此我编写了 <code>JobIntegrationTest</code> 类，并规定所有集成测试用例必须继承该类。此外，<code>KafkaSuite</code> 是负责 Kafka 集成测试的套件，封装了各种流畅接口 API。</p>
+<h3 id="JobIntegrationTest"><a href="#JobIntegrationTest" class="headerlink" title="JobIntegrationTest"></a>JobIntegrationTest</h3><p>所有的集成测试必需继承 JobIntegrationTest 类，该类提供 final 的 <code>setUp()</code> 方法和 <code>tearDown()</code> 方法。</p>
+<p>集成测试运行的流程是 <code>SetUp -&gt; All Tests -&gt; TearDown</code>：</p>
+<ol>
+<li><p><code>setUp()</code> 方法中使用了单独的线程启动 Job，所以<strong>不会阻塞主线程（测试方法）的运行</strong>。</p>
+</li>
+<li><p>测试方法主体由集成测试使用者编写，如果用到 KafkaSuite 的 send 和 await 方法则会被阻塞，直到<strong>成功发送或者接收到消息</strong>，或者<strong>超时抛出异常</strong>退出。</p>
+</li>
+<li><p><code>tearDown()</code> 方法关闭 Job 和用到的资源。</p>
+</li>
+</ol>
+<h3 id="KafkaSuite"><a href="#KafkaSuite" class="headerlink" title="KafkaSuite"></a>KafkaSuite</h3><p>目前集成测试实现了 Kafka 消息的<strong>阻塞发送</strong>和<strong>阻塞监听</strong>，抽象出来的 KafkaSuite 提供了流畅接口以支持集成测试。<code>kafkaSuite</code> 作为 JobIntegrationTest 的 protected 字段可以直接在集成测试类中使用。我将 KafkaSuite 的流畅接口分为三大阶段：配置阶段（PrepareStep）、发送阶段（SendStep）和接受阶段（AwaitStep）。具体的流畅接口使用可以查看 KafkaSuiteTest 或者直接阅读源码 JavaDoc。</p>
+<h4 id="PrepareStep"><a href="#PrepareStep" class="headerlink" title="PrepareStep"></a>PrepareStep</h4><p>由于 JobIntegrationTest 会加载配置文件并由此创建 KafakSuite 实例，所以正常情况下不需要独立配置 IP、端口等。但为提供给特殊需求使用，仍设计相关接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kafkaSuite.clusterIps(<span class="string">"172.20.10.120:9092,172.20.10.152:9092,172.20.10.171:9092"</span>)</span><br><span class="line">            .noSsl()</span><br><span class="line">            .send() <span class="comment">//...</span></span><br></pre></td></tr></table></figure>
+<h4 id="SendStep"><a href="#SendStep" class="headerlink" title="SendStep"></a>SendStep</h4><p>KafkaSuite 发送消息是阻塞的，设置的超时时间是 10s，<strong>如果 10s 未发送成功则会抛出 SendTimeoutException 异常</strong>，这时候需要检查配置文件中的 IP 和 SSL 配置是否正确。</p>
+<p>API 使用如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kafkaSuite.send(<span class="keyword">new</span> ResourceFile(<span class="string">"kafka/test-suite.json"</span>))</span><br><span class="line">            .toTopic()</span><br><span class="line">            .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br></pre></td></tr></table></figure>
+<p><code>send()</code> 方法提供发送字符串、文件或数据流的接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DSLSendStep</span> </span>&#123;</span><br><span class="line">    <span class="function">DSLSendToStep <span class="title">send</span><span class="params">(String value)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLSendToStep <span class="title">send</span><span class="params">(ResourceFile file)</span> <span class="keyword">throws</span> ResourceFileNotFoundException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLSendToStep <span class="title">send</span><span class="params">(InputStream inputStream)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>toTopic()</code> 方法可以直接 <code>toTopic(&quot;xxx&quot;)</code> 指定明确 Topic，但更加推荐从配置文件读取的写法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DSLSendToStep</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">toTopic</span><span class="params">(String topic)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLSentLoadConfigStep <span class="title">toTopic</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="AwaitStep"><a href="#AwaitStep" class="headerlink" title="AwaitStep"></a>AwaitStep</h4><p>KafkaSuite 监听消息同样是阻塞的。设置的<strong>默认超时时间是 60s</strong>，也提供自定义超时时间的接口如 <code>await(300)</code>，单位为秒，<strong>超过这个时间未接收到消息则抛出 AwaitTimeoutException</strong>。理论上我们都是先发再收，所以如果发送成功则代表 Kafka 连接不存在问题（也就是配置没有问题），接收不到就应该是业务代码有问题，这时候就需要 Debug 排查问题。</p>
+<p>监听结果提供<strong>监听一条</strong>和<strong>监听多条</strong>的 API，但不管是使用哪一个，<code>await()</code> 后会取到 Kafka 该 Topic 的上一个 offset 以来的所有新消息，然后变更 offset。可以根据 Index 获取多条消息里的某一条，Index 从 0 开始计算。大致用法是：使用 <code>await().latestOne()</code> 获取最新一条，<code>await().multi()</code> 或者直接 <code>await()</code> 获取多条。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DSLAwaitIndexStep</span> <span class="keyword">extends</span> <span class="title">DSLAwaitMultiFromStep</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line">    <span class="comment">//  Kafka Consumer Fetch latest one record</span></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">latestOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">lastOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line">    <span class="comment">//  Kafka Consumer Fetch record by index in records</span></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">one</span><span class="params">(<span class="keyword">int</span> index)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">firstOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">secondOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">thirdOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line">    <span class="comment">//  Kafka Consumer Fetch all latest records</span></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitMultiFromStep <span class="title">all</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitMultiFromStep <span class="title">multi</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line">    <span class="comment">//  Kafka Consumer Fetch multi records directly from topic</span></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">DSLAwaitMultiLoadConfigStep <span class="title">fromTopic</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">DSLAwaitMultiRecordsStep <span class="title">fromTopic</span><span class="params">(String topic)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">DSLAwaitMultiRecordsStep <span class="title">fromTopic</span><span class="params">(String topic, String groupId)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面是<strong>监听一条并且验证消息是否正确</strong>的写法，这里使用了 <code>toJavaObject()</code> 转成了 Java 对象，这个是我提供的转换消息的 API，后面会有介绍。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">kafkaSuite.send(<span class="string">"&#123;\"name\":\"jack\",\"age\":25&#125;"</span>)</span><br><span class="line">                .toTopic()</span><br><span class="line">                .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br><span class="line">                </span><br><span class="line">Person record = kafkaSuite</span><br><span class="line">                .await().latestOne()</span><br><span class="line">                .fromTopic()</span><br><span class="line">                .ofConfig(<span class="string">"INTEGRATION-TEST"</span>)</span><br><span class="line">                .toJavaObject(Person.class);</span><br><span class="line">                </span><br><span class="line">assertThat(record.getName()).isEqualTo(<span class="string">"jack"</span>);</span><br><span class="line">assertThat(record.getAge()).isEqualTo(<span class="number">25</span>);</span><br></pre></td></tr></table></figure>
+<p><strong>由于有的业务场景会出口多条消息，所以接下来演示验证多条消息的正确写法</strong>。提供了 <code>fetchFirstOne()</code> 和 <code>fetchOne(int index)</code> 根据 Index 获取多条中的一条等 API：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">kafkaSuite.send(<span class="string">"&#123;\"name\": \"jack\", \"age\": 25&#125;"</span>)</span><br><span class="line">        .toTopic()</span><br><span class="line">        .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br><span class="line"></span><br><span class="line">kafkaSuite.send(<span class="string">"&#123;\"name\": \"tony\", \"age\": 20&#125;"</span>)</span><br><span class="line">        .toTopic()</span><br><span class="line">        .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br><span class="line"></span><br><span class="line">DSLAwaitMultiRecordsStep records = kafkaSuite</span><br><span class="line">        .await().multi()</span><br><span class="line">        .fromTopic()</span><br><span class="line">        .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br><span class="line"></span><br><span class="line">Person jack = records.fetchFirstOne().toJavaObject(Person.class);</span><br><span class="line">Person tony = records.fetchOne(<span class="number">1</span>).toJavaObject(Person.class);</span><br><span class="line"></span><br><span class="line">assertThat(jack.getName()).isEqualTo(<span class="string">"jack"</span>);</span><br><span class="line">assertThat(jack.getAge()).isEqualTo(<span class="number">25</span>);</span><br><span class="line">assertThat(tony.getName()).isEqualTo(<span class="string">"tony"</span>);</span><br><span class="line">assertThat(tony.getAge()).isEqualTo(<span class="number">20</span>);</span><br></pre></td></tr></table></figure>
+<p>最后结果的<strong>输出提供了转换和输出到文件的 API</strong>。需要注意，输出到文件只是方便调试 Bug 时使用，不应该出现在正式的代码中；输出的文件被写入到 <code>target/test-classes/resources</code> 下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DSLAwaitOneRecordStep</span> <span class="keyword">extends</span> <span class="title">DSLAwaitRecordStep</span>, <span class="title">DSLAwaitOneRecordOutputStep</span>, <span class="title">DSLAwaitOneRecordConvertStep</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">String <span class="title">toString</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">JsonObject <span class="title">toJsonObject</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">JSONArray <span class="title">toJsonArray</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">toXml</span><span class="params">()</span></span>; <span class="comment">// 编码未完成</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    &lt;T&gt; <span class="function">T <span class="title">toJavaObject</span><span class="params">(Class&lt;T&gt; clazz)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">writeAsTxt</span><span class="params">(String absolutePath)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">writeAsTxt</span><span class="params">(ResourceFile resourceFile)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h2><p>流畅接口 API 的设计一个重中之重就是<strong>接口和抽象类的使用</strong>，为了契合流式接口，有时不能按照面向对象的模式设计接口继承关系。简言之，在编写流畅接口 API 框架时，大致思路是先编写接口（Interface），按照流式的原则设计接口之间的继承关系，然后再编写具体的实现类。以下是我的代码结构，与 <code>impl</code> 文件夹并列的都是接口。具体代码详见我的 <a href="https://github.com/s1mplecc/kafka-integration-test" target="_blank" rel="noopener">GitHub</a> 项目。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── Assertions.java</span><br><span class="line">├── JobIntegrationTest.java</span><br><span class="line">├── KafkaSuite.java</span><br><span class="line">└── core</span><br><span class="line">    ├── dsl</span><br><span class="line">    │   ├── await</span><br><span class="line">    │   │   ├── DSLAwaitFromStep.java</span><br><span class="line">    │   │   ├── DSLAwaitIndexStep.java</span><br><span class="line">    │   │   ├── DSLAwaitLoadConfigStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiFromStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiLoadConfigStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiRecordsConvertStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiRecordsFetchOneStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiRecordsStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneFromStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneLoadConfigStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneRecordConvertStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneRecordOutputStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneRecordStep.java</span><br><span class="line">    │   │   ├── DSLAwaitRecordStep.java</span><br><span class="line">    │   │   ├── DSLAwaitStep.java</span><br><span class="line">    │   │   └── impl</span><br><span class="line">    │   │       ├── AbstractDSLAwaitFromStep.java</span><br><span class="line">    │   │       ├── AbstractDSLAwaitLoadConfigStep.java</span><br><span class="line">    │   │       ├── DSLAwaitIndexStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitMultiFromStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitMultiLoadConfigStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitMultiRecordsStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitOneFromStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitOneLoadConfigStepImpl.java</span><br><span class="line">    │   │       └── DSLAwaitOneRecordStepImpl.java</span><br><span class="line">    │   ├── send</span><br><span class="line">    │   │   ├── DSLSendStep.java</span><br><span class="line">    │   │   ├── DSLSendToStep.java</span><br><span class="line">    │   │   ├── DSLSentLoadConfigStep.java</span><br><span class="line">    │   │   └── impl</span><br><span class="line">    │   │       ├── DSLSendToStepImpl.java</span><br><span class="line">    │   │       └── DSLSentLoadConfigStepImpl.java</span><br><span class="line">    │   └── start</span><br><span class="line">    │       ├── DSLPrepareStep.java</span><br><span class="line">    │       └── DSLStartStep.java</span><br><span class="line">    └── exceptions</span><br><span class="line">        ├── AwaitTimeoutException.java</span><br><span class="line">        ├── InvalidIntegrationTestNameException.java</span><br><span class="line">        ├── SendNullValueException.java</span><br><span class="line">        └── SendTimeoutException.java</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/API-Design/" rel="tag"># API Design</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/DSL/" rel="tag"># DSL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/10/搭建-SSR-科学上网/" rel="next" title="搭建 SSR 科学上网">
+                <i class="fa fa-chevron-left"></i> 搭建 SSR 科学上网
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+            
+              <p class="site-author-name" itemprop="name">s1mple</p>
+              <p class="site-description motion-element" itemprop="description">清风不问过路客，岁月不负有心人</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">62</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/s1mplecc" title="GitHub &rarr; https://github.com/s1mplecc" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:s1mple951205@gmail.com" title="E-Mail &rarr; mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集成测试"><span class="nav-number">2.</span> <span class="nav-text">集成测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JobIntegrationTest"><span class="nav-number">2.1.</span> <span class="nav-text">JobIntegrationTest</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KafkaSuite"><span class="nav-number">2.2.</span> <span class="nav-text">KafkaSuite</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PrepareStep"><span class="nav-number">2.2.1.</span> <span class="nav-text">PrepareStep</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SendStep"><span class="nav-number">2.2.2.</span> <span class="nav-text">SendStep</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AwaitStep"><span class="nav-number">2.2.3.</span> <span class="nav-text">AwaitStep</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码结构"><span class="nav-number">3.</span> <span class="nav-text">代码结构</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">s1mple</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://s1mple.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://s1mplecc.github.io/2020/01/03/使用流畅接口编写-Kafka-集成测试框架/';
+        this.page.identifier = '2020/01/03/使用流畅接口编写-Kafka-集成测试框架/';
+        this.page.title = '使用流畅接口编写 Kafka 集成测试框架';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://s1mple.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

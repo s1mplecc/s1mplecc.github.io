@@ -369,6 +369,231 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/01/03/使用流畅接口编写-Kafka-集成测试框架/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/01/03/使用流畅接口编写-Kafka-集成测试框架/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">使用流畅接口编写 Kafka 集成测试框架</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-01-03 19:26:40 / 修改时间：20:34:37" itemprop="dateCreated datePublished" datetime="2020-01-03T19:26:40+08:00">2020-01-03</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Design/" itemprop="url" rel="index"><span itemprop="name">Design</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/03/使用流畅接口编写-Kafka-集成测试框架/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/03/使用流畅接口编写-Kafka-集成测试框架/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">9k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该文档是我在团队中负责集成测试模块时为团队成员编写的 API 接口文档，这次拿过来修改了一下，并已经将业务无关的代码剥离出来上传到 <a href="https://github.com/s1mplecc/kafka-integration-test" target="_blank" rel="noopener">GitHub</a> 上。主要是向大家展示一种流畅接口设计框架代码的模式。</p>
+<p>所谓流畅接口，可以参考我之前翻译的 Martin Flower 的博客译文。简单来说，流畅接口被设计为<strong>可读的</strong>和<strong>流式的</strong>，使用起来几乎和自然语言一般流畅，并且配合 IDE 的智能提示，易于 API 使用者的理解和使用。譬如下面我编写的集成测试用例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InboundToOutboundExampleJobTest</span> <span class="keyword">extends</span> <span class="title">JobIntegrationTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_send_ACTT_and_receive_trigger_event_from_kafka</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        kafkaSuite.send(<span class="keyword">new</span> ResourceFile(<span class="string">"sample/send/pek/ACTT.xml"</span>))</span><br><span class="line">                .toTopic()</span><br><span class="line">                .ofConfig(<span class="string">"inbound_imf"</span>);</span><br><span class="line"></span><br><span class="line">        SubjectEvent event = kafkaSuite</span><br><span class="line">                .await().latestOne()</span><br><span class="line">                .fromTopic()</span><br><span class="line">                .ofConfig(<span class="string">"trigger"</span>)</span><br><span class="line">                .toJavaObject(SubjectEvent.class);</span><br><span class="line"></span><br><span class="line">        assertThat(event.getEventName()).isEqualTo(<span class="string">"FLOP_ACTT"</span>);</span><br><span class="line">        assertThat(event.getGids().size()).isEqualTo(<span class="number">1</span>);</span><br><span class="line">        assertThat(event.getGids().get(<span class="number">0</span>)).isEqualTo(<span class="string">"PEK_80664162170310656"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码读起来非常明了，<code>KafkaSuite</code> 是我编写的 Kafka 集成测试套件，负责将 xml 文件发送至 Kafka 的一个 Topic 中，该 Topic 配置在配置文件中，对应着 <code>inbound_imf</code> 项。同时 <code>KafkaSuite</code> 监听另一个 Topic <code>trigger</code> 的最新一条消息并转换成 Java 对象，对结果进行验证（其间过程 xml 文件会被其他模块解析并经过一系列的业务处理）。</p>
+<p>上述代码中，<code>assertThat().isEqualTo()</code> 就是断言框架 <code>assertj</code> 的 API，它是一个非常优秀的流畅接口的框架，建议大家阅读其源代码。我在编写 Kafka 集成测试框架时就借鉴了这种编码模式。</p>
+<h2 id="集成测试"><a href="#集成测试" class="headerlink" title="集成测试"></a>集成测试</h2><p>代码目前完成了 Kafka 集成测试的发送和监听功能。我们的流处理框架采用的是 Flink，将任务分解为一个个 Job 独立运行，所以集成测试首先得启动 Job，并且加载包括 Kafka IP地址等相关配置。为此我编写了 <code>JobIntegrationTest</code> 类，并规定所有集成测试用例必须继承该类。此外，<code>KafkaSuite</code> 是负责 Kafka 集成测试的套件，封装了各种流畅接口 API。</p>
+<h3 id="JobIntegrationTest"><a href="#JobIntegrationTest" class="headerlink" title="JobIntegrationTest"></a>JobIntegrationTest</h3><p>所有的集成测试必需继承 JobIntegrationTest 类，该类提供 final 的 <code>setUp()</code> 方法和 <code>tearDown()</code> 方法。</p>
+<p>集成测试运行的流程是 <code>SetUp -&gt; All Tests -&gt; TearDown</code>：</p>
+<ol>
+<li><p><code>setUp()</code> 方法中使用了单独的线程启动 Job，所以<strong>不会阻塞主线程（测试方法）的运行</strong>。</p>
+</li>
+<li><p>测试方法主体由集成测试使用者编写，如果用到 KafkaSuite 的 send 和 await 方法则会被阻塞，直到<strong>成功发送或者接收到消息</strong>，或者<strong>超时抛出异常</strong>退出。</p>
+</li>
+<li><p><code>tearDown()</code> 方法关闭 Job 和用到的资源。</p>
+</li>
+</ol>
+<h3 id="KafkaSuite"><a href="#KafkaSuite" class="headerlink" title="KafkaSuite"></a>KafkaSuite</h3><p>目前集成测试实现了 Kafka 消息的<strong>阻塞发送</strong>和<strong>阻塞监听</strong>，抽象出来的 KafkaSuite 提供了流畅接口以支持集成测试。<code>kafkaSuite</code> 作为 JobIntegrationTest 的 protected 字段可以直接在集成测试类中使用。我将 KafkaSuite 的流畅接口分为三大阶段：配置阶段（PrepareStep）、发送阶段（SendStep）和接受阶段（AwaitStep）。具体的流畅接口使用可以查看 KafkaSuiteTest 或者直接阅读源码 JavaDoc。</p>
+<h4 id="PrepareStep"><a href="#PrepareStep" class="headerlink" title="PrepareStep"></a>PrepareStep</h4><p>由于 JobIntegrationTest 会加载配置文件并由此创建 KafakSuite 实例，所以正常情况下不需要独立配置 IP、端口等。但为提供给特殊需求使用，仍设计相关接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kafkaSuite.clusterIps(<span class="string">"172.20.10.120:9092,172.20.10.152:9092,172.20.10.171:9092"</span>)</span><br><span class="line">            .noSsl()</span><br><span class="line">            .send() <span class="comment">//...</span></span><br></pre></td></tr></table></figure>
+<h4 id="SendStep"><a href="#SendStep" class="headerlink" title="SendStep"></a>SendStep</h4><p>KafkaSuite 发送消息是阻塞的，设置的超时时间是 10s，<strong>如果 10s 未发送成功则会抛出 SendTimeoutException 异常</strong>，这时候需要检查配置文件中的 IP 和 SSL 配置是否正确。</p>
+<p>API 使用如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kafkaSuite.send(<span class="keyword">new</span> ResourceFile(<span class="string">"kafka/test-suite.json"</span>))</span><br><span class="line">            .toTopic()</span><br><span class="line">            .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br></pre></td></tr></table></figure>
+<p><code>send()</code> 方法提供发送字符串、文件或数据流的接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DSLSendStep</span> </span>&#123;</span><br><span class="line">    <span class="function">DSLSendToStep <span class="title">send</span><span class="params">(String value)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLSendToStep <span class="title">send</span><span class="params">(ResourceFile file)</span> <span class="keyword">throws</span> ResourceFileNotFoundException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLSendToStep <span class="title">send</span><span class="params">(InputStream inputStream)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>toTopic()</code> 方法可以直接 <code>toTopic(&quot;xxx&quot;)</code> 指定明确 Topic，但更加推荐从配置文件读取的写法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DSLSendToStep</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">toTopic</span><span class="params">(String topic)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLSentLoadConfigStep <span class="title">toTopic</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="AwaitStep"><a href="#AwaitStep" class="headerlink" title="AwaitStep"></a>AwaitStep</h4><p>KafkaSuite 监听消息同样是阻塞的。设置的<strong>默认超时时间是 60s</strong>，也提供自定义超时时间的接口如 <code>await(300)</code>，单位为秒，<strong>超过这个时间未接收到消息则抛出 AwaitTimeoutException</strong>。理论上我们都是先发再收，所以如果发送成功则代表 Kafka 连接不存在问题（也就是配置没有问题），接收不到就应该是业务代码有问题，这时候就需要 Debug 排查问题。</p>
+<p>监听结果提供<strong>监听一条</strong>和<strong>监听多条</strong>的 API，但不管是使用哪一个，<code>await()</code> 后会取到 Kafka 该 Topic 的上一个 offset 以来的所有新消息，然后变更 offset。可以根据 Index 获取多条消息里的某一条，Index 从 0 开始计算。大致用法是：使用 <code>await().latestOne()</code> 获取最新一条，<code>await().multi()</code> 或者直接 <code>await()</code> 获取多条。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DSLAwaitIndexStep</span> <span class="keyword">extends</span> <span class="title">DSLAwaitMultiFromStep</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line">    <span class="comment">//  Kafka Consumer Fetch latest one record</span></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">latestOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">lastOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line">    <span class="comment">//  Kafka Consumer Fetch record by index in records</span></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">one</span><span class="params">(<span class="keyword">int</span> index)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">firstOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">secondOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">thirdOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line">    <span class="comment">//  Kafka Consumer Fetch all latest records</span></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitMultiFromStep <span class="title">all</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitMultiFromStep <span class="title">multi</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line">    <span class="comment">//  Kafka Consumer Fetch multi records directly from topic</span></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">DSLAwaitMultiLoadConfigStep <span class="title">fromTopic</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">DSLAwaitMultiRecordsStep <span class="title">fromTopic</span><span class="params">(String topic)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">DSLAwaitMultiRecordsStep <span class="title">fromTopic</span><span class="params">(String topic, String groupId)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面是<strong>监听一条并且验证消息是否正确</strong>的写法，这里使用了 <code>toJavaObject()</code> 转成了 Java 对象，这个是我提供的转换消息的 API，后面会有介绍。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">kafkaSuite.send(<span class="string">"&#123;\"name\":\"jack\",\"age\":25&#125;"</span>)</span><br><span class="line">                .toTopic()</span><br><span class="line">                .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br><span class="line">                </span><br><span class="line">Person record = kafkaSuite</span><br><span class="line">                .await().latestOne()</span><br><span class="line">                .fromTopic()</span><br><span class="line">                .ofConfig(<span class="string">"INTEGRATION-TEST"</span>)</span><br><span class="line">                .toJavaObject(Person.class);</span><br><span class="line">                </span><br><span class="line">assertThat(record.getName()).isEqualTo(<span class="string">"jack"</span>);</span><br><span class="line">assertThat(record.getAge()).isEqualTo(<span class="number">25</span>);</span><br></pre></td></tr></table></figure>
+<p><strong>由于有的业务场景会出口多条消息，所以接下来演示验证多条消息的正确写法</strong>。提供了 <code>fetchFirstOne()</code> 和 <code>fetchOne(int index)</code> 根据 Index 获取多条中的一条等 API：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">kafkaSuite.send(<span class="string">"&#123;\"name\": \"jack\", \"age\": 25&#125;"</span>)</span><br><span class="line">        .toTopic()</span><br><span class="line">        .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br><span class="line"></span><br><span class="line">kafkaSuite.send(<span class="string">"&#123;\"name\": \"tony\", \"age\": 20&#125;"</span>)</span><br><span class="line">        .toTopic()</span><br><span class="line">        .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br><span class="line"></span><br><span class="line">DSLAwaitMultiRecordsStep records = kafkaSuite</span><br><span class="line">        .await().multi()</span><br><span class="line">        .fromTopic()</span><br><span class="line">        .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br><span class="line"></span><br><span class="line">Person jack = records.fetchFirstOne().toJavaObject(Person.class);</span><br><span class="line">Person tony = records.fetchOne(<span class="number">1</span>).toJavaObject(Person.class);</span><br><span class="line"></span><br><span class="line">assertThat(jack.getName()).isEqualTo(<span class="string">"jack"</span>);</span><br><span class="line">assertThat(jack.getAge()).isEqualTo(<span class="number">25</span>);</span><br><span class="line">assertThat(tony.getName()).isEqualTo(<span class="string">"tony"</span>);</span><br><span class="line">assertThat(tony.getAge()).isEqualTo(<span class="number">20</span>);</span><br></pre></td></tr></table></figure>
+<p>最后结果的<strong>输出提供了转换和输出到文件的 API</strong>。需要注意，输出到文件只是方便调试 Bug 时使用，不应该出现在正式的代码中；输出的文件被写入到 <code>target/test-classes/resources</code> 下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DSLAwaitOneRecordStep</span> <span class="keyword">extends</span> <span class="title">DSLAwaitRecordStep</span>, <span class="title">DSLAwaitOneRecordOutputStep</span>, <span class="title">DSLAwaitOneRecordConvertStep</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">String <span class="title">toString</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">JsonObject <span class="title">toJsonObject</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">JSONArray <span class="title">toJsonArray</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">toXml</span><span class="params">()</span></span>; <span class="comment">// 编码未完成</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    &lt;T&gt; <span class="function">T <span class="title">toJavaObject</span><span class="params">(Class&lt;T&gt; clazz)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">writeAsTxt</span><span class="params">(String absolutePath)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">writeAsTxt</span><span class="params">(ResourceFile resourceFile)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h2><p>流畅接口 API 的设计一个重中之重就是<strong>接口和抽象类的使用</strong>，为了契合流式接口，有时不能按照面向对象的模式设计接口继承关系。简言之，在编写流畅接口 API 框架时，大致思路是先编写接口（Interface），按照流式的原则设计接口之间的继承关系，然后再编写具体的实现类。以下是我的代码结构，与 <code>impl</code> 文件夹并列的都是接口。具体代码详见我的 <a href="https://github.com/s1mplecc/kafka-integration-test" target="_blank" rel="noopener">GitHub</a> 项目。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── Assertions.java</span><br><span class="line">├── JobIntegrationTest.java</span><br><span class="line">├── KafkaSuite.java</span><br><span class="line">└── core</span><br><span class="line">    ├── dsl</span><br><span class="line">    │   ├── await</span><br><span class="line">    │   │   ├── DSLAwaitFromStep.java</span><br><span class="line">    │   │   ├── DSLAwaitIndexStep.java</span><br><span class="line">    │   │   ├── DSLAwaitLoadConfigStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiFromStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiLoadConfigStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiRecordsConvertStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiRecordsFetchOneStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiRecordsStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneFromStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneLoadConfigStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneRecordConvertStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneRecordOutputStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneRecordStep.java</span><br><span class="line">    │   │   ├── DSLAwaitRecordStep.java</span><br><span class="line">    │   │   ├── DSLAwaitStep.java</span><br><span class="line">    │   │   └── impl</span><br><span class="line">    │   │       ├── AbstractDSLAwaitFromStep.java</span><br><span class="line">    │   │       ├── AbstractDSLAwaitLoadConfigStep.java</span><br><span class="line">    │   │       ├── DSLAwaitIndexStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitMultiFromStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitMultiLoadConfigStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitMultiRecordsStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitOneFromStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitOneLoadConfigStepImpl.java</span><br><span class="line">    │   │       └── DSLAwaitOneRecordStepImpl.java</span><br><span class="line">    │   ├── send</span><br><span class="line">    │   │   ├── DSLSendStep.java</span><br><span class="line">    │   │   ├── DSLSendToStep.java</span><br><span class="line">    │   │   ├── DSLSentLoadConfigStep.java</span><br><span class="line">    │   │   └── impl</span><br><span class="line">    │   │       ├── DSLSendToStepImpl.java</span><br><span class="line">    │   │       └── DSLSentLoadConfigStepImpl.java</span><br><span class="line">    │   └── start</span><br><span class="line">    │       ├── DSLPrepareStep.java</span><br><span class="line">    │       └── DSLStartStep.java</span><br><span class="line">    └── exceptions</span><br><span class="line">        ├── AwaitTimeoutException.java</span><br><span class="line">        ├── InvalidIntegrationTestNameException.java</span><br><span class="line">        ├── SendNullValueException.java</span><br><span class="line">        └── SendTimeoutException.java</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2019/04/10/搭建-SSR-科学上网/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -431,7 +656,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-04-15 15:14:26" itemprop="dateModified" datetime="2019-04-15T15:14:26+08:00">2019-04-15</time>
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
               
             
           </span>
@@ -653,12 +878,24 @@
                 
               
 
-              <time title="创建时间：2019-02-25 21:35:58 / 修改时间：21:41:40" itemprop="dateCreated datePublished" datetime="2019-02-25T21:35:58+08:00">2019-02-25</time>
+              <time title="创建时间：2019-02-25 21:35:58" itemprop="dateCreated datePublished" datetime="2019-02-25T21:35:58+08:00">2019-02-25</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
               
             
           </span>
@@ -901,12 +1138,24 @@
                 
               
 
-              <time title="创建时间：2019-02-15 15:09:14 / 修改时间：15:18:21" itemprop="dateCreated datePublished" datetime="2019-02-15T15:09:14+08:00">2019-02-15</time>
+              <time title="创建时间：2019-02-15 15:09:14" itemprop="dateCreated datePublished" datetime="2019-02-15T15:09:14+08:00">2019-02-15</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
               
             
           </span>
@@ -1140,12 +1389,24 @@
                 
               
 
-              <time title="创建时间：2019-01-23 14:15:45 / 修改时间：14:16:06" itemprop="dateCreated datePublished" datetime="2019-01-23T14:15:45+08:00">2019-01-23</time>
+              <time title="创建时间：2019-01-23 14:15:45" itemprop="dateCreated datePublished" datetime="2019-01-23T14:15:45+08:00">2019-01-23</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
               
             
           </span>
@@ -1353,12 +1614,24 @@
                 
               
 
-              <time title="创建时间：2019-01-13 18:10:44 / 修改时间：19:07:22" itemprop="dateCreated datePublished" datetime="2019-01-13T18:10:44+08:00">2019-01-13</time>
+              <time title="创建时间：2019-01-13 18:10:44" itemprop="dateCreated datePublished" datetime="2019-01-13T18:10:44+08:00">2019-01-13</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
               
             
           </span>
@@ -1640,7 +1913,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-30 20:31:10" itemprop="dateModified" datetime="2018-12-30T20:31:10+08:00">2018-12-30</time>
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
               
             
           </span>
@@ -1952,7 +2225,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-27 20:40:43" itemprop="dateModified" datetime="2018-12-27T20:40:43+08:00">2018-12-27</time>
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
               
             
           </span>
@@ -2275,7 +2548,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-27 20:50:38" itemprop="dateModified" datetime="2018-12-27T20:50:38+08:00">2018-12-27</time>
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
               
             
           </span>
@@ -2562,7 +2835,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-30 20:35:21" itemprop="dateModified" datetime="2018-12-30T20:35:21+08:00">2018-12-30</time>
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
               
             
           </span>
@@ -2738,243 +3011,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/16/Java8 函数接口/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="清风不问过路客，岁月不负有心人">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/11/16/Java8 函数接口/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">Java8 函数接口</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-16 12:33:17" itemprop="dateCreated datePublished" datetime="2018-11-16T12:33:17+08:00">2018-11-16</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-27 20:44:30" itemprop="dateModified" datetime="2018-12-27T20:44:30+08:00">2018-12-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/11/16/Java8 函数接口/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/16/Java8 函数接口/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">4.8k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="函数接口"><a href="#函数接口" class="headerlink" title="函数接口"></a>函数接口</h2><p>在函数式编程中，<strong>纯函数</strong>的定义是：</p>
-<ol>
-<li>此函数在相同的输入值时，需产生相同的输出。函数的输出和输入值以外的其他隐藏信息或状态无关，也和由 I/O 设备产生的外部输出无关。</li>
-<li>该函数不能有语义上可观察的函数副作用，诸如“触发事件”，使输出设备输出，或更改输出值以外物件的内容等。</li>
-</ol>
-<p>为使 Java 支持函数式编程，<strong>函数接口</strong>（<strong>Functional Interfaces</strong>）正是 Java 8 引入的一个核心概念。函数接口要求接口中只能定义个<strong>唯一一个抽象方法</strong>。同时，引入一个新的注解： <code>@FunctionalInterface</code>，作为函数接口的标记。</p>
-<p>Java 8 提供了四大类函数接口：<strong>谓词</strong> <code>Predicate</code>，<strong>函数</strong> <code>Function</code>，<strong>提供者</strong> <code>Supplier</code>，<strong>消费者</strong> <code>Consumer</code>。以及衍生的函数接口，比如 <code>BiFunction&lt;T, U, R&gt;</code> 支持两个入参的函数等等，它们都定义在 <code>java.util.function</code> 包下。</p>
-<h3 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h3><p>函数式接口的重要属性是：<strong>我们能够使用 Lambda 实例化它们</strong>。Lambda 表达式的引入给开发者带来了不少优点：在 Java 8 之前，匿名内部类，监听器和事件处理器的使用都显得很冗长，代码可读性很差，Lambda 表达式的应用则使代码变得更加紧凑，可读性增强；Lambda 表达式使<strong>并行操作大集合</strong>变得很方便，可以充分发挥多核 CPU 的优势，更易于为多核处理器编写代码。</p>
-<p>Lambda 表达式由三个部分组成：第一部分为一个括号内用逗号分隔的函数入参；第二部分为箭头符号 <code>-&gt;</code>；第三部分为方法体，可以是表达式和代码块。语法如下：</p>
-<ul>
-<li><p><code>(parameters) ‑&gt; expression</code> 方法体为表达式，该表达式的值作为返回值返回。</p>
-</li>
-<li><p><code>(parameters) ‑&gt; { statements; }</code> 方法体为代码块，必须用 <code>{}</code> 包裹起来，若该函数需要返回值则需要 <code>return</code>。</p>
-</li>
-</ul>
-<p>用 Lambda 表达式替换匿名内部类的写法如下。再进一步，可以使用<strong>方法引用</strong>（<strong>Method Reference</strong>）简写</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Anonymous inner class</span></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).map(<span class="keyword">new</span> Function&lt;String, Integer&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">apply</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> s.length();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).map(s -&gt; s.length());</span><br><span class="line"></span><br><span class="line"><span class="comment">// Method reference</span></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).map(String::length);</span><br></pre></td></tr></table></figure>
-<p>使用 <code>parallelStream()</code> 和 Lambda 表达式并行操作集合，默认线程数为 CPU 核数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">urls.parallelStream()</span><br><span class="line">        .filter(url -&gt; url.endsWith(<span class="string">".html"</span>))</span><br><span class="line">        .map(url -&gt; htmlParser.contentFrom(url))</span><br><span class="line">        .reduce((x, y) -&gt; x + y)</span><br><span class="line">        .orElse(<span class="string">""</span>);</span><br></pre></td></tr></table></figure></p>
-<h3 id="谓词-Predicate"><a href="#谓词-Predicate" class="headerlink" title="谓词 Predicate"></a>谓词 Predicate</h3><p>在计算机语言的环境下，谓词是指条件表达式的求值返回真或假的过程。在 Java 中就是进行逻辑判断后返回值为 <code>boolean</code> 的函数，对应函数接口为 <code>Predicate&lt;T&gt;</code>。在针对集合进行筛选时，通常会使用谓词对集合元素进行条件判断。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Predicate</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">test</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">and</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; other)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; test(t) &amp;&amp; other.test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">negate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; !test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">or</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; other)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; test(t) || other.test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function">Predicate&lt;T&gt; <span class="title">isEqual</span><span class="params">(Object targetRef)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">null</span> == targetRef)</span><br><span class="line">                ? Objects::isNull</span><br><span class="line">                : object -&gt; targetRef.equals(object);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>Predicate&lt;T&gt;</code> 接口定义的唯一抽象方法 <code>test(T t)</code> 用以验证输入参数是否满足谓词条件。同时，它还提供了默认方法用以支持<strong>组合的与、或、非逻辑运算</strong>。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Predicate&lt;Apple&gt; p1 = p ‑&gt; p.getColor() == Color.RED;</span><br><span class="line">Predicate&lt;Apple&gt; p2 = p ‑&gt; p.getSize() == Size.Medium;</span><br><span class="line"></span><br><span class="line">apples.stream().filter(p1.and(p2));</span><br></pre></td></tr></table></figure>
-<h3 id="函数-Function"><a href="#函数-Function" class="headerlink" title="函数 Function"></a>函数 Function</h3><p><code>Function&lt;T, R&gt;</code> 接口代表一个函数，准确地说，代表了具有输入输出的函数，这也是最常见的函数定义。具有两个入参的函数对应接口为 <code>BiFunction&lt;T, U, R&gt;</code> 。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;T&gt; the type of the input to the function</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;R&gt; the type of the result of the function</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Function</span>&lt;<span class="title">T</span>, <span class="title">R</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">R <span class="title">apply</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;V&gt; <span class="function">Function&lt;V, R&gt; <span class="title">compose</span><span class="params">(Function&lt;? <span class="keyword">super</span> V, ? extends T&gt; before)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(before);</span><br><span class="line">        <span class="keyword">return</span> (V v) -&gt; apply(before.apply(v));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;V&gt; <span class="function">Function&lt;T, V&gt; <span class="title">andThen</span><span class="params">(Function&lt;? <span class="keyword">super</span> R, ? extends V&gt; after)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        <span class="keyword">return</span> (T t) -&gt; after.apply(apply(t));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function">Function&lt;T, T&gt; <span class="title">identity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> t -&gt; t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>函数也可以进行组合，组合后返回的结果也是一个函数，这就是所谓的<strong>组合子</strong>。组合子方法分别为：</p>
-<ul>
-<li><code>compose(before)</code>，组合前一个函数，相当于 <code>V -&gt; T -&gt; R</code> </li>
-<li><code>andThen(after)</code>，组合后一个函数，相当于 <code>T -&gt; R -&gt; V</code></li>
-</ul>
-<h3 id="提供者-Supplier"><a href="#提供者-Supplier" class="headerlink" title="提供者 Supplier"></a>提供者 Supplier</h3><p>当一个函数仅仅用于返回结果时，我们可以将这种函数称为<strong>提供者</strong>，接口定义为 <code>Supplier&lt;T&gt;</code>。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Supplier</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function">T <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>只提供一个 <code>get()</code> 方法，我们可以将这种提供者代表的函数看做是一种 Query 操作。</p>
-<h3 id="消费者-Consumer"><a href="#消费者-Consumer" class="headerlink" title="消费者 Consumer"></a>消费者 Consumer</h3><p>与提供者对应的接口则被称之为<strong>消费者</strong>，用以接收一个输入，但却并不关心返回结果，即返回值为 <code>void</code>。消费者的对应接口为 <code>Consumer&lt;T&gt;</code>。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Represents an operation that accepts a single input argument and returns no</span></span><br><span class="line"><span class="comment"> * result. Unlike most other functional interfaces, &#123;<span class="doctag">@code</span> Consumer&#125; is expected</span></span><br><span class="line"><span class="comment"> * to operate via side-effects.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Consumer</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">accept</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Consumer&lt;T&gt; <span class="title">andThen</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; after)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        <span class="keyword">return</span> (T t) -&gt; &#123; accept(t); after.accept(t); &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>不像其他函数接口，<code>Consumer</code> 通常是<strong>有副作用的</strong>。这也不难理解，该函数只有输入没有输出，那数据通常是被外部系统消费了。同时 <code>Consumer</code> 支持 <code>andThen(after)</code> 组合</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Consumer&lt;String&gt; c1 = s -&gt; System.out.println(s);</span><br><span class="line">Consumer&lt;String&gt; c2 = s -&gt; storeToDB(s);</span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).ifPresent(c1.andThen(c2));</span><br></pre></td></tr></table></figure>
-<p>这种消费者代表的函数相当于是一个 Command 操作。软件设计的一条原则就是 <strong>CQS</strong>（Command-Query Separation）命令-查询分离原则，即保证一个方法体内只有 Query 和 Command 的一种，就是因为查询无副作用而命令可能会改变数据状态。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3024,7 +3060,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">61</span>
+                    <span class="site-state-item-count">62</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
