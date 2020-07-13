@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://s1mplecc.github.io/"/>
-  <updated>2020-01-03T12:40:41.073Z</updated>
+  <updated>2020-07-13T13:35:31.063Z</updated>
   <id>https://s1mplecc.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>图流算法之 Bipartiteness Check</title>
+    <link href="https://s1mplecc.github.io/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/"/>
+    <id>https://s1mplecc.github.io/2020/07/13/图流算法之-Bipartiteness-Check/</id>
+    <published>2020-07-13T13:28:17.000Z</published>
+    <updated>2020-07-13T13:35:31.063Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Algorithms" scheme="https://s1mplecc.github.io/categories/Algorithms/"/>
+    
+    
+      <category term="Graph Theory" scheme="https://s1mplecc.github.io/tags/Graph-Theory/"/>
+    
+      <category term="Stream Progressing" scheme="https://s1mplecc.github.io/tags/Stream-Progressing/"/>
+    
+  </entry>
   
   <entry>
     <title>使用流畅接口编写 Kafka 集成测试框架</title>
@@ -525,32 +553,6 @@
       <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
     
       <category term="Web" scheme="https://s1mplecc.github.io/tags/Web/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java 异常处理</title>
-    <link href="https://s1mplecc.github.io/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/"/>
-    <id>https://s1mplecc.github.io/2018/07/16/Java 异常处理/</id>
-    <published>2018-07-15T21:21:06.000Z</published>
-    <updated>2020-01-03T11:24:53.251Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-      <category term="Languages" scheme="https://s1mplecc.github.io/categories/Languages/"/>
-    
-    
-      <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
     
   </entry>
   
