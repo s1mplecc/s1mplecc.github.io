@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -113,39 +113,42 @@
 
 
   <meta name="description" content="Preface 最近遇到需要在 Spring Cloud 框架中加入用户认证的功能，发现 GitHub 有第三方认证功能，遂先写了个 demo 实现通过 GitHub 三方认证完成用户认证，虽然不是最终解决方案，但是有助于理解用户认证的流程   代码沿用之前的 Sidecar – 将Node应用引入Spring Cloud 博客中的代码，用到以下模块   1234─ sidecar-example">
-<meta name="keywords" content="Spring Cloud,OAuth">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring Cloud 集成 GitHub 第三方认证">
-<meta property="og:url" content="https://s1mplecc.github.io/2018/04/13/Spring Cloud集成GitHub第三方认证/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="Preface 最近遇到需要在 Spring Cloud 框架中加入用户认证的功能，发现 GitHub 有第三方认证功能，遂先写了个 demo 实现通过 GitHub 三方认证完成用户认证，虽然不是最终解决方案，但是有助于理解用户认证的流程   代码沿用之前的 Sidecar – 将Node应用引入Spring Cloud 博客中的代码，用到以下模块   1234─ sidecar-example">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud集成GitHub第三方认证/0.jpg">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud集成GitHub第三方认证/1.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud集成GitHub第三方认证/2.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud集成GitHub第三方认证/3.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud集成GitHub第三方认证/4.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud集成GitHub第三方认证/5.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud集成GitHub第三方认证/6.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud集成GitHub第三方认证/7.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud集成GitHub第三方认证/8.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud集成GitHub第三方认证/9.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud集成GitHub第三方认证/10.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud集成GitHub第三方认证/11.png">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.329Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/0.jpg">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/1.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/2.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/3.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/4.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/5.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/6.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/7.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/8.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/9.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/10.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/11.png">
+<meta property="article:published_time" content="2018-04-12T23:23:14.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.329Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Spring Cloud">
+<meta property="article:tag" content="OAuth">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spring Cloud 集成 GitHub 第三方认证">
-<meta name="twitter:description" content="Preface 最近遇到需要在 Spring Cloud 框架中加入用户认证的功能，发现 GitHub 有第三方认证功能，遂先写了个 demo 实现通过 GitHub 三方认证完成用户认证，虽然不是最终解决方案，但是有助于理解用户认证的流程   代码沿用之前的 Sidecar – 将Node应用引入Spring Cloud 博客中的代码，用到以下模块   1234─ sidecar-example">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud集成GitHub第三方认证/0.jpg">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/0.jpg">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2018/04/13/Spring Cloud集成GitHub第三方认证/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/04/13/Spring Cloud集成GitHub第三方认证/"/>
 
 
 
@@ -195,9 +198,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -207,7 +210,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -251,7 +254,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -268,7 +271,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -285,7 +288,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -302,7 +305,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -313,7 +316,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -333,7 +336,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -378,20 +383,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/04/13/Spring Cloud集成GitHub第三方认证/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -448,7 +453,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -459,7 +464,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
 
                 
                 
@@ -474,9 +479,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/04/13/Spring Cloud集成GitHub第三方认证/#comments" itemprop="discussionUrl">
+                <a href="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/04/13/Spring Cloud集成GitHub第三方认证/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/04/13/Spring Cloud集成GitHub第三方认证/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -487,10 +493,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -534,7 +541,7 @@
 </blockquote>
 <ul>
 <li><p>代码沿用之前的 <a href="https://s1mple.xyz/sidecar/" target="_blank" rel="noopener">Sidecar – 将Node应用引入Spring Cloud</a> 博客中的代码，用到以下模块</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">─ sidecar-example</span><br><span class="line">   ├── author-service    // 需要认证才能访问的微服务</span><br><span class="line">   ├── eureka-server    // 注册中心</span><br><span class="line">   └── api-gateway    // 网关，一切访问的入口</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">─ sidecar-example</span><br><span class="line">   ├── author-service    &#x2F;&#x2F; 需要认证才能访问的微服务</span><br><span class="line">   ├── eureka-server    &#x2F;&#x2F; 注册中心</span><br><span class="line">   └── api-gateway    &#x2F;&#x2F; 网关，一切访问的入口</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <blockquote>
@@ -551,12 +558,10 @@
 <li><p>最传统的办法是让用户直接在简书的登录页面输微博的账号和密码，简书通过用户的账号和密码去微博那里获取用户数据，但这样做有很多严重的缺点：</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">简书需要保存用户的微博账号和密码，这样很不安全。</span><br><span class="line">简书拥有了获取用户在微博所有的权限，包括删除好友、给好友发私信、更改密码、注销账号等危险操作。</span><br><span class="line">用户只有修改微博密码，才能收回赋予简书的权限。但是这样做会使得其他所有通过微博登录的第三方应用程序全部失效。</span><br><span class="line">只要有一个第三方应用程序被破解，就会导致用户密码泄漏，以及所有使用微博登录的网站的数据泄漏。</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>为了解决以上的问题，OAuth 协议应运而生。我们来看一下它的流程</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">简书问新浪微博：我想要获取用户 A 的头像和昵称，请你提供</span><br><span class="line">微博说：我需要经过用户Ａ 本人的许可 =&gt; 然后微博询问用户 A 是否要授权简书访问自己的头像和昵称</span><br><span class="line">用户授权后，微博对简书说：我给你一个临时钥匙（Token），你访问我带了这把钥匙，我就把用户的资料给你</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">简书问新浪微博：我想要获取用户 A 的头像和昵称，请你提供</span><br><span class="line">微博说：我需要经过用户Ａ 本人的许可 &#x3D;&gt; 然后微博询问用户 A 是否要授权简书访问自己的头像和昵称</span><br><span class="line">用户授权后，微博对简书说：我给你一个临时钥匙（Token），你访问我带了这把钥匙，我就把用户的资料给你</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>以上流程可由下图表示<br><img src="/2018/04/13/Spring Cloud集成GitHub第三方认证/0.jpg" alt="291523855245_.pic"></p>
+<li><p>以上流程可由下图表示<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/0.jpg" alt="291523855245_.pic"></p>
 </li>
 <li><p>其中最关键的两个部分如下</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">② 用户同意授权给客户端，则认证服务器返回 Code，即授权码</span><br><span class="line">③ 客户端带着 Code，去认证服务器申领 Token</span><br></pre></td></tr></table></figure>
@@ -569,16 +574,16 @@
 <ul>
 <li><p>步骤如下</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">用户访问客户端，后者将前者导向认证服务器。</span><br><span class="line">认证服务器询问用户是否给予客户端授权。</span><br><span class="line">若用户给予授权，认证服务器将用户导向客户端事先指定的&quot;重定向URI&quot;（redirection URI），同时附上一个授权码。</span><br><span class="line">客户端收到授权码，附上早先的&quot;重定向URI&quot;，向认证服务器申请令牌。这一步是在客户端的后台的服务器上完成的，对用户不可见。</span><br><span class="line">认证服务器核对了授权码和重定向URI，确认无误后，向客户端发送访问令牌（access token）和更新令牌（refresh token）。</span><br></pre></td></tr></table></figure>
-<p>  <img src="/2018/04/13/Spring Cloud集成GitHub第三方认证/1.png" alt="bg2014051204"></p>
+<p>  <img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/1.png" alt="bg2014051204"></p>
 </li>
 </ul>
 <h2 id="Register"><a href="#Register" class="headerlink" title="Register"></a>Register</h2><blockquote>
 <p>接下来进入正题，如何基于 GitHub 进行第三方认证。首先，我们需要先前往 GitHub 注册一个新的 OAuth App</p>
 </blockquote>
 <ul>
-<li><p>前往<code>https://github.com/settings/developers</code>点击<code>Register a new application</code>，出现如下界面，填写相应信息。注意，主页和回调的 URL 填写的都是<code>api-gateway</code>的地址<br><img src="/2018/04/13/Spring Cloud集成GitHub第三方认证/2.png" alt="B2241479-07A7-4E03-BB62-BCA4CDA5A4A3"></p>
+<li><p>前往<code>https://github.com/settings/developers</code>点击<code>Register a new application</code>，出现如下界面，填写相应信息。注意，主页和回调的 URL 填写的都是<code>api-gateway</code>的地址<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/2.png" alt="B2241479-07A7-4E03-BB62-BCA4CDA5A4A3"></p>
 </li>
-<li><p>注册成功后生成的<code>Client ID</code>和<code>Client Secret</code>是后续需要填写到配置文件中<br><img src="/2018/04/13/Spring Cloud集成GitHub第三方认证/3.png" alt="C65DDEFD-F282-4F12-A211-938767ECD7DA"></p>
+<li><p>注册成功后生成的<code>Client ID</code>和<code>Client Secret</code>是后续需要填写到配置文件中<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/3.png" alt="C65DDEFD-F282-4F12-A211-938767ECD7DA"></p>
 </li>
 </ul>
 <h2 id="Coding"><a href="#Coding" class="headerlink" title="Coding"></a>Coding</h2><blockquote>
@@ -588,13 +593,9 @@
 <li><p>添加 Maven 依赖</p>
   <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-oauth2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>在主类上添加<code>@EnableOAuth2Sso</code>注解</p>
   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableDiscoveryClient</span></span><br><span class="line"><span class="meta">@EnableZuulProxy</span></span><br><span class="line"><span class="meta">@EnableOAuth</span>2Sso</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ApiGatewayApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(ApiGatewayApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>为了测试过滤情况，我加入了<code>/</code>和<code>/test</code>接口，除此之外，还有<code>/user</code>接口返回 GitHub 个人信息的接口</p>
   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Controller</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">welcome</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"welcome"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/test"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"test"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/user"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Principal <span class="title">user</span><span class="params">(Principal user)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
@@ -606,31 +607,31 @@
 <p>现在就可以进行测试了。陆续启动<code>eureka-server</code>、<code>api-gateway</code>、<code>author-service</code>三个微服务</p>
 </blockquote>
 <ul>
-<li><p>访问<code>localhost:5555/</code>和<code>localhost:5555/test</code>接口，发现均不需要认证，即<code>security.ignored: /,/test</code>配置生效<br><img src="/2018/04/13/Spring Cloud集成GitHub第三方认证/4.png" alt="1C21C2B8-E689-4BBC-94EE-4ED74796994C"></p>
+<li><p>访问<code>localhost:5555/</code>和<code>localhost:5555/test</code>接口，发现均不需要认证，即<code>security.ignored: /,/test</code>配置生效<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/4.png" alt="1C21C2B8-E689-4BBC-94EE-4ED74796994C"></p>
 </li>
-<li><p>接下来通过网关访问<code>author-service</code>的接口，正常需要通过 GitHub 认证，事实证明确实如此。访问<code>http://localhost:5555/author-service/author/1</code>接口，跳转到<strong>用户授权</strong>界面<br><img src="/2018/04/13/Spring Cloud集成GitHub第三方认证/5.png" alt="D2FCA844-1A95-4907-A350-68A21ACCE38C"></p>
+<li><p>接下来通过网关访问<code>author-service</code>的接口，正常需要通过 GitHub 认证，事实证明确实如此。访问<code>http://localhost:5555/author-service/author/1</code>接口，跳转到<strong>用户授权</strong>界面<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/5.png" alt="D2FCA844-1A95-4907-A350-68A21ACCE38C"></p>
 </li>
-<li><p>确认授权后重定位到<code>/author-service/author/1</code>接口返回数据<br><img src="/2018/04/13/Spring Cloud集成GitHub第三方认证/6.png" alt="ED7EE656-F376-408D-9DB8-2C6908799A07-1"></p>
+<li><p>确认授权后重定位到<code>/author-service/author/1</code>接口返回数据<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/6.png" alt="ED7EE656-F376-408D-9DB8-2C6908799A07-1"></p>
 </li>
 <li><p>还可以访问<code>http://localhost:5555/user</code>来获取 GitHub 账号的信息，这个就不贴图了，自己测试即可</p>
 </li>
-<li><p>再回到 GitHub 的 OAuth 界面，发现<code>0 user</code>变成<code>1 user</code>了，在此你可以弃用所有的用户 Token 以及重置 Client Secret 密钥<br><img src="/2018/04/13/Spring Cloud集成GitHub第三方认证/7.png" alt="7E65EF94-3B65-4FE3-B814-29C6B8A54ECF"> </p>
+<li><p>再回到 GitHub 的 OAuth 界面，发现<code>0 user</code>变成<code>1 user</code>了，在此你可以弃用所有的用户 Token 以及重置 Client Secret 密钥<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/7.png" alt="7E65EF94-3B65-4FE3-B814-29C6B8A54ECF"> </p>
 </li>
 </ul>
 <h2 id="Analyze"><a href="#Analyze" class="headerlink" title="Analyze"></a>Analyze</h2><blockquote>
 <p>以下分析主要是为了看清重定位、URL 的参数和<code>application.yml</code>中的配置有何关联</p>
 </blockquote>
 <ul>
-<li><p>访问<code>http://localhost:5555/author-service/author/1</code>后，重定位到<code>http://localhost:5555/login</code><br><img src="/2018/04/13/Spring Cloud集成GitHub第三方认证/8.png" alt="D33AA927-F963-41C7-BE5F-6AA7C4FF09AF"></p>
+<li><p>访问<code>http://localhost:5555/author-service/author/1</code>后，重定位到<code>http://localhost:5555/login</code><br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/8.png" alt="D33AA927-F963-41C7-BE5F-6AA7C4FF09AF"></p>
 </li>
-<li><p>访问<code>http://localhost:5555/login</code>重定位<code>https://github.com/login/oauth/authorize</code>即 GitHub 的用户授权路径<br><img src="/2018/04/13/Spring Cloud集成GitHub第三方认证/9.png" alt="E652C938-12A3-4A56-9367-0D07D76B1B66"></p>
+<li><p>访问<code>http://localhost:5555/login</code>重定位<code>https://github.com/login/oauth/authorize</code>即 GitHub 的用户授权路径<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/9.png" alt="E652C938-12A3-4A56-9367-0D07D76B1B66"></p>
 </li>
 <li><p><code>/login/oauth/authorize</code>这个界面才是用户看到的需要点击授权的页面，我们来看下 URL 携带的参数：</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">client_id: 554906e366f7861eab21</span><br><span class="line">redirect_uri: http://localhost:5555/login</span><br><span class="line">response_type: code</span><br><span class="line">state: z2MaR7</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">client_id: 554906e366f7861eab21</span><br><span class="line">redirect_uri: http:&#x2F;&#x2F;localhost:5555&#x2F;login</span><br><span class="line">response_type: code</span><br><span class="line">state: z2MaR7</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>用户点击确认授权后，注意此 Token 非彼 Token<br><img src="/2018/04/13/Spring Cloud集成GitHub第三方认证/10.png" alt="71F69537-2DE4-49BD-AC22-774211576934"></p>
+<li><p>用户点击确认授权后，注意此 Token 非彼 Token<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/10.png" alt="71F69537-2DE4-49BD-AC22-774211576934"></p>
 </li>
-<li><p>接下来带着 code 和 state 访问<code>http://localhost:5555/login</code>再重定位到<code>http://localhost:5555/author-service/author/1</code>真正想访问的接口<br><img src="/2018/04/13/Spring Cloud集成GitHub第三方认证/11.png" alt="05DAA887-01B1-42F4-9C20-0820777E7D92"></p>
+<li><p>接下来带着 code 和 state 访问<code>http://localhost:5555/login</code>再重定位到<code>http://localhost:5555/author-service/author/1</code>真正想访问的接口<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/11.png" alt="05DAA887-01B1-42F4-9C20-0820777E7D92"></p>
 </li>
 </ul>
 <blockquote>
@@ -681,7 +682,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/04/ESLint -- 代码规约插件/" rel="next" title="ESLint -- 代码规约插件">
+              <a href="/2018/04/04/ESLint%20--%20%E4%BB%A3%E7%A0%81%E8%A7%84%E7%BA%A6%E6%8F%92%E4%BB%B6/" rel="next" title="ESLint -- 代码规约插件">
                 <i class="fa fa-chevron-left"></i> ESLint -- 代码规约插件
               </a>
             
@@ -691,7 +692,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/27/JavaScript异步编程的发展/" rel="prev" title="JavaScript 异步编程的发展">
+              <a href="/2018/04/27/JavaScript%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E7%9A%84%E5%8F%91%E5%B1%95/" rel="prev" title="JavaScript 异步编程的发展">
                 JavaScript 异步编程的发展 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -757,9 +758,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -770,7 +773,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -984,7 +987,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1138,7 +1141,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2018/04/13/Spring Cloud集成GitHub第三方认证/';
+        this.page.url = 'https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/';
         this.page.identifier = '2018/04/13/Spring Cloud集成GitHub第三方认证/';
         this.page.title = 'Spring Cloud 集成 GitHub 第三方认证';
         };

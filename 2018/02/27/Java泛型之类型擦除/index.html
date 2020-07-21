@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -113,26 +113,28 @@
 
 
   <meta name="description" content="Preface Java SE5 的重大变化之一就是加入了泛型，实现了参数化类型，使得代码可以适用于多种类型。但由于兼容旧版本的考虑，不得不作出了一些牺牲，比如擦除，使得泛型使用受到一定局限。本文简要介绍了 Java 泛型以及类型擦除的概念和使用  泛型 Java泛型 (Generics) 是 JDK5 引入的新特性，允许在定义类和接口的时候使用类型参数 (Type Parameter)。声明的类">
-<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 泛型之类型擦除">
-<meta property="og:url" content="https://s1mplecc.github.io/2018/02/27/Java泛型之类型擦除/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="Preface Java SE5 的重大变化之一就是加入了泛型，实现了参数化类型，使得代码可以适用于多种类型。但由于兼容旧版本的考虑，不得不作出了一些牺牲，比如擦除，使得泛型使用受到一定局限。本文简要介绍了 Java 泛型以及类型擦除的概念和使用  泛型 Java泛型 (Generics) 是 JDK5 引入的新特性，允许在定义类和接口的时候使用类型参数 (Type Parameter)。声明的类">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.285Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-02-26T17:47:58.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.285Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java 泛型之类型擦除">
-<meta name="twitter:description" content="Preface Java SE5 的重大变化之一就是加入了泛型，实现了参数化类型，使得代码可以适用于多种类型。但由于兼容旧版本的考虑，不得不作出了一些牺牲，比如擦除，使得泛型使用受到一定局限。本文简要介绍了 Java 泛型以及类型擦除的概念和使用  泛型 Java泛型 (Generics) 是 JDK5 引入的新特性，允许在定义类和接口的时候使用类型参数 (Type Parameter)。声明的类">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2018/02/27/Java泛型之类型擦除/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/02/27/Java泛型之类型擦除/"/>
 
 
 
@@ -182,9 +184,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -194,7 +196,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -238,7 +240,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -255,7 +257,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -272,7 +274,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -289,7 +291,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -300,7 +302,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -320,7 +322,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -365,20 +369,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/02/27/Java泛型之类型擦除/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -435,7 +439,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -446,7 +450,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
 
                 
                 
@@ -461,9 +465,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/02/27/Java泛型之类型擦除/#comments" itemprop="discussionUrl">
+                <a href="/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/02/27/Java泛型之类型擦除/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/02/27/Java泛型之类型擦除/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -474,10 +479,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -492,7 +498,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">4.8k</span>
+                <span title="本文字数">5k</span>
               
 
               
@@ -524,11 +530,10 @@
 </blockquote>
 <ul>
 <li><p>通过泛型，大大提升了集合类的<strong>可复用性</strong>，你可以定义一个装字符串的 ArrayList，也可以定义一个装整型的 ArrayList</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;String&gt; als = new ArrayList&lt;&gt;();</span><br><span class="line">als.add(&quot;aaa&quot;);</span><br><span class="line"></span><br><span class="line">ArrayList&lt;Integer&gt; ali = new ArrayList&lt;&gt;();</span><br><span class="line">ali.add(1); </span><br><span class="line">ali.add(&quot;aaa&quot;);  // error</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;String&gt; als &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">als.add(&quot;aaa&quot;);</span><br><span class="line"></span><br><span class="line">ArrayList&lt;Integer&gt; ali &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">ali.add(1); </span><br><span class="line">ali.add(&quot;aaa&quot;);  &#x2F;&#x2F; error</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
-<li>自定义泛型类可以参考我的上一篇博客，<a href="https://s1mple.xyz/java-generics-linkedstack/" target="_blank" rel="noopener">Java泛型之LinkedStack</a></li>
+<li><p>自定义泛型类可以参考我的上一篇博客，<a href="https://s1mple.xyz/java-generics-linkedstack/" target="_blank" rel="noopener">Java泛型之LinkedStack</a></p>
+</li>
 </ul>
 <h3 id="使用泛型需要注意"><a href="#使用泛型需要注意" class="headerlink" title="使用泛型需要注意"></a>使用泛型需要注意</h3><hr>
 <blockquote>
@@ -536,16 +541,13 @@
 </blockquote>
 <ul>
 <li><p>开发人员在使用泛型的时候，很容易根据自己的直觉而犯一些错误</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;Object&gt; list) &#123;</span><br><span class="line">    // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;Object&gt; list) &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  这个方法接收<code>ArrayList&lt;Object&gt;</code>作为形参，但是如果尝试传入一个<code>ArrayList&lt;String&gt;</code>对象，却发现无法通过编译</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void test()&#123;</span><br><span class="line">    testGenerics(new ArrayList&lt;String&gt;()); &#x2F;&#x2F; 编译错误!!!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  虽然从直觉上来说，Object 是 String 的父类，这种类型转换应该是合理的。但是实际上这会产生<strong>隐含的类型转换</strong>问题，因此编译器直接就禁止这样的行为</p>
 </li>
 </ul>
-<pre><code>这个方法接收`ArrayList&lt;Object&gt;`作为形参，但是如果尝试传入一个`ArrayList&lt;String&gt;`对象，却发现无法通过编译
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void test()&#123;</span><br><span class="line">    testGenerics(new ArrayList&lt;String&gt;()); // 编译错误!!!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-虽然从直觉上来说，Object 是 String 的父类，这种类型转换应该是合理的。但是实际上这会产生**隐含的类型转换**问题，因此编译器直接就禁止这样的行为
-</code></pre><h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h2><blockquote>
+<h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h2><blockquote>
 <p>使用泛型的时候加上的类型参数，会被编译器在<strong>编译时</strong>去掉(擦除)。这个过程就称为<strong>类型擦除</strong> (<strong>Type Erasure</strong>) 。如在代码中定义的<code>List&lt;Object&gt;</code>和<code>List&lt;String&gt;</code>等类型，在编译之后都会变成 List 。</p>
 </blockquote>
 <blockquote>
@@ -569,7 +571,7 @@
 </blockquote>
 <ul>
 <li><p>继续用上例代码来做演示</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;Object&gt; list) &#123;</span><br><span class="line">    list.add(1); // 合法</span><br><span class="line">    list.add(&quot;aaa&quot;); // 合法</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void test()&#123;</span><br><span class="line">    testGenerics(new ArrayList&lt;String&gt;()); // 编译错误!!!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;Object&gt; list) &#123;</span><br><span class="line">    list.add(1); &#x2F;&#x2F; 合法</span><br><span class="line">    list.add(&quot;aaa&quot;); &#x2F;&#x2F; 合法</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void test()&#123;</span><br><span class="line">    testGenerics(new ArrayList&lt;String&gt;()); &#x2F;&#x2F; 编译错误!!!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>  不难理解，为了避免<code>ArrayList&lt;String&gt;</code>中添加一个 Integer 类型的对象，编译器干脆禁止了这样的行为。编译器会尽可能的检查可能存在的类型安全问题。对于确定是违反相关原则的地方，会给出编译错误。当编译器无法判断类型的使用是否正确的时候，会给出警告信息。</p>
 </li>
 </ul>
@@ -581,7 +583,7 @@
 <li><p><code>List&lt;?&gt;</code>不同于<code>List&lt;Object&gt;</code>的地方是，<code>List&lt;Object&gt;</code>实际上确定了参数类型是 Object 及其子类。而<code>List&lt;?&gt;</code>则其中所包含的元素类型是不确定。使用时可以用<code>List&lt;String&gt;</code>或<code>List&lt;Integer&gt;</code>替换。如果它包含了 String 的话，往里面添加 Integer 类型的元素就是错误的</p>
 </li>
 <li><p>请看如下代码</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;?&gt; list) &#123;</span><br><span class="line">    list.add(&quot;aaa&quot;); // 编译错误!!!</span><br><span class="line">    </span><br><span class="line">    Object obj = list.get(0); // 合法</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void test()&#123;</span><br><span class="line">    ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line">    list.add(&quot;aaa&quot;);</span><br><span class="line">    testGenerics(list); // 合法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;?&gt; list) &#123;</span><br><span class="line">    list.add(&quot;aaa&quot;); &#x2F;&#x2F; 编译错误!!!</span><br><span class="line">    </span><br><span class="line">    Object obj &#x3D; list.get(0); &#x2F;&#x2F; 合法</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void test()&#123;</span><br><span class="line">    ArrayList&lt;String&gt; list &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    list.add(&quot;aaa&quot;);</span><br><span class="line">    testGenerics(list); &#x2F;&#x2F; 合法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>  上述代码有如下几点要注意：</p>
 <ol>
 <li>因为通配符<code>?</code>类型未知，所以为了避免运行时类型错误，<code>list.add(&quot;aaa&quot;)</code>编译不会通过</li>
@@ -599,7 +601,7 @@
 <li><p><code>List&lt;? super Number&gt;</code>则说明 List 中包含的是 Number 及其<strong>父类</strong>。</p>
 </li>
 <li><p>当使用<code>extends</code>引入了上界之后，在使用类型的时候就可以<strong>使用上界类中定义的方法</strong>。查看如下的例子</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public static void testGenerics(ArrayList&lt;? extends Number&gt; list) &#123;</span><br><span class="line">    Number number = list.get(0);</span><br><span class="line">    System.out.println(number.intValue());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    ArrayList&lt;Double&gt; doubles = new ArrayList&lt;&gt;();</span><br><span class="line">    doubles.add(2.33333);</span><br><span class="line">    testGenerics(doubles); // 运行输出结果：2 </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public static void testGenerics(ArrayList&lt;? extends Number&gt; list) &#123;</span><br><span class="line">    Number number &#x3D; list.get(0);</span><br><span class="line">    System.out.println(number.intValue());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    ArrayList&lt;Double&gt; doubles &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    doubles.add(2.33333);</span><br><span class="line">    testGenerics(doubles); &#x2F;&#x2F; 运行输出结果：2 </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>  形参改为<code>&lt;? extends Number&gt;</code>后，可以看到如下两个性质：</p>
 <ol>
 <li>可以使用 Number 引用</li>
@@ -666,7 +668,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/24/Java泛型之LinkedStack/" rel="next" title="Java 泛型之 LinkedStack">
+              <a href="/2018/02/24/Java%E6%B3%9B%E5%9E%8B%E4%B9%8BLinkedStack/" rel="next" title="Java 泛型之 LinkedStack">
                 <i class="fa fa-chevron-left"></i> Java 泛型之 LinkedStack
               </a>
             
@@ -676,7 +678,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/02/28/Java泛型/" rel="prev" title="Java 泛型">
+              <a href="/2018/02/28/Java%E6%B3%9B%E5%9E%8B/" rel="prev" title="Java 泛型">
                 Java 泛型 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -742,9 +744,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -755,7 +759,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -969,7 +973,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1123,7 +1127,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2018/02/27/Java泛型之类型擦除/';
+        this.page.url = 'https://s1mplecc.github.io/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/';
         this.page.identifier = '2018/02/27/Java泛型之类型擦除/';
         this.page.title = 'Java 泛型之类型擦除';
         };

@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -113,26 +113,31 @@
 
 
   <meta name="description" content="Preface 本文介绍 Redis 的五种数据类型，并结合redis-cli和 Koa 应用演示如何与 Redis 的五种数据类型进行 CRUD 操作，在文章最后还有关于过期时间设置的介绍   代码已上传至 GitHub Node 框架使用 Koa2，与 Redis 的操作都使用 Restful API 的形式展现，使用 Postman 测试接口 使用的依赖为ioredis，执行npm i io">
-<meta name="keywords" content="Node.js,Database,Redis,Koa">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis 五种数据类型">
-<meta property="og:url" content="https://s1mplecc.github.io/2018/03/16/Redis五种数据类型/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/03/16/Redis%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="Preface 本文介绍 Redis 的五种数据类型，并结合redis-cli和 Koa 应用演示如何与 Redis 的五种数据类型进行 CRUD 操作，在文章最后还有关于过期时间设置的介绍   代码已上传至 GitHub Node 框架使用 Koa2，与 Redis 的操作都使用 Restful API 的形式展现，使用 Postman 测试接口 使用的依赖为ioredis，执行npm i io">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.310Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-03-16T00:27:36.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.310Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Node.js">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="Redis">
+<meta property="article:tag" content="Koa">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Redis 五种数据类型">
-<meta name="twitter:description" content="Preface 本文介绍 Redis 的五种数据类型，并结合redis-cli和 Koa 应用演示如何与 Redis 的五种数据类型进行 CRUD 操作，在文章最后还有关于过期时间设置的介绍   代码已上传至 GitHub Node 框架使用 Koa2，与 Redis 的操作都使用 Restful API 的形式展现，使用 Postman 测试接口 使用的依赖为ioredis，执行npm i io">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2018/03/16/Redis五种数据类型/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/03/16/Redis五种数据类型/"/>
 
 
 
@@ -182,9 +187,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -194,7 +199,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -238,7 +243,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -255,7 +260,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -272,7 +277,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -289,7 +294,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -300,7 +305,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -320,7 +325,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -365,20 +372,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/03/16/Redis五种数据类型/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/03/16/Redis%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -435,7 +442,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -446,7 +453,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
 
                 
                 
@@ -461,9 +468,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/03/16/Redis五种数据类型/#comments" itemprop="discussionUrl">
+                <a href="/2018/03/16/Redis%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/03/16/Redis五种数据类型/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/16/Redis五种数据类型/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -474,10 +482,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -534,8 +543,6 @@
 <li><p><code>redis-cli</code></p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SET string:s1 hello</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; GET string:s1</span><br><span class="line">&quot;hello&quot;</span><br><span class="line">127.0.0.1:6379&gt; DEL string:s1</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p><code>contollers/string.js</code></p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> router = <span class="built_in">require</span>(<span class="string">'koa-router'</span>)()</span><br><span class="line"><span class="keyword">const</span> redis = <span class="built_in">require</span>(<span class="string">'../config/redis'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> setString = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.set(<span class="string">'string:s1'</span>, <span class="string">'hello world'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> getString = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.get(<span class="string">'string:s1'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> delString = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.del(<span class="string">'string:s1'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/string'</span>, setString)</span><br><span class="line">router.get(<span class="string">'/string'</span>, getString)</span><br><span class="line">router.delete(<span class="string">'/string'</span>, delString)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = router</span><br></pre></td></tr></table></figure>
 </li>
@@ -561,12 +568,10 @@
 <p>  <code>LPUSH</code>添加到列表头部（Left Push），<code>RPUSH</code>添加到列表头部（Right Push）。相应的，<code>LPOP</code>和<code>RPOP</code>即从列表头和列表尾移除一个元素并获取该值。</p>
 </li>
 <li><p><code>LREM</code>根据参数<code>count</code>的值，移除列表中与参数 value 相等的元素</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">count &gt; 0 : 从表头开始向表尾搜索，移除与 value 相等的元素，数量为 count 。</span><br><span class="line">count &lt; 0 : 从表尾开始向表头搜索，移除与 value 相等的元素，数量为 count 的绝对值。</span><br><span class="line">count = 0 : 移除表中所有与 VALUE 相等的值。</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">count &gt; 0 : 从表头开始向表尾搜索，移除与 value 相等的元素，数量为 count 。</span><br><span class="line">count &lt; 0 : 从表尾开始向表头搜索，移除与 value 相等的元素，数量为 count 的绝对值。</span><br><span class="line">count &#x3D; 0 : 移除表中所有与 VALUE 相等的值。</span><br></pre></td></tr></table></figure>
 <p>  语法如下：<code>LREM key count value</code></p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; LRANGE list:list1 0 100</span><br><span class="line">1) &quot;my&quot;</span><br><span class="line">2) &quot;world&quot;</span><br><span class="line">3) &quot;hello&quot;</span><br><span class="line">4) &quot;right&quot;</span><br><span class="line">5) &quot;hello&quot;</span><br><span class="line">6) &quot;foo&quot;</span><br><span class="line">7) &quot;hello&quot;</span><br><span class="line">127.0.0.1:6379&gt; LREM list:list1 -2 hello</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; LRANGE list:list1 0 100</span><br><span class="line">1) &quot;my&quot;</span><br><span class="line">2) &quot;world&quot;</span><br><span class="line">3) &quot;hello&quot;</span><br><span class="line">4) &quot;right&quot;</span><br><span class="line">5) &quot;foo&quot;</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p><code>contollers/list.js</code></p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pushListAndGetAll = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">    redis.lpush(<span class="string">'list:list1'</span>, i)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">5</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    redis.rpush(<span class="string">'list:list1'</span>, i)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> length = <span class="keyword">await</span> redis.llen(<span class="string">'list:list1'</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'length'</span>, length)</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.lrange(<span class="string">'list:list1'</span>, <span class="number">0</span>, length)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> popList = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> lPopValue = <span class="keyword">await</span> redis.lpop(<span class="string">'list:list1'</span>)</span><br><span class="line">  <span class="keyword">const</span> rPopValue = <span class="keyword">await</span> redis.rpop(<span class="string">'list:list1'</span>)</span><br><span class="line">  ctx.body = &#123; lPopValue, rPopValue &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> deleteListByValue = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.lrem(<span class="string">'list:list1'</span>, <span class="number">0</span>, ctx.params.value)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/list'</span>, pushListAndGetAll)</span><br><span class="line">router.delete(<span class="string">'/list'</span>, popList)</span><br><span class="line">router.delete(<span class="string">'/list/:value'</span>, deleteListByValue)</span><br></pre></td></tr></table></figure>
 </li>
@@ -602,8 +607,6 @@
 <li><p>设置过期时间使用<code>EXPIRE</code>关键字，时间单位为秒(s)，时间到后，整个 hash:hash1 键将被删除</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; EXPIRE hash:hash1 60</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>可以使用<code>TTL</code>查看 KEY 的剩余过期时间，<code>TTL</code>为 -1 表示未设置过期时间</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; TTL hash:hash1</span><br><span class="line">(integer) 46</span><br></pre></td></tr></table></figure>
 </li>
@@ -654,7 +657,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/16/Redis持久化/" rel="next" title="Redis 持久化">
+              <a href="/2018/03/16/Redis%E6%8C%81%E4%B9%85%E5%8C%96/" rel="next" title="Redis 持久化">
                 <i class="fa fa-chevron-left"></i> Redis 持久化
               </a>
             
@@ -664,7 +667,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/" rel="prev" title="Sidecar -- 将 Node 应用引入 Spring Cloud">
+              <a href="/2018/03/31/Sidecar%20--%20%E5%B0%86Node%E5%BA%94%E7%94%A8%E5%BC%95%E5%85%A5Spring%20Cloud/" rel="prev" title="Sidecar -- 将 Node 应用引入 Spring Cloud">
                 Sidecar -- 将 Node 应用引入 Spring Cloud <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -730,9 +733,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -743,7 +748,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -957,7 +962,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1111,7 +1116,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2018/03/16/Redis五种数据类型/';
+        this.page.url = 'https://s1mplecc.github.io/2018/03/16/Redis%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/';
         this.page.identifier = '2018/03/16/Redis五种数据类型/';
         this.page.title = 'Redis 五种数据类型';
         };

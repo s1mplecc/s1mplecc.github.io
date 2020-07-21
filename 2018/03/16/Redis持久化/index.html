@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -112,27 +112,30 @@
 
 
 
-  <meta name="description" content="Preface Redis 不仅可以基于内存进行高速的数据读写，还提供了两种持久化方式，即 RDB(or Redis Database) 和 AOF(or Append Only File)，本文主要介绍这两种持久化方式的原理及区别  RDB RDB 持久化可以在指定的时间间隔内生成数据集的快照(snapshot)   我们可以在配置文件/etc/redis/redis.conf中查看 RDB 持">
-<meta name="keywords" content="Database,Redis">
+  <meta name="description" content="Preface Redis 不仅可以基于内存进行高速的数据读写，还提供了两种持久化方式，即 RDB(or Redis Database) 和 AOF(or Append Only File)，本文主要介绍这两种持久化方式的原理及区别  RDB RDB 持久化可以在指定的时间间隔内生成数据集的快照(snapshot)   我们可以在配置文件&#x2F;etc&#x2F;redis&#x2F;redis.conf中查看 RDB 持">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis 持久化">
-<meta property="og:url" content="https://s1mplecc.github.io/2018/03/16/Redis持久化/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/03/16/Redis%E6%8C%81%E4%B9%85%E5%8C%96/index.html">
 <meta property="og:site_name" content="s1mple的博客">
-<meta property="og:description" content="Preface Redis 不仅可以基于内存进行高速的数据读写，还提供了两种持久化方式，即 RDB(or Redis Database) 和 AOF(or Append Only File)，本文主要介绍这两种持久化方式的原理及区别  RDB RDB 持久化可以在指定的时间间隔内生成数据集的快照(snapshot)   我们可以在配置文件/etc/redis/redis.conf中查看 RDB 持">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.317Z">
+<meta property="og:description" content="Preface Redis 不仅可以基于内存进行高速的数据读写，还提供了两种持久化方式，即 RDB(or Redis Database) 和 AOF(or Append Only File)，本文主要介绍这两种持久化方式的原理及区别  RDB RDB 持久化可以在指定的时间间隔内生成数据集的快照(snapshot)   我们可以在配置文件&#x2F;etc&#x2F;redis&#x2F;redis.conf中查看 RDB 持">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-03-16T00:25:31.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.317Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Redis 持久化">
-<meta name="twitter:description" content="Preface Redis 不仅可以基于内存进行高速的数据读写，还提供了两种持久化方式，即 RDB(or Redis Database) 和 AOF(or Append Only File)，本文主要介绍这两种持久化方式的原理及区别  RDB RDB 持久化可以在指定的时间间隔内生成数据集的快照(snapshot)   我们可以在配置文件/etc/redis/redis.conf中查看 RDB 持">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2018/03/16/Redis持久化/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/03/16/Redis持久化/"/>
 
 
 
@@ -182,9 +185,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -194,7 +197,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -238,7 +241,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -255,7 +258,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -272,7 +275,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -289,7 +292,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -300,7 +303,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -320,7 +323,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -365,20 +370,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/03/16/Redis持久化/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/03/16/Redis%E6%8C%81%E4%B9%85%E5%8C%96/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -435,7 +440,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -446,7 +451,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
 
                 
                 
@@ -461,9 +466,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/03/16/Redis持久化/#comments" itemprop="discussionUrl">
+                <a href="/2018/03/16/Redis%E6%8C%81%E4%B9%85%E5%8C%96/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/03/16/Redis持久化/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/16/Redis持久化/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -474,10 +480,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -492,7 +499,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">6.1k</span>
+                <span title="本文字数">6.2k</span>
               
 
               
@@ -528,7 +535,7 @@
 <p>  格式如下<code>save &lt;seconds&gt; &lt;changes&gt;</code>，比如<code>save 900 1</code>就表示 <strong>900秒内如果有超过一个键被修改就自动保存一次数据集</strong></p>
 </li>
 <li><p>另外两个重要信息就是快照写入的文件名以及文件夹路径</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># The filename where to dump the DB</span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"># The working directory.</span><br><span class="line">#</span><br><span class="line"># The DB will be written inside this directory, with the filename specified</span><br><span class="line"># above using the &apos;dbfilename&apos; configuration directive.</span><br><span class="line">#</span><br><span class="line"># The Append Only File will also be created inside this directory.</span><br><span class="line">#</span><br><span class="line"># Note that you must specify a directory here, not a file name.</span><br><span class="line">dir /var/lib/redis</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># The filename where to dump the DB</span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"># The working directory.</span><br><span class="line">#</span><br><span class="line"># The DB will be written inside this directory, with the filename specified</span><br><span class="line"># above using the &#39;dbfilename&#39; configuration directive.</span><br><span class="line">#</span><br><span class="line"># The Append Only File will also be created inside this directory.</span><br><span class="line">#</span><br><span class="line"># Note that you must specify a directory here, not a file name.</span><br><span class="line">dir &#x2F;var&#x2F;lib&#x2F;redis</span><br></pre></td></tr></table></figure>
 <p>  可以看到快照的文件名是<code>dump.rdb</code>，保存路径<code>/var/lib/redis</code>，<strong>RDB 和 AOF 的持久化文件都保存在这个目录下</strong></p>
 </li>
 <li><p>另外也可以在<code>redis-cli</code>中查看配置</p>
@@ -554,22 +561,16 @@
 </blockquote>
 <ul>
 <li><p>在配置文件中查看 AOF 设置</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">############################## APPEND ONLY MODE ###############################</span><br><span class="line"></span><br><span class="line"># By default Redis asynchronously dumps the dataset on disk. This mode is</span><br><span class="line"># good enough in many applications, but an issue with the Redis process or</span><br><span class="line"># a power outage may result into a few minutes of writes lost (depending on</span><br><span class="line"># the configured save points).</span><br><span class="line">#</span><br><span class="line"># The Append Only File is an alternative persistence mode that provides</span><br><span class="line"># much better durability. For instance using the default data fsync policy</span><br><span class="line"># (see later in the config file) Redis can lose just one second of writes in a</span><br><span class="line"># dramatic event like a server power outage, or a single write if something</span><br><span class="line"># wrong with the Redis process itself happens, but the operating system is</span><br><span class="line"># still running correctly.</span><br><span class="line">#</span><br><span class="line"># AOF and RDB persistence can be enabled at the same time without problems.</span><br><span class="line"># If the AOF is enabled on startup Redis will load the AOF, that is the file</span><br><span class="line"># with the better durability guarantees.</span><br><span class="line"></span><br><span class="line">appendonly no</span><br><span class="line"></span><br><span class="line"># The name of the append only file (default: &quot;appendonly.aof&quot;)</span><br><span class="line"></span><br><span class="line">appendfilename &quot;appendonly.aof&quot;</span><br><span class="line"></span><br><span class="line"># The fsync() call tells the Operating System to actually write data on disk</span><br><span class="line"># instead of waiting for more data in the output buffer. Some OS will really flush</span><br><span class="line"># data on disk, some other OS will just try to do it ASAP.</span><br><span class="line">#</span><br><span class="line"># Redis supports three different modes:</span><br><span class="line">#</span><br><span class="line"># no: don&apos;t fsync, just let the OS flush the data when it wants. Faster.</span><br><span class="line"># always: fsync after every write to the append only log. Slow, Safest.</span><br><span class="line"># everysec: fsync only one time every second. Compromise.</span><br><span class="line">#</span><br><span class="line"># The default is &quot;everysec&quot;, as that&apos;s usually the right compromise between</span><br><span class="line"># speed and data safety. It&apos;s up to you to understand if you can relax this to</span><br><span class="line"># &quot;no&quot; that will let the operating system flush the output buffer when</span><br><span class="line"># it wants, for better performances (but if you can live with the idea of</span><br><span class="line"># some data loss consider the default persistence mode that&apos;s snapshotting),</span><br><span class="line"># or on the contrary, use &quot;always&quot; that&apos;s very slow but a bit safer than</span><br><span class="line"># everysec.</span><br><span class="line">#</span><br><span class="line"># If unsure, use &quot;everysec&quot;.</span><br><span class="line"></span><br><span class="line"># appendfsync always</span><br><span class="line">appendfsync everysec</span><br><span class="line"># appendfsync no</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">############################## APPEND ONLY MODE ###############################</span><br><span class="line"></span><br><span class="line"># By default Redis asynchronously dumps the dataset on disk. This mode is</span><br><span class="line"># good enough in many applications, but an issue with the Redis process or</span><br><span class="line"># a power outage may result into a few minutes of writes lost (depending on</span><br><span class="line"># the configured save points).</span><br><span class="line">#</span><br><span class="line"># The Append Only File is an alternative persistence mode that provides</span><br><span class="line"># much better durability. For instance using the default data fsync policy</span><br><span class="line"># (see later in the config file) Redis can lose just one second of writes in a</span><br><span class="line"># dramatic event like a server power outage, or a single write if something</span><br><span class="line"># wrong with the Redis process itself happens, but the operating system is</span><br><span class="line"># still running correctly.</span><br><span class="line">#</span><br><span class="line"># AOF and RDB persistence can be enabled at the same time without problems.</span><br><span class="line"># If the AOF is enabled on startup Redis will load the AOF, that is the file</span><br><span class="line"># with the better durability guarantees.</span><br><span class="line"></span><br><span class="line">appendonly no</span><br><span class="line"></span><br><span class="line"># The name of the append only file (default: &quot;appendonly.aof&quot;)</span><br><span class="line"></span><br><span class="line">appendfilename &quot;appendonly.aof&quot;</span><br><span class="line"></span><br><span class="line"># The fsync() call tells the Operating System to actually write data on disk</span><br><span class="line"># instead of waiting for more data in the output buffer. Some OS will really flush</span><br><span class="line"># data on disk, some other OS will just try to do it ASAP.</span><br><span class="line">#</span><br><span class="line"># Redis supports three different modes:</span><br><span class="line">#</span><br><span class="line"># no: don&#39;t fsync, just let the OS flush the data when it wants. Faster.</span><br><span class="line"># always: fsync after every write to the append only log. Slow, Safest.</span><br><span class="line"># everysec: fsync only one time every second. Compromise.</span><br><span class="line">#</span><br><span class="line"># The default is &quot;everysec&quot;, as that&#39;s usually the right compromise between</span><br><span class="line"># speed and data safety. It&#39;s up to you to understand if you can relax this to</span><br><span class="line"># &quot;no&quot; that will let the operating system flush the output buffer when</span><br><span class="line"># it wants, for better performances (but if you can live with the idea of</span><br><span class="line"># some data loss consider the default persistence mode that&#39;s snapshotting),</span><br><span class="line"># or on the contrary, use &quot;always&quot; that&#39;s very slow but a bit safer than</span><br><span class="line"># everysec.</span><br><span class="line">#</span><br><span class="line"># If unsure, use &quot;everysec&quot;.</span><br><span class="line"></span><br><span class="line"># appendfsync always</span><br><span class="line">appendfsync everysec</span><br><span class="line"># appendfsync no</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>默认<code>appendonly no</code>，需要改为<code>yes</code>开启 AOF 功能，修改后重启<code>redis-server</code>，发现<code>/var/lib/redis</code>多了个<code>appendonly.aof</code>文件，即以 Redis 协议格式保存的一条条命令</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls /var/lib/redis</span><br><span class="line">appendonly.aof  dump.rdb</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;var&#x2F;lib&#x2F;redis</span><br><span class="line">appendonly.aof  dump.rdb</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>我们打开<code>redis-cli</code>执行一些写操作</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set foo &quot;foooo&quot;</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set bar &quot;barrr&quot;</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; keys *</span><br><span class="line">1) &quot;foo&quot;</span><br><span class="line">2) &quot;bar&quot;</span><br></pre></td></tr></table></figure>
 <p>  查看<code>appendonly.aof</code>，文件可读性很强，<code>*3</code>表示命令由 3 个短语构成，<code>$3</code>表示短语长度为 3，第一句<code>SELECT 0</code>表示选中第一个数据库</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">*2</span><br><span class="line">$6</span><br><span class="line">SELECT</span><br><span class="line">$1</span><br><span class="line">0</span><br><span class="line">*3</span><br><span class="line">$3</span><br><span class="line">set</span><br><span class="line">$3</span><br><span class="line">foo</span><br><span class="line">$5</span><br><span class="line">foooo</span><br><span class="line">*3</span><br><span class="line">$3</span><br><span class="line">set</span><br><span class="line">$3</span><br><span class="line">bar</span><br><span class="line">$5</span><br><span class="line">barrr</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>我们将上述文件 13 ~ 19 行删除，重启<code>redis-server</code>，发现第二个键已被我们人工删除。</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; keys *</span><br><span class="line">1) &quot;foo&quot;</span><br></pre></td></tr></table></figure>
 </li>
@@ -579,7 +580,7 @@
 </blockquote>
 <h3 id="AOF-的特性"><a href="#AOF-的特性" class="headerlink" title="AOF 的特性"></a>AOF 的特性</h3><ul>
 <li><p>从配置文件的注释也可以看出 <strong>AOF 持久化比 Redis 持久化更耐用(durability)</strong>。可以设置不同的 fsync 策略</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># appendfsync always    // 每次执行写入命令时 fsync</span><br><span class="line">appendfsync everysec    // 每秒钟一次 fsync</span><br><span class="line"># appendfsync no    // 无 fsync</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># appendfsync always    &#x2F;&#x2F; 每次执行写入命令时 fsync</span><br><span class="line">appendfsync everysec    &#x2F;&#x2F; 每秒钟一次 fsync</span><br><span class="line"># appendfsync no    &#x2F;&#x2F; 无 fsync</span><br></pre></td></tr></table></figure>
 <p>  默认策略为每秒钟 fsync 一次，在这种配置下，Redis 仍然可以保持良好的性能，并且就算发生故障停机，也最多只会丢失一秒钟的数据</p>
 </li>
 <li><p>当 Redis 启动时，如果 RDB 持久化和 AOF 持久化都被打开了，那么程序会优先使用 AOF 文件来恢复数据集，因为 <strong>AOF 文件所保存的数据通常是最完整的</strong></p>
@@ -636,7 +637,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/15/Redis安装及初步使用/" rel="next" title="Redis 安装及初步使用">
+              <a href="/2018/03/15/Redis%E5%AE%89%E8%A3%85%E5%8F%8A%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/" rel="next" title="Redis 安装及初步使用">
                 <i class="fa fa-chevron-left"></i> Redis 安装及初步使用
               </a>
             
@@ -646,7 +647,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/03/16/Redis五种数据类型/" rel="prev" title="Redis 五种数据类型">
+              <a href="/2018/03/16/Redis%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" rel="prev" title="Redis 五种数据类型">
                 Redis 五种数据类型 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -712,9 +713,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -725,7 +728,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -939,7 +942,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1093,7 +1096,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2018/03/16/Redis持久化/';
+        this.page.url = 'https://s1mplecc.github.io/2018/03/16/Redis%E6%8C%81%E4%B9%85%E5%8C%96/';
         this.page.identifier = '2018/03/16/Redis持久化/';
         this.page.title = 'Redis 持久化';
         };

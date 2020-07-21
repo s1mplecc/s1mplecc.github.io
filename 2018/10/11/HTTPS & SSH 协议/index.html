@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -113,28 +113,31 @@
 
 
   <meta name="description" content="HTTPS Https(Http over Secure Socket Layer) 是基于 ssl 加密的更安全的 http 协议，默认端口 443，在普通的 HTTP 与 TCP 层之间多了一个安全加密的夹层，称之为 SSL（Secure Socket Layer），用于加密基于HTTP的网页内容，不容易篡改、不容易劫持、网页内容保密，目前广泛用于网上银行等行业。  SSL握手协议  ① 客户">
-<meta name="keywords" content="Network,Security">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HTTPS &amp; SSH 协议">
-<meta property="og:url" content="https://s1mplecc.github.io/2018/10/11/HTTPS & SSH 协议/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/10/11/HTTPS%20&%20SSH%20%E5%8D%8F%E8%AE%AE/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="HTTPS Https(Http over Secure Socket Layer) 是基于 ssl 加密的更安全的 http 协议，默认端口 443，在普通的 HTTP 与 TCP 层之间多了一个安全加密的夹层，称之为 SSL（Secure Socket Layer），用于加密基于HTTP的网页内容，不容易篡改、不容易劫持、网页内容保密，目前广泛用于网上银行等行业。  SSL握手协议  ① 客户">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/10/11/HTTPS%20&%20SSH%20协议/0.jpeg">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.249Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/10/11/HTTPS%20&%20SSH%20%E5%8D%8F%E8%AE%AE/0.jpeg">
+<meta property="article:published_time" content="2018-10-10T19:14:36.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.249Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Network">
+<meta property="article:tag" content="Security">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HTTPS &amp; SSH 协议">
-<meta name="twitter:description" content="HTTPS Https(Http over Secure Socket Layer) 是基于 ssl 加密的更安全的 http 协议，默认端口 443，在普通的 HTTP 与 TCP 层之间多了一个安全加密的夹层，称之为 SSL（Secure Socket Layer），用于加密基于HTTP的网页内容，不容易篡改、不容易劫持、网页内容保密，目前广泛用于网上银行等行业。  SSL握手协议  ① 客户">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2018/10/11/HTTPS%20&%20SSH%20协议/0.jpeg">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2018/10/11/HTTPS%20&%20SSH%20%E5%8D%8F%E8%AE%AE/0.jpeg">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2018/10/11/HTTPS & SSH 协议/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/10/11/HTTPS & SSH 协议/"/>
 
 
 
@@ -184,9 +187,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -196,7 +199,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -240,7 +243,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -257,7 +260,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -274,7 +277,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -291,7 +294,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -302,7 +305,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -322,7 +325,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -367,20 +372,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/10/11/HTTPS & SSH 协议/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/10/11/HTTPS%20&%20SSH%20%E5%8D%8F%E8%AE%AE/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -437,7 +442,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -448,7 +453,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
 
                 
                 
@@ -463,9 +468,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/10/11/HTTPS & SSH 协议/#comments" itemprop="discussionUrl">
+                <a href="/2018/10/11/HTTPS%20&%20SSH%20%E5%8D%8F%E8%AE%AE/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/10/11/HTTPS & SSH 协议/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/10/11/HTTPS & SSH 协议/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -476,10 +482,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -521,7 +528,7 @@
         <h2 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h2><blockquote>
 <p><strong>Https(Http over Secure Socket Layer)</strong> 是基于 ssl 加密的更安全的 http 协议，默认端口 443，在普通的 HTTP 与 TCP 层之间多了一个安全加密的夹层，称之为 <strong>SSL（Secure Socket Layer）</strong>，用于加密基于HTTP的网页内容，不容易篡改、不容易劫持、网页内容保密，目前广泛用于网上银行等行业。</p>
 </blockquote>
-<h3 id="SSL握手协议"><a href="#SSL握手协议" class="headerlink" title="SSL握手协议"></a>SSL握手协议</h3><p><img src="/2018/10/11/HTTPS & SSH 协议/0.jpeg" alt="78ab162bf20b438ca377faa87f4ea2a2_th"></p>
+<h3 id="SSL握手协议"><a href="#SSL握手协议" class="headerlink" title="SSL握手协议"></a>SSL握手协议</h3><p><img src="/2018/10/11/HTTPS%20&%20SSH%20%E5%8D%8F%E8%AE%AE/0.jpeg" alt="78ab162bf20b438ca377faa87f4ea2a2_th"></p>
 <blockquote>
 <p>① 客户端的浏览器向服务器传送客户端SSL协议的版本号，加密算法的种类，产生的随机数，以及其他通讯所需要信息。<br>② 服务器向客户端传送SSL协议的版本号，加密算法的种类，随机数以及其他相关信息，同时<strong>服务器还将向客户端传送自己的证书</strong>。<br>③ 客户端利用服务器传过来的信息<strong>验证服务器的合法性</strong>，服务器的合法性包括：证书是否过期，发行服务器证书的CA 是否可靠，发行者证书的公钥能否正确解开服务器证书的“发行者的数字签名”，服务器证书上的域名是否和服务器的实际域名相匹配。<br>④ 客户端随机产生一个用于后面通讯的“<strong>对称密钥</strong>”，然后用服务器的公钥（服务器的公钥从步骤②中的服务器的证书中获得）对其加密，然后传给服务器。<br>⑤ <strong>服务器用私钥解密</strong>“对称密钥”(此处的公钥和私钥是相互关联的，<strong>公钥加密的数据只能用私钥解密</strong>，<strong>私钥只在服务器端保留</strong>。详细请参看： <a href="http://zh.wikipedia.org/wiki/RSA%E7%AE%97%E6%B3%95)，然后用其作为服务器和客户端的“**通话密码**”加解密通讯。同时在SSL通讯过程中还要完成数据通讯的完整性，防止数据通讯中的任何变化。" target="_blank" rel="noopener">http://zh.wikipedia.org/wiki/RSA%E7%AE%97%E6%B3%95)，然后用其作为服务器和客户端的“**通话密码**”加解密通讯。同时在SSL通讯过程中还要完成数据通讯的完整性，防止数据通讯中的任何变化。</a><br>⑥ SSL的握手部分结束，SSL安全通道的数据通讯开始，客户和服务器开始<strong>使用相同的对称密钥进行数据通讯</strong>，同时进行通讯完整性的检验。</p>
 </blockquote>
@@ -584,7 +591,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/10/API设计心得/" rel="next" title="API 设计心得">
+              <a href="/2018/10/10/API%E8%AE%BE%E8%AE%A1%E5%BF%83%E5%BE%97/" rel="next" title="API 设计心得">
                 <i class="fa fa-chevron-left"></i> API 设计心得
               </a>
             
@@ -594,7 +601,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/05/Java 网络爬虫/" rel="prev" title="Java 网络爬虫">
+              <a href="/2018/11/05/Java%20%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/" rel="prev" title="Java 网络爬虫">
                 Java 网络爬虫 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -660,9 +667,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -673,7 +682,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -887,7 +896,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1041,7 +1050,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2018/10/11/HTTPS & SSH 协议/';
+        this.page.url = 'https://s1mplecc.github.io/2018/10/11/HTTPS%20&%20SSH%20%E5%8D%8F%E8%AE%AE/';
         this.page.identifier = '2018/10/11/HTTPS & SSH 协议/';
         this.page.title = 'HTTPS & SSH 协议';
         };

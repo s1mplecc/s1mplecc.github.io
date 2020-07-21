@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -113,31 +113,33 @@
 
 
   <meta name="description" content="Preface 目前常用的 Linux 系统和 OS X 系统的默认 Shell 都是 bash，但是真正强大的 Shell 是深藏不露的 zsh， 这货绝对是马车中的跑车，跑车中的飞行车，史称『终极 Shell』，但是由于配置过于复杂，所以初期无人问津，很多人跑过来看看 zsh 的配置指南，什么都不说转身就走了。直到有一天，国外某位大牛开源出一个能够让你快速上手的 zsh 项目，叫做『oh my">
-<meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mac 的终极 Shell -- ZSH">
-<meta property="og:url" content="https://s1mplecc.github.io/2018/07/30/Mac 的终极 Shell -- ZSH/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="Preface 目前常用的 Linux 系统和 OS X 系统的默认 Shell 都是 bash，但是真正强大的 Shell 是深藏不露的 zsh， 这货绝对是马车中的跑车，跑车中的飞行车，史称『终极 Shell』，但是由于配置过于复杂，所以初期无人问津，很多人跑过来看看 zsh 的配置指南，什么都不说转身就走了。直到有一天，国外某位大牛开源出一个能够让你快速上手的 zsh 项目，叫做『oh my">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/0.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/1.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/2.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/3.png">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.295Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/0.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/1.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/2.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/3.png">
+<meta property="article:published_time" content="2018-07-29T23:46:19.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.295Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mac 的终极 Shell -- ZSH">
-<meta name="twitter:description" content="Preface 目前常用的 Linux 系统和 OS X 系统的默认 Shell 都是 bash，但是真正强大的 Shell 是深藏不露的 zsh， 这货绝对是马车中的跑车，跑车中的飞行车，史称『终极 Shell』，但是由于配置过于复杂，所以初期无人问津，很多人跑过来看看 zsh 的配置指南，什么都不说转身就走了。直到有一天，国外某位大牛开源出一个能够让你快速上手的 zsh 项目，叫做『oh my">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20的终极%20Shell%20--%20ZSH/0.png">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/0.png">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2018/07/30/Mac 的终极 Shell -- ZSH/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/07/30/Mac 的终极 Shell -- ZSH/"/>
 
 
 
@@ -187,9 +189,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -199,7 +201,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -243,7 +245,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -260,7 +262,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -277,7 +279,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -294,7 +296,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -305,7 +307,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -325,7 +327,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -370,20 +374,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/07/30/Mac 的终极 Shell -- ZSH/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -440,7 +444,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -451,7 +455,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
 
                 
                 
@@ -466,9 +470,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/30/Mac 的终极 Shell -- ZSH/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/30/Mac 的终极 Shell -- ZSH/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/30/Mac 的终极 Shell -- ZSH/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -479,10 +484,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -497,7 +503,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">2.3k</span>
+                <span title="本文字数">2.5k</span>
               
 
               
@@ -527,7 +533,7 @@
 <h2 id="ZSH"><a href="#ZSH" class="headerlink" title="ZSH"></a>ZSH</h2><ul>
 <li><p>安装 zsh</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install zsh</span><br></pre></td></tr></table></figure>
-<p>  安装完后在 Terminal 的设置中设置默认使用 zsh<img src="/2018/07/30/Mac 的终极 Shell -- ZSH/0.png" alt="8F9622E7-901E-46F0-94D7-B5E7AEE04C08"></p>
+<p>  安装完后在 Terminal 的设置中设置默认使用 zsh<img src="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/0.png" alt="8F9622E7-901E-46F0-94D7-B5E7AEE04C08"></p>
 </li>
 </ul>
 <h2 id="Oh-My-Zsh"><a href="#Oh-My-Zsh" class="headerlink" title="Oh My Zsh"></a>Oh My Zsh</h2><ul>
@@ -540,37 +546,35 @@
 </ul>
 <h3 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h3><ul>
 <li><p>在<code>.zshrc</code>中添加配置，其中可以自定义<code>alias</code>用于简化命令，这里贴出我的配置。<code>alias -s</code>意为 define suffix aliases，譬如命令行输入<code>xxx.gz</code>就相当于<code>tar -xzvf xxx.gz</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># compress relatived</span><br><span class="line">alias -s gz=&apos;tar -xzvf&apos;</span><br><span class="line">alias -s tgz=&apos;tar -xzvf&apos;</span><br><span class="line">alias -s zip=&apos;unzip&apos;</span><br><span class="line">alias -s bz2=&apos;tar -xjvf&apos;</span><br><span class="line"></span><br><span class="line"># sublime text</span><br><span class="line">alias subl=&quot;open -a &apos;Sublime Text&apos;&quot;</span><br><span class="line">alias -s php=subl</span><br><span class="line">alias -s rb=subl</span><br><span class="line">alias -s html=crm</span><br><span class="line">alias -s xml=subl</span><br><span class="line">alias -s txt=subl</span><br><span class="line">alias -s hbs=subl</span><br><span class="line"></span><br><span class="line"># macdown</span><br><span class="line">alias macdown=&quot;open -a MacDown&quot;</span><br><span class="line">alias -s md=macdown</span><br><span class="line"></span><br><span class="line"># git relatived</span><br><span class="line">alias gpom=&apos;git push -u origin master&apos;</span><br><span class="line">alias grao=&apos;git remote add origin&apos;</span><br><span class="line"></span><br><span class="line"># others</span><br><span class="line">alias his=&apos;history&apos;</span><br><span class="line">alias la=&apos;ls -a&apos;</span><br><span class="line">alias ll=&apos;ls -alh&apos;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># compress relatived</span><br><span class="line">alias -s gz&#x3D;&#39;tar -xzvf&#39;</span><br><span class="line">alias -s tgz&#x3D;&#39;tar -xzvf&#39;</span><br><span class="line">alias -s zip&#x3D;&#39;unzip&#39;</span><br><span class="line">alias -s bz2&#x3D;&#39;tar -xjvf&#39;</span><br><span class="line"></span><br><span class="line"># sublime text</span><br><span class="line">alias subl&#x3D;&quot;open -a &#39;Sublime Text&#39;&quot;</span><br><span class="line">alias -s php&#x3D;subl</span><br><span class="line">alias -s rb&#x3D;subl</span><br><span class="line">alias -s html&#x3D;crm</span><br><span class="line">alias -s xml&#x3D;subl</span><br><span class="line">alias -s txt&#x3D;subl</span><br><span class="line">alias -s hbs&#x3D;subl</span><br><span class="line"></span><br><span class="line"># macdown</span><br><span class="line">alias macdown&#x3D;&quot;open -a MacDown&quot;</span><br><span class="line">alias -s md&#x3D;macdown</span><br><span class="line"></span><br><span class="line"># git relatived</span><br><span class="line">alias gpom&#x3D;&#39;git push -u origin master&#39;</span><br><span class="line">alias grao&#x3D;&#39;git remote add origin&#39;</span><br><span class="line"></span><br><span class="line"># others</span><br><span class="line">alias his&#x3D;&#39;history&#39;</span><br><span class="line">alias la&#x3D;&#39;ls -a&#39;</span><br><span class="line">alias ll&#x3D;&#39;ls -alh&#39;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>添加如下配置后，可以使用<code>subl a.txt</code>或者直接输入<code>a.txt</code>通过 Sublime 打开文本文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alias subl=&quot;open -a &apos;Sublime Text&apos;&quot;</span><br><span class="line">alias -s txt=subl</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>另外，添加了两个常用 Git 命令的缩写，其实 Oh My Zsh 已经包含了许多 Git 的简写命令，比如常用的<code>gst</code>即<code>git status</code>的简写。可以使用命令<code>alias</code>查看还有哪些简写命令</p>
-</li>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alias subl&#x3D;&quot;open -a &#39;Sublime Text&#39;&quot;</span><br><span class="line">alias -s txt&#x3D;subl</span><br></pre></td></tr></table></figure></li>
+<li>另外，添加了两个常用 Git 命令的缩写，其实 Oh My Zsh 已经包含了许多 Git 的简写命令，比如常用的<code>gst</code>即<code>git status</code>的简写。可以使用命令<code>alias</code>查看还有哪些简写命令</li>
 </ul>
 <h3 id="Plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a>Plugins</h3><ul>
 <li><p>oh-my-zsh 有很多提升命令行效率的实用工具，我目前使用了如下四个插件，确实在使用过程中体验到效率的提升。安装完成后在<code>.zshrc</code>中打开插件，其中 git 是默认安装并开启的插件，前面也提到有许多简写命令，这里不多赘述，请自行查阅</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">plugins=(</span><br><span class="line">  git</span><br><span class="line">  Z</span><br><span class="line">  zsh-syntax-highlighting</span><br><span class="line">  zsh-autosuggestions</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">plugins&#x3D;(</span><br><span class="line">  git</span><br><span class="line">  Z</span><br><span class="line">  zsh-syntax-highlighting</span><br><span class="line">  zsh-autosuggestions</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h4 id="Z"><a href="#Z" class="headerlink" title="Z"></a>Z</h4><ul>
 <li><p>功能和 autojump 类似，使用<code>z {path}</code>实现目录间快速跳转，并且作为 oh-my-zsh 的内置组件，只需要在<code>.zshrc</code>中打开即可。<a href="https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/z" target="_blank" rel="noopener">GitHub 链接</a></p>
 </li>
-<li><p>如图，Z 插件会记录你前往的目录，并根据进入次数计算权重（<code>z -r</code>查看权重），以后再进入该目录只用<code>z ddd</code>，会进行<strong>模糊匹配</strong>，前往<strong>权重最高</strong>的目录<br><img src="/2018/07/30/Mac 的终极 Shell -- ZSH/1.png" alt="678A0E3A-EDE9-4D9B-AA39-A6E14DC6E2EC"></p>
+<li><p>如图，Z 插件会记录你前往的目录，并根据进入次数计算权重（<code>z -r</code>查看权重），以后再进入该目录只用<code>z ddd</code>，会进行<strong>模糊匹配</strong>，前往<strong>权重最高</strong>的目录<br><img src="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/1.png" alt="678A0E3A-EDE9-4D9B-AA39-A6E14DC6E2EC"></p>
 </li>
 </ul>
 <h4 id="zsh-syntax-highlighting"><a href="#zsh-syntax-highlighting" class="headerlink" title="zsh-syntax-highlighting"></a>zsh-syntax-highlighting</h4><ul>
-<li><p>终端输入的命令正确会<strong>绿色高亮</strong>显示，输入错误会显示红色，用于在执行命令前检查是否有语法错误。<a href="https://github.com/zsh-users/zsh-syntax-highlighting" target="_blank" rel="noopener">GitHub 链接</a><br><img src="/2018/07/30/Mac 的终极 Shell -- ZSH/2.png" alt="82881CCA-A343-45D1-9A1D-4DD8E77E1B78"></p>
+<li><p>终端输入的命令正确会<strong>绿色高亮</strong>显示，输入错误会显示红色，用于在执行命令前检查是否有语法错误。<a href="https://github.com/zsh-users/zsh-syntax-highlighting" target="_blank" rel="noopener">GitHub 链接</a><br><img src="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/2.png" alt="82881CCA-A343-45D1-9A1D-4DD8E77E1B78"></p>
 </li>
 <li><p>安装，完成后在<code>.zshrc</code>中添加</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;zsh-syntax-highlighting.git $&#123;ZSH_CUSTOM:-~&#x2F;.oh-my-zsh&#x2F;custom&#125;&#x2F;plugins&#x2F;zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h4 id="zsh-autosuggestions"><a href="#zsh-autosuggestions" class="headerlink" title="zsh-autosuggestions"></a>zsh-autosuggestions</h4><ul>
-<li><p>效率神器。如图输入命令时，会给出建议的命令（灰色部分）按键盘 → 补全。<a href="https://github.com/zsh-users/zsh-autosuggestions" target="_blank" rel="noopener">GitHub 链接</a><br><img src="/2018/07/30/Mac 的终极 Shell -- ZSH/3.png" alt="8B1B4FDE-F810-4E90-B20A-37274ABDDFDE"></p>
+<li><p>效率神器。如图输入命令时，会给出建议的命令（灰色部分）按键盘 → 补全。<a href="https://github.com/zsh-users/zsh-autosuggestions" target="_blank" rel="noopener">GitHub 链接</a><br><img src="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/3.png" alt="8B1B4FDE-F810-4E90-B20A-37274ABDDFDE"></p>
 </li>
 <li><p>安装，完成后在<code>.zshrc</code>中添加</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;zsh-autosuggestions $ZSH_CUSTOM&#x2F;plugins&#x2F;zsh-autosuggestions</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
@@ -613,7 +617,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/19/Java 异常处理之 Web 案例/" rel="next" title="Java 异常处理之 Web 案例">
+              <a href="/2018/07/19/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B9%8B%20Web%20%E6%A1%88%E4%BE%8B/" rel="next" title="Java 异常处理之 Web 案例">
                 <i class="fa fa-chevron-left"></i> Java 异常处理之 Web 案例
               </a>
             
@@ -623,7 +627,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/09/18/Git 进阶教程/" rel="prev" title="Git 进阶教程">
+              <a href="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/" rel="prev" title="Git 进阶教程">
                 Git 进阶教程 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -689,9 +693,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -702,7 +708,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -916,7 +922,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1070,7 +1076,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2018/07/30/Mac 的终极 Shell -- ZSH/';
+        this.page.url = 'https://s1mplecc.github.io/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/';
         this.page.identifier = '2018/07/30/Mac 的终极 Shell -- ZSH/';
         this.page.title = 'Mac 的终极 Shell -- ZSH';
         };

@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -113,26 +113,28 @@
 
 
   <meta name="description" content="Preface 我的上一篇博客 Java泛型与擦除只是对于 Java 泛型和类型擦除做了一个简要的介绍，本文主要是针对 Java 泛型做一些更深入的补充说明。  泛型的引入 在没有泛型之前，我们如果想向一个 Box 类中装入一个不知道类型的对象，只能使用 Object 这个顶级父类来操作盒子中的对象   123456public class Box &amp;#123;    private Object">
-<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 泛型">
-<meta property="og:url" content="https://s1mplecc.github.io/2018/02/28/Java泛型/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/02/28/Java%E6%B3%9B%E5%9E%8B/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="Preface 我的上一篇博客 Java泛型与擦除只是对于 Java 泛型和类型擦除做了一个简要的介绍，本文主要是针对 Java 泛型做一些更深入的补充说明。  泛型的引入 在没有泛型之前，我们如果想向一个 Box 类中装入一个不知道类型的对象，只能使用 Object 这个顶级父类来操作盒子中的对象   123456public class Box &amp;#123;    private Object">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.277Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-02-27T22:01:53.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.277Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java 泛型">
-<meta name="twitter:description" content="Preface 我的上一篇博客 Java泛型与擦除只是对于 Java 泛型和类型擦除做了一个简要的介绍，本文主要是针对 Java 泛型做一些更深入的补充说明。  泛型的引入 在没有泛型之前，我们如果想向一个 Box 类中装入一个不知道类型的对象，只能使用 Object 这个顶级父类来操作盒子中的对象   123456public class Box &amp;#123;    private Object">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2018/02/28/Java泛型/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/02/28/Java泛型/"/>
 
 
 
@@ -182,9 +184,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -194,7 +196,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -238,7 +240,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -255,7 +257,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -272,7 +274,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -289,7 +291,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -300,7 +302,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -320,7 +322,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -365,20 +369,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/02/28/Java泛型/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/02/28/Java%E6%B3%9B%E5%9E%8B/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -435,7 +439,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -446,7 +450,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
 
                 
                 
@@ -461,9 +465,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/02/28/Java泛型/#comments" itemprop="discussionUrl">
+                <a href="/2018/02/28/Java%E6%B3%9B%E5%9E%8B/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/02/28/Java泛型/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/02/28/Java泛型/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -474,10 +479,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -492,7 +498,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.7k</span>
+                <span title="本文字数">3.9k</span>
               
 
               
@@ -521,18 +527,18 @@
 </blockquote>
 <h2 id="泛型的引入"><a href="#泛型的引入" class="headerlink" title="泛型的引入"></a>泛型的引入</h2><ul>
 <li><p>在没有泛型之前，我们如果想向一个 Box 类中装入一个不知道类型的对象，只能使用 <strong>Object</strong> 这个顶级父类来操作盒子中的对象</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class Box &#123;</span><br><span class="line">    private Object object;</span><br><span class="line"></span><br><span class="line">    public void set(Object object) &#123; this.object = object; &#125;</span><br><span class="line">    public Object get() &#123; return object; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class Box &#123;</span><br><span class="line">    private Object object;</span><br><span class="line"></span><br><span class="line">    public void set(Object object) &#123; this.object &#x3D; object; &#125;</span><br><span class="line">    public Object get() &#123; return object; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>而引入了泛型自后，代码修改如下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Generic version of the Box class.</span><br><span class="line"> * @param &lt;T&gt; the type of the value being boxed</span><br><span class="line"> */</span><br><span class="line">public class Box&lt;T&gt; &#123;</span><br><span class="line">    // T stands for &quot;Type&quot;</span><br><span class="line">    private T t;</span><br><span class="line"></span><br><span class="line">    public void set(T t) &#123; this.t = t; &#125;</span><br><span class="line">    public T get() &#123; return t; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * Generic version of the Box class.</span><br><span class="line"> * @param &lt;T&gt; the type of the value being boxed</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class Box&lt;T&gt; &#123;</span><br><span class="line">    &#x2F;&#x2F; T stands for &quot;Type&quot;</span><br><span class="line">    private T t;</span><br><span class="line"></span><br><span class="line">    public void set(T t) &#123; this.t &#x3D; t; &#125;</span><br><span class="line">    public T get() &#123; return t; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>我们定义了一个装有 <strong>T</strong> 类型的 Box 类。在使用时可以随心所欲，既可创建一个专门装 String 的 Box ，也可创建一个装 Integer 的 Box</p>
   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Box&lt;String&gt; bs = <span class="keyword">new</span> Box&lt;String&gt;();</span><br><span class="line">Box&lt;Integer&gt; bi = <span class="keyword">new</span> Box&lt;Integer&gt;();</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>甚至于我们在定义 Box 时可以更加苛刻，只允许这个盒子装入一个数字类型的对象</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public class Box&lt;T extends Number&gt; &#123;</span><br><span class="line">    // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public class Box&lt;T extends Number&gt; &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>  那么，如果你想在创建一个装 String 的 Box 就得报错了</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// Error: Type Parameter &apos;String&apos; is not within its bound; should extend &apos;Number&apos;</span><br><span class="line">// Box&lt;String&gt; bs = new Box&lt;String&gt;();</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Error: Type Parameter &#39;String&#39; is not within its bound; should extend &#39;Number&#39;</span><br><span class="line">&#x2F;&#x2F; Box&lt;String&gt; bs &#x3D; new Box&lt;String&gt;();</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
@@ -543,7 +549,7 @@
 </blockquote>
 <ul>
 <li><p>示范代码如下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class TestGenericsMethod &#123;</span><br><span class="line"></span><br><span class="line">    private &lt;T&gt; void printClassName(T x) &#123;</span><br><span class="line">        System.out.println(x.getClass().getSimpleName());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        TestGenericsMethod test = new TestGenericsMethod();</span><br><span class="line">        test.printClassName(&quot; &quot;);</span><br><span class="line">        test.printClassName(10);</span><br><span class="line">        test.printClassName(&apos;a&apos;);</span><br><span class="line">        test.printClassName(test);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 运行结果：</span><br><span class="line">String</span><br><span class="line">Integer</span><br><span class="line">Character</span><br><span class="line">TestGenerics</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class TestGenericsMethod &#123;</span><br><span class="line"></span><br><span class="line">    private &lt;T&gt; void printClassName(T x) &#123;</span><br><span class="line">        System.out.println(x.getClass().getSimpleName());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        TestGenericsMethod test &#x3D; new TestGenericsMethod();</span><br><span class="line">        test.printClassName(&quot; &quot;);</span><br><span class="line">        test.printClassName(10);</span><br><span class="line">        test.printClassName(&#39;a&#39;);</span><br><span class="line">        test.printClassName(test);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 运行结果：</span><br><span class="line">String</span><br><span class="line">Integer</span><br><span class="line">Character</span><br><span class="line">TestGenerics</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="泛型的类型变量"><a href="#泛型的类型变量" class="headerlink" title="泛型的类型变量"></a>泛型的类型变量</h2><blockquote>
@@ -569,10 +575,8 @@
 <li><p>一个典型案例就是 Map，它存储一对键值对，我截取了一段 Map.Entry 的源码</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">interface Entry&lt;K,V&gt; &#123;</span><br><span class="line"></span><br><span class="line">    K getKey();</span><br><span class="line">    V getValue();</span><br><span class="line">    V setValue(V value);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>我们知道 HashMap 是继承了 Map 的，所以在使用时可以这样使用</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HashMap&lt;String, Integer&gt; map = new HashMap&lt;&gt;();</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HashMap&lt;String, Integer&gt; map &#x3D; new HashMap&lt;&gt;();</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h3 id="通配符与-T-的区别"><a href="#通配符与-T-的区别" class="headerlink" title="通配符与 T 的区别"></a>通配符与 T 的区别</h3><hr>
@@ -584,17 +588,13 @@
 <li><p>在定义泛型类或接口时，只能使用类型参数，并可以在类内部引用</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public class Box&lt;T&gt; &#123;</span><br><span class="line">    private T t;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>  不可以使用通配符，因为<code>?</code>不能代表一种具体类型，而<code>T</code>代表一种具体类型，只是暂时未定</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public class Box&lt;?&gt; &#123; // Error!!!</span><br><span class="line">    private ? t; // Error!!!</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public class Box&lt;?&gt; &#123; &#x2F;&#x2F; Error!!!</span><br><span class="line">    private ? t; &#x2F;&#x2F; Error!!!</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>通配符可以使用 <strong>super</strong> 关键字定义<strong>下界</strong>，而类型参数不可以</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void bar(List&lt;? super Number&gt; list) &#123;...&#125;</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>如果需要在泛型类内部定义一个与当前参数类型无关的方法，可以使用<code>&lt;?&gt;</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Box&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private T t;// Used type &apos;T&apos;</span><br><span class="line"></span><br><span class="line">    public void printListSize(List&lt;?&gt; list)&#123; // Not associated with type &apos;T&apos;</span><br><span class="line">        System.out.println(list.size());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Box&lt;String&gt; box = new Box&lt;&gt;();</span><br><span class="line">        box.printListSize(new ArrayList&lt;&gt;(Arrays.asList(1,2,3,&quot;aa&quot;,&apos;s&apos;))); // 5</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Box&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private T t;&#x2F;&#x2F; Used type &#39;T&#39;</span><br><span class="line"></span><br><span class="line">    public void printListSize(List&lt;?&gt; list)&#123; &#x2F;&#x2F; Not associated with type &#39;T&#39;</span><br><span class="line">        System.out.println(list.size());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Box&lt;String&gt; box &#x3D; new Box&lt;&gt;();</span><br><span class="line">        box.printListSize(new ArrayList&lt;&gt;(Arrays.asList(1,2,3,&quot;aa&quot;,&#39;s&#39;))); &#x2F;&#x2F; 5</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>  实际上，查看 Java 的 <strong>Class</strong> 类的源码，可以看到<code>&lt;?&gt;</code>有被广泛的使用，是因为<code>Class&lt;T&gt;</code>中的大多数的方法都不依赖于 <strong>T</strong></p>
 </li>
 </ul>
@@ -641,7 +641,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/27/Java泛型之类型擦除/" rel="next" title="Java 泛型之类型擦除">
+              <a href="/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/" rel="next" title="Java 泛型之类型擦除">
                 <i class="fa fa-chevron-left"></i> Java 泛型之类型擦除
               </a>
             
@@ -651,7 +651,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/03/15/Redis安装及初步使用/" rel="prev" title="Redis 安装及初步使用">
+              <a href="/2018/03/15/Redis%E5%AE%89%E8%A3%85%E5%8F%8A%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/" rel="prev" title="Redis 安装及初步使用">
                 Redis 安装及初步使用 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -717,9 +717,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -730,7 +732,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -912,7 +914,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型的引入"><span class="nav-number">2.</span> <span class="nav-text">泛型的引入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tips"><span class="nav-number">2.0.1.</span> <span class="nav-text">Tips</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型方法"><span class="nav-number">3.</span> <span class="nav-text">泛型方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型的类型变量"><span class="nav-number">4.</span> <span class="nav-text">泛型的类型变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类型参数命名惯例"><span class="nav-number">4.1.</span> <span class="nav-text">类型参数命名惯例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多个类型参数"><span class="nav-number">4.2.</span> <span class="nav-text">多个类型参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通配符与-T-的区别"><span class="nav-number">4.3.</span> <span class="nav-text">通配符与 T 的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Preferences"><span class="nav-number">5.</span> <span class="nav-text">Preferences</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型的引入"><span class="nav-number">2.</span> <span class="nav-text">泛型的引入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tips"><span class="nav-number">2.0.1.</span> <span class="nav-text">Tips</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型方法"><span class="nav-number">3.</span> <span class="nav-text">泛型方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型的类型变量"><span class="nav-number">4.</span> <span class="nav-text">泛型的类型变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类型参数命名惯例"><span class="nav-number">4.1.</span> <span class="nav-text">类型参数命名惯例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多个类型参数"><span class="nav-number">4.2.</span> <span class="nav-text">多个类型参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通配符与-T-的区别"><span class="nav-number">4.3.</span> <span class="nav-text">通配符与 T 的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Preferences"><span class="nav-number">5.</span> <span class="nav-text">Preferences</span></a></li></ol></div>
             
 
           </div>
@@ -944,7 +946,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1098,7 +1100,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2018/02/28/Java泛型/';
+        this.page.url = 'https://s1mplecc.github.io/2018/02/28/Java%E6%B3%9B%E5%9E%8B/';
         this.page.identifier = '2018/02/28/Java泛型/';
         this.page.title = 'Java 泛型';
         };

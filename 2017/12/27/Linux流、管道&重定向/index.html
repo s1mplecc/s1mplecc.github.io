@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -112,30 +112,32 @@
 
 
 
-  <meta name="description" content="标准I/O流 Linux shell（比如Bash）可以接收和发送字符序列或字符流形式的输入和输出。无论实际的字符流是来自还是来自文件，键盘，显示器上的窗口或其他IO设备，字符流都可以通过文件IO技术进行访问   Linux shell使用3种标准的I/O流，每种流都与一个文件描述符   1231.stdout   //标准输出流，它显示命令运行的输出，文件描述符为 12.stderr   //标">
-<meta name="keywords" content="Linux">
+  <meta name="description" content="标准I&#x2F;O流 Linux shell（比如Bash）可以接收和发送字符序列或字符流形式的输入和输出。无论实际的字符流是来自还是来自文件，键盘，显示器上的窗口或其他IO设备，字符流都可以通过文件IO技术进行访问   Linux shell使用3种标准的I&#x2F;O流，每种流都与一个文件描述符   1231.stdout   &#x2F;&#x2F;标准输出流，它显示命令运行的输出，文件描述符为 12.stderr   &#x2F;&#x2F;标">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux 流、管道&amp;重定向">
-<meta property="og:url" content="https://s1mplecc.github.io/2017/12/27/Linux流、管道&重定向/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2017/12/27/Linux%E6%B5%81%E3%80%81%E7%AE%A1%E9%81%93&%E9%87%8D%E5%AE%9A%E5%90%91/index.html">
 <meta property="og:site_name" content="s1mple的博客">
-<meta property="og:description" content="标准I/O流 Linux shell（比如Bash）可以接收和发送字符序列或字符流形式的输入和输出。无论实际的字符流是来自还是来自文件，键盘，显示器上的窗口或其他IO设备，字符流都可以通过文件IO技术进行访问   Linux shell使用3种标准的I/O流，每种流都与一个文件描述符   1231.stdout   //标准输出流，它显示命令运行的输出，文件描述符为 12.stderr   //标">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2017/12/27/Linux流、管道&重定向/0.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2017/12/27/Linux流、管道&重定向/1.png">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.294Z">
+<meta property="og:description" content="标准I&#x2F;O流 Linux shell（比如Bash）可以接收和发送字符序列或字符流形式的输入和输出。无论实际的字符流是来自还是来自文件，键盘，显示器上的窗口或其他IO设备，字符流都可以通过文件IO技术进行访问   Linux shell使用3种标准的I&#x2F;O流，每种流都与一个文件描述符   1231.stdout   &#x2F;&#x2F;标准输出流，它显示命令运行的输出，文件描述符为 12.stderr   &#x2F;&#x2F;标">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2017/12/27/Linux%E6%B5%81%E3%80%81%E7%AE%A1%E9%81%93&%E9%87%8D%E5%AE%9A%E5%90%91/0.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2017/12/27/Linux%E6%B5%81%E3%80%81%E7%AE%A1%E9%81%93&%E9%87%8D%E5%AE%9A%E5%90%91/1.png">
+<meta property="article:published_time" content="2017-12-27T04:32:23.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.294Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux 流、管道&amp;重定向">
-<meta name="twitter:description" content="标准I/O流 Linux shell（比如Bash）可以接收和发送字符序列或字符流形式的输入和输出。无论实际的字符流是来自还是来自文件，键盘，显示器上的窗口或其他IO设备，字符流都可以通过文件IO技术进行访问   Linux shell使用3种标准的I/O流，每种流都与一个文件描述符   1231.stdout   //标准输出流，它显示命令运行的输出，文件描述符为 12.stderr   //标">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2017/12/27/Linux流、管道&重定向/0.png">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2017/12/27/Linux%E6%B5%81%E3%80%81%E7%AE%A1%E9%81%93&%E9%87%8D%E5%AE%9A%E5%90%91/0.png">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2017/12/27/Linux流、管道&重定向/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2017/12/27/Linux流、管道&重定向/"/>
 
 
 
@@ -185,9 +187,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -197,7 +199,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -241,7 +243,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -258,7 +260,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -275,7 +277,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -292,7 +294,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -303,7 +305,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -323,7 +325,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -368,20 +372,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/27/Linux流、管道&重定向/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/27/Linux%E6%B5%81%E3%80%81%E7%AE%A1%E9%81%93&%E9%87%8D%E5%AE%9A%E5%90%91/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -438,7 +442,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -449,7 +453,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
 
                 
                 
@@ -464,9 +468,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/27/Linux流、管道&重定向/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/27/Linux%E6%B5%81%E3%80%81%E7%AE%A1%E9%81%93&%E9%87%8D%E5%AE%9A%E5%90%91/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/12/27/Linux流、管道&重定向/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/27/Linux流、管道&重定向/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -477,10 +482,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -495,7 +501,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.3k</span>
+                <span title="本文字数">3.4k</span>
               
 
               
@@ -530,7 +536,7 @@
 </li>
 <li><p>Linux内核采用文件描述符（<strong>file descriptor</strong>）来访问文件。文件描述符是<strong>非负整数</strong>。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件</p>
 </li>
-<li><p>一条Linux命令执行的流程图<br><img src="/2017/12/27/Linux流、管道&重定向/0.png" alt="linuxcom"></p>
+<li><p>一条Linux命令执行的流程图<br><img src="/2017/12/27/Linux%E6%B5%81%E3%80%81%E7%AE%A1%E9%81%93&%E9%87%8D%E5%AE%9A%E5%90%91/0.png" alt="linuxcom"></p>
 </li>
 </ul>
 <hr>
@@ -549,7 +555,7 @@
 <p>  该命令将左侧命令的标准输出重定向到<code>a.txt</code>文件中</p>
 </li>
 <li><p>使用<code>/dev/null</code>清空文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /dev/null &gt; a.txt</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat &#x2F;dev&#x2F;null &gt; a.txt</span><br></pre></td></tr></table></figure>
 <p>  <code>/dev/null</code>相当于Linux的黑洞文件，永远为空</p>
 </li>
 </ul>
@@ -566,10 +572,10 @@
 <li><p>将文件的内容作为标准输入，传给左边的命令处理</p>
 </li>
 <li><p>将字符<code>o</code>替换为<code>x</code>，但是源文件并不会改动</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜ tr &apos;o&apos; &apos;x&apos; &lt; a.txt</span><br><span class="line">hellx</span><br><span class="line">wxrld</span><br><span class="line">➜ cat a.txt </span><br><span class="line">hello</span><br><span class="line">world</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜ tr &#39;o&#39; &#39;x&#39; &lt; a.txt</span><br><span class="line">hellx</span><br><span class="line">wxrld</span><br><span class="line">➜ cat a.txt </span><br><span class="line">hello</span><br><span class="line">world</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>或者之前博客提到的用<code>nc</code>来传输文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nc -l &#123;port&#125; &gt; filename // 接收端</span><br><span class="line">nc &#123;接受者IP&#125; &#123;port&#125; &lt; filename // 发送端</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nc -l &#123;port&#125; &gt; filename &#x2F;&#x2F; 接收端</span><br><span class="line">nc &#123;接受者IP&#125; &#123;port&#125; &lt; filename &#x2F;&#x2F; 发送端</span><br></pre></td></tr></table></figure>
 <p>  发送端将文件作为标准输入传输给接受端，再由接收端写入文件</p>
 </li>
 </ul>
@@ -578,22 +584,22 @@
 <p>管道命令操作符：<strong>|</strong> ，它能将前面一个命令传出的标准输出(<strong>stdout</strong>)，作为标准输入(<strong>stdin</strong>)传给下一条命令。相比于重定向，管道符号两边都是<strong>可独立执行</strong>的命令，通常用于命令间<strong>传递参数</strong>，而重定位符号的右边必须是<strong>文件名</strong></p>
 </blockquote>
 <ul>
-<li><p>流程图<br><img src="/2017/12/27/Linux流、管道&重定向/1.png" alt="pipe"></p>
+<li><p>流程图<br><img src="/2017/12/27/Linux%E6%B5%81%E3%80%81%E7%AE%A1%E9%81%93&%E9%87%8D%E5%AE%9A%E5%90%91/1.png" alt="pipe"></p>
 </li>
 <li><p>先来看这条命令</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ ls | grep &quot;**.png&quot;</span><br><span class="line">arguments.png</span><br><span class="line">mvvm.png</span><br><span class="line">nrm-test.png</span><br><span class="line">require.png</span><br></pre></td></tr></table></figure>
 <p>  <code>ls</code>列出当前目录下所有非隐藏文件，作为标准输入传给<code>grep</code>去过滤出以<code>.png</code>结尾的文件</p>
 </li>
 <li><p>现在我用<strong>IDEA</strong>启动了一个<strong>Spring Boot</strong>项目</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java</span><br><span class="line">  501  6292  6030   0 11:00PM ttys000    0:11.42 /usr/bin/java -jar /Users/s1mple/Library/Mobile Documents/com~apple~CloudDocs/Works/testvue/target/testvue-0.0.1-SNAPSHOT.jar</span><br><span class="line">  501  6324  6224   0 11:05PM ttys001    0:00.00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn java</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java</span><br><span class="line">  501  6292  6030   0 11:00PM ttys000    0:11.42 &#x2F;usr&#x2F;bin&#x2F;java -jar &#x2F;Users&#x2F;s1mple&#x2F;Library&#x2F;Mobile Documents&#x2F;com~apple~CloudDocs&#x2F;Works&#x2F;testvue&#x2F;target&#x2F;testvue-0.0.1-SNAPSHOT.jar</span><br><span class="line">  501  6324  6224   0 11:05PM ttys001    0:00.00 grep --color&#x3D;auto --exclude-dir&#x3D;.bzr --exclude-dir&#x3D;CVS --exclude-dir&#x3D;.git --exclude-dir&#x3D;.hg --exclude-dir&#x3D;.svn java</span><br></pre></td></tr></table></figure>
 <p>  执行这条命令后终端打印出<strong>Java</strong>进程信息，进程号<strong>6292</strong>。下面一个是<strong>grep</strong>进程，无关紧要</p>
 </li>
 <li><p>接下来我想结合管道命令<code>kill</code>掉这个<strong>Java</strong>进程</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java | grep -v grep | awk &apos;&#123;print $2&#125;&apos; | xargs kill -9   </span><br><span class="line">➜ ps -ef | grep java</span><br><span class="line">  501  6352  6224   0 11:11PM ttys001    0:00.00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn java</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java | grep -v grep | awk &#39;&#123;print $2&#125;&#39; | xargs kill -9   </span><br><span class="line">➜ ps -ef | grep java</span><br><span class="line">  501  6352  6224   0 11:11PM ttys001    0:00.00 grep --color&#x3D;auto --exclude-dir&#x3D;.bzr --exclude-dir&#x3D;CVS --exclude-dir&#x3D;.git --exclude-dir&#x3D;.hg --exclude-dir&#x3D;.svn java</span><br></pre></td></tr></table></figure>
 <p>  只剩下<strong>grep</strong>进程了，<strong>IDEA</strong>控制台也显示 <strong>“Process finished with exit code 137 (interrupted by signal 9: SIGKILL)”</strong> ，该进程已经被<code>kill</code>了，其实相当于执行了<code>kill -9 6292</code></p>
 </li>
 <li><p>这个命令看上去很长但是不要害怕，它无非是多个命令组合在一起。我之所以想说这个是因为在<strong>Tomcat</strong>的运行脚本<code>catalina.sh</code>中看到了用于停止<strong>Tomcat</strong>的类似的命令</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java | grep -v grep | awk &apos;&#123;print $2&#125;&apos; | xargs kill -9</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java | grep -v grep | awk &#39;&#123;print $2&#125;&#39; | xargs kill -9</span><br></pre></td></tr></table></figure>
 <p>  <code>ps -ef</code>列出所有进程传递给<code>grep java</code>过滤出包含<strong>java</strong>关键字的进程，再传递给<code>grep -v grep</code>剔除包含<strong>grep</strong>关键字的进程，<code>awk &#39;{print $2}&#39;</code>扫描输入获取第二个参数即进程号<strong>6292</strong>，再作为<strong>xargs</strong>参数传递给<code>xargs kill -9</code>最终杀掉进程</p>
 </li>
 <li><p>很多时候比如说再写<strong>shell</strong>脚本时确实这样用，因为进程号是动态分配的，不能写死，只能通过一些手段动态获取进程号再进行<strong>参数传递</strong></p>
@@ -605,10 +611,10 @@
 </blockquote>
 <ul>
 <li><p>过滤出<code>.*rc</code>的文件，将文件中的内容统一输出到<code>rc.txt</code>中</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ cat `ls -a | grep &quot;.*rc&quot;` &gt; ./Desktop/rc.txt</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ cat &#96;ls -a | grep &quot;.*rc&quot;&#96; &gt; .&#x2F;Desktop&#x2F;rc.txt</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>上诉命令和下面这条起一个作用</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ ls -a | grep &quot;.*rc&quot; | xargs cat &gt; ./Desktop/rc.txt</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ ls -a | grep &quot;.*rc&quot; | xargs cat &gt; .&#x2F;Desktop&#x2F;rc.txt</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <hr>
@@ -651,7 +657,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/27/Npm、Nrm & Nvm/" rel="next" title="Npm、Nrm & Nvm">
+              <a href="/2017/12/27/Npm%E3%80%81Nrm%20&%20Nvm/" rel="next" title="Npm、Nrm & Nvm">
                 <i class="fa fa-chevron-left"></i> Npm、Nrm & Nvm
               </a>
             
@@ -661,7 +667,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/29/ES6新特性/" rel="prev" title="ES6 新特性">
+              <a href="/2017/12/29/ES6%E6%96%B0%E7%89%B9%E6%80%A7/" rel="prev" title="ES6 新特性">
                 ES6 新特性 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -727,9 +733,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -740,7 +748,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -922,7 +930,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#标准I-O流"><span class="nav-number">1.</span> <span class="nav-text">标准I/O流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重定向"><span class="nav-number">2.</span> <span class="nav-text">重定向</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#“-gt-“"><span class="nav-number">2.1.</span> <span class="nav-text">“ &gt; “</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#“-gt-gt-“"><span class="nav-number">2.2.</span> <span class="nav-text">“ &gt;&gt; “</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#“-lt-“"><span class="nav-number">2.3.</span> <span class="nav-text">“ &lt; “</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管道"><span class="nav-number">3.</span> <span class="nav-text">管道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令替换"><span class="nav-number">4.</span> <span class="nav-text">命令替换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">5.</span> <span class="nav-text">References</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#标准I-O流"><span class="nav-number">1.</span> <span class="nav-text">标准I&#x2F;O流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重定向"><span class="nav-number">2.</span> <span class="nav-text">重定向</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#“-gt-“"><span class="nav-number">2.1.</span> <span class="nav-text">“ &gt; “</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#“-gt-gt-“"><span class="nav-number">2.2.</span> <span class="nav-text">“ &gt;&gt; “</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#“-lt-“"><span class="nav-number">2.3.</span> <span class="nav-text">“ &lt; “</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管道"><span class="nav-number">3.</span> <span class="nav-text">管道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令替换"><span class="nav-number">4.</span> <span class="nav-text">命令替换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">5.</span> <span class="nav-text">References</span></a></li></ol></div>
             
 
           </div>
@@ -954,7 +962,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1108,7 +1116,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2017/12/27/Linux流、管道&重定向/';
+        this.page.url = 'https://s1mplecc.github.io/2017/12/27/Linux%E6%B5%81%E3%80%81%E7%AE%A1%E9%81%93&%E9%87%8D%E5%AE%9A%E5%90%91/';
         this.page.identifier = '2017/12/27/Linux流、管道&重定向/';
         this.page.title = 'Linux 流、管道&重定向';
         };

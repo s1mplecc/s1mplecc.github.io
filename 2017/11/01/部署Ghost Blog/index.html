@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -113,26 +113,28 @@
 
 
   <meta name="description" content="Preface Ghost是比较简约、轻量级的博客平台，而且文档编写使用markdown完成的。所以本片博客将介绍如何在服务器上搭建了Ghost。  Prerequisites Ubuntu 16.04 MySQL NGINX (minimum of 1.9.5 for SSL) Systemd Node v6 installed via NodeSource At least 1GB memor">
-<meta name="keywords" content="Server">
 <meta property="og:type" content="article">
 <meta property="og:title" content="部署 Ghost Blog">
-<meta property="og:url" content="https://s1mplecc.github.io/2017/11/01/部署Ghost Blog/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="Preface Ghost是比较简约、轻量级的博客平台，而且文档编写使用markdown完成的。所以本片博客将介绍如何在服务器上搭建了Ghost。  Prerequisites Ubuntu 16.04 MySQL NGINX (minimum of 1.9.5 for SSL) Systemd Node v6 installed via NodeSource At least 1GB memor">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.636Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-10-31T21:08:37.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.636Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Server">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="部署 Ghost Blog">
-<meta name="twitter:description" content="Preface Ghost是比较简约、轻量级的博客平台，而且文档编写使用markdown完成的。所以本片博客将介绍如何在服务器上搭建了Ghost。  Prerequisites Ubuntu 16.04 MySQL NGINX (minimum of 1.9.5 for SSL) Systemd Node v6 installed via NodeSource At least 1GB memor">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2017/11/01/部署Ghost Blog/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2017/11/01/部署Ghost Blog/"/>
 
 
 
@@ -182,9 +184,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -194,7 +196,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -238,7 +240,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -255,7 +257,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -272,7 +274,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -289,7 +291,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -300,7 +302,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -320,7 +322,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -365,20 +369,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/01/部署Ghost Blog/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -435,7 +439,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -446,7 +450,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
 
                 
                 
@@ -461,9 +465,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/11/01/部署Ghost Blog/#comments" itemprop="discussionUrl">
+                <a href="/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/11/01/部署Ghost Blog/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/01/部署Ghost Blog/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -474,10 +479,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -492,7 +498,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">2k</span>
+                <span title="本文字数">2.1k</span>
               
 
               
@@ -533,22 +539,12 @@
 <p>如果你的数据库在其他服务器上，可以不安装mysql</p>
 </blockquote>
 <ul>
-<li><p>更新软件包源以及更新通过包源安装的软件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>mysql、ngnix、systemd都可以通过<code>sudo apt-get install</code>命令安装</p>
-</li>
-<li><p>由于ghost是基于nodejs开发的，所以要安装nodejs，执行下面这俩条命令</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash </span><br><span class="line">sudo apt-get install -y nodejs</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装ghost-cli命令行程序</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm i -g ghost-cli</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装完成后可以使用<code>ghost</code>命令，<code>ghost help</code>查看帮助，ghost安装需要一个空的文件夹</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /home/s1mple/ghost</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>cd</code>到这个目录下，执行<code>ghost install</code>命令即可</p>
-</li>
+<li>更新软件包源以及更新通过包源安装的软件  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br></pre></td></tr></table></figure></li>
+<li>mysql、ngnix、systemd都可以通过<code>sudo apt-get install</code>命令安装</li>
+<li>由于ghost是基于nodejs开发的，所以要安装nodejs，执行下面这俩条命令  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -sL https:&#x2F;&#x2F;deb.nodesource.com&#x2F;setup_6.x | sudo -E bash </span><br><span class="line">sudo apt-get install -y nodejs</span><br></pre></td></tr></table></figure></li>
+<li>安装ghost-cli命令行程序  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm i -g ghost-cli</span><br></pre></td></tr></table></figure></li>
+<li>安装完成后可以使用<code>ghost</code>命令，<code>ghost help</code>查看帮助，ghost安装需要一个空的文件夹  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#x2F;home&#x2F;s1mple&#x2F;ghost</span><br></pre></td></tr></table></figure></li>
+<li><code>cd</code>到这个目录下，执行<code>ghost install</code>命令即可</li>
 </ul>
 <blockquote>
 <p>1.安装过程中会配置数据库，需要提前建个空的database。如果mysql装在本机，就输入localhost，装在别的服务器上就需要输入服务器IP<br>2.询问是否使用nginx可以选no，可以自己手动配置nginx。实际上他帮你配置将80端口的请求转发到ghost的2368端口<br>3.询问是否新建”ghost”用户可以选no，若选yes他会在数据库中新建此用户，并且在ghost后台管理可以看到此用户和一些默认文章。</p>
@@ -562,16 +558,11 @@
 <p>很尴尬，因为Aliyun的服务器需要备案，80端口有时候会出现抽风的情况。所以有必要先配置个其他端口（2368端口太难记了），比如8080。</p>
 </blockquote>
 <ul>
-<li><p><code>cat /etc/nginx/nginx.conf</code>发现nginx配置文件包括如下两行</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">include /etc/nginx/conf.d/*.conf;</span><br><span class="line">include /etc/nginx/sites-enabled/*;</span><br></pre></td></tr></table></figure>
-<p>  意思就是配置文件会导入上述两个目录中的文件。所以我们可以<code>cd /etc/nginx/sites-enabled/</code>中。</p>
-</li>
-<li><p>发现目录下有个<strong>s1mple.info.conf</strong>文件，这其实就是ghost配置nginx的文件。</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp s1mple.info.conf ghost_8080.conf</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改<code>ghost_8080.conf</code>中的监听端口80为8080,<code>service nginx restart</code>重启nginx</p>
-</li>
-<li>修改ghost安装目录下的<strong>config.production.json</strong>,重启ghost  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;url&quot;: &quot;http://s1mple.info:8080&quot;,</span><br></pre></td></tr></table></figure>
+<li><code>cat /etc/nginx/nginx.conf</code>发现nginx配置文件包括如下两行  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">include &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;*.conf;</span><br><span class="line">include &#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;*;</span><br></pre></td></tr></table></figure>
+  意思就是配置文件会导入上述两个目录中的文件。所以我们可以<code>cd /etc/nginx/sites-enabled/</code>中。</li>
+<li>发现目录下有个<strong>s1mple.info.conf</strong>文件，这其实就是ghost配置nginx的文件。  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp s1mple.info.conf ghost_8080.conf</span><br></pre></td></tr></table></figure></li>
+<li>修改<code>ghost_8080.conf</code>中的监听端口80为8080,<code>service nginx restart</code>重启nginx</li>
+<li>修改ghost安装目录下的<strong>config.production.json</strong>,重启ghost  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;url&quot;: &quot;http:&#x2F;&#x2F;s1mple.info:8080&quot;,</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <blockquote>
@@ -623,7 +614,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/11/02/构建你的Docker镜像/" rel="prev" title="构建你的 Docker 镜像">
+              <a href="/2017/11/02/%E6%9E%84%E5%BB%BA%E4%BD%A0%E7%9A%84Docker%E9%95%9C%E5%83%8F/" rel="prev" title="构建你的 Docker 镜像">
                 构建你的 Docker 镜像 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -689,9 +680,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -702,7 +695,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -916,7 +909,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1070,7 +1063,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2017/11/01/部署Ghost Blog/';
+        this.page.url = 'https://s1mplecc.github.io/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/';
         this.page.identifier = '2017/11/01/部署Ghost Blog/';
         this.page.title = '部署 Ghost Blog';
         };

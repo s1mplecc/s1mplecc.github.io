@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -113,32 +113,37 @@
 
 
   <meta name="description" content="Preface 在已经构建vue-cli项目的基础上，我们来梳理一下vue-cli项目的结构。   vue-cli项目总体结构  build build文件主要是webpack打包生成静态文件的配置  最新的vue-webpack-template中已经去掉了dev-server.js改用webpack-dev-server代替，webpack-dev-server是一个独立的NPM包，支持热重载">
-<meta name="keywords" content="JavaScript,Web,Vue,Front-end">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Vue 项目结构">
-<meta property="og:url" content="https://s1mplecc.github.io/2017/12/14/Vue 项目结构/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="Preface 在已经构建vue-cli项目的基础上，我们来梳理一下vue-cli项目的结构。   vue-cli项目总体结构  build build文件主要是webpack打包生成静态文件的配置  最新的vue-webpack-template中已经去掉了dev-server.js改用webpack-dev-server代替，webpack-dev-server是一个独立的NPM包，支持热重载">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2017/12/14/Vue%20项目结构/0.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2017/12/14/Vue%20项目结构/1.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2017/12/14/Vue%20项目结构/2.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2017/12/14/Vue%20项目结构/3.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2017/12/14/Vue%20项目结构/4.png">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.433Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/0.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/1.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/2.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/3.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/4.png">
+<meta property="article:published_time" content="2017-12-13T18:11:19.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.433Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="Front-end">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Vue 项目结构">
-<meta name="twitter:description" content="Preface 在已经构建vue-cli项目的基础上，我们来梳理一下vue-cli项目的结构。   vue-cli项目总体结构  build build文件主要是webpack打包生成静态文件的配置  最新的vue-webpack-template中已经去掉了dev-server.js改用webpack-dev-server代替，webpack-dev-server是一个独立的NPM包，支持热重载">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2017/12/14/Vue%20项目结构/0.png">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/0.png">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2017/12/14/Vue 项目结构/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2017/12/14/Vue 项目结构/"/>
 
 
 
@@ -188,9 +193,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -200,7 +205,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -244,7 +249,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -261,7 +266,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -278,7 +283,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -295,7 +300,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -306,7 +311,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -326,7 +331,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -371,20 +378,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/14/Vue 项目结构/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -441,7 +448,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -452,7 +459,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
 
                 
                 
@@ -467,9 +474,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/14/Vue 项目结构/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/12/14/Vue 项目结构/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/14/Vue 项目结构/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -480,10 +488,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -498,7 +507,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">1.7k</span>
+                <span title="本文字数">1.8k</span>
               
 
               
@@ -526,44 +535,43 @@
 <p>在已经<a href="https://s1mple.xyz/vue-cli-project-build/" target="_blank" rel="noopener">构建vue-cli项目</a>的基础上，我们来梳理一下vue-cli项目的结构。</p>
 </blockquote>
 <ul>
-<li>vue-cli项目总体结构<br><img src="/2017/12/14/Vue 项目结构/0.png" alt="vue-project-structure"></li>
+<li>vue-cli项目总体结构<br><img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/0.png" alt="vue-project-structure"></li>
 </ul>
 <h2 id="build"><a href="#build" class="headerlink" title="build"></a>build</h2><ul>
-<li><p>build文件主要是<strong>webpack</strong>打包生成静态文件的配置<br><img src="/2017/12/14/Vue 项目结构/1.png" alt="build"></p>
+<li><p>build文件主要是<strong>webpack</strong>打包生成静态文件的配置<br><img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/1.png" alt="build"></p>
 </li>
 <li><p>最新的<strong>vue-webpack-template</strong>中已经去掉了<strong>dev-server.js</strong>改用<strong>webpack-dev-server</strong>代替，<strong>webpack-dev-server</strong>是一个独立的NPM包，支持<strong>热重载</strong></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-    &quot;dev&quot;: &quot;node build/dev-server.js&quot;,</span><br><span class="line">+    &quot;dev&quot;: &quot;webpack-dev-server --inline --progress --config build/webpack.dev.conf.js&quot;,</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-    &quot;dev&quot;: &quot;node build&#x2F;dev-server.js&quot;,</span><br><span class="line">+    &quot;dev&quot;: &quot;webpack-dev-server --inline --progress --config build&#x2F;webpack.dev.conf.js&quot;,</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="config"><a href="#config" class="headerlink" title="config"></a>config</h2><ul>
-<li>config文件主要是项目相关配置，我们常用的就是当端口冲突时配置监听端口，打包输出路径及命名等<br><img src="/2017/12/14/Vue 项目结构/2.png" alt="config"></li>
+<li>config文件主要是项目相关配置，我们常用的就是当端口冲突时配置监听端口，打包输出路径及命名等<br><img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/2.png" alt="config"></li>
 </ul>
 <h2 id="src"><a href="#src" class="headerlink" title="src"></a>src</h2><ul>
 <li><p>这是项目最初的一个结构图。<strong>assets</strong>不用多说，静态资源文件包括css文件、外部的一些js包都可以放这里。<strong>components</strong>和<strong>router</strong>则是Vue的俩个核心概念：<strong>组件</strong>和<strong>路由</strong></p>
-<p>  <img src="/2017/12/14/Vue 项目结构/3.png" alt="Screen-Shot-2017-12-16-at-5.13.01-PM"></p>
+<p>  <img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/3.png" alt="Screen-Shot-2017-12-16-at-5.13.01-PM"></p>
 </li>
 </ul>
 <h3 id="main-js"><a href="#main-js" class="headerlink" title="main.js"></a>main.js</h3><ul>
 <li><p>项目的入口文件，new了一个Vue实例，将这个实例挂载到<strong>id=app</strong>的<strong>DOM元素</strong>上，并用<strong>App.vue</strong>中的模版替换该元素，这也是为什么我们能看到<strong>App.vue</strong>中的logo图片</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import App from &apos;./App&apos;</span><br><span class="line">new Vue(&#123;</span><br><span class="line">  el: &apos;#app&apos;,</span><br><span class="line">  router,</span><br><span class="line">  template: &apos;&lt;App/&gt;&apos;,</span><br><span class="line">  components: &#123; App &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import App from &#39;.&#x2F;App&#39;</span><br><span class="line">new Vue(&#123;</span><br><span class="line">  el: &#39;#app&#39;,</span><br><span class="line">  router,</span><br><span class="line">  template: &#39;&lt;App&#x2F;&gt;&#39;,</span><br><span class="line">  components: &#123; App &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h3 id="App-vue"><a href="#App-vue" class="headerlink" title="App.vue"></a>App.vue</h3><ul>
 <li><p>根组件，可以看到 <strong>.vue</strong>文件包含3个部分：<strong>template、script、style</strong>，分别对应<strong>html、JavaScript、css</strong>文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div id=&quot;app&quot;&gt;</span><br><span class="line">    &lt;img src=&quot;./assets/logo.png&quot;&gt;</span><br><span class="line">    &lt;router-view/&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  name: &apos;app&apos;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">#app &#123;...&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div id&#x3D;&quot;app&quot;&gt;</span><br><span class="line">    &lt;img src&#x3D;&quot;.&#x2F;assets&#x2F;logo.png&quot;&gt;</span><br><span class="line">    &lt;router-view&#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  name: &#39;app&#39;</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">#app &#123;...&#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
-<li><code>&lt;router-view&gt;</code>是路由子视图，类似于一个插槽</li>
+<li><p><code>&lt;router-view&gt;</code>是路由子视图，类似于一个插槽</p>
+</li>
 </ul>
 <h3 id="router-index-js"><a href="#router-index-js" class="headerlink" title="router/index.js"></a>router/index.js</h3><ul>
 <li><p>路由文件，如果访问跟路径<code>/</code>，那么将<strong>HelloWorld</strong>组件插入到<code>&lt;router-view&gt;</code>中并渲染出来</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import Vue from &apos;vue&apos;</span><br><span class="line">import Router from &apos;vue-router&apos;</span><br><span class="line">import HelloWorld from &apos;@/components/HelloWorld&apos;</span><br><span class="line"></span><br><span class="line">Vue.use(Router)</span><br><span class="line"></span><br><span class="line">export default new Router(&#123;</span><br><span class="line">  routes: [</span><br><span class="line">    &#123;</span><br><span class="line">      path: &apos;/&apos;,</span><br><span class="line">      name: &apos;HelloWorld&apos;,</span><br><span class="line">      component: HelloWorld</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import Vue from &#39;vue&#39;</span><br><span class="line">import Router from &#39;vue-router&#39;</span><br><span class="line">import HelloWorld from &#39;@&#x2F;components&#x2F;HelloWorld&#39;</span><br><span class="line"></span><br><span class="line">Vue.use(Router)</span><br><span class="line"></span><br><span class="line">export default new Router(&#123;</span><br><span class="line">  routes: [</span><br><span class="line">    &#123;</span><br><span class="line">      path: &#39;&#x2F;&#39;,</span><br><span class="line">      name: &#39;HelloWorld&#39;,</span><br><span class="line">      component: HelloWorld</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><ul>
 <li><p>可以看到我在浏览器控制台输入app，看到的是<strong>id=app</strong>的DOM元素，也就是<strong>App.vue</strong>中插入了<strong>HelloWorld.vue</strong>的模版文件</p>
-<p>  <img src="/2017/12/14/Vue 项目结构/4.png" alt="Screen-Shot-2017-12-16-at-5.45.45-PM"></p>
+<p>  <img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/4.png" alt="Screen-Shot-2017-12-16-at-5.45.45-PM"></p>
 </li>
 </ul>
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
@@ -611,7 +619,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/13/Vue项目构建/" rel="next" title="Vue 项目构建">
+              <a href="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/" rel="next" title="Vue 项目构建">
                 <i class="fa fa-chevron-left"></i> Vue 项目构建
               </a>
             
@@ -621,7 +629,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/14/Vue初识/" rel="prev" title="Vue 初识">
+              <a href="/2017/12/14/Vue%E5%88%9D%E8%AF%86/" rel="prev" title="Vue 初识">
                 Vue 初识 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -687,9 +695,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -700,7 +710,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -882,7 +892,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build"><span class="nav-number">2.</span> <span class="nav-text">build</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#config"><span class="nav-number">3.</span> <span class="nav-text">config</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#src"><span class="nav-number">4.</span> <span class="nav-text">src</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#main-js"><span class="nav-number">4.1.</span> <span class="nav-text">main.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#App-vue"><span class="nav-number">4.2.</span> <span class="nav-text">App.vue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#router-index-js"><span class="nav-number">4.3.</span> <span class="nav-text">router/index.js</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Postscript"><span class="nav-number">5.</span> <span class="nav-text">Postscript</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">6.</span> <span class="nav-text">References</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build"><span class="nav-number">2.</span> <span class="nav-text">build</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#config"><span class="nav-number">3.</span> <span class="nav-text">config</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#src"><span class="nav-number">4.</span> <span class="nav-text">src</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#main-js"><span class="nav-number">4.1.</span> <span class="nav-text">main.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#App-vue"><span class="nav-number">4.2.</span> <span class="nav-text">App.vue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#router-index-js"><span class="nav-number">4.3.</span> <span class="nav-text">router&#x2F;index.js</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Postscript"><span class="nav-number">5.</span> <span class="nav-text">Postscript</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">6.</span> <span class="nav-text">References</span></a></li></ol></div>
             
 
           </div>
@@ -914,7 +924,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1068,7 +1078,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2017/12/14/Vue 项目结构/';
+        this.page.url = 'https://s1mplecc.github.io/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/';
         this.page.identifier = '2017/12/14/Vue 项目结构/';
         this.page.title = 'Vue 项目结构';
         };

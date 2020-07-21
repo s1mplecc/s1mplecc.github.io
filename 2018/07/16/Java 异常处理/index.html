@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -113,28 +113,30 @@
 
 
   <meta name="description" content="Preface 一直以来，Java 的异常处理可能是每个 Java 程序员都需要面对和经历的难题之一。何时该抛出异常，该抛出何种异常，需不需要自定义异常类，何时又该捕获异常并处理，相信每一个 Java 程序员或多或少都有这样的疑问。最近也是觉得项目需要统一规范的异常处理，所以花了些时间研读《Thinking in Java》、《阿里巴巴 Java 开发手册》以及前辈们总结的优质文章，归纳了一些自认">
-<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 异常处理">
-<meta property="og:url" content="https://s1mplecc.github.io/2018/07/16/Java 异常处理/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="Preface 一直以来，Java 的异常处理可能是每个 Java 程序员都需要面对和经历的难题之一。何时该抛出异常，该抛出何种异常，需不需要自定义异常类，何时又该捕获异常并处理，相信每一个 Java 程序员或多或少都有这样的疑问。最近也是觉得项目需要统一规范的异常处理，所以花了些时间研读《Thinking in Java》、《阿里巴巴 Java 开发手册》以及前辈们总结的优质文章，归纳了一些自认">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/07/16/Java%20异常处理/0.jpg">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.251Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/0.jpg">
+<meta property="article:published_time" content="2018-07-15T21:21:06.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.251Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java 异常处理">
-<meta name="twitter:description" content="Preface 一直以来，Java 的异常处理可能是每个 Java 程序员都需要面对和经历的难题之一。何时该抛出异常，该抛出何种异常，需不需要自定义异常类，何时又该捕获异常并处理，相信每一个 Java 程序员或多或少都有这样的疑问。最近也是觉得项目需要统一规范的异常处理，所以花了些时间研读《Thinking in Java》、《阿里巴巴 Java 开发手册》以及前辈们总结的优质文章，归纳了一些自认">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2018/07/16/Java%20异常处理/0.jpg">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/0.jpg">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2018/07/16/Java 异常处理/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/07/16/Java 异常处理/"/>
 
 
 
@@ -184,9 +186,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -196,7 +198,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -240,7 +242,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -257,7 +259,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -274,7 +276,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -291,7 +293,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -302,7 +304,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -322,7 +324,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -367,20 +371,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/07/16/Java 异常处理/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -437,7 +441,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -448,7 +452,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
 
                 
                 
@@ -463,9 +467,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/16/Java 异常处理/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/16/Java 异常处理/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/16/Java 异常处理/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -476,10 +481,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -545,7 +551,7 @@
 <h3 id="异常的构成"><a href="#异常的构成" class="headerlink" title="异常的构成"></a>异常的构成</h3><blockquote>
 <p>异常的继承结构如下图所示：<code>Throwable</code>为基类，<code>Error</code>和<code>Exception</code>继承<code>Throwable</code>，<code>RuntimeException</code>和<code>IOException</code>等继承<code>Exception</code>。图中蓝色标识的<code>Error</code>和<code>RuntimeException</code> 为非检查型异常，其余粉色标识的为检查型异常</p>
 </blockquote>
-<p><img src="/2018/07/16/Java 异常处理/0.jpg" alt="v2-2cb1558f17876f329804fcced62661ef_1200x500"></p>
+<p><img src="/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/0.jpg" alt="v2-2cb1558f17876f329804fcced62661ef_1200x500"></p>
 <h4 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h4><blockquote>
 <p>Error 表示系统级别的错误，应用程序本身无法克服和恢复的一种严重问题，例如 JVM 栈溢出<code>StackOverFlowError</code>、内存溢出<code>OutOfMemoryError</code>等。一般不用你关心，在程序中也不应该抛出<code>Error</code>类型的异常，程序员关心的异常基类型通常是<code>Exception</code>。</p>
 </blockquote>
@@ -560,11 +566,11 @@
 </blockquote>
 <h3 id="提早抛出"><a href="#提早抛出" class="headerlink" title="提早抛出"></a>提早抛出</h3><ul>
 <li><p>来看以下代码</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">   private static void readFile(String filename) throws IOException &#123;</span><br><span class="line"></span><br><span class="line">       InputStream in = new FileInputStream(filename);</span><br><span class="line"></span><br><span class="line">       // read file...</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   readFile(null); // throw exception</span><br><span class="line">   </span><br><span class="line">   ---</span><br><span class="line">   Exception in thread &quot;main&quot; java.lang.NullPointerException</span><br><span class="line">at java.io.FileInputStream.&lt;init&gt;(FileInputStream.java:130)</span><br><span class="line">at java.io.FileInputStream.&lt;init&gt;(FileInputStream.java:93)</span><br><span class="line">at info.s1mple.exceptiondemo.ExceptionDemo.readFile(ExceptionDemo.java:15)</span><br><span class="line">at info.s1mple.exceptiondemo.ExceptionDemo.main(ExceptionDemo.java:10)</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">   private static void readFile(String filename) throws IOException &#123;</span><br><span class="line"></span><br><span class="line">       InputStream in &#x3D; new FileInputStream(filename);</span><br><span class="line"></span><br><span class="line">       &#x2F;&#x2F; read file...</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   readFile(null); &#x2F;&#x2F; throw exception</span><br><span class="line">   </span><br><span class="line">   ---</span><br><span class="line">   Exception in thread &quot;main&quot; java.lang.NullPointerException</span><br><span class="line">at java.io.FileInputStream.&lt;init&gt;(FileInputStream.java:130)</span><br><span class="line">at java.io.FileInputStream.&lt;init&gt;(FileInputStream.java:93)</span><br><span class="line">at info.s1mple.exceptiondemo.ExceptionDemo.readFile(ExceptionDemo.java:15)</span><br><span class="line">at info.s1mple.exceptiondemo.ExceptionDemo.main(ExceptionDemo.java:10)</span><br></pre></td></tr></table></figure>
 <p>  以上代码展示了<code>FileInputStream</code>类的构造函数传入<code>null</code>值导致的<code>NullPointerException</code>异常。不幸的是，<code>NullPointerException</code>是 Java 中信息量最少的（却也是最常遭遇且让人崩溃的）异常。它压根不提我们最关心的事情：到底哪里是<code>null</code>。所以我们不得不回退几步去找哪里出了错。</p>
 </li>
 <li><p>通过跟踪堆栈打印信息，我们可以确定错误原因是向<code>readFile()</code>传入了一个空文件名参数。既然<code>readFile()</code>不能处理空文件名，所以马上检查该条件，如果文件名为空抛出非法参数异常</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">private static void readFile(String filename) throws IOException &#123;</span><br><span class="line">    if (filename == null)&#123;</span><br><span class="line">        throw new IllegalArgumentException(&quot;filename is null&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    InputStream in = new FileInputStream(filename);</span><br><span class="line"></span><br><span class="line">    // read file...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile(null); // throw exception</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">Exception in thread &quot;main&quot; java.lang.IllegalArgumentException: filename is null</span><br><span class="line">    at info.s1mple.exceptiondemo.ExceptionDemo.readFile(ExceptionDemo.java:15)</span><br><span class="line">    at info.s1mple.exceptiondemo.ExceptionDemo.main(ExceptionDemo.java:10)</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">private static void readFile(String filename) throws IOException &#123;</span><br><span class="line">    if (filename &#x3D;&#x3D; null)&#123;</span><br><span class="line">        throw new IllegalArgumentException(&quot;filename is null&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    InputStream in &#x3D; new FileInputStream(filename);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; read file...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile(null); &#x2F;&#x2F; throw exception</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">Exception in thread &quot;main&quot; java.lang.IllegalArgumentException: filename is null</span><br><span class="line">    at info.s1mple.exceptiondemo.ExceptionDemo.readFile(ExceptionDemo.java:15)</span><br><span class="line">    at info.s1mple.exceptiondemo.ExceptionDemo.main(ExceptionDemo.java:10)</span><br></pre></td></tr></table></figure>
 <p>  这里使用<code>IllegalArgumentException</code>继承自<code>RuntimeException</code>的非受控异常，所以不强制要求在方法签名处声明。实际开发中根据业务要求，假如文件名是由用户输入，那可以自定义类似<code>RequestArgsIllegalException</code>的受控异常类将错误信息返回给前端并呈现给用户。在命名自定义异常类时要清晰准确。</p>
 </li>
 <li><p>类似上述代码中的<code>if statement</code>被称为<strong>卫语句（guard clauses）</strong>，原则是将可能出错的每个分支做<strong>单独检查</strong>，要么抛出异常要么立即返回，将正常的实现代码放在卫语句之后保证运行到此处时所有条件都已通过。如此既避免了嵌套层次过多的<code>if...else</code>条件分支，又使得实现代码被剥离出来放在最后集中处理。</p>
@@ -580,8 +586,6 @@
 <li><p>在有条件处理异常之前过早捕获它，通常会导致更严重的错误和其他异常。例如，如果上文的<code>readFile()</code>方法在调用<code>FileInputStream</code>构造方法时立即捕获和记录可能抛出的<code>FileNotFoundException</code>，代码会变成下面这样：</p>
   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readFile</span><span class="params">(String filename)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    InputStream in = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        in = <span class="keyword">new</span> FileInputStream(filename);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">        logger.error(<span class="string">"file not found: &#123;&#125;"</span>, filename);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    in.read(); <span class="comment">// may produce NullPointerException</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile(<span class="string">"xxx"</span>); <span class="comment">// throw exception</span></span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"><span class="number">13</span>:<span class="number">10</span>:<span class="number">27.439</span> [main] ERROR info.s1mple.exceptiondemo.ExceptionDemo - file not found: xxx</span><br><span class="line">Exception in thread <span class="string">"main"</span> java.lang.NullPointerException</span><br><span class="line">    at info.s1mple.exceptiondemo.ExceptionDemo.readFile(ExceptionDemo.java:<span class="number">32</span>)</span><br><span class="line">    at info.s1mple.exceptiondemo.ExceptionDemo.main(ExceptionDemo.java:<span class="number">16</span>)</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>上面的代码在完全没有能力从<code>FileNotFoundException</code>中恢复过来的情况下就捕获了它。如果文件无法找到，那么<code>in.read()</code>就不应该执行。尽管我们捕获了<code>FileNotFoundException</code>异常并打印了日志，但是一个更让人头疼的<code>NullPointerException</code>将被抛出。错误信息不仅误导了我们出了什么错（真正的错误是文件找不到而不是空指针），还误导了错误的出处，不应该在<code>in.read()</code>而应该在<code>new FileInputStream(filename)</code>。</p>
 </li>
 <li><p>所以<code>readFile()</code>真正应该做的事情不是捕获这些异常，那应该是什么？看起来有点有悖常理，通常最合适的做法其实是什么都不做，不要马上捕获异常。把责任交给<code>readFile()</code>的调用者，让它来决定文件缺失的处理方法，有可能会提示用户指定其他文件，或者使用默认值，实在不行的话警告用户并退出程序</p>
@@ -666,7 +670,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/03/Git Flow 模型以及工具的使用/" rel="next" title="Git Flow 模型以及工具的使用">
+              <a href="/2018/07/03/Git%20Flow%20%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/" rel="next" title="Git Flow 模型以及工具的使用">
                 <i class="fa fa-chevron-left"></i> Git Flow 模型以及工具的使用
               </a>
             
@@ -676,7 +680,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/07/19/Java 异常处理之 Web 案例/" rel="prev" title="Java 异常处理之 Web 案例">
+              <a href="/2018/07/19/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B9%8B%20Web%20%E6%A1%88%E4%BE%8B/" rel="prev" title="Java 异常处理之 Web 案例">
                 Java 异常处理之 Web 案例 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -742,9 +746,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -755,7 +761,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -969,7 +975,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1123,7 +1129,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2018/07/16/Java 异常处理/';
+        this.page.url = 'https://s1mplecc.github.io/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/';
         this.page.identifier = '2018/07/16/Java 异常处理/';
         this.page.title = 'Java 异常处理';
         };

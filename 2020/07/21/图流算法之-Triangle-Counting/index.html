@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -113,26 +113,29 @@
 
 
   <meta name="description" content="前言图中的三角形是复杂网络分析的重要角色，不论是来自社会交互、计算机交流、金融交易、蛋白质还是生态学网络，图中三角形的数量都是巨大的，它在这些领域中有着非常广泛的应用。例如：通过三角形的分布可以区分哪些是垃圾邮件的主人；角色行为识别中，通过使用者参与的三角形的数量可以判断这个使用者的地位。 图三角数量的计算（Triangle Counting）是计算网络聚集系数和传递性的重要步骤，广泛应用于重要角">
-<meta name="keywords" content="Graph Theory,Stream Progressing">
 <meta property="og:type" content="article">
 <meta property="og:title" content="图流算法之 Triangle Counting">
-<meta property="og:url" content="https://s1mplecc.github.io/2020/07/21/图流算法之-Triangle-Counting/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2020/07/21/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Triangle-Counting/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="前言图中的三角形是复杂网络分析的重要角色，不论是来自社会交互、计算机交流、金融交易、蛋白质还是生态学网络，图中三角形的数量都是巨大的，它在这些领域中有着非常广泛的应用。例如：通过三角形的分布可以区分哪些是垃圾邮件的主人；角色行为识别中，通过使用者参与的三角形的数量可以判断这个使用者的地位。 图三角数量的计算（Triangle Counting）是计算网络聚集系数和传递性的重要步骤，广泛应用于重要角">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-07-21T01:21:54.157Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-21T01:15:32.000Z">
+<meta property="article:modified_time" content="2020-07-21T01:21:54.157Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Graph Theory">
+<meta property="article:tag" content="Stream Progressing">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="图流算法之 Triangle Counting">
-<meta name="twitter:description" content="前言图中的三角形是复杂网络分析的重要角色，不论是来自社会交互、计算机交流、金融交易、蛋白质还是生态学网络，图中三角形的数量都是巨大的，它在这些领域中有着非常广泛的应用。例如：通过三角形的分布可以区分哪些是垃圾邮件的主人；角色行为识别中，通过使用者参与的三角形的数量可以判断这个使用者的地位。 图三角数量的计算（Triangle Counting）是计算网络聚集系数和传递性的重要步骤，广泛应用于重要角">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2020/07/21/图流算法之-Triangle-Counting/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2020/07/21/图流算法之-Triangle-Counting/"/>
 
 
 
@@ -182,9 +185,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -194,7 +197,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -238,7 +241,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -255,7 +258,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -272,7 +275,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -289,7 +292,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -300,7 +303,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -320,7 +323,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -365,20 +370,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/07/21/图流算法之-Triangle-Counting/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/07/21/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Triangle-Counting/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -423,7 +428,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -434,7 +439,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
 
                 
                 
@@ -449,9 +454,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2020/07/21/图流算法之-Triangle-Counting/#comments" itemprop="discussionUrl">
+                <a href="/2020/07/21/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Triangle-Counting/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/07/21/图流算法之-Triangle-Counting/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/07/21/图流算法之-Triangle-Counting/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -462,10 +468,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -565,7 +572,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/07/13/图流算法之-Bipartiteness-Check/" rel="next" title="图流算法之 Bipartiteness Check">
+              <a href="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/" rel="next" title="图流算法之 Bipartiteness Check">
                 <i class="fa fa-chevron-left"></i> 图流算法之 Bipartiteness Check
               </a>
             
@@ -637,9 +644,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -650,7 +659,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -864,7 +873,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1018,7 +1027,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2020/07/21/图流算法之-Triangle-Counting/';
+        this.page.url = 'https://s1mplecc.github.io/2020/07/21/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Triangle-Counting/';
         this.page.identifier = '2020/07/21/图流算法之-Triangle-Counting/';
         this.page.title = '图流算法之 Triangle Counting';
         };

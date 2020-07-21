@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -113,37 +113,40 @@
 
 
   <meta name="description" content="Preface 该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。上一篇我们介绍了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过报表参数填充的案例来加深理解，并见识 IDEA 中更为强大的重构功能  Prerequi">
-<meta name="keywords" content="Clean Code,Refactoring">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Clean Code -- 报表参数填充案例">
-<meta property="og:url" content="https://s1mplecc.github.io/2018/05/07/Clean Code -- 报表参数填充案例/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="Preface 该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。上一篇我们介绍了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过报表参数填充的案例来加深理解，并见识 IDEA 中更为强大的重构功能  Prerequi">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20报表参数填充案例/0.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20报表参数填充案例/1.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20报表参数填充案例/2.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20报表参数填充案例/3.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20报表参数填充案例/4.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20报表参数填充案例/5.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20报表参数填充案例/6.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20报表参数填充案例/7.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20报表参数填充案例/8.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20报表参数填充案例/9.png">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.159Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/0.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/1.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/2.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/3.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/4.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/5.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/6.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/7.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/8.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/9.png">
+<meta property="article:published_time" content="2018-05-07T05:39:03.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.159Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Clean Code">
+<meta property="article:tag" content="Refactoring">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Clean Code -- 报表参数填充案例">
-<meta name="twitter:description" content="Preface 该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。上一篇我们介绍了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过报表参数填充的案例来加深理解，并见识 IDEA 中更为强大的重构功能  Prerequi">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20报表参数填充案例/0.png">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/0.png">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2018/05/07/Clean Code -- 报表参数填充案例/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/05/07/Clean Code -- 报表参数填充案例/"/>
 
 
 
@@ -193,9 +196,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -205,7 +208,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -249,7 +252,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -266,7 +269,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -283,7 +286,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -300,7 +303,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -311,7 +314,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -331,7 +334,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -376,20 +381,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/05/07/Clean Code -- 报表参数填充案例/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -446,7 +451,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -457,7 +462,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
 
                 
                 
@@ -472,9 +477,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/05/07/Clean Code -- 报表参数填充案例/#comments" itemprop="discussionUrl">
+                <a href="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/07/Clean Code -- 报表参数填充案例/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/07/Clean Code -- 报表参数填充案例/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -485,10 +491,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -503,7 +510,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">4.9k</span>
+                <span title="本文字数">5k</span>
               
 
               
@@ -534,7 +541,7 @@
 <li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目</li>
 <li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，clone 下代码进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 Cmd + D 查看<strong>代码差异</strong></li>
 <li><p><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 Cmd 替换成 Ctrl，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Shift + F6 // 重命名方法、属性、文件</span><br><span class="line">F6 // 移动方法（move method）</span><br><span class="line">Cmd + Shift + ⬆️/ ⬇️ // 上下移动声明体（statement）</span><br><span class="line">Cmd + Alt + ⬆️/ ⬇️ // 上下移动代码行</span><br><span class="line">Cmd + Alt + M // 提取方法（extract method）</span><br><span class="line">Cmd + Alt + N // 内联（Inline），与 extract 相反</span><br><span class="line">Cmd + Alt + L // 格式化代码</span><br><span class="line"></span><br><span class="line">Alt + Enter // IDEA 的智能辅助</span><br><span class="line">Ctrl + T // 重构菜单</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Shift + F6 &#x2F;&#x2F; 重命名方法、属性、文件</span><br><span class="line">F6 &#x2F;&#x2F; 移动方法（move method）</span><br><span class="line">Cmd + Shift + ⬆️&#x2F; ⬇️ &#x2F;&#x2F; 上下移动声明体（statement）</span><br><span class="line">Cmd + Alt + ⬆️&#x2F; ⬇️ &#x2F;&#x2F; 上下移动代码行</span><br><span class="line">Cmd + Alt + M &#x2F;&#x2F; 提取方法（extract method）</span><br><span class="line">Cmd + Alt + N &#x2F;&#x2F; 内联（Inline），与 extract 相反</span><br><span class="line">Cmd + Alt + L &#x2F;&#x2F; 格式化代码</span><br><span class="line"></span><br><span class="line">Alt + Enter &#x2F;&#x2F; IDEA 的智能辅助</span><br><span class="line">Ctrl + T &#x2F;&#x2F; 重构菜单</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="案例：报表系统之参数处理"><a href="#案例：报表系统之参数处理" class="headerlink" title="案例：报表系统之参数处理"></a>案例：报表系统之参数处理</h2><blockquote>
@@ -550,26 +557,25 @@
 <li><p>最初的实现代码为：</p>
   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ParameterCollector</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fillParameters</span><span class="params">(ServletHttpRequest request, ParameterGraph parameterGraph)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (Parameter para : parameterGraph.getParmaeters()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (para <span class="keyword">instanceof</span> SimpleParameter) &#123;</span><br><span class="line">                SimpleParameter simplePara = (SimpleParameter) para;</span><br><span class="line">                String[] values = request.getParameterValues(simplePara.getName());</span><br><span class="line">                simplePara.setValue(values);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (para <span class="keyword">instanceof</span> ItemParameter) &#123;</span><br><span class="line">                    ItemParameter itemPara = (ItemParameter) para;</span><br><span class="line">                    <span class="keyword">for</span> (Item item : itemPara.getItems()) &#123;</span><br><span class="line">                        String[] values = request.getParameterValues(item.getName());</span><br><span class="line">                        item.setValues(values);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    TableParameter tablePara = (TableParameter) para;</span><br><span class="line">                    String[] rows =</span><br><span class="line">                            request.getParameterValues(tablePara.getRowName());</span><br><span class="line">                    String[] columns =</span><br><span class="line">                            request.getParameterValues(tablePara.getColumnName());</span><br><span class="line">                    String[] dataCells =</span><br><span class="line">                            request.getParameterValues(tablePara.getDataCellName());</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">int</span> columnSize = columns.length;</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; rows.length; i++) &#123;</span><br><span class="line">                        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; columns.length; j++) &#123;</span><br><span class="line">                            TableParameterElement element = <span class="keyword">new</span> TableParameterElement();</span><br><span class="line">                            element.setRow(rows[i]);</span><br><span class="line">                            element.setColumn(columns[j]);</span><br><span class="line">                            element.setDataCell(dataCells[columnSize * i + j]);</span><br><span class="line">                            tablePara.addElement(element);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
-<li>观察代码，<code>if statement</code>中的三段代码块其实做的都是<strong>填充参数</strong>的事，只不过用<code>instanceof</code>判断了参数类型再执行对应的填充操作。结合之前的 Paperboy 案例，与 Wallet 打交道的应该是 Customer 而不是 Paperboy。上述代码明显也违反了迪米特法则，<strong>参数填充的行为应该交由参数类完成而不是 ParameterCollector</strong></li>
+<li><p>观察代码，<code>if statement</code>中的三段代码块其实做的都是<strong>填充参数</strong>的事，只不过用<code>instanceof</code>判断了参数类型再执行对应的填充操作。结合之前的 Paperboy 案例，与 Wallet 打交道的应该是 Customer 而不是 Paperboy。上述代码明显也违反了迪米特法则，<strong>参数填充的行为应该交由参数类完成而不是 ParameterCollector</strong></p>
+</li>
 </ul>
 <h2 id="Refactoring"><a href="#Refactoring" class="headerlink" title="Refactoring"></a>Refactoring</h2><ul>
-<li><p>基于代码重用的思想，先将三段代码 <strong>提取方法（Cmd + Alt + M）</strong>，并分别取名为<code>fillSimplePara()</code>、<code>fillItemPara()</code>、<code>fillTablePara()</code>，重构后的方法顺序可能有所差异，可以在方法签名上使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 快捷键移动方法顺序，使之符合正常的阅读习惯<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/0.png" alt="A6C5B629-ACC6-458A-8379-852021771E83"></p>
+<li><p>基于代码重用的思想，先将三段代码 <strong>提取方法（Cmd + Alt + M）</strong>，并分别取名为<code>fillSimplePara()</code>、<code>fillItemPara()</code>、<code>fillTablePara()</code>，重构后的方法顺序可能有所差异，可以在方法签名上使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 快捷键移动方法顺序，使之符合正常的阅读习惯<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/0.png" alt="A6C5B629-ACC6-458A-8379-852021771E83"></p>
 </li>
-<li><p>提取了方法后，这一幕是不是似曾相识？之前的 Paperboy 案例中，我们从<code>charge()</code>方法中提取了<code>pay()</code>方法，意识到<code>pay()</code>方法应该归属于 Customer 而不是 Paperboy。这里就要再次强调：<strong>数据和行为应该封装在一起</strong>。显然，ParameterCollector 这个类不应该关注如何填充参数，而是应该收到<code>fillParameters()</code>请求后<strong>委派</strong>给各个 Parameter 类完成填充操作。所以我们采取“<strong>Move Method</strong>”重构手法（<strong>F6</strong>）<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/1.png" alt="17C89C7E-DA4F-4914-AA2A-5F6C8DE8845E">注意，IDEA 通过入参智能提示可以将方法移动到两个类中，显然应该选择 SimpleParameter，同时，方法的访问权限应为 public。接下来分别将<code>fillItemPara()</code>和<code>fillTablePara()</code>方法移动至 ItemParameter 和 TableParameter 中<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/2.png" alt="8FB216EF-394B-42F3-B556-6EC576224FE7"></p>
+<li><p>提取了方法后，这一幕是不是似曾相识？之前的 Paperboy 案例中，我们从<code>charge()</code>方法中提取了<code>pay()</code>方法，意识到<code>pay()</code>方法应该归属于 Customer 而不是 Paperboy。这里就要再次强调：<strong>数据和行为应该封装在一起</strong>。显然，ParameterCollector 这个类不应该关注如何填充参数，而是应该收到<code>fillParameters()</code>请求后<strong>委派</strong>给各个 Parameter 类完成填充操作。所以我们采取“<strong>Move Method</strong>”重构手法（<strong>F6</strong>）<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/1.png" alt="17C89C7E-DA4F-4914-AA2A-5F6C8DE8845E">注意，IDEA 通过入参智能提示可以将方法移动到两个类中，显然应该选择 SimpleParameter，同时，方法的访问权限应为 public。接下来分别将<code>fillItemPara()</code>和<code>fillTablePara()</code>方法移动至 ItemParameter 和 TableParameter 中<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/2.png" alt="8FB216EF-394B-42F3-B556-6EC576224FE7"></p>
 </li>
-<li><p>观察上图你会发现，原先的方法有两个参数，但由于我们移动了方法到对应的 Parameter 类中，第二个参数直接变成了用<code>this</code>引用当前对象。<code>ItemParameter itemPara = this;</code>这一步是多余的，直接使用<strong>内联（Cmd + Alt + N</strong>）消除。然后呢，别着急，我们想一想，既然 SimpleParameter、ItemParameter、TableParameter 三个类都有接收一个 request 参数的填充方法，而且他们都实现了 Parameter 接口，那我们为什么不将方法提到接口中，让其他三个类去重写呢？所以接下来先把方法都重命名为<code>fill()</code>，使用 <strong>Shift + F6</strong>进行重命名<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/3.png" alt="74F483BA-13C8-4769-9E94-290369E2B41B-1"></p>
+<li><p>观察上图你会发现，原先的方法有两个参数，但由于我们移动了方法到对应的 Parameter 类中，第二个参数直接变成了用<code>this</code>引用当前对象。<code>ItemParameter itemPara = this;</code>这一步是多余的，直接使用<strong>内联（Cmd + Alt + N</strong>）消除。然后呢，别着急，我们想一想，既然 SimpleParameter、ItemParameter、TableParameter 三个类都有接收一个 request 参数的填充方法，而且他们都实现了 Parameter 接口，那我们为什么不将方法提到接口中，让其他三个类去重写呢？所以接下来先把方法都重命名为<code>fill()</code>，使用 <strong>Shift + F6</strong>进行重命名<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/3.png" alt="74F483BA-13C8-4769-9E94-290369E2B41B-1"></p>
 </li>
-<li><p>接着，不要傻乎乎的去 Parameter 接口中手写<code>fill()</code>抽象方法，还是有快捷键的！那就是 “<strong>Pull Members Up</strong>”重构手法，说真的，当时看张总演示我就震惊了！选中方法，使用 <strong>Ctrl + T</strong> 调出重构菜单，输入一个 pull 你就能看到提示了<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/4.png" alt="C477A0C4-7E53-4C85-BE02-4A37697680B5"></p>
+<li><p>接着，不要傻乎乎的去 Parameter 接口中手写<code>fill()</code>抽象方法，还是有快捷键的！那就是 “<strong>Pull Members Up</strong>”重构手法，说真的，当时看张总演示我就震惊了！选中方法，使用 <strong>Ctrl + T</strong> 调出重构菜单，输入一个 pull 你就能看到提示了<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/4.png" alt="C477A0C4-7E53-4C85-BE02-4A37697680B5"></p>
 </li>
-<li><p>IDEA 会提示你将<code>pull()</code>方法提升至 Parameter 接口中并 make abstract<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/5.png" alt="9E0BC21E-0DFB-47AF-8B9E-C99900755E7F"></p>
+<li><p>IDEA 会提示你将<code>pull()</code>方法提升至 Parameter 接口中并 make abstract<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/5.png" alt="9E0BC21E-0DFB-47AF-8B9E-C99900755E7F"></p>
 </li>
-<li><p>我们看看重构后的效果，甚至于 ItemParameter 的<code>fill()</code>方法还已经帮你添加了<code>@Override</code>注解，但是剩下的两个 Parameter 类中的<code>fill()</code>方法还需要你手动的添加注解<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/6.png" alt="0007121B-DCAA-4629-B1EB-911959D12455"> <img src="/2018/05/07/Clean Code -- 报表参数填充案例/7.png" alt="FE508CEB-BABF-4D6F-830E-A6C126BCD693"></p>
+<li><p>我们看看重构后的效果，甚至于 ItemParameter 的<code>fill()</code>方法还已经帮你添加了<code>@Override</code>注解，但是剩下的两个 Parameter 类中的<code>fill()</code>方法还需要你手动的添加注解<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/6.png" alt="0007121B-DCAA-4629-B1EB-911959D12455"> <img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/7.png" alt="FE508CEB-BABF-4D6F-830E-A6C126BCD693"></p>
 </li>
-<li><p>最后我们回到 ParameterCollector 类，使用 IDEA 的<strong>智能辅助</strong>快捷键（<strong>Alt + Enter</strong>）去 Cleanup code 删除多余的类型转换<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/8.png" alt="5A6909D5-21DC-45BB-B3F0-02ECE946EC10"></p>
+<li><p>最后我们回到 ParameterCollector 类，使用 IDEA 的<strong>智能辅助</strong>快捷键（<strong>Alt + Enter</strong>）去 Cleanup code 删除多余的类型转换<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/8.png" alt="5A6909D5-21DC-45BB-B3F0-02ECE946EC10"></p>
 </li>
-<li><p>然后，你就会发现，<code>if statement</code>也是多余的，删除后，<strong>Cmd + Alt + L</strong> 格式化代码<br><img src="/2018/05/07/Clean Code -- 报表参数填充案例/9.png" alt="91715C62-8438-4C16-BE77-0C821007877A"></p>
+<li><p>然后，你就会发现，<code>if statement</code>也是多余的，删除后，<strong>Cmd + Alt + L</strong> 格式化代码<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/9.png" alt="91715C62-8438-4C16-BE77-0C821007877A"></p>
 </li>
 </ul>
 <h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
@@ -613,7 +619,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/" rel="next" title="Clean Code -- 迪米特法则与 Paperboy 案例">
+              <a href="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/" rel="next" title="Clean Code -- 迪米特法则与 Paperboy 案例">
                 <i class="fa fa-chevron-left"></i> Clean Code -- 迪米特法则与 Paperboy 案例
               </a>
             
@@ -623,7 +629,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/05/10/Clean Code -- PartDB 案例与模版方法模式/" rel="prev" title="Clean Code -- PartDB 案例与模版方法模式">
+              <a href="/2018/05/10/Clean%20Code%20--%20PartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" rel="prev" title="Clean Code -- PartDB 案例与模版方法模式">
                 Clean Code -- PartDB 案例与模版方法模式 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -689,9 +695,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -702,7 +710,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -916,7 +924,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1070,7 +1078,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2018/05/07/Clean Code -- 报表参数填充案例/';
+        this.page.url = 'https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/';
         this.page.identifier = '2018/05/07/Clean Code -- 报表参数填充案例/';
         this.page.title = 'Clean Code -- 报表参数填充案例';
         };

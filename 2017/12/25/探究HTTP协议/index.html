@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -113,28 +113,31 @@
 
 
   <meta name="description" content="Preface 本文摘自油条的知乎文章 摸索HTTP，自己结合实验一步一步探究HTTP协议  Prerequisites OS: MacOS或Linux各发行版 curl、nc命令 多台电脑，最好是有自己的服务器  nc nc(or netcat)命令用于建立TCP和UDP监听和连接，它可以建立TCP连接、发送UDP包、监听任意TCP和UDP端口、端口扫描和处理IPv4和IPv6等。它比telne">
-<meta name="keywords" content="Network,Web">
 <meta property="og:type" content="article">
 <meta property="og:title" content="探究 HTTP 协议">
-<meta property="og:url" content="https://s1mplecc.github.io/2017/12/25/探究HTTP协议/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="Preface 本文摘自油条的知乎文章 摸索HTTP，自己结合实验一步一步探究HTTP协议  Prerequisites OS: MacOS或Linux各发行版 curl、nc命令 多台电脑，最好是有自己的服务器  nc nc(or netcat)命令用于建立TCP和UDP监听和连接，它可以建立TCP连接、发送UDP包、监听任意TCP和UDP端口、端口扫描和处理IPv4和IPv6等。它比telne">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2017/12/25/探究HTTP协议/1.png">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.458Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/1.png">
+<meta property="article:published_time" content="2017-12-24T17:39:59.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.458Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Network">
+<meta property="article:tag" content="Web">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="探究 HTTP 协议">
-<meta name="twitter:description" content="Preface 本文摘自油条的知乎文章 摸索HTTP，自己结合实验一步一步探究HTTP协议  Prerequisites OS: MacOS或Linux各发行版 curl、nc命令 多台电脑，最好是有自己的服务器  nc nc(or netcat)命令用于建立TCP和UDP监听和连接，它可以建立TCP连接、发送UDP包、监听任意TCP和UDP端口、端口扫描和处理IPv4和IPv6等。它比telne">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2017/12/25/探究HTTP协议/1.png">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/1.png">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2017/12/25/探究HTTP协议/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2017/12/25/探究HTTP协议/"/>
 
 
 
@@ -184,9 +187,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -196,7 +199,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -240,7 +243,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -257,7 +260,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -274,7 +277,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -291,7 +294,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -302,7 +305,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -322,7 +325,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -367,20 +372,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/25/探究HTTP协议/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -437,7 +442,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -448,7 +453,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
 
                 
                 
@@ -463,9 +468,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/25/探究HTTP协议/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/12/25/探究HTTP协议/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/25/探究HTTP协议/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -476,10 +482,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -494,7 +501,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">4.8k</span>
+                <span title="本文字数">5.2k</span>
               
 
               
@@ -533,22 +540,22 @@
 <li><p>打开两个终端。一个充当客户端，一个充当服务端。</p>
 </li>
 <li><p>让服务端<code>nc</code>启动之后监听8000端口，等待TCP连接</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    nc -l 8000 //server</span><br><span class="line">    ``` </span><br><span class="line">    </span><br><span class="line">- 切换到客户端，如果是不同的机器则将`localhost`换成服务端主机的**IP**</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    nc -l 8000 &#x2F;&#x2F;server</span><br><span class="line">    &#96;&#96;&#96; </span><br><span class="line">    </span><br><span class="line">- 切换到客户端，如果是不同的机器则将&#96;localhost&#96;换成服务端主机的**IP**</span><br></pre></td></tr></table></figure>
 <p>  nc localhost 8000 //client</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 现在在任意一个终端中输入些字符，敲击回车，另一个终端会显示相应字符，说明双方已经成功建立TCP连接进行通信，需要注意的是一定要服务端先建立监听</span><br><span class="line"></span><br><span class="line">#### Tips</span><br><span class="line"></span><br><span class="line">- 可以直接用`nc`命令来传输文件</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 现在在任意一个终端中输入些字符，敲击回车，另一个终端会显示相应字符，说明双方已经成功建立TCP连接进行通信，需要注意的是一定要服务端先建立监听</span><br><span class="line"></span><br><span class="line">#### Tips</span><br><span class="line"></span><br><span class="line">- 可以直接用&#96;nc&#96;命令来传输文件</span><br></pre></td></tr></table></figure>
 <p>  nc -l {port} &gt; filename // 接收端<br>  nc {接受者IP} {port} &lt; filename // 发送端</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 亲测这条命令非常实用，适用于在你的本地和服务器未建立**ssh认证**时（不能使用**scp**），或内网网络传输文件，或你的两台电脑不能登陆同一微信传输文件时</span><br><span class="line"></span><br><span class="line">## HTTP响应</span><br><span class="line"></span><br><span class="line">&gt; 浏览器在访问网站的时候，服务器到底给浏览器回复了一些什么玩意儿呢？有了上面的工具，接下来该探究一下HTTP了，到这里才正式开始切入正题了。首先，使用一下**curl**。**curl**能够向指定的URL发起一个http请求，并显示出请求回应中的内容。</span><br><span class="line"></span><br><span class="line">- 先拿百度开刀，执行如下命令</span><br></pre></td></tr></table></figure>
 <p>  curl -i baidu.com</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 得到如下输出内容</span><br></pre></td></tr></table></figure>
 <p>  HTTP/1.1 200 OK<br>  Date: Mon, 25 Dec 2017 03:19:21 GMT<br>  Server: Apache<br>  Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT<br>  ETag: “51-47cf7e6ee8400”<br>  Accept-Ranges: bytes<br>  Content-Length: 81<br>  Cache-Control: max-age=86400<br>  Expires: Tue, 26 Dec 2017 03:19:21 GMT<br>  Connection: Keep-Alive<br>  Content-Type: text/html</p>
 <p>  <html><br>  <meta http-equiv="refresh" content="0;url=http://www.baidu.com/"><br>  </html></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    这里，你所看到的这一大堆数据，便是一个完整的HTTP响应报文。也就是你在浏览器中输入网址 baidu.com 敲下回车之后，baidu服务器返回给浏览器的数据。</span><br><span class="line">    </span><br><span class="line">- **响应报文**包含如下部分：</span><br><span class="line">    - 状态行</span><br><span class="line">    - 响应头</span><br><span class="line">    - 响应正文（可能没有）</span><br><span class="line">    </span><br><span class="line">    ![----](/0.png)</span><br><span class="line"></span><br><span class="line">### 解析响应报文</span><br><span class="line"></span><br><span class="line">&gt; 了解HTTP响应的格式，以及其中的各部分字段的含义，有助于我们理解一些Web应用的功能以及浏览器的行为。</span><br><span class="line"></span><br><span class="line">- 这里对HTTP响应的数据稍作分析。上述报文中的第一行：</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    这里，你所看到的这一大堆数据，便是一个完整的HTTP响应报文。也就是你在浏览器中输入网址 baidu.com 敲下回车之后，baidu服务器返回给浏览器的数据。</span><br><span class="line">    </span><br><span class="line">- **响应报文**包含如下部分：</span><br><span class="line">    - 状态行</span><br><span class="line">    - 响应头</span><br><span class="line">    - 响应正文（可能没有）</span><br><span class="line">    </span><br><span class="line">    ![----](&#x2F;0.png)</span><br><span class="line"></span><br><span class="line">### 解析响应报文</span><br><span class="line"></span><br><span class="line">&gt; 了解HTTP响应的格式，以及其中的各部分字段的含义，有助于我们理解一些Web应用的功能以及浏览器的行为。</span><br><span class="line"></span><br><span class="line">- 这里对HTTP响应的数据稍作分析。上述报文中的第一行：</span><br></pre></td></tr></table></figure>
 <p>  HTTP/1.1 200 OK</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">    为HTTP响应的状态，这里的200代表OK，表示服务器已经成功地处理了请求</span><br><span class="line">    </span><br><span class="line">- 报文往后的内容直到空行部分：</span><br></pre></td></tr></table></figure>
 <p>  Date: Fri, 25 Nov 2016 10:58:59 GMT<br>  Server: Apache<br>  Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT<br>  ETag: “51-47cf7e6ee8400”<br>  Accept-Ranges: bytes<br>  Content-Length: 81<br>  Cache-Control: max-age=86400<br>  Expires: Sat, 26 Nov 2016 10:58:59 GMT<br>  Connection: Keep-Alive<br>  Content-Type: text/html</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    这部分为HTTP响应的头部，其中大部分内容其实是可读性较强的，基本可以直接分析其中的含义。如`Content-Type: text/html`表示此次HTTP响应的结果为html文本。如果你访问的是一个图片，那么这里就可能是`Content-Type: image/png`了。头部中的`Content-Length: 81`表示整个响应的正文长度为81，这个也比较关键，告诉浏览器整个响应的正文部分数据有多少</span><br><span class="line"></span><br><span class="line">- HTTP响应的头部中有许多非常有用的信息，这些信息往往决定着浏览器收到报文后接下来需要做出什么样的行动。也有一些非必须的内容，比如**Server、Accept-Ranges**</span><br><span class="line"></span><br><span class="line">- 响应中的最后一部分内容，可以看到接下来页面刷新跳转到`http://www.baidu.com/`</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    这部分为HTTP响应的头部，其中大部分内容其实是可读性较强的，基本可以直接分析其中的含义。如&#96;Content-Type: text&#x2F;html&#96;表示此次HTTP响应的结果为html文本。如果你访问的是一个图片，那么这里就可能是&#96;Content-Type: image&#x2F;png&#96;了。头部中的&#96;Content-Length: 81&#96;表示整个响应的正文长度为81，这个也比较关键，告诉浏览器整个响应的正文部分数据有多少</span><br><span class="line"></span><br><span class="line">- HTTP响应的头部中有许多非常有用的信息，这些信息往往决定着浏览器收到报文后接下来需要做出什么样的行动。也有一些非必须的内容，比如**Server、Accept-Ranges**</span><br><span class="line"></span><br><span class="line">- 响应中的最后一部分内容，可以看到接下来页面刷新跳转到&#96;http:&#x2F;&#x2F;www.baidu.com&#x2F;&#96;</span><br></pre></td></tr></table></figure>
 <p>  <html><br>  <meta http-equiv="refresh" content="0;url=http://www.baidu.com/"><br>  </html></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">    为响应的正文部分，这部分内容的长度是和响应头部的**Content-Length**对应值一致。</span><br><span class="line">    </span><br><span class="line">#### Verify Content Length</span><br><span class="line"></span><br><span class="line">&gt; 我们来验证正文长度是不是81。能用编程解决的就用编程解决，非常推荐平时用**python**或者**JavaScript**这种脚本语言去编程验证一些东西。只需要装个**node**或者**python**解释器就可以了，非常轻量级</span><br><span class="line"></span><br><span class="line">- 这里用javascript，文件名a.js</span><br><span class="line"></span><br><span class="line">    ```js</span><br><span class="line">    // a.js</span><br><span class="line">    </span><br><span class="line">    const s = `&lt;html&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=http://www.baidu.com/&quot;&gt;</span><br><span class="line">    &lt;/html&gt;</span><br><span class="line">    `;</span><br><span class="line">    console.log(s.length);</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">    为响应的正文部分，这部分内容的长度是和响应头部的**Content-Length**对应值一致。</span><br><span class="line">    </span><br><span class="line">#### Verify Content Length</span><br><span class="line"></span><br><span class="line">&gt; 我们来验证正文长度是不是81。能用编程解决的就用编程解决，非常推荐平时用**python**或者**JavaScript**这种脚本语言去编程验证一些东西。只需要装个**node**或者**python**解释器就可以了，非常轻量级</span><br><span class="line"></span><br><span class="line">- 这里用javascript，文件名a.js</span><br><span class="line"></span><br><span class="line">    &#96;&#96;&#96;js</span><br><span class="line">    &#x2F;&#x2F; a.js</span><br><span class="line">    </span><br><span class="line">    const s &#x3D; &#96;&lt;html&gt;</span><br><span class="line">    &lt;meta http-equiv&#x3D;&quot;refresh&quot; content&#x3D;&quot;0;url&#x3D;http:&#x2F;&#x2F;www.baidu.com&#x2F;&quot;&gt;</span><br><span class="line">    &lt;&#x2F;html&gt;</span><br><span class="line">    &#96;;</span><br><span class="line">    console.log(s.length);</span><br></pre></td></tr></table></figure>
 <p>  其中<code>`</code>反引号是ES6的新特性，可方便表示多行字符串。注意最后一行有回车</p>
 </li>
 <li><p>执行<code>node a.js</code>得到输出81</p>
@@ -559,7 +566,7 @@
 </blockquote>
 <ul>
 <li><p><code>nc -l 8000</code>开启一个服务端，监听8000端口，粘贴如下内容</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Length: 14</span><br><span class="line">Content-Type: text/html</span><br><span class="line"></span><br><span class="line">&lt;h1&gt;Hello&lt;/h1&gt;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">Content-Length: 14</span><br><span class="line">Content-Type: text&#x2F;html</span><br><span class="line"></span><br><span class="line">&lt;h1&gt;Hello&lt;&#x2F;h1&gt;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>在浏览器端访问<code>http://localhost:8000/</code>，里面出现了一个大标题Hello</p>
 </li>
@@ -571,14 +578,14 @@
 </blockquote>
 <ul>
 <li><p>其实我们就已经可以在终端里看到浏览器发送的请求报文</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: localhost:8000</span><br><span class="line">Connection: keep-alive</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9,en;q=0.8</span><br><span class="line">Cookie: Webstorm-f269b48=ebcfcf96-de94-4438-acc1-f68e40c6b6f1; session=eyJ1aWQiOjJ9.DR6wAg.ktPekLF--XP9XrDZlpbeT8J0XDE</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: localhost:8000</span><br><span class="line">Connection: keep-alive</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;63.0.3239.108 Safari&#x2F;537.36</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9,en;q&#x3D;0.8</span><br><span class="line">Cookie: Webstorm-f269b48&#x3D;ebcfcf96-de94-4438-acc1-f68e40c6b6f1; session&#x3D;eyJ1aWQiOjJ9.DR6wAg.ktPekLF--XP9XrDZlpbeT8J0XDE</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>请求报文</strong>包含如下部分：</p>
 <ul>
 <li>请求行</li>
 <li>请求头</li>
 <li><p>请求体（可能没有）</p>
-<p><img src="/2017/12/25/探究HTTP协议/1.png" alt="-----2"></p>
+<p><img src="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/1.png" alt="-----2"></p>
 </li>
 </ul>
 </li>
@@ -589,16 +596,15 @@
 <li><p><strong>GET请求</strong>没有请求体，请求参数和对应的值附加在URL后面，利用问号<code>?</code>代表URL的结尾与请求参数的开始，与号<code>&amp;</code>连接多个参数。传递参数<strong>长度受限</strong>，并且可以在地址栏清楚的看到，不适合传输私密数据及大量数据</p>
 </li>
 <li><p>而在填写登陆表单点击确认后一般都是发送<strong>POST请求</strong>，请求数据在请求体中，不会显示的展示在地址栏，但是还是可能被黑客获取，所以通常密码等敏感信息需要加密而不是明文传输</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">POST /user/login HTTP/1.1</span><br><span class="line">Host: example.com</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, sdch, br</span><br><span class="line">Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4,zh-TW;q=0.2</span><br><span class="line">Content-Length: 27</span><br><span class="line"></span><br><span class="line">username=test&amp;password=test</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;user&#x2F;login HTTP&#x2F;1.1</span><br><span class="line">Host: example.com</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;54.0.2840.98 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, sdch, br</span><br><span class="line">Accept-Language: en-US,en;q&#x3D;0.8,zh-CN;q&#x3D;0.6,zh;q&#x3D;0.4,zh-TW;q&#x3D;0.2</span><br><span class="line">Content-Length: 27</span><br><span class="line"></span><br><span class="line">username&#x3D;test&amp;password&#x3D;test</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h3 id="模拟HTTP请求"><a href="#模拟HTTP请求" class="headerlink" title="模拟HTTP请求"></a>模拟HTTP请求</h3><ul>
 <li><p>同样可以使用<code>nc</code>构造一个HTTP请求，<code>nc baidu.com 80</code>与百度服务器建立连接</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: baidu.com</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: baidu.com</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
-<li>构造一个最精简的请求，敲击回车，终端上打印出响应报文</li>
+<li><p>构造一个最精简的请求，敲击回车，终端上打印出响应报文</p>
+</li>
 </ul>
 <h2 id="Postscripts"><a href="#Postscripts" class="headerlink" title="Postscripts"></a>Postscripts</h2><blockquote>
 <p>实际上，按照前面的演示，在网络中，每一个应用都没法知道对面到底是个什么东西，只要双方相互收发的数据符合一定的格式和规则，它们之间就能够相互配合好工作。那么这些格式和规则，就时平时所谓的“协议”。</p>
@@ -641,7 +647,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/14/Vue初识/" rel="next" title="Vue 初识">
+              <a href="/2017/12/14/Vue%E5%88%9D%E8%AF%86/" rel="next" title="Vue 初识">
                 <i class="fa fa-chevron-left"></i> Vue 初识
               </a>
             
@@ -651,7 +657,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/26/JavaScript相关介绍/" rel="prev" title="JavaScript 相关介绍">
+              <a href="/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/" rel="prev" title="JavaScript 相关介绍">
                 JavaScript 相关介绍 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -717,9 +723,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -730,7 +738,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -944,7 +952,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1098,7 +1106,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2017/12/25/探究HTTP协议/';
+        this.page.url = 'https://s1mplecc.github.io/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/';
         this.page.identifier = '2017/12/25/探究HTTP协议/';
         this.page.title = '探究 HTTP 协议';
         };

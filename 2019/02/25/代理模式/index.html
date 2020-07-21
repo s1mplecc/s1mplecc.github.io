@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -113,28 +113,31 @@
 
 
   <meta name="description" content="前言代理模式（Proxy Pattern）是一种常见的设计模式，也是 GoF 提出的 23 种设计模式中的一种，属于结构型设计模式。它使用代理对象完成用户请求，屏蔽用户对真实对象的访问。代理模式用处很多，本文主要介绍如何使用代理模式实现延迟加载和面向切面编程，并着重介绍动态代理的几种实现方式。本文涉及到的示例代码以上传到 GitHub 上。 角色及职责代理模式中的几个角色：  Subject，接口">
-<meta name="keywords" content="Java,Design Pattern">
 <meta property="og:type" content="article">
 <meta property="og:title" content="代理模式">
-<meta property="og:url" content="https://s1mplecc.github.io/2019/02/25/代理模式/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="前言代理模式（Proxy Pattern）是一种常见的设计模式，也是 GoF 提出的 23 种设计模式中的一种，属于结构型设计模式。它使用代理对象完成用户请求，屏蔽用户对真实对象的访问。代理模式用处很多，本文主要介绍如何使用代理模式实现延迟加载和面向切面编程，并着重介绍动态代理的几种实现方式。本文涉及到的示例代码以上传到 GitHub 上。 角色及职责代理模式中的几个角色：  Subject，接口">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2019/02/25/代理模式/0.png">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.453Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/0.png">
+<meta property="article:published_time" content="2019-02-25T13:35:58.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.453Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Design Pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="代理模式">
-<meta name="twitter:description" content="前言代理模式（Proxy Pattern）是一种常见的设计模式，也是 GoF 提出的 23 种设计模式中的一种，属于结构型设计模式。它使用代理对象完成用户请求，屏蔽用户对真实对象的访问。代理模式用处很多，本文主要介绍如何使用代理模式实现延迟加载和面向切面编程，并着重介绍动态代理的几种实现方式。本文涉及到的示例代码以上传到 GitHub 上。 角色及职责代理模式中的几个角色：  Subject，接口">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2019/02/25/代理模式/0.png">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/0.png">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2019/02/25/代理模式/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2019/02/25/代理模式/"/>
 
 
 
@@ -184,9 +187,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -196,7 +199,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -240,7 +243,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -257,7 +260,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -274,7 +277,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -291,7 +294,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -302,7 +305,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -322,7 +325,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -367,20 +372,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2019/02/25/代理模式/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -437,7 +442,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -448,7 +453,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Design/" itemprop="url" rel="index"><span itemprop="name">Design</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Design/" itemprop="url" rel="index"><span itemprop="name">Design</span></a></span>
 
                 
                 
@@ -463,9 +468,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/02/25/代理模式/#comments" itemprop="discussionUrl">
+                <a href="/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/02/25/代理模式/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/02/25/代理模式/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -476,10 +482,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -525,7 +532,7 @@
 <li><strong>RealSubject</strong>，真实对象（被代理类），真正实现功能的对象。</li>
 <li><strong>Proxy</strong>，代理类，用来<strong>封装</strong>真实对象。</li>
 </ul>
-<p><img src="/2019/02/25/代理模式/0.png" alt="0d73af744af2fd7ecfd3326888c3d69b.png"></p>
+<p><img src="/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/0.png" alt="0d73af744af2fd7ecfd3326888c3d69b.png"></p>
 <h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><p>代理模式通常用于解决以下几类问题：</p>
 <ul>
 <li><strong>需要控制对象的访问权限</strong></li>
@@ -570,7 +577,7 @@
 <p>从数据库载入 ID 为 1 的 User 用户，并且打印它的类名、父类名、实现的接口名。最后调用 getName 方法取得数据库数据。演示代码采用的 Hibernate 版本为 3.2.6，不同的 Hibernate 版本实现会有差异。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">User user = (User)sessionFactory.getSession().load(User.class, <span class="number">1</span>);</span><br><span class="line">System.out.println(<span class="string">"Class name: "</span> + user.getClass().getName());</span><br><span class="line">System.out.println(<span class="string">"Superclass name: "</span> + user.getClass().getSuperclass().getName());</span><br><span class="line"><span class="keyword">for</span> (Class&lt;?&gt; anInterface : user.getClass().getInterfaces()) &#123;</span><br><span class="line">    System.out.println(<span class="string">"Interface name: "</span> + anInterface.getName());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"\n"</span> + user.getName());</span><br></pre></td></tr></table></figure>
 <p>程序输出如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Class name: com.github.s1mplecc.gof.proxy.User$EnhancerByCGLIB$N8wfgVhe</span><br><span class="line">Superclass name: com.github.s1mplecc.gof.proxy.User</span><br><span class="line">Interface name: org.hibernate.proxy.HibernateProxy</span><br><span class="line"></span><br><span class="line">Hibernate: select user0_.id as id1_0_0_, user0_.name as name2_0_0_ from t_user user0_ where user0_.id=?</span><br><span class="line">Geym</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Class name: com.github.s1mplecc.gof.proxy.User$EnhancerByCGLIB$N8wfgVhe</span><br><span class="line">Superclass name: com.github.s1mplecc.gof.proxy.User</span><br><span class="line">Interface name: org.hibernate.proxy.HibernateProxy</span><br><span class="line"></span><br><span class="line">Hibernate: select user0_.id as id1_0_0_, user0_.name as name2_0_0_ from t_user user0_ where user0_.id&#x3D;?</span><br><span class="line">Geym</span><br></pre></td></tr></table></figure>
 <p>从输出来看，load 方法加载出的 User 类并不是我们定义的 User 类，而是名为 <code>com.github.s1mplecc.gof.proxy.User$EnhancerByCGLIB$N8wfgVhe</code> 的类。从名称上可以推测它是使用 CGLIB 的 Enhancer 生成的动态类。该类的父类才是我们自定义的 User 类，此外，它还实现了 HibernateProxy 接口。由此可见，<strong>Hibernate 使用一个动态代理生成的子类替代用户定义的类</strong>。只有在真正使用对象数据时，才去数据库加载实际的数据。从输出结果来看，在调用 getName 方法之前从未输出过一条 SQL 语句，这说明 User 对象被加载时根本没有访问数据库。Hibernate 正是用这种方式实现了延迟加载。</p>
 <p>另外，由于 CGLIB 停止维护很长一段时间了，Hibernate 从 3.5.5 版本开始弃用 CGLIB 而使用 Javassist。感兴趣的同学可以自行下去研究。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
@@ -616,7 +623,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/02/15/一道有趣的路径规划算法题（Java-版）/" rel="next" title="一道有趣的路径规划算法题（Java 版）">
+              <a href="/2019/02/15/%E4%B8%80%E9%81%93%E6%9C%89%E8%B6%A3%E7%9A%84%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95%E9%A2%98%EF%BC%88Java-%E7%89%88%EF%BC%89/" rel="next" title="一道有趣的路径规划算法题（Java 版）">
                 <i class="fa fa-chevron-left"></i> 一道有趣的路径规划算法题（Java 版）
               </a>
             
@@ -626,7 +633,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/04/10/搭建-SSR-科学上网/" rel="prev" title="搭建 SSR 科学上网">
+              <a href="/2019/04/10/%E6%90%AD%E5%BB%BA-SSR-%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/" rel="prev" title="搭建 SSR 科学上网">
                 搭建 SSR 科学上网 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -692,9 +699,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -705,7 +714,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -919,7 +928,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1073,7 +1082,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2019/02/25/代理模式/';
+        this.page.url = 'https://s1mplecc.github.io/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/';
         this.page.identifier = '2019/02/25/代理模式/';
         this.page.title = '代理模式';
         };

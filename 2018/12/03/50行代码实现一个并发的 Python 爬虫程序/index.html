@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -112,29 +112,31 @@
 
 
 
-  <meta name="description" content="前言得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。 案例还是用的之前 Java 网络爬虫 的案例。所需 Python Version &amp;gt;=">
-<meta name="keywords" content="Python">
+  <meta name="description" content="前言得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。 案例还是用的之前 Java 网络爬虫 的案例。所需 Python Version &gt;&#x3D;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="50行代码实现一个并发的 Python 爬虫程序">
-<meta property="og:url" content="https://s1mplecc.github.io/2018/12/03/50行代码实现一个并发的 Python 爬虫程序/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/index.html">
 <meta property="og:site_name" content="s1mple的博客">
-<meta property="og:description" content="前言得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。 案例还是用的之前 Java 网络爬虫 的案例。所需 Python Version &amp;gt;=">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/12/03/50行代码实现一个并发的%20Python%20爬虫程序/0.png">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.126Z">
+<meta property="og:description" content="前言得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。 案例还是用的之前 Java 网络爬虫 的案例。所需 Python Version &gt;&#x3D;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/0.png">
+<meta property="article:published_time" content="2018-12-03T05:41:09.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.126Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="50行代码实现一个并发的 Python 爬虫程序">
-<meta name="twitter:description" content="前言得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。 案例还是用的之前 Java 网络爬虫 的案例。所需 Python Version &amp;gt;=">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2018/12/03/50行代码实现一个并发的%20Python%20爬虫程序/0.png">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/0.png">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2018/12/03/50行代码实现一个并发的 Python 爬虫程序/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/12/03/50行代码实现一个并发的 Python 爬虫程序/"/>
 
 
 
@@ -184,9 +186,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -196,7 +198,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -240,7 +242,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -257,7 +259,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -274,7 +276,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -291,7 +293,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -302,7 +304,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -322,7 +324,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -367,20 +371,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/12/03/50行代码实现一个并发的 Python 爬虫程序/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -437,7 +441,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -448,7 +452,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
 
                 
                 
@@ -463,9 +467,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/03/50行代码实现一个并发的 Python 爬虫程序/#comments" itemprop="discussionUrl">
+                <a href="/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/03/50行代码实现一个并发的 Python 爬虫程序/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/03/50行代码实现一个并发的 Python 爬虫程序/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -476,10 +481,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -544,7 +550,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  crawler ✗ python3 -m perf timeit <span class="string">'import app;app.run("12/12455")'</span></span><br><span class="line">...</span><br><span class="line">* the standard deviation (281 ms) is 24% of the mean (1.16 sec)</span><br><span class="line">* the maximum (2.02 sec) is 73% greater than the mean (1.16 sec)</span><br><span class="line"></span><br><span class="line">Mean +- std dev: 1.16 sec +- 0.28 sec</span><br></pre></td></tr></table></figure>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="venv"><a href="#venv" class="headerlink" title="venv"></a>venv</h3><p><strong>venv</strong>，全称 <strong>virtualenv</strong> 虚拟环境。用过 JavaScript 的同学都知道，执行 <code>npm install xxx</code> 时会在当前目录生成一个 <code>node_modules</code> 目录，依赖会被安装在这个目录下，除非你加上 <code>-g/--global</code> 全局参数，否则安装的依赖只对当前项目生效（不是全局依赖）。这其实相当于做了一层隔离，将当前项目的环境与全局环境隔离开，有利于版本的管理。</p>
 <p>venv 也是这样的作用，用于<strong>为一个应用创建一套隔离的 Python 运行环境</strong>。在这个环境中，你可以管理 Python 版本，pip 版本，以及你所用的三方库的版本，而不会与全局环境冲突。</p>
-<p>如果你使用的是 PyCharm，那么创建项目时就可以勾选使用 venv（这也是建议的选择）。效果如下图：<br><img src="/2018/12/03/50行代码实现一个并发的 Python 爬虫程序/0.png" alt="Screen-Shot-2018-12-03-at-11.01.47-AM">命令行多了 (venv) 前缀：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  crawler ✗</span><br></pre></td></tr></table></figure></p>
+<p>如果你使用的是 PyCharm，那么创建项目时就可以勾选使用 venv（这也是建议的选择）。效果如下图：<br><img src="/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/0.png" alt="Screen-Shot-2018-12-03-at-11.01.47-AM">命令行多了 (venv) 前缀：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  crawler ✗</span><br></pre></td></tr></table></figure></p>
 <p>如果你不是使用的 PyCharm，参考这篇文档：<a href="https://www.kancloud.cn/smilesb101/python3_x/298883" target="_blank" rel="noopener">virtualenv</a></p>
 <h3 id="风格规范"><a href="#风格规范" class="headerlink" title="风格规范"></a>风格规范</h3><p>Python 风格规范我参考的 <a href="https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/python_style_rules/#id16" target="_blank" rel="noopener">Google 开源项目风格指南</a>。推荐使用 <strong>PyCharm</strong> IDE，和 IntelliJ IDEA 一样产自 JetBrains 公司，非常良心的软件，会有一些风格提示，并且可以使用快捷键（Ctrl/Cmd + Shift + L）自动格式化。这里主要说说命名吧。</p>
 <h4 id="命名"><a href="#命名" class="headerlink" title="命名"></a>命名</h4><p><strong>应该避免的名称</strong></p>
@@ -677,7 +683,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/29/结合案例使用 Java 注解和反射/" rel="next" title="结合案例使用 Java 注解和反射">
+              <a href="/2018/11/29/%E7%BB%93%E5%90%88%E6%A1%88%E4%BE%8B%E4%BD%BF%E7%94%A8%20Java%20%E6%B3%A8%E8%A7%A3%E5%92%8C%E5%8F%8D%E5%B0%84/" rel="next" title="结合案例使用 Java 注解和反射">
                 <i class="fa fa-chevron-left"></i> 结合案例使用 Java 注解和反射
               </a>
             
@@ -687,7 +693,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/" rel="prev" title="迁移 Ghost 博客至 Hexo 并使用 GitHub Pages 部署">
+              <a href="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/" rel="prev" title="迁移 Ghost 博客至 Hexo 并使用 GitHub Pages 部署">
                 迁移 Ghost 博客至 Hexo 并使用 GitHub Pages 部署 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -753,9 +759,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -766,7 +774,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -980,7 +988,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1134,7 +1142,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2018/12/03/50行代码实现一个并发的 Python 爬虫程序/';
+        this.page.url = 'https://s1mplecc.github.io/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/';
         this.page.identifier = '2018/12/03/50行代码实现一个并发的 Python 爬虫程序/';
         this.page.title = '50行代码实现一个并发的 Python 爬虫程序';
         };

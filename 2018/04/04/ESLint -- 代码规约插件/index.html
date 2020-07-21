@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -113,29 +113,31 @@
 
 
   <meta name="description" content="Preface之前在 Vue 项目中使用vue-cli时可以自动添加 ESLint 代码规约插件，所以也没去管怎么手动添加 ESLint 。但是最近在Koa2项目中，需要手动的去添加并配置 ESLint 。本文将介绍如何安装以及配置 ESLint 的规则。 Installing在项目目录下使用npm命令安装 ESLint，并且是开发时依赖需要加上--save-dev。不推荐全局安装，这样可以实现项">
-<meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ESLint -- 代码规约插件">
-<meta property="og:url" content="https://s1mplecc.github.io/2018/04/04/ESLint -- 代码规约插件/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/04/04/ESLint%20--%20%E4%BB%A3%E7%A0%81%E8%A7%84%E7%BA%A6%E6%8F%92%E4%BB%B6/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="Preface之前在 Vue 项目中使用vue-cli时可以自动添加 ESLint 代码规约插件，所以也没去管怎么手动添加 ESLint 。但是最近在Koa2项目中，需要手动的去添加并配置 ESLint 。本文将介绍如何安装以及配置 ESLint 的规则。 Installing在项目目录下使用npm命令安装 ESLint，并且是开发时依赖需要加上--save-dev。不推荐全局安装，这样可以实现项">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/04/04/ESLint%20--%20代码规约插件/0.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2018/04/04/ESLint%20--%20代码规约插件/1.png">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.220Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/04/04/ESLint%20--%20%E4%BB%A3%E7%A0%81%E8%A7%84%E7%BA%A6%E6%8F%92%E4%BB%B6/0.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/04/04/ESLint%20--%20%E4%BB%A3%E7%A0%81%E8%A7%84%E7%BA%A6%E6%8F%92%E4%BB%B6/1.png">
+<meta property="article:published_time" content="2018-04-03T18:47:12.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.220Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ESLint -- 代码规约插件">
-<meta name="twitter:description" content="Preface之前在 Vue 项目中使用vue-cli时可以自动添加 ESLint 代码规约插件，所以也没去管怎么手动添加 ESLint 。但是最近在Koa2项目中，需要手动的去添加并配置 ESLint 。本文将介绍如何安装以及配置 ESLint 的规则。 Installing在项目目录下使用npm命令安装 ESLint，并且是开发时依赖需要加上--save-dev。不推荐全局安装，这样可以实现项">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2018/04/04/ESLint%20--%20代码规约插件/0.png">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2018/04/04/ESLint%20--%20%E4%BB%A3%E7%A0%81%E8%A7%84%E7%BA%A6%E6%8F%92%E4%BB%B6/0.png">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2018/04/04/ESLint -- 代码规约插件/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/04/04/ESLint -- 代码规约插件/"/>
 
 
 
@@ -185,9 +187,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -197,7 +199,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -241,7 +243,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -258,7 +260,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -275,7 +277,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -292,7 +294,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -303,7 +305,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -323,7 +325,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -368,20 +372,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/04/04/ESLint -- 代码规约插件/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/04/04/ESLint%20--%20%E4%BB%A3%E7%A0%81%E8%A7%84%E7%BA%A6%E6%8F%92%E4%BB%B6/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -438,7 +442,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -449,7 +453,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
 
                 
                 
@@ -464,9 +468,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/04/04/ESLint -- 代码规约插件/#comments" itemprop="discussionUrl">
+                <a href="/2018/04/04/ESLint%20--%20%E4%BB%A3%E7%A0%81%E8%A7%84%E7%BA%A6%E6%8F%92%E4%BB%B6/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/04/04/ESLint -- 代码规约插件/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/04/04/ESLint -- 代码规约插件/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -477,10 +482,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -495,7 +501,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.2k</span>
+                <span title="本文字数">3.4k</span>
               
 
               
@@ -525,14 +531,14 @@
 <p>初始化，会询问一些问题用于设置 ESLint，比如回答使用 Airbnb 的风格</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜ ./node_modules/.bin/eslint --init</span><br><span class="line"></span><br><span class="line">? How would you like to configure ESLint? Use a popular style guide</span><br><span class="line">? Which style guide <span class="keyword">do</span> you want to follow? Airbnb</span><br><span class="line">? Do you use React? No</span><br><span class="line">? What format <span class="keyword">do</span> you want your config file to be <span class="keyword">in</span>? JavaScript</span><br></pre></td></tr></table></figure>
 <p>完成后会在项目目录下生成<code>.eslintrc.js</code>文件，除此之外还可以手动添加<code>.eslintignore</code>，作用和<code>.gitignore</code>一样用于 Eslint 忽略检查的文件</p>
-<p>接着需要在 WebStorm 中启用 Eslint，勾选<code>Enable</code><br><img src="/2018/04/04/ESLint -- 代码规约插件/0.png" alt="E9C4D048-BFC5-4D13-A4E8-30CD61BEE953"></p>
-<p>现在代码检测已经启动了，比如规则中定义了句尾不加分号，现在就会报错<br><img src="/2018/04/04/ESLint -- 代码规约插件/1.png" alt="8EAC31A2-7E35-4016-9D0F-0FB7AD8057A6"></p>
+<p>接着需要在 WebStorm 中启用 Eslint，勾选<code>Enable</code><br><img src="/2018/04/04/ESLint%20--%20%E4%BB%A3%E7%A0%81%E8%A7%84%E7%BA%A6%E6%8F%92%E4%BB%B6/0.png" alt="E9C4D048-BFC5-4D13-A4E8-30CD61BEE953"></p>
+<p>现在代码检测已经启动了，比如规则中定义了句尾不加分号，现在就会报错<br><img src="/2018/04/04/ESLint%20--%20%E4%BB%A3%E7%A0%81%E8%A7%84%E7%BA%A6%E6%8F%92%E4%BB%B6/1.png" alt="8EAC31A2-7E35-4016-9D0F-0FB7AD8057A6"></p>
 <h2 id="Rules"><a href="#Rules" class="headerlink" title="Rules"></a>Rules</h2><p>配置自定义规则，以下是我的规则。参考官方文档 <a href="https://eslint.org/docs/rules/" target="_blank" rel="noopener">Rules</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">module.exports = &#123;</span><br><span class="line">  extends: &apos;airbnb-base&apos;,</span><br><span class="line">  // add your custom rules here</span><br><span class="line">  rules: &#123;</span><br><span class="line">    // allow debugger during development</span><br><span class="line">    &apos;no-debugger&apos;: process.env.NODE_ENV === &apos;production&apos; ? &apos;error&apos; : &apos;off&apos;,</span><br><span class="line">    // allow console during development</span><br><span class="line">    &apos;no-console&apos;: process.env.NODE_ENV === &apos;production&apos; ? &apos;error&apos; : &apos;off&apos;,</span><br><span class="line">    // allow unused variables during development</span><br><span class="line">    &apos;no-unused-vars&apos;: process.env.NODE_ENV === &apos;production&apos; ? &apos;error&apos; : &apos;warn&apos;,</span><br><span class="line">    // disallow trailing commas</span><br><span class="line">    &apos;comma-dangle&apos;: [&apos;error&apos;, &apos;never&apos;],</span><br><span class="line">    // disallow trailing semi</span><br><span class="line">    &apos;semi&apos;: [&apos;error&apos;, &apos;never&apos;],</span><br><span class="line">    // allow the unary operators ++ and --</span><br><span class="line">    &apos;no-plusplus&apos;: &apos;off&apos;,</span><br><span class="line">    // enforce a maximum line length</span><br><span class="line">    &apos;max-len&apos;: [0, 150]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">  extends: &#39;airbnb-base&#39;,</span><br><span class="line">  &#x2F;&#x2F; add your custom rules here</span><br><span class="line">  rules: &#123;</span><br><span class="line">    &#x2F;&#x2F; allow debugger during development</span><br><span class="line">    &#39;no-debugger&#39;: process.env.NODE_ENV &#x3D;&#x3D;&#x3D; &#39;production&#39; ? &#39;error&#39; : &#39;off&#39;,</span><br><span class="line">    &#x2F;&#x2F; allow console during development</span><br><span class="line">    &#39;no-console&#39;: process.env.NODE_ENV &#x3D;&#x3D;&#x3D; &#39;production&#39; ? &#39;error&#39; : &#39;off&#39;,</span><br><span class="line">    &#x2F;&#x2F; allow unused variables during development</span><br><span class="line">    &#39;no-unused-vars&#39;: process.env.NODE_ENV &#x3D;&#x3D;&#x3D; &#39;production&#39; ? &#39;error&#39; : &#39;warn&#39;,</span><br><span class="line">    &#x2F;&#x2F; disallow trailing commas</span><br><span class="line">    &#39;comma-dangle&#39;: [&#39;error&#39;, &#39;never&#39;],</span><br><span class="line">    &#x2F;&#x2F; disallow trailing semi</span><br><span class="line">    &#39;semi&#39;: [&#39;error&#39;, &#39;never&#39;],</span><br><span class="line">    &#x2F;&#x2F; allow the unary operators ++ and --</span><br><span class="line">    &#39;no-plusplus&#39;: &#39;off&#39;,</span><br><span class="line">    &#x2F;&#x2F; enforce a maximum line length</span><br><span class="line">    &#39;max-len&#39;: [0, 150]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="Running"><a href="#Running" class="headerlink" title="Running"></a>Running</h2><p>在<code>package.json</code>中添加命令脚本</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">"scripts": &#123;</span><br><span class="line">    // ...</span><br><span class="line">    "lint": "eslint --ext .js ."</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这样就可以使用<code>npm run lint</code>运行 Eslint 检查程序，结果列出了问题文件所在路径、警告的级别及问题原因</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">➜ npm run lint</span><br><span class="line"></span><br><span class="line">&gt; airbi-metadata@0.1.0 lint /Users/s1mple/Desktop/airbi-metadata</span><br><span class="line">&gt; eslint --ext .js .</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /Users/s1mple/Desktop/airbi-metadata/app.js</span><br><span class="line">       3:22  error  Extra semicolon                                                 semi</span><br><span class="line">      22:31  error  Use path.join() or path.resolve() instead of + to create paths  no-path-concat</span><br><span class="line">      22:31  error  Unexpected string concatenation                                 prefer-template</span><br><span class="line">      24:15  error  Use path.join() or path.resolve() instead of + to create paths  no-path-concat</span><br><span class="line">      24:15  error  Unexpected string concatenation                                 prefer-template</span><br><span class="line">    </span><br><span class="line">    /Users/s1mple/Desktop/airbi-metadata/routes/index.js</span><br><span class="line">       3:29  warning  &apos;next&apos; is defined but never used  no-unused-vars</span><br><span class="line">       9:35  warning  &apos;next&apos; is defined but never used  no-unused-vars</span><br><span class="line">      13:33  warning  &apos;next&apos; is defined but never used  no-unused-vars</span><br><span class="line">    </span><br><span class="line">    /Users/s1mple/Desktop/airbi-metadata/routes/users.js</span><br><span class="line">      5:17  error    Unexpected function expression    prefer-arrow-callback</span><br><span class="line">      5:32  warning  &apos;next&apos; is defined but never used  no-unused-vars</span><br><span class="line">      9:20  error    Unexpected function expression    prefer-arrow-callback</span><br><span class="line">      9:35  warning  &apos;next&apos; is defined but never used  no-unused-vars</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">➜ npm run lint</span><br><span class="line"></span><br><span class="line">&gt; airbi-metadata@0.1.0 lint &#x2F;Users&#x2F;s1mple&#x2F;Desktop&#x2F;airbi-metadata</span><br><span class="line">&gt; eslint --ext .js .</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#x2F;Users&#x2F;s1mple&#x2F;Desktop&#x2F;airbi-metadata&#x2F;app.js</span><br><span class="line">       3:22  error  Extra semicolon                                                 semi</span><br><span class="line">      22:31  error  Use path.join() or path.resolve() instead of + to create paths  no-path-concat</span><br><span class="line">      22:31  error  Unexpected string concatenation                                 prefer-template</span><br><span class="line">      24:15  error  Use path.join() or path.resolve() instead of + to create paths  no-path-concat</span><br><span class="line">      24:15  error  Unexpected string concatenation                                 prefer-template</span><br><span class="line">    </span><br><span class="line">    &#x2F;Users&#x2F;s1mple&#x2F;Desktop&#x2F;airbi-metadata&#x2F;routes&#x2F;index.js</span><br><span class="line">       3:29  warning  &#39;next&#39; is defined but never used  no-unused-vars</span><br><span class="line">       9:35  warning  &#39;next&#39; is defined but never used  no-unused-vars</span><br><span class="line">      13:33  warning  &#39;next&#39; is defined but never used  no-unused-vars</span><br><span class="line">    </span><br><span class="line">    &#x2F;Users&#x2F;s1mple&#x2F;Desktop&#x2F;airbi-metadata&#x2F;routes&#x2F;users.js</span><br><span class="line">      5:17  error    Unexpected function expression    prefer-arrow-callback</span><br><span class="line">      5:32  warning  &#39;next&#39; is defined but never used  no-unused-vars</span><br><span class="line">      9:20  error    Unexpected function expression    prefer-arrow-callback</span><br><span class="line">      9:35  warning  &#39;next&#39; is defined but never used  no-unused-vars</span><br></pre></td></tr></table></figure>
 <h2 id="Preferences"><a href="#Preferences" class="headerlink" title="Preferences"></a>Preferences</h2><ul>
 <li><a href="https://cn.eslint.org/docs/user-guide/getting-started" target="_blank" rel="noopener">官方文档</a></li>
 <li><a href="https://eslint.org/docs/rules/" target="_blank" rel="noopener">Rules</a></li>
@@ -574,7 +580,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/" rel="next" title="Sidecar -- 将 Node 应用引入 Spring Cloud">
+              <a href="/2018/03/31/Sidecar%20--%20%E5%B0%86Node%E5%BA%94%E7%94%A8%E5%BC%95%E5%85%A5Spring%20Cloud/" rel="next" title="Sidecar -- 将 Node 应用引入 Spring Cloud">
                 <i class="fa fa-chevron-left"></i> Sidecar -- 将 Node 应用引入 Spring Cloud
               </a>
             
@@ -584,7 +590,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/13/Spring Cloud集成GitHub第三方认证/" rel="prev" title="Spring Cloud 集成 GitHub 第三方认证">
+              <a href="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/" rel="prev" title="Spring Cloud 集成 GitHub 第三方认证">
                 Spring Cloud 集成 GitHub 第三方认证 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -650,9 +656,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -663,7 +671,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -877,7 +885,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1031,7 +1039,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2018/04/04/ESLint -- 代码规约插件/';
+        this.page.url = 'https://s1mplecc.github.io/2018/04/04/ESLint%20--%20%E4%BB%A3%E7%A0%81%E8%A7%84%E7%BA%A6%E6%8F%92%E4%BB%B6/';
         this.page.identifier = '2018/04/04/ESLint -- 代码规约插件/';
         this.page.title = 'ESLint -- 代码规约插件';
         };

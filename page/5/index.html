@@ -118,11 +118,12 @@
 <meta property="og:url" content="https://s1mplecc.github.io/page/5/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="春光恰与少年同，十里清风慕天青">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="s1mple">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="s1mple的博客">
-<meta name="twitter:description" content="春光恰与少年同，十里清风慕天青">
 
+
+  
 
 
   <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
@@ -371,7 +372,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/22/前端编码规范/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/22/%E5%89%8D%E7%AB%AF%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -391,7 +392,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/01/22/前端编码规范/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">前端编码规范</a>
+                <a href="/2018/01/22/%E5%89%8D%E7%AB%AF%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">前端编码规范</a>
               
             
           </h1>
@@ -465,7 +466,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/22/前端编码规范/#comments" itemprop="discussionUrl">
+                <a href="/2018/01/22/%E5%89%8D%E7%AB%AF%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
                         data-disqus-identifier="2018/01/22/前端编码规范/" itemprop="commentCount"></span>
@@ -544,15 +545,13 @@
 <li><p>组件名始终为多个单词组成（为避免与 HTML 元素冲突），单词首字母大写拼接，组件的 name 属性不可省略（方便 <strong>DevTools</strong> 调试）</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TodoItem.vue</span><br><span class="line"></span><br><span class="line"><span class="comment">// JS</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  name: <span class="string">'TodoItem'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>组件名应该倾向于完整单词而不是缩写</p>
 </li>
 <li><p>HTML 中对应组件单词均小写，以<code>-</code>中划线连接多个单词</p>
   <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// HTML</span><br><span class="line"><span class="tag">&lt;<span class="name">todo-item</span>&gt;</span><span class="tag">&lt;/<span class="name">todo-item</span>&gt;</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>使用组件名作为样式作用域空间，同时给<code>&lt;style&gt;</code>标签加上<code>scoped</code>属性</p>
-  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"app-button"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- ... --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">  .app-button &#123; /* ... */ &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"app-button"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- ... --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">  <span class="selector-class">.app-button</span> &#123; <span class="comment">/* ... */</span> &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>通用组件</strong>或<strong>基础组件</strong>使用<code>App、Base、V</code>作为前缀</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AppHeader.vue</span><br><span class="line">AppTable.vue</span><br></pre></td></tr></table></figure>
@@ -567,8 +566,6 @@
 <li><p>总是用<code>key</code>配合<code>v-for</code></p>
   <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-for</span>=<span class="string">"todo in todos"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:key</span>=<span class="string">"todo.id"</span></span></span><br><span class="line"><span class="tag">  &gt;</span></span><br><span class="line">    &#123;&#123; todo.text &#125;&#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>永远不要把<code>v-if</code>和<code>v-for</code>同时用在同一个元素上，可以将<code>v-if</code>移至上一层</p>
   <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-for</span>=<span class="string">"user in users"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-if</span>=<span class="string">"shouldShowUsers"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:key</span>=<span class="string">"user.id"</span></span></span><br><span class="line"><span class="tag">  &gt;</span></span><br><span class="line">    &#123;&#123; user.name &#125;&#125;</span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"></span><br><span class="line">//good</span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">v-if</span>=<span class="string">"shouldShowUsers"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-for</span>=<span class="string">"user in users"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:key</span>=<span class="string">"user.id"</span></span></span><br><span class="line"><span class="tag">  &gt;</span></span><br><span class="line">    &#123;&#123; user.name &#125;&#125;</span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
 </li>
@@ -634,7 +631,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/02/TCP／IP协议/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -654,7 +651,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/01/02/TCP／IP协议/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">TCP/IP 协议</a>
+                <a href="/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">TCP/IP 协议</a>
               
             
           </h1>
@@ -728,7 +725,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/02/TCP／IP协议/#comments" itemprop="discussionUrl">
+                <a href="/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
                         data-disqus-identifier="2018/01/02/TCP／IP协议/" itemprop="commentCount"></span>
@@ -788,7 +785,7 @@
 </ul>
 <hr>
 <h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><ul>
-<li><p>最初，网络的数据传递被划分为如下七个层次，亦即 <strong>OSI七层协议</strong> (or <strong>Open System Interconnection</strong>)<br><img src="/2018/01/02/TCP／IP协议/0.JPG" alt="IMG_0058-3"></p>
+<li><p>最初，网络的数据传递被划分为如下七个层次，亦即 <strong>OSI七层协议</strong> (or <strong>Open System Interconnection</strong>)<br><img src="/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/0.JPG" alt="IMG_0058-3"></p>
 </li>
 <li><p>可以看到，数据包从一个应用程序传递到网络上的另一个应用程序，是一层一层传递的过程，<strong>每一层只认识对方相同层级的数据</strong>，而<strong>数据头</strong>(<strong>Header</strong>)就包含了互相认识的信息，所以<strong>数据自顶向下被层层Header包裹起来</strong>，最后在物理介质上传输</p>
 </li>
@@ -797,7 +794,7 @@
 <p>通俗理解，网络协议干的事就是让数据能<strong>精确投递</strong>到另一个人手中，你比如说网络层的<strong>IP数据包</strong>的 <strong>Header</strong> 就包含了源IP地址、目的IP地址等信息，再比如传输层的源端口号、目的端口号</p>
 </blockquote>
 <ul>
-<li><p>而如今的 <strong>TCP/IP协议</strong> 是由 <strong>OSI七层协议</strong> 简化而来的<br><img src="/2018/01/02/TCP／IP协议/1.JPG" alt="IMG_0059"></p>
+<li><p>而如今的 <strong>TCP/IP协议</strong> 是由 <strong>OSI七层协议</strong> 简化而来的<br><img src="/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/1.JPG" alt="IMG_0059"></p>
 </li>
 <li><p>实际上就是简化合并了一些没那么重要的层，相反，从 <strong>TCP/IP</strong> 的命名就可以看出<strong>传输层</strong>和<strong>网络层</strong>的重要性</p>
 </li>
@@ -809,13 +806,13 @@
 <ul>
 <li><p>以太网（<strong>Ethernet</strong>）是现有局域网采用的最通用的通信协议标准，主要定义了局域网内的传输协议（比如<strong>CSMA/CD</strong>），还有数据帧的格式、大小等。以太网的传输主要就是网卡对网卡的传输</p>
 </li>
-<li><p>数据从一个网卡出，以<strong>数据帧(frame)</strong> 在链路上传递，再从另一个网卡进，所以<strong>MAC数据帧</strong>必须包含了来源和目标的网卡卡号<br><img src="/2018/01/02/TCP／IP协议/2.png" alt="C7A05D1BF522B158CE16E65E6BED7209"></p>
+<li><p>数据从一个网卡出，以<strong>数据帧(frame)</strong> 在链路上传递，再从另一个网卡进，所以<strong>MAC数据帧</strong>必须包含了来源和目标的网卡卡号<br><img src="/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/2.png" alt="C7A05D1BF522B158CE16E65E6BED7209"></p>
 </li>
 <li><p><strong>MAC地址</strong>(or <strong>Media Access Control</strong>)，其实指的就是网卡卡号(<strong>Hardware Address</strong>，硬件地址)，每张以太网卡出厂就会有个独一无二的卡号</p>
 </li>
 <li><p>可以看到我的 <strong>MAC地址</strong>，以及 <strong>MTU</strong>(or <strong>Maximum Transmission Unit</strong>)为1500，也就是说一个数据帧最大传输 <strong>1500bytes</strong></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">en0: flags=8863&lt;UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST&gt; mtu 1500</span><br><span class="line">    ether 8c:85:90:85:e3:c7</span><br></pre></td></tr></table></figure>
-<p>  <img src="/2018/01/02/TCP／IP协议/3.png" alt="Screen-Shot-2018-01-02-at-9.58.18-PM"></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">en0: flags&#x3D;8863&lt;UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST&gt; mtu 1500</span><br><span class="line">    ether 8c:85:90:85:e3:c7</span><br></pre></td></tr></table></figure>
+<p>  <img src="/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/3.png" alt="Screen-Shot-2018-01-02-at-9.58.18-PM"></p>
 </li>
 </ul>
 <hr>
@@ -823,13 +820,13 @@
 <p>在网络层传输的是<strong>IP数据包</strong>，<strong>IP</strong> 的全称是 <strong>Internet Protocol</strong> ，目前有<strong>IPv4</strong>和<strong>IPv6</strong>两个版本，本文涉及的为<strong>IPv4</strong></p>
 </blockquote>
 <ul>
-<li><p>IP数据包的 <strong>Header</strong>，<strong>Version</strong> 版本（如IPv4），<strong>Total Length</strong> 该IP数据包总长度，最长 <strong>2^16-1</strong> 即 <strong>65535 bytes</strong>（字节为单位）<br><img src="/2018/01/02/TCP／IP协议/4.JPG" alt="IMG_0061-1"></p>
+<li><p>IP数据包的 <strong>Header</strong>，<strong>Version</strong> 版本（如IPv4），<strong>Total Length</strong> 该IP数据包总长度，最长 <strong>2^16-1</strong> 即 <strong>65535 bytes</strong>（字节为单位）<br><img src="/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/4.JPG" alt="IMG_0061-1"></p>
 </li>
 <li><p><strong>Identification</strong>辨识码，IP数据包会被封装成数据帧在网络上传输，那就一定不能大于数据帧的 <strong>MTU</strong> ，如果IP数据包超过数据帧的最大长度，则需要分片，辨识码用于<strong>辨识、重组</strong>属于同一数据包的IP数据包</p>
 </li>
 <li><p><strong>Time To Live</strong>( or <strong>TTL</strong>)存活时间，最大255，每经过一个路由器<strong>减一</strong>，为0时该IP数据包将会被直接抛弃</p>
 </li>
-<li><p><strong>Protocol Number</strong>协议代码，用于记录数据包使用的协议，常见的有 <strong>TCP、UDP、ICMP</strong><br><img src="/2018/01/02/TCP／IP协议/5.jpg" alt="498ADD4210B624434245C9BFF2F58F6A"></p>
+<li><p><strong>Protocol Number</strong>协议代码，用于记录数据包使用的协议，常见的有 <strong>TCP、UDP、ICMP</strong><br><img src="/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/5.jpg" alt="498ADD4210B624434245C9BFF2F58F6A"></p>
 </li>
 </ul>
 <h3 id="IP-Address"><a href="#IP-Address" class="headerlink" title="IP Address"></a>IP Address</h3><blockquote>
@@ -842,13 +839,9 @@
 <li><p>IP被分组用于不同范围的网络，通常我们会接触到的是<strong>A、B、C</strong>三组，以 <strong>Net_ID</strong> 前几位区别</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Class A : <span class="number">0</span>xxxxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx  ==&gt; Net_ID 的开头是 <span class="number">0</span></span><br><span class="line">          |--net--|---------host------------|</span><br><span class="line">Class B : <span class="number">10</span>xxxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx  ==&gt; Net_ID 的开头是 <span class="number">10</span></span><br><span class="line">          |------net-------|------host------|</span><br><span class="line">Class C : <span class="number">110</span>xxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx  ==&gt; Net_ID 的开头是 <span class="number">110</span></span><br><span class="line">          |-----------net-----------|-host--|</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>从A到C随着 <strong>Net_ID</strong> 位数减少和 <strong>Host_ID</strong> 位数增加，意味着该组网络上的可用子网（主机）数减少，网络的作用范围变小，比如 <strong>Class B</strong> 常用于企业网络，<strong>Class C</strong> 常用于家庭网络</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Class A :   0.xx.xx.xx ~ 127.xx.xx.xx</span><br><span class="line">Class B : 128.xx.xx.xx ~ 191.xx.xx.xx</span><br><span class="line">Class C : 192.xx.xx.xx ~ 223.xx.xx.xx</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>私有 IP 也分别在 A, B, C 三个 Class 当中各保留一段作为私有 IP 网段</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Class A：10.0.0.0    ~ 10.255.255.255</span><br><span class="line">Class B：172.16.0.0  ~ 172.31.255.255</span><br><span class="line">Class C：192.168.0.0 ~ 192.168.255.255</span><br></pre></td></tr></table></figure>
 </li>
@@ -864,9 +857,8 @@
 <li><p>还可以继续进行子域的切分，比如 <strong>192.168.0.0 ~ 192.168.0.255</strong> 中拿出一位 <strong>Host_ID</strong> 作为 <strong>Net_ID</strong></p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">11000000.10101000.00000000.0 0000000</span><br><span class="line">11000000.10101000.00000000.1 0000000</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
-<li>这样就划分出了两个子网，表示方式为 <strong>192.168.0.0/25</strong> 和 <strong>192.168.0.128/25</strong>，每个子网下可分配<code>2^7</code>个 Host</li>
+<li><p>这样就划分出了两个子网，表示方式为 <strong>192.168.0.0/25</strong> 和 <strong>192.168.0.128/25</strong>，每个子网下可分配<code>2^7</code>个 Host</p>
+</li>
 </ul>
 <h4 id="Loopback-IP"><a href="#Loopback-IP" class="headerlink" title="Loopback IP"></a>Loopback IP</h4><blockquote>
 <p>除了预留的私有 IP 网段外，还预留了内部回环网段 <strong>127.0.0.0/8</strong>，默认的主机 <strong>(localhost)</strong> 的IP是 <strong>127.0.0.1</strong>，不需要网卡即可访问</p>
@@ -875,10 +867,8 @@
 <li><p>这个在查看<code>/etc/hosts</code>时可以看到这一行，IPv6 用<code>::1</code>表示</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1	localhost</span><br><span class="line">255.255.255.255	broadcasthost</span><br><span class="line">::1             localhost</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>执行<code>ifconfig</code>看到的<code>lo0</code>也是回环地址的相关信息</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜ ifconfig </span><br><span class="line">lo0: flags=8049&lt;UP,LOOPBACK,RUNNING,MULTICAST&gt; mtu 16384</span><br><span class="line">    options=1203&lt;RXCSUM,TXCSUM,TXSTATUS,SW_TIMESTAMP&gt;</span><br><span class="line">    inet 127.0.0.1 netmask 0xff000000</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜ ifconfig </span><br><span class="line">lo0: flags&#x3D;8049&lt;UP,LOOPBACK,RUNNING,MULTICAST&gt; mtu 16384</span><br><span class="line">    options&#x3D;1203&lt;RXCSUM,TXCSUM,TXSTATUS,SW_TIMESTAMP&gt;</span><br><span class="line">    inet 127.0.0.1 netmask 0xff000000</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h3 id="Gateway-Router"><a href="#Gateway-Router" class="headerlink" title="Gateway/Router"></a>Gateway/Router</h3><blockquote>
@@ -899,25 +889,25 @@
 <p><strong>DHCP</strong>( or <strong>Dynamic Host Configuration Protocol</strong>，<strong>动态主机配置协议</strong>)是一个局域网的网络协议，使用UDP协议工作，可以给内部网络自动分配IP地址</p>
 </blockquote>
 <ul>
-<li>现在再看电脑上网络设置相关字段应该都明白其意思了<br><img src="/2018/01/02/TCP／IP协议/6.png" alt="861DECFB-DB0E-4863-A958-4448C560B145"></li>
+<li>现在再看电脑上网络设置相关字段应该都明白其意思了<br><img src="/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/6.png" alt="861DECFB-DB0E-4863-A958-4448C560B145"></li>
 </ul>
 <hr>
 <h2 id="Transport-Layer"><a href="#Transport-Layer" class="headerlink" title="Transport Layer"></a>Transport Layer</h2><blockquote>
 <p>网络层的 IP 数据包只负责将数据送到正确的目标主机去，但这个数据包有没有被正确接收就是传输层的任务了，传输层常见协议有两个，一个是<strong>可靠的、面向连接</strong>的 <strong>TCP</strong> 协议，一个是<strong>不可靠的、无连接</strong>的 <strong>UDP</strong> 协议</p>
 </blockquote>
 <h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h3><ul>
-<li>TCP 数据包的报头<br><img src="/2018/01/02/TCP／IP协议/7.JPG" alt="IMG_0091"></li>
+<li>TCP 数据包的报头<br><img src="/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/7.JPG" alt="IMG_0091"></li>
 </ul>
 <blockquote>
 <p>➤ <strong>Source Port、Destination Port</strong>，源端口号、目的端口号，用于区分数据包到底发往哪个应用程序。端口号 16 位，也就是说最大 65535<br>➤ <strong>Sequence Number</strong>(数据包序号)，TCP数据包要被装入IP数据包中，如果过大也需要分段，该字段记录每个数据包的序号用于<strong>重组</strong><br>➤ <strong>Acknowledge Number</strong>(响应序号)，用于确认之前传递的数据包已被正确接收下<br>➤ <strong>Code</strong>(or <strong>Control Flag</strong>，<strong>状态控制码</strong>)有 6 位，表示 6 个不同的属性，为 1 则为真。主要关心的有下面两个：<strong>ACK</strong>(or <strong>Acknowledge</strong>)若为 1，代表该数据包为<strong>响应数据包</strong>；<strong>SYN</strong>(or <strong>Synchronous</strong>)若为 1，表示发送端希望双方建立同步处理，即<strong>建立连接</strong> </p>
 </blockquote>
 <ul>
-<li>常见端口号<br><img src="/2018/01/02/TCP／IP协议/8.JPG" alt="IMG_0095"></li>
+<li>常见端口号<br><img src="/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/8.JPG" alt="IMG_0095"></li>
 </ul>
 <h4 id="TCP-的三次握手"><a href="#TCP-的三次握手" class="headerlink" title="TCP 的三次握手"></a>TCP 的三次握手</h4><blockquote>
 <p>TCP 协议正是通过<strong>三次握手协议</strong>了来确认两个主机的连接</p>
 </blockquote>
-<p><img src="/2018/01/02/TCP／IP协议/9.JPG" alt="IMG_0096"></p>
+<p><img src="/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/9.JPG" alt="IMG_0096"></p>
 <blockquote>
 <p>如图，假设左边是客户端，右边是服务器端。<br>➠ 客户端向服务端发送一个 TCP 数据包，并请求连接 <strong>(SYN = 1)</strong>，数据包序号为 10001<br>➠ 当服务器接到客户端的数据包后回传一个同时带有 <strong>(SYN=1, ACK=1)</strong> 的封包，表示<strong>确认收到，也请求客户端连接</strong>。其中 <strong>Acknowledge</strong> 是要给客户端确认用的，所以该数字比 <strong>Sequence Number</strong> 多一号 <strong>(ack = 10001 + 1 = 10002)</strong> 。而服务器也必须要确认客户端接收到服务器的数据包才行，所以也会随机产生一个 <strong>(seq = 20001)</strong> 发送给客户端<br>➠ 当客户端收到来自服务器端的 <strong>(ack = 10002)</strong> 就能够确认之前的数据包被正确接受了，同时发送一个数据包 <strong>(ACK = 1, ack = 20002)</strong> 给服务器表示确认收到服务端的数据包<br>➠ 服务器收到数据包后确认无误即可与客户端建立连接</p>
 </blockquote>
@@ -925,7 +915,7 @@
 <p>TCP 面向连接，需要三次握手，传输的成本较高，并且还会有严密的检测机制，不符合要求的数据包会请求重传，所以是<strong>可靠传输</strong>。而与 TCP 不同，UDP 不提供可靠的传输模式，没有 TCP 的三次握手，传输的消耗自然较低，所以 UDP 适用与视频、音频等<strong>实时性</strong>要求较高，但数据<strong>准确性</strong>要求较低的场合</p>
 </blockquote>
 <ul>
-<li><p>UDP数据包的报头就很简单了<br><img src="/2018/01/02/TCP／IP协议/10.JPG" alt="IMG_0098-1"></p>
+<li><p>UDP数据包的报头就很简单了<br><img src="/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/10.JPG" alt="IMG_0098-1"></p>
 </li>
 <li><p>另外，很多的软件其实是同时提供 TCP 与 UDP 的传输协议的，举例来说，查询主机名的 DNS 服务就同时提供了 UDP/TCP 协议。由于 UDP 较为快速，会先使用 UDP 进行传输，当使用 UDP 无法取得正确的数据时，便转换为较为可靠的 TCP 传输。这样可以同时兼顾快速与可靠的传输</p>
 </li>
@@ -938,8 +928,6 @@
 <li><p>查看主机的 <strong>DNS</strong> 设置，一般保存在<code>/etc/resolv.conf</code>中</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nameserver 192.168.0.1</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>该文件在你连接网络时会自动生成，不同的网络会有不同的 <strong>DNS</strong> 设置，比如我的阿里云服务器的配置如下，这就是阿里内部的DNS服务器的IP了</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Dynamic resolv.conf(5) file for glibc resolver(3) generated by resolvconf(8)            </span><br><span class="line">#     DO NOT EDIT THIS FILE BY HAND -- YOUR CHANGES WILL BE OVERWRITTEN</span><br><span class="line">nameserver 100.100.2.136</span><br><span class="line">nameserver 100.100.2.138</span><br></pre></td></tr></table></figure></li>
 </ul>
@@ -999,7 +987,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/29/ES6新特性/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/29/ES6%E6%96%B0%E7%89%B9%E6%80%A7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -1019,7 +1007,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2017/12/29/ES6新特性/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">ES6 新特性</a>
+                <a href="/2017/12/29/ES6%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">ES6 新特性</a>
               
             
           </h1>
@@ -1093,7 +1081,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/29/ES6新特性/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/29/ES6%E6%96%B0%E7%89%B9%E6%80%A7/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
                         data-disqus-identifier="2017/12/29/ES6新特性/" itemprop="commentCount"></span>
@@ -1165,16 +1153,11 @@
 <li><p><code>=&gt;</code>右边接声明体</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log([<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>].forEach(<span class="function"><span class="params">v</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(v &gt; <span class="number">2</span>)&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(v)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;))</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>箭头函数可以和<strong>不定参数</strong>配合使用，下面代码定义了一个求和方法</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sum = <span class="function">(<span class="params">...nums</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> sumValue = <span class="number">0</span></span><br><span class="line">    nums.forEach(<span class="function"><span class="params">num</span> =&gt;</span> sumValue += num)</span><br><span class="line">    <span class="built_in">console</span>.log(sumValue)</span><br><span class="line">&#125;</span><br><span class="line">sum(<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>)</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">7</span></span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>需要特别注意的是，箭头函数<strong>绑定this</strong>，这是和 <strong>function</strong> 定义是不同的</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> std = &#123;</span><br><span class="line">    birth: <span class="number">1990</span>,</span><br><span class="line">    getAge: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> _this = <span class="keyword">this</span></span><br><span class="line">        <span class="keyword">const</span> fn = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>().getFullYear() - _this.birth</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> fn()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">std.getAge()</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">28</span></span><br></pre></td></tr></table></figure>
-</li>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> std = &#123;</span><br><span class="line">    birth: <span class="number">1990</span>,</span><br><span class="line">    getAge: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> _this = <span class="keyword">this</span></span><br><span class="line">        <span class="keyword">const</span> fn = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>().getFullYear() - _this.birth</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> fn()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">std.getAge()</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">28</span></span><br></pre></td></tr></table></figure></li>
 <li><p>传统的写法我需要特地定义个<code>_this</code>让它指向当前这个 <strong>std</strong> 对象，而箭头函数绑定了上下文的 <strong>this</strong>，即调用该 <strong>function</strong> 的对象 <strong>std</strong></p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">std = &#123;</span><br><span class="line">    birth: <span class="number">1990</span>,</span><br><span class="line">    getAge: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> fn = <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">new</span> <span class="built_in">Date</span>().getFullYear() - <span class="keyword">this</span>.birth <span class="comment">// this指向std对象</span></span><br><span class="line">        <span class="keyword">return</span> fn()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">std.getAge()</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">28</span></span><br></pre></td></tr></table></figure>
 </li>
@@ -1185,10 +1168,10 @@
 </blockquote>
 <ul>
 <li><p><code>let</code>用法和<code>var</code>一样，但是限定了作用域。因为在 <strong>JavaScript</strong> 中，<code>var</code>定义全局变量，所以能不用<code>var</code>的地方就不用</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  let a = 10</span><br><span class="line">  var b = 1</span><br><span class="line">&#125;</span><br><span class="line">// result</span><br><span class="line">a // ReferenceError: a is not defined.</span><br><span class="line">b // 1</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  let a &#x3D; 10</span><br><span class="line">  var b &#x3D; 1</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; result</span><br><span class="line">a &#x2F;&#x2F; ReferenceError: a is not defined.</span><br><span class="line">b &#x2F;&#x2F; 1</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><code>const</code>声明一个只读的常量，并且必须<strong>初始化</strong>。一旦声明，常量的值就不能改变</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">const a // Missing initializer in const declaration</span><br><span class="line">const a = 1</span><br><span class="line">a = 2 // Assignment to constant variable.</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">const a &#x2F;&#x2F; Missing initializer in const declaration</span><br><span class="line">const a &#x3D; 1</span><br><span class="line">a &#x3D; 2 &#x2F;&#x2F; Assignment to constant variable.</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>阮一峰老师的<strong>ES6编程风格</strong>中明确指出在<code>let</code>和<code>const</code>之间，建议优先使用<code>const</code>，尤其是在<strong>全局环境</strong>，不应该设置变量，只应设置常量。<strong>const优于let原因如下:</strong></p>
 <blockquote>
@@ -1204,8 +1187,6 @@
 <li><p>多行字符串</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">`第一行</span></span><br><span class="line"><span class="string">第二行`</span>)</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line">第一行</span><br><span class="line">第二行</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>在模版字符串中使用<code>${property}</code>替换为属性的值</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> name = <span class="string">'Bob'</span>, time = <span class="string">'today'</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`Hello <span class="subst">$&#123;name&#125;</span>, how are you <span class="subst">$&#123;time&#125;</span>?`</span>)</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line">Hello Bob, how are you today?</span><br></pre></td></tr></table></figure>
 </li>
@@ -1221,8 +1202,6 @@
 <li><p><strong>不定参数</strong>使用<code>...</code>表示，它取代了之前的 <strong>arguments</strong>，适用于更常见的需求。如下例中 <strong>y</strong> 是一个参数数组</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x, ...y</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x * y.length</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line">f(<span class="number">3</span>,<span class="string">'abc'</span>,<span class="number">10</span>)</span><br><span class="line"><span class="number">6</span></span><br><span class="line">f(<span class="number">3</span>,<span class="string">'abc'</span>,<span class="number">10</span>,<span class="string">'xyz'</span>)</span><br><span class="line"><span class="number">9</span></span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>同时<code>...</code>还可以在函数调用时将数组转换成连续的参数</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x, y, z</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x + y + z</span><br><span class="line">&#125;</span><br><span class="line">f(...[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">6</span></span><br></pre></td></tr></table></figure>
 </li>
@@ -1235,8 +1214,6 @@
 <li><p>我们用<code>for ... in</code>遍历对象的<strong>属性名</strong>，需要用<code>o[prop]</code>来获取属性的值</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> o = &#123; <span class="attr">name</span>: <span class="string">'Jack'</span>, <span class="attr">age</span>: <span class="number">11</span>&#125;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> prop <span class="keyword">in</span> o) &#123; </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;prop&#125;</span> is <span class="subst">$&#123;o[prop]&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line">name is Jack</span><br><span class="line">age is <span class="number">11</span></span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>同样的，<strong>Array</strong> 实际上也是一个对象，它的每个元素的索引被视为一个属性</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>,<span class="number">4</span>,<span class="number">9</span>]</span><br><span class="line">arr.name = <span class="string">'Jack'</span></span><br><span class="line"><span class="comment">// actually arr is an object</span></span><br><span class="line">(<span class="number">3</span>) [<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="attr">name</span>: <span class="string">"Jack"</span>]</span><br><span class="line"><span class="number">0</span>: <span class="number">1</span></span><br><span class="line"><span class="number">1</span>: <span class="number">4</span></span><br><span class="line"><span class="number">2</span>: <span class="number">9</span></span><br><span class="line">name: <span class="string">"Jack"</span></span><br><span class="line">length: <span class="number">3</span></span><br><span class="line">__proto__: <span class="built_in">Array</span>(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
 <p>  令人奇怪的是数组的长度还是3</p>
@@ -1244,8 +1221,6 @@
 <li><p>我们使用<code>for ... in</code>去遍历数组，实际上<code>for ... in</code>遍历的是数组的<strong>下标索引</strong></p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> index <span class="keyword">in</span> arr) &#123; </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`数组第<span class="subst">$&#123;index&#125;</span>个是<span class="subst">$&#123;arr[index]&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//result</span></span><br><span class="line">数组第<span class="number">0</span>个是<span class="number">1</span></span><br><span class="line">数组第<span class="number">1</span>个是<span class="number">4</span></span><br><span class="line">数组第<span class="number">2</span>个是<span class="number">9</span></span><br><span class="line">数组第name个是Jack</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>ES6 引入<code>for ... of</code>循环，遍历的是集合本身的元素，可以用于遍历 <strong>Array、Set、Map</strong> 等</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> value <span class="keyword">of</span> arr) &#123; </span><br><span class="line">    <span class="built_in">console</span>.log(value)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">9</span></span><br></pre></td></tr></table></figure>
 <p>  可以看到我们的<code>name: &quot;Jack&quot;</code>被舍弃了，实际上也不推荐这种向数组添加属性的操作</p>
@@ -1255,8 +1230,6 @@
 <li><p>更好的方式是直接使用<code>iterable</code>内置的<code>forEach</code>方法，它接收一个函数，每次迭代就自动回调该函数</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">arr.forEach(<span class="function">(<span class="params">value,index</span>) =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;index&#125;</span> : <span class="subst">$&#123;value&#125;</span>`</span>))</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">0</span> : <span class="number">1</span></span><br><span class="line"><span class="number">1</span> : <span class="number">4</span></span><br><span class="line"><span class="number">2</span> : <span class="number">9</span></span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>遍历一个 <strong>Map</strong></p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> m = <span class="keyword">new</span> <span class="built_in">Map</span>([[<span class="string">'Jack'</span>, <span class="number">11</span>], [<span class="string">'Tom'</span>, <span class="number">13</span>], [<span class="string">'John'</span>, <span class="number">10</span>]])</span><br><span class="line">m.forEach(<span class="function">(<span class="params">value, key, map</span>) =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;key&#125;</span> is <span class="subst">$&#123;value&#125;</span> years old.`</span>))</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line">Jack is <span class="number">11</span> years old.</span><br><span class="line">Tom is <span class="number">13</span> years old.</span><br><span class="line">John is <span class="number">10</span> years old.</span><br></pre></td></tr></table></figure>
 </li>
@@ -1269,23 +1242,15 @@
 <li><p>可以利用数组和解构，一次性给多个变量赋值。同时可以很方便的<strong>交换</strong>两个变量值</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [a, b] = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">a === <span class="number">1</span></span><br><span class="line">b === <span class="number">2</span></span><br><span class="line"><span class="comment">// 交换a、b的值</span></span><br><span class="line">[a, b] = [b, a]</span><br><span class="line">a === <span class="number">2</span></span><br><span class="line">b === <span class="number">1</span></span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>也可以使用嵌套数组进行解构，左右两边的模版应该相同，不对应则变量值为<code>undefined</code></p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [x, [[y], z]] = [<span class="number">1</span>, [[<span class="number">2</span>], <span class="number">3</span>]]</span><br><span class="line">x === <span class="number">1</span></span><br><span class="line">y === <span class="number">2</span></span><br><span class="line">z === <span class="number">3</span></span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p><code>...</code>被解构成一个数组</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [a,...rest] = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line">a === <span class="number">1</span></span><br><span class="line">rest === [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>解构还可以用于对象，<strong>需要注意:</strong> 数组的解构是按次序排列的，而对象的属性没有次序，所以<strong>变量必须与属性同名</strong></p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123; bar, foo &#125; = &#123; <span class="attr">foo</span>: <span class="string">"aaa"</span>, <span class="attr">bar</span>: <span class="string">"bbb"</span> &#125;</span><br><span class="line">foo === <span class="string">"aaa"</span></span><br><span class="line">bar === <span class="string">"bbb"</span></span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>当不知道参数传入顺序时，可以将一组参数与变量名对应起来</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">&#123;x, y, z&#125;</span>) </span>&#123; </span><br><span class="line">    <span class="keyword">return</span> x + y - z </span><br><span class="line">&#125;</span><br><span class="line">f(&#123;<span class="attr">z</span>: <span class="number">3</span>, <span class="attr">y</span>: <span class="number">2</span>, <span class="attr">x</span>: <span class="number">1</span>&#125;)</span><br><span class="line"><span class="comment">// result</span></span><br><span class="line"><span class="number">0</span></span><br></pre></td></tr></table></figure>
 </li>
@@ -1311,25 +1276,24 @@
 </blockquote>
 <ul>
 <li><p>下面代码我在<code>b.js</code>中导出了一个常量和一个函数，在<code>a.js</code>中导入</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// b.js</span><br><span class="line">module.exports = &#123;</span><br><span class="line">    pi: 3.14,</span><br><span class="line">    plusOne: v =&gt; v + 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// a.js</span><br><span class="line">const &#123; pi, plusOne &#125; = require(&apos;./b&apos;)</span><br><span class="line"></span><br><span class="line">console.log(pi)</span><br><span class="line">console.log(plusOne(10))</span><br><span class="line"></span><br><span class="line">// 执行 node a.js 输出结果</span><br><span class="line">3.14</span><br><span class="line">11</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; b.js</span><br><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">    pi: 3.14,</span><br><span class="line">    plusOne: v &#x3D;&gt; v + 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; a.js</span><br><span class="line">const &#123; pi, plusOne &#125; &#x3D; require(&#39;.&#x2F;b&#39;)</span><br><span class="line"></span><br><span class="line">console.log(pi)</span><br><span class="line">console.log(plusOne(10))</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 执行 node a.js 输出结果</span><br><span class="line">3.14</span><br><span class="line">11</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>在 ES6 中规定了模块导入导出的关键字<code>import、export</code>，使用方法如下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// b.js</span><br><span class="line">const pi = 3.14;</span><br><span class="line">const plusOne = v =&gt; v + 1;</span><br><span class="line"></span><br><span class="line">export &#123; pi, plusOne &#125;</span><br><span class="line"></span><br><span class="line">// a.js</span><br><span class="line">import &#123; pi, plusOne &#125; from &apos;./b&apos;;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; b.js</span><br><span class="line">const pi &#x3D; 3.14;</span><br><span class="line">const plusOne &#x3D; v &#x3D;&gt; v + 1;</span><br><span class="line"></span><br><span class="line">export &#123; pi, plusOne &#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; a.js</span><br><span class="line">import &#123; pi, plusOne &#125; from &#39;.&#x2F;b&#39;;</span><br></pre></td></tr></table></figure>
 <p>  <code>import</code>大括号中变量名，必须与导出时声明的对外接口的<strong>名称相同</strong></p>
 </li>
 <li><p><code>export default</code>命令用于指定模块的<strong>默认输出</strong>，一个模块只能有一个默认输出，因此<code>export default</code>只能出现一次，所以<code>import</code>导入时可以不加大括号，名称也可以随意取。其实就想当于导出了一个 <strong>default</strong> 变量，将开平方的箭头函数<strong>赋值</strong>给它</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// b.js</span><br><span class="line">export default v =&gt; v * v</span><br><span class="line"></span><br><span class="line">// a.js</span><br><span class="line">import square from &apos;./b&apos;</span><br><span class="line">console.log(square(10))</span><br><span class="line"></span><br><span class="line">// result</span><br><span class="line">100</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; b.js</span><br><span class="line">export default v &#x3D;&gt; v * v</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; a.js</span><br><span class="line">import square from &#39;.&#x2F;b&#39;</span><br><span class="line">console.log(square(10))</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; result</span><br><span class="line">100</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>因此我们才可以这样引入第三方库</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import _ from &apos;lodash&apos;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import _ from &#39;lodash&#39;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>需要<strong>特别注意</strong>的是，目前 <strong>Node</strong> 和浏览器还未对 <strong>import、export</strong> 做支持，因为<strong>V8引擎</strong>暂不支持，但是不久的将来肯定会加入该语法。<a href="https://nodejs.org/dist/latest-v9.x/docs/api/esm.html#esm_unsupported" target="_blank" rel="noopener">Node官方文档</a> 也明确说明了不建议 <strong>require</strong> 而推荐使用标准的 <strong>import</strong> 并且等待最新的<strong>V8引擎</strong>的支持。可以使用 <strong>Babel</strong> 进行转码</p>
+</blockquote>
+<p>  <img src="/2017/12/29/ES6%E6%96%B0%E7%89%B9%E6%80%A7/0.png" alt="512494CE-D620-4262-B2A2-CC5B351E6A3C"></p>
 </li>
 </ul>
-<pre><code>&gt; 需要**特别注意**的是，目前 **Node** 和浏览器还未对 **import、export** 做支持，因为**V8引擎**暂不支持，但是不久的将来肯定会加入该语法。[Node官方文档](https://nodejs.org/dist/latest-v9.x/docs/api/esm.html#esm_unsupported) 也明确说明了不建议 **require** 而推荐使用标准的 **import** 并且等待最新的**V8引擎**的支持。可以使用 **Babel** 进行转码
-
-![512494CE-D620-4262-B2A2-CC5B351E6A3C](/0.png)
-</code></pre><hr>
+<hr>
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
 <li><a href="https://babeljs.io/learn-es2015/" target="_blank" rel="noopener">Babel官网 – Learn ES2015</a></li>
 <li><a href="http://es6.ruanyifeng.com/" target="_blank" rel="noopener">阮一峰 – ES6入门</a></li>
@@ -1391,7 +1355,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/27/Linux流、管道&重定向/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/27/Linux%E6%B5%81%E3%80%81%E7%AE%A1%E9%81%93&%E9%87%8D%E5%AE%9A%E5%90%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -1411,7 +1375,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2017/12/27/Linux流、管道&重定向/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Linux 流、管道&重定向</a>
+                <a href="/2017/12/27/Linux%E6%B5%81%E3%80%81%E7%AE%A1%E9%81%93&%E9%87%8D%E5%AE%9A%E5%90%91/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Linux 流、管道&重定向</a>
               
             
           </h1>
@@ -1485,7 +1449,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/27/Linux流、管道&重定向/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/27/Linux%E6%B5%81%E3%80%81%E7%AE%A1%E9%81%93&%E9%87%8D%E5%AE%9A%E5%90%91/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
                         data-disqus-identifier="2017/12/27/Linux流、管道&重定向/" itemprop="commentCount"></span>
@@ -1510,7 +1474,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.3k</span>
+                <span title="本文字数">3.4k</span>
               
 
               
@@ -1547,7 +1511,7 @@
 </li>
 <li><p>Linux内核采用文件描述符（<strong>file descriptor</strong>）来访问文件。文件描述符是<strong>非负整数</strong>。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件</p>
 </li>
-<li><p>一条Linux命令执行的流程图<br><img src="/2017/12/27/Linux流、管道&重定向/0.png" alt="linuxcom"></p>
+<li><p>一条Linux命令执行的流程图<br><img src="/2017/12/27/Linux%E6%B5%81%E3%80%81%E7%AE%A1%E9%81%93&%E9%87%8D%E5%AE%9A%E5%90%91/0.png" alt="linuxcom"></p>
 </li>
 </ul>
 <hr>
@@ -1566,7 +1530,7 @@
 <p>  该命令将左侧命令的标准输出重定向到<code>a.txt</code>文件中</p>
 </li>
 <li><p>使用<code>/dev/null</code>清空文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /dev/null &gt; a.txt</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat &#x2F;dev&#x2F;null &gt; a.txt</span><br></pre></td></tr></table></figure>
 <p>  <code>/dev/null</code>相当于Linux的黑洞文件，永远为空</p>
 </li>
 </ul>
@@ -1583,10 +1547,10 @@
 <li><p>将文件的内容作为标准输入，传给左边的命令处理</p>
 </li>
 <li><p>将字符<code>o</code>替换为<code>x</code>，但是源文件并不会改动</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜ tr &apos;o&apos; &apos;x&apos; &lt; a.txt</span><br><span class="line">hellx</span><br><span class="line">wxrld</span><br><span class="line">➜ cat a.txt </span><br><span class="line">hello</span><br><span class="line">world</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜ tr &#39;o&#39; &#39;x&#39; &lt; a.txt</span><br><span class="line">hellx</span><br><span class="line">wxrld</span><br><span class="line">➜ cat a.txt </span><br><span class="line">hello</span><br><span class="line">world</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>或者之前博客提到的用<code>nc</code>来传输文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nc -l &#123;port&#125; &gt; filename // 接收端</span><br><span class="line">nc &#123;接受者IP&#125; &#123;port&#125; &lt; filename // 发送端</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nc -l &#123;port&#125; &gt; filename &#x2F;&#x2F; 接收端</span><br><span class="line">nc &#123;接受者IP&#125; &#123;port&#125; &lt; filename &#x2F;&#x2F; 发送端</span><br></pre></td></tr></table></figure>
 <p>  发送端将文件作为标准输入传输给接受端，再由接收端写入文件</p>
 </li>
 </ul>
@@ -1595,22 +1559,22 @@
 <p>管道命令操作符：<strong>|</strong> ，它能将前面一个命令传出的标准输出(<strong>stdout</strong>)，作为标准输入(<strong>stdin</strong>)传给下一条命令。相比于重定向，管道符号两边都是<strong>可独立执行</strong>的命令，通常用于命令间<strong>传递参数</strong>，而重定位符号的右边必须是<strong>文件名</strong></p>
 </blockquote>
 <ul>
-<li><p>流程图<br><img src="/2017/12/27/Linux流、管道&重定向/1.png" alt="pipe"></p>
+<li><p>流程图<br><img src="/2017/12/27/Linux%E6%B5%81%E3%80%81%E7%AE%A1%E9%81%93&%E9%87%8D%E5%AE%9A%E5%90%91/1.png" alt="pipe"></p>
 </li>
 <li><p>先来看这条命令</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ ls | grep &quot;**.png&quot;</span><br><span class="line">arguments.png</span><br><span class="line">mvvm.png</span><br><span class="line">nrm-test.png</span><br><span class="line">require.png</span><br></pre></td></tr></table></figure>
 <p>  <code>ls</code>列出当前目录下所有非隐藏文件，作为标准输入传给<code>grep</code>去过滤出以<code>.png</code>结尾的文件</p>
 </li>
 <li><p>现在我用<strong>IDEA</strong>启动了一个<strong>Spring Boot</strong>项目</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java</span><br><span class="line">  501  6292  6030   0 11:00PM ttys000    0:11.42 /usr/bin/java -jar /Users/s1mple/Library/Mobile Documents/com~apple~CloudDocs/Works/testvue/target/testvue-0.0.1-SNAPSHOT.jar</span><br><span class="line">  501  6324  6224   0 11:05PM ttys001    0:00.00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn java</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java</span><br><span class="line">  501  6292  6030   0 11:00PM ttys000    0:11.42 &#x2F;usr&#x2F;bin&#x2F;java -jar &#x2F;Users&#x2F;s1mple&#x2F;Library&#x2F;Mobile Documents&#x2F;com~apple~CloudDocs&#x2F;Works&#x2F;testvue&#x2F;target&#x2F;testvue-0.0.1-SNAPSHOT.jar</span><br><span class="line">  501  6324  6224   0 11:05PM ttys001    0:00.00 grep --color&#x3D;auto --exclude-dir&#x3D;.bzr --exclude-dir&#x3D;CVS --exclude-dir&#x3D;.git --exclude-dir&#x3D;.hg --exclude-dir&#x3D;.svn java</span><br></pre></td></tr></table></figure>
 <p>  执行这条命令后终端打印出<strong>Java</strong>进程信息，进程号<strong>6292</strong>。下面一个是<strong>grep</strong>进程，无关紧要</p>
 </li>
 <li><p>接下来我想结合管道命令<code>kill</code>掉这个<strong>Java</strong>进程</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java | grep -v grep | awk &apos;&#123;print $2&#125;&apos; | xargs kill -9   </span><br><span class="line">➜ ps -ef | grep java</span><br><span class="line">  501  6352  6224   0 11:11PM ttys001    0:00.00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn java</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java | grep -v grep | awk &#39;&#123;print $2&#125;&#39; | xargs kill -9   </span><br><span class="line">➜ ps -ef | grep java</span><br><span class="line">  501  6352  6224   0 11:11PM ttys001    0:00.00 grep --color&#x3D;auto --exclude-dir&#x3D;.bzr --exclude-dir&#x3D;CVS --exclude-dir&#x3D;.git --exclude-dir&#x3D;.hg --exclude-dir&#x3D;.svn java</span><br></pre></td></tr></table></figure>
 <p>  只剩下<strong>grep</strong>进程了，<strong>IDEA</strong>控制台也显示 <strong>“Process finished with exit code 137 (interrupted by signal 9: SIGKILL)”</strong> ，该进程已经被<code>kill</code>了，其实相当于执行了<code>kill -9 6292</code></p>
 </li>
 <li><p>这个命令看上去很长但是不要害怕，它无非是多个命令组合在一起。我之所以想说这个是因为在<strong>Tomcat</strong>的运行脚本<code>catalina.sh</code>中看到了用于停止<strong>Tomcat</strong>的类似的命令</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java | grep -v grep | awk &apos;&#123;print $2&#125;&apos; | xargs kill -9</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ ps -ef | grep java | grep -v grep | awk &#39;&#123;print $2&#125;&#39; | xargs kill -9</span><br></pre></td></tr></table></figure>
 <p>  <code>ps -ef</code>列出所有进程传递给<code>grep java</code>过滤出包含<strong>java</strong>关键字的进程，再传递给<code>grep -v grep</code>剔除包含<strong>grep</strong>关键字的进程，<code>awk &#39;{print $2}&#39;</code>扫描输入获取第二个参数即进程号<strong>6292</strong>，再作为<strong>xargs</strong>参数传递给<code>xargs kill -9</code>最终杀掉进程</p>
 </li>
 <li><p>很多时候比如说再写<strong>shell</strong>脚本时确实这样用，因为进程号是动态分配的，不能写死，只能通过一些手段动态获取进程号再进行<strong>参数传递</strong></p>
@@ -1622,10 +1586,10 @@
 </blockquote>
 <ul>
 <li><p>过滤出<code>.*rc</code>的文件，将文件中的内容统一输出到<code>rc.txt</code>中</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ cat `ls -a | grep &quot;.*rc&quot;` &gt; ./Desktop/rc.txt</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ cat &#96;ls -a | grep &quot;.*rc&quot;&#96; &gt; .&#x2F;Desktop&#x2F;rc.txt</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>上诉命令和下面这条起一个作用</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ ls -a | grep &quot;.*rc&quot; | xargs cat &gt; ./Desktop/rc.txt</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ ls -a | grep &quot;.*rc&quot; | xargs cat &gt; .&#x2F;Desktop&#x2F;rc.txt</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <hr>
@@ -1688,7 +1652,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/27/Npm、Nrm & Nvm/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/27/Npm%E3%80%81Nrm%20&%20Nvm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -1708,7 +1672,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2017/12/27/Npm、Nrm & Nvm/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Npm、Nrm & Nvm</a>
+                <a href="/2017/12/27/Npm%E3%80%81Nrm%20&%20Nvm/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Npm、Nrm & Nvm</a>
               
             
           </h1>
@@ -1782,7 +1746,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/27/Npm、Nrm & Nvm/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/27/Npm%E3%80%81Nrm%20&%20Nvm/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
                         data-disqus-identifier="2017/12/27/Npm、Nrm & Nvm/" itemprop="commentCount"></span>
@@ -1807,7 +1771,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">2.9k</span>
+                <span title="本文字数">3.3k</span>
               
 
               
@@ -1843,26 +1807,22 @@
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install lodash</span><br><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>可查看已安装的全局依赖（默认安装到<code>/usr/local/lib/node_modules</code>目录下），<code>--depth</code>显示的树深度，不加<code>-g</code>参数查看当前目录安装的依赖</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ npm ls -g --depth=0</span><br><span class="line">/usr/local/lib</span><br><span class="line">├── npm@5.6.0</span><br><span class="line">├── nrm@1.0.2</span><br><span class="line">└── vue-cli@2.9.2</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ npm ls -g --depth&#x3D;0</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;lib</span><br><span class="line">├── npm@5.6.0</span><br><span class="line">├── nrm@1.0.2</span><br><span class="line">└── vue-cli@2.9.2</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>卸载依赖</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm rm lodash</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>搜索某个依赖，以及显示某个依赖的具体信息，另外经测试，只有官方的源可以<code>search</code>，其他源未做相应支持</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm search lodash</span><br><span class="line">npm [view|show|info] lodash</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><code>npm config ls</code>查看配置信息，<code>-l</code>参数查看详细配置</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">➜ npm config ls</span><br><span class="line">; cli configs</span><br><span class="line">metrics-registry = &quot;https://registry.npmjs.org/&quot;</span><br><span class="line">scope = &quot;&quot;</span><br><span class="line">user-agent = &quot;npm/5.6.0 node/v9.3.0 darwin x64&quot;</span><br><span class="line"></span><br><span class="line">; userconfig /Users/s1mple/.npmrc</span><br><span class="line">registry = &quot;https://registry.npmjs.org/&quot;</span><br><span class="line"></span><br><span class="line">; builtin config undefined</span><br><span class="line">prefix = &quot;/usr/local&quot;</span><br><span class="line"></span><br><span class="line">; node bin location = /usr/local/Cellar/node/9.3.0_1/bin/node</span><br><span class="line">; cwd = /Users/s1mple/WebstormProjects/vue/table</span><br><span class="line">; HOME = /Users/s1mple</span><br><span class="line">; &quot;npm config ls -l&quot; to show all defaults.</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">➜ npm config ls</span><br><span class="line">; cli configs</span><br><span class="line">metrics-registry &#x3D; &quot;https:&#x2F;&#x2F;registry.npmjs.org&#x2F;&quot;</span><br><span class="line">scope &#x3D; &quot;&quot;</span><br><span class="line">user-agent &#x3D; &quot;npm&#x2F;5.6.0 node&#x2F;v9.3.0 darwin x64&quot;</span><br><span class="line"></span><br><span class="line">; userconfig &#x2F;Users&#x2F;s1mple&#x2F;.npmrc</span><br><span class="line">registry &#x3D; &quot;https:&#x2F;&#x2F;registry.npmjs.org&#x2F;&quot;</span><br><span class="line"></span><br><span class="line">; builtin config undefined</span><br><span class="line">prefix &#x3D; &quot;&#x2F;usr&#x2F;local&quot;</span><br><span class="line"></span><br><span class="line">; node bin location &#x3D; &#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;node&#x2F;9.3.0_1&#x2F;bin&#x2F;node</span><br><span class="line">; cwd &#x3D; &#x2F;Users&#x2F;s1mple&#x2F;WebstormProjects&#x2F;vue&#x2F;table</span><br><span class="line">; HOME &#x3D; &#x2F;Users&#x2F;s1mple</span><br><span class="line">; &quot;npm config ls -l&quot; to show all defaults.</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>默认软件源为国外的官方软件源，速度较慢，可修改为国内软件源，比如淘宝</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry https:&#x2F;&#x2F;registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>Npm</strong> 还可以登录，需要先在官网注册一个账号，然后<code>npm login</code>登录，就可以将自己写的依赖<code>publish</code>上去，有点类似于 <strong>Docker</strong> 的个人仓库，网站地址为<code>https://www.npmjs.com/~{username}</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.npmjs.com/~s1mple</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;www.npmjs.com&#x2F;~s1mple</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>另外，还有一些命令简写，比如<code>i</code>代替<code>install</code>，<code>rm</code>代替<code>uninstall</code>，执行<code>npm -l</code>查看那些命令下面有哪些 <strong>alias</strong></p>
 </li>
@@ -1876,10 +1836,10 @@
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i -g nrm</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>nrm</strong> 内置了一些软件源，带<code>*</code>星号的表示当前使用的软件源，当然也可以使用<code>nrm current</code>查看</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">➜ nrm ls</span><br><span class="line"></span><br><span class="line">* npm ---- https://registry.npmjs.org/</span><br><span class="line">  cnpm --- http://r.cnpmjs.org/</span><br><span class="line">  taobao - https://registry.npm.taobao.org/</span><br><span class="line">  nj ----- https://registry.nodejitsu.com/</span><br><span class="line">  rednpm - http://registry.mirror.cqupt.edu.cn/</span><br><span class="line">  npmMirror  https://skimdb.npmjs.com/registry/</span><br><span class="line">  edunpm - http://registry.enpmjs.org/</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">➜ nrm ls</span><br><span class="line"></span><br><span class="line">* npm ---- https:&#x2F;&#x2F;registry.npmjs.org&#x2F;</span><br><span class="line">  cnpm --- http:&#x2F;&#x2F;r.cnpmjs.org&#x2F;</span><br><span class="line">  taobao - https:&#x2F;&#x2F;registry.npm.taobao.org&#x2F;</span><br><span class="line">  nj ----- https:&#x2F;&#x2F;registry.nodejitsu.com&#x2F;</span><br><span class="line">  rednpm - http:&#x2F;&#x2F;registry.mirror.cqupt.edu.cn&#x2F;</span><br><span class="line">  npmMirror  https:&#x2F;&#x2F;skimdb.npmjs.com&#x2F;registry&#x2F;</span><br><span class="line">  edunpm - http:&#x2F;&#x2F;registry.enpmjs.org&#x2F;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>切换软件源，比如换成 <strong>taobao</strong> 的</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ nrm use taobao</span><br><span class="line"></span><br><span class="line">    Registry has been set to: https://registry.npm.taobao.org/</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ nrm use taobao</span><br><span class="line"></span><br><span class="line">    Registry has been set to: https:&#x2F;&#x2F;registry.npm.taobao.org&#x2F;</span><br></pre></td></tr></table></figure>
 <p>  其实就是修改了<code>~/.npmrc</code>中的<code>registry=...</code></p>
 </li>
 <li><p>可以执行<code>nrm test</code>测试网络延迟</p>
@@ -1894,19 +1854,15 @@
 </blockquote>
 <ul>
 <li><p>安装，完成后重启终端</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -o- https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;creationix&#x2F;nvm&#x2F;v0.33.8&#x2F;install.sh | bash</span><br></pre></td></tr></table></figure>
 <p>  这个脚本克隆了 <strong>nvm repository</strong> 到<code>~/.nvm</code>并在<code>~/.bash_profile, ~/.zshrc, ~/.profile, ~/.bashrc</code>中加入环境变量</p>
 </li>
 <li><p>安装最新的 <strong>Node</strong></p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm install node</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">Now using node v9.3.0 (npm v5.5.1)</span><br><span class="line">Creating default alias: default -&gt; node (-&gt; v9.3.0)</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>或安装指定版本，执行<code>nvm ls-remote</code>可列出所有可以安装的版本</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm install 8.9.3</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>查看已安装 <strong>Node</strong> 版本</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm ls</span><br><span class="line">-&gt;       v8.9.3</span><br><span class="line">         v9.3.0</span><br><span class="line">         system</span><br><span class="line">default -&gt; node (-&gt; v9.3.0)</span><br><span class="line">node -&gt; stable (-&gt; v9.3.0) (default)</span><br><span class="line">stable -&gt; 9.3 (-&gt; v9.3.0) (default)</span><br></pre></td></tr></table></figure>
 </li>
@@ -1978,7 +1934,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/26/JavaScript相关介绍/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -1998,7 +1954,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2017/12/26/JavaScript相关介绍/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">JavaScript 相关介绍</a>
+                <a href="/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">JavaScript 相关介绍</a>
               
             
           </h1>
@@ -2072,7 +2028,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/26/JavaScript相关介绍/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
                         data-disqus-identifier="2017/12/26/JavaScript相关介绍/" itemprop="commentCount"></span>
@@ -2097,7 +2053,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">2k</span>
+                <span title="本文字数">2.1k</span>
               
 
               
@@ -2136,7 +2092,7 @@
 <li><p>目前的几乎所有的浏览器（不包括低版本的IE），都已经支持<strong>ES5</strong>了，而写代码时最好采用<strong>ES6</strong>语法（毕竟语法糖写起来更舒服，还添加了很多必要的新特性，而且浏览器全面支持<strong>ES6</strong>是迟早的事）。不用担心浏览器不能识别新语法，<strong>Bable</strong>就是用来解决这种问题的工具</p>
 </li>
 <li><p><strong>Babel</strong>是一个广泛使用的<strong>ES6</strong>转码器，可以将<strong>ES6</strong>代码转为<strong>ES5</strong>代码，从而在浏览器环境运行</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 转码前</span><br><span class="line">input.map(item =&gt; item + 1);</span><br><span class="line"></span><br><span class="line">// 转码后</span><br><span class="line">input.map(function (item) &#123;</span><br><span class="line">  return item + 1;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 转码前</span><br><span class="line">input.map(item &#x3D;&gt; item + 1);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 转码后</span><br><span class="line">input.map(function (item) &#123;</span><br><span class="line">  return item + 1;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <hr>
@@ -2163,10 +2119,10 @@
 <li><p>而<strong>CommonJS</strong>主要为<strong>非浏览器的应用</strong>定义一套API（比如<strong>Node</strong>应用），从而填补了空白。它的终极目标是提供一个类似<strong>Python、Ruby</strong>和<strong>Java</strong>的<strong>标准库</strong></p>
 </li>
 <li><p>可以看到在<strong>Node</strong>环境中没有定义<code>alert</code>和<code>document</code>，因为<strong>Node</strong>不关心<strong>DOM</strong>和<strong>BOM</strong>操作</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; alert(&apos;!!!&apos;)</span><br><span class="line">ReferenceError: alert is not defined</span><br><span class="line">&gt; document</span><br><span class="line">ReferenceError: document is not defined</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; alert(&#39;!!!&#39;)</span><br><span class="line">ReferenceError: alert is not defined</span><br><span class="line">&gt; document</span><br><span class="line">ReferenceError: document is not defined</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>但是它可以调用读取文件的函数，读取出了<code>a.txt</code>中的<code>Hello!</code>并打印，这是浏览器做不到也不应该去做的</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; const fs = require(&apos;fs&apos;);                 </span><br><span class="line">&gt; const content = fs.readFileSync(&apos;./a.txt&apos;,&apos;utf-8&apos;);</span><br><span class="line">&gt; console.log(content);</span><br><span class="line">hello!</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; const fs &#x3D; require(&#39;fs&#39;);                 </span><br><span class="line">&gt; const content &#x3D; fs.readFileSync(&#39;.&#x2F;a.txt&#39;,&#39;utf-8&#39;);</span><br><span class="line">&gt; console.log(content);</span><br><span class="line">hello!</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <hr>
@@ -2238,7 +2194,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/25/探究HTTP协议/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -2258,7 +2214,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2017/12/25/探究HTTP协议/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">探究 HTTP 协议</a>
+                <a href="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">探究 HTTP 协议</a>
               
             
           </h1>
@@ -2332,7 +2288,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/25/探究HTTP协议/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
                         data-disqus-identifier="2017/12/25/探究HTTP协议/" itemprop="commentCount"></span>
@@ -2357,7 +2313,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">4.8k</span>
+                <span title="本文字数">5.2k</span>
               
 
               
@@ -2398,22 +2354,22 @@
 <li><p>打开两个终端。一个充当客户端，一个充当服务端。</p>
 </li>
 <li><p>让服务端<code>nc</code>启动之后监听8000端口，等待TCP连接</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    nc -l 8000 //server</span><br><span class="line">    ``` </span><br><span class="line">    </span><br><span class="line">- 切换到客户端，如果是不同的机器则将`localhost`换成服务端主机的**IP**</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    nc -l 8000 &#x2F;&#x2F;server</span><br><span class="line">    &#96;&#96;&#96; </span><br><span class="line">    </span><br><span class="line">- 切换到客户端，如果是不同的机器则将&#96;localhost&#96;换成服务端主机的**IP**</span><br></pre></td></tr></table></figure>
 <p>  nc localhost 8000 //client</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 现在在任意一个终端中输入些字符，敲击回车，另一个终端会显示相应字符，说明双方已经成功建立TCP连接进行通信，需要注意的是一定要服务端先建立监听</span><br><span class="line"></span><br><span class="line">#### Tips</span><br><span class="line"></span><br><span class="line">- 可以直接用`nc`命令来传输文件</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 现在在任意一个终端中输入些字符，敲击回车，另一个终端会显示相应字符，说明双方已经成功建立TCP连接进行通信，需要注意的是一定要服务端先建立监听</span><br><span class="line"></span><br><span class="line">#### Tips</span><br><span class="line"></span><br><span class="line">- 可以直接用&#96;nc&#96;命令来传输文件</span><br></pre></td></tr></table></figure>
 <p>  nc -l {port} &gt; filename // 接收端<br>  nc {接受者IP} {port} &lt; filename // 发送端</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 亲测这条命令非常实用，适用于在你的本地和服务器未建立**ssh认证**时（不能使用**scp**），或内网网络传输文件，或你的两台电脑不能登陆同一微信传输文件时</span><br><span class="line"></span><br><span class="line">## HTTP响应</span><br><span class="line"></span><br><span class="line">&gt; 浏览器在访问网站的时候，服务器到底给浏览器回复了一些什么玩意儿呢？有了上面的工具，接下来该探究一下HTTP了，到这里才正式开始切入正题了。首先，使用一下**curl**。**curl**能够向指定的URL发起一个http请求，并显示出请求回应中的内容。</span><br><span class="line"></span><br><span class="line">- 先拿百度开刀，执行如下命令</span><br></pre></td></tr></table></figure>
 <p>  curl -i baidu.com</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 得到如下输出内容</span><br></pre></td></tr></table></figure>
 <p>  HTTP/1.1 200 OK<br>  Date: Mon, 25 Dec 2017 03:19:21 GMT<br>  Server: Apache<br>  Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT<br>  ETag: “51-47cf7e6ee8400”<br>  Accept-Ranges: bytes<br>  Content-Length: 81<br>  Cache-Control: max-age=86400<br>  Expires: Tue, 26 Dec 2017 03:19:21 GMT<br>  Connection: Keep-Alive<br>  Content-Type: text/html</p>
 <p>  <html><br>  <meta http-equiv="refresh" content="0;url=http://www.baidu.com/"><br>  </html></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    这里，你所看到的这一大堆数据，便是一个完整的HTTP响应报文。也就是你在浏览器中输入网址 baidu.com 敲下回车之后，baidu服务器返回给浏览器的数据。</span><br><span class="line">    </span><br><span class="line">- **响应报文**包含如下部分：</span><br><span class="line">    - 状态行</span><br><span class="line">    - 响应头</span><br><span class="line">    - 响应正文（可能没有）</span><br><span class="line">    </span><br><span class="line">    ![----](/0.png)</span><br><span class="line"></span><br><span class="line">### 解析响应报文</span><br><span class="line"></span><br><span class="line">&gt; 了解HTTP响应的格式，以及其中的各部分字段的含义，有助于我们理解一些Web应用的功能以及浏览器的行为。</span><br><span class="line"></span><br><span class="line">- 这里对HTTP响应的数据稍作分析。上述报文中的第一行：</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    这里，你所看到的这一大堆数据，便是一个完整的HTTP响应报文。也就是你在浏览器中输入网址 baidu.com 敲下回车之后，baidu服务器返回给浏览器的数据。</span><br><span class="line">    </span><br><span class="line">- **响应报文**包含如下部分：</span><br><span class="line">    - 状态行</span><br><span class="line">    - 响应头</span><br><span class="line">    - 响应正文（可能没有）</span><br><span class="line">    </span><br><span class="line">    ![----](&#x2F;0.png)</span><br><span class="line"></span><br><span class="line">### 解析响应报文</span><br><span class="line"></span><br><span class="line">&gt; 了解HTTP响应的格式，以及其中的各部分字段的含义，有助于我们理解一些Web应用的功能以及浏览器的行为。</span><br><span class="line"></span><br><span class="line">- 这里对HTTP响应的数据稍作分析。上述报文中的第一行：</span><br></pre></td></tr></table></figure>
 <p>  HTTP/1.1 200 OK</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">    为HTTP响应的状态，这里的200代表OK，表示服务器已经成功地处理了请求</span><br><span class="line">    </span><br><span class="line">- 报文往后的内容直到空行部分：</span><br></pre></td></tr></table></figure>
 <p>  Date: Fri, 25 Nov 2016 10:58:59 GMT<br>  Server: Apache<br>  Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT<br>  ETag: “51-47cf7e6ee8400”<br>  Accept-Ranges: bytes<br>  Content-Length: 81<br>  Cache-Control: max-age=86400<br>  Expires: Sat, 26 Nov 2016 10:58:59 GMT<br>  Connection: Keep-Alive<br>  Content-Type: text/html</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    这部分为HTTP响应的头部，其中大部分内容其实是可读性较强的，基本可以直接分析其中的含义。如`Content-Type: text/html`表示此次HTTP响应的结果为html文本。如果你访问的是一个图片，那么这里就可能是`Content-Type: image/png`了。头部中的`Content-Length: 81`表示整个响应的正文长度为81，这个也比较关键，告诉浏览器整个响应的正文部分数据有多少</span><br><span class="line"></span><br><span class="line">- HTTP响应的头部中有许多非常有用的信息，这些信息往往决定着浏览器收到报文后接下来需要做出什么样的行动。也有一些非必须的内容，比如**Server、Accept-Ranges**</span><br><span class="line"></span><br><span class="line">- 响应中的最后一部分内容，可以看到接下来页面刷新跳转到`http://www.baidu.com/`</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    这部分为HTTP响应的头部，其中大部分内容其实是可读性较强的，基本可以直接分析其中的含义。如&#96;Content-Type: text&#x2F;html&#96;表示此次HTTP响应的结果为html文本。如果你访问的是一个图片，那么这里就可能是&#96;Content-Type: image&#x2F;png&#96;了。头部中的&#96;Content-Length: 81&#96;表示整个响应的正文长度为81，这个也比较关键，告诉浏览器整个响应的正文部分数据有多少</span><br><span class="line"></span><br><span class="line">- HTTP响应的头部中有许多非常有用的信息，这些信息往往决定着浏览器收到报文后接下来需要做出什么样的行动。也有一些非必须的内容，比如**Server、Accept-Ranges**</span><br><span class="line"></span><br><span class="line">- 响应中的最后一部分内容，可以看到接下来页面刷新跳转到&#96;http:&#x2F;&#x2F;www.baidu.com&#x2F;&#96;</span><br></pre></td></tr></table></figure>
 <p>  <html><br>  <meta http-equiv="refresh" content="0;url=http://www.baidu.com/"><br>  </html></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">    为响应的正文部分，这部分内容的长度是和响应头部的**Content-Length**对应值一致。</span><br><span class="line">    </span><br><span class="line">#### Verify Content Length</span><br><span class="line"></span><br><span class="line">&gt; 我们来验证正文长度是不是81。能用编程解决的就用编程解决，非常推荐平时用**python**或者**JavaScript**这种脚本语言去编程验证一些东西。只需要装个**node**或者**python**解释器就可以了，非常轻量级</span><br><span class="line"></span><br><span class="line">- 这里用javascript，文件名a.js</span><br><span class="line"></span><br><span class="line">    ```js</span><br><span class="line">    // a.js</span><br><span class="line">    </span><br><span class="line">    const s = `&lt;html&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=http://www.baidu.com/&quot;&gt;</span><br><span class="line">    &lt;/html&gt;</span><br><span class="line">    `;</span><br><span class="line">    console.log(s.length);</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">    为响应的正文部分，这部分内容的长度是和响应头部的**Content-Length**对应值一致。</span><br><span class="line">    </span><br><span class="line">#### Verify Content Length</span><br><span class="line"></span><br><span class="line">&gt; 我们来验证正文长度是不是81。能用编程解决的就用编程解决，非常推荐平时用**python**或者**JavaScript**这种脚本语言去编程验证一些东西。只需要装个**node**或者**python**解释器就可以了，非常轻量级</span><br><span class="line"></span><br><span class="line">- 这里用javascript，文件名a.js</span><br><span class="line"></span><br><span class="line">    &#96;&#96;&#96;js</span><br><span class="line">    &#x2F;&#x2F; a.js</span><br><span class="line">    </span><br><span class="line">    const s &#x3D; &#96;&lt;html&gt;</span><br><span class="line">    &lt;meta http-equiv&#x3D;&quot;refresh&quot; content&#x3D;&quot;0;url&#x3D;http:&#x2F;&#x2F;www.baidu.com&#x2F;&quot;&gt;</span><br><span class="line">    &lt;&#x2F;html&gt;</span><br><span class="line">    &#96;;</span><br><span class="line">    console.log(s.length);</span><br></pre></td></tr></table></figure>
 <p>  其中<code>`</code>反引号是ES6的新特性，可方便表示多行字符串。注意最后一行有回车</p>
 </li>
 <li><p>执行<code>node a.js</code>得到输出81</p>
@@ -2424,7 +2380,7 @@
 </blockquote>
 <ul>
 <li><p><code>nc -l 8000</code>开启一个服务端，监听8000端口，粘贴如下内容</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Length: 14</span><br><span class="line">Content-Type: text/html</span><br><span class="line"></span><br><span class="line">&lt;h1&gt;Hello&lt;/h1&gt;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">Content-Length: 14</span><br><span class="line">Content-Type: text&#x2F;html</span><br><span class="line"></span><br><span class="line">&lt;h1&gt;Hello&lt;&#x2F;h1&gt;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>在浏览器端访问<code>http://localhost:8000/</code>，里面出现了一个大标题Hello</p>
 </li>
@@ -2436,14 +2392,14 @@
 </blockquote>
 <ul>
 <li><p>其实我们就已经可以在终端里看到浏览器发送的请求报文</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: localhost:8000</span><br><span class="line">Connection: keep-alive</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9,en;q=0.8</span><br><span class="line">Cookie: Webstorm-f269b48=ebcfcf96-de94-4438-acc1-f68e40c6b6f1; session=eyJ1aWQiOjJ9.DR6wAg.ktPekLF--XP9XrDZlpbeT8J0XDE</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: localhost:8000</span><br><span class="line">Connection: keep-alive</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;63.0.3239.108 Safari&#x2F;537.36</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9,en;q&#x3D;0.8</span><br><span class="line">Cookie: Webstorm-f269b48&#x3D;ebcfcf96-de94-4438-acc1-f68e40c6b6f1; session&#x3D;eyJ1aWQiOjJ9.DR6wAg.ktPekLF--XP9XrDZlpbeT8J0XDE</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>请求报文</strong>包含如下部分：</p>
 <ul>
 <li>请求行</li>
 <li>请求头</li>
 <li><p>请求体（可能没有）</p>
-<p><img src="/2017/12/25/探究HTTP协议/1.png" alt="-----2"></p>
+<p><img src="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/1.png" alt="-----2"></p>
 </li>
 </ul>
 </li>
@@ -2454,16 +2410,15 @@
 <li><p><strong>GET请求</strong>没有请求体，请求参数和对应的值附加在URL后面，利用问号<code>?</code>代表URL的结尾与请求参数的开始，与号<code>&amp;</code>连接多个参数。传递参数<strong>长度受限</strong>，并且可以在地址栏清楚的看到，不适合传输私密数据及大量数据</p>
 </li>
 <li><p>而在填写登陆表单点击确认后一般都是发送<strong>POST请求</strong>，请求数据在请求体中，不会显示的展示在地址栏，但是还是可能被黑客获取，所以通常密码等敏感信息需要加密而不是明文传输</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">POST /user/login HTTP/1.1</span><br><span class="line">Host: example.com</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, sdch, br</span><br><span class="line">Accept-Language: en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4,zh-TW;q=0.2</span><br><span class="line">Content-Length: 27</span><br><span class="line"></span><br><span class="line">username=test&amp;password=test</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;user&#x2F;login HTTP&#x2F;1.1</span><br><span class="line">Host: example.com</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;54.0.2840.98 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, sdch, br</span><br><span class="line">Accept-Language: en-US,en;q&#x3D;0.8,zh-CN;q&#x3D;0.6,zh;q&#x3D;0.4,zh-TW;q&#x3D;0.2</span><br><span class="line">Content-Length: 27</span><br><span class="line"></span><br><span class="line">username&#x3D;test&amp;password&#x3D;test</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h3 id="模拟HTTP请求"><a href="#模拟HTTP请求" class="headerlink" title="模拟HTTP请求"></a>模拟HTTP请求</h3><ul>
 <li><p>同样可以使用<code>nc</code>构造一个HTTP请求，<code>nc baidu.com 80</code>与百度服务器建立连接</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: baidu.com</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: baidu.com</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
-<li>构造一个最精简的请求，敲击回车，终端上打印出响应报文</li>
+<li><p>构造一个最精简的请求，敲击回车，终端上打印出响应报文</p>
+</li>
 </ul>
 <h2 id="Postscripts"><a href="#Postscripts" class="headerlink" title="Postscripts"></a>Postscripts</h2><blockquote>
 <p>实际上，按照前面的演示，在网络中，每一个应用都没法知道对面到底是个什么东西，只要双方相互收发的数据符合一定的格式和规则，它们之间就能够相互配合好工作。那么这些格式和规则，就时平时所谓的“协议”。</p>
@@ -2524,7 +2479,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/14/Vue初识/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/14/Vue%E5%88%9D%E8%AF%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -2544,7 +2499,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2017/12/14/Vue初识/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Vue 初识</a>
+                <a href="/2017/12/14/Vue%E5%88%9D%E8%AF%86/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Vue 初识</a>
               
             
           </h1>
@@ -2618,7 +2573,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/14/Vue初识/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/14/Vue%E5%88%9D%E8%AF%86/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
                         data-disqus-identifier="2017/12/14/Vue初识/" itemprop="commentCount"></span>
@@ -2643,7 +2598,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.1k</span>
+                <span title="本文字数">3.3k</span>
               
 
               
@@ -2692,10 +2647,8 @@
 <hr>
 <h2 id="Hellovue-html"><a href="#Hellovue-html" class="headerlink" title="Hellovue.html"></a>Hellovue.html</h2><ul>
 <li><p>我们先来看一个最简单的<strong>Vue</strong>的<strong>Helloworld</strong>程序，这只是个HTML文件，只不过导入了<strong>Vue</strong>的包。页面显示的内容是 <strong>“Hello Vue!”</strong></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;script src=&quot;https://unpkg.com/vue&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id=&quot;app&quot;&gt;</span><br><span class="line">        &#123;&#123; msg &#125;&#125;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        var app = new Vue(&#123;</span><br><span class="line">          el: &apos;#app&apos;,</span><br><span class="line">          data: &#123;</span><br><span class="line">            msg: &apos;Hello Vue!&apos;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;script src&#x3D;&quot;https:&#x2F;&#x2F;unpkg.com&#x2F;vue&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id&#x3D;&quot;app&quot;&gt;</span><br><span class="line">        &#123;&#123; msg &#125;&#125;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        var app &#x3D; new Vue(&#123;</span><br><span class="line">          el: &#39;#app&#39;,</span><br><span class="line">          data: &#123;</span><br><span class="line">            msg: &#39;Hello Vue!&#39;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p><strong>el</strong>全称<strong>element</strong>，提供一个在页面上已存在的<strong>DOM</strong>元素作为<strong>Vue实例</strong>的<strong>挂载</strong>目标。可以是<strong>CSS选择器</strong>，也可以是一个<strong>HTMLElement实例</strong></p>
 </li>
 <li><p><code>el: &#39;#app&#39;</code>的意思是: 将new出来的Vue实例挂载到<code>id=&quot;app&quot;</code>的DOM元素上</p>
@@ -2705,12 +2658,10 @@
 </ul>
 <h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ul>
 <li><p><a href="http://www.w3school.com.cn/cssref/css_selectors.asp" target="_blank" rel="noopener">CSS选择器参考手册</a></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">el : ‘body’ ==&gt; Html element</span><br><span class="line">el : ‘#app’ ==&gt; id=‘app’</span><br><span class="line">el : ‘.app’ ==&gt; class=‘app’</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">el : ‘body’ &#x3D;&#x3D;&gt; Html element</span><br><span class="line">el : ‘#app’ &#x3D;&#x3D;&gt; id&#x3D;‘app’</span><br><span class="line">el : ‘.app’ &#x3D;&#x3D;&gt; class&#x3D;‘app’</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
 <li><p>在浏览器的控制台中可以这样访问</p>
-<p>  <img src="/2017/12/14/Vue初识/0.png" alt="Screen-Shot-2017-12-17-at-5.57.26-PM"></p>
+<p>  <img src="/2017/12/14/Vue%E5%88%9D%E8%AF%86/0.png" alt="Screen-Shot-2017-12-17-at-5.57.26-PM"></p>
 </li>
 </ul>
 <hr>
@@ -2719,12 +2670,12 @@
 </blockquote>
 <ul>
 <li><p>先来看个例子，修改下面输入框的内容，查看效果<br>  &lt;!DOCTYPE html&gt;</p>
-  <html lang="en"><br>  <head><meta name="generator" content="Hexo 3.8.0"><br>      <meta charset="UTF-8"><br>      <script src="https://unpkg.com/vue"></script><br>  </head><br>  <body><br>      <div id="app"><br>          <input type="text" placeholder="在这里输入文字，下面会跟着变化" v-model="msg"><br>          <p></p><br>      </div><br>      <script type="text/javascript"><br>          var app = new Vue({<br>            el: ‘#app’,<br>            data: {<br>              msg: ‘Hello Vue!’<br>            }<br>          })<br>      </script><br>  </body><br>  </html>
+  <html lang="en"><br>  <head><br>      <meta charset="UTF-8"><br>      <script src="https://unpkg.com/vue"></script><br>  <meta name="generator" content="Hexo 4.2.1"></head><br>  <body><br>      <div id="app"><br>          <input type="text" placeholder="在这里输入文字，下面会跟着变化" v-model="msg"><br>          <p></p><br>      </div><br>      <script type="text/javascript"><br>          var app = new Vue({<br>            el: ‘#app’,<br>            data: {<br>              msg: ‘Hello Vue!’<br>            }<br>          })<br>      </script><br>  </body><br>  </html>
 </li>
 <li><p>要实现上面的功能，传统的写法是<code>&lt;input&gt;</code>标签中加一个事件监听，比如说<code>onkeyup=&quot;change()&quot;</code>，然后在<code>&lt;script&gt;</code>写这个change方法</p>
 </li>
 <li><p>然而Vue中实现只需要加个指令<code>v-model=&quot;msg&quot;</code>，它的意思是将数据和视图<strong>双向绑定</strong>，只要其中一个改变必定引起另一个的改变，达到了<strong>数据驱动视图</strong>的效果</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id=&quot;app&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;text&quot; placeholder=&quot;在这里输入文字，下面会跟着变化&quot; v-model=&quot;msg&quot;&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; msg &#125;&#125;&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        var app = new Vue(&#123;</span><br><span class="line">          el: &apos;#app&apos;,</span><br><span class="line">          data: &#123;</span><br><span class="line">            msg: &apos;Hello Vue!&apos;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id&#x3D;&quot;app&quot;&gt;</span><br><span class="line">        &lt;input type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;在这里输入文字，下面会跟着变化&quot; v-model&#x3D;&quot;msg&quot;&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; msg &#125;&#125;&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        var app &#x3D; new Vue(&#123;</span><br><span class="line">          el: &#39;#app&#39;,</span><br><span class="line">          data: &#123;</span><br><span class="line">            msg: &#39;Hello Vue!&#39;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <hr>
@@ -2733,7 +2684,7 @@
 </blockquote>
 <ul>
 <li><p>下面的代码是我基于上一个实例加了转化为大写的过滤器</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id=&quot;app&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;text&quot; placeholder=&quot;在这里输入文字，下面会跟着变化&quot; v-model=&quot;msg&quot;&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; msg | uppercase &#125;&#125;&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        Vue.filter(&apos;uppercase&apos;,function(value)&#123;</span><br><span class="line">            return value.toUpperCase()</span><br><span class="line">        &#125;)</span><br><span class="line"></span><br><span class="line">        var app = new Vue(&#123;</span><br><span class="line">          el: &apos;#app&apos;,</span><br><span class="line">          data: &#123;</span><br><span class="line">            msg: &apos;Hello Vue!&apos;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id&#x3D;&quot;app&quot;&gt;</span><br><span class="line">        &lt;input type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;在这里输入文字，下面会跟着变化&quot; v-model&#x3D;&quot;msg&quot;&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; msg | uppercase &#125;&#125;&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        Vue.filter(&#39;uppercase&#39;,function(value)&#123;</span><br><span class="line">            return value.toUpperCase()</span><br><span class="line">        &#125;)</span><br><span class="line"></span><br><span class="line">        var app &#x3D; new Vue(&#123;</span><br><span class="line">          el: &#39;#app&#39;,</span><br><span class="line">          data: &#123;</span><br><span class="line">            msg: &#39;Hello Vue!&#39;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <hr>
@@ -2798,7 +2749,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/14/Vue 项目结构/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -2818,7 +2769,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2017/12/14/Vue 项目结构/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Vue 项目结构</a>
+                <a href="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Vue 项目结构</a>
               
             
           </h1>
@@ -2892,7 +2843,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/14/Vue 项目结构/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
                         data-disqus-identifier="2017/12/14/Vue 项目结构/" itemprop="commentCount"></span>
@@ -2917,7 +2868,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">1.7k</span>
+                <span title="本文字数">1.8k</span>
               
 
               
@@ -2947,44 +2898,43 @@
 <p>在已经<a href="https://s1mple.xyz/vue-cli-project-build/" target="_blank" rel="noopener">构建vue-cli项目</a>的基础上，我们来梳理一下vue-cli项目的结构。</p>
 </blockquote>
 <ul>
-<li>vue-cli项目总体结构<br><img src="/2017/12/14/Vue 项目结构/0.png" alt="vue-project-structure"></li>
+<li>vue-cli项目总体结构<br><img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/0.png" alt="vue-project-structure"></li>
 </ul>
 <h2 id="build"><a href="#build" class="headerlink" title="build"></a>build</h2><ul>
-<li><p>build文件主要是<strong>webpack</strong>打包生成静态文件的配置<br><img src="/2017/12/14/Vue 项目结构/1.png" alt="build"></p>
+<li><p>build文件主要是<strong>webpack</strong>打包生成静态文件的配置<br><img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/1.png" alt="build"></p>
 </li>
 <li><p>最新的<strong>vue-webpack-template</strong>中已经去掉了<strong>dev-server.js</strong>改用<strong>webpack-dev-server</strong>代替，<strong>webpack-dev-server</strong>是一个独立的NPM包，支持<strong>热重载</strong></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-    &quot;dev&quot;: &quot;node build/dev-server.js&quot;,</span><br><span class="line">+    &quot;dev&quot;: &quot;webpack-dev-server --inline --progress --config build/webpack.dev.conf.js&quot;,</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-    &quot;dev&quot;: &quot;node build&#x2F;dev-server.js&quot;,</span><br><span class="line">+    &quot;dev&quot;: &quot;webpack-dev-server --inline --progress --config build&#x2F;webpack.dev.conf.js&quot;,</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="config"><a href="#config" class="headerlink" title="config"></a>config</h2><ul>
-<li>config文件主要是项目相关配置，我们常用的就是当端口冲突时配置监听端口，打包输出路径及命名等<br><img src="/2017/12/14/Vue 项目结构/2.png" alt="config"></li>
+<li>config文件主要是项目相关配置，我们常用的就是当端口冲突时配置监听端口，打包输出路径及命名等<br><img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/2.png" alt="config"></li>
 </ul>
 <h2 id="src"><a href="#src" class="headerlink" title="src"></a>src</h2><ul>
 <li><p>这是项目最初的一个结构图。<strong>assets</strong>不用多说，静态资源文件包括css文件、外部的一些js包都可以放这里。<strong>components</strong>和<strong>router</strong>则是Vue的俩个核心概念：<strong>组件</strong>和<strong>路由</strong></p>
-<p>  <img src="/2017/12/14/Vue 项目结构/3.png" alt="Screen-Shot-2017-12-16-at-5.13.01-PM"></p>
+<p>  <img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/3.png" alt="Screen-Shot-2017-12-16-at-5.13.01-PM"></p>
 </li>
 </ul>
 <h3 id="main-js"><a href="#main-js" class="headerlink" title="main.js"></a>main.js</h3><ul>
 <li><p>项目的入口文件，new了一个Vue实例，将这个实例挂载到<strong>id=app</strong>的<strong>DOM元素</strong>上，并用<strong>App.vue</strong>中的模版替换该元素，这也是为什么我们能看到<strong>App.vue</strong>中的logo图片</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import App from &apos;./App&apos;</span><br><span class="line">new Vue(&#123;</span><br><span class="line">  el: &apos;#app&apos;,</span><br><span class="line">  router,</span><br><span class="line">  template: &apos;&lt;App/&gt;&apos;,</span><br><span class="line">  components: &#123; App &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import App from &#39;.&#x2F;App&#39;</span><br><span class="line">new Vue(&#123;</span><br><span class="line">  el: &#39;#app&#39;,</span><br><span class="line">  router,</span><br><span class="line">  template: &#39;&lt;App&#x2F;&gt;&#39;,</span><br><span class="line">  components: &#123; App &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h3 id="App-vue"><a href="#App-vue" class="headerlink" title="App.vue"></a>App.vue</h3><ul>
 <li><p>根组件，可以看到 <strong>.vue</strong>文件包含3个部分：<strong>template、script、style</strong>，分别对应<strong>html、JavaScript、css</strong>文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div id=&quot;app&quot;&gt;</span><br><span class="line">    &lt;img src=&quot;./assets/logo.png&quot;&gt;</span><br><span class="line">    &lt;router-view/&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  name: &apos;app&apos;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">#app &#123;...&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div id&#x3D;&quot;app&quot;&gt;</span><br><span class="line">    &lt;img src&#x3D;&quot;.&#x2F;assets&#x2F;logo.png&quot;&gt;</span><br><span class="line">    &lt;router-view&#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  name: &#39;app&#39;</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">#app &#123;...&#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<ul>
-<li><code>&lt;router-view&gt;</code>是路由子视图，类似于一个插槽</li>
+<li><p><code>&lt;router-view&gt;</code>是路由子视图，类似于一个插槽</p>
+</li>
 </ul>
 <h3 id="router-index-js"><a href="#router-index-js" class="headerlink" title="router/index.js"></a>router/index.js</h3><ul>
 <li><p>路由文件，如果访问跟路径<code>/</code>，那么将<strong>HelloWorld</strong>组件插入到<code>&lt;router-view&gt;</code>中并渲染出来</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import Vue from &apos;vue&apos;</span><br><span class="line">import Router from &apos;vue-router&apos;</span><br><span class="line">import HelloWorld from &apos;@/components/HelloWorld&apos;</span><br><span class="line"></span><br><span class="line">Vue.use(Router)</span><br><span class="line"></span><br><span class="line">export default new Router(&#123;</span><br><span class="line">  routes: [</span><br><span class="line">    &#123;</span><br><span class="line">      path: &apos;/&apos;,</span><br><span class="line">      name: &apos;HelloWorld&apos;,</span><br><span class="line">      component: HelloWorld</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import Vue from &#39;vue&#39;</span><br><span class="line">import Router from &#39;vue-router&#39;</span><br><span class="line">import HelloWorld from &#39;@&#x2F;components&#x2F;HelloWorld&#39;</span><br><span class="line"></span><br><span class="line">Vue.use(Router)</span><br><span class="line"></span><br><span class="line">export default new Router(&#123;</span><br><span class="line">  routes: [</span><br><span class="line">    &#123;</span><br><span class="line">      path: &#39;&#x2F;&#39;,</span><br><span class="line">      name: &#39;HelloWorld&#39;,</span><br><span class="line">      component: HelloWorld</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><ul>
 <li><p>可以看到我在浏览器控制台输入app，看到的是<strong>id=app</strong>的DOM元素，也就是<strong>App.vue</strong>中插入了<strong>HelloWorld.vue</strong>的模版文件</p>
-<p>  <img src="/2017/12/14/Vue 项目结构/4.png" alt="Screen-Shot-2017-12-16-at-5.45.45-PM"></p>
+<p>  <img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/4.png" alt="Screen-Shot-2017-12-16-at-5.45.45-PM"></p>
 </li>
 </ul>
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
@@ -3046,7 +2996,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/13/Vue项目构建/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -3066,7 +3016,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2017/12/13/Vue项目构建/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Vue 项目构建</a>
+                <a href="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Vue 项目构建</a>
               
             
           </h1>
@@ -3140,7 +3090,7 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/13/Vue项目构建/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
                         data-disqus-identifier="2017/12/13/Vue项目构建/" itemprop="commentCount"></span>
@@ -3196,24 +3146,22 @@
 </blockquote>
 <ul>
 <li><p>安装<strong>node.js</strong>。安装完成会自动设置环境变量</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew install node    // Mac </span><br><span class="line">apt-get install node    // Ubuntu</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew install node    &#x2F;&#x2F; Mac </span><br><span class="line">apt-get install node    &#x2F;&#x2F; Ubuntu</span><br></pre></td></tr></table></figure>
 <p>  现在可以使用<strong>node</strong>及<strong>npm</strong>命令</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   ➜ node -v ; npm -v</span><br><span class="line">v8.9.2</span><br><span class="line">5.5.1</span><br></pre></td></tr></table></figure>
+<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
+<p><strong>Node.js</strong>之于JavaScript类似于JVM之于Java，它是JavaScript的运行平台，使之脱离浏览器得以运行。传统意义上的JavaScript运行在浏览器上，这是因为<strong>浏览器内核</strong>实际上分为两个部分:渲染引擎和JavaScript引擎。前者负责渲染HTML + CSS，后者则负责运行JavaScript。Chrome使用的JavaScript引擎是V8。Node.js是一个运行在服务端的框架，它的底层就使用了V8引擎。</p>
+</blockquote>
 </li>
-</ul>
-<pre><code>#### Tips
-
-&gt; **Node.js**之于JavaScript类似于JVM之于Java，它是JavaScript的运行平台，使之脱离浏览器得以运行。传统意义上的JavaScript运行在浏览器上，这是因为**浏览器内核**实际上分为两个部分:渲染引擎和JavaScript引擎。前者负责渲染HTML + CSS，后者则负责运行JavaScript。Chrome使用的JavaScript引擎是V8。Node.js是一个运行在服务端的框架，它的底层就使用了V8引擎。
-</code></pre><ul>
 <li><p>建议将npm源更改为国内淘宝的镜像，npm全称为<strong>Node Package Manager</strong></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry https:&#x2F;&#x2F;registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
 <p>  可以执行<code>npm config list</code>查看npm配置</p>
 </li>
 <li><p>安装<strong>vue-cli</strong>，<code>-g</code>代表<strong>global</strong>全局安装，否则只在当前目录下安装</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>初始化一个项目，<code>vue init webpack projectname</code><br><img src="/2017/12/13/Vue项目构建/0.png" alt="Screen-Shot-2017-12-13-at-2.28.39-PM-1"></p>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
+<li><p>初始化一个项目，<code>vue init webpack projectname</code><br><img src="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/0.png" alt="Screen-Shot-2017-12-13-at-2.28.39-PM-1"></p>
+<h4 id="Tips-1"><a href="#Tips-1" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
 <p><strong>vue-router</strong>是路由组件，后面构建项目会用到。<br><strong>Eslint</strong>是代码规范的插件，不规范的代码会报错，有助于项目成员统一编码风格。<br>后面两个都是测试相关，暂时不用。</p>
 </blockquote>
 </li>
@@ -3222,11 +3170,11 @@
 </li>
 </ul>
 <h2 id="Running"><a href="#Running" class="headerlink" title="Running"></a>Running</h2><ul>
-<li><p>不着急安装依赖，我们先用<strong>WebStorm</strong>打开项目<br><img src="/2017/12/13/Vue项目构建/1.png" alt="Screen-Shot-2017-12-13-at-3.29.38-PM-1"><br>  其中，<code>.babelrc</code>是<strong>babel</strong>配置文件，可以将ES6代码转为ES5代码。<code>.editorconfig</code>用于统一团队中的编码风格，比如缩进规则等</p>
+<li><p>不着急安装依赖，我们先用<strong>WebStorm</strong>打开项目<br><img src="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/1.png" alt="Screen-Shot-2017-12-13-at-3.29.38-PM-1"><br>  其中，<code>.babelrc</code>是<strong>babel</strong>配置文件，可以将ES6代码转为ES5代码。<code>.editorconfig</code>用于统一团队中的编码风格，比如缩进规则等</p>
 </li>
 <li><p><code>package.json</code>包含了项目的信息和所需的依赖，定义了三个脚本<code>dev|start|build</code>，可以在IDE中点击运行。<code>devDependencies</code>表示只有开发环境需要的依赖，比如Babel这种开发时的转码工具，生产环境即浏览器并不需要。<code>^2.5.2</code>表示向后兼容，实际下载的版本一定是大于等于该版本的</p>
   <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"vuedemo"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">"A Vue.js project"</span>,</span><br><span class="line">  <span class="attr">"author"</span>: <span class="string">"s1mple &lt;798342418@qq.com&gt;"</span>,</span><br><span class="line">  <span class="attr">"private"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"dev"</span>: <span class="string">"webpack-dev-server --inline --progress --config build/webpack.dev.conf.js"</span>,</span><br><span class="line">    <span class="attr">"start"</span>: <span class="string">"npm run dev"</span>,</span><br><span class="line">    <span class="attr">"build"</span>: <span class="string">"node build/build.js"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"dependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"vue"</span>: <span class="string">"^2.5.2"</span>,</span><br><span class="line">    <span class="attr">"vue-router"</span>: <span class="string">"^3.0.1"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"autoprefixer"</span>: <span class="string">"^7.1.2"</span>,</span><br><span class="line">    <span class="attr">"babel-core"</span>: <span class="string">"^6.22.1"</span>,</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-<h4 id="Tips-1"><a href="#Tips-1" class="headerlink" title="Tips"></a>Tips</h4><ul>
+<h4 id="Tips-2"><a href="#Tips-2" class="headerlink" title="Tips"></a>Tips</h4><ul>
 <li><strong>version</strong> Must match version exactly</li>
 <li><strong>&gt;version</strong> Must be greater than version</li>
 <li><strong>&gt;=version</strong> etc</li>
@@ -3241,14 +3189,14 @@
 </li>
 <li><p>执行<code>npm run dev</code>或者在IDE中点击<strong>start</strong>即可启动。会提示编译成功并且访问Url为 <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a></p>
 </li>
-<li><p>在IDE中执行<code>start</code>时其实执行了<code>npm run dev</code>，而<code>dev</code>又执行了<code>webpack-dev-server</code><br><img src="/2017/12/13/Vue项目构建/2.png" alt="Screen-Shot-2017-12-13-at-10.27.43-PM"></p>
+<li><p>在IDE中执行<code>start</code>时其实执行了<code>npm run dev</code>，而<code>dev</code>又执行了<code>webpack-dev-server</code><br><img src="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/2.png" alt="Screen-Shot-2017-12-13-at-10.27.43-PM"></p>
 </li>
 </ul>
 <h2 id="What’s-webpack"><a href="#What’s-webpack" class="headerlink" title="What’s webpack"></a>What’s webpack</h2><blockquote>
 <p>本质上，<strong>webpack</strong>是一个现代 JavaScript 应用程序的模块打包器(<strong>module bundler</strong>)。当 webpack 处理应用程序时，它会递归地构建一个依赖关系图(dependency graph)，其中包含应用程序需要的每个模块，然后将所有这些模块打包成一个或多个<strong>bundle</strong>。</p>
 </blockquote>
 <ul>
-<li><p>如果我们的js代码中<code>require|import</code>了一个js依赖包，<strong>webpack</strong>可以方便的将我们js打包成一个<strong>bundle</strong>包，而不是像传统的HTML中<code>&lt;script&gt;</code>去引用一堆js包<br><img src="/2017/12/13/Vue项目构建/3.png" alt="webpack"></p>
+<li><p>如果我们的js代码中<code>require|import</code>了一个js依赖包，<strong>webpack</strong>可以方便的将我们js打包成一个<strong>bundle</strong>包，而不是像传统的HTML中<code>&lt;script&gt;</code>去引用一堆js包<br><img src="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/3.png" alt="webpack"></p>
 </li>
 <li><p>在执行<code>build</code>时会去读取<strong>webpack</strong>的相关配置文件，<code>webpack.*.config.js</code>中定义了程序入口<strong>entry</strong>，输出的文件路径和文件名等</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  context: path.resolve(__dirname, <span class="string">'../'</span>),</span><br><span class="line">  entry: &#123;</span><br><span class="line">    app: <span class="string">'./src/main.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: config.build.assetsRoot,</span><br><span class="line">    filename: <span class="string">'[name].js'</span>,</span><br></pre></td></tr></table></figure>
@@ -3308,7 +3256,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot; aria-label&#x3D;&quot;上一页&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot; aria-label&#x3D;&quot;下一页&quot;&gt;&lt;&#x2F;i&gt;</a>
   </nav>
 
 
@@ -3353,7 +3301,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -3551,7 +3499,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 

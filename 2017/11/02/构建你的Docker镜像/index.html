@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
@@ -36,8 +36,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -60,9 +60,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -112,27 +112,30 @@
 
 
 
-  <meta name="description" content="Preface Docker实现了宿主系统和Docker容器(container)的隔离，使用Docker可以将构建开发所需环境的镜像(images)，再根据镜像生成容器实例。实现不依赖宿主机环境的高效部署、测试。   油条有一篇很好的文章介绍了Docker的工作原理。链接  Get Started 安装Docker,官网文档   1.官方镜像仓库：https://hub.docker.com/2">
-<meta name="keywords" content="Server,Docker">
+  <meta name="description" content="Preface Docker实现了宿主系统和Docker容器(container)的隔离，使用Docker可以将构建开发所需环境的镜像(images)，再根据镜像生成容器实例。实现不依赖宿主机环境的高效部署、测试。   油条有一篇很好的文章介绍了Docker的工作原理。链接  Get Started 安装Docker,官网文档   1.官方镜像仓库：https:&#x2F;&#x2F;hub.docker.com&#x2F;2">
 <meta property="og:type" content="article">
 <meta property="og:title" content="构建你的 Docker 镜像">
-<meta property="og:url" content="https://s1mplecc.github.io/2017/11/02/构建你的Docker镜像/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2017/11/02/%E6%9E%84%E5%BB%BA%E4%BD%A0%E7%9A%84Docker%E9%95%9C%E5%83%8F/index.html">
 <meta property="og:site_name" content="s1mple的博客">
-<meta property="og:description" content="Preface Docker实现了宿主系统和Docker容器(container)的隔离，使用Docker可以将构建开发所需环境的镜像(images)，再根据镜像生成容器实例。实现不依赖宿主机环境的高效部署、测试。   油条有一篇很好的文章介绍了Docker的工作原理。链接  Get Started 安装Docker,官网文档   1.官方镜像仓库：https://hub.docker.com/2">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-03T11:24:53.527Z">
+<meta property="og:description" content="Preface Docker实现了宿主系统和Docker容器(container)的隔离，使用Docker可以将构建开发所需环境的镜像(images)，再根据镜像生成容器实例。实现不依赖宿主机环境的高效部署、测试。   油条有一篇很好的文章介绍了Docker的工作原理。链接  Get Started 安装Docker,官网文档   1.官方镜像仓库：https:&#x2F;&#x2F;hub.docker.com&#x2F;2">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-11-01T21:44:16.000Z">
+<meta property="article:modified_time" content="2020-01-03T11:24:53.527Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Server">
+<meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="构建你的 Docker 镜像">
-<meta name="twitter:description" content="Preface Docker实现了宿主系统和Docker容器(container)的隔离，使用Docker可以将构建开发所需环境的镜像(images)，再根据镜像生成容器实例。实现不依赖宿主机环境的高效部署、测试。   油条有一篇很好的文章介绍了Docker的工作原理。链接  Get Started 安装Docker,官网文档   1.官方镜像仓库：https://hub.docker.com/2">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml" />
 
 
 
-  <link rel="alternate" href="/atom.xml" title="s1mple的博客" type="application/atom+xml">
 
-
-
-
-  <link rel="canonical" href="https://s1mplecc.github.io/2017/11/02/构建你的Docker镜像/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2017/11/02/构建你的Docker镜像/"/>
 
 
 
@@ -182,9 +185,9 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -194,7 +197,7 @@
   <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -238,7 +241,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
 
   </li>
         
@@ -255,7 +258,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
 
   </li>
         
@@ -272,7 +275,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
 
   </li>
         
@@ -289,7 +292,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
 
   </li>
 
@@ -300,7 +303,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
         </li>
       
     </ul>
@@ -320,7 +323,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -365,20 +370,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/02/构建你的Docker镜像/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/02/%E6%9E%84%E5%BB%BA%E4%BD%A0%E7%9A%84Docker%E9%95%9C%E5%83%8F/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
       <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
       <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="s1mple的博客">
     </span>
 
@@ -435,7 +440,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -446,7 +451,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
 
                 
                 
@@ -461,9 +466,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/11/02/构建你的Docker镜像/#comments" itemprop="discussionUrl">
+                <a href="/2017/11/02/%E6%9E%84%E5%BB%BA%E4%BD%A0%E7%9A%84Docker%E9%95%9C%E5%83%8F/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/11/02/构建你的Docker镜像/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/02/构建你的Docker镜像/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -474,10 +480,11 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon">
+            <span class="post-meta-item-icon"
+            >
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
             </span>
           
 
@@ -492,7 +499,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">2.2k</span>
+                <span title="本文字数">2.5k</span>
               
 
               
@@ -530,11 +537,11 @@
 </blockquote>
 <ul>
 <li><p>下载ubuntu基础镜像，冒号后是标签</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull daocloud.io/library/ubuntu:16.04</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull daocloud.io&#x2F;library&#x2F;ubuntu:16.04</span><br></pre></td></tr></table></figure>
 <p>  执行<code>docker images</code>查看已下载的镜像</p>
 </li>
 <li><p>创建容器实例，返回容器ID。<code>-d</code>后台运行</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -it daocloud.io/library/ubuntu:16.04</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -it daocloud.io&#x2F;library&#x2F;ubuntu:16.04</span><br></pre></td></tr></table></figure>
 <p>  执行<code>docker ps</code>查看正在运行的容器</p>
 </li>
 </ul>
@@ -547,10 +554,10 @@
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install vim</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>更改软件源为阿里云源</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/apt/</span><br><span class="line">cp sources.list sources.list_backup </span><br><span class="line">cat /dev/null &gt; sources.list</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;etc&#x2F;apt&#x2F;</span><br><span class="line">cp sources.list sources.list_backup </span><br><span class="line">cat &#x2F;dev&#x2F;null &gt; sources.list</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><code>vim sources.list</code>将如下内容加入文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial main</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial main</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates main</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates main</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial universe</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial universe</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates universe</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates universe</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-security main</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-security main</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-security universe</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-security universe</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial main</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial main</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-updates main</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-updates main</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial universe</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial universe</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-updates universe</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-updates universe</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-security main</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-security main</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-security universe</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-security universe</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>日常<code>apt-get update|upgrade</code>之后着手安装jdk和Tomcat了</p>
 </li>
@@ -564,18 +571,20 @@
 <li><p><code>exit</code>或者<code>ctrl+d</code>退出当前容器，<code>docker ps</code>查看容器ID</p>
 </li>
 <li><p>根据容器创建一个新的镜像，不加标签默认<strong>latest</strong></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit 4e s1mple1995/java-web-env</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit 4e s1mple1995&#x2F;java-web-env</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>在<code>push</code>前需要在<a href="https://cloud.docker.com/" target="_blank" rel="noopener">docker官网</a>注册账户，用于存放自己的镜像</p>
 </li>
 <li><p>在<strong>Docker Cloud</strong>中<strong>create repository</strong>，镜像名要和服务器中的镜像名一致，不一致可以使用如下命令</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag local-image:tagname new-repo:tagname</span><br></pre></td></tr></table></figure>
 </li>
+</ul>
+<ul>
 <li><p>在服务器端登录</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>执行push命令，等待上传完成</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push s1mple1995/java-web-env</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push s1mple1995&#x2F;java-web-env</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>现在你的镜像已经存放在Docker Cloud云端了，搜索你的镜像，随时随地可以pull下来。</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search s1mple1995</span><br></pre></td></tr></table></figure>
@@ -627,7 +636,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/11/01/部署Ghost Blog/" rel="next" title="部署 Ghost Blog">
+              <a href="/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/" rel="next" title="部署 Ghost Blog">
                 <i class="fa fa-chevron-left"></i> 部署 Ghost Blog
               </a>
             
@@ -637,7 +646,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/11/02/安装 JDK&Tomcat/" rel="prev" title="安装 JDK & Tomcat">
+              <a href="/2017/11/02/%E5%AE%89%E8%A3%85%20JDK&Tomcat/" rel="prev" title="安装 JDK & Tomcat">
                 安装 JDK & Tomcat <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -703,9 +712,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="s1mple">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="s1mple" />
             
               <p class="site-author-name" itemprop="name">s1mple</p>
               <p class="site-description motion-element" itemprop="description">春光恰与少年同，十里清风慕天青</p>
@@ -716,7 +727,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives/%20%7C%7C%20archive">
                 
                     <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
@@ -898,7 +909,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Get-Started"><span class="nav-number">2.</span> <span class="nav-text">Get Started</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Build-Your-Image"><span class="nav-number">3.</span> <span class="nav-text">Build Your Image</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Push-It"><span class="nav-number">4.</span> <span class="nav-text">Push It !</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tips"><span class="nav-number">4.0.1.</span> <span class="nav-text">Tips</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Get-Started"><span class="nav-number">2.</span> <span class="nav-text">Get Started</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Build-Your-Image"><span class="nav-number">3.</span> <span class="nav-text">Build Your Image</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Push-It"><span class="nav-number">4.</span> <span class="nav-text">Push It !</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tips"><span class="nav-number">4.0.1.</span> <span class="nav-text">Tips</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -930,7 +941,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
 
 
 
@@ -1084,7 +1095,7 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2017/11/02/构建你的Docker镜像/';
+        this.page.url = 'https://s1mplecc.github.io/2017/11/02/%E6%9E%84%E5%BB%BA%E4%BD%A0%E7%9A%84Docker%E9%95%9C%E5%83%8F/';
         this.page.identifier = '2017/11/02/构建你的Docker镜像/';
         this.page.title = '构建你的 Docker 镜像';
         };
