@@ -112,16 +112,18 @@
 
 
 
-  <meta name="description" content="春光恰与少年同，十里清风慕天青">
-<meta property="og:type" content="website">
-<meta property="og:title" content="s1mple的博客">
-<meta property="og:url" content="https://s1mplecc.github.io/archives/2018/page/4/index.html">
+  <meta name="description" content="前言图中的三角形是复杂网络分析的重要角色，不论是来自社会交互、计算机交流、金融交易、蛋白质还是生态学网络，图中三角形的数量都是巨大的，它在这些领域中有着非常广泛的应用。例如：通过三角形的分布可以区分哪些是垃圾邮件的主人；角色行为识别中，通过使用者参与的三角形的数量可以判断这个使用者的地位。 图三角数量的计算（Triangle Counting）是计算网络聚集系数和传递性的重要步骤，广泛应用于重要角">
+<meta name="keywords" content="Graph Theory,Stream Progressing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图流算法之 Triangle Counting">
+<meta property="og:url" content="https://s1mplecc.github.io/2020/07/21/图流算法之-Triangle-Counting/index.html">
 <meta property="og:site_name" content="s1mple的博客">
-<meta property="og:description" content="春光恰与少年同，十里清风慕天青">
+<meta property="og:description" content="前言图中的三角形是复杂网络分析的重要角色，不论是来自社会交互、计算机交流、金融交易、蛋白质还是生态学网络，图中三角形的数量都是巨大的，它在这些领域中有着非常广泛的应用。例如：通过三角形的分布可以区分哪些是垃圾邮件的主人；角色行为识别中，通过使用者参与的三角形的数量可以判断这个使用者的地位。 图三角数量的计算（Triangle Counting）是计算网络聚集系数和传递性的重要步骤，广泛应用于重要角">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-21T01:21:54.157Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="s1mple的博客">
-<meta name="twitter:description" content="春光恰与少年同，十里清风慕天青">
+<meta name="twitter:title" content="图流算法之 Triangle Counting">
+<meta name="twitter:description" content="前言图中的三角形是复杂网络分析的重要角色，不论是来自社会交互、计算机交流、金融交易、蛋白质还是生态学网络，图中三角形的数量都是巨大的，它在这些领域中有着非常广泛的应用。例如：通过三角形的分布可以区分哪些是垃圾邮件的主人；角色行为识别中，通过使用者参与的三角形的数量可以判断这个使用者的地位。 图三角数量的计算（Triangle Counting）是计算网络聚集系数和传递性的重要步骤，广泛应用于重要角">
 
 
 
@@ -130,7 +132,7 @@
 
 
 
-  <link rel="canonical" href="https://s1mplecc.github.io/archives/2018/page/4/">
+  <link rel="canonical" href="https://s1mplecc.github.io/2020/07/21/图流算法之-Triangle-Counting/">
 
 
 
@@ -140,7 +142,7 @@
   };
 </script>
 
-  <title>归档 | s1mple的博客</title>
+  <title>图流算法之 Triangle Counting | s1mple的博客</title>
   
 
 
@@ -189,7 +191,7 @@
     
   
 
-  <div class="container sidebar-position-right page-archive">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -277,7 +279,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
 
     
     
@@ -348,209 +350,261 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/07/21/图流算法之-Triangle-Counting/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
-         
+          <h1 class="post-title" itemprop="name headline">图流算法之 Triangle Counting
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-07-21 09:15:32 / 修改时间：09:21:54" itemprop="dateCreated datePublished" datetime="2020-07-21T09:15:32+08:00">2020-07-21</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
           
-        不错! 目前共计 64 篇日志。 继续努力。
-      </span>
-      
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
 
-        
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/21/图流算法之-Triangle-Counting/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/07/21/图流算法之-Triangle-Counting/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/30/Linux文件结构/" itemprop="url">
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
               
-                <span itemprop="name">Linux 文件结构</span>
+
               
-            </a>
-        
-      </h2>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">1.6k</span>
+              
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-01-30T02:28:54+08:00" content="2018-01-30">
-          01-30
-        </time>
-      </div>
+              
 
-    </header>
-  </article>
+              
+            </div>
+          
 
+          
 
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/22/离线安装Nginx/" itemprop="url">
-              
-                <span itemprop="name">离线安装 Nginx</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-01-22T05:22:55+08:00" content="2018-01-22">
-          01-22
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/22/前端编码规范/" itemprop="url">
-              
-                <span itemprop="name">前端编码规范</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-01-22T01:59:32+08:00" content="2018-01-22">
-          01-22
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>图中的三角形是复杂网络分析的重要角色，不论是来自社会交互、计算机交流、金融交易、蛋白质还是生态学网络，图中三角形的数量都是巨大的，它在这些领域中有着非常广泛的应用。例如：通过三角形的分布可以区分哪些是垃圾邮件的主人；角色行为识别中，通过使用者参与的三角形的数量可以判断这个使用者的地位。</p>
+<p>图三角数量的计算（Triangle Counting）是计算网络聚集系数和传递性的重要步骤，广泛应用于重要角色识别、垃圾邮件检测、社区发现、生物检测等。目前图中三角形的计算主要分为<strong>准确计算</strong>（exact counting）和<strong>近似计算</strong>（approximate counting）两种类型。 </p>
+<h2 id="Gelly-Streaming"><a href="#Gelly-Streaming" class="headerlink" title="Gelly Streaming"></a>Gelly Streaming</h2><p>Gelly Streaming 框架给出的 Triangle Counting 示例算法的 Java Class：</p>
+<ul>
+<li><code>WindowTriangles</code>：Counts exact number of triangles in a graph slice.</li>
+<li><code>ExactTriangleCount</code>：Single-pass, insertion-only exact Triangle Local and Global Count algorithm.</li>
+<li><code>BroadcastTriangleCount</code>：The broadcast triangle count example estimates the number of triangles in a streamed graph.</li>
+</ul>
+<h2 id="Exact-Counting"><a href="#Exact-Counting" class="headerlink" title="Exact Counting"></a>Exact Counting</h2><p>准确计算可以准确地计算图中三角形的数量，对于规模很大的大图来说，计算的时空消耗很大。所以<strong>在流处理情形下，我们可以将图的边流按照时间来切片，计算一个图切<br>片（graph slice）中的三角形准确数量</strong>。比如 Gelly 示例类 <code>WindowTriangles</code> 中的处理流程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">edges.slice(windowTime, EdgeDirection.ALL)</span><br><span class="line">        .applyOnNeighbors(new GenerateCandidateEdges())</span><br><span class="line">        .keyBy(0, 1).timeWindow(windowTime)</span><br><span class="line">        .apply(new CountTriangles())</span><br><span class="line">        .timeWindowAll(windowTime).sum(0);</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，在这种情况下，一个图分片的所有信息我们都已获得，<strong>相当于我们是在批处理情形下计算一个图的三角数量</strong>。况且图的规模不大，在顶点和边已知的情况下，图三角的计算就变的简单了。算法的核心步骤如下：</p>
+<ol>
+<li>计算每一个顶点（Vertex）的领域（Neighborhood），即一个顶点的所有相邻顶点集合；</li>
+<li>领域中的每两个顶点构成一条候选边（Candidate Edge），为避免重复计算需要满足 <code>neighborIds[i] &gt; vertexID &amp;&amp; neighborIds[j] &gt; vertexID</code>；</li>
+<li>如果候选边存在于图中，则 Count + 1。</li>
+</ol>
+<h2 id="Approximate-Counting"><a href="#Approximate-Counting" class="headerlink" title="Approximate Counting"></a>Approximate Counting</h2><p>当图的规模很大时，准确计算的时空复杂度将会很大，而在很多应用中只需要近似得到图三角的数量，所以近年来近似算法得到了很多关注。 </p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://github.com/vasia/gelly-streaming" target="_blank" rel="noopener">Gelly Streaming：An experiemental API for single-pass graph streaming analytics on Apache Flink.</a></li>
+<li><a href="https://yhx-12243.github.io/OI-transit/memos/14.html" target="_blank" rel="noopener">图论概念梳理</a></li>
+<li><a href="http://www.infocomm-journal.com/dxkx/CN/10.11959/j.issn.1000-0801.2016169" target="_blank" rel="noopener">Research progress of triangle counting in big data</a></li>
+<li><a href="https://ieeexplore.ieee.org/document/7421397" target="_blank" rel="noopener">Counting Triangles in Real-World Graph Streams:Dealing with Repeated Edges and Time Windows</a></li>
+</ul>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/02/TCP／IP协议/" itemprop="url">
-              
-                <span itemprop="name">TCP/IP 协议</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-01-02T01:19:29+08:00" content="2018-01-02">
-          01-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Graph-Theory/" rel="tag"># Graph Theory</a>
+          
+            <a href="/tags/Stream-Progressing/" rel="tag"># Stream Progressing</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/13/图流算法之-Bipartiteness-Check/" rel="next" title="图流算法之 Bipartiteness Check">
+                <i class="fa fa-chevron-left"></i> 图流算法之 Bipartiteness Check
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/2018/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/archives/2018/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2018/page/3/">3</a><span class="page-number current">4</span>
-  </nav>
+  </article>
 
 
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -571,8 +625,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -760,6 +823,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gelly-Streaming"><span class="nav-number">2.</span> <span class="nav-text">Gelly Streaming</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exact-Counting"><span class="nav-number">3.</span> <span class="nav-text">Exact Counting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Approximate-Counting"><span class="nav-number">4.</span> <span class="nav-text">Approximate Counting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -918,6 +997,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
 
   
 
@@ -932,6 +1015,23 @@
     <script id="dsq-count-scr" src="https://s1mple.disqus.com/count.js" async></script>
   
 
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://s1mplecc.github.io/2020/07/21/图流算法之-Triangle-Counting/';
+        this.page.identifier = '2020/07/21/图流算法之-Triangle-Counting/';
+        this.page.title = '图流算法之 Triangle Counting';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://s1mple.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
   
 
 

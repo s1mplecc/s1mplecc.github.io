@@ -369,6 +369,293 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/29/结合案例使用 Java 注解和反射/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/29/结合案例使用 Java 注解和反射/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/2/index.html">结合案例使用 Java 注解和反射</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-29 04:53:50" itemprop="dateCreated datePublished" datetime="2018-11-29T04:53:50+08:00">2018-11-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/29/结合案例使用 Java 注解和反射/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/29/结合案例使用 Java 注解和反射/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">8.5k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在项目开发时遇到这样一个场景：从上游传过来一个实体类对象 <code>newEntity</code>，但它只有部分字段，需要去库中查出对应的旧对象 <code>oldEntity</code> 做一次补全（相当于一次部分更新）。</p>
+<p>一开始我们这样编码的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> FlightBasic <span class="title">merge</span><span class="params">(FlightBasic newEntity)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getAirportCode() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setAirportCode(newEntity.getAirportCode());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getCraftNo() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setCraftNo(newEntity.getCraftNo());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getCraftType() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setCraftType(newEntity.getCraftType());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// too long ...</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很快我们发现了问题：不仅类的字段很多，这样的 Entity 也有很多，所以到处都是又臭又长的 <code>merge</code> 方法。</p>
+<p>其实不难总结这些代码的共性：</p>
+<ul>
+<li>一个 Entity 只能和本身的类型 Merge</li>
+<li>代码都是判空后对属性的 <code>getter/setter</code> 方法的重复调用</li>
+</ul>
+<p>为了简化代码（偷懒），就在想能不能通过统一的处理完成这些 Merge 逻辑。首先想到的是代码生成，类似 MyBatis Generator，重复的工作交给脚本或者工具多好。但是很快就否定了这种方案，配置这些类的工作量也不小，而且很多类中有自己的业务逻辑，一不小心覆盖了也不行。那注解行不行呢？Spring Boot 就大量使用注解替换了之前配置繁杂的 XML 文件。实际编码后验证是可行的！本文将介绍如何<strong>配合使用 Java 的注解和反射</strong>实现上述问题中的 Merge 操作。示例代码已上传到 <a href="https://github.com/s1mplecc/merging" target="_blank" rel="noopener">GitHub</a> 上。</p>
+<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p>每当你创建描述符性质的类或者接口时，一旦其中包含重复性的工作，就可以考虑使用注解来简化与自动化该过程。一个注解准确意义上来说，只不过是一种特殊的注释而已，如果没有<strong>解析</strong>它的代码，它可能连注释都不如。而解析注解往往有两种方式，一种是<strong>编译期扫描</strong>，典型的例如 <code>@Override</code>，这种只适用于编译器已经认识的注解，一般都是 JDK 内置注解；另一种则是通过<strong>运行期反射</strong>，也是在我们自定义注解后需要自己编码的。</p>
+<h3 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h3><p>Java提供了四种元注解，专门负责<strong>修饰其他注解</strong>：</p>
+<ul>
+<li><code>@Target</code>：注解的作用目标</li>
+<li><code>@Retention</code>：注解的生命周期</li>
+<li><code>@Documented</code>：注解是否要包含在 JavaDoc 文档中</li>
+<li><code>@Inherited</code>：子类是否继承该注解</li>
+</ul>
+<h4 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h4><p><code>@Target</code> 用于定义注解的<strong>作用域</strong>，源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.ANNOTATION_TYPE)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Target &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns an array of the kinds of elements an annotation type</span></span><br><span class="line"><span class="comment">     * can be applied to.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    ElementType[] value();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>ElementType</code> 是一个枚举类型，包含以下值：</p>
+<ul>
+<li><code>ElementType.TYPE</code>：允许注解作用在类、接口和枚举上</li>
+<li><code>ElementType.FIELD</code>：允许作用在属性字段上</li>
+<li><code>ElementType.METHOD</code>：允许作用在方法上</li>
+<li><code>ElementType.PARAMETER</code>：允许作用在方法参数上</li>
+<li><code>ElementType.CONSTRUCTOR</code>：允许作用在构造器上</li>
+<li><code>ElementType.LOCAL_VARIABLE</code>：允许作用在本地局部变量上</li>
+<li><code>ElementType.ANNOTATION_TYPE</code>：允许作用在注解上</li>
+<li><code>ElementType.PACKAGE</code>：允许作用在包上</li>
+</ul>
+<p>当允许有多个作用域时使用花括号 <code>{}</code> 包裹，比如这样：<code>@Target({ ElementType.TYPE, ElementType.FIELD })</code></p>
+<h4 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h4><p><code>@Retention</code> 用于标明注解存在的<strong>生命周期</strong>，源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.ANNOTATION_TYPE)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Retention &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns the retention policy.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">RetentionPolicy <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>RetentionPolicy</code> 也是一个枚举类型，包含以下值：</p>
+<ul>
+<li><code>RetentionPolicy.SOURCE</code>：在源文件中保留，编译为 .class 文件时会被丢弃，比如 <code>@Override</code>、<code>@SuppressWarnings</code></li>
+<li><code>RetentionPolicy.CLASS</code>：.class 文件中会保留，但运行时丢弃</li>
+<li><code>RetentionPolicy.RUNTIME</code>：运行时保留，可以通过<strong>反射获取</strong></li>
+</ul>
+<p>剩下两种类型的注解用的不多，也比较简单，这里不再详细的介绍了，只需要知道他们各自的作用即可。<code>@Documented</code> 修饰的注解，当执行 JavaDoc 文档打包时会被保存进文档，否则将被丢弃。<code>@Inherited</code> 注解修饰的注解是有<strong>继承性</strong>的，也就说我们的注解修饰了一个类，而该类的子类将自动继承父类的该注解。该注解只作用于类，对属性或方法无效。</p>
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>Java 反射机制是指在<strong>程序运行时（Runtime）识别和使用对象的类型信息</strong>。以下内容摘自《Thinking in Java》，是我认为的有利于理解反射的核心概念。</p>
+<blockquote>
+<p>要理解反射的工作原理，首先必须知道<strong>类型信息</strong>在运行时是如何表示的。这项工作是由称为 <strong>Class</strong> 对象的特殊对象完成的，它包含了与类有关的信息。事实上，Class 对象就是用来创建类的所有“常规”对象的。</p>
+<p>类是程序的一部分，每个类都有一个 Class 对象。换言之，每当编写并且编译了一个新类，就会产生一个 Class 对象（更恰当地说，是被保存在一个同名的 <code>.class</code> 文中）。为了生成这个类的对象，运行这个程序的 Java 虚拟机（JVM）将使用被称为<strong>类加载器</strong>的子系统。类加载器首先检查这个类的 Class 对象是否已经加载。如果尚未加载，默认的类加载器就会根据类名查找 <code>.class</code> 文件。<strong>一旦某个类的 Class 对象被载入内存，它就被用来创建这个类的所有对象</strong>。</p>
+<p><code>Class</code> 类和 <code>java.lang.reflect</code> 类库一起对反射的概念提供了支持，该类库包含 <code>Field</code>、<code>Method</code> 以及 <code>Constructor</code> 类。这些类型的对象是由 JVM 在运行时创建的，用以<strong>表示未知类里对应的成员</strong>。这样你就可以使用 <code>Constructor</code> 创建新的对象，用 <code>get()</code> 和 <code>set()</code> 方法读取和修改与 <code>Field</code> 对象关联的字段，用 <code>invoke()</code> 方法调用与 <code>Method</code> 对象关联的方法等等。另外，还可以调用 <code>getFields()</code>、<code>getMethods()</code> 和 <code>getConstructors()</code> 等方法以返回表示字段、方法以及构造器的对象的数组（可以查看 Class 类源码了解更多资料）。</p>
+<p>重要的是，要认识到反射机制并没有什么神奇之处。当通过反射与一个未知类型的对象打交道时，JVM 只是简单地检查这个对象，看它属于哪个特定的类。在用它做其他事情之前必须先加在那个类的 Class 对象。对于反射机制来说，<code>.class</code> 文件在编译时是不可获取的，所以是在运行时打开和检查 <code>.class</code> 文件。</p>
+</blockquote>
+<p>这里简单的介绍一下我们编码时用到的与反射有关的方法：</p>
+<ul>
+<li><code>obj.getClass();</code> Java 提供了三种方式获取类的 Class 对象的引用：<code>Class.forName()</code> 通过类名获取；<code>obj.getClass();</code> 通过对象获取和 <code>Object.class</code> 通过类字面常量获取。</li>
+<li><code>getDeclaredFields();</code> 获取类中声明的所有字段，不包括父类和接口中的字段。它与 <code>getFields()</code> 的区别在于，<code>getFields()</code> 是获取所在类以及父类和接口中的所有访问修饰符为 <code>public</code> 的字段。</li>
+<li><code>getAnnotation();</code> 获取标注的注解实例对象。</li>
+</ul>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="Merge-粒度与等级"><a href="#Merge-粒度与等级" class="headerlink" title="Merge 粒度与等级"></a>Merge 粒度与等级</h3><p>回到我们的问题上来，首先考虑一个问题：Merge 的粒度应该位于什么层次？如果是类级别的，意味着整个类的所有属性将一视同仁，要么都合并要么都不，显然这样是不行的。Merge 的<strong>粒度应该在属性字段上</strong>，为此，我们专门定义了字段的 Merge 等级 <code>Level</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Level &#123;</span><br><span class="line">    <span class="comment">/* 无论新值为何值，都会覆盖旧值 */</span></span><br><span class="line">    Mandatory,</span><br><span class="line">    <span class="comment">/* 如果新值不为null，覆盖旧值，否则不覆盖 */</span></span><br><span class="line">    Required,</span><br><span class="line">    <span class="comment">/* 忽略，不做合并处理 */</span></span><br><span class="line">    Ignored;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="自定义注解-MergeOn"><a href="#自定义注解-MergeOn" class="headerlink" title="自定义注解 @MergeOn"></a>自定义注解 @MergeOn</h3><p>接下来就需要自定义我们的注解：<code>@MergeOn</code>，作用在字段上，在运行时有效：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MergeOn &#123;</span><br><span class="line">    <span class="function">Level <span class="title">level</span><span class="params">()</span> <span class="keyword">default</span> Level.Required</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>default</code> 关键字可以设置缺省等级为 <code>Required</code>。</p>
+<h3 id="通过反射将字段设值"><a href="#通过反射将字段设值" class="headerlink" title="通过反射将字段设值"></a>通过反射将字段设值</h3><p>现在，还差最后一步，就是如何通过反射将字段设值。要想让实体类实现 Merge，首先需要定义一个接口 <code>Merging</code> 让实体类去继承它，然后接口中得有一个默认方法 <code>mergeWith(T newEntity)</code>，它将做下面这几件事：</p>
+<ul>
+<li>通过反射获取 Entity 声明的所有字段</li>
+<li>通过反射获取字段上 <code>@MergeOn</code> 注解的 Level</li>
+<li>通过 Level 走不同的分支去给字段设值，是强制或是忽略亦或是只有非空情况下才设值。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Merging</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Merging</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">mergeWith</span><span class="params">(T newEntity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.getClass() != newEntity.getClass()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MergeWithDifferentClassTypeException(</span><br><span class="line">                    String.format(<span class="string">"&lt;%s&gt; can not merge with other class type &lt;%s&gt;"</span>, <span class="keyword">this</span>.getClass().getName(), newEntity.getClass().getName()));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Field[] fields = <span class="keyword">this</span>.getClass().getDeclaredFields(); <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Field field : fields) &#123;</span><br><span class="line">            MergeOn mergeOn = field.getAnnotation(MergeOn.class); <span class="comment">// 2</span></span><br><span class="line">            field.setAccessible(<span class="keyword">true</span>); <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (mergeOn == <span class="keyword">null</span> || mergeOn.level().isRequired()) &#123; <span class="comment">// 4...</span></span><br><span class="line">                    Object newFieldValue = field.get(newEntity);</span><br><span class="line">                    <span class="keyword">if</span> (newFieldValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        field.set(<span class="keyword">this</span>, newFieldValue);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (mergeOn.level().isMandatory()) &#123; <span class="comment">// 4...</span></span><br><span class="line">                    field.set(<span class="keyword">this</span>, field.get(newEntity)); <span class="comment">// 5</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IllegalAccessException ex) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> MergeOnFieldIllegalAccessException(field.getName(), ex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们看看代码具体的实现步骤（注释中标明了顺序）：</p>
+<ol>
+<li><code>this.getClass().getDeclaredFields();</code> 获取类中声明的所有字段，不包含父类和接口中的字段。<code>this</code> 指向的是实现接口的实体类。</li>
+<li><code>field.getAnnotation(MergeOn.class);</code> 获取字段上的 <code>@MergeOn</code> 注解实例。</li>
+<li><code>field.setAccessible(true);</code> 由于字段通常是 <code>private</code> 修饰的，就需要<strong>获取访问权</strong>（并不是修改实际权限），否则将抛出 <code>IllegalAccessException</code> 异常。由此可见，反射有可能破环封装性。</li>
+<li>根据 Level 做相应设值。如果无注解或 Level 为 Required，则新值非空时覆盖旧值；如果是强制（Mandatory）则始终覆盖；否则（Ignored），忽略不做处理。</li>
+<li><code>field.set(this, field.get(newEntity));</code> 字段设值的实际操作，接口设计看上去有点反人类。第一个参数为需要设置字段的对象，此处为 oldEntity，第二个参数为要设置的值，此处为新对象的字段值。</li>
+</ol>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>接下来我将演示如何使用这个接口，并编写单元测试验证其正确性。</p>
+<p>首先定义实体类 Entity。</p>
+<ul>
+<li>为了测试全面性，加入了各种类型的属性字段，包括基础类型、集合、数组和类；同时，<code>@MergeOn</code> 注解覆盖了所有 Level，还包括缺省和无注解的情况。</li>
+<li>为了简单，直接在字段声明时赋初值。即 <code>new Entity()</code> 出来的可以看成旧的模型对象（oldEntity）。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Entity</span> <span class="keyword">implements</span> <span class="title">Merging</span>&lt;<span class="title">Entity</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@MergeOn</span>(level = Level.Ignored)</span><br><span class="line">    <span class="keyword">private</span> String string = <span class="string">"string"</span>;</span><br><span class="line">    <span class="meta">@MergeOn</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> anInt = <span class="number">1</span>;</span><br><span class="line">    <span class="meta">@MergeOn</span>(level = Level.Mandatory)</span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; stringList = Arrays.asList(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>);</span><br><span class="line">    <span class="meta">@MergeOn</span>(level = Level.Required)</span><br><span class="line">    <span class="keyword">private</span> String[] strings = <span class="keyword">new</span> String[]&#123;<span class="string">"sArr1"</span>, <span class="string">"sArr2"</span>&#125;;</span><br><span class="line">    <span class="keyword">private</span> Email email = <span class="keyword">new</span> Email(<span class="string">"zz@163.com"</span>);</span><br><span class="line">    <span class="keyword">private</span> Set&lt;Email&gt; emails = Sets.newLinkedHashSet(<span class="keyword">new</span> Email(<span class="string">"zz@163.com"</span>), <span class="keyword">new</span> Email(<span class="string">"zz@gmail.com"</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Email</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String value;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Email</span><span class="params">(String value)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.value = value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>理想情况下，<code>string</code> 字段新值应当被忽略；<code>stringList</code> 在新值为 null 时也会被强制覆盖；其他缺省和无注解的应当行为与 <code>@MergeOn(level = Level.Required)</code> 一致，即非空时才会覆盖旧值。以下为测试代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_merge_new_entity_with_different_merge_level</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Entity newEntity = <span class="keyword">new</span> Entity();</span><br><span class="line">    newEntity.setString(<span class="string">"newString"</span>);  <span class="comment">// Ignored</span></span><br><span class="line">    newEntity.setAnInt(<span class="number">2</span>);</span><br><span class="line">    newEntity.setStringList(<span class="keyword">null</span>);  <span class="comment">// Mandatory</span></span><br><span class="line">    newEntity.setStrings(<span class="keyword">new</span> String[]&#123;<span class="string">"newS1"</span>, <span class="string">"newS2"</span>, <span class="string">"newS3"</span>&#125;);</span><br><span class="line">    newEntity.setEmail(<span class="keyword">new</span> Entity.Email(<span class="string">"newEmail@163.com"</span>));</span><br><span class="line">    newEntity.setEmails(<span class="keyword">null</span>); <span class="comment">// Required, wished not be overwrited</span></span><br><span class="line"></span><br><span class="line">    Entity entity = <span class="keyword">new</span> Entity(); <span class="comment">// oldEntity</span></span><br><span class="line">    entity.mergeWith(newEntity);</span><br><span class="line"></span><br><span class="line">    assertThat(entity.getString()).isEqualTo(<span class="string">"string"</span>);</span><br><span class="line">    assertThat(entity.getAnInt()).isEqualTo(<span class="number">2</span>);</span><br><span class="line">    assertThat(entity.getStringList()).isNull();</span><br><span class="line">    assertThat(entity.getStrings()).containsSequence(<span class="string">"newS1"</span>, <span class="string">"newS2"</span>, <span class="string">"newS3"</span>);</span><br><span class="line">    assertThat(entity.getEmail().getValue()).isEqualTo(<span class="string">"newEmail@163.com"</span>);</span><br><span class="line">    assertThat(entity.getEmails()).hasSize(<span class="number">2</span>);</span><br><span class="line">    assertThat(entity.getEmails()).contains(<span class="keyword">new</span> Entity.Email(<span class="string">"zz@163.com"</span>));</span><br><span class="line">    assertThat(entity.getEmails()).contains(<span class="keyword">new</span> Entity.Email(<span class="string">"zz@gmail.com"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://juejin.im/post/5b45bd715188251b3a1db54f" target="_blank" rel="noopener">JAVA 注解的基本原理 —— 掘金</a></li>
+<li>Thinking in Java 第14章：类型信息</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/27/Java8 Optional 源码阅读/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2521,283 +2808,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/07/19/Java 异常处理之 Web 案例/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/07/19/Java 异常处理之 Web 案例/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/2/index.html">Java 异常处理之 Web 案例</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-07-19 08:00:23" itemprop="dateCreated datePublished" datetime="2018-07-19T08:00:23+08:00">2018-07-19</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/07/19/Java 异常处理之 Web 案例/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/19/Java 异常处理之 Web 案例/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">5.7k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>基于我的上一篇博客：<a href="https://s1mple.xyz/java-exception/" target="_blank" rel="noopener">Java 异常处理</a>中的观点，我编写了一个简单的 Web 案例，包括自定义异常类，在合适的层面处理，以及遇到的由于代码 Bug 抛出运行时异常的情形。示例代码已经上传至 <a href="https://github.com/s1mplecc/exception-demo" target="_blank" rel="noopener">GitHub</a>，包含基于 Spring Boot 的 Java 后端代码以及基于 Vue.js 的前端代码两个部分</p>
-</blockquote>
-<h2 id="Web案例"><a href="#Web案例" class="headerlink" title="Web案例"></a>Web案例</h2><ul>
-<li>我们的演示案例有两个功能，获取用户列表以及注册新用户，界面如下所示<br><img src="/2018/07/19/Java 异常处理之 Web 案例/0.png" alt="102BDB82-6CAD-4C3F-A5EC-5F1052F3A337"></li>
-</ul>
-<h3 id="未抛异常时的后端实现"><a href="#未抛异常时的后端实现" class="headerlink" title="未抛异常时的后端实现"></a>未抛异常时的后端实现</h3><ul>
-<li><p>先看一下我们领域模型 User，为简化代码未使用数据库，而是模拟数据库的自增主键自动生成 userId</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> userIdGenerateKey = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer userId;</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">    <span class="keyword">private</span> String phone;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    User(String username, String phone, Integer age) &#123;</span><br><span class="line">        <span class="keyword">this</span>.userId = User.userIdGenerateKey++;</span><br><span class="line">        <span class="keyword">this</span>.username = username;</span><br><span class="line">        <span class="keyword">this</span>.phone = phone;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    User(User userWithoutId) &#123;</span><br><span class="line">        <span class="keyword">this</span>(userWithoutId.username, userWithoutId.phone, userWithoutId.age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在资源库<code>UserRepository</code>一层使用<code>List</code>直接在内存中存储用户，并初始化了两条用户信息。对外提供<code>users()</code>返回所有用户以及<code>addUser()</code>添加一个新用户两个接口</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserRepository</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;User&gt; users = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UserRepository</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        users.add(<span class="keyword">new</span> User(<span class="string">"Jack"</span>, <span class="string">"13500000000"</span>, <span class="number">18</span>));</span><br><span class="line">        users.add(<span class="keyword">new</span> User(<span class="string">"Tom"</span>, <span class="string">"13500000001"</span>, <span class="number">19</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">users</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> users;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addUser</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        users.add(user);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>考虑到在业务功能为获取用户列表和注册新用户，而注册功能还可能包括发送验证邮件等之类的功能，所以有必要将其提取至 Service 层提供一个<code>register()</code>接口。目前只是单纯的调用资源库的<code>addUser()</code>添加一个新的用户</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserRepository userRepository;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        userRepository.addUser(<span class="keyword">new</span> User(user));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>Controller 层代码如下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">@RequestMapping(&quot;/users&quot;)</span><br><span class="line">public class UserController &#123;</span><br><span class="line"></span><br><span class="line">    @Resource</span><br><span class="line">    private UserRepository userRepository;</span><br><span class="line">    @Resource</span><br><span class="line">    private UserService userService;</span><br><span class="line"></span><br><span class="line">    @GetMapping</span><br><span class="line">    public List&lt;User&gt; users() &#123;</span><br><span class="line">        return userRepository.users();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @PostMapping</span><br><span class="line">    public void register(@RequestBody User user) &#123;</span><br><span class="line">        userService.register(user);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="添加业务规则进行校验"><a href="#添加业务规则进行校验" class="headerlink" title="添加业务规则进行校验"></a>添加业务规则进行校验</h3><blockquote>
-<p>上述案例还是未抛出任何异常的情况，实际业务必然会对用户输入做一定约束。假设注册新用户有如下业务规则：1. 用户名是必填项，不能为空；2. 年龄和电话号码为可选项，如果填入年龄，必须是大于零的合法数字</p>
-</blockquote>
-<ul>
-<li><p>那么根据 DDD 的思想以及信息专家模式，检查用户名和年龄是否合法应该属于领域对象 User。如下所示，这里先埋个坑，也是我未思考全面所留下的隐患，一会儿会提及</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// User</span><br><span class="line"></span><br><span class="line">public boolean checkAgeIsLegal() &#123;</span><br><span class="line">    return this.age &gt;= 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public boolean checkUsernameIsNotEmpty() &#123;</span><br><span class="line">    return username != null &amp;&amp; !&quot;&quot;.equals(username.trim());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="抛出异常"><a href="#抛出异常" class="headerlink" title="抛出异常"></a>抛出异常</h3><ul>
-<li><p>如果客户输入的值不符合要求，我们应当抛出一个异常提醒用户及时修正。自定义<code>RequestArgsIllegalException</code>异常类，意为请求参数非法，重写<code>getMessage()</code>方法。异常类的命名要清晰准确反应问题</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class RequestArgsIllegalException extends Exception &#123;</span><br><span class="line">    public RequestArgsIllegalException(String message) &#123;</span><br><span class="line">        super(message);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public RequestArgsIllegalException(String message, Throwable cause) &#123;</span><br><span class="line">        super(message, cause);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String getMessage() &#123;</span><br><span class="line">        return &quot;Illegal request arguments: &quot; + super.getMessage();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>在服务层的<code>register()</code>接口，我们使用<strong>卫语句</strong>检查参数，如果非法则抛出包含了异常信息的异常</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// UserService</span><br><span class="line"></span><br><span class="line">public void register(User user) throws RequestArgsIllegalException &#123;</span><br><span class="line">    if (!user.checkAgeIsLegal()) &#123;</span><br><span class="line">        throw new RequestArgsIllegalException(&quot;age cannot be less than zero&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    if (!user.checkUsernameIsNotEmpty()) &#123;</span><br><span class="line">        throw new RequestArgsIllegalException(&quot;username can not be empty&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    userRepository.addUser(new User(user));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>在 Controller 层捕获异常并将异常信息返回给前端</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// UserController</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@PostMapping</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(@RequestBody User user, HttpServletResponse response)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        userService.register(user);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (RequestArgsIllegalException e) &#123;</span><br><span class="line">        logger.warn(<span class="string">"&#123;&#125;. &#123;&#125;"</span>, e.getMessage(), user);</span><br><span class="line">        response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="Postman调试接口"><a href="#Postman调试接口" class="headerlink" title="Postman调试接口"></a>Postman调试接口</h2><ul>
-<li><p>使用 Postman 测试后端<code>register()</code>接口，请求体如下，其中年龄违反了业务规则</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"username"</span>: <span class="string">"Halen"</span>,</span><br><span class="line">    <span class="attr">"age"</span>: <span class="number">-1</span>,</span><br><span class="line">    <span class="attr">"phone"</span>: <span class="string">"13500000002"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>通过 Postman 返回的错误信息，状态吗<code>status</code>为 400，错误信息<code>message</code>为 “Illegal request arguments: age cannot be less than zero” 都已经被包装在返回的消息体中。同理，用户名为空也是一样就不贴出来了</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"timestamp"</span>: <span class="number">1532055599002</span>,</span><br><span class="line">    <span class="attr">"status"</span>: <span class="number">400</span>,</span><br><span class="line">    <span class="attr">"error"</span>: <span class="string">"Bad Request"</span>,</span><br><span class="line">    <span class="attr">"message"</span>: <span class="string">"Illegal request arguments: age cannot be less than zero"</span>,</span><br><span class="line">    <span class="attr">"path"</span>: <span class="string">"/users"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>这里又要提到我之前说到的那个坑了，也是我在使用 Postman 测试接口时发现的 Bug。根据业务规则允许用户不填入年龄和电话号码</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 请求消息体</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"username"</span>: <span class="string">"Halen"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 响应消息体</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"timestamp"</span>: <span class="number">1532056232417</span>,</span><br><span class="line">    <span class="attr">"status"</span>: <span class="number">500</span>,</span><br><span class="line">    <span class="attr">"error"</span>: <span class="string">"Internal Server Error"</span>,</span><br><span class="line">    <span class="attr">"message"</span>: <span class="string">"No message available"</span>,</span><br><span class="line">    <span class="attr">"path"</span>: <span class="string">"/users"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>   非常可怕的 500 服务器内部错误出现了！根据响应消息完全无法定位错误出处。一般来说，这种情况是后端代码出了 Bug，所幸我们还能查看控制台输出或者日志。果不其然，一个空指针异常被抛出</p>
-<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">java.lang.NullPointerException: null</span><br><span class="line">    at info.s1mple.exceptiondemo.domian.model.user.User.checkAgeIsLegal(User.java:30)</span><br></pre></td></tr></table></figure>
-
-
-原来是`checkAgeIsLegal()`方法出了问题，赶紧去及时修复 Bug，根据业务规则，添加`this.age == null`认为年龄为空合法
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">checkAgeIsLegal</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.age == <span class="keyword">null</span> || <span class="keyword">this</span>.age &gt;= <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</code></pre><h2 id="前端捕获异常"><a href="#前端捕获异常" class="headerlink" title="前端捕获异常"></a>前端捕获异常</h2><ul>
-<li><p>前端使用 axios 发送异步请求，请求后端的注册用户接口，<code>this.user</code>是绑定了用户输入表单值的 User 对象。如果参数符合要求提示成功，如果参数非法则会走入<code>catch</code>分支将错误原因提醒给用户。注意到 Error 对象是做了封装的，我们要获取可以在<code>err.response.data</code>中获取</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">register() &#123;</span><br><span class="line">    axios.post(<span class="string">'http://localhost:8080/users'</span>, <span class="keyword">this</span>.user)</span><br><span class="line">      .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        alert(<span class="string">'Success!'</span>)</span><br><span class="line">        <span class="keyword">this</span>.loadUsers()</span><br><span class="line">      &#125;)</span><br><span class="line">      .catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">        alert(err.response.data.message)</span><br><span class="line">      &#125;)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li>前端捕获了异常将异常出错信息弹框显示<br><img src="/2018/07/19/Java 异常处理之 Web 案例/1.png" alt="06A6A59C-1FDF-4BA6-9DDB-6D29BDD489A9"></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2847,7 +2857,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2886,8 +2896,6 @@
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
-                    
-                      
                     
                       
                     

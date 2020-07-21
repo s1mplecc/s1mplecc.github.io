@@ -369,6 +369,217 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/07/21/图流算法之-Triangle-Counting/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/07/21/图流算法之-Triangle-Counting/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">图流算法之 Triangle Counting</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-07-21 09:15:32 / 修改时间：09:21:54" itemprop="dateCreated datePublished" datetime="2020-07-21T09:15:32+08:00">2020-07-21</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/21/图流算法之-Triangle-Counting/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/07/21/图流算法之-Triangle-Counting/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">1.6k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>图中的三角形是复杂网络分析的重要角色，不论是来自社会交互、计算机交流、金融交易、蛋白质还是生态学网络，图中三角形的数量都是巨大的，它在这些领域中有着非常广泛的应用。例如：通过三角形的分布可以区分哪些是垃圾邮件的主人；角色行为识别中，通过使用者参与的三角形的数量可以判断这个使用者的地位。</p>
+<p>图三角数量的计算（Triangle Counting）是计算网络聚集系数和传递性的重要步骤，广泛应用于重要角色识别、垃圾邮件检测、社区发现、生物检测等。目前图中三角形的计算主要分为<strong>准确计算</strong>（exact counting）和<strong>近似计算</strong>（approximate counting）两种类型。 </p>
+<h2 id="Gelly-Streaming"><a href="#Gelly-Streaming" class="headerlink" title="Gelly Streaming"></a>Gelly Streaming</h2><p>Gelly Streaming 框架给出的 Triangle Counting 示例算法的 Java Class：</p>
+<ul>
+<li><code>WindowTriangles</code>：Counts exact number of triangles in a graph slice.</li>
+<li><code>ExactTriangleCount</code>：Single-pass, insertion-only exact Triangle Local and Global Count algorithm.</li>
+<li><code>BroadcastTriangleCount</code>：The broadcast triangle count example estimates the number of triangles in a streamed graph.</li>
+</ul>
+<h2 id="Exact-Counting"><a href="#Exact-Counting" class="headerlink" title="Exact Counting"></a>Exact Counting</h2><p>准确计算可以准确地计算图中三角形的数量，对于规模很大的大图来说，计算的时空消耗很大。所以<strong>在流处理情形下，我们可以将图的边流按照时间来切片，计算一个图切<br>片（graph slice）中的三角形准确数量</strong>。比如 Gelly 示例类 <code>WindowTriangles</code> 中的处理流程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">edges.slice(windowTime, EdgeDirection.ALL)</span><br><span class="line">        .applyOnNeighbors(new GenerateCandidateEdges())</span><br><span class="line">        .keyBy(0, 1).timeWindow(windowTime)</span><br><span class="line">        .apply(new CountTriangles())</span><br><span class="line">        .timeWindowAll(windowTime).sum(0);</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，在这种情况下，一个图分片的所有信息我们都已获得，<strong>相当于我们是在批处理情形下计算一个图的三角数量</strong>。况且图的规模不大，在顶点和边已知的情况下，图三角的计算就变的简单了。算法的核心步骤如下：</p>
+<ol>
+<li>计算每一个顶点（Vertex）的领域（Neighborhood），即一个顶点的所有相邻顶点集合；</li>
+<li>领域中的每两个顶点构成一条候选边（Candidate Edge），为避免重复计算需要满足 <code>neighborIds[i] &gt; vertexID &amp;&amp; neighborIds[j] &gt; vertexID</code>；</li>
+<li>如果候选边存在于图中，则 Count + 1。</li>
+</ol>
+<h2 id="Approximate-Counting"><a href="#Approximate-Counting" class="headerlink" title="Approximate Counting"></a>Approximate Counting</h2><p>当图的规模很大时，准确计算的时空复杂度将会很大，而在很多应用中只需要近似得到图三角的数量，所以近年来近似算法得到了很多关注。 </p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://github.com/vasia/gelly-streaming" target="_blank" rel="noopener">Gelly Streaming：An experiemental API for single-pass graph streaming analytics on Apache Flink.</a></li>
+<li><a href="https://yhx-12243.github.io/OI-transit/memos/14.html" target="_blank" rel="noopener">图论概念梳理</a></li>
+<li><a href="http://www.infocomm-journal.com/dxkx/CN/10.11959/j.issn.1000-0801.2016169" target="_blank" rel="noopener">Research progress of triangle counting in big data</a></li>
+<li><a href="https://ieeexplore.ieee.org/document/7421397" target="_blank" rel="noopener">Counting Triangles in Real-World Graph Streams:Dealing with Repeated Edges and Time Windows</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/07/13/图流算法之-Bipartiteness-Check/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2690,293 +2901,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/29/结合案例使用 Java 注解和反射/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/11/29/结合案例使用 Java 注解和反射/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">结合案例使用 Java 注解和反射</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-29 04:53:50" itemprop="dateCreated datePublished" datetime="2018-11-29T04:53:50+08:00">2018-11-29</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/11/29/结合案例使用 Java 注解和反射/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/29/结合案例使用 Java 注解和反射/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">8.5k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在项目开发时遇到这样一个场景：从上游传过来一个实体类对象 <code>newEntity</code>，但它只有部分字段，需要去库中查出对应的旧对象 <code>oldEntity</code> 做一次补全（相当于一次部分更新）。</p>
-<p>一开始我们这样编码的：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> FlightBasic <span class="title">merge</span><span class="params">(FlightBasic newEntity)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getAirportCode() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setAirportCode(newEntity.getAirportCode());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getCraftNo() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setCraftNo(newEntity.getCraftNo());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getCraftType() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setCraftType(newEntity.getCraftType());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// too long ...</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>很快我们发现了问题：不仅类的字段很多，这样的 Entity 也有很多，所以到处都是又臭又长的 <code>merge</code> 方法。</p>
-<p>其实不难总结这些代码的共性：</p>
-<ul>
-<li>一个 Entity 只能和本身的类型 Merge</li>
-<li>代码都是判空后对属性的 <code>getter/setter</code> 方法的重复调用</li>
-</ul>
-<p>为了简化代码（偷懒），就在想能不能通过统一的处理完成这些 Merge 逻辑。首先想到的是代码生成，类似 MyBatis Generator，重复的工作交给脚本或者工具多好。但是很快就否定了这种方案，配置这些类的工作量也不小，而且很多类中有自己的业务逻辑，一不小心覆盖了也不行。那注解行不行呢？Spring Boot 就大量使用注解替换了之前配置繁杂的 XML 文件。实际编码后验证是可行的！本文将介绍如何<strong>配合使用 Java 的注解和反射</strong>实现上述问题中的 Merge 操作。示例代码已上传到 <a href="https://github.com/s1mplecc/merging" target="_blank" rel="noopener">GitHub</a> 上。</p>
-<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p>每当你创建描述符性质的类或者接口时，一旦其中包含重复性的工作，就可以考虑使用注解来简化与自动化该过程。一个注解准确意义上来说，只不过是一种特殊的注释而已，如果没有<strong>解析</strong>它的代码，它可能连注释都不如。而解析注解往往有两种方式，一种是<strong>编译期扫描</strong>，典型的例如 <code>@Override</code>，这种只适用于编译器已经认识的注解，一般都是 JDK 内置注解；另一种则是通过<strong>运行期反射</strong>，也是在我们自定义注解后需要自己编码的。</p>
-<h3 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h3><p>Java提供了四种元注解，专门负责<strong>修饰其他注解</strong>：</p>
-<ul>
-<li><code>@Target</code>：注解的作用目标</li>
-<li><code>@Retention</code>：注解的生命周期</li>
-<li><code>@Documented</code>：注解是否要包含在 JavaDoc 文档中</li>
-<li><code>@Inherited</code>：子类是否继承该注解</li>
-</ul>
-<h4 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h4><p><code>@Target</code> 用于定义注解的<strong>作用域</strong>，源码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.ANNOTATION_TYPE)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Target &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns an array of the kinds of elements an annotation type</span></span><br><span class="line"><span class="comment">     * can be applied to.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    ElementType[] value();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中 <code>ElementType</code> 是一个枚举类型，包含以下值：</p>
-<ul>
-<li><code>ElementType.TYPE</code>：允许注解作用在类、接口和枚举上</li>
-<li><code>ElementType.FIELD</code>：允许作用在属性字段上</li>
-<li><code>ElementType.METHOD</code>：允许作用在方法上</li>
-<li><code>ElementType.PARAMETER</code>：允许作用在方法参数上</li>
-<li><code>ElementType.CONSTRUCTOR</code>：允许作用在构造器上</li>
-<li><code>ElementType.LOCAL_VARIABLE</code>：允许作用在本地局部变量上</li>
-<li><code>ElementType.ANNOTATION_TYPE</code>：允许作用在注解上</li>
-<li><code>ElementType.PACKAGE</code>：允许作用在包上</li>
-</ul>
-<p>当允许有多个作用域时使用花括号 <code>{}</code> 包裹，比如这样：<code>@Target({ ElementType.TYPE, ElementType.FIELD })</code></p>
-<h4 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h4><p><code>@Retention</code> 用于标明注解存在的<strong>生命周期</strong>，源码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.ANNOTATION_TYPE)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Retention &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns the retention policy.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">RetentionPolicy <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>RetentionPolicy</code> 也是一个枚举类型，包含以下值：</p>
-<ul>
-<li><code>RetentionPolicy.SOURCE</code>：在源文件中保留，编译为 .class 文件时会被丢弃，比如 <code>@Override</code>、<code>@SuppressWarnings</code></li>
-<li><code>RetentionPolicy.CLASS</code>：.class 文件中会保留，但运行时丢弃</li>
-<li><code>RetentionPolicy.RUNTIME</code>：运行时保留，可以通过<strong>反射获取</strong></li>
-</ul>
-<p>剩下两种类型的注解用的不多，也比较简单，这里不再详细的介绍了，只需要知道他们各自的作用即可。<code>@Documented</code> 修饰的注解，当执行 JavaDoc 文档打包时会被保存进文档，否则将被丢弃。<code>@Inherited</code> 注解修饰的注解是有<strong>继承性</strong>的，也就说我们的注解修饰了一个类，而该类的子类将自动继承父类的该注解。该注解只作用于类，对属性或方法无效。</p>
-<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>Java 反射机制是指在<strong>程序运行时（Runtime）识别和使用对象的类型信息</strong>。以下内容摘自《Thinking in Java》，是我认为的有利于理解反射的核心概念。</p>
-<blockquote>
-<p>要理解反射的工作原理，首先必须知道<strong>类型信息</strong>在运行时是如何表示的。这项工作是由称为 <strong>Class</strong> 对象的特殊对象完成的，它包含了与类有关的信息。事实上，Class 对象就是用来创建类的所有“常规”对象的。</p>
-<p>类是程序的一部分，每个类都有一个 Class 对象。换言之，每当编写并且编译了一个新类，就会产生一个 Class 对象（更恰当地说，是被保存在一个同名的 <code>.class</code> 文中）。为了生成这个类的对象，运行这个程序的 Java 虚拟机（JVM）将使用被称为<strong>类加载器</strong>的子系统。类加载器首先检查这个类的 Class 对象是否已经加载。如果尚未加载，默认的类加载器就会根据类名查找 <code>.class</code> 文件。<strong>一旦某个类的 Class 对象被载入内存，它就被用来创建这个类的所有对象</strong>。</p>
-<p><code>Class</code> 类和 <code>java.lang.reflect</code> 类库一起对反射的概念提供了支持，该类库包含 <code>Field</code>、<code>Method</code> 以及 <code>Constructor</code> 类。这些类型的对象是由 JVM 在运行时创建的，用以<strong>表示未知类里对应的成员</strong>。这样你就可以使用 <code>Constructor</code> 创建新的对象，用 <code>get()</code> 和 <code>set()</code> 方法读取和修改与 <code>Field</code> 对象关联的字段，用 <code>invoke()</code> 方法调用与 <code>Method</code> 对象关联的方法等等。另外，还可以调用 <code>getFields()</code>、<code>getMethods()</code> 和 <code>getConstructors()</code> 等方法以返回表示字段、方法以及构造器的对象的数组（可以查看 Class 类源码了解更多资料）。</p>
-<p>重要的是，要认识到反射机制并没有什么神奇之处。当通过反射与一个未知类型的对象打交道时，JVM 只是简单地检查这个对象，看它属于哪个特定的类。在用它做其他事情之前必须先加在那个类的 Class 对象。对于反射机制来说，<code>.class</code> 文件在编译时是不可获取的，所以是在运行时打开和检查 <code>.class</code> 文件。</p>
-</blockquote>
-<p>这里简单的介绍一下我们编码时用到的与反射有关的方法：</p>
-<ul>
-<li><code>obj.getClass();</code> Java 提供了三种方式获取类的 Class 对象的引用：<code>Class.forName()</code> 通过类名获取；<code>obj.getClass();</code> 通过对象获取和 <code>Object.class</code> 通过类字面常量获取。</li>
-<li><code>getDeclaredFields();</code> 获取类中声明的所有字段，不包括父类和接口中的字段。它与 <code>getFields()</code> 的区别在于，<code>getFields()</code> 是获取所在类以及父类和接口中的所有访问修饰符为 <code>public</code> 的字段。</li>
-<li><code>getAnnotation();</code> 获取标注的注解实例对象。</li>
-</ul>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="Merge-粒度与等级"><a href="#Merge-粒度与等级" class="headerlink" title="Merge 粒度与等级"></a>Merge 粒度与等级</h3><p>回到我们的问题上来，首先考虑一个问题：Merge 的粒度应该位于什么层次？如果是类级别的，意味着整个类的所有属性将一视同仁，要么都合并要么都不，显然这样是不行的。Merge 的<strong>粒度应该在属性字段上</strong>，为此，我们专门定义了字段的 Merge 等级 <code>Level</code>：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Level &#123;</span><br><span class="line">    <span class="comment">/* 无论新值为何值，都会覆盖旧值 */</span></span><br><span class="line">    Mandatory,</span><br><span class="line">    <span class="comment">/* 如果新值不为null，覆盖旧值，否则不覆盖 */</span></span><br><span class="line">    Required,</span><br><span class="line">    <span class="comment">/* 忽略，不做合并处理 */</span></span><br><span class="line">    Ignored;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="自定义注解-MergeOn"><a href="#自定义注解-MergeOn" class="headerlink" title="自定义注解 @MergeOn"></a>自定义注解 @MergeOn</h3><p>接下来就需要自定义我们的注解：<code>@MergeOn</code>，作用在字段上，在运行时有效：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MergeOn &#123;</span><br><span class="line">    <span class="function">Level <span class="title">level</span><span class="params">()</span> <span class="keyword">default</span> Level.Required</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用 <code>default</code> 关键字可以设置缺省等级为 <code>Required</code>。</p>
-<h3 id="通过反射将字段设值"><a href="#通过反射将字段设值" class="headerlink" title="通过反射将字段设值"></a>通过反射将字段设值</h3><p>现在，还差最后一步，就是如何通过反射将字段设值。要想让实体类实现 Merge，首先需要定义一个接口 <code>Merging</code> 让实体类去继承它，然后接口中得有一个默认方法 <code>mergeWith(T newEntity)</code>，它将做下面这几件事：</p>
-<ul>
-<li>通过反射获取 Entity 声明的所有字段</li>
-<li>通过反射获取字段上 <code>@MergeOn</code> 注解的 Level</li>
-<li>通过 Level 走不同的分支去给字段设值，是强制或是忽略亦或是只有非空情况下才设值。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Merging</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Merging</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">mergeWith</span><span class="params">(T newEntity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.getClass() != newEntity.getClass()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MergeWithDifferentClassTypeException(</span><br><span class="line">                    String.format(<span class="string">"&lt;%s&gt; can not merge with other class type &lt;%s&gt;"</span>, <span class="keyword">this</span>.getClass().getName(), newEntity.getClass().getName()));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Field[] fields = <span class="keyword">this</span>.getClass().getDeclaredFields(); <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Field field : fields) &#123;</span><br><span class="line">            MergeOn mergeOn = field.getAnnotation(MergeOn.class); <span class="comment">// 2</span></span><br><span class="line">            field.setAccessible(<span class="keyword">true</span>); <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (mergeOn == <span class="keyword">null</span> || mergeOn.level().isRequired()) &#123; <span class="comment">// 4...</span></span><br><span class="line">                    Object newFieldValue = field.get(newEntity);</span><br><span class="line">                    <span class="keyword">if</span> (newFieldValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        field.set(<span class="keyword">this</span>, newFieldValue);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (mergeOn.level().isMandatory()) &#123; <span class="comment">// 4...</span></span><br><span class="line">                    field.set(<span class="keyword">this</span>, field.get(newEntity)); <span class="comment">// 5</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IllegalAccessException ex) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> MergeOnFieldIllegalAccessException(field.getName(), ex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们看看代码具体的实现步骤（注释中标明了顺序）：</p>
-<ol>
-<li><code>this.getClass().getDeclaredFields();</code> 获取类中声明的所有字段，不包含父类和接口中的字段。<code>this</code> 指向的是实现接口的实体类。</li>
-<li><code>field.getAnnotation(MergeOn.class);</code> 获取字段上的 <code>@MergeOn</code> 注解实例。</li>
-<li><code>field.setAccessible(true);</code> 由于字段通常是 <code>private</code> 修饰的，就需要<strong>获取访问权</strong>（并不是修改实际权限），否则将抛出 <code>IllegalAccessException</code> 异常。由此可见，反射有可能破环封装性。</li>
-<li>根据 Level 做相应设值。如果无注解或 Level 为 Required，则新值非空时覆盖旧值；如果是强制（Mandatory）则始终覆盖；否则（Ignored），忽略不做处理。</li>
-<li><code>field.set(this, field.get(newEntity));</code> 字段设值的实际操作，接口设计看上去有点反人类。第一个参数为需要设置字段的对象，此处为 oldEntity，第二个参数为要设置的值，此处为新对象的字段值。</li>
-</ol>
-<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>接下来我将演示如何使用这个接口，并编写单元测试验证其正确性。</p>
-<p>首先定义实体类 Entity。</p>
-<ul>
-<li>为了测试全面性，加入了各种类型的属性字段，包括基础类型、集合、数组和类；同时，<code>@MergeOn</code> 注解覆盖了所有 Level，还包括缺省和无注解的情况。</li>
-<li>为了简单，直接在字段声明时赋初值。即 <code>new Entity()</code> 出来的可以看成旧的模型对象（oldEntity）。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Entity</span> <span class="keyword">implements</span> <span class="title">Merging</span>&lt;<span class="title">Entity</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@MergeOn</span>(level = Level.Ignored)</span><br><span class="line">    <span class="keyword">private</span> String string = <span class="string">"string"</span>;</span><br><span class="line">    <span class="meta">@MergeOn</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> anInt = <span class="number">1</span>;</span><br><span class="line">    <span class="meta">@MergeOn</span>(level = Level.Mandatory)</span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; stringList = Arrays.asList(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>);</span><br><span class="line">    <span class="meta">@MergeOn</span>(level = Level.Required)</span><br><span class="line">    <span class="keyword">private</span> String[] strings = <span class="keyword">new</span> String[]&#123;<span class="string">"sArr1"</span>, <span class="string">"sArr2"</span>&#125;;</span><br><span class="line">    <span class="keyword">private</span> Email email = <span class="keyword">new</span> Email(<span class="string">"zz@163.com"</span>);</span><br><span class="line">    <span class="keyword">private</span> Set&lt;Email&gt; emails = Sets.newLinkedHashSet(<span class="keyword">new</span> Email(<span class="string">"zz@163.com"</span>), <span class="keyword">new</span> Email(<span class="string">"zz@gmail.com"</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Email</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String value;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Email</span><span class="params">(String value)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.value = value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>理想情况下，<code>string</code> 字段新值应当被忽略；<code>stringList</code> 在新值为 null 时也会被强制覆盖；其他缺省和无注解的应当行为与 <code>@MergeOn(level = Level.Required)</code> 一致，即非空时才会覆盖旧值。以下为测试代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_merge_new_entity_with_different_merge_level</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Entity newEntity = <span class="keyword">new</span> Entity();</span><br><span class="line">    newEntity.setString(<span class="string">"newString"</span>);  <span class="comment">// Ignored</span></span><br><span class="line">    newEntity.setAnInt(<span class="number">2</span>);</span><br><span class="line">    newEntity.setStringList(<span class="keyword">null</span>);  <span class="comment">// Mandatory</span></span><br><span class="line">    newEntity.setStrings(<span class="keyword">new</span> String[]&#123;<span class="string">"newS1"</span>, <span class="string">"newS2"</span>, <span class="string">"newS3"</span>&#125;);</span><br><span class="line">    newEntity.setEmail(<span class="keyword">new</span> Entity.Email(<span class="string">"newEmail@163.com"</span>));</span><br><span class="line">    newEntity.setEmails(<span class="keyword">null</span>); <span class="comment">// Required, wished not be overwrited</span></span><br><span class="line"></span><br><span class="line">    Entity entity = <span class="keyword">new</span> Entity(); <span class="comment">// oldEntity</span></span><br><span class="line">    entity.mergeWith(newEntity);</span><br><span class="line"></span><br><span class="line">    assertThat(entity.getString()).isEqualTo(<span class="string">"string"</span>);</span><br><span class="line">    assertThat(entity.getAnInt()).isEqualTo(<span class="number">2</span>);</span><br><span class="line">    assertThat(entity.getStringList()).isNull();</span><br><span class="line">    assertThat(entity.getStrings()).containsSequence(<span class="string">"newS1"</span>, <span class="string">"newS2"</span>, <span class="string">"newS3"</span>);</span><br><span class="line">    assertThat(entity.getEmail().getValue()).isEqualTo(<span class="string">"newEmail@163.com"</span>);</span><br><span class="line">    assertThat(entity.getEmails()).hasSize(<span class="number">2</span>);</span><br><span class="line">    assertThat(entity.getEmails()).contains(<span class="keyword">new</span> Entity.Email(<span class="string">"zz@163.com"</span>));</span><br><span class="line">    assertThat(entity.getEmails()).contains(<span class="keyword">new</span> Entity.Email(<span class="string">"zz@gmail.com"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://juejin.im/post/5b45bd715188251b3a1db54f" target="_blank" rel="noopener">JAVA 注解的基本原理 —— 掘金</a></li>
-<li>Thinking in Java 第14章：类型信息</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3026,7 +2950,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3065,8 +2989,6 @@
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
-                    
-                      
                     
                       
                     
