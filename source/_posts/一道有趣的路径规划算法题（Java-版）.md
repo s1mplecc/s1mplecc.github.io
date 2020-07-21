@@ -1,7 +1,7 @@
 ---
 title: 一道有趣的路径规划算法题（Java 版）
-tags: [Algorithm]
-categories: [Coding]
+tags: []
+categories: [Algorithms]
 date: 2019-02-15 15:09:14
 ---
 ## 问题
