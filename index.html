@@ -372,6 +372,395 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-08-09 23:20:52 / 修改时间：23:29:04" itemprop="dateCreated datePublished" datetime="2020-08-09T23:20:52+08:00">2020-08-09</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/08/09/DataCon2020-加密恶意流量检测初赛-Writeup-及总结反思/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">14k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="初赛题目"><a href="#初赛题目" class="headerlink" title="初赛题目"></a>初赛题目</h2><p>主办方提供了 black/white/test 三个 pcap 文件夹，其中 black 和 white 分别是检测出有/无恶意软件感染的客户端 IP 组，要求选手对 test 数据集进行判定。</p>
+<p><img src="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/0.png" alt="09bda35ff290f2e34d88d50e71d98f1a.png"></p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>该题的解题过程应分为以下三个大步骤：</p>
+<ol>
+<li><strong>特征选择（Feature Selection）</strong>，选取对于区分正常/恶意流量有明显作用的 Features。</li>
+<li><strong>特征提取（Feature Extraction）</strong>，从 pcap 文件中提取上述 Features，并转换为模型训练所需要的格式。我们选择的特征提取工具为 <strong>Zeek</strong>。</li>
+<li><strong>模型训练（Model Training）</strong>，选择合适的机器学习模型对三类 pcap 文件进行训练和预测。我们选择的 Python 机器学习库为 <strong>scikit-learn</strong>。</li>
+</ol>
+<h2 id="解题步骤"><a href="#解题步骤" class="headerlink" title="解题步骤"></a>解题步骤</h2><h3 id="1-合并pcap文件"><a href="#1-合并pcap文件" class="headerlink" title="1. 合并pcap文件"></a>1. 合并pcap文件</h3><p>主办方提供的 pcap 文件，其中 white/black 各有 1500 个 pcap，test 2000 个 pcap</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">➜  tree eta_1 </span><br><span class="line">eta_1</span><br><span class="line">├── black</span><br><span class="line">│   ├── 192.168.10.91.pcap</span><br><span class="line">│   ├── 192.168.44.25.pcap</span><br><span class="line">|		├── ...</span><br><span class="line">│   └── 192.168.80.115.pcap</span><br><span class="line">├── test</span><br><span class="line">│   ├── 192.168.150.71.pcap</span><br><span class="line">│   ├── 192.168.150.99.pcap</span><br><span class="line">|		├── ...</span><br><span class="line">│   └── 192.168.210.239.pcap</span><br><span class="line">└── white</span><br><span class="line">    ├── 192.168.119.23.pcap</span><br><span class="line">    ├── 192.168.122.37.pcap</span><br><span class="line">		├── ...</span><br><span class="line">    └── 192.168.96.180.pcap</span><br></pre></td></tr></table></figure>
+<p>使用 <code>mergecap</code> 命令将 pcap 文件合并为三个大的 pcap 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  mergecap -w black.pcap .&#x2F;eta_1&#x2F;black&#x2F;*.pcap</span><br><span class="line">➜  tree -s -h .     </span><br><span class="line">.</span><br><span class="line">├── [418M]  black.pcap</span><br><span class="line">├── [1.0G]  test.pcap</span><br><span class="line">└── [1.7G]  white.pcap</span><br></pre></td></tr></table></figure>
+<h3 id="2-特征选择"><a href="#2-特征选择" class="headerlink" title="2. 特征选择"></a>2. 特征选择</h3><p>参考了多篇加密恶意流量检测的研究论文，我们初步确定了以下四类需要提取的 Features，包括<strong>TLS客户端指纹信息</strong>、<strong>数据包元数据</strong>、<strong>HTTP头部信息</strong>和<strong>DNS响应信息</strong>。</p>
+<h4 id="TLS-client-fingerprinting："><a href="#TLS-client-fingerprinting：" class="headerlink" title="TLS client fingerprinting："></a>TLS client fingerprinting：</h4><p>在进行TLS握手时，会进行如下几个步骤：</p>
+<ol>
+<li><strong>Client Hello</strong>，客户端提供支持的加密套件数组（cipher suites）；</li>
+<li><strong>Server Hello</strong>，由服务器端选择一个加密套件，传回服务器端公钥，并进行认证和签名授权（<strong>Certificate</strong> + Signature）；</li>
+<li>客户端传回客户端公钥（<strong>Client Key Exchange</strong>），客户端确立连接；</li>
+<li>服务器端确立连接，开始 HTTP 通信。</li>
+</ol>
+<p><img src="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/1.png" alt="5b01483a65bdc17c68873508796bb85e.png"></p>
+<p>以上加粗的四种消息类型可以通过 TLS 握手协议的 <strong>Handshake Type</strong> 做区分：</p>
+<p><img src="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/2.png" alt="bff6a460bcaa7c442014c3eb89deb26f.png"></p>
+<p>基于此，我们选取了以下特征：</p>
+<ul>
+<li><strong>客户端支持的加密套件数组</strong>（Cipher suites），<strong>服务器端选择的加密套件</strong>。</li>
+<li><strong>支持的扩展</strong>（TLS extensions），若分别用向量表示客户端提供的密码套件列表和 TLS 扩展列表，可以从服务器发送的确认包中的信息确定两组向量的值。</li>
+<li><strong>客户端公钥长度</strong>（Client public key length），从密钥交换的数据包中，得到密钥的长度。</li>
+<li><strong>Client version</strong>，the preferred TLS version for the client</li>
+<li><strong>是否非CA自签名</strong>，统计数据表示，恶意流量约70%出现非CA认证服务器且自签名的情况，非恶意流量约占0.1%。此项判断的依据是：未出现 <code>CA: True</code> 字段（默认非 CA 机构）且 <code>signedCertificate</code> 中的 <code>issuer</code> 字段等于 <code>subject</code> 字段。</li>
+</ul>
+<h4 id="数据包元数据："><a href="#数据包元数据：" class="headerlink" title="数据包元数据："></a>数据包元数据：</h4><ul>
+<li><strong>数据包的大小</strong>，数据包的长度受 UDP、TCP 或者 ICMP 协议中数据包的有效载荷大小影响，如果数据包不属于以上协议，则被设置为 IP 数据包的大小。</li>
+<li><strong>到达时间序列</strong></li>
+<li><strong>字节分布</strong></li>
+</ul>
+<h4 id="HTTP头部信息："><a href="#HTTP头部信息：" class="headerlink" title="HTTP头部信息："></a>HTTP头部信息：</h4><ul>
+<li><strong>Content-Type</strong>，正常流量 HTTP 头部信息汇总值多为 <code>image/*</code>，而恶意流量为 <code>text/*、text/html、charset=UTF-8</code> 或者 <code>text/html;charset=UTF-8</code>。</li>
+<li><strong>User-Agent</strong></li>
+<li><strong>Accept-Language</strong></li>
+<li><strong>Server</strong></li>
+<li><strong>HTTP响应码</strong></li>
+</ul>
+<h4 id="DNS响应信息："><a href="#DNS响应信息：" class="headerlink" title="DNS响应信息："></a>DNS响应信息：</h4><ul>
+<li><p><strong>域名的长度</strong>：正常流量的域名长度分布为均值为6或7的高斯分布（正态分布）；而恶意流量的域名（FQDN全称域名）长度多为6（10）。</p>
+</li>
+<li><p><strong>数字字符及非字母数字(non-alphanumeric character)的字符占比</strong>：正常流量的DNS响应中全称域名的数字字符的占比和非字母数字字符的占比要大。</p>
+</li>
+<li><p><strong>DNS解析出的IP数量</strong>：大多数恶意流量和正常流量只返回一个IP地址；其它情况，大部分正常流量返回2-8个IP地址，恶意流量返回4或者11个IP地址。</p>
+</li>
+<li><p><strong>TTL值</strong>：正常流量的TTL值一般为60、300、20、30；而恶意流量多为300，大约22%的DNS响应汇总TTL为100，而这在正常流量中很罕见。</p>
+</li>
+<li><p><strong>域名是否收录在Alexa网站</strong>：恶意流量域名信息很少收录在Alexa top-1,000,000中，而正常流量域名多收录在其中。</p>
+</li>
+</ul>
+<h3 id="3-特征提取"><a href="#3-特征提取" class="headerlink" title="3. 特征提取"></a>3. 特征提取</h3><p>分析 pcap 提取特征我们采用的工具是 <strong>zeek</strong>，zeek是一款关于流量分析和特征提取的强大的软件，它可以对网络中的指定设备进行监听，捕获该设备通信中的数据包，并把数据包按照一定的规则聚合为一次会话，也可以直接处理pcap文件。以TCP为例，zeek一次会话从接收到第一个SYN包开始，直到收到FIN或者计时器超时结束，之间的所有数据包都会被聚合到这条连接里。</p>
+<p>在执行zeek命令之前，因为网上有很多zeek相关的脚本，可以方便我们的特征提取，所以我们在把这些脚本下载之后，需要在zeek的local.zeek文件里面按照格式，把脚本的文件夹路径添加到里面。以我们找的/Flowmeter/flowmeter.zeek为例。在文件的最后一行加入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@load &#x2F;Your_Script_Path&#x2F;Flowmeter</span><br></pre></td></tr></table></figure>
+<p>之后进入pcap文件目录，以black.pcap为例，执行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /your_zeek_path/bin/zeek -Cr black.pcap /your_zeek_path/share/zeek/site/local.zeek</span><br></pre></td></tr></table></figure>
+<p>执行完毕，生成一系列的zeek日志，我们主要关注 <strong>conn.log ，ssl.log ，X509.log ，flowmeter.log</strong> 这几个日志。</p>
+<p>这几个日志中都有相应的标识字段，连接用uid标识，证书文件用fuid标识，在ssl日志中有本次连接的uid和双方提供的证书的fuid，根据这些标识可以将不同的日志连接到一起，所以我们先用python把这几个日志处理成csv，方便后续的操作。以conn.log为例，处理它的python代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The log should delete the comment lines in advance.</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">logToCsv</span><span class="params">(which_dataset)</span>:</span></span><br><span class="line">    infile = <span class="string">"D:/datacon/"</span> + which_dataset + <span class="string">"/conn.log"</span></span><br><span class="line">    outfile = <span class="string">"D:/datacon/"</span> + which_dataset + <span class="string">"/conn.csv"</span></span><br><span class="line">    f0 = open(infile, <span class="string">"r"</span>)</span><br><span class="line">    f1 = open(outfile, <span class="string">"w"</span>)</span><br><span class="line">    <span class="keyword">for</span> each_line <span class="keyword">in</span> f0:</span><br><span class="line">        <span class="comment"># The fields in zeek logs are split by '\t'</span></span><br><span class="line">        aline = each_line.split(<span class="string">'\t'</span>)</span><br><span class="line">        <span class="keyword">if</span> aline[<span class="number">9</span>] == <span class="string">'-'</span>:</span><br><span class="line">            aline[<span class="number">9</span>] = <span class="string">'0'</span></span><br><span class="line">        <span class="keyword">if</span> aline[<span class="number">10</span>] == <span class="string">'-'</span>:</span><br><span class="line">            aline[<span class="number">10</span>] = <span class="string">'0'</span></span><br><span class="line">        str = <span class="string">""</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">20</span>):</span><br><span class="line">            <span class="comment"># filter some fields</span></span><br><span class="line">            <span class="keyword">if</span> (i == <span class="number">8</span> <span class="keyword">or</span> (i &gt;= <span class="number">12</span> <span class="keyword">and</span> i &lt;= <span class="number">15</span>)):</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            str = str + aline[i] + <span class="string">','</span></span><br><span class="line">        str += (aline[i + <span class="number">1</span>])</span><br><span class="line">        f1.write(str)</span><br><span class="line">        print(aline)</span><br></pre></td></tr></table></figure>
+<p>处理其他日志的思路也大致相同，如果某行缺失太多字段，我们考虑直接删除，当遇到有些空字段，也需要对其处理，如果有bool类型的字段为空，我们根据逻辑把置为T或者F，如果是数值型，就直接置0，如果是字符串，一般当作null处理。最后几个日志处理完毕，生成相应的csv后，用python里的merge函数合并，以conn.csv和flowmeter.csv为例，这两个csv根据文件中的uid字段合并。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">conn = pd.read_csv(<span class="string">"D:/datacon/"</span>+which_dataset+<span class="string">"/conn.csv"</span>)</span><br><span class="line">flowmeter = pd.read_csv(<span class="string">"D:/datacon/"</span>+which_dataset+<span class="string">"/flowmeter.csv"</span>)</span><br><span class="line"><span class="comment">#By default, merge is doing natural join of 2 csv files</span></span><br><span class="line">merged = conn.merge(flowmeter, on=<span class="string">'uid'</span>)</span><br><span class="line"><span class="comment">#Output the new file</span></span><br><span class="line">merged.to_csv(<span class="string">"D:/datacon/"</span>+which_dataset+<span class="string">"/conn_detail.csv"</span>)</span><br></pre></td></tr></table></figure>
+<p>我们解题时的feature是基于zeek里面的某次会话的，我们的feature主要是利用zeek日志中的字段和这些字段进过处理后得到的字段，一开始我们尝试把我们获取的几十个features全部保留用于后续机器学习，但是可能因为有些字段在black和white区分度不大，所以得到的预测结果不是很好。之后我们主要根据论文Analysis of Encrypted Malicious Traffic和A machine learning approach to detecting malware in TLS traffic using resilient network features中提到的加密流量特征，我们进行研究分析，把我们的feature从85个精简到32个，再进行预测，这次预测结果准确率显著上升。</p>
+<p>我们的feature，主要分为两类（因为比赛流量全是443端口的，所以没有其他DNS，http等信息）。一类是会话中双方的流量信息，另一类是双方的SSL会话中的信息。<strong>最终提取的特征如下：</strong></p>
+<p><img src="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/3.jpeg" alt="7d1475ca9c4d88e2c3e078a126fdfd52.jpeg"></p>
+<p>在这些feature中，流量信息是两个四元组通信最基本的特征，我们采用了IAT（inter-arrive-time)和有效载荷的最大值，最小值，均值和方差这几个属性。</p>
+<p>在恶意流量检测中，上下行流量比也很重要，如果客户端受到感染，可能就会向恶意服务器发送大量数据，此时上行流量就会大于下行流量。</p>
+<p>对于SSL会话特征，恶意流量客户端经常希望选用TLS_RSA_WITH_RC4_128_MD5这个加密套件。</p>
+<p>对于服务器来说，最重要的就是服务器证书是否自签名，有大约70%的恶意流量为自签名，而正常流量自签名只占大约0.1%。除此之外，服务器在SSL认证时提供的证书链中证书个数，这些证书中所附带的其他站点个数等指标也可做为衡量恶意流量的标准。</p>
+<h3 id="特征向量化"><a href="#特征向量化" class="headerlink" title="特征向量化"></a>特征向量化</h3><p>因为模型训练不支持 <code>str</code> 类型的特征，所以需要对 <code>version</code> 和 <code>server_cipher</code> 字段进行特征向量化。</p>
+<table>
+<thead>
+<tr>
+<th>version</th>
+<th>cipher</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TLSv10</td>
+<td>TLS_RSA_WITH_3DES_EDE_CBC_SHA</td>
+</tr>
+<tr>
+<td>TLSv10</td>
+<td>TLS_RSA_WITH_3DES_EDE_CBC_SHA</td>
+</tr>
+<tr>
+<td>TLSv10</td>
+<td>TLS_RSA_WITH_3DES_EDE_CBC_SHA</td>
+</tr>
+<tr>
+<td>TLSv10</td>
+<td>TLS_RSA_WITH_3DES_EDE_CBC_SHA</td>
+</tr>
+<tr>
+<td>TLSv12</td>
+<td>TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</td>
+</tr>
+<tr>
+<td>TLSv10</td>
+<td>TLS_RSA_WITH_RC4_128_MD5</td>
+</tr>
+</tbody>
+</table>
+<p><code>DictVectorizer</code> 是 scikit-learn 库中用于将 Python <code>dict</code> 对象表示的特征数组转换为 scikit-learn 估计器使用的 NumPy/SciPy 表示形式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convert_by_dict</span><span class="params">(src_file, dest_file)</span>:</span></span><br><span class="line">    <span class="keyword">from</span> sklearn.feature_extraction <span class="keyword">import</span> DictVectorizer</span><br><span class="line">    vec = DictVectorizer()</span><br><span class="line"></span><br><span class="line">    df = pd.read_csv(src_file)</span><br><span class="line">    vs1 = list(map(<span class="keyword">lambda</span> x: &#123;<span class="string">'version'</span>: x&#125;, df[<span class="string">'version'</span>]))</span><br><span class="line">    vs2 = vec.fit_transform(vs1).toarray()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> index, name <span class="keyword">in</span> enumerate(vec.get_feature_names()):</span><br><span class="line">        df[name] = list(map(<span class="keyword">lambda</span> x: int(x[index]), vs2))</span><br><span class="line"></span><br><span class="line">    df.to_csv(dest_file, index=<span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
+<p>向量化后的效果：</p>
+<table>
+<thead>
+<tr>
+<th>version=SSLv3</th>
+<th>version=TLSv10</th>
+<th>version=TLSv12</th>
+<th>version=TLSv11</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>另外需要注意的是，<strong>需要对特征列进行补全</strong>，否则在进行模型训练时会出现特征个数不匹配的问题。例如：white.pcap 文件中 TLS versions 包含 <code>[&#39;TLSv1.0&#39;, &#39;TLSv1.2&#39;, &#39;SSLv3&#39;]</code> 三个版本，而 black 和 test 的 pcap 文件中除这三个版本外还包含 <code>&#39;TLSv1.1&#39;</code> 版本，所以需要在 white 中加入 <code>version=TLSv1.1</code> 全为 0 的列。</p>
+<h3 id="4-模型选取及参数"><a href="#4-模型选取及参数" class="headerlink" title="4. 模型选取及参数"></a>4. 模型选取及参数</h3><p>需要注意的是：white 已明确没有被恶意软件感染，所以产生的流量可以全部标注为正常流量，而 black 明确的只是客户端感染了恶意软件，但产生的流量不一定全为恶意流量。所以实际上是<strong>对不平衡样本数据进行训练和预测</strong>。遵循这个思路，可以采用 Anomaly Detector + Misuse Detector 的联合分类器进行训练。</p>
+<p><img src="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/4.png" alt="fe7a1c020a03492fd8b465e8541a410e.png"></p>
+<p>基于全正常流量的 white.pcap 文件进行 <strong>One-class Classification</strong> 训练异常检测器 Anomaly Detector；再用该分类器对 black.pcap 文件进行分类预测恶意流量；结合 black 中检测的恶意流量和 white 正常流量训练二分类器；最终采用二分类器对 test 中的流量进行检测。</p>
+<h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><p>用于模型训练的数据集有以下 3 个：</p>
+<ul>
+<li><code>white.csv</code> 是从无恶意软件感染的客户端 IP 所提取出来的四元组相关特征，共4834条。</li>
+<li><code>black.csv</code> 是从恶意软件感染的客户端 IP 所提取出来的四元组相关特征，共3980条。</li>
+<li><code>test.csv</code> 是从需要评测的客户端 IP 所提取出来的四元组相关特征，共5690条。</li>
+</ul>
+<h4 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h4><p>首先我们将三个数据集使用 pandas 读入：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">white_df = pd.read_csv(<span class="string">"white.csv"</span>,index_col=<span class="number">0</span>)</span><br><span class="line">black_df = pd.read_csv(<span class="string">"black.csv"</span>,index_col=<span class="number">0</span>)</span><br><span class="line">test_df = pd.read_csv(<span class="string">"test.csv"</span>,index_col=<span class="number">0</span>)<span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>然后对于用一个列名数组 <code>data_f</code> 来定义需要提取的特征：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">data_f = [ <span class="string">'bwd_payload_ratio'</span>,<span class="string">'fwd_payload_ratio'</span>,</span><br><span class="line">                <span class="string">'fwd_pkts_payload.std'</span>,<span class="string">'bwd_pkts_payload.std'</span>,<span class="string">'fwd_iat.std'</span>,<span class="string">'bwd_iat.std'</span>,</span><br><span class="line">                <span class="string">'orig_pkts'</span>,<span class="string">'resp_pkts'</span>,<span class="string">'flow_duration'</span>,<span class="string">'down_up_ratio'</span>,<span class="string">'fwd_pkts_payload.max'</span>,</span><br><span class="line">               <span class="string">'fwd_pkts_payload.tot'</span>,<span class="string">'fwd_pkts_payload.avg'</span>,<span class="string">'bwd_pkts_payload.max'</span>,<span class="string">'bwd_pkts_payload.tot'</span>,</span><br><span class="line">               <span class="string">'bwd_pkts_payload.avg'</span>,<span class="string">'fwd_iat.min'</span>,<span class="string">'fwd_iat.max'</span>,<span class="string">'fwd_iat.avg'</span>,<span class="string">'bwd_iat.min'</span>,<span class="string">'bwd_iat.max'</span>,</span><br><span class="line">               <span class="string">'bwd_iat.avg'</span>,<span class="string">'established'</span>,<span class="string">'num_certs'</span>,<span class="string">'certificate.duration'</span>,<span class="string">'certificate.key_length'</span>,</span><br><span class="line">               <span class="string">'num_san_dns'</span>,<span class="string">'Not_CA_Self_Signed'</span>,<span class="string">'is_version_eq_TLSv10'</span>,<span class="string">'is_version_eq_TLSv12'</span>,<span class="string">'is_version_eq_SSLv3'</span>,</span><br><span class="line">               <span class="string">'is_version_eq_TLSv11'</span>,<span class="string">'is_server_cipher_eq_TLS_RSA_WITH_3DES_EDE_CBC_SHA'</span>,<span class="string">'is_server_cipher_eq_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256'</span>,</span><br><span class="line">               <span class="string">'is_server_cipher_eq_TLS_RSA_WITH_RC4_128_MD5'</span>,<span class="string">'is_server_cipher_eq_TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'</span>,</span><br><span class="line">               <span class="string">'is_server_cipher_eq_TLS_RSA_WITH_RC4_128_SHA'</span>,<span class="string">'is_server_cipher_eq_TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256'</span>,</span><br><span class="line">               <span class="string">'is_server_cipher_eq_TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA'</span>,<span class="string">'is_server_cipher_eq_TLS_RSA_WITH_AES_256_CBC_SHA'</span>,</span><br><span class="line">               <span class="string">'is_server_cipher_eq_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384'</span>,<span class="string">'is_server_cipher_eq_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA'</span>,</span><br><span class="line">               <span class="string">'is_server_cipher_eq_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256'</span>,<span class="string">'is_server_cipher_eq_TLS_DHE_RSA_WITH_AES_256_CBC_SHA'</span>,</span><br><span class="line">               <span class="string">'is_server_cipher_eq_TLS_RSA_WITH_AES_128_CBC_SHA'</span>,<span class="string">'is_server_cipher_eq_TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384'</span>,</span><br><span class="line">               <span class="string">'is_server_cipher_eq_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256'</span>,<span class="string">'is_server_cipher_eq_TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256'</span>,</span><br><span class="line">               <span class="string">'is_server_cipher_eq_TLS_RSA_WITH_AES_128_GCM_SHA256'</span>,<span class="string">'is_server_cipher_eq_TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256_OLD'</span>，</span><br><span class="line">       <span class="string">'is_server_cipher_eq_TLS_RSA_WITH_AES_256_GCM_SHA384'</span>,<span class="string">'is_server_cipher_eq_TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256'</span>]</span><br></pre></td></tr></table></figure>
+<p>我们将从3类数据集中提取的特征分别保存在white_flow，black_flow，test_flow中，同时将test数据集中的源ip信息保留在test_ip中（用于在恶意流量中提取恶意客户端ip）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># extract features</span></span><br><span class="line">white_flow = white_df[data_f]</span><br><span class="line">black_flow = black_df[data_f]</span><br><span class="line">test_flow = test_df[data_f]</span><br><span class="line"></span><br><span class="line"><span class="comment">#id.orig_h字段存放流量的源ip</span></span><br><span class="line">test_ip = test_df[<span class="string">'id.oirg_h'</span>]</span><br></pre></td></tr></table></figure>
+<h4 id="训练异常检测器-Anomaly-Detector"><a href="#训练异常检测器-Anomaly-Detector" class="headerlink" title="训练异常检测器 Anomaly Detector"></a>训练异常检测器 Anomaly Detector</h4><p>在black数据集中同时存在恶意流量和正常流量，没有明确的标注，无法直接用于训练分类器。</p>
+<p>而white数据集中都是正常流量，可以先用white数据集来训练一个anomaly detector分类器。然后用这个分类器在black数据集中推理得到哪些是恶意流量。该分类器主要用到one-class classification的思想，选取了隔离森林模型 <code>IsolationForest</code>。</p>
+<p>在这里我们用到的是white_flow和black_fllow这两个数据集，先将两个数据集合并做归一化处理,得到total_data：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#merge black_flow with white flow</span></span><br><span class="line">merge_flow = white_flow.append(black_flow, ignore_index=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#MinMax归一化</span></span><br><span class="line">min_max_scaler = preprocessing.MinMaxScaler()</span><br><span class="line">total_data = min_max_scaler.fit_transform(merge_flow.values)</span><br></pre></td></tr></table></figure>
+<p>然后我们从total_data中提取white的训练集和测试集，同时需要提取black的测试集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#white训练集和测试集(标签1表示正常流量)</span></span><br><span class="line">x_train,x_valid,y_train,y_valid=train_test_split(total_data[<span class="number">0</span>:<span class="number">4834</span>],np.ones(<span class="number">4834</span>,np.int),random_state=<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># black测试集</span></span><br><span class="line">black_data = total_data[<span class="number">4834</span>:]</span><br></pre></td></tr></table></figure>
+<p>下一步就开始进行IsolationForest模型的训练。模型的第一个参数是样本数目，第二个参数是样本中异常数据占比：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#IsolationForest Model</span></span><br><span class="line"></span><br><span class="line">clf = IsolationForest(max_samples=len(x_train), contamination=<span class="number">0.4</span>)</span><br><span class="line">clf.fit(x_train)</span><br><span class="line"></span><br><span class="line"><span class="comment">#验证集正确率</span></span><br><span class="line">y_pred_valid = clf.predict(x_valid)</span><br><span class="line">print(<span class="string">"valid_accuracy："</span> + str(np.mean(y_valid == y_pred_valid)))</span><br><span class="line"></span><br><span class="line"><span class="comment">#由black测试集得到的恶意流量占比</span></span><br><span class="line">y_black_test = clf.predict(black_data)</span><br><span class="line">print(<span class="string">"black_anomaly_ratio："</span> + str(<span class="number">1</span> - np.mean(y_black_test==np.ones(<span class="number">3980</span>, np.int))))</span><br></pre></td></tr></table></figure>
+<h4 id="训练误用检测器-Misuse-Detector"><a href="#训练误用检测器-Misuse-Detector" class="headerlink" title="训练误用检测器 Misuse Detector"></a>训练误用检测器 Misuse Detector</h4><p>假设这些由异常检测器识别的可疑流量是恶意流量，我们就有了恶意流量的标注。</p>
+<p>接下来我们用这些恶意流量labels，结合white数据集中的正常流量labels，来训练一个misuse detector。在这里选取了XGboost基于树的模型，目标选取为多分类问题（分类数为2）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#XGbooster Model     gbtree    multi:softmax   2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># label标签  1:white  0:black</span></span><br><span class="line">white_flow[<span class="string">'label'</span>] = <span class="number">1</span></span><br><span class="line">black_flow[<span class="string">'label'</span>] = y_black_test</span><br><span class="line">black_flow[<span class="string">'label'</span>] = black_flow[<span class="string">'label'</span>].map(<span class="keyword">lambda</span> x: <span class="number">1</span> <span class="keyword">if</span> x &gt; <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保留balck中的恶意流量数据</span></span><br><span class="line">balack_anomaly_flow = black_flow[black_flow[<span class="string">'label'</span>] == <span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 得到模型训练数据集</span></span><br><span class="line">model_data = white_flow.append(balack_anomaly_flow, ignore_index=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<p>下一步对于数据做MaxMin归一化，然后分割出训练集、验证集、测试集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># MaxMin归一化</span></span><br><span class="line">X_flow = model_data[data_f]</span><br><span class="line">label_flow = model_data[<span class="string">'label'</span>].values</span><br><span class="line">model_total_flow = X_flow.append(test_flow, ignore_index=<span class="keyword">True</span>)</span><br><span class="line">data_normal = preprocessing.scale(model_total_flow.values)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分出训练集和测试集</span></span><br><span class="line">model_train = data_normal[:model_data.shape[<span class="number">0</span>]]</span><br><span class="line">model_test = data_normal[model_data.shape[<span class="number">0</span>]:]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练集中分割出验证集(根据label_flow来层次化分割)</span></span><br><span class="line">X_train, X_valid, Y_train, Y_valid = train_test_split(model_train, label_flow, random_state=<span class="number">50</span>,stratify = label_flow)</span><br><span class="line"></span><br><span class="line">xgboost_train = xgb.DMatrix(X_train, label=Y_train)</span><br><span class="line">xgboost_valid = xgb.DMatrix(X_valid, label=Y_valid)</span><br></pre></td></tr></table></figure>
+<p>进行XGbooster模型训练：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">evalerror</span><span class="params">(preds, dtrain)</span>:</span>    </span><br><span class="line">    labels = dtrain.get_label()</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'error'</span>, math.sqrt(metrics.mean_squared_error(preds,labels))</span><br><span class="line"></span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">'booster'</span>: <span class="string">'gbtree'</span>,  <span class="comment">#树模型</span></span><br><span class="line">    <span class="string">'objective'</span>: <span class="string">'multi:softmax'</span>,  <span class="comment">#多分类</span></span><br><span class="line">    <span class="string">'num_class'</span>: <span class="number">2</span>,  <span class="comment"># 类别数</span></span><br><span class="line">    </span><br><span class="line">    <span class="string">'gamma'</span>: <span class="number">0.1</span>,  <span class="comment"># 指定了节点分裂所需的最小损失函数下降值，越大越不易分裂</span></span><br><span class="line">    <span class="string">'max_depth'</span>: <span class="number">7</span>,  <span class="comment"># 树的深度</span></span><br><span class="line">    <span class="string">'subsample'</span>: <span class="number">0.75</span>,  <span class="comment"># 每棵树随机采样的占比（训练集中）</span></span><br><span class="line">    <span class="string">'colsample_bytree'</span>: <span class="number">0.75</span>,  <span class="comment"># 每棵树随机采样的列数的占比（每一列是一个特征）</span></span><br><span class="line">    <span class="string">'min_child_weight'</span>: <span class="number">0.06</span>, <span class="comment"># 决定最小叶子节点样本权重和</span></span><br><span class="line">    </span><br><span class="line">    <span class="string">'eta'</span>: <span class="number">0.05</span>,  <span class="comment"># 学习率</span></span><br><span class="line">    <span class="string">'seed'</span>: <span class="number">100</span>, <span class="comment">#随机种子</span></span><br><span class="line">    <span class="string">'nthread'</span>: <span class="number">6</span>  <span class="comment"># cpu 线程数</span></span><br><span class="line">&#125;</span><br><span class="line">rounds = <span class="number">200</span> <span class="comment">#迭代次数</span></span><br><span class="line">watchlist = [(xgboost_train, <span class="string">'train'</span>), (xgboost_valid, <span class="string">'valid'</span>)]</span><br><span class="line">bst = xgb.train(params, xgboost_train, rounds, watchlist,feval=evalerror)</span><br></pre></td></tr></table></figure>
+<p>用模型去预测结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#test数据集上使用模型进行预测</span></span><br><span class="line">xgboost_test = xgb.DMatrix(model_test)</span><br><span class="line">y_predicted = bst.predict(xgboost_test)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#test_ip.txt是test文件夹中的所有文件名</span></span><br><span class="line">ip = pd.read_table(<span class="string">'test_ip.txt'</span>, header=<span class="keyword">None</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#文件名去掉对应的.pcap就是要预测的ip</span></span><br><span class="line">ip[<span class="number">0</span>] = ip[<span class="number">0</span>].map(<span class="keyword">lambda</span> x: x.replace(<span class="string">'.pcap'</span>, <span class="string">''</span>))</span><br><span class="line">ip_list = list(ip[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#先将所有客户端ip对应的类型标记为'white'</span></span><br><span class="line">ip[<span class="number">1</span>] = [<span class="string">'white'</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(ip.shape[<span class="number">0</span>])]</span><br><span class="line"></span><br><span class="line"><span class="comment">#遍历预测结果</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(y_predicted)):</span><br><span class="line">    <span class="comment">#如果第i条流量为black</span></span><br><span class="line">    <span class="keyword">if</span> y_predicted[i] == <span class="number">0</span>:</span><br><span class="line">        <span class="comment">#读取第i条流量的源ip</span></span><br><span class="line">        tmp_ip = list(test_ip[i:i+<span class="number">1</span>])[<span class="number">0</span>]</span><br><span class="line">        </span><br><span class="line">        <span class="comment">#遍历所有要预测的客户端ip</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(len(ip_list)):</span><br><span class="line">            <span class="comment">#如果是第i条流量（恶意）的源ip</span></span><br><span class="line">            <span class="keyword">if</span> tmp_ip == ip_list[j]:</span><br><span class="line">      			<span class="comment">#将该客户端ip标记为'black'</span></span><br><span class="line">                ip.loc[j,<span class="number">1</span>] = <span class="string">'black'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#test数据集恶意ip计数</span></span><br><span class="line">malware_ip_count = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(ip.shape[<span class="number">0</span>]):</span><br><span class="line">    <span class="keyword">if</span> ip.loc[i,<span class="number">1</span>] == <span class="string">'black'</span>:</span><br><span class="line">        malware_ip_count += <span class="number">1</span></span><br><span class="line">print(<span class="string">"test数据集恶意ip个数"</span> + str(malware_ip_count) )</span><br><span class="line"></span><br><span class="line"><span class="comment">#将最终结果写入result.txt</span></span><br><span class="line">ip.to_csv(<span class="string">'result.txt'</span>,sep=<span class="string">','</span>,index=<span class="keyword">False</span>,header=<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="总结与反思"><a href="#总结与反思" class="headerlink" title="总结与反思"></a>总结与反思</h2><p>这次比赛几次提交点的最好成绩是 72.5 分，距离复赛要求的名次差几名，很遗憾无缘复赛。总结了失利的几点原因：</p>
+<ol>
+<li>对恶意流量的特征不熟悉，导致花了很多时间去确定需要提取哪些 Features，浪费了前面的检查点。其实我们最后提取的 Features 还有很大的提升空间，比如数据包的时间序列特征，我们只提取了均值、方差等特征，还有字节分布等重要特征未进行有效提取。<br><img src="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/5.png" alt="e67c9834b783a0c2b314e2dd35719671.png"></li>
+<li>对模型的选择和参数认识不够，只是盲目的更换模型和调参，一开始发现模型和参数对结果的影响很大，实际上还是特征提取的不够好。当提取了能有效区分正常/恶意流量的特征后，模型的选择和参数对结果影响就较小了，所以最重要的依然是有效特征的提取。</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>Shekhawat, A. S. (2018). <em>Analysis of Encrypted Malicious Traffic.</em></li>
+<li>Jenseg, O. (2019). <em>A machine learning approach to detecting malware in TLS traffic using resilient network features (Master’s thesis, NTNU).</em></li>
+<li>Shekhawat, A. S., Di Troia, F., &amp; Stamp, M. (2019). <em>Feature analysis of encrypted malicious traffic. Expert Systems with Applications, 125, 130-141.</em></li>
+<li><a href="https://www.intechopen.com/online-first/machine-learning-applications-in-misuse-and-anomaly-detection" target="_blank" rel="noopener">Machine Learning Applications in Misuse and Anomaly Detection</a></li>
+<li><a href="https://machinelearningmastery.com/imbalanced-classification-with-python/" target="_blank" rel="noopener">imbalanced-classification-with-python</a></li>
+<li><a href="https://github.com/scikit-learn/scikit-learn/blob/master/doc/modules/feature_extraction.rst" target="_blank" rel="noopener">scikit-learn GitHub doc: Feature extraction</a></li>
+<li><a href="https://www.secrss.com/articles/18679" target="_blank" rel="noopener">基于机器学习的TLS恶意加密流量检测方案</a></li>
+<li><a href="https://www.cnblogs.com/bonelee/p/9604530.html" target="_blank" rel="noopener">利用背景流量数据（contexual flow data）识别TLS加密恶意流量</a>- </li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/07/21/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Triangle-Counting/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -629,12 +1018,24 @@
                 
               
 
-              <time title="创建时间：2020-07-13 21:28:17 / 修改时间：21:35:31" itemprop="dateCreated datePublished" datetime="2020-07-13T21:28:17+08:00">2020-07-13</time>
+              <time title="创建时间：2020-07-13 21:28:17" itemprop="dateCreated datePublished" datetime="2020-07-13T21:28:17+08:00">2020-07-13</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-08-01 08:10:12" itemprop="dateModified" datetime="2020-08-01T08:10:12+08:00">2020-08-01</time>
               
             
           </span>
@@ -735,7 +1136,7 @@
 <p>我们可以参考 GitHub 上的 <a href="https://github.com/vasia/gelly-streaming" target="_blank" rel="noopener">Gelly Streaming 项目</a>，该项目是 Flink 的一个轻量级图流处理 API，提供了一些图流分析接口，并实现了部分图的流处理算法。</p>
 <p>Gelly Streaming 的算法核心思想仍然是染色法，具体步骤如下：</p>
 <ol>
-<li>在一条边进入系统时，如果该边是已经存在的边，则丢弃；如果该边的两个顶点均已存在，则将其染成两个不同的颜色；如果该边有且仅有一个顶点已存在（已染色），则将另一个顶点染成相反的颜色。</li>
+<li>在一条边进入系统时，如果该边是已经存在的边，则丢弃；如果该边的两个顶点均不存在，则将其染成两个不同的颜色；如果该边有且仅有一个顶点已存在（已染色），则将另一个顶点染成相反的颜色。</li>
 <li>如果该边的两个顶点均已存在，则可能出现三种情况：</li>
 </ol>
 <ul>
@@ -2588,330 +2989,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">50行代码实现一个并发的 Python 爬虫程序</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-12-03 13:41:09" itemprop="dateCreated datePublished" datetime="2018-12-03T13:41:09+08:00">2018-12-03</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/03/50行代码实现一个并发的 Python 爬虫程序/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">7.4k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。</p>
-<p>案例还是用的之前 <a href="https://s1mple.xyz/java-web-crawler/" target="_blank" rel="noopener">Java 网络爬虫</a> 的案例。所需 <code>Python Version &gt;= 3.6</code>，用到的库有：</p>
-<ul>
-<li><strong>beautifulsoup4</strong> 三方库用于解析 Html，执行 <code>pip install beautifulsoup4</code> 安装</li>
-<li>内置的 <strong>urllib</strong> 用于发起网络请求获取响应内容</li>
-<li>内置的 <strong>concurrent.futures</strong> 并发库中的 <strong>ProcessPoolExecutor</strong> 用于创建进程池</li>
-</ul>
-<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><p>源码已经上传到 <a href="https://gist.github.com/s1mplecc/dfd15f58cbbe5fad2ab13bc2246d49f4" target="_blank" rel="noopener">GitHub</a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> urllib <span class="keyword">import</span> request</span><br><span class="line"><span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ProcessPoolExecutor</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">WWW_BIQUGE_CM = <span class="string">'http://www.biquge.cm'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__fetch_html</span><span class="params">(url, decode=<span class="string">'UTF-8'</span>)</span>:</span></span><br><span class="line">    req = request.Request(url)</span><br><span class="line">    req.add_header(<span class="string">'User-Agent'</span>, <span class="string">'Mozilla/5.0'</span>)</span><br><span class="line">    <span class="keyword">with</span> request.urlopen(req) <span class="keyword">as</span> res:</span><br><span class="line">        <span class="keyword">return</span> res.read().decode(decode)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__parse_title_and_hrefs</span><span class="params">(index)</span>:</span></span><br><span class="line">    html = __fetch_html(<span class="string">f'<span class="subst">&#123;WWW_BIQUGE_CM&#125;</span>/<span class="subst">&#123;index&#125;</span>/'</span>, <span class="string">'gbk'</span>)</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'html.parser'</span>)</span><br><span class="line">    links = soup.find_all(<span class="string">'a'</span>, href=re.compile(<span class="string">rf'/<span class="subst">&#123;index&#125;</span>/'</span>))</span><br><span class="line">    hrefs = list(map(<span class="keyword">lambda</span> x: x[<span class="string">'href'</span>], links))</span><br><span class="line">    title = soup.h1.string</span><br><span class="line">    print(<span class="string">f'title: <span class="subst">&#123;title&#125;</span>\nhrefs: size=<span class="subst">&#123;len(hrefs)&#125;</span>'</span>)</span><br><span class="line">    <span class="keyword">return</span> title, hrefs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__fetch_content</span><span class="params">(href)</span>:</span></span><br><span class="line">    print(<span class="string">f'parsing <span class="subst">&#123;href&#125;</span>'</span>)</span><br><span class="line">    html = __fetch_html(<span class="string">f'<span class="subst">&#123;WWW_BIQUGE_CM&#125;</span>/<span class="subst">&#123;href&#125;</span>'</span>, <span class="string">'gbk'</span>)</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'html.parser'</span>)</span><br><span class="line">    <span class="keyword">return</span> re.sub(<span class="string">r'&lt;div id="content"&gt;|&lt;/div&gt;|&lt;br/&gt;'</span>, <span class="string">''</span>, str(soup.find(<span class="string">'div'</span>, id=<span class="string">'content'</span>)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__append_contents_to_file</span><span class="params">(title, hrefs)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> ProcessPoolExecutor(<span class="number">16</span>) <span class="keyword">as</span> executor:</span><br><span class="line">        contents = executor.map(__fetch_content, hrefs)</span><br><span class="line">    os.makedirs(<span class="string">'downloads'</span>, exist_ok=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">f'./downloads/<span class="subst">&#123;title&#125;</span>.txt'</span>, <span class="string">'wt+'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">for</span> content <span class="keyword">in</span> contents:</span><br><span class="line">            f.write(content)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(index=<span class="string">'12/12481'</span>)</span>:</span></span><br><span class="line">    start = time.time()</span><br><span class="line">    title, hrefs = __parse_title_and_hrefs(index)</span><br><span class="line">    __append_contents_to_file(title, hrefs)</span><br><span class="line">    print(<span class="string">f'spend time: <span class="subst">&#123;time.time() - start&#125;</span>s'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    run(<span class="string">'9/9422'</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="urllib"><a href="#urllib" class="headerlink" title="urllib"></a>urllib</h3><p>模拟浏览器发起一个 HTTP 请求，我们需要用到 <code>urllib.request</code> 模块。其 <code>urlopen()</code> 方法用于发起请求并获取响应结果，该方法可单独传入一个 <code>urllib.request.Request</code> 对象，并返回一个 <code>http.client.HTTPResponse</code> 对象。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__fetch_html</span><span class="params">(url, decode=<span class="string">'UTF-8'</span>)</span>:</span></span><br><span class="line">    req = request.Request(url)</span><br><span class="line">    req.add_header(<span class="string">'User-Agent'</span>, <span class="string">'Mozilla/5.0'</span>)</span><br><span class="line">    <span class="keyword">with</span> request.urlopen(req) <span class="keyword">as</span> res:</span><br><span class="line">        <span class="keyword">return</span> res.read().decode(decode)</span><br></pre></td></tr></table></figure>
-<p>使用 <code>Request</code> 包装请求头。如果不设置 headers 中的 <strong>User-Agent</strong>，默认的 User-Agent 是 Python-urllib。可能一些网站会将该请求拦截，所以需要伪装成浏览器发起请求。</p>
-<h3 id="Beautiful-Soup"><a href="#Beautiful-Soup" class="headerlink" title="Beautiful Soup"></a>Beautiful Soup</h3><blockquote>
-<p>Beautiful Soup is a Python library for pulling data out of HTML and XML files. It works with your favorite parser to provide idiomatic ways of navigating, searching, and modifying the parse tree. It commonly saves programmers hours or days of work.</p>
-</blockquote>
-<p>Beautiful Soup 用于从 HTML 或 XML 文件中提取数据，提供的功能非常强大。它支持 Python 标准库中的 HTML 解析器：<code>BeautifulSoup(markup, &quot;html.parser&quot;)</code>，还支持一些第三方的解析器（如 html5lib、lxml 等）。</p>
-<p>Beautiful Soup 将 HTML 文档转换成一个复杂的树形结构,每个节点都是 Python 对象,所有对象可以归纳为4种: <code>Tag</code>，<code>NavigableString</code>，<code>BeautifulSoup</code>，<code>Comment</code>。<code>Tag</code> 对象与 XML 或 HTML 原生文档中的 tag 相同，所以非常适合用于<strong>定位</strong>。下面列出一些常见用法，感兴趣的同学可以查阅 <a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/" target="_blank" rel="noopener">官方文档</a>。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">soup.title</span><br><span class="line"><span class="comment"># &lt;title&gt;The Dormouse's story&lt;/title&gt;</span></span><br><span class="line"></span><br><span class="line">soup.a</span><br><span class="line"><span class="comment"># &lt;a class="sister" href="http://example.com/elsie" id="link1"&gt;Elsie&lt;/a&gt;</span></span><br><span class="line"></span><br><span class="line">soup.find_all(<span class="string">'a'</span>)</span><br><span class="line"><span class="comment"># [&lt;a class="sister" href="http://example.com/elsie" id="link1"&gt;Elsie&lt;/a&gt;,</span></span><br><span class="line"><span class="comment">#  &lt;a class="sister" href="http://example.com/lacie" id="link2"&gt;Lacie&lt;/a&gt;,</span></span><br><span class="line"><span class="comment">#  &lt;a class="sister" href="http://example.com/tillie" id="link3"&gt;Tillie&lt;/a&gt;]</span></span><br><span class="line"></span><br><span class="line">soup.find(<span class="string">'a'</span>, id=<span class="string">'link3'</span>)</span><br><span class="line"><span class="comment"># &lt;a class="sister" href="http://example.com/tillie" id="link3"&gt;Tillie&lt;/a&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> link <span class="keyword">in</span> soup.find_all(<span class="string">'a'</span>):</span><br><span class="line">    print(link.get(<span class="string">'href'</span>))</span><br><span class="line">    <span class="comment"># http://example.com/elsie</span></span><br><span class="line">    <span class="comment"># http://example.com/lacie</span></span><br><span class="line">    <span class="comment"># http://example.com/tillie</span></span><br></pre></td></tr></table></figure>
-<h3 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h3><p>从 Python3.2 开始 <code>concurrent.futures</code> 被纳入了标准库，这个模块中有2个类：<code>ThreadPoolExecutor</code> 和 <code>ProcessPoolExecutor</code>，分别对 <code>threading</code> 多线程库和 <code>multiprocessing</code> 多进程库的进行了高级别的抽象，封装了统一的接口。</p>
-<p>关于是使用多线程还是多进程，大部分人可能有所耳闻，Python 推荐使用多进程而不是多线程。我自己测试的情况也是爬取 3000 章时使用 <code>ProcessPoolExecutor</code> 大约需要 20s，使用 <code>ThreadPoolExecutor</code> 需要大概 40s，性能差了一倍。</p>
-<p>其他语言，CPU 是多核时是支持多个线程同时执行的。但在 Python 中，无论是单核还是多核，<strong>同时只能由一个线程在执行</strong>，其根源是 <strong>GIL</strong> 的存在（只存在于 CPython，PyPy 和 Jython 中没有）。</p>
-<p>GIL 全称 <strong>Global Interpreter Lock</strong>(全局解释器锁)，是 Python 设计之初为了数据安全所做的决定。某个线程想要执行，必须先拿到 GIL，并且在一个 Python 进程中只有一个 GIL。并且每次释放 GIL 锁时线程会进行锁竞争，切换线程也会消耗资源。这就是为什么在多核 CPU 上 Python 的多线程效率并不高的原因所在，以至于 Python 的专家们精心制作了一个标准答案：<strong>不要使用多线程，请使用多进程</strong>。</p>
-<p>此外，Python 可使用 <strong>perf</strong> 库进行性能测试，以下是爬取 50 章时的性能：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  crawler ✗ python3 -m perf timeit <span class="string">'import app;app.run("12/12455")'</span></span><br><span class="line">...</span><br><span class="line">* the standard deviation (281 ms) is 24% of the mean (1.16 sec)</span><br><span class="line">* the maximum (2.02 sec) is 73% greater than the mean (1.16 sec)</span><br><span class="line"></span><br><span class="line">Mean +- std dev: 1.16 sec +- 0.28 sec</span><br></pre></td></tr></table></figure>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="venv"><a href="#venv" class="headerlink" title="venv"></a>venv</h3><p><strong>venv</strong>，全称 <strong>virtualenv</strong> 虚拟环境。用过 JavaScript 的同学都知道，执行 <code>npm install xxx</code> 时会在当前目录生成一个 <code>node_modules</code> 目录，依赖会被安装在这个目录下，除非你加上 <code>-g/--global</code> 全局参数，否则安装的依赖只对当前项目生效（不是全局依赖）。这其实相当于做了一层隔离，将当前项目的环境与全局环境隔离开，有利于版本的管理。</p>
-<p>venv 也是这样的作用，用于<strong>为一个应用创建一套隔离的 Python 运行环境</strong>。在这个环境中，你可以管理 Python 版本，pip 版本，以及你所用的三方库的版本，而不会与全局环境冲突。</p>
-<p>如果你使用的是 PyCharm，那么创建项目时就可以勾选使用 venv（这也是建议的选择）。效果如下图：<br><img src="/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/0.png" alt="Screen-Shot-2018-12-03-at-11.01.47-AM">命令行多了 (venv) 前缀：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  crawler ✗</span><br></pre></td></tr></table></figure></p>
-<p>如果你不是使用的 PyCharm，参考这篇文档：<a href="https://www.kancloud.cn/smilesb101/python3_x/298883" target="_blank" rel="noopener">virtualenv</a></p>
-<h3 id="风格规范"><a href="#风格规范" class="headerlink" title="风格规范"></a>风格规范</h3><p>Python 风格规范我参考的 <a href="https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/python_style_rules/#id16" target="_blank" rel="noopener">Google 开源项目风格指南</a>。推荐使用 <strong>PyCharm</strong> IDE，和 IntelliJ IDEA 一样产自 JetBrains 公司，非常良心的软件，会有一些风格提示，并且可以使用快捷键（Ctrl/Cmd + Shift + L）自动格式化。这里主要说说命名吧。</p>
-<h4 id="命名"><a href="#命名" class="headerlink" title="命名"></a>命名</h4><p><strong>应该避免的名称</strong></p>
-<ol>
-<li>单字符名称, 除了计数器和迭代器</li>
-<li>包/模块名中的连字符(-)</li>
-<li>双下划线开头并结尾的名称( Python 保留, 例如<code>__init__</code>)</li>
-</ol>
-<p><strong>命名约定</strong></p>
-<ol>
-<li>用<strong>单下划线(_)开头</strong>表示模块变量或函数是 protected 的(使用 <code>from module import *</code> 时不会包含)。</li>
-<li>用<strong>双下划线(__)开头</strong>的实例变量或方法表示类内私有。</li>
-<li>对类名使用大写字母开头的单词(如 CapWords，即 Pascal 风格)，但是模块名应该用小写加下划线的方式(如 lower_with_under.py )。尽管已经有很多现存的模块使用类似于CapWords.py 这样的命名，但现在已经不鼓励这样做，因为如果模块名碰巧和类名一致，这会让人困扰。</li>
-</ol>
-<p><strong>Python之父Guido推荐的规范</strong></p>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Public</th>
-<th>Internal</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Modules</td>
-<td>lower_with_under</td>
-<td>_lower_with_under</td>
-</tr>
-<tr>
-<td>Packages</td>
-<td>lower_with_under</td>
-<td></td>
-</tr>
-<tr>
-<td>Classes</td>
-<td>CapWords</td>
-<td>_CapWords</td>
-</tr>
-<tr>
-<td>Exceptions</td>
-<td>CapWords</td>
-<td></td>
-</tr>
-<tr>
-<td>Functions</td>
-<td>lower_with_under()</td>
-<td>_lower_with_under()</td>
-</tr>
-<tr>
-<td>Global/Class Constants</td>
-<td>CAPS_WITH_UNDER</td>
-<td>_CAPS_WITH_UNDER</td>
-</tr>
-<tr>
-<td>Global/Class Variables</td>
-<td>lower_with_under</td>
-<td>_lower_with_under</td>
-</tr>
-<tr>
-<td>Instance Variables</td>
-<td>lower_with_under</td>
-<td>_lower_with_under (protected) or __lower_with_under (private)</td>
-</tr>
-<tr>
-<td>Method Names</td>
-<td>lower_with_under()</td>
-<td>_lower_with_under() (protected) or __lower_with_under() (private)</td>
-</tr>
-<tr>
-<td>Function/Method Parameters</td>
-<td>lower_with_under</td>
-<td></td>
-</tr>
-<tr>
-<td>Local Variables</td>
-<td>lower_with_under</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h4 id="Main"><a href="#Main" class="headerlink" title="Main"></a>Main</h4><p><strong>所有的顶级代码在模块导入时都会被执行</strong>。即使是一个打算被用作脚本的文件，也应该是可导入的。并且简单的导入不应该导致这个脚本的主功能(main functionality)被执行，这是一种副作用。主功能应该放在一个函数中，并在执行主程序前总是检查 <code>if __name__ == &#39;__main__&#39;</code>。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">      ...</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-<p><code>__name__</code> 是内置变量，指代<strong>当前模块名</strong>，当模块被直接运行时模块名为 <code>__main__</code>。这句话的意思就是，当模块被直接运行时，下面代码块将被运行，当模块是被导入时，代码块不被运行。</p>
-<h3 id="文件写入"><a href="#文件写入" class="headerlink" title="文件写入"></a>文件写入</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">os.makedirs(<span class="string">'downloads'</span>, exist_ok=<span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">f'./downloads/<span class="subst">&#123;title&#125;</span>.txt'</span>, <span class="string">'wt+'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="keyword">for</span> content <span class="keyword">in</span> contents:</span><br><span class="line">        f.write(content)</span><br></pre></td></tr></table></figure>
-<p>第一句用于创建 downloads 文件夹，<code>exist_ok=True</code> 参数允许创建的文件夹已存在，否则会抛出 <code>FileExistsError</code> 异常。</p>
-<p>第二句 <code>with ... as ...</code> 的用法和 Java 中的 <code>try with resources</code> 有点类似，这里它会自动关闭打开的文件流。它的核心思想是 with 所求值的对象必须有一个 <code>__enter()__</code> 方法和一个 <code>__exit()__</code> 方法，在 with 代码块开始和结束这两个方法会被执行。如果出现异常则会执行 <code>__exit()__</code>，并传入三个参数 <code>exc_type</code>，<code>exc_value</code>，<code>exc_traceback</code> 用于异常处理。</p>
-<p><code>open(&#39;abc.txt&#39;, &#39;a+&#39;)</code> 打开文件时不同的参数有不同的作用，我这里用的 <code>wt+</code> 表示以文本格式打开一个文件用于读写，如果该文件已存在则将其覆盖，如果该文件不存在则创建新文件。还有其他参数，例如 <code>a+</code> 代表 append 追加，<code>r</code> 表示只读等等。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://www.kancloud.cn/smilesb101/python3_x/295557" target="_blank" rel="noopener">廖雪峰的Python3.x教程</a></li>
-<li><a href="https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/python_style_rules/#id16" target="_blank" rel="noopener">Python 风格指南 —— Google 开源项目风格指南</a></li>
-<li><a href="https://www.jianshu.com/p/2e190438bd9c" target="_blank" rel="noopener">详解 python3 urllib</a></li>
-<li><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/" target="_blank" rel="noopener">Beautiful Soup 4 官方文档</a></li>
-<li><a href="https://docs.python.org/3/library/concurrent.futures.html" target="_blank" rel="noopener">concurrent.futures — Launching parallel tasks 官方文档</a></li>
-<li><a href="https://blog.louie.lu/2017/08/01/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84-python-%E6%A8%99%E6%BA%96%E5%87%BD%E5%BC%8F%E5%BA%AB%E7%94%A8%E6%B3%95-06-concurrent-futures/" target="_blank" rel="noopener">concurrent.futures 性能分析</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2963,7 +3040,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">64</span>
+                    <span class="site-state-item-count">65</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
