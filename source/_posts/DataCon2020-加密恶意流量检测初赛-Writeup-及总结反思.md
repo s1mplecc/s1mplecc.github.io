@@ -1,3 +1,4 @@
+
 ---
 title: DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思
 tags: [Network, Security]
@@ -97,97 +98,47 @@ eta_1
 #### DNS响应信息：
 
 - **域名的长度**：正常流量的域名长度分布为均值为6或7的高斯分布（正态分布）；而恶意流量的域名（FQDN全称域名）长度多为6（10）。
-
 - **数字字符及非字母数字(non-alphanumeric character)的字符占比**：正常流量的DNS响应中全称域名的数字字符的占比和非字母数字字符的占比要大。
-
 - **DNS解析出的IP数量**：大多数恶意流量和正常流量只返回一个IP地址；其它情况，大部分正常流量返回2-8个IP地址，恶意流量返回4或者11个IP地址。
-
 - **TTL值**：正常流量的TTL值一般为60、300、20、30；而恶意流量多为300，大约22%的DNS响应汇总TTL为100，而这在正常流量中很罕见。
-
 - **域名是否收录在Alexa网站**：恶意流量域名信息很少收录在Alexa top-1,000,000中，而正常流量域名多收录在其中。
 
 ### 3. 特征提取
 
-分析 pcap 提取特征我们采用的工具是 **zeek**，zeek是一款关于流量分析和特征提取的强大的软件，它可以对网络中的指定设备进行监听，捕获该设备通信中的数据包，并把数据包按照一定的规则聚合为一次会话，也可以直接处理pcap文件。以TCP为例，zeek一次会话从接收到第一个SYN包开始，直到收到FIN或者计时器超时结束，之间的所有数据包都会被聚合到这条连接里。
+特征提取我们采用的工具是 **Zeek**，它的前身是 Bro，一款网络安全监视（Network Security Monitoring）工具，同时它也支持直接处理 pcap 文件形成各类日志文件，包括 dns、http、smtp 等：
 
-在执行zeek命令之前，因为网上有很多zeek相关的脚本，可以方便我们的特征提取，所以我们在把这些脚本下载之后，需要在zeek的local.zeek文件里面按照格式，把脚本的文件夹路径添加到里面。以我们找的/Flowmeter/flowmeter.zeek为例。在文件的最后一行加入：
+![cce00cf94b14017707eaa55f09ae67e1.png](6.png)
 
-```
-@load /Your_Script_Path/Flowmeter
-```
+Zeek 网上有一些现成的脚本，我们采用的是 **Zeek FlowMeter**，它基于 OSI 七层协议的网络层和传输层，可以分析并生成一些 Packets 到达时间序列、Packet 字节大小和元数据等新特征。
 
-之后进入pcap文件目录，以black.pcap为例，执行：
+在使用时，我们需要在 `local.zeek` 配置文件中加入 `@load flowmeter`，这样 Zeek 在执行时会加载 `flowmeter.zeek` 并生成对应的 `flowmeter.log`，下面列出了 FlowMeter 提取出的一些特征，包括上下行包总数、包负载均值方差等。其他详细的特征请见 [zeek-flowmeter GitHub官方文档](https://github.com/zeek-flowmeter/zeek-flowmeter)。
 
-```sh
-sudo /your_zeek_path/bin/zeek -Cr black.pcap /your_zeek_path/share/zeek/site/local.zeek
-```
+| Feature Name         | Description                                                                                                                              | exists in FlowMeter |
+|----------------------|---------------------------------------------------------------------------------------------------------------------------------|---------------------|
+| uid                  | The ID of the flow as given by Zeek                                                                                                      | No                  |
+| flow\_duration       | The length of the flow in seconds \(maximal precision ms\)\. If only on packet was seen the duration is 0\.                              | Yes                 |
+| fwd\_pkts\_tot       | The number of packets travelling in the forward direction\.                                                                              | Yes                 |
+| bwd\_pkts\_tot       | The number of packets travelling in the backwards direction\.                                                                            | Yes                 |
+| fwd\_pkts\_per\_sec  | The average number of forward packets transmitted per second during the flow\. If the duration is 0 then this feature is also set to 0\. | Yes                 |
+| fwd\_pkts\_payload\.avg | The average payload size, in bytes, seen in the forward direction\.                   | Yes |
+| fwd\_pkts\_payload\.std | The standard deviation of the payload size, in bytes, seen in the forward direction\. | Yes |
+| ... | ... | ... |
 
-执行完毕，生成一系列的zeek日志，我们主要关注 **conn.log ，ssl.log ，X509.log ，flowmeter.log** 这几个日志。
-
-这几个日志中都有相应的标识字段，连接用uid标识，证书文件用fuid标识，在ssl日志中有本次连接的uid和双方提供的证书的fuid，根据这些标识可以将不同的日志连接到一起，所以我们先用python把这几个日志处理成csv，方便后续的操作。以conn.log为例，处理它的python代码如下：
-
-```python
-# The log should delete the comment lines in advance.
-def logToCsv(which_dataset):
-    infile = "D:/datacon/" + which_dataset + "/conn.log"
-    outfile = "D:/datacon/" + which_dataset + "/conn.csv"
-    f0 = open(infile, "r")
-    f1 = open(outfile, "w")
-    for each_line in f0:
-        # The fields in zeek logs are split by '\t'
-        aline = each_line.split('\t')
-        if aline[9] == '-':
-            aline[9] = '0'
-        if aline[10] == '-':
-            aline[10] = '0'
-        str = ""
-        for i in range(20):
-            # filter some fields
-            if (i == 8 or (i >= 12 and i <= 15)):
-                continue
-            str = str + aline[i] + ','
-        str += (aline[i + 1])
-        f1.write(str)
-        print(aline)
-```
-
-处理其他日志的思路也大致相同，如果某行缺失太多字段，我们考虑直接删除，当遇到有些空字段，也需要对其处理，如果有bool类型的字段为空，我们根据逻辑把置为T或者F，如果是数值型，就直接置0，如果是字符串，一般当作null处理。最后几个日志处理完毕，生成相应的csv后，用python里的merge函数合并，以conn.csv和flowmeter.csv为例，这两个csv根据文件中的uid字段合并。
-
-```python
-conn = pd.read_csv("D:/datacon/"+which_dataset+"/conn.csv")
-flowmeter = pd.read_csv("D:/datacon/"+which_dataset+"/flowmeter.csv")
-#By default, merge is doing natural join of 2 csv files
-merged = conn.merge(flowmeter, on='uid')
-#Output the new file
-merged.to_csv("D:/datacon/"+which_dataset+"/conn_detail.csv")
-```
-
-我们解题时的feature是基于zeek里面的某次会话的，我们的feature主要是利用zeek日志中的字段和这些字段进过处理后得到的字段，一开始我们尝试把我们获取的几十个features全部保留用于后续机器学习，但是可能因为有些字段在black和white区分度不大，所以得到的预测结果不是很好。之后我们主要根据论文Analysis of Encrypted Malicious Traffic和A machine learning approach to detecting malware in TLS traffic using resilient network features中提到的加密流量特征，我们进行研究分析，把我们的feature从85个精简到32个，再进行预测，这次预测结果准确率显著上升。
-
-我们的feature，主要分为两类（因为比赛流量全是443端口的，所以没有其他DNS，http等信息）。一类是会话中双方的流量信息，另一类是双方的SSL会话中的信息。**最终提取的特征如下：**
+除 `flowmeter.log` 之外我们还需要关注 `conn.log`、`ssl.log` 和 `X509.log`。这几个日志可用共同字段 `uid` 连接，`uid` 字段是 Zeek 根据一次连接的源/目的 IP、源/目的端口生成的唯一 ID。为了方便后续的处理，我们将这几个日志文件统一读入，使用 `uid` 字段连接后转成 csv 格式输出到文件。**最终提取的特征如下：**
 
 ![7d1475ca9c4d88e2c3e078a126fdfd52.jpeg](3.jpeg)
 
-在这些feature中，流量信息是两个四元组通信最基本的特征，我们采用了IAT（inter-arrive-time)和有效载荷的最大值，最小值，均值和方差这几个属性。
-
-在恶意流量检测中，上下行流量比也很重要，如果客户端受到感染，可能就会向恶意服务器发送大量数据，此时上行流量就会大于下行流量。
-
-对于SSL会话特征，恶意流量客户端经常希望选用TLS_RSA_WITH_RC4_128_MD5这个加密套件。
-
-对于服务器来说，最重要的就是服务器证书是否自签名，有大约70%的恶意流量为自签名，而正常流量自签名只占大约0.1%。除此之外，服务器在SSL认证时提供的证书链中证书个数，这些证书中所附带的其他站点个数等指标也可做为衡量恶意流量的标准。
-
 ### 特征向量化
 
-因为模型训练不支持 `str` 类型的特征，所以需要对 `version` 和 `server_cipher` 字段进行特征向量化。
+因为模型训练不支持 `str` 类型的特征，所以需要对 `version` 和 `server_cipher` 等字段进行特征向量化。
 
 | version | cipher                                       |
 |---------|----------------------------------------------|
 | TLSv10  | TLS\_RSA\_WITH\_3DES\_EDE\_CBC\_SHA          |
 | TLSv10  | TLS\_RSA\_WITH\_3DES\_EDE\_CBC\_SHA          |
-| TLSv10  | TLS\_RSA\_WITH\_3DES\_EDE\_CBC\_SHA          |
-| TLSv10  | TLS\_RSA\_WITH\_3DES\_EDE\_CBC\_SHA          |
 | TLSv12  | TLS\_ECDHE\_RSA\_WITH\_AES\_128\_GCM\_SHA256 |
 | TLSv10  | TLS\_RSA\_WITH\_RC4\_128\_MD5                |
+| ... | ... |
 
 `DictVectorizer` 是 scikit-learn 库中用于将 Python `dict` 对象表示的特征数组转换为 scikit-learn 估计器使用的 NumPy/SciPy 表示形式。
 
@@ -208,146 +159,100 @@ def convert_by_dict(src_file, dest_file):
 
 向量化后的效果：
 
-| version=SSLv3 | version=TLSv10 | version=TLSv12 | version=TLSv11 |
-|---------------|----------------|----------------|----------------|
-| 0             | 1              | 0              | 0              |
-| 0             | 1              | 0              | 0              |
-| 0             | 1              | 0              | 0              |
-| 0             | 1              | 0              | 0              |
-| 0             | 0              | 1              | 0              |
+| version=SSLv3 | version=TLSv10 | version=TLSv12 | version=TLSv11 | cipher=TLS\_RSA\_WITH\_3DES\_EDE\_CBC\_SHA | ... |
+|---------------|----------------|----------------|----------------|--| --|
+| 0             | 1              | 0              | 0              | 0 |... |
+| 0             | 1              | 0              | 0              |0 |... |
+| 0             | 1              | 0              | 0              |0 |...|
+| 0             | 0              | 1              | 0              |0 |... |
+| ...            | ...              |...              |...             |...|... |
 
 另外需要注意的是，**需要对特征列进行补全**，否则在进行模型训练时会出现特征个数不匹配的问题。例如：white.pcap 文件中 TLS versions 包含 `['TLSv1.0', 'TLSv1.2', 'SSLv3']` 三个版本，而 black 和 test 的 pcap 文件中除这三个版本外还包含 `'TLSv1.1'` 版本，所以需要在 white 中加入 `version=TLSv1.1` 全为 0 的列。
 
 ### 4. 模型选取及参数
 
-需要注意的是：white 已明确没有被恶意软件感染，所以产生的流量可以全部标注为正常流量，而 black 明确的只是客户端感染了恶意软件，但产生的流量不一定全为恶意流量。所以实际上是**对不平衡样本数据进行训练和预测**。遵循这个思路，可以采用 Anomaly Detector + Misuse Detector 的联合分类器进行训练。
+需要注意的是：white 已明确没有被恶意软件感染，所以产生的流量可以全部标注为正常流量，而 black 明确的只是客户端感染了恶意软件，但产生的流量不一定全为恶意流量。所以实际上是**对不平衡样本数据进行训练和预测**。遵循这个思路，可以采用 **Anomaly Detector** + **Misuse Detector** 的联合分类器进行训练。
 
 ![fe7a1c020a03492fd8b465e8541a410e.png](4.png)
 
-基于全正常流量的 white.pcap 文件进行 **One-class Classification** 训练异常检测器 Anomaly Detector；再用该分类器对 black.pcap 文件进行分类预测恶意流量；结合 black 中检测的恶意流量和 white 正常流量训练二分类器；最终采用二分类器对 test 中的流量进行检测。
-
-#### 数据集
-
-用于模型训练的数据集有以下 3 个：
-
-- `white.csv` 是从无恶意软件感染的客户端 IP 所提取出来的四元组相关特征，共4834条。
-- `black.csv` 是从恶意软件感染的客户端 IP 所提取出来的四元组相关特征，共3980条。
-- `test.csv` 是从需要评测的客户端 IP 所提取出来的四元组相关特征，共5690条。
+基于全正常流量的 white.pcap 文件进行 **one-class classification** 训练异常检测器 Anomaly Detector；再用该分类器对 black.pcap 文件进行推理预测恶意流量；结合 black 中检测的恶意流量和 white 正常流量训练二分类器；最终采用二分类器对 test 中的流量进行检测。
 
 #### 数据处理
 
-首先我们将三个数据集使用 pandas 读入：
+数据集是我们之前经过 Zeek 特征提取、特征向量化后产生的 `white.csv`、`black.csv` 和 `test.csv` 三个 csv 文件，使用 pandas 读入后定义一个列名数组 `data_f` 来获取相应特征：
 
 ```python
-import pandas as pd
 white_df = pd.read_csv("white.csv",index_col=0)
 black_df = pd.read_csv("black.csv",index_col=0)
-test_df = pd.read_csv("test.csv",index_col=0)0
-```
+test_df = pd.read_csv("test.csv",index_col=0)
 
-然后对于用一个列名数组 `data_f` 来定义需要提取的特征：
-
-```python
-data_f = [ 'bwd_payload_ratio','fwd_payload_ratio',
-                'fwd_pkts_payload.std','bwd_pkts_payload.std','fwd_iat.std','bwd_iat.std',
-                'orig_pkts','resp_pkts','flow_duration','down_up_ratio','fwd_pkts_payload.max',
-               'fwd_pkts_payload.tot','fwd_pkts_payload.avg','bwd_pkts_payload.max','bwd_pkts_payload.tot',
-               'bwd_pkts_payload.avg','fwd_iat.min','fwd_iat.max','fwd_iat.avg','bwd_iat.min','bwd_iat.max',
-               'bwd_iat.avg','established','num_certs','certificate.duration','certificate.key_length',
-               'num_san_dns','Not_CA_Self_Signed','is_version_eq_TLSv10','is_version_eq_TLSv12','is_version_eq_SSLv3',
-               'is_version_eq_TLSv11','is_server_cipher_eq_TLS_RSA_WITH_3DES_EDE_CBC_SHA','is_server_cipher_eq_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256',
-               'is_server_cipher_eq_TLS_RSA_WITH_RC4_128_MD5','is_server_cipher_eq_TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
-               'is_server_cipher_eq_TLS_RSA_WITH_RC4_128_SHA','is_server_cipher_eq_TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256',
-               'is_server_cipher_eq_TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA','is_server_cipher_eq_TLS_RSA_WITH_AES_256_CBC_SHA',
-               'is_server_cipher_eq_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384','is_server_cipher_eq_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA',
-               'is_server_cipher_eq_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256','is_server_cipher_eq_TLS_DHE_RSA_WITH_AES_256_CBC_SHA',
-               'is_server_cipher_eq_TLS_RSA_WITH_AES_128_CBC_SHA','is_server_cipher_eq_TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384',
-               'is_server_cipher_eq_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256','is_server_cipher_eq_TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256',
-               'is_server_cipher_eq_TLS_RSA_WITH_AES_128_GCM_SHA256','is_server_cipher_eq_TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256_OLD'，
-       'is_server_cipher_eq_TLS_RSA_WITH_AES_256_GCM_SHA384','is_server_cipher_eq_TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256']
-```
-
-我们将从3类数据集中提取的特征分别保存在white_flow，black_flow，test_flow中，同时将test数据集中的源ip信息保留在test_ip中（用于在恶意流量中提取恶意客户端ip）：
-
-```python
-# extract features
 white_flow = white_df[data_f]
 black_flow = black_df[data_f]
 test_flow = test_df[data_f]
 
-#id.orig_h字段存放流量的源ip
+# 源 IP 用于生成结果 result.txt 文件时使用
 test_ip = test_df['id.oirg_h']
 ```
 
-#### 训练异常检测器 Anomaly Detector
-
-在black数据集中同时存在恶意流量和正常流量，没有明确的标注，无法直接用于训练分类器。
-
-而white数据集中都是正常流量，可以先用white数据集来训练一个anomaly detector分类器。然后用这个分类器在black数据集中推理得到哪些是恶意流量。该分类器主要用到one-class classification的思想，选取了隔离森林模型 `IsolationForest`。
-
-在这里我们用到的是white_flow和black_fllow这两个数据集，先将两个数据集合并做归一化处理,得到total_data：
+将 white_flow 和 black_flow 两个数据集合并做归一化处理，得到total_data：
 
 ```python
-#merge black_flow with white flow
 merge_flow = white_flow.append(black_flow, ignore_index=True)
 
-#MinMax归一化
 min_max_scaler = preprocessing.MinMaxScaler()
 total_data = min_max_scaler.fit_transform(merge_flow.values)
 ```
 
-然后我们从total_data中提取white的训练集和测试集，同时需要提取black的测试集：
+然后我们从 total_data 中提取 white 的训练集和测试集，同时需要提取 black 的测试集：
 
 ```python
-#white训练集和测试集(标签1表示正常流量)
+# white 训练集和测试集(标签1表示正常流量)
 x_train,x_valid,y_train,y_valid=train_test_split(total_data[0:4834],np.ones(4834,np.int),random_state=30)
 
-# black测试集
+# black 测试集
 black_data = total_data[4834:]
 ```
 
-下一步就开始进行IsolationForest模型的训练。模型的第一个参数是样本数目，第二个参数是样本中异常数据占比：
+#### Anomaly Detector
+
+在 black 数据集中同时存在恶意流量和正常流量，没有明确的标注，无法直接用于训练分类器。而 white 数据集中都是正常流量，可以先用 white 数据集来训练一个 Anomaly Detector 分类器。然后用这个分类器在 black 数据集中推理得到哪些是恶意流量。我们的模型选取的隔离森林 `IsolationForest`。
 
 ```python
-#IsolationForest Model
-
-clf = IsolationForest(max_samples=len(x_train), contamination=0.4)
+clf = IsolationForest(max_samples=len(x_train), contamination=0.3)
 clf.fit(x_train)
 
-#验证集正确率
+# 验证集正确率
 y_pred_valid = clf.predict(x_valid)
 print("valid_accuracy：" + str(np.mean(y_valid == y_pred_valid)))
 
-#由black测试集得到的恶意流量占比
+# 由 black 测试集得到的恶意流量占比
 y_black_test = clf.predict(black_data)
 print("black_anomaly_ratio：" + str(1 - np.mean(y_black_test==np.ones(3980, np.int))))
 ```
 
 #### 训练误用检测器 Misuse Detector
 
-假设这些由异常检测器识别的可疑流量是恶意流量，我们就有了恶意流量的标注。
-
-接下来我们用这些恶意流量labels，结合white数据集中的正常流量labels，来训练一个misuse detector。在这里选取了XGboost基于树的模型，目标选取为多分类问题（分类数为2）：
+假设这些由异常检测器识别的可疑流量是恶意流量，我们就有了恶意流量的标注。接下来我们用这些恶意流量 labels，结合 white 数据集中的正常流量 labels，来训练一个 Misuse Detector。我们选取了 XGBoost 基于树的模型，目标选取为多分类问题（分类数为2）：
 
 ```python
-#XGbooster Model     gbtree    multi:softmax   2
+# XGbooster Model     gbtree    multi:softmax   2
 
 # label标签  1:white  0:black
 white_flow['label'] = 1
 black_flow['label'] = y_black_test
 black_flow['label'] = black_flow['label'].map(lambda x: 1 if x > 0 else 0)
 
-# 保留balck中的恶意流量数据
+# 保留 black 中的恶意流量数据
 balack_anomaly_flow = black_flow[black_flow['label'] == 0]
 
 # 得到模型训练数据集
 model_data = white_flow.append(balack_anomaly_flow, ignore_index=True) 
 ```
 
-下一步对于数据做MaxMin归一化，然后分割出训练集、验证集、测试集：
+下一步对于数据做 Max/Min 归一化，然后分割出训练集、验证集、测试集：
 
 ```python
-# MaxMin归一化
+# Max/Min 归一化
 X_flow = model_data[data_f]
 label_flow = model_data['label'].values
 model_total_flow = X_flow.append(test_flow, ignore_index=True)
@@ -357,14 +262,14 @@ data_normal = preprocessing.scale(model_total_flow.values)
 model_train = data_normal[:model_data.shape[0]]
 model_test = data_normal[model_data.shape[0]:]
 
-# 训练集中分割出验证集(根据label_flow来层次化分割)
+# 训练集中分割出验证集(根据 label_flow 来层次化分割)
 X_train, X_valid, Y_train, Y_valid = train_test_split(model_train, label_flow, random_state=50,stratify = label_flow)
 
 xgboost_train = xgb.DMatrix(X_train, label=Y_train)
 xgboost_valid = xgb.DMatrix(X_valid, label=Y_valid)
 ```
 
-进行XGbooster模型训练：
+进行 XGBoost 模型训练：
 
 ```python
 def evalerror(preds, dtrain):    
@@ -372,8 +277,8 @@ def evalerror(preds, dtrain):
     return 'error', math.sqrt(metrics.mean_squared_error(preds,labels))
 
 params = {
-    'booster': 'gbtree',  #树模型
-    'objective': 'multi:softmax',  #多分类
+    'booster': 'gbtree',  # 树模型
+    'objective': 'multi:softmax',  # 多分类
     'num_class': 2,  # 类别数
     
     'gamma': 0.1,  # 指定了节点分裂所需的最小损失函数下降值，越大越不易分裂
@@ -383,10 +288,10 @@ params = {
     'min_child_weight': 0.06, # 决定最小叶子节点样本权重和
     
     'eta': 0.05,  # 学习率
-    'seed': 100, #随机种子
+    'seed': 100, # 随机种子
     'nthread': 6  # cpu 线程数
 }
-rounds = 200 #迭代次数
+rounds = 200 # 迭代次数
 watchlist = [(xgboost_train, 'train'), (xgboost_valid, 'valid')]
 bst = xgb.train(params, xgboost_train, rounds, watchlist,feval=evalerror)
 ```
@@ -394,43 +299,43 @@ bst = xgb.train(params, xgboost_train, rounds, watchlist,feval=evalerror)
 用模型去预测结果：
 
 ```python
-#test数据集上使用模型进行预测
+# test 数据集上使用模型进行预测
 xgboost_test = xgb.DMatrix(model_test)
 y_predicted = bst.predict(xgboost_test)
 
 
-#test_ip.txt是test文件夹中的所有文件名
+# test_ip.txt 是 test 文件夹中的所有文件名
 ip = pd.read_table('test_ip.txt', header=None)
 
-#文件名去掉对应的.pcap就是要预测的ip
+# 文件名去掉对应的 .pcap 就是要预测的 IP
 ip[0] = ip[0].map(lambda x: x.replace('.pcap', ''))
 ip_list = list(ip[0])
 
-#先将所有客户端ip对应的类型标记为'white'
+# 先将所有客户端 IP 对应的类型标记为 white
 ip[1] = ['white' for i in range(ip.shape[0])]
 
-#遍历预测结果
+# 遍历预测结果
 for i in range(len(y_predicted)):
-    #如果第i条流量为black
+    # 如果第 i 条流量为 black
     if y_predicted[i] == 0:
-        #读取第i条流量的源ip
+        # 读取第 i 条流量的源 IP
         tmp_ip = list(test_ip[i:i+1])[0]
         
-        #遍历所有要预测的客户端ip
+        # 遍历所有要预测的客户端 IP
         for j in range(len(ip_list)):
-            #如果是第i条流量（恶意）的源ip
+            # 如果是第 i 条流量（恶意）的源 IP
             if tmp_ip == ip_list[j]:
-      			#将该客户端ip标记为'black'
+            # 将该客户端 IP 标记为 black
                 ip.loc[j,1] = 'black'
 
-#test数据集恶意ip计数
+# test 数据集恶意 IP 计数
 malware_ip_count = 0
 for i in range(ip.shape[0]):
     if ip.loc[i,1] == 'black':
         malware_ip_count += 1
 print("test数据集恶意ip个数" + str(malware_ip_count) )
 
-#将最终结果写入result.txt
+# 将最终结果写入 result.txt
 ip.to_csv('result.txt',sep=',',index=False,header=None)
 ```
 
@@ -447,8 +352,9 @@ ip.to_csv('result.txt',sep=',',index=False,header=None)
 - Shekhawat, A. S. (2018). *Analysis of Encrypted Malicious Traffic.*
 - Jenseg, O. (2019). *A machine learning approach to detecting malware in TLS traffic using resilient network features (Master's thesis, NTNU).*
 - Shekhawat, A. S., Di Troia, F., & Stamp, M. (2019). *Feature analysis of encrypted malicious traffic. Expert Systems with Applications, 125, 130-141.*
+- [Analysing PCAPs with Bro/Zeek](https://medium.com/@melanijan93/https-medium-com-melanijan93-analysing-pcaps-with-bro-zeek-33340e710012)
 - [Machine Learning Applications in Misuse and Anomaly Detection](https://www.intechopen.com/online-first/machine-learning-applications-in-misuse-and-anomaly-detection)
 - [imbalanced-classification-with-python](https://machinelearningmastery.com/imbalanced-classification-with-python/)
 - [scikit-learn GitHub doc: Feature extraction](https://github.com/scikit-learn/scikit-learn/blob/master/doc/modules/feature_extraction.rst)
 - [基于机器学习的TLS恶意加密流量检测方案](https://www.secrss.com/articles/18679)
-- [利用背景流量数据（contexual flow data）识别TLS加密恶意流量](https://www.cnblogs.com/bonelee/p/9604530.html)- 
+- [利用背景流量数据（contexual flow data）识别TLS加密恶意流量](https://www.cnblogs.com/bonelee/p/9604530.html)
