@@ -5174,8 +5174,8 @@ redirectPort=&quot;8443&quot; /&gt;
 <li><strong>TTL值</strong>：正常流量的TTL值一般为60、300、20、30；而恶意流量多为300，大约22%的DNS响应汇总TTL为100，而这在正常流量中很罕见。</li>
 <li><strong>域名是否收录在Alexa网站</strong>：恶意流量域名信息很少收录在Alexa top-1,000,000中，而正常流量域名多收录在其中。</li>
 </ul>
-<h3 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h3><p>特征提取我们采用的工具是 <strong>Zeek</strong>，它的前身是 Bro，一款网络安全监视（Network Security Monitoring）工具，同时它也支持直接处理 pcap 文件形成各类日志文件，包括 dns、http、smtp 等：</p>
-<p><img src="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/6.png" alt="cce00cf94b14017707eaa55f09ae67e1.png"></p>
+<h3 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h3><p>特征提取我们采用的工具是 <strong>Zeek</strong>，它的前身是 Bro，一款网络安全监视（Network Security Monitoring）工具，它定义了自己的 DSL 语言，支持直接处理 pcap 文件生成各类日志文件，包括 dns、http、smtp 等：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ls</span><br><span class="line">conn.log	dhcp.log		 files.log	infected.pcap	  packet_filter.log	  smb_files.log	</span><br><span class="line">smtp.log	lce_rpc.log	 dns.log	  http.log	 kerberos.log	   pe.log		smb_mapping.log	</span><br><span class="line">ssl.log		weird.log		 x5Q9.log</span><br></pre></td></tr></table></figure>
 <p>Zeek 网上有一些现成的脚本，我们采用的是 <strong>Zeek FlowMeter</strong>，它基于 OSI 七层协议的网络层和传输层，可以分析并生成一些 Packets 到达时间序列、Packet 字节大小和元数据等新特征。</p>
 <p>在使用时，我们需要在 <code>local.zeek</code> 配置文件中加入 <code>@load flowmeter</code>，这样 Zeek 在执行时会加载 <code>flowmeter.zeek</code> 并生成对应的 <code>flowmeter.log</code>，下面列出了 FlowMeter 提取出的一些特征，包括上下行包总数、包负载均值方差等。其他详细的特征请见 <a href="https://github.com/zeek-flowmeter/zeek-flowmeter" target="_blank" rel="noopener">zeek-flowmeter GitHub官方文档</a>。</p>
 <table>
