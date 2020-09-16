@@ -3,6 +3,7 @@
 title: DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思
 tags: [Network, Security]
 categories: [Algorithms]
+
 date: 2020-08-09 23:20:52
 ---
 ## 初赛题目
@@ -30,12 +31,12 @@ eta_1
 ├── black
 │   ├── 192.168.10.91.pcap
 │   ├── 192.168.44.25.pcap
-|		├── ...
+│   ├── ...
 │   └── 192.168.80.115.pcap
 ├── test
 │   ├── 192.168.150.71.pcap
 │   ├── 192.168.150.99.pcap
-|		├── ...
+│   ├── ...
 │   └── 192.168.210.239.pcap
 └── white
     ├── 192.168.119.23.pcap
@@ -105,9 +106,16 @@ eta_1
 
 ### 特征提取
 
-特征提取我们采用的工具是 **Zeek**，它的前身是 Bro，一款网络安全监视（Network Security Monitoring）工具，同时它也支持直接处理 pcap 文件形成各类日志文件，包括 dns、http、smtp 等：
+特征提取我们采用的工具是 **Zeek**，它的前身是 Bro，一款网络安全监视（Network Security Monitoring）工具，它定义了自己的 DSL 语言，支持直接处理 pcap 文件生成各类日志文件，包括 dns、http、smtp 等：
 
-![cce00cf94b14017707eaa55f09ae67e1.png](6.png)
+```
+➜  ls
+conn.log	dhcp.log		 files.log	infected.pcap	  packet_filter.log	  smb_files.log	
+smtp.log	lce_rpc.log	 dns.log	  http.log	 kerberos.log	   pe.log		smb_mapping.log	
+ssl.log		weird.log		 x5Q9.log
+```
+
+
 
 Zeek 网上有一些现成的脚本，我们采用的是 **Zeek FlowMeter**，它基于 OSI 七层协议的网络层和传输层，可以分析并生成一些 Packets 到达时间序列、Packet 字节大小和元数据等新特征。
 
