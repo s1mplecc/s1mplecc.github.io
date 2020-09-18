@@ -372,6 +372,349 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">基于DPDK的模拟(D)Dos攻击实验</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-09-17 21:02:12" itemprop="dateCreated datePublished" datetime="2020-09-17T21:02:12+08:00">2020-09-17</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-18 09:51:00" itemprop="dateModified" datetime="2020-09-18T09:51:00+08:00">2020-09-18</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Experiments/" itemprop="url" rel="index"><span itemprop="name">Experiments</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/09/17/基于DPDK的模拟-D-Dos攻击实验/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">8.9k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>该实验是我暑期前往导师实验室，与一群东南大学网安三年级的本科生所做。我的工作是帮他们搭建了实验所需运行的服务器环境，实验数据的采集、制图以及结果分析均是他们所做。由于该实验可能在我研究生阶段进行进一步的研究，所以将它摘至我的博客，文档亦摘录了本科生们所做的实验报告，特此申明。</p>
+</blockquote>
+<p>东大网安本科组员：翟思宇、肖遥、宋昌霖、胡钺琳、赵泽瑞、赵钧陶<br>指导老师：肖卿俊</p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本实验搭载高速以太网卡，通过持续的高速数据传输，达到逼近目标服务器链路的传输速率极限，以模拟 (D)Dos 攻击的效果。攻击主机系统采用 Ubuntu Server 版本，受 Linux 系统 I/O 的内核机制的影响，发包速率受到限制。本实验创新性的利用 DPDK 软件平台绕过系统内核，实现高数据吞吐率的效果。</p>
+<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/0.png" alt="81db04d3b1658e9c254bfbfce6dedde2.png"></p>
+<p>如上图，Linux 内核协议栈的实现决定了它内核网络协议的性能不佳，Linux 在内核收包处理时，将网卡收到的报文通过 DMA 放到内存，网卡出发中断通知系统有报文到达，系统分配 sk_buff，将报文拷贝到 sk_buff 中，交由协议栈处理，之后将其送用户态应用程序处理。</p>
+<p>这种情况下，报文数量的增多将急剧增加资源的消耗。这包含报文产生 CPU 中断的上下文切换、为报文申请分配 sk_buff 消耗的资源、用户态程序收发包时产生系统调用和上下文切换带来的系统资源消耗。Kernel Bypass（内核旁路）技术应运而生，DPDK 正是采用的上图图由这种类 DMA 机制，直接将数据包从硬件（网卡端口）传输至用户态应用程序，以此来实现低延迟、低消耗的高吞吐网络传输。</p>
+<p>TRex 是思科研发的一款成熟的基于 DPDK 的网络测试工具。它运行在标准的 Intel 处理芯片上，同时支持 stateful 和 stateless 两种模式，stateful 可以描述 L4~L7 层的应用场景，而 stateless 主要用于进行定制包的发包。本实验主要利用 TRex 的 DPDK 高线速发包能力，模拟对目标服务器进行 (D)Dos 打击。</p>
+<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/1.png" alt="7a135e990f639b406cd1cc244d4943f3.png"></p>
+<h2 id="实验物理环境"><a href="#实验物理环境" class="headerlink" title="实验物理环境"></a>实验物理环境</h2><p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/2.JPG" alt="2ffa174d247d24ce9f16ea7332178308.jpeg"></p>
+<ol>
+<li>DELL Xeon Server，OS: Ubuntu Server 18.04 LTS。原装的系统为 CentOS 6，实验过程中遇到内核版本过低不支持 TRex 发包的问题，所以重装了 Ubuntu 系统。此外服务器还安装了实验室购入的兼容 DPDK 的 INTEL X710 网卡。</li>
+<li>NetFPGA-SUME Virtex-7 FPGA Development Board，四个 10Gbps 的端口，实验过程中使用两根光缆连接到服务器构成回环。</li>
+<li>DELL 工作站，用于将编译好的 P4 程序烧入 NetFPGA 智能网卡。</li>
+</ol>
+<h2 id="服务器环境准备"><a href="#服务器环境准备" class="headerlink" title="服务器环境准备"></a>服务器环境准备</h2><h3 id="安装系统"><a href="#安装系统" class="headerlink" title="安装系统"></a>安装系统</h3><ol>
+<li>服务器操作系统选择兼容性、稳定性较好的 Ubuntu 18.04.5 LTS 版本，官网下载需要翻墙，也可以选择清华或阿里的开源软件镜像网。<a href="https://releases.ubuntu.com/bionic/" target="_blank" rel="noopener">官网下载地址</a></li>
+<li>制作启动 U 盘，使用 Rufus 镜像刻录工具将下载好的 iso 镜像刻录至 U 盘。<a href="https://ubuntu.com/tutorials/create-a-usb-stick-on-windows#1-overview" target="_blank" rel="noopener">官网教程 - Create a bootable USB stick on Windows</a>。</li>
+<li>启动服务器，按住 F2 进入 DELL 的 BIOS 界面，将 U 盘调整为启动的第一选项。</li>
+<li>重启服务器，按照引导程序安装系统。<a href="https://ubuntu.com/tutorials/install-ubuntu-server#1-overview" target="_blank" rel="noopener">官网教程 - Install Ubuntu Server</a></li>
+</ol>
+<h3 id="连接外网"><a href="#连接外网" class="headerlink" title="连接外网"></a>连接外网</h3><p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/3.JPG" alt="8d45ed82634b33c68b4ddacfeef8a6a7.jpeg"></p>
+<p>服务器共有四个网口 eno1～eno4，将网线插在左数第一个网口对应 eno1（图中①），并配置 interfaces 文件。图中②位置为 INTEL X710 网卡位置，从 NetFPGA 智能网卡的端口连接至服务器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ vi etc&#x2F;network&#x2F;interfaces</span><br><span class="line"></span><br><span class="line">auto eno1</span><br><span class="line">iface eno1 inet dhcp</span><br></pre></td></tr></table></figure>
+<p>在<code>/etc/resolv.conf</code>中加入 DNS 配置，此为阿里提供的公共 DNS</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nameserver 223.5.5.5</span><br><span class="line">nameserver 223.6.6.6</span><br></pre></td></tr></table></figure>
+<p>要先手动设置 IP 再使用 <code>dhclient</code> 命令启用 DHCP，<strong>每次重启服务器后如需连接外网，需输入这两行命令</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ifconfig eth0 192.168.0.102 netmask 255.255.255.0</span><br><span class="line">dhclient eno1</span><br></pre></td></tr></table></figure>
+<p>执行完成就可以连通外网了</p>
+<h3 id="设置网口"><a href="#设置网口" class="headerlink" title="设置网口"></a>设置网口</h3><p><code>ifconfig -a</code>查看网口信息，列出了 X710 网卡的两个网口信息，默认驱动是 Kernel Driver i40e，先设置 IP</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo ifconfig enp59s0f0 192.168.200.2</span><br><span class="line">sudo ifconfig enp59s0f1 192.168.201.2</span><br></pre></td></tr></table></figure>
+<p>在工作站的主机上 ping 一下服务器保证双向联通</p>
+<h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><p>使用 <code>apt-get</code> 命令安装 DPDK 依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt-get upgrade</span><br><span class="line">sudo apt install -y dpdk dpdk-dev dpdk-doc</span><br></pre></td></tr></table></figure>
+<p>安装其他依赖，可以先在本地保存为 <code>install.sh</code>，然后使用 <code>scp</code> 命令传到服务器上 <code>sh install.sh</code>执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install -y cmake gcc g++ git automake llvm llvm-dev llvm-runtime libtool bison flex build-essential vim</span><br><span class="line"></span><br><span class="line"># Install pkg-config here, as it is required for p4lang&#x2F;PI</span><br><span class="line"># installation to succeed.</span><br><span class="line">sudo apt-get install -y pkg-config</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y wget curl zip unzip rar unrar unar</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y libgc-dev libfl-dev libgmp-dev libevent-dev libssl-dev libjudy-dev libpcap-dev tcpdump</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y libboost-dev libboost-iostreams-dev libboost-graph-dev libboost-test-dev libboost-program-options-dev libboost-system-dev libboost-filesystem-dev libboost-thread-dev</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y libreadline6 libreadline6-dev</span><br><span class="line"># 这里如果提示废弃就执行下面的安装</span><br><span class="line">sudo apt-get install -y libreadline-dev </span><br><span class="line"></span><br><span class="line"># Deps needed to build PI:</span><br><span class="line">sudo apt-get install -y libjudy-dev libreadline-dev valgrind libtool-bin libboost-dev libboost-system-dev libboost-thread-dev</span><br><span class="line"></span><br><span class="line"># Things needed for &#96;cd tutorials&#x2F;exercises&#x2F;basic ; make run&#96; to work:</span><br><span class="line">sudo apt-get install -y libgflags-dev net-tools</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y doxygen graphviz texlive-full</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y bridge-utils tcpreplay</span><br><span class="line">sudo apt-get install -y zlib1g-dev pciutils kmod strace  ## needed by cisco trex</span><br></pre></td></tr></table></figure>
+<h3 id="安装TRex"><a href="#安装TRex" class="headerlink" title="安装TRex"></a>安装TRex</h3><p>联网下载 TRex</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget --no-cache http:&#x2F;&#x2F;trex-tgn.cisco.com&#x2F;trex&#x2F;release&#x2F;latest</span><br><span class="line">tar -zxvf latest</span><br></pre></td></tr></table></figure>
+<p>我们下载的 TRex 最新版本为 v2.82，进入到该目录下并执行 DPDK 端口设置脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd v2.82</span><br><span class="line">.&#x2F;dpdk_setup_ports.py -i</span><br></pre></td></tr></table></figure>
+<p>按照下图设置</p>
+<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/4.jpeg" alt="0b9649d536fbab09908a9df0303c590a.jpeg"></p>
+<p>此时可以注意到，X710 网卡的两个网口还是绑定的 i40e 内核驱动。但在运行 TRex 发包命令后会自动绑定到 DPDK 兼容驱动 igb_uio 上。</p>
+<h2 id="发包测试"><a href="#发包测试" class="headerlink" title="发包测试"></a>发包测试</h2><p>实验环境准备就绪，进行发包测试。参考 TRex 官方手册 <a href="https://trex-tgn.cisco.com/trex/doc/trex_manual.html#_running_examples" target="_blank" rel="noopener">Running examples
+</a>，在 stateful 模式下使用 <code>t-rex-64</code> 命令发送数据包。<code>-f</code> 指定配置 yaml，<code>-m</code> 指定重放次数，<code>-l</code> 指定网络延迟检测速率。更多参数详见官方手册。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo .&#x2F;t-rex-64 -f avl&#x2F;sfr_delay_10_1g.yaml -m 5 -l 1000</span><br></pre></td></tr></table></figure>
+<p>测试效果如下：</p>
+<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/5.jpeg" alt="7402f2999111d19e378f8883aaf3ba34.jpeg"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">-Per port stats table </span><br><span class="line"></span><br><span class="line">      ports |               0 |               1 </span><br><span class="line"> -----------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">   opackets |        27882688 |        35434728 </span><br><span class="line">     obytes |      8217921859 |     28586813888 </span><br><span class="line">   ipackets |         5007937 |             709 </span><br><span class="line">     ibytes |      4647534484 |           79608 </span><br><span class="line">    ierrors |               0 |               0 </span><br><span class="line">    oerrors |               0 |               0 </span><br><span class="line">      Tx Bw |       1.18 Gbps |       3.81 Gbps </span><br><span class="line"></span><br><span class="line">-Global stats enabled </span><br><span class="line"> Cpu Utilization : 31.6  %  31.6 Gb&#x2F;core </span><br><span class="line"> Platform_factor : 1.0  </span><br><span class="line"> Total-Tx        :       5.00 Gbps  </span><br><span class="line"> Total-Rx        :       0.00  bps  </span><br><span class="line"> Total-PPS       :       1.07 Mpps  </span><br><span class="line"> Total-CPS       :      20.51 Kcps  </span><br><span class="line"></span><br><span class="line"> Expected-PPS    :       1.08 Mpps  </span><br><span class="line"> Expected-CPS    :      20.61 Kcps  </span><br><span class="line"> Expected-BPS    :       5.02 Gbps  </span><br><span class="line"></span><br><span class="line"> Active-flows    :    21328  Clients :      511   Socket-util : 0.0775 %    </span><br><span class="line"> Open-flows      :  1342791  Servers :     5621   Socket :    24927 Socket&#x2F;Clients :  48.8 </span><br><span class="line"> drop-rate       :       5.00 Gbps   </span><br><span class="line"> current time    : 66.5 sec  </span><br><span class="line"> test duration   : 3533.5 sec  </span><br><span class="line"></span><br><span class="line">-Latency stats enabled </span><br><span class="line"> Cpu Utilization : 0.1 %  </span><br><span class="line"> if|   tx_ok , rx_ok  , rx check ,error,       latency (usec) ,    Jitter          max window </span><br><span class="line"></span><br><span class="line">   |         ,        ,          ,     ,   average   ,   max  ,    (usec)                     </span><br><span class="line"> ---------------------------------------------------------------------------------------------------------------- </span><br><span class="line"></span><br><span class="line"> 0 |    65254,   12858,         0,    0,          7  ,      23,       1      |  10  10  15  10  12  11  12  23  10  10  15  18  12 </span><br><span class="line"> 1 |    65254,     136,         0,    0,          3  ,       0,       0      |  0  0  0  0  0  0  0  0  0  0  0  0  0 </span><br><span class="line"></span><br><span class="line">##</span><br></pre></td></tr></table></figure>
+<p>主要记录的数据包括：</p>
+<ul>
+<li><strong>Cpu Utilization</strong>，CPU利用率</li>
+<li><strong>Total-Tx</strong>，总计发送速率（Transport）</li>
+<li><strong>Total-Rx</strong>，总计接受速率（Receive）</li>
+<li><strong>Total-PPS</strong>，总计每秒传输包数量（Packets per second）</li>
+</ul>
+<h2 id="发包实验"><a href="#发包实验" class="headerlink" title="发包实验"></a>发包实验</h2><p>接下来我们尝试在 stateful 模式下模拟 stateless 发包，使用的是 <code>cap2/</code> 目录下的 <code>imix.yaml</code> 配置文件，根据以太网协议，一个数据包的大小从最小 64Bytes 到最大 1518Bytes，imix 提供了 imix_64、imix_594 和 imix_1518 三类配置文件。</p>
+<p><code>-c</code> 指定 CPU 核数，观察并绘制不同包大小、不同核数时 CPU 利用率以及吞吐率的 eps 矢量图。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo .&#x2F;t-rex-64 -f cap2&#x2F;imix_1518.yaml -m 823451 -l 1000 -c 2</span><br></pre></td></tr></table></figure>
+<p>实验结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">-Per port stats table </span><br><span class="line"></span><br><span class="line">      ports |               0 |               1 </span><br><span class="line"> -----------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">   opackets |        34232892 |           42080 </span><br><span class="line">     obytes |     51904428378 |         2777280 </span><br><span class="line">   ipackets |               0 |               0 </span><br><span class="line">     ibytes |               0 |               0 </span><br><span class="line">    ierrors |               0 |               0 </span><br><span class="line">    oerrors |               0 |               0 </span><br><span class="line">      Tx Bw |       9.89 Gbps |     527.55 Kbps </span><br><span class="line"></span><br><span class="line">-Global stats enabled </span><br><span class="line"> Cpu Utilization : 100.0  %  9.9 Gb&#x2F;core </span><br><span class="line"> Platform_factor : 1.0  </span><br><span class="line"> Total-Tx        :       9.89 Gbps  </span><br><span class="line"> Total-Rx        :       0.00  bps  </span><br><span class="line"> Total-PPS       :     816.02 Kpps  </span><br><span class="line"> Total-CPS       :       0.00  cps  </span><br><span class="line"></span><br><span class="line"> Expected-PPS    :       6.59 Gpps  </span><br><span class="line"> Expected-CPS    :       6.59 Gcps  </span><br><span class="line"> Expected-BPS    :      80.00 Tbps  </span><br><span class="line"></span><br><span class="line"> Active-flows    :     1600  Clients :      254   Socket-util : 0.0100 %    </span><br><span class="line"> Open-flows      :     1600  Servers :    65534   Socket :     1600 Socket&#x2F;Clients :  6.3 </span><br><span class="line"> Total_queue_full : 72264932         </span><br><span class="line"> drop-rate       :       9.89 Gbps   </span><br><span class="line"> current time    : 43.3 sec  </span><br><span class="line"> test duration   : 3556.7 sec  </span><br><span class="line"></span><br><span class="line">-Latency stats enabled </span><br><span class="line"> Cpu Utilization : 0.1 %  </span><br><span class="line"> if|   tx_ok , rx_ok  , rx check ,error,       latency (usec) ,    Jitter          max window </span><br><span class="line"></span><br><span class="line">   |         ,        ,          ,     ,   average   ,   max  ,    (usec)                     </span><br><span class="line"> ---------------------------------------------------------------------------------------------------------------- </span><br><span class="line"></span><br><span class="line"> 0 |    42080,       0,         0,    0,          0  ,       0,       0      |  0  0  0  0  0  0  0  0  0  0  0  0  0 </span><br><span class="line"> 1 |    42081,       0,         0,    0,          0  ,       0,       0      |  0  0  0  0  0  0  0  0  0  0  0  0  0 </span><br><span class="line"></span><br><span class="line">##</span><br></pre></td></tr></table></figure>
+<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><h3 id="理论分析"><a href="#理论分析" class="headerlink" title="理论分析"></a>理论分析</h3><p>一个以太网帧的结构包括：</p>
+<table>
+<thead>
+<tr>
+<th>PA</th>
+<th>SFD</th>
+<th>DA</th>
+<th>SA</th>
+<th>Type</th>
+<th>Payload</th>
+<th>FCS</th>
+<th>IFG</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td>1</td>
+<td>6</td>
+<td>6</td>
+<td>2</td>
+<td>46 ~ 1500</td>
+<td>4</td>
+<td>12</td>
+</tr>
+</tbody>
+</table>
+<p>最小帧长：7+1+(6+6+2+46+4)+12 = 84B（最小有效帧长 64B）<br>最大帧长：7+1+(6+6+2+1500+4)+12 = 1538B（最大有效帧长 1518B）</p>
+<p>对于最小帧长，最大包传输率 M 和吞吐率 T 为：</p>
+<p>$$M = Speed/Size = 100 <em> 10^9 / (84 </em> 8) = 148809523 pps$$<br>$$T = M <em> 64 </em> 8 = 76.19Gbps$$</p>
+<p>对于最大帧长，最大包传输率 M 和吞吐率 T 为：</p>
+<p>$$M = Speed/Size = 100 <em> 10^9 / (1538 </em> 8) = 8127438 pps$$<br>$$T = M <em> 1518 </em> 8 = 98.69Gbps$$</p>
+<p>以此类推，我们对于不同的帧长做了理论分析，得到下图：</p>
+<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/6.png" alt="38021550bd20f375c0c872a80cea41af.png"></p>
+<h3 id="吞吐率测试结果"><a href="#吞吐率测试结果" class="headerlink" title="吞吐率测试结果"></a>吞吐率测试结果</h3><p>以下是吞吐率的测试结果：</p>
+<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/7.png" alt="037b37c99b1bc4c938f887dc1b876ba1.png"><br><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/8.png" alt="ec784c4bc84e984d27170739145d5bfe.png"><br><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/9.png" alt="d9c6568a7c11555a9290d452fbacafe2.png"></p>
+<h3 id="包传输率测试结果"><a href="#包传输率测试结果" class="headerlink" title="包传输率测试结果"></a>包传输率测试结果</h3><p>以下是包传输率的测试结果：</p>
+<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/10.png" alt="0f5b53c8b5544ae9572cebc9168f12cb.png"><br><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/11.png" alt="83c9995318589576075bf3140b4f46fd.png"><br><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/12.png" alt="79d66dcca878a695f31c01cf8e08e2d8.png"></p>
+<h3 id="与内核机制发包的对比"><a href="#与内核机制发包的对比" class="headerlink" title="与内核机制发包的对比"></a>与内核机制发包的对比</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">包大小(B)</th>
+<th style="text-align:center">内核机制发包<br>CPU利用率</th>
+<th style="text-align:center">内核机制发包<br>PPS(Kpps)</th>
+<th style="text-align:center">DPDK机制发包<br>PPS(Mpps)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">64</td>
+<td style="text-align:center">100%</td>
+<td style="text-align:center">593.5</td>
+<td style="text-align:center">14.85</td>
+</tr>
+<tr>
+<td style="text-align:center">549</td>
+<td style="text-align:center">100%</td>
+<td style="text-align:center">585.29</td>
+<td style="text-align:center">2.04</td>
+</tr>
+<tr>
+<td style="text-align:center">1518</td>
+<td style="text-align:center">97.70%</td>
+<td style="text-align:center">537.27</td>
+<td style="text-align:center">0.82</td>
+</tr>
+</tbody>
+</table>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>由上述实验结果可知：</p>
+<ol>
+<li>10Gbps 线速的网络，用 DPDK 跑 4 个核，基本可以实现 64B 最小包较好的发送吞吐率，但是仍达不到 10Gbps 的线速，只有 7.6Gbps 左右。</li>
+<li>DPDK 由于采用了绕过内核驱动的技术，使得网络数据包的发送速度大大增加。</li>
+<li>此外，随着数据包长度增加，其他条件一定时，吞吐率也随之增加，这与我们的理论分析基本吻合。</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><em>Surasak Sanguanpong, Experiences in Building a 100 Gbps (D)DoS Traffic Generator, DIY with a Single  Commodity-off-the-shelf (COTS) Server.</em></li>
+<li><a href="https://trex-tgn.cisco.com/trex/doc/trex_manual.html" target="_blank" rel="noopener">TRex official manual</a></li>
+<li><a href="https://trex-tgn.cisco.com/trex/doc/trex_stateless.html#_stateful_vs_stateless" target="_blank" rel="noopener">TRex Stateless Support</a></li>
+<li><a href="https://github.com/cisco-system-traffic-generator/trex-core" target="_blank" rel="noopener">思科TRex Traffic Generator代码仓库</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2820,330 +3163,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">50行代码实现一个并发的 Python 爬虫程序</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-12-03 13:41:09" itemprop="dateCreated datePublished" datetime="2018-12-03T13:41:09+08:00">2018-12-03</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/03/50行代码实现一个并发的 Python 爬虫程序/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">7.4k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。</p>
-<p>案例还是用的之前 <a href="https://s1mple.xyz/java-web-crawler/" target="_blank" rel="noopener">Java 网络爬虫</a> 的案例。所需 <code>Python Version &gt;= 3.6</code>，用到的库有：</p>
-<ul>
-<li><strong>beautifulsoup4</strong> 三方库用于解析 Html，执行 <code>pip install beautifulsoup4</code> 安装</li>
-<li>内置的 <strong>urllib</strong> 用于发起网络请求获取响应内容</li>
-<li>内置的 <strong>concurrent.futures</strong> 并发库中的 <strong>ProcessPoolExecutor</strong> 用于创建进程池</li>
-</ul>
-<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><p>源码已经上传到 <a href="https://gist.github.com/s1mplecc/dfd15f58cbbe5fad2ab13bc2246d49f4" target="_blank" rel="noopener">GitHub</a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> urllib <span class="keyword">import</span> request</span><br><span class="line"><span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ProcessPoolExecutor</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">WWW_BIQUGE_CM = <span class="string">'http://www.biquge.cm'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__fetch_html</span><span class="params">(url, decode=<span class="string">'UTF-8'</span>)</span>:</span></span><br><span class="line">    req = request.Request(url)</span><br><span class="line">    req.add_header(<span class="string">'User-Agent'</span>, <span class="string">'Mozilla/5.0'</span>)</span><br><span class="line">    <span class="keyword">with</span> request.urlopen(req) <span class="keyword">as</span> res:</span><br><span class="line">        <span class="keyword">return</span> res.read().decode(decode)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__parse_title_and_hrefs</span><span class="params">(index)</span>:</span></span><br><span class="line">    html = __fetch_html(<span class="string">f'<span class="subst">&#123;WWW_BIQUGE_CM&#125;</span>/<span class="subst">&#123;index&#125;</span>/'</span>, <span class="string">'gbk'</span>)</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'html.parser'</span>)</span><br><span class="line">    links = soup.find_all(<span class="string">'a'</span>, href=re.compile(<span class="string">rf'/<span class="subst">&#123;index&#125;</span>/'</span>))</span><br><span class="line">    hrefs = list(map(<span class="keyword">lambda</span> x: x[<span class="string">'href'</span>], links))</span><br><span class="line">    title = soup.h1.string</span><br><span class="line">    print(<span class="string">f'title: <span class="subst">&#123;title&#125;</span>\nhrefs: size=<span class="subst">&#123;len(hrefs)&#125;</span>'</span>)</span><br><span class="line">    <span class="keyword">return</span> title, hrefs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__fetch_content</span><span class="params">(href)</span>:</span></span><br><span class="line">    print(<span class="string">f'parsing <span class="subst">&#123;href&#125;</span>'</span>)</span><br><span class="line">    html = __fetch_html(<span class="string">f'<span class="subst">&#123;WWW_BIQUGE_CM&#125;</span>/<span class="subst">&#123;href&#125;</span>'</span>, <span class="string">'gbk'</span>)</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'html.parser'</span>)</span><br><span class="line">    <span class="keyword">return</span> re.sub(<span class="string">r'&lt;div id="content"&gt;|&lt;/div&gt;|&lt;br/&gt;'</span>, <span class="string">''</span>, str(soup.find(<span class="string">'div'</span>, id=<span class="string">'content'</span>)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__append_contents_to_file</span><span class="params">(title, hrefs)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> ProcessPoolExecutor(<span class="number">16</span>) <span class="keyword">as</span> executor:</span><br><span class="line">        contents = executor.map(__fetch_content, hrefs)</span><br><span class="line">    os.makedirs(<span class="string">'downloads'</span>, exist_ok=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">f'./downloads/<span class="subst">&#123;title&#125;</span>.txt'</span>, <span class="string">'wt+'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">for</span> content <span class="keyword">in</span> contents:</span><br><span class="line">            f.write(content)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(index=<span class="string">'12/12481'</span>)</span>:</span></span><br><span class="line">    start = time.time()</span><br><span class="line">    title, hrefs = __parse_title_and_hrefs(index)</span><br><span class="line">    __append_contents_to_file(title, hrefs)</span><br><span class="line">    print(<span class="string">f'spend time: <span class="subst">&#123;time.time() - start&#125;</span>s'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    run(<span class="string">'9/9422'</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="urllib"><a href="#urllib" class="headerlink" title="urllib"></a>urllib</h3><p>模拟浏览器发起一个 HTTP 请求，我们需要用到 <code>urllib.request</code> 模块。其 <code>urlopen()</code> 方法用于发起请求并获取响应结果，该方法可单独传入一个 <code>urllib.request.Request</code> 对象，并返回一个 <code>http.client.HTTPResponse</code> 对象。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__fetch_html</span><span class="params">(url, decode=<span class="string">'UTF-8'</span>)</span>:</span></span><br><span class="line">    req = request.Request(url)</span><br><span class="line">    req.add_header(<span class="string">'User-Agent'</span>, <span class="string">'Mozilla/5.0'</span>)</span><br><span class="line">    <span class="keyword">with</span> request.urlopen(req) <span class="keyword">as</span> res:</span><br><span class="line">        <span class="keyword">return</span> res.read().decode(decode)</span><br></pre></td></tr></table></figure>
-<p>使用 <code>Request</code> 包装请求头。如果不设置 headers 中的 <strong>User-Agent</strong>，默认的 User-Agent 是 Python-urllib。可能一些网站会将该请求拦截，所以需要伪装成浏览器发起请求。</p>
-<h3 id="Beautiful-Soup"><a href="#Beautiful-Soup" class="headerlink" title="Beautiful Soup"></a>Beautiful Soup</h3><blockquote>
-<p>Beautiful Soup is a Python library for pulling data out of HTML and XML files. It works with your favorite parser to provide idiomatic ways of navigating, searching, and modifying the parse tree. It commonly saves programmers hours or days of work.</p>
-</blockquote>
-<p>Beautiful Soup 用于从 HTML 或 XML 文件中提取数据，提供的功能非常强大。它支持 Python 标准库中的 HTML 解析器：<code>BeautifulSoup(markup, &quot;html.parser&quot;)</code>，还支持一些第三方的解析器（如 html5lib、lxml 等）。</p>
-<p>Beautiful Soup 将 HTML 文档转换成一个复杂的树形结构,每个节点都是 Python 对象,所有对象可以归纳为4种: <code>Tag</code>，<code>NavigableString</code>，<code>BeautifulSoup</code>，<code>Comment</code>。<code>Tag</code> 对象与 XML 或 HTML 原生文档中的 tag 相同，所以非常适合用于<strong>定位</strong>。下面列出一些常见用法，感兴趣的同学可以查阅 <a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/" target="_blank" rel="noopener">官方文档</a>。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">soup.title</span><br><span class="line"><span class="comment"># &lt;title&gt;The Dormouse's story&lt;/title&gt;</span></span><br><span class="line"></span><br><span class="line">soup.a</span><br><span class="line"><span class="comment"># &lt;a class="sister" href="http://example.com/elsie" id="link1"&gt;Elsie&lt;/a&gt;</span></span><br><span class="line"></span><br><span class="line">soup.find_all(<span class="string">'a'</span>)</span><br><span class="line"><span class="comment"># [&lt;a class="sister" href="http://example.com/elsie" id="link1"&gt;Elsie&lt;/a&gt;,</span></span><br><span class="line"><span class="comment">#  &lt;a class="sister" href="http://example.com/lacie" id="link2"&gt;Lacie&lt;/a&gt;,</span></span><br><span class="line"><span class="comment">#  &lt;a class="sister" href="http://example.com/tillie" id="link3"&gt;Tillie&lt;/a&gt;]</span></span><br><span class="line"></span><br><span class="line">soup.find(<span class="string">'a'</span>, id=<span class="string">'link3'</span>)</span><br><span class="line"><span class="comment"># &lt;a class="sister" href="http://example.com/tillie" id="link3"&gt;Tillie&lt;/a&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> link <span class="keyword">in</span> soup.find_all(<span class="string">'a'</span>):</span><br><span class="line">    print(link.get(<span class="string">'href'</span>))</span><br><span class="line">    <span class="comment"># http://example.com/elsie</span></span><br><span class="line">    <span class="comment"># http://example.com/lacie</span></span><br><span class="line">    <span class="comment"># http://example.com/tillie</span></span><br></pre></td></tr></table></figure>
-<h3 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h3><p>从 Python3.2 开始 <code>concurrent.futures</code> 被纳入了标准库，这个模块中有2个类：<code>ThreadPoolExecutor</code> 和 <code>ProcessPoolExecutor</code>，分别对 <code>threading</code> 多线程库和 <code>multiprocessing</code> 多进程库的进行了高级别的抽象，封装了统一的接口。</p>
-<p>关于是使用多线程还是多进程，大部分人可能有所耳闻，Python 推荐使用多进程而不是多线程。我自己测试的情况也是爬取 3000 章时使用 <code>ProcessPoolExecutor</code> 大约需要 20s，使用 <code>ThreadPoolExecutor</code> 需要大概 40s，性能差了一倍。</p>
-<p>其他语言，CPU 是多核时是支持多个线程同时执行的。但在 Python 中，无论是单核还是多核，<strong>同时只能由一个线程在执行</strong>，其根源是 <strong>GIL</strong> 的存在（只存在于 CPython，PyPy 和 Jython 中没有）。</p>
-<p>GIL 全称 <strong>Global Interpreter Lock</strong>(全局解释器锁)，是 Python 设计之初为了数据安全所做的决定。某个线程想要执行，必须先拿到 GIL，并且在一个 Python 进程中只有一个 GIL。并且每次释放 GIL 锁时线程会进行锁竞争，切换线程也会消耗资源。这就是为什么在多核 CPU 上 Python 的多线程效率并不高的原因所在，以至于 Python 的专家们精心制作了一个标准答案：<strong>不要使用多线程，请使用多进程</strong>。</p>
-<p>此外，Python 可使用 <strong>perf</strong> 库进行性能测试，以下是爬取 50 章时的性能：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  crawler ✗ python3 -m perf timeit <span class="string">'import app;app.run("12/12455")'</span></span><br><span class="line">...</span><br><span class="line">* the standard deviation (281 ms) is 24% of the mean (1.16 sec)</span><br><span class="line">* the maximum (2.02 sec) is 73% greater than the mean (1.16 sec)</span><br><span class="line"></span><br><span class="line">Mean +- std dev: 1.16 sec +- 0.28 sec</span><br></pre></td></tr></table></figure>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="venv"><a href="#venv" class="headerlink" title="venv"></a>venv</h3><p><strong>venv</strong>，全称 <strong>virtualenv</strong> 虚拟环境。用过 JavaScript 的同学都知道，执行 <code>npm install xxx</code> 时会在当前目录生成一个 <code>node_modules</code> 目录，依赖会被安装在这个目录下，除非你加上 <code>-g/--global</code> 全局参数，否则安装的依赖只对当前项目生效（不是全局依赖）。这其实相当于做了一层隔离，将当前项目的环境与全局环境隔离开，有利于版本的管理。</p>
-<p>venv 也是这样的作用，用于<strong>为一个应用创建一套隔离的 Python 运行环境</strong>。在这个环境中，你可以管理 Python 版本，pip 版本，以及你所用的三方库的版本，而不会与全局环境冲突。</p>
-<p>如果你使用的是 PyCharm，那么创建项目时就可以勾选使用 venv（这也是建议的选择）。效果如下图：<br><img src="/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/0.png" alt="Screen-Shot-2018-12-03-at-11.01.47-AM">命令行多了 (venv) 前缀：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  crawler ✗</span><br></pre></td></tr></table></figure></p>
-<p>如果你不是使用的 PyCharm，参考这篇文档：<a href="https://www.kancloud.cn/smilesb101/python3_x/298883" target="_blank" rel="noopener">virtualenv</a></p>
-<h3 id="风格规范"><a href="#风格规范" class="headerlink" title="风格规范"></a>风格规范</h3><p>Python 风格规范我参考的 <a href="https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/python_style_rules/#id16" target="_blank" rel="noopener">Google 开源项目风格指南</a>。推荐使用 <strong>PyCharm</strong> IDE，和 IntelliJ IDEA 一样产自 JetBrains 公司，非常良心的软件，会有一些风格提示，并且可以使用快捷键（Ctrl/Cmd + Shift + L）自动格式化。这里主要说说命名吧。</p>
-<h4 id="命名"><a href="#命名" class="headerlink" title="命名"></a>命名</h4><p><strong>应该避免的名称</strong></p>
-<ol>
-<li>单字符名称, 除了计数器和迭代器</li>
-<li>包/模块名中的连字符(-)</li>
-<li>双下划线开头并结尾的名称( Python 保留, 例如<code>__init__</code>)</li>
-</ol>
-<p><strong>命名约定</strong></p>
-<ol>
-<li>用<strong>单下划线(_)开头</strong>表示模块变量或函数是 protected 的(使用 <code>from module import *</code> 时不会包含)。</li>
-<li>用<strong>双下划线(__)开头</strong>的实例变量或方法表示类内私有。</li>
-<li>对类名使用大写字母开头的单词(如 CapWords，即 Pascal 风格)，但是模块名应该用小写加下划线的方式(如 lower_with_under.py )。尽管已经有很多现存的模块使用类似于CapWords.py 这样的命名，但现在已经不鼓励这样做，因为如果模块名碰巧和类名一致，这会让人困扰。</li>
-</ol>
-<p><strong>Python之父Guido推荐的规范</strong></p>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Public</th>
-<th>Internal</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Modules</td>
-<td>lower_with_under</td>
-<td>_lower_with_under</td>
-</tr>
-<tr>
-<td>Packages</td>
-<td>lower_with_under</td>
-<td></td>
-</tr>
-<tr>
-<td>Classes</td>
-<td>CapWords</td>
-<td>_CapWords</td>
-</tr>
-<tr>
-<td>Exceptions</td>
-<td>CapWords</td>
-<td></td>
-</tr>
-<tr>
-<td>Functions</td>
-<td>lower_with_under()</td>
-<td>_lower_with_under()</td>
-</tr>
-<tr>
-<td>Global/Class Constants</td>
-<td>CAPS_WITH_UNDER</td>
-<td>_CAPS_WITH_UNDER</td>
-</tr>
-<tr>
-<td>Global/Class Variables</td>
-<td>lower_with_under</td>
-<td>_lower_with_under</td>
-</tr>
-<tr>
-<td>Instance Variables</td>
-<td>lower_with_under</td>
-<td>_lower_with_under (protected) or __lower_with_under (private)</td>
-</tr>
-<tr>
-<td>Method Names</td>
-<td>lower_with_under()</td>
-<td>_lower_with_under() (protected) or __lower_with_under() (private)</td>
-</tr>
-<tr>
-<td>Function/Method Parameters</td>
-<td>lower_with_under</td>
-<td></td>
-</tr>
-<tr>
-<td>Local Variables</td>
-<td>lower_with_under</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h4 id="Main"><a href="#Main" class="headerlink" title="Main"></a>Main</h4><p><strong>所有的顶级代码在模块导入时都会被执行</strong>。即使是一个打算被用作脚本的文件，也应该是可导入的。并且简单的导入不应该导致这个脚本的主功能(main functionality)被执行，这是一种副作用。主功能应该放在一个函数中，并在执行主程序前总是检查 <code>if __name__ == &#39;__main__&#39;</code>。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">      ...</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-<p><code>__name__</code> 是内置变量，指代<strong>当前模块名</strong>，当模块被直接运行时模块名为 <code>__main__</code>。这句话的意思就是，当模块被直接运行时，下面代码块将被运行，当模块是被导入时，代码块不被运行。</p>
-<h3 id="文件写入"><a href="#文件写入" class="headerlink" title="文件写入"></a>文件写入</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">os.makedirs(<span class="string">'downloads'</span>, exist_ok=<span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">f'./downloads/<span class="subst">&#123;title&#125;</span>.txt'</span>, <span class="string">'wt+'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="keyword">for</span> content <span class="keyword">in</span> contents:</span><br><span class="line">        f.write(content)</span><br></pre></td></tr></table></figure>
-<p>第一句用于创建 downloads 文件夹，<code>exist_ok=True</code> 参数允许创建的文件夹已存在，否则会抛出 <code>FileExistsError</code> 异常。</p>
-<p>第二句 <code>with ... as ...</code> 的用法和 Java 中的 <code>try with resources</code> 有点类似，这里它会自动关闭打开的文件流。它的核心思想是 with 所求值的对象必须有一个 <code>__enter()__</code> 方法和一个 <code>__exit()__</code> 方法，在 with 代码块开始和结束这两个方法会被执行。如果出现异常则会执行 <code>__exit()__</code>，并传入三个参数 <code>exc_type</code>，<code>exc_value</code>，<code>exc_traceback</code> 用于异常处理。</p>
-<p><code>open(&#39;abc.txt&#39;, &#39;a+&#39;)</code> 打开文件时不同的参数有不同的作用，我这里用的 <code>wt+</code> 表示以文本格式打开一个文件用于读写，如果该文件已存在则将其覆盖，如果该文件不存在则创建新文件。还有其他参数，例如 <code>a+</code> 代表 append 追加，<code>r</code> 表示只读等等。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://www.kancloud.cn/smilesb101/python3_x/295557" target="_blank" rel="noopener">廖雪峰的Python3.x教程</a></li>
-<li><a href="https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/python_style_rules/#id16" target="_blank" rel="noopener">Python 风格指南 —— Google 开源项目风格指南</a></li>
-<li><a href="https://www.jianshu.com/p/2e190438bd9c" target="_blank" rel="noopener">详解 python3 urllib</a></li>
-<li><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/" target="_blank" rel="noopener">Beautiful Soup 4 官方文档</a></li>
-<li><a href="https://docs.python.org/3/library/concurrent.futures.html" target="_blank" rel="noopener">concurrent.futures — Launching parallel tasks 官方文档</a></li>
-<li><a href="https://blog.louie.lu/2017/08/01/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84-python-%E6%A8%99%E6%BA%96%E5%87%BD%E5%BC%8F%E5%BA%AB%E7%94%A8%E6%B3%95-06-concurrent-futures/" target="_blank" rel="noopener">concurrent.futures 性能分析</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3195,7 +3214,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">64</span>
+                    <span class="site-state-item-count">65</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3222,7 +3241,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>

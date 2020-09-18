@@ -5329,4 +5329,154 @@ redirectPort=&quot;8443&quot; /&gt;
         <tag>Linux</tag>
       </tags>
   </entry>
+  <entry>
+    <title>基于DPDK的模拟(D)Dos攻击实验</title>
+    <url>/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>该实验是我暑期前往导师实验室，与一群东南大学网安三年级的本科生所做。我的工作是帮他们搭建了实验所需运行的服务器环境，实验数据的采集、制图以及结果分析均是他们所做。由于该实验可能在我研究生阶段进行进一步的研究，所以将它摘至我的博客，文档亦摘录了本科生们所做的实验报告，特此申明。</p>
+</blockquote>
+<p>东大网安本科组员：翟思宇、肖遥、宋昌霖、胡钺琳、赵泽瑞、赵钧陶<br>指导老师：肖卿俊</p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本实验搭载高速以太网卡，通过持续的高速数据传输，达到逼近目标服务器链路的传输速率极限，以模拟 (D)Dos 攻击的效果。攻击主机系统采用 Ubuntu Server 版本，受 Linux 系统 I/O 的内核机制的影响，发包速率受到限制。本实验创新性的利用 DPDK 软件平台绕过系统内核，实现高数据吞吐率的效果。</p>
+<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/0.png" alt="81db04d3b1658e9c254bfbfce6dedde2.png"></p>
+<p>如上图，Linux 内核协议栈的实现决定了它内核网络协议的性能不佳，Linux 在内核收包处理时，将网卡收到的报文通过 DMA 放到内存，网卡出发中断通知系统有报文到达，系统分配 sk_buff，将报文拷贝到 sk_buff 中，交由协议栈处理，之后将其送用户态应用程序处理。</p>
+<p>这种情况下，报文数量的增多将急剧增加资源的消耗。这包含报文产生 CPU 中断的上下文切换、为报文申请分配 sk_buff 消耗的资源、用户态程序收发包时产生系统调用和上下文切换带来的系统资源消耗。Kernel Bypass（内核旁路）技术应运而生，DPDK 正是采用的上图图由这种类 DMA 机制，直接将数据包从硬件（网卡端口）传输至用户态应用程序，以此来实现低延迟、低消耗的高吞吐网络传输。</p>
+<p>TRex 是思科研发的一款成熟的基于 DPDK 的网络测试工具。它运行在标准的 Intel 处理芯片上，同时支持 stateful 和 stateless 两种模式，stateful 可以描述 L4~L7 层的应用场景，而 stateless 主要用于进行定制包的发包。本实验主要利用 TRex 的 DPDK 高线速发包能力，模拟对目标服务器进行 (D)Dos 打击。</p>
+<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/1.png" alt="7a135e990f639b406cd1cc244d4943f3.png"></p>
+<h2 id="实验物理环境"><a href="#实验物理环境" class="headerlink" title="实验物理环境"></a>实验物理环境</h2><p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/2.JPG" alt="2ffa174d247d24ce9f16ea7332178308.jpeg"></p>
+<ol>
+<li>DELL Xeon Server，OS: Ubuntu Server 18.04 LTS。原装的系统为 CentOS 6，实验过程中遇到内核版本过低不支持 TRex 发包的问题，所以重装了 Ubuntu 系统。此外服务器还安装了实验室购入的兼容 DPDK 的 INTEL X710 网卡。</li>
+<li>NetFPGA-SUME Virtex-7 FPGA Development Board，四个 10Gbps 的端口，实验过程中使用两根光缆连接到服务器构成回环。</li>
+<li>DELL 工作站，用于将编译好的 P4 程序烧入 NetFPGA 智能网卡。</li>
+</ol>
+<h2 id="服务器环境准备"><a href="#服务器环境准备" class="headerlink" title="服务器环境准备"></a>服务器环境准备</h2><h3 id="安装系统"><a href="#安装系统" class="headerlink" title="安装系统"></a>安装系统</h3><ol>
+<li>服务器操作系统选择兼容性、稳定性较好的 Ubuntu 18.04.5 LTS 版本，官网下载需要翻墙，也可以选择清华或阿里的开源软件镜像网。<a href="https://releases.ubuntu.com/bionic/" target="_blank" rel="noopener">官网下载地址</a></li>
+<li>制作启动 U 盘，使用 Rufus 镜像刻录工具将下载好的 iso 镜像刻录至 U 盘。<a href="https://ubuntu.com/tutorials/create-a-usb-stick-on-windows#1-overview" target="_blank" rel="noopener">官网教程 - Create a bootable USB stick on Windows</a>。</li>
+<li>启动服务器，按住 F2 进入 DELL 的 BIOS 界面，将 U 盘调整为启动的第一选项。</li>
+<li>重启服务器，按照引导程序安装系统。<a href="https://ubuntu.com/tutorials/install-ubuntu-server#1-overview" target="_blank" rel="noopener">官网教程 - Install Ubuntu Server</a></li>
+</ol>
+<h3 id="连接外网"><a href="#连接外网" class="headerlink" title="连接外网"></a>连接外网</h3><p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/3.JPG" alt="8d45ed82634b33c68b4ddacfeef8a6a7.jpeg"></p>
+<p>服务器共有四个网口 eno1～eno4，将网线插在左数第一个网口对应 eno1（图中①），并配置 interfaces 文件。图中②位置为 INTEL X710 网卡位置，从 NetFPGA 智能网卡的端口连接至服务器。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ vi etc&#x2F;network&#x2F;interfaces</span><br><span class="line"></span><br><span class="line">auto eno1</span><br><span class="line">iface eno1 inet dhcp</span><br></pre></td></tr></table></figure>
+<p>在<code>/etc/resolv.conf</code>中加入 DNS 配置，此为阿里提供的公共 DNS</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nameserver 223.5.5.5</span><br><span class="line">nameserver 223.6.6.6</span><br></pre></td></tr></table></figure>
+<p>要先手动设置 IP 再使用 <code>dhclient</code> 命令启用 DHCP，<strong>每次重启服务器后如需连接外网，需输入这两行命令</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ifconfig eth0 192.168.0.102 netmask 255.255.255.0</span><br><span class="line">dhclient eno1</span><br></pre></td></tr></table></figure>
+<p>执行完成就可以连通外网了</p>
+<h3 id="设置网口"><a href="#设置网口" class="headerlink" title="设置网口"></a>设置网口</h3><p><code>ifconfig -a</code>查看网口信息，列出了 X710 网卡的两个网口信息，默认驱动是 Kernel Driver i40e，先设置 IP</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo ifconfig enp59s0f0 192.168.200.2</span><br><span class="line">sudo ifconfig enp59s0f1 192.168.201.2</span><br></pre></td></tr></table></figure>
+<p>在工作站的主机上 ping 一下服务器保证双向联通</p>
+<h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><p>使用 <code>apt-get</code> 命令安装 DPDK 依赖</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt-get upgrade</span><br><span class="line">sudo apt install -y dpdk dpdk-dev dpdk-doc</span><br></pre></td></tr></table></figure>
+<p>安装其他依赖，可以先在本地保存为 <code>install.sh</code>，然后使用 <code>scp</code> 命令传到服务器上 <code>sh install.sh</code>执行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get install -y cmake gcc g++ git automake llvm llvm-dev llvm-runtime libtool bison flex build-essential vim</span><br><span class="line"></span><br><span class="line"># Install pkg-config here, as it is required for p4lang&#x2F;PI</span><br><span class="line"># installation to succeed.</span><br><span class="line">sudo apt-get install -y pkg-config</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y wget curl zip unzip rar unrar unar</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y libgc-dev libfl-dev libgmp-dev libevent-dev libssl-dev libjudy-dev libpcap-dev tcpdump</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y libboost-dev libboost-iostreams-dev libboost-graph-dev libboost-test-dev libboost-program-options-dev libboost-system-dev libboost-filesystem-dev libboost-thread-dev</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y libreadline6 libreadline6-dev</span><br><span class="line"># 这里如果提示废弃就执行下面的安装</span><br><span class="line">sudo apt-get install -y libreadline-dev </span><br><span class="line"></span><br><span class="line"># Deps needed to build PI:</span><br><span class="line">sudo apt-get install -y libjudy-dev libreadline-dev valgrind libtool-bin libboost-dev libboost-system-dev libboost-thread-dev</span><br><span class="line"></span><br><span class="line"># Things needed for &#96;cd tutorials&#x2F;exercises&#x2F;basic ; make run&#96; to work:</span><br><span class="line">sudo apt-get install -y libgflags-dev net-tools</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y doxygen graphviz texlive-full</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y bridge-utils tcpreplay</span><br><span class="line">sudo apt-get install -y zlib1g-dev pciutils kmod strace  ## needed by cisco trex</span><br></pre></td></tr></table></figure>
+<h3 id="安装TRex"><a href="#安装TRex" class="headerlink" title="安装TRex"></a>安装TRex</h3><p>联网下载 TRex</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget --no-cache http:&#x2F;&#x2F;trex-tgn.cisco.com&#x2F;trex&#x2F;release&#x2F;latest</span><br><span class="line">tar -zxvf latest</span><br></pre></td></tr></table></figure>
+<p>我们下载的 TRex 最新版本为 v2.82，进入到该目录下并执行 DPDK 端口设置脚本</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd v2.82</span><br><span class="line">.&#x2F;dpdk_setup_ports.py -i</span><br></pre></td></tr></table></figure>
+<p>按照下图设置</p>
+<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/4.jpeg" alt="0b9649d536fbab09908a9df0303c590a.jpeg"></p>
+<p>此时可以注意到，X710 网卡的两个网口还是绑定的 i40e 内核驱动。但在运行 TRex 发包命令后会自动绑定到 DPDK 兼容驱动 igb_uio 上。</p>
+<h2 id="发包测试"><a href="#发包测试" class="headerlink" title="发包测试"></a>发包测试</h2><p>实验环境准备就绪，进行发包测试。参考 TRex 官方手册 <a href="https://trex-tgn.cisco.com/trex/doc/trex_manual.html#_running_examples" target="_blank" rel="noopener">Running examples
+</a>，在 stateful 模式下使用 <code>t-rex-64</code> 命令发送数据包。<code>-f</code> 指定配置 yaml，<code>-m</code> 指定重放次数，<code>-l</code> 指定网络延迟检测速率。更多参数详见官方手册。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo .&#x2F;t-rex-64 -f avl&#x2F;sfr_delay_10_1g.yaml -m 5 -l 1000</span><br></pre></td></tr></table></figure>
+<p>测试效果如下：</p>
+<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/5.jpeg" alt="7402f2999111d19e378f8883aaf3ba34.jpeg"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-Per port stats table </span><br><span class="line"></span><br><span class="line">      ports |               0 |               1 </span><br><span class="line"> -----------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">   opackets |        27882688 |        35434728 </span><br><span class="line">     obytes |      8217921859 |     28586813888 </span><br><span class="line">   ipackets |         5007937 |             709 </span><br><span class="line">     ibytes |      4647534484 |           79608 </span><br><span class="line">    ierrors |               0 |               0 </span><br><span class="line">    oerrors |               0 |               0 </span><br><span class="line">      Tx Bw |       1.18 Gbps |       3.81 Gbps </span><br><span class="line"></span><br><span class="line">-Global stats enabled </span><br><span class="line"> Cpu Utilization : 31.6  %  31.6 Gb&#x2F;core </span><br><span class="line"> Platform_factor : 1.0  </span><br><span class="line"> Total-Tx        :       5.00 Gbps  </span><br><span class="line"> Total-Rx        :       0.00  bps  </span><br><span class="line"> Total-PPS       :       1.07 Mpps  </span><br><span class="line"> Total-CPS       :      20.51 Kcps  </span><br><span class="line"></span><br><span class="line"> Expected-PPS    :       1.08 Mpps  </span><br><span class="line"> Expected-CPS    :      20.61 Kcps  </span><br><span class="line"> Expected-BPS    :       5.02 Gbps  </span><br><span class="line"></span><br><span class="line"> Active-flows    :    21328  Clients :      511   Socket-util : 0.0775 %    </span><br><span class="line"> Open-flows      :  1342791  Servers :     5621   Socket :    24927 Socket&#x2F;Clients :  48.8 </span><br><span class="line"> drop-rate       :       5.00 Gbps   </span><br><span class="line"> current time    : 66.5 sec  </span><br><span class="line"> test duration   : 3533.5 sec  </span><br><span class="line"></span><br><span class="line">-Latency stats enabled </span><br><span class="line"> Cpu Utilization : 0.1 %  </span><br><span class="line"> if|   tx_ok , rx_ok  , rx check ,error,       latency (usec) ,    Jitter          max window </span><br><span class="line"></span><br><span class="line">   |         ,        ,          ,     ,   average   ,   max  ,    (usec)                     </span><br><span class="line"> ---------------------------------------------------------------------------------------------------------------- </span><br><span class="line"></span><br><span class="line"> 0 |    65254,   12858,         0,    0,          7  ,      23,       1      |  10  10  15  10  12  11  12  23  10  10  15  18  12 </span><br><span class="line"> 1 |    65254,     136,         0,    0,          3  ,       0,       0      |  0  0  0  0  0  0  0  0  0  0  0  0  0 </span><br><span class="line"></span><br><span class="line">##</span><br></pre></td></tr></table></figure>
+<p>主要记录的数据包括：</p>
+<ul>
+<li><strong>Cpu Utilization</strong>，CPU利用率</li>
+<li><strong>Total-Tx</strong>，总计发送速率（Transport）</li>
+<li><strong>Total-Rx</strong>，总计接受速率（Receive）</li>
+<li><strong>Total-PPS</strong>，总计每秒传输包数量（Packets per second）</li>
+</ul>
+<h2 id="发包实验"><a href="#发包实验" class="headerlink" title="发包实验"></a>发包实验</h2><p>接下来我们尝试在 stateful 模式下模拟 stateless 发包，使用的是 <code>cap2/</code> 目录下的 <code>imix.yaml</code> 配置文件，根据以太网协议，一个数据包的大小从最小 64Bytes 到最大 1518Bytes，imix 提供了 imix_64、imix_594 和 imix_1518 三类配置文件。</p>
+<p><code>-c</code> 指定 CPU 核数，观察并绘制不同包大小、不同核数时 CPU 利用率以及吞吐率的 eps 矢量图。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo .&#x2F;t-rex-64 -f cap2&#x2F;imix_1518.yaml -m 823451 -l 1000 -c 2</span><br></pre></td></tr></table></figure>
+<p>实验结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-Per port stats table </span><br><span class="line"></span><br><span class="line">      ports |               0 |               1 </span><br><span class="line"> -----------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">   opackets |        34232892 |           42080 </span><br><span class="line">     obytes |     51904428378 |         2777280 </span><br><span class="line">   ipackets |               0 |               0 </span><br><span class="line">     ibytes |               0 |               0 </span><br><span class="line">    ierrors |               0 |               0 </span><br><span class="line">    oerrors |               0 |               0 </span><br><span class="line">      Tx Bw |       9.89 Gbps |     527.55 Kbps </span><br><span class="line"></span><br><span class="line">-Global stats enabled </span><br><span class="line"> Cpu Utilization : 100.0  %  9.9 Gb&#x2F;core </span><br><span class="line"> Platform_factor : 1.0  </span><br><span class="line"> Total-Tx        :       9.89 Gbps  </span><br><span class="line"> Total-Rx        :       0.00  bps  </span><br><span class="line"> Total-PPS       :     816.02 Kpps  </span><br><span class="line"> Total-CPS       :       0.00  cps  </span><br><span class="line"></span><br><span class="line"> Expected-PPS    :       6.59 Gpps  </span><br><span class="line"> Expected-CPS    :       6.59 Gcps  </span><br><span class="line"> Expected-BPS    :      80.00 Tbps  </span><br><span class="line"></span><br><span class="line"> Active-flows    :     1600  Clients :      254   Socket-util : 0.0100 %    </span><br><span class="line"> Open-flows      :     1600  Servers :    65534   Socket :     1600 Socket&#x2F;Clients :  6.3 </span><br><span class="line"> Total_queue_full : 72264932         </span><br><span class="line"> drop-rate       :       9.89 Gbps   </span><br><span class="line"> current time    : 43.3 sec  </span><br><span class="line"> test duration   : 3556.7 sec  </span><br><span class="line"></span><br><span class="line">-Latency stats enabled </span><br><span class="line"> Cpu Utilization : 0.1 %  </span><br><span class="line"> if|   tx_ok , rx_ok  , rx check ,error,       latency (usec) ,    Jitter          max window </span><br><span class="line"></span><br><span class="line">   |         ,        ,          ,     ,   average   ,   max  ,    (usec)                     </span><br><span class="line"> ---------------------------------------------------------------------------------------------------------------- </span><br><span class="line"></span><br><span class="line"> 0 |    42080,       0,         0,    0,          0  ,       0,       0      |  0  0  0  0  0  0  0  0  0  0  0  0  0 </span><br><span class="line"> 1 |    42081,       0,         0,    0,          0  ,       0,       0      |  0  0  0  0  0  0  0  0  0  0  0  0  0 </span><br><span class="line"></span><br><span class="line">##</span><br></pre></td></tr></table></figure>
+<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><h3 id="理论分析"><a href="#理论分析" class="headerlink" title="理论分析"></a>理论分析</h3><p>一个以太网帧的结构包括：</p>
+<table>
+<thead>
+<tr>
+<th>PA</th>
+<th>SFD</th>
+<th>DA</th>
+<th>SA</th>
+<th>Type</th>
+<th>Payload</th>
+<th>FCS</th>
+<th>IFG</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td>1</td>
+<td>6</td>
+<td>6</td>
+<td>2</td>
+<td>46 ~ 1500</td>
+<td>4</td>
+<td>12</td>
+</tr>
+</tbody>
+</table>
+<p>最小帧长：7+1+(6+6+2+46+4)+12 = 84B（最小有效帧长 64B）<br>最大帧长：7+1+(6+6+2+1500+4)+12 = 1538B（最大有效帧长 1518B）</p>
+<p>对于最小帧长，最大包传输率 M 和吞吐率 T 为：</p>
+<p>$$M = Speed/Size = 100 <em> 10^9 / (84 </em> 8) = 148809523 pps$$<br>$$T = M <em> 64 </em> 8 = 76.19Gbps$$</p>
+<p>对于最大帧长，最大包传输率 M 和吞吐率 T 为：</p>
+<p>$$M = Speed/Size = 100 <em> 10^9 / (1538 </em> 8) = 8127438 pps$$<br>$$T = M <em> 1518 </em> 8 = 98.69Gbps$$</p>
+<p>以此类推，我们对于不同的帧长做了理论分析，得到下图：</p>
+<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/6.png" alt="38021550bd20f375c0c872a80cea41af.png"></p>
+<h3 id="吞吐率测试结果"><a href="#吞吐率测试结果" class="headerlink" title="吞吐率测试结果"></a>吞吐率测试结果</h3><p>以下是吞吐率的测试结果：</p>
+<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/7.png" alt="037b37c99b1bc4c938f887dc1b876ba1.png"><br><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/8.png" alt="ec784c4bc84e984d27170739145d5bfe.png"><br><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/9.png" alt="d9c6568a7c11555a9290d452fbacafe2.png"></p>
+<h3 id="包传输率测试结果"><a href="#包传输率测试结果" class="headerlink" title="包传输率测试结果"></a>包传输率测试结果</h3><p>以下是包传输率的测试结果：</p>
+<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/10.png" alt="0f5b53c8b5544ae9572cebc9168f12cb.png"><br><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/11.png" alt="83c9995318589576075bf3140b4f46fd.png"><br><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/12.png" alt="79d66dcca878a695f31c01cf8e08e2d8.png"></p>
+<h3 id="与内核机制发包的对比"><a href="#与内核机制发包的对比" class="headerlink" title="与内核机制发包的对比"></a>与内核机制发包的对比</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">包大小(B)</th>
+<th style="text-align:center">内核机制发包<br>CPU利用率</th>
+<th style="text-align:center">内核机制发包<br>PPS(Kpps)</th>
+<th style="text-align:center">DPDK机制发包<br>PPS(Mpps)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">64</td>
+<td style="text-align:center">100%</td>
+<td style="text-align:center">593.5</td>
+<td style="text-align:center">14.85</td>
+</tr>
+<tr>
+<td style="text-align:center">549</td>
+<td style="text-align:center">100%</td>
+<td style="text-align:center">585.29</td>
+<td style="text-align:center">2.04</td>
+</tr>
+<tr>
+<td style="text-align:center">1518</td>
+<td style="text-align:center">97.70%</td>
+<td style="text-align:center">537.27</td>
+<td style="text-align:center">0.82</td>
+</tr>
+</tbody>
+</table>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>由上述实验结果可知：</p>
+<ol>
+<li>10Gbps 线速的网络，用 DPDK 跑 4 个核，基本可以实现 64B 最小包较好的发送吞吐率，但是仍达不到 10Gbps 的线速，只有 7.6Gbps 左右。</li>
+<li>DPDK 由于采用了绕过内核驱动的技术，使得网络数据包的发送速度大大增加。</li>
+<li>此外，随着数据包长度增加，其他条件一定时，吞吐率也随之增加，这与我们的理论分析基本吻合。</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><em>Surasak Sanguanpong, Experiences in Building a 100 Gbps (D)DoS Traffic Generator, DIY with a Single  Commodity-off-the-shelf (COTS) Server.</em></li>
+<li><a href="https://trex-tgn.cisco.com/trex/doc/trex_manual.html" target="_blank" rel="noopener">TRex official manual</a></li>
+<li><a href="https://trex-tgn.cisco.com/trex/doc/trex_stateless.html#_stateful_vs_stateless" target="_blank" rel="noopener">TRex Stateless Support</a></li>
+<li><a href="https://github.com/cisco-system-traffic-generator/trex-core" target="_blank" rel="noopener">思科TRex Traffic Generator代码仓库</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Experiments</category>
+      </categories>
+  </entry>
 </search>

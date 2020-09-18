@@ -372,6 +372,277 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/6/index.html">Vue 项目构建</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-12-13 06:36:50" itemprop="dateCreated datePublished" datetime="2017-12-13T06:36:50+08:00">2017-12-13</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/13/Vue项目构建/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.9k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Creating"><a href="#Creating" class="headerlink" title="Creating"></a>Creating</h2><blockquote>
+<p><strong>vue-cli</strong>作为一款mvvm框架语言(vue)的脚手架，集成了<strong>webpack</strong>环境及主要依赖，对于项目的搭建、打包、维护管理等都非常方便快捷。</p>
+</blockquote>
+<ul>
+<li><p>安装<strong>node.js</strong>。安装完成会自动设置环境变量</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew install node    &#x2F;&#x2F; Mac </span><br><span class="line">apt-get install node    &#x2F;&#x2F; Ubuntu</span><br></pre></td></tr></table></figure>
+<p>  现在可以使用<strong>node</strong>及<strong>npm</strong>命令</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   ➜ node -v ; npm -v</span><br><span class="line">v8.9.2</span><br><span class="line">5.5.1</span><br></pre></td></tr></table></figure>
+<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
+<p><strong>Node.js</strong>之于JavaScript类似于JVM之于Java，它是JavaScript的运行平台，使之脱离浏览器得以运行。传统意义上的JavaScript运行在浏览器上，这是因为<strong>浏览器内核</strong>实际上分为两个部分:渲染引擎和JavaScript引擎。前者负责渲染HTML + CSS，后者则负责运行JavaScript。Chrome使用的JavaScript引擎是V8。Node.js是一个运行在服务端的框架，它的底层就使用了V8引擎。</p>
+</blockquote>
+</li>
+<li><p>建议将npm源更改为国内淘宝的镜像，npm全称为<strong>Node Package Manager</strong></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry https:&#x2F;&#x2F;registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+<p>  可以执行<code>npm config list</code>查看npm配置</p>
+</li>
+<li><p>安装<strong>vue-cli</strong>，<code>-g</code>代表<strong>global</strong>全局安装，否则只在当前目录下安装</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>初始化一个项目，<code>vue init webpack projectname</code><br><img src="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/0.png" alt="Screen-Shot-2017-12-13-at-2.28.39-PM-1"></p>
+<h4 id="Tips-1"><a href="#Tips-1" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
+<p><strong>vue-router</strong>是路由组件，后面构建项目会用到。<br><strong>Eslint</strong>是代码规范的插件，不规范的代码会报错，有助于项目成员统一编码风格。<br>后面两个都是测试相关，暂时不用。</p>
+</blockquote>
+</li>
+<li><p>初始化成功后会提示你安装依赖以及如何运行</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">To get started:</span><br><span class="line"></span><br><span class="line">  cd vuedemo</span><br><span class="line">  npm install</span><br><span class="line">  npm run dev</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Running"><a href="#Running" class="headerlink" title="Running"></a>Running</h2><ul>
+<li><p>不着急安装依赖，我们先用<strong>WebStorm</strong>打开项目<br><img src="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/1.png" alt="Screen-Shot-2017-12-13-at-3.29.38-PM-1"><br>  其中，<code>.babelrc</code>是<strong>babel</strong>配置文件，可以将ES6代码转为ES5代码。<code>.editorconfig</code>用于统一团队中的编码风格，比如缩进规则等</p>
+</li>
+<li><p><code>package.json</code>包含了项目的信息和所需的依赖，定义了三个脚本<code>dev|start|build</code>，可以在IDE中点击运行。<code>devDependencies</code>表示只有开发环境需要的依赖，比如Babel这种开发时的转码工具，生产环境即浏览器并不需要。<code>^2.5.2</code>表示向后兼容，实际下载的版本一定是大于等于该版本的</p>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"vuedemo"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">"A Vue.js project"</span>,</span><br><span class="line">  <span class="attr">"author"</span>: <span class="string">"s1mple &lt;798342418@qq.com&gt;"</span>,</span><br><span class="line">  <span class="attr">"private"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"dev"</span>: <span class="string">"webpack-dev-server --inline --progress --config build/webpack.dev.conf.js"</span>,</span><br><span class="line">    <span class="attr">"start"</span>: <span class="string">"npm run dev"</span>,</span><br><span class="line">    <span class="attr">"build"</span>: <span class="string">"node build/build.js"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"dependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"vue"</span>: <span class="string">"^2.5.2"</span>,</span><br><span class="line">    <span class="attr">"vue-router"</span>: <span class="string">"^3.0.1"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"autoprefixer"</span>: <span class="string">"^7.1.2"</span>,</span><br><span class="line">    <span class="attr">"babel-core"</span>: <span class="string">"^6.22.1"</span>,</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<h4 id="Tips-2"><a href="#Tips-2" class="headerlink" title="Tips"></a>Tips</h4><ul>
+<li><strong>version</strong> Must match version exactly</li>
+<li><strong>&gt;version</strong> Must be greater than version</li>
+<li><strong>&gt;=version</strong> etc</li>
+<li><strong>&lt;version</strong></li>
+<li><strong>&lt;=version</strong></li>
+<li><strong>~version</strong> “Approximately equivalent to version”</li>
+<li><strong>^version</strong> “Compatible with version”</li>
+<li><strong>1.2.x</strong> 1.2.0, 1.2.1, etc., but not 1.3.0</li>
+</ul>
+</li>
+<li><p>在执行<code>npm install</code>命令后npm根据<code>package.json</code>拉取依赖。并在当前目录下生成<strong>node_modules</strong>和<strong>package-lock.json</strong>，前者保存所需依赖库文件，后者则含有依赖的<strong>具体版本</strong>信息，这样做是为了保证每次build拉取的依赖包版本一致，所以命名为<strong>lock</strong></p>
+</li>
+<li><p>执行<code>npm run dev</code>或者在IDE中点击<strong>start</strong>即可启动。会提示编译成功并且访问Url为 <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a></p>
+</li>
+<li><p>在IDE中执行<code>start</code>时其实执行了<code>npm run dev</code>，而<code>dev</code>又执行了<code>webpack-dev-server</code><br><img src="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/2.png" alt="Screen-Shot-2017-12-13-at-10.27.43-PM"></p>
+</li>
+</ul>
+<h2 id="What’s-webpack"><a href="#What’s-webpack" class="headerlink" title="What’s webpack"></a>What’s webpack</h2><blockquote>
+<p>本质上，<strong>webpack</strong>是一个现代 JavaScript 应用程序的模块打包器(<strong>module bundler</strong>)。当 webpack 处理应用程序时，它会递归地构建一个依赖关系图(dependency graph)，其中包含应用程序需要的每个模块，然后将所有这些模块打包成一个或多个<strong>bundle</strong>。</p>
+</blockquote>
+<ul>
+<li><p>如果我们的js代码中<code>require|import</code>了一个js依赖包，<strong>webpack</strong>可以方便的将我们js打包成一个<strong>bundle</strong>包，而不是像传统的HTML中<code>&lt;script&gt;</code>去引用一堆js包<br><img src="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/3.png" alt="webpack"></p>
+</li>
+<li><p>在执行<code>build</code>时会去读取<strong>webpack</strong>的相关配置文件，<code>webpack.*.config.js</code>中定义了程序入口<strong>entry</strong>，输出的文件路径和文件名等</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  context: path.resolve(__dirname, <span class="string">'../'</span>),</span><br><span class="line">  entry: &#123;</span><br><span class="line">    app: <span class="string">'./src/main.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: config.build.assetsRoot,</span><br><span class="line">    filename: <span class="string">'[name].js'</span>,</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>IDE中点击<strong>build</strong>或执行<code>node build/build.js</code>会生成编译好的静态文件<strong>dist</strong>，目录如下</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dist</span><br><span class="line">├── index.html</span><br><span class="line">└── static</span><br><span class="line">    ├── css</span><br><span class="line">    └── js</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://cn.vuejs.org/" target="_blank" rel="noopener">Vue.js官方中文文档</a></li>
+<li><a href="https://doc.webpack-china.org/concepts/" target="_blank" rel="noopener">webpack官方中文文档</a></li>
+<li><a href="http://www.jianshu.com/p/7f21880af897?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" target="_blank" rel="noopener">简书–vue学习路径</a></li>
+<li><a href="https://www.qcloud.com/community/article/430630001490779316" target="_blank" rel="noopener">腾讯云论坛文档–浅入浅出Vue.js</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/05/%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%94%9F%E6%88%90%E4%B8%8E%E7%86%B5%E6%B1%A0%E7%AD%96%E7%95%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2755,266 +3026,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/6/index.html">Certbot 配置 Https</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-11-06 04:04:46" itemprop="dateCreated datePublished" datetime="2017-11-06T04:04:46+08:00">2017-11-06</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/06/Certbot配置Https/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">2.6k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>天天看着自己的网站“不安全”很不开心，在油条那儿了解到一个叫做Certbot的工具，可以简单快捷的配置http为https</p>
-</blockquote>
-<h2 id="Prerequisite"><a href="#Prerequisite" class="headerlink" title="Prerequisite"></a>Prerequisite</h2><ul>
-<li>ubuntu 16.04</li>
-<li>nginx</li>
-</ul>
-<h2 id="Get-Started"><a href="#Get-Started" class="headerlink" title="Get Started"></a>Get Started</h2><ul>
-<li><p><a href="https://certbot.eff.org/#ubuntuxenial-nginx" target="_blank" rel="noopener">官方文档</a></p>
-</li>
-<li><p>导入软件源</p>
-  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install software-properties-common</span><br><span class="line">sudo add-apt-repository ppa:certbot/certbot</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
-<p>add-apt-repository is a script for adding apt sources.list entries.It can be used to add any repository and also provides a shorthand syntax for adding a Launchpad PPA (Personal Package Archive) repository.</p>
-</blockquote>
-<ul>
-<li><p>可以看到<code>/etc/apt/sources.list.d</code>目录下多了个<code>certbot-ubuntu-certbot-xenial.list</code>文件，内容如下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br><span class="line"># deb-src http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装<strong>Certbot</strong></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install python-certbot-nginx</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用如下命令自动配置nginx服务，当然你也可以加上<code>certonly</code>参数来手动配置nginx</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo certbot --nginx</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>出现如下文字，说明certbot可以识别nginx配置文件，读取其中信息<br><img src="/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/0.png" alt="-----2017-11-06---10.49.41"><br>  直接回车选取所有</p>
-</li>
-<li><p>选2的话所有网页都会被重定位到https<br><img src="/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/1.png" alt="-----2017-11-06---11.05.39"></p>
-</li>
-<li><p>配置成功，可以看到有效期是90天，需要使用<code>certbot renew</code>生成新的证书<br><img src="/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/2.png" alt="-----2017-11-06---11.10.43"></p>
-</li>
-<li><p>现在你就可以通过https访问你的网站了</p>
-</li>
-</ul>
-<h3 id="Nginx-Configuration"><a href="#Nginx-Configuration" class="headerlink" title="Nginx Configuration"></a>Nginx Configuration</h3><ul>
-<li><p>我们看一下nginx配置文件，<code>vim /etc/nginx/sites-enabled/s1mple.info.conf</code>，<br>发现新增了如下内容</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">listen 443 ssl; # managed by Certbot</span><br><span class="line">ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;fullchain.pem; # managed by Certbot</span><br><span class="line">ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;privkey.pem; # managed by Certbot</span><br><span class="line">include &#x2F;etc&#x2F;letsencrypt&#x2F;options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">ssl_dhparam &#x2F;etc&#x2F;letsencrypt&#x2F;ssl-dhparams.pem; # managed by Certbot</span><br><span class="line"></span><br><span class="line"># Redirect non-https traffic to https</span><br><span class="line">if ($scheme !&#x3D; &quot;https&quot;) &#123;</span><br><span class="line">    return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">&#125; # managed by Certbot</span><br></pre></td></tr></table></figure>
-<p>  监听443端口，重定位https，301也是重定位的状态码</p>
-</li>
-<li><p>执行<code>netstat -tulpen</code>也可以看到nginx确实在监听443端口</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcp     0.0.0.0:443     0.0.0.0:*    LISTEN    11873&#x2F;nginx -g daem</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="About-Https"><a href="#About-Https" class="headerlink" title="About Https"></a>About Https</h2><ul>
-<li><a href="http://jingyan.baidu.com/article/e4d08ffdb61f040fd3f60d48.html" target="_blank" rel="noopener">Https协议原理</a></li>
-<li><a href="http://news.ifeng.com/a/20170904/51862764_0.shtml" target="_blank" rel="noopener">Web 加速，协议先行！</a></li>
-</ul>
-<blockquote>
-<p><strong>Https(Http over Secure Socket Layer)</strong> 是基于ssl加密的更安全的http协议，默认端口443。而<strong>Certbot</strong>部署的的<strong>Let’s Encrypt</strong>证书就是“让我们加密”的意思。</p>
-</blockquote>
-<h3 id="SSL握手协议"><a href="#SSL握手协议" class="headerlink" title="SSL握手协议"></a>SSL握手协议</h3><ul>
-<li><a href="http://www.188cf.net/licai/87869x.shtml" target="_blank" rel="noopener">传输层安全协议抓包分析之SSL/TLS</a></li>
-</ul>
-<p><img src="/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/3.jpeg" alt="78ab162bf20b438ca377faa87f4ea2a2_th"></p>
-<blockquote>
-<p>① 客户端的浏览器向服务器传送客户端SSL协议的版本号，加密算法的种类，产生的随机数，以及其他通讯所需要信息。<br>② 服务器向客户端传送SSL协议的版本号，加密算法的种类，随机数以及其他相关信息，同时<strong>服务器还将向客户端传送自己的证书</strong>。<br>③ 客户端利用服务器传过来的信息<strong>验证服务器的合法性</strong>，服务器的合法性包括：证书是否过期，发行服务器证书的CA 是否可靠，发行者证书的公钥能否正确解开服务器证书的“发行者的数字签名”，服务器证书上的域名是否和服务器的实际域名相匹配。<br>④ 客户端随机产生一个用于后面通讯的“<strong>对称密钥</strong>”，然后用服务器的公钥（服务器的公钥从步骤②中的服务器的证书中获得）对其加密，然后传给服务器。<br>⑤ <strong>服务器用私钥解密</strong>“对称密钥”(此处的公钥和私钥是相互关联的，<strong>公钥加密的数据只能用私钥解密</strong>，<strong>私钥只在服务器端保留</strong>。详细请参看： <a href="http://zh.wikipedia.org/wiki/RSA%E7%AE%97%E6%B3%95)，然后用其作为服务器和客户端的“**通话密码**”加解密通讯。同时在SSL通讯过程中还要完成数据通讯的完整性，防止数据通讯中的任何变化。" target="_blank" rel="noopener">http://zh.wikipedia.org/wiki/RSA%E7%AE%97%E6%B3%95)，然后用其作为服务器和客户端的“**通话密码**”加解密通讯。同时在SSL通讯过程中还要完成数据通讯的完整性，防止数据通讯中的任何变化。</a><br>⑥ SSL的握手部分结束，SSL安全通道的数据通讯开始，客户和服务器开始<strong>使用相同的对称密钥进行数据通讯</strong>，同时进行通讯完整性的检验。</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3066,7 +3077,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">64</span>
+                    <span class="site-state-item-count">65</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3093,7 +3104,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>

@@ -372,6 +372,267 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/22/%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85Nginx/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/01/22/%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85Nginx/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">离线安装 Nginx</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-01-22 05:22:55" itemprop="dateCreated datePublished" datetime="2018-01-22T05:22:55+08:00">2018-01-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/22/%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85Nginx/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/22/离线安装Nginx/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">3.9k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>工作中难免有不能使用外网的环境，虽然说不能连外网安装软件真的是很费劲，但是为了安全着想也没得办法嘛</p>
+</blockquote>
+<hr>
+<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
+<li><strong>nginx-1.12.2.tar.gz</strong> <a href="http://nginx.org/en/download.html" target="_blank" rel="noopener">官网</a>下载tar包，下载链接：<a href="http://nginx.org/download/nginx-1.12.2.tar.gz" target="_blank" rel="noopener">http://nginx.org/download/nginx-1.12.2.tar.gz</a></li>
+<li><strong>pcre-8.41.tar.gz</strong></li>
+<li><strong>zlib-1.2.11.tar.gz</strong></li>
+<li><strong>openssl-1.0.2n.tar.gz</strong></li>
+<li>配置好 <strong>ssh</strong> 免密钥登录服务器</li>
+</ul>
+<hr>
+<h2 id="Installing"><a href="#Installing" class="headerlink" title="Installing"></a>Installing</h2><ul>
+<li><p>上传各个 tar 包至服务器的<code>/opt</code>目录，然后使用<code>tar -xzvf</code>解压</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">scp &#x2F;Users&#x2F;s1mple&#x2F;Downloads&#x2F;nginx-1.12.2.tar.gz root@10.0.1.16:&#x2F;opt</span><br><span class="line">scp &#x2F;Users&#x2F;s1mple&#x2F;Downloads&#x2F;pcre-8.41.tar.gz root@10.0.1.16:&#x2F;opt</span><br><span class="line">scp &#x2F;Users&#x2F;s1mple&#x2F;Downloads&#x2F;zlib-1.2.11.tar.gz root@10.0.1.16:&#x2F;opt</span><br><span class="line">scp &#x2F;Users&#x2F;s1mple&#x2F;Downloads&#x2F;openssl-1.0.2n.tar.gz root@10.0.1.16:&#x2F;opt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>前往解压出来的<code>/opt/nginx-1.12.2</code>文件夹，其中包含了 <strong>Nginx</strong> 的配置脚本<code>configure</code>，运行这个脚本并指导刚才解压的各依赖的路径</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;configure --with-pcre&#x3D;&#x2F;opt&#x2F;pcre-8.41 --with-zlib&#x3D;&#x2F;opt&#x2F;zlib-1.2.11 --with-openssl&#x3D;&#x2F;opt&#x2F;openssl-1.0.2n</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行后的结果，生成了 <strong>Makefile</strong> 文件，并输出了一些配置的摘要。简单看一下，默认的 <strong>Nginx</strong> 安装在<code>/usr/local/nginx</code>下，以及启动脚本、配置、日志的路径</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">creating objs&#x2F;Makefile</span><br><span class="line"></span><br><span class="line">Configuration summary</span><br><span class="line">  + using PCRE library: &#x2F;opt&#x2F;pcre-8.41</span><br><span class="line">  + using OpenSSL library: &#x2F;opt&#x2F;openssl-1.0.2n</span><br><span class="line">  + using zlib library: &#x2F;opt&#x2F;zlib-1.2.11</span><br><span class="line"></span><br><span class="line">  nginx path prefix: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&quot;</span><br><span class="line">  nginx binary file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin&#x2F;nginx&quot;</span><br><span class="line">  nginx modules path: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;modules&quot;</span><br><span class="line">  nginx configuration prefix: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&quot;</span><br><span class="line">  nginx configuration file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;nginx.conf&quot;</span><br><span class="line">  nginx pid file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#x2F;nginx.pid&quot;</span><br><span class="line">  nginx error log file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#x2F;error.log&quot;</span><br><span class="line">  nginx http access log file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#x2F;access.log&quot;</span><br><span class="line">  nginx http client request body temporary files: &quot;client_body_temp&quot;</span><br><span class="line">  nginx http proxy temporary files: &quot;proxy_temp&quot;</span><br><span class="line">  nginx http fastcgi temporary files: &quot;fastcgi_temp&quot;</span><br><span class="line">  nginx http uwsgi temporary files: &quot;uwsgi_temp&quot;</span><br><span class="line">  nginx http scgi temporary files: &quot;scgi_temp&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>make</code>是 <strong>Linux</strong> 下常用的构建工具，主要用于 C 语言，它会根据 <strong>Makefile</strong> 中的构建规则生成文件。在<code>/opt/nginx-1.12.2</code>目录下执行这俩个命令</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>/opt/nginx-1.12.2</code>目录下的 <strong>Makefile</strong> 文件包含了实际执行的命令。<code>-f</code>指定了刚刚生成的<code>/objs/Makefile</code>文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">default:    build</span><br><span class="line">build:      $(MAKE) -f objs&#x2F;Makefile</span><br><span class="line">install:    $(MAKE) -f objs&#x2F;Makefile install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>构建完成后前往<code>/usr/local/nginx</code>查看生成的文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;usr&#x2F;local&#x2F;nginx</span><br><span class="line">client_body_temp  fastcgi_temp  logs        sbin       uwsgi_temp</span><br><span class="line">conf              html          proxy_temp  scgi_temp</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="Running"><a href="#Running" class="headerlink" title="Running"></a>Running</h2><ul>
+<li><p>运行<code>sbin/nginx</code>启动脚本并验证是否已启动</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ .&#x2F;sbin&#x2F;nginx</span><br><span class="line">$ ps -ef | grep nginx</span><br><span class="line">root     31402     1  0 11:48 ?        00:00:00 nginx: master process .&#x2F;nginx</span><br><span class="line">nobody   31403 31402  0 11:48 ?        00:00:00 nginx: worker process</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>浏览器访问 10.0.1.16 也已显示 <strong>Nginx</strong> 启动成功<br><img src="/2018/01/22/%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85Nginx/0.png" alt="Screen-Shot-2018-01-22-at-11.50.30-AM"></p>
+</li>
+</ul>
+<hr>
+<h2 id="Configuring"><a href="#Configuring" class="headerlink" title="Configuring"></a>Configuring</h2><ul>
+<li><p>在<code>/usr/local/nginx/conf</code>中包含了 <strong>Nginx</strong> 配置文件，我们先做个备份</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp nginx.conf nginx.conf.bk</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改<code>nginx.conf</code>文件，在<code>http{}</code>中加入这一行表示引入外部配置文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;conf.d&#x2F;*.conf;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>/usr/local/nginx/conf</code>中创建<code>conf.d</code>文件夹，并创建自己的配置文件，注意要以<code>.conf</code>结尾，添加<code>server{}</code>后重启 <strong>Nginx</strong> 即可</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server &#123;                                                                                </span><br><span class="line">    listen 80;</span><br><span class="line">    listen [::]:80;</span><br><span class="line"></span><br><span class="line">    server_name 10.0.1.16;</span><br><span class="line">    root &#x2F;var&#x2F;www&#x2F;dist;</span><br><span class="line"></span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $http_host;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="Postscripts"><a href="#Postscripts" class="headerlink" title="Postscripts"></a>Postscripts</h2><blockquote>
+<p>安装下来感觉就是，本来一条命令就解决的事，你比如说 <strong>sudo apt-get install nginx</strong> 结果强行搞这么复杂，网络带来的便利无疑是巨大的，所以说安全方面的意识和技能非常关键</p>
+</blockquote>
+<hr>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="http://www.nginx.cn/doc/" target="_blank" rel="noopener">Nginx中文文档</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/22/%E5%89%8D%E7%AB%AF%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2981,277 +3242,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Vue 项目构建</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-12-13 06:36:50" itemprop="dateCreated datePublished" datetime="2017-12-13T06:36:50+08:00">2017-12-13</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/12/13/Vue项目构建/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">2.9k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Creating"><a href="#Creating" class="headerlink" title="Creating"></a>Creating</h2><blockquote>
-<p><strong>vue-cli</strong>作为一款mvvm框架语言(vue)的脚手架，集成了<strong>webpack</strong>环境及主要依赖，对于项目的搭建、打包、维护管理等都非常方便快捷。</p>
-</blockquote>
-<ul>
-<li><p>安装<strong>node.js</strong>。安装完成会自动设置环境变量</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew install node    &#x2F;&#x2F; Mac </span><br><span class="line">apt-get install node    &#x2F;&#x2F; Ubuntu</span><br></pre></td></tr></table></figure>
-<p>  现在可以使用<strong>node</strong>及<strong>npm</strong>命令</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   ➜ node -v ; npm -v</span><br><span class="line">v8.9.2</span><br><span class="line">5.5.1</span><br></pre></td></tr></table></figure>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
-<p><strong>Node.js</strong>之于JavaScript类似于JVM之于Java，它是JavaScript的运行平台，使之脱离浏览器得以运行。传统意义上的JavaScript运行在浏览器上，这是因为<strong>浏览器内核</strong>实际上分为两个部分:渲染引擎和JavaScript引擎。前者负责渲染HTML + CSS，后者则负责运行JavaScript。Chrome使用的JavaScript引擎是V8。Node.js是一个运行在服务端的框架，它的底层就使用了V8引擎。</p>
-</blockquote>
-</li>
-<li><p>建议将npm源更改为国内淘宝的镜像，npm全称为<strong>Node Package Manager</strong></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry https:&#x2F;&#x2F;registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
-<p>  可以执行<code>npm config list</code>查看npm配置</p>
-</li>
-<li><p>安装<strong>vue-cli</strong>，<code>-g</code>代表<strong>global</strong>全局安装，否则只在当前目录下安装</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>初始化一个项目，<code>vue init webpack projectname</code><br><img src="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/0.png" alt="Screen-Shot-2017-12-13-at-2.28.39-PM-1"></p>
-<h4 id="Tips-1"><a href="#Tips-1" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
-<p><strong>vue-router</strong>是路由组件，后面构建项目会用到。<br><strong>Eslint</strong>是代码规范的插件，不规范的代码会报错，有助于项目成员统一编码风格。<br>后面两个都是测试相关，暂时不用。</p>
-</blockquote>
-</li>
-<li><p>初始化成功后会提示你安装依赖以及如何运行</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">To get started:</span><br><span class="line"></span><br><span class="line">  cd vuedemo</span><br><span class="line">  npm install</span><br><span class="line">  npm run dev</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="Running"><a href="#Running" class="headerlink" title="Running"></a>Running</h2><ul>
-<li><p>不着急安装依赖，我们先用<strong>WebStorm</strong>打开项目<br><img src="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/1.png" alt="Screen-Shot-2017-12-13-at-3.29.38-PM-1"><br>  其中，<code>.babelrc</code>是<strong>babel</strong>配置文件，可以将ES6代码转为ES5代码。<code>.editorconfig</code>用于统一团队中的编码风格，比如缩进规则等</p>
-</li>
-<li><p><code>package.json</code>包含了项目的信息和所需的依赖，定义了三个脚本<code>dev|start|build</code>，可以在IDE中点击运行。<code>devDependencies</code>表示只有开发环境需要的依赖，比如Babel这种开发时的转码工具，生产环境即浏览器并不需要。<code>^2.5.2</code>表示向后兼容，实际下载的版本一定是大于等于该版本的</p>
-  <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"vuedemo"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">"A Vue.js project"</span>,</span><br><span class="line">  <span class="attr">"author"</span>: <span class="string">"s1mple &lt;798342418@qq.com&gt;"</span>,</span><br><span class="line">  <span class="attr">"private"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"dev"</span>: <span class="string">"webpack-dev-server --inline --progress --config build/webpack.dev.conf.js"</span>,</span><br><span class="line">    <span class="attr">"start"</span>: <span class="string">"npm run dev"</span>,</span><br><span class="line">    <span class="attr">"build"</span>: <span class="string">"node build/build.js"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"dependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"vue"</span>: <span class="string">"^2.5.2"</span>,</span><br><span class="line">    <span class="attr">"vue-router"</span>: <span class="string">"^3.0.1"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"autoprefixer"</span>: <span class="string">"^7.1.2"</span>,</span><br><span class="line">    <span class="attr">"babel-core"</span>: <span class="string">"^6.22.1"</span>,</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-<h4 id="Tips-2"><a href="#Tips-2" class="headerlink" title="Tips"></a>Tips</h4><ul>
-<li><strong>version</strong> Must match version exactly</li>
-<li><strong>&gt;version</strong> Must be greater than version</li>
-<li><strong>&gt;=version</strong> etc</li>
-<li><strong>&lt;version</strong></li>
-<li><strong>&lt;=version</strong></li>
-<li><strong>~version</strong> “Approximately equivalent to version”</li>
-<li><strong>^version</strong> “Compatible with version”</li>
-<li><strong>1.2.x</strong> 1.2.0, 1.2.1, etc., but not 1.3.0</li>
-</ul>
-</li>
-<li><p>在执行<code>npm install</code>命令后npm根据<code>package.json</code>拉取依赖。并在当前目录下生成<strong>node_modules</strong>和<strong>package-lock.json</strong>，前者保存所需依赖库文件，后者则含有依赖的<strong>具体版本</strong>信息，这样做是为了保证每次build拉取的依赖包版本一致，所以命名为<strong>lock</strong></p>
-</li>
-<li><p>执行<code>npm run dev</code>或者在IDE中点击<strong>start</strong>即可启动。会提示编译成功并且访问Url为 <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a></p>
-</li>
-<li><p>在IDE中执行<code>start</code>时其实执行了<code>npm run dev</code>，而<code>dev</code>又执行了<code>webpack-dev-server</code><br><img src="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/2.png" alt="Screen-Shot-2017-12-13-at-10.27.43-PM"></p>
-</li>
-</ul>
-<h2 id="What’s-webpack"><a href="#What’s-webpack" class="headerlink" title="What’s webpack"></a>What’s webpack</h2><blockquote>
-<p>本质上，<strong>webpack</strong>是一个现代 JavaScript 应用程序的模块打包器(<strong>module bundler</strong>)。当 webpack 处理应用程序时，它会递归地构建一个依赖关系图(dependency graph)，其中包含应用程序需要的每个模块，然后将所有这些模块打包成一个或多个<strong>bundle</strong>。</p>
-</blockquote>
-<ul>
-<li><p>如果我们的js代码中<code>require|import</code>了一个js依赖包，<strong>webpack</strong>可以方便的将我们js打包成一个<strong>bundle</strong>包，而不是像传统的HTML中<code>&lt;script&gt;</code>去引用一堆js包<br><img src="/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/3.png" alt="webpack"></p>
-</li>
-<li><p>在执行<code>build</code>时会去读取<strong>webpack</strong>的相关配置文件，<code>webpack.*.config.js</code>中定义了程序入口<strong>entry</strong>，输出的文件路径和文件名等</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  context: path.resolve(__dirname, <span class="string">'../'</span>),</span><br><span class="line">  entry: &#123;</span><br><span class="line">    app: <span class="string">'./src/main.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: config.build.assetsRoot,</span><br><span class="line">    filename: <span class="string">'[name].js'</span>,</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>IDE中点击<strong>build</strong>或执行<code>node build/build.js</code>会生成编译好的静态文件<strong>dist</strong>，目录如下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dist</span><br><span class="line">├── index.html</span><br><span class="line">└── static</span><br><span class="line">    ├── css</span><br><span class="line">    └── js</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="https://cn.vuejs.org/" target="_blank" rel="noopener">Vue.js官方中文文档</a></li>
-<li><a href="https://doc.webpack-china.org/concepts/" target="_blank" rel="noopener">webpack官方中文文档</a></li>
-<li><a href="http://www.jianshu.com/p/7f21880af897?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" target="_blank" rel="noopener">简书–vue学习路径</a></li>
-<li><a href="https://www.qcloud.com/community/article/430630001490779316" target="_blank" rel="noopener">腾讯云论坛文档–浅入浅出Vue.js</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3303,7 +3293,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">64</span>
+                    <span class="site-state-item-count">65</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3330,7 +3320,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>

@@ -372,6 +372,261 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/3/index.html">Mac 的终极 Shell -- ZSH</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-30 07:46:19" itemprop="dateCreated datePublished" datetime="2018-07-30T07:46:19+08:00">2018-07-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/30/Mac 的终极 Shell -- ZSH/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.5k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>目前常用的 Linux 系统和 OS X 系统的默认 Shell 都是 bash，但是真正强大的 Shell 是深藏不露的 zsh， 这货绝对是马车中的跑车，跑车中的飞行车，史称『终极 Shell』，但是由于配置过于复杂，所以初期无人问津，很多人跑过来看看 zsh 的配置指南，什么都不说转身就走了。直到有一天，国外某位大牛开源出一个能够让你快速上手的 zsh 项目，叫做『oh my zsh』，使得 zsh 逐渐流行起来。</p>
+</blockquote>
+<h2 id="ZSH"><a href="#ZSH" class="headerlink" title="ZSH"></a>ZSH</h2><ul>
+<li><p>安装 zsh</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install zsh</span><br></pre></td></tr></table></figure>
+<p>  安装完后在 Terminal 的设置中设置默认使用 zsh<img src="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/0.png" alt="8F9622E7-901E-46F0-94D7-B5E7AEE04C08"></p>
+</li>
+</ul>
+<h2 id="Oh-My-Zsh"><a href="#Oh-My-Zsh" class="headerlink" title="Oh My Zsh"></a>Oh My Zsh</h2><ul>
+<li><p>oh-my-zsh 是最为流行的 zsh 配置文件，提供了完善的插件体系，相关的文件在<code>~/.oh-my-zsh/plugins</code>目录下。<a href="https://github.com/robbyrussell/oh-my-zsh" target="_blank" rel="noopener">GitHub 链接</a></p>
+</li>
+<li><p>安装 <a href="https://github.com/robbyrussell/oh-my-zsh" target="_blank" rel="noopener">oh-my-zsh</a></p>
+  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh -c <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)</span>"</span></span><br></pre></td></tr></table></figure>
+<p>  安装完成后<code>source ~/.zshrc</code>使之生效</p>
+</li>
+</ul>
+<h3 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h3><ul>
+<li><p>在<code>.zshrc</code>中添加配置，其中可以自定义<code>alias</code>用于简化命令，这里贴出我的配置。<code>alias -s</code>意为 define suffix aliases，譬如命令行输入<code>xxx.gz</code>就相当于<code>tar -xzvf xxx.gz</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># compress relatived</span><br><span class="line">alias -s gz&#x3D;&#39;tar -xzvf&#39;</span><br><span class="line">alias -s tgz&#x3D;&#39;tar -xzvf&#39;</span><br><span class="line">alias -s zip&#x3D;&#39;unzip&#39;</span><br><span class="line">alias -s bz2&#x3D;&#39;tar -xjvf&#39;</span><br><span class="line"></span><br><span class="line"># sublime text</span><br><span class="line">alias subl&#x3D;&quot;open -a &#39;Sublime Text&#39;&quot;</span><br><span class="line">alias -s php&#x3D;subl</span><br><span class="line">alias -s rb&#x3D;subl</span><br><span class="line">alias -s html&#x3D;crm</span><br><span class="line">alias -s xml&#x3D;subl</span><br><span class="line">alias -s txt&#x3D;subl</span><br><span class="line">alias -s hbs&#x3D;subl</span><br><span class="line"></span><br><span class="line"># macdown</span><br><span class="line">alias macdown&#x3D;&quot;open -a MacDown&quot;</span><br><span class="line">alias -s md&#x3D;macdown</span><br><span class="line"></span><br><span class="line"># git relatived</span><br><span class="line">alias gpom&#x3D;&#39;git push -u origin master&#39;</span><br><span class="line">alias grao&#x3D;&#39;git remote add origin&#39;</span><br><span class="line"></span><br><span class="line"># others</span><br><span class="line">alias his&#x3D;&#39;history&#39;</span><br><span class="line">alias la&#x3D;&#39;ls -a&#39;</span><br><span class="line">alias ll&#x3D;&#39;ls -alh&#39;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加如下配置后，可以使用<code>subl a.txt</code>或者直接输入<code>a.txt</code>通过 Sublime 打开文本文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alias subl&#x3D;&quot;open -a &#39;Sublime Text&#39;&quot;</span><br><span class="line">alias -s txt&#x3D;subl</span><br></pre></td></tr></table></figure></li>
+<li>另外，添加了两个常用 Git 命令的缩写，其实 Oh My Zsh 已经包含了许多 Git 的简写命令，比如常用的<code>gst</code>即<code>git status</code>的简写。可以使用命令<code>alias</code>查看还有哪些简写命令</li>
+</ul>
+<h3 id="Plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a>Plugins</h3><ul>
+<li><p>oh-my-zsh 有很多提升命令行效率的实用工具，我目前使用了如下四个插件，确实在使用过程中体验到效率的提升。安装完成后在<code>.zshrc</code>中打开插件，其中 git 是默认安装并开启的插件，前面也提到有许多简写命令，这里不多赘述，请自行查阅</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">plugins&#x3D;(</span><br><span class="line">  git</span><br><span class="line">  Z</span><br><span class="line">  zsh-syntax-highlighting</span><br><span class="line">  zsh-autosuggestions</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Z"><a href="#Z" class="headerlink" title="Z"></a>Z</h4><ul>
+<li><p>功能和 autojump 类似，使用<code>z {path}</code>实现目录间快速跳转，并且作为 oh-my-zsh 的内置组件，只需要在<code>.zshrc</code>中打开即可。<a href="https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/z" target="_blank" rel="noopener">GitHub 链接</a></p>
+</li>
+<li><p>如图，Z 插件会记录你前往的目录，并根据进入次数计算权重（<code>z -r</code>查看权重），以后再进入该目录只用<code>z ddd</code>，会进行<strong>模糊匹配</strong>，前往<strong>权重最高</strong>的目录<br><img src="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/1.png" alt="678A0E3A-EDE9-4D9B-AA39-A6E14DC6E2EC"></p>
+</li>
+</ul>
+<h4 id="zsh-syntax-highlighting"><a href="#zsh-syntax-highlighting" class="headerlink" title="zsh-syntax-highlighting"></a>zsh-syntax-highlighting</h4><ul>
+<li><p>终端输入的命令正确会<strong>绿色高亮</strong>显示，输入错误会显示红色，用于在执行命令前检查是否有语法错误。<a href="https://github.com/zsh-users/zsh-syntax-highlighting" target="_blank" rel="noopener">GitHub 链接</a><br><img src="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/2.png" alt="82881CCA-A343-45D1-9A1D-4DD8E77E1B78"></p>
+</li>
+<li><p>安装，完成后在<code>.zshrc</code>中添加</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;zsh-syntax-highlighting.git $&#123;ZSH_CUSTOM:-~&#x2F;.oh-my-zsh&#x2F;custom&#125;&#x2F;plugins&#x2F;zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="zsh-autosuggestions"><a href="#zsh-autosuggestions" class="headerlink" title="zsh-autosuggestions"></a>zsh-autosuggestions</h4><ul>
+<li><p>效率神器。如图输入命令时，会给出建议的命令（灰色部分）按键盘 → 补全。<a href="https://github.com/zsh-users/zsh-autosuggestions" target="_blank" rel="noopener">GitHub 链接</a><br><img src="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/3.png" alt="8B1B4FDE-F810-4E90-B20A-37274ABDDFDE"></p>
+</li>
+<li><p>安装，完成后在<code>.zshrc</code>中添加</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;zsh-autosuggestions $ZSH_CUSTOM&#x2F;plugins&#x2F;zsh-autosuggestions</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/19556676" target="_blank" rel="noopener">终极 Shell——ZSH - 知乎专栏</a></li>
+<li><a href="http://wulfric.me/2015/08/zsh/" target="_blank" rel="noopener">一些命令行效率工具</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/07/19/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B9%8B%20Web%20%E6%A1%88%E4%BE%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2836,315 +3091,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/3/index.html">Spring Cloud 集成 GitHub 第三方认证</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-04-13 07:23:14" itemprop="dateCreated datePublished" datetime="2018-04-13T07:23:14+08:00">2018-04-13</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/04/13/Spring Cloud集成GitHub第三方认证/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">5k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>最近遇到需要在 Spring Cloud 框架中加入<strong>用户认证</strong>的功能，发现 GitHub 有第三方认证功能，遂先写了个 demo 实现通过 GitHub 三方认证完成用户认证，虽然不是最终解决方案，但是有助于理解用户认证的流程</p>
-</blockquote>
-<ul>
-<li><p>代码沿用之前的 <a href="https://s1mple.xyz/sidecar/" target="_blank" rel="noopener">Sidecar – 将Node应用引入Spring Cloud</a> 博客中的代码，用到以下模块</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">─ sidecar-example</span><br><span class="line">   ├── author-service    &#x2F;&#x2F; 需要认证才能访问的微服务</span><br><span class="line">   ├── eureka-server    &#x2F;&#x2F; 注册中心</span><br><span class="line">   └── api-gateway    &#x2F;&#x2F; 网关，一切访问的入口</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<blockquote>
-<p>主要修改的是<code>api-gateway</code>，实现效果就是：<strong>用户通过<code>api-gateway</code>访问任何一个微服务，需要先跳转到 GitHub 进行认证，认证通过后才获取访问权限</strong></p>
-</blockquote>
-<h2 id="Concepts"><a href="#Concepts" class="headerlink" title="Concepts"></a>Concepts</h2><p>在这之前，有一些概念需要先了解</p>
-<h3 id="SSO"><a href="#SSO" class="headerlink" title="SSO"></a>SSO</h3><blockquote>
-<p><strong>SSO</strong>(or <strong>Single Sign On</strong>) <strong>单点登录</strong>，是目前比较流行的企业业务整合的解决方案之一。SSO 的定义是在多个应用系统中，用户只需要登录一次就可以访问所有相互信任的应用系统。非常适用于微服务架构，可以实现<strong>在一个微服务应用登录后（通常有专门的认证服务器），即可访问该微服务集群中的所有其他微服务</strong>。</p>
-</blockquote>
-<h3 id="OAuth-2-0"><a href="#OAuth-2-0" class="headerlink" title="OAuth 2.0"></a>OAuth 2.0</h3><blockquote>
-<p>大家平时肯定遇到过第三方登录的情况，不知道有没有仔细想过它的流程。假设现在我们用微博账号登录简书</p>
-</blockquote>
-<ul>
-<li><p>最传统的办法是让用户直接在简书的登录页面输微博的账号和密码，简书通过用户的账号和密码去微博那里获取用户数据，但这样做有很多严重的缺点：</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">简书需要保存用户的微博账号和密码，这样很不安全。</span><br><span class="line">简书拥有了获取用户在微博所有的权限，包括删除好友、给好友发私信、更改密码、注销账号等危险操作。</span><br><span class="line">用户只有修改微博密码，才能收回赋予简书的权限。但是这样做会使得其他所有通过微博登录的第三方应用程序全部失效。</span><br><span class="line">只要有一个第三方应用程序被破解，就会导致用户密码泄漏，以及所有使用微博登录的网站的数据泄漏。</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>为了解决以上的问题，OAuth 协议应运而生。我们来看一下它的流程</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">简书问新浪微博：我想要获取用户 A 的头像和昵称，请你提供</span><br><span class="line">微博说：我需要经过用户Ａ 本人的许可 &#x3D;&gt; 然后微博询问用户 A 是否要授权简书访问自己的头像和昵称</span><br><span class="line">用户授权后，微博对简书说：我给你一个临时钥匙（Token），你访问我带了这把钥匙，我就把用户的资料给你</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>以上流程可由下图表示<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/0.jpg" alt="291523855245_.pic"></p>
-</li>
-<li><p>其中最关键的两个部分如下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">② 用户同意授权给客户端，则认证服务器返回 Code，即授权码</span><br><span class="line">③ 客户端带着 Code，去认证服务器申领 Token</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h4 id="授权码模式"><a href="#授权码模式" class="headerlink" title="授权码模式"></a>授权码模式</h4><blockquote>
-<p>以上模式称为授权码模式 (<strong>authorization code</strong>) ，是目前功能最完整、流程最严密的客户端授权模式。它的特点就是通过客户端服务器，与”服务提供商”的认证服务器进行互动</p>
-</blockquote>
-<ul>
-<li><p>步骤如下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">用户访问客户端，后者将前者导向认证服务器。</span><br><span class="line">认证服务器询问用户是否给予客户端授权。</span><br><span class="line">若用户给予授权，认证服务器将用户导向客户端事先指定的&quot;重定向URI&quot;（redirection URI），同时附上一个授权码。</span><br><span class="line">客户端收到授权码，附上早先的&quot;重定向URI&quot;，向认证服务器申请令牌。这一步是在客户端的后台的服务器上完成的，对用户不可见。</span><br><span class="line">认证服务器核对了授权码和重定向URI，确认无误后，向客户端发送访问令牌（access token）和更新令牌（refresh token）。</span><br></pre></td></tr></table></figure>
-<p>  <img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/1.png" alt="bg2014051204"></p>
-</li>
-</ul>
-<h2 id="Register"><a href="#Register" class="headerlink" title="Register"></a>Register</h2><blockquote>
-<p>接下来进入正题，如何基于 GitHub 进行第三方认证。首先，我们需要先前往 GitHub 注册一个新的 OAuth App</p>
-</blockquote>
-<ul>
-<li><p>前往<code>https://github.com/settings/developers</code>点击<code>Register a new application</code>，出现如下界面，填写相应信息。注意，主页和回调的 URL 填写的都是<code>api-gateway</code>的地址<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/2.png" alt="B2241479-07A7-4E03-BB62-BCA4CDA5A4A3"></p>
-</li>
-<li><p>注册成功后生成的<code>Client ID</code>和<code>Client Secret</code>是后续需要填写到配置文件中<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/3.png" alt="C65DDEFD-F282-4F12-A211-938767ECD7DA"></p>
-</li>
-</ul>
-<h2 id="Coding"><a href="#Coding" class="headerlink" title="Coding"></a>Coding</h2><blockquote>
-<p>接下来就是编码<code>api-gateway</code>实现重定位到刚注册的 OAuth App 进行认证</p>
-</blockquote>
-<ul>
-<li><p>添加 Maven 依赖</p>
-  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-oauth2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在主类上添加<code>@EnableOAuth2Sso</code>注解</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableDiscoveryClient</span></span><br><span class="line"><span class="meta">@EnableZuulProxy</span></span><br><span class="line"><span class="meta">@EnableOAuth</span>2Sso</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ApiGatewayApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(ApiGatewayApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>为了测试过滤情况，我加入了<code>/</code>和<code>/test</code>接口，除此之外，还有<code>/user</code>接口返回 GitHub 个人信息的接口</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Controller</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">welcome</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"welcome"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/test"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"test"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/user"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Principal <span class="title">user</span><span class="params">(Principal user)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改<code>application.yml</code></p>
-  <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">api-gateway</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">5555</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">  instance:</span></span><br><span class="line"><span class="attr">    hostname:</span> <span class="string">localhost</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    serviceUrl:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://$&#123;eureka.instance.hostname&#125;:9090/eureka/</span></span><br><span class="line"><span class="attr">zuul:</span></span><br><span class="line"><span class="attr">  routes:</span></span><br><span class="line"><span class="attr">    author-service:</span></span><br><span class="line"><span class="attr">      path:</span> <span class="string">/author-service/**</span></span><br><span class="line"><span class="attr">      serviceId:</span> <span class="string">author-service</span></span><br><span class="line"><span class="attr">    book-service:</span></span><br><span class="line"><span class="attr">      path:</span> <span class="string">/book-service/**</span></span><br><span class="line"><span class="attr">      serviceId:</span> <span class="string">node-sidecar</span></span><br><span class="line"></span><br><span class="line"><span class="attr">security:</span></span><br><span class="line"><span class="attr">  ignored:</span> <span class="string">/,/test</span>  <span class="comment"># 认证忽略的接口</span></span><br><span class="line"><span class="attr">  sessions:</span> <span class="string">never</span>   <span class="comment"># session 策略</span></span><br><span class="line"><span class="attr">  oauth2:</span></span><br><span class="line"><span class="attr">    sso:</span></span><br><span class="line"><span class="attr">      loginPath:</span> <span class="string">/login</span>   <span class="comment"># 登录路径</span></span><br><span class="line"><span class="attr">    client:</span></span><br><span class="line"><span class="attr">      clientId:</span> <span class="number">554906e366</span><span class="string">f7861eab21</span></span><br><span class="line"><span class="attr">      clientSecret:</span> <span class="string">e1286e1ac17599c7a8638bb24649e79f5aabddfd</span></span><br><span class="line"><span class="attr">      userAuthorizationUri:</span> <span class="attr">https://github.com/login/oauth/authorize</span>   <span class="comment"># 进行用户授权的路径</span></span><br><span class="line"><span class="attr">      accessTokenUri:</span> <span class="attr">https://github.com/login/oauth/access_token</span>   <span class="comment"># 获取 token 的路径</span></span><br><span class="line"><span class="attr">    resource:</span></span><br><span class="line"><span class="attr">      userInfoUri:</span> <span class="attr">https://api.github.com/user</span></span><br><span class="line"><span class="attr">      preferTokenInfo:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><blockquote>
-<p>现在就可以进行测试了。陆续启动<code>eureka-server</code>、<code>api-gateway</code>、<code>author-service</code>三个微服务</p>
-</blockquote>
-<ul>
-<li><p>访问<code>localhost:5555/</code>和<code>localhost:5555/test</code>接口，发现均不需要认证，即<code>security.ignored: /,/test</code>配置生效<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/4.png" alt="1C21C2B8-E689-4BBC-94EE-4ED74796994C"></p>
-</li>
-<li><p>接下来通过网关访问<code>author-service</code>的接口，正常需要通过 GitHub 认证，事实证明确实如此。访问<code>http://localhost:5555/author-service/author/1</code>接口，跳转到<strong>用户授权</strong>界面<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/5.png" alt="D2FCA844-1A95-4907-A350-68A21ACCE38C"></p>
-</li>
-<li><p>确认授权后重定位到<code>/author-service/author/1</code>接口返回数据<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/6.png" alt="ED7EE656-F376-408D-9DB8-2C6908799A07-1"></p>
-</li>
-<li><p>还可以访问<code>http://localhost:5555/user</code>来获取 GitHub 账号的信息，这个就不贴图了，自己测试即可</p>
-</li>
-<li><p>再回到 GitHub 的 OAuth 界面，发现<code>0 user</code>变成<code>1 user</code>了，在此你可以弃用所有的用户 Token 以及重置 Client Secret 密钥<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/7.png" alt="7E65EF94-3B65-4FE3-B814-29C6B8A54ECF"> </p>
-</li>
-</ul>
-<h2 id="Analyze"><a href="#Analyze" class="headerlink" title="Analyze"></a>Analyze</h2><blockquote>
-<p>以下分析主要是为了看清重定位、URL 的参数和<code>application.yml</code>中的配置有何关联</p>
-</blockquote>
-<ul>
-<li><p>访问<code>http://localhost:5555/author-service/author/1</code>后，重定位到<code>http://localhost:5555/login</code><br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/8.png" alt="D33AA927-F963-41C7-BE5F-6AA7C4FF09AF"></p>
-</li>
-<li><p>访问<code>http://localhost:5555/login</code>重定位<code>https://github.com/login/oauth/authorize</code>即 GitHub 的用户授权路径<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/9.png" alt="E652C938-12A3-4A56-9367-0D07D76B1B66"></p>
-</li>
-<li><p><code>/login/oauth/authorize</code>这个界面才是用户看到的需要点击授权的页面，我们来看下 URL 携带的参数：</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">client_id: 554906e366f7861eab21</span><br><span class="line">redirect_uri: http:&#x2F;&#x2F;localhost:5555&#x2F;login</span><br><span class="line">response_type: code</span><br><span class="line">state: z2MaR7</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>用户点击确认授权后，注意此 Token 非彼 Token<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/10.png" alt="71F69537-2DE4-49BD-AC22-774211576934"></p>
-</li>
-<li><p>接下来带着 code 和 state 访问<code>http://localhost:5555/login</code>再重定位到<code>http://localhost:5555/author-service/author/1</code>真正想访问的接口<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/11.png" alt="05DAA887-01B1-42F4-9C20-0820777E7D92"></p>
-</li>
-</ul>
-<blockquote>
-<p>事实上，由于申领 Token 这一步是在客户端的后台服务器上完成的，所以对用户不可见。其实客户端在用户点击授权后向<code>https://github.com/login/oauth/access_token</code>发送了一个 POST 请求，并带上<code>client_id</code>、<code>client_secret</code>、上一步获取的<code>code</code>以及<code>redirect_uri</code>等参数，由此来获取<code>access_token</code></p>
-</blockquote>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="https://cloud.spring.io/spring-cloud-security/" target="_blank" rel="noopener">Spring Cloud Security - 官网</a></li>
-<li><a href="https://developer.github.com/apps/building-oauth-apps/authorization-options-for-oauth-apps/" target="_blank" rel="noopener">Authorization options for OAuth Apps</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html" target="_blank" rel="noopener">理解 OAuth 2.0 - 阮一峰</a></li>
-<li><a href="https://www.jianshu.com/p/0db71eb445c8" target="_blank" rel="noopener">OAuth 认证流程详解</a></li>
-<li><a href="https://segmentfault.com/a/1190000011098539" target="_blank" rel="noopener">Spring Cloud Security 集成 CAS 对微服务认证</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3196,7 +3142,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">64</span>
+                    <span class="site-state-item-count">65</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3223,7 +3169,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
