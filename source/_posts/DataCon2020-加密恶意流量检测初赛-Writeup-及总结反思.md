@@ -2,7 +2,7 @@
 ---
 title: DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思
 tags: [Network, Security]
-categories: [Algorithms]
+categories: [Experiments]
 
 date: 2020-08-09 23:20:52
 ---
