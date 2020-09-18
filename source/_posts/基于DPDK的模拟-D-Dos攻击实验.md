@@ -1,15 +1,7 @@
 ---
 title: 基于DPDK的模拟(D)Dos攻击实验
 tags: []
-<<<<<<< Updated upstream
-<<<<<<< HEAD
 categories: [Experiments]
-=======
-categories: [Ops]
->>>>>>> 7013a464dfb06b98d142fd7f70ff20c4c93c5353
-=======
-categories: [Experiments]
->>>>>>> Stashed changes
 date: 2020-09-17 21:02:12
 ---
 ## 前言
