@@ -3,6 +3,7 @@ title: '什么是P, NP, NPC以及NP-Hard问题？'
 tags: []
 categories: [Concepts]
 date: 2020-09-22 21:17:07
+mathjax: true
 ---
 ## 时间复杂度
 
@@ -30,7 +31,7 @@ date: 2020-09-22 21:17:07
 
 P问题比较容易理解，它是复杂度最低的一类问题。事实上，计算机能解决的问题绝大部分都属于P问题，譬如排序、最小树、最短路、最大流、最小费用流、最大匹配等常见问题都是多项式时间可解的P类问题。
 
-然而另一类问题如[旅行商问题](https://zh.wikipedia.org/wiki/TSP)(Travelling Salesman Problem, TSP)、[整数线性规划问题](https://zh.wikipedia.org/wiki/%E7%BA%BF%E6%80%A7%E8%A7%84%E5%88%92)(Integer Linear Programming, ILP)至今仍未找到多项式时间算法，又往往无法证明多项式算法的不存在性。在这类问题中，又存在一类特殊的问题，即：**我无法在多项式时间内解决该问题，但我可以找到该问题的一个解，然后在多项式时间内验证该解是否正确**。我们将这类问题归类为**NP问题**。举个例子，前面的Hamilton回路问题，虽然它不是P问题，但我可以找到一条路径，并在$O(n)$时间内验证这条路径是否经过每个顶点一次（每个顶点遍历一次）。
+然而另一类问题如[旅行商问题](https://zh.wikipedia.org/wiki/TSP)（Travelling Salesman Problem，TSP）、[整数线性规划问题](https://zh.wikipedia.org/wiki/%E7%BA%BF%E6%80%A7%E8%A7%84%E5%88%92)（Integer Linear Programming，ILP）至今仍未找到多项式时间算法，又往往无法证明多项式算法的不存在性。在这类问题中，又存在一类特殊的问题，即：**我无法在多项式时间内解决该问题，但我可以找到该问题的一个解，然后在多项式时间内验证该解是否正确**。我们将这类问题归类为**NP问题**。举个例子，前面的Hamilton回路问题，虽然它不是P问题，但我可以找到一条路径，并在$O(n)$时间内验证这条路径是否经过每个顶点一次（每个顶点遍历一次）。
 
 ## NP问题
 
