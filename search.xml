@@ -5395,6 +5395,7 @@ redirectPort=&quot;8443&quot; /&gt;
 <p>实验结果如下：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-Per port stats table </span><br><span class="line"></span><br><span class="line">      ports |               0 |               1 </span><br><span class="line"> -----------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">   opackets |        34232892 |           42080 </span><br><span class="line">     obytes |     51904428378 |         2777280 </span><br><span class="line">   ipackets |               0 |               0 </span><br><span class="line">     ibytes |               0 |               0 </span><br><span class="line">    ierrors |               0 |               0 </span><br><span class="line">    oerrors |               0 |               0 </span><br><span class="line">      Tx Bw |       9.89 Gbps |     527.55 Kbps </span><br><span class="line"></span><br><span class="line">-Global stats enabled </span><br><span class="line"> Cpu Utilization : 100.0  %  9.9 Gb&#x2F;core </span><br><span class="line"> Platform_factor : 1.0  </span><br><span class="line"> Total-Tx        :       9.89 Gbps  </span><br><span class="line"> Total-Rx        :       0.00  bps  </span><br><span class="line"> Total-PPS       :     816.02 Kpps  </span><br><span class="line"> Total-CPS       :       0.00  cps  </span><br><span class="line"></span><br><span class="line"> Expected-PPS    :       6.59 Gpps  </span><br><span class="line"> Expected-CPS    :       6.59 Gcps  </span><br><span class="line"> Expected-BPS    :      80.00 Tbps  </span><br><span class="line"></span><br><span class="line"> Active-flows    :     1600  Clients :      254   Socket-util : 0.0100 %    </span><br><span class="line"> Open-flows      :     1600  Servers :    65534   Socket :     1600 Socket&#x2F;Clients :  6.3 </span><br><span class="line"> Total_queue_full : 72264932         </span><br><span class="line"> drop-rate       :       9.89 Gbps   </span><br><span class="line"> current time    : 43.3 sec  </span><br><span class="line"> test duration   : 3556.7 sec  </span><br><span class="line"></span><br><span class="line">-Latency stats enabled </span><br><span class="line"> Cpu Utilization : 0.1 %  </span><br><span class="line"> if|   tx_ok , rx_ok  , rx check ,error,       latency (usec) ,    Jitter          max window </span><br><span class="line"></span><br><span class="line">   |         ,        ,          ,     ,   average   ,   max  ,    (usec)                     </span><br><span class="line"> ---------------------------------------------------------------------------------------------------------------- </span><br><span class="line"></span><br><span class="line"> 0 |    42080,       0,         0,    0,          0  ,       0,       0      |  0  0  0  0  0  0  0  0  0  0  0  0  0 </span><br><span class="line"> 1 |    42081,       0,         0,    0,          0  ,       0,       0      |  0  0  0  0  0  0  0  0  0  0  0  0  0 </span><br><span class="line"></span><br><span class="line">##</span><br></pre></td></tr></table></figure>
 <h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><h3 id="理论分析"><a href="#理论分析" class="headerlink" title="理论分析"></a>理论分析</h3><p>一个以太网帧的结构包括：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -5421,18 +5422,18 @@ redirectPort=&quot;8443&quot; /&gt;
 </tr>
 </tbody>
 </table>
+</div>
 <p>最小帧长：7+1+(6+6+2+46+4)+12 = 84B（最小有效帧长 64B）<br>最大帧长：7+1+(6+6+2+1500+4)+12 = 1538B（最大有效帧长 1518B）</p>
 <p>对于最小帧长，最大包传输率 M 和吞吐率 T 为：</p>
-<p>$$M = Speed/Size = 100 <em> 10^9 / (84 </em> 8) = 148809523 pps$$<br>$$T = M <em> 64 </em> 8 = 76.19Gbps$$</p>
-<p>对于最大帧长，最大包传输率 M 和吞吐率 T 为：</p>
-<p>$$M = Speed/Size = 100 <em> 10^9 / (1538 </em> 8) = 8127438 pps$$<br>$$T = M <em> 1518 </em> 8 = 98.69Gbps$$</p>
-<p>以此类推，我们对于不同的帧长做了理论分析，得到下图：</p>
+<script type="math/tex; mode=display">M = Speed/Size = 100 * 10^9 / (84 * 8) = 148809523 pps</script><script type="math/tex; mode=display">T = M * 64 * 8 = 76.19Gbps</script><p>对于最大帧长，最大包传输率 M 和吞吐率 T 为：</p>
+<script type="math/tex; mode=display">M = Speed/Size = 100 * 10^9 / (1538 * 8) = 8127438 pps</script><script type="math/tex; mode=display">T = M * 1518 * 8 = 98.69Gbps</script><p>以此类推，我们对于不同的帧长做了理论分析，得到下图：</p>
 <p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/6.png" alt="38021550bd20f375c0c872a80cea41af.png"></p>
 <h3 id="吞吐率测试结果"><a href="#吞吐率测试结果" class="headerlink" title="吞吐率测试结果"></a>吞吐率测试结果</h3><p>以下是吞吐率的测试结果：</p>
 <p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/7.png" alt="037b37c99b1bc4c938f887dc1b876ba1.png"><br><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/8.png" alt="ec784c4bc84e984d27170739145d5bfe.png"><br><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/9.png" alt="d9c6568a7c11555a9290d452fbacafe2.png"></p>
 <h3 id="包传输率测试结果"><a href="#包传输率测试结果" class="headerlink" title="包传输率测试结果"></a>包传输率测试结果</h3><p>以下是包传输率的测试结果：</p>
 <p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/10.png" alt="0f5b53c8b5544ae9572cebc9168f12cb.png"><br><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/11.png" alt="83c9995318589576075bf3140b4f46fd.png"><br><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/12.png" alt="79d66dcca878a695f31c01cf8e08e2d8.png"></p>
-<h3 id="与内核机制发包的对比"><a href="#与内核机制发包的对比" class="headerlink" title="与内核机制发包的对比"></a>与内核机制发包的对比</h3><table>
+<h3 id="与内核机制发包的对比"><a href="#与内核机制发包的对比" class="headerlink" title="与内核机制发包的对比"></a>与内核机制发包的对比</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th style="text-align:center">包大小(B)</th>
@@ -5462,6 +5463,7 @@ redirectPort=&quot;8443&quot; /&gt;
 </tr>
 </tbody>
 </table>
+</div>
 <h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>由上述实验结果可知：</p>
 <ol>
 <li>10Gbps 线速的网络，用 DPDK 跑 4 个核，基本可以实现 64B 最小包较好的发送吞吐率，但是仍达不到 10Gbps 的线速，只有 7.6Gbps 左右。</li>
@@ -5534,9 +5536,8 @@ redirectPort=&quot;8443&quot; /&gt;
 <li>一个<strong>状态寄存器</strong>。保存图灵机当前状态。</li>
 </ol>
 <p>不难看出图灵机本质上就是状态机，我们可以将机器从开始运行到停机的运作过程记录为一串序列：</p>
-<p>$$q_0 \rightarrow_{\omega_0} q_1 \rightarrow_{\omega_1} q_2 \rightarrow … \rightarrow_{\omega_{n-1}} q_n$$</p>
-<p>开始时，机器处于$q_0$状态，读写头指向0号格子；开始运行后，读入格子中的符号$\omega_0$，根据控制规则，机器进入下一状态$q_1$；重复此过程，直至到达终止状态，机器停机。</p>
-<p>终止状态包括两种状态，$q_{accept}$称为接受状态，即机器根据控制规则成功运行至终态。$q_{reject}$称为拒绝状态，如果在运行中遇到下一个操作没有定义的情况，机器将立刻停机并拒绝输入的字符串。由于整个过程只要初始状态、输入、控制规则确定，机器运行的过程就确定，所以我们将其称之为<strong>确定型</strong>图灵机。</p>
+<script type="math/tex; mode=display">q_0 \rightarrow_{\omega_0} q_1 \rightarrow_{\omega_1} q_2 \rightarrow ... \rightarrow_{\omega_{n-1}} q_n</script><p>开始时，机器处于$q_0$状态，读写头指向0号格子；开始运行后，读入格子中的符号$\omega_0$，根据控制规则，机器进入下一状态$q_1$；重复此过程，直至到达终止状态，机器停机。</p>
+<p>终止状态包括两种状态，$q<em>{accept}$称为接受状态，即机器根据控制规则成功运行至终态。$q</em>{reject}$称为拒绝状态，如果在运行中遇到下一个操作没有定义的情况，机器将立刻停机并拒绝输入的字符串。由于整个过程只要初始状态、输入、控制规则确定，机器运行的过程就确定，所以我们将其称之为<strong>确定型</strong>图灵机。</p>
 <p>如果不加特殊说明，通常所说的图灵机都是确定型图灵机。<strong>非确定型图灵机</strong>和确定型图灵机的不同之处在于，在计算的每一时刻，根据当前状态和读写头所读的符号，<strong>机器存在多种状态转移方案，机器将任意地选择其中一种方案继续运作</strong>，直到最后停机为止。</p>
 <p>图灵机是一个计算机的理论模型，我们通常说，现代计算机是基于冯诺依曼体系的，实际是冯诺依曼机就是基于图灵机模型的实现，包括高度复杂化的运算、控制、存储、输入、输出五个部分。比如纸带（用内存/磁盘模拟）、内部状态寄存器（现代计算机有大量的标志位和大量的寄存器甚至寄存器组）、在纸带上移动（各种跳转指令、各种复杂的寻址操作）、控制规则（CPU指令集）等。到目前为止，依然没有能够超越图灵机的模型。关于人工智能、量子计算机是否超越了图灵机也有非常有趣的讨论，感兴趣的读者可以自行查阅资料。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
