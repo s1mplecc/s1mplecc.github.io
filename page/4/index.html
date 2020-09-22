@@ -372,6 +372,275 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/04/27/JavaScript%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E7%9A%84%E5%8F%91%E5%B1%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/04/27/JavaScript%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E7%9A%84%E5%8F%91%E5%B1%95/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">JavaScript 异步编程的发展</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-04-27 02:47:39" itemprop="dateCreated datePublished" datetime="2018-04-27T02:47:39+08:00">2018-04-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/27/JavaScript%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E7%9A%84%E5%8F%91%E5%B1%95/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/04/27/JavaScript异步编程的发展/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.3k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>你可能知道，JavaScript 语言的执行环境是<strong>单线程（single thread）</strong>。这种模式的好处是实现起来比较简单，执行环境相对单纯；坏处是只要有一个任务耗时很长，后面的任务都必须排队等着，会拖延整个程序的执行。常见的浏览器无响应（假死），往往就是因为某一段 JavaScript 代码长时间运行（比如死循环），导致整个页面卡在这个地方，其他任务无法执行。为了解决这个问题，JavaScript 语言将任务的执行模式分成两种：<strong>同步（Synchronous）</strong> 和 <strong>异步（Asynchronous）</strong></p>
+</blockquote>
+<ul>
+<li><strong>同步模式</strong>：后一个任务等待前一个任务结束，然后再执行，程序的执行顺序与任务的排列顺序是一致的、同步的；<strong>异步模式</strong>则完全不同，每一个任务有一个或多个回调函数（callback），前一个任务结束后，不是执行后一个任务，而是执行回调函数，后一个任务则是不等前一个任务结束就执行，所以程序的执行顺序与任务的排列顺序是不一致的、异步的。</li>
+<li>异步模式非常重要。在浏览器端，耗时很长的操作都应该异步执行，避免浏览器失去响应，最好的例子就是 Ajax 操作。在服务器端，经典的 Node.js 的异步 I/O 则保证了同一时间可以响应大量的 Http 请求</li>
+<li>示例代码已上传至<a href="https://github.com/s1mplecc/js-asynchronous-programming" target="_blank" rel="noopener">GitHub</a></li>
+</ul>
+<h2 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h2><blockquote>
+<p>回调（Callback）函数是异步编程最基本的方法。回调就好比你送女朋友到车站，并让她回家了给你回条短信。回调函数在完成任务后就会被调用，Node.js 就使用了大量的回调函数</p>
+</blockquote>
+<ul>
+<li><p>看看下面的示例代码，你要求女朋友回到家后发一条短信告诉你，然后她在回家的路上愉快的耍起了手机，哈哈哈</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">goHome</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    callback()</span><br><span class="line">  &#125;, <span class="number">2000</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'I am playing a mobile phone'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sendMessage</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'I have just arrived home.'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">goHome(sendMessage)</span><br></pre></td></tr></table></figure>
+<p>  输出结果</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I am playing a mobile phone.</span><br><span class="line">I have just arrived home.    &#x2F;&#x2F; after 2000ms</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注意打印结果的顺序。先打印的是<code>I am playing a mobile phone</code>，而后过了 2s 打印<code>I have just arrived home</code>。这是因为使用了<code>setTimeout()</code>这个函数，表示延时 2000ms 后执行回调函数</p>
+</li>
+<li><p>在这个示例中，回调函数即是<code>sendMessage()</code>，回家这个动作是比较耗时的，所以我们使用了<strong>异步</strong>的方式，使得<strong>玩手机的行为不受到阻塞</strong>。是吧，玩手机不一定要回家才能完，路上也能玩嘛。回调使得同步操作变成了异步操作，相当于先执行程序的主要逻辑，将耗时的操作推迟执行</p>
+</li>
+<li><p>回调函数的优点是简单、容易理解，缺点是不利于代码的阅读和维护，各个部分之间<strong>高度耦合</strong>，流程会很混乱，而且每个任务只能指定一个回调函数。在 Node.js 的开发中，由于逻辑分层所致，会出现多层回调，易于引发异常处理混乱、闭包过于复杂、代码难以维护等问题。</p>
+</li>
+</ul>
+<h2 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h2><blockquote>
+<p>Promise 是异步编程的一种解决方案，比传统的解决方案——回调函数和事件，更合理和更强大。它由社区最早提出和实现，ES6 将其写进了语言标准，统一了用法，原生提供了 Promise 对象。所谓 Promise，简单说就是一个<strong>容器</strong>，里面<strong>保存着某个未来才会结束的事件（通常是一个异步操作）的结果</strong>。从语法上说，Promise 是一个对象，从它可以获取异步操作的消息。Promise 提供统一的 API，各种异步操作都可以用同样的方法进行处理。</p>
+</blockquote>
+<ul>
+<li><p>Promise 对象有以下两个特点</p>
+<p>  （1）对象的状态不受外界影响。Promise 对象代表一个异步操作，有三种状态：<strong>Pending</strong>（进行中）、<strong>Resolved</strong>（已成功，又称 Fulfilled）和 <strong>Rejected</strong>（已失败）。只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态。这也是 Promise 这个名字的由来，它的英语意思就是「承诺」，表示其他手段无法改变。</p>
+<p>  （2）<strong>一旦状态改变，就不会再变</strong>，任何时候都可以得到这个结果。Promise 对象的状态改变，只有两种可能：从 Pending 变为 Resolved 和从 Pending 变为 Rejected。只要这两种情况发生，状态就<strong>凝固</strong>了，不会再变了，会一直保持这个结果。如果改变已经发生了，你再对 Promise 对象添加回调函数，也会立即得到这个结果。这与事件（Event）完全不同，事件的特点是，如果你错过了它，再去监听，是得不到结果的。</p>
+</li>
+<li><p>来看下面这段代码</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> goHome = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">    resolve(<span class="string">'I have just arrived home.'</span>)</span><br><span class="line">  &#125;,<span class="number">2000</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'I am playing a mobile phone.'</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sendMessage</span>(<span class="params">message</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(message)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">goHome.then(sendMessage)</span><br></pre></td></tr></table></figure>
+<p>  这样写的优点在于，回调函数变成了链式写法，程序的流程可以看得很清楚，<code>goHome.then(sendMessage)</code>显然更符合人的思维方式</p>
+</li>
+<li><p>我们可以在<code>Promise</code>中<code>reject</code>错误，在用<code>catch</code>去捕捉，你可能在 axios 发送异步请求的时候见过这种写法。<code>catch</code>方法是<code>.then(null, rejection)</code>的别名，用于指定发生错误时的回调函数</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isEven = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> num = <span class="built_in">Math</span>.round(<span class="built_in">Math</span>.random() * <span class="number">10</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'num'</span>, num)</span><br><span class="line">  num % <span class="number">2</span> === <span class="number">0</span> ? resolve(<span class="string">`<span class="subst">$&#123;num&#125;</span> is an even number`</span>) : reject(<span class="string">`<span class="subst">$&#123;num&#125;</span> is not an even number`</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">isEven</span><br><span class="line">  .then(<span class="function"><span class="params">result</span> =&gt;</span> <span class="built_in">console</span>.log(result))</span><br><span class="line">  .catch(<span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.log(err))</span><br></pre></td></tr></table></figure>
+<p>  结果有两种，随机到偶数和随机到奇数</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">num 6</span><br><span class="line">6 is an even number</span><br><span class="line">num 7</span><br><span class="line">7 is not an even number</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>有了 Promise 对象，就可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。此外，Promise 对象提供统一的接口，使得控制异步操作更加容易。更多请参考<a href="http://es6.ruanyifeng.com/#docs/promise" target="_blank" rel="noopener">阮老师的教程</a></p>
+</blockquote>
+<h2 id="async-await"><a href="#async-await" class="headerlink" title="async/await"></a>async/await</h2><blockquote>
+<p>最后来看一下异步编程的<strong>终极解决方案</strong>:<code>async/await</code>。<code>async</code>作为 ES7 的一大特性，已经在 Node.js 的框架——<a href="https://koa.bootcss.com/" target="_blank" rel="noopener">Koa2</a> 中被广泛使用。<code>async</code>函数是什么？一句话，<strong>async 函数就是 Generator 函数的语法糖</strong>。<code>async</code>用于申明一个<code>function</code>是异步的，而 <code>await</code>用于等待一个异步函数执行完成</p>
+</blockquote>
+<ul>
+<li><p>使用时需要注意：<strong>async 函数返回一个 Promise 对象</strong>；<code>await</code>只能在<code>async</code>内部使用，类似于<code>async function</code>内部的<code>then</code>命令的语法糖</p>
+</li>
+<li><p><code>await</code>是个运算符，用于组成表达式，<code>await</code>如果在等待一个 Promise 对象，就会阻塞后面的代码，等着 Promise 对象<code>resolve</code>，然后将得到<code>resolve</code>的值作为 <code>await</code> 表达式的运算结果</p>
+</li>
+<li><p>用<code>async/await</code>改写后的代码如下，看起来就像同步代码那样直观</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> goHome = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    resolve(<span class="string">'I have just arrived home.'</span>)</span><br><span class="line">  &#125;, <span class="number">2000</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'I am playing a mobile phone.'</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">sendMessage</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> msg = <span class="keyword">await</span> goHome</span><br><span class="line">  <span class="built_in">console</span>.log(msg)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sendMessage().then(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'Play together.'</span>))</span><br></pre></td></tr></table></figure>
+<p>  输出结果</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">I am playing a mobile phone.</span><br><span class="line">I have just arrived home.    &#x2F;&#x2F; after 2000ms</span><br><span class="line">Play together.</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
+<p>从最早的回调函数，到 Promise 对象，再到 Generator 函数，每次都有所改进，但又让人觉得不彻底。<strong>异步编程的语法目标，就是怎样让它更像同步编程</strong>， async 函数就是隧道尽头的亮光，很多人认为它是异步操作的终极解决方案。实际使用起来也更顺手、更容易理解，它必然会被普及，我们应该习惯这种用法。事实上 Koa2 也正是由于此而比拥有复杂的回调嵌套的 Express 更脱颖而出。</p>
+</blockquote>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="http://www.ruanyifeng.com/blog/2012/12/asynchronous%EF%BC%BFjavascript.html" target="_blank" rel="noopener">Javascript异步编程的4种方法 - 阮一峰</a></li>
+<li><a href="http://es6.ruanyifeng.com/#docs/promise" target="_blank" rel="noopener">Promise 对象 - 阮一峰ES6教程</a></li>
+<li><a href="http://es6.ruanyifeng.com/#docs/async" target="_blank" rel="noopener">async 函数 - 阮一峰ES6教程</a></li>
+<li><a href="https://segmentfault.com/a/1190000007535316" target="_blank" rel="noopener">理解 JavaScript 的 async/await</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2881,304 +3150,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">Linux 文件结构</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-01-30 02:28:54" itemprop="dateCreated datePublished" datetime="2018-01-30T02:28:54+08:00">2018-01-30</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/30/Linux文件结构/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">3.3k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>初学 <strong>Linux</strong> 总是好奇 <strong>Linux</strong> 系统下各个文件夹为什么这么命名，它们的用途是什么。本文主要介绍 <strong>Linux</strong> 下各文件夹的结构和用途说明</p>
-</blockquote>
-<ul>
-<li><p>使用的环境为 <strong>Aliyun</strong> 的服务器，系统为 <strong>Ubuntu 16.04</strong> 版本</p>
-</li>
-<li><p>不同的系统文件结构必然有所不同，但是只要是 <strong>Linux</strong> 发行版，就应该遵循 <strong>Linux</strong> 文件系统</p>
-</li>
-</ul>
-<h2 id="Color"><a href="#Color" class="headerlink" title="Color"></a>Color</h2><ul>
-<li>一般人性化点的 <strong>Shell</strong> 都会有文件的不同颜色显示。下图为 <strong>Linux</strong> 下不同颜色的文件代表的含义。比如可执行文件显示绿色，目录显示蓝色，链接文件显示浅蓝色等<br><img src="/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/0.png" alt="linuxfilecolor"></li>
-</ul>
-<h2 id="FHS"><a href="#FHS" class="headerlink" title="FHS"></a>FHS</h2><blockquote>
-<p><strong>Linux</strong> 有专门的指导文件系统的标准，叫做 <strong>FHS</strong>(or <strong>Filesystem Hierarchy Standard</strong>)</p>
-</blockquote>
-<ul>
-<li><p><strong>Linux</strong> 所依赖的文件系统，有两个基本的概念：</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shareable &#x2F; unshareable （共享性）</span><br><span class="line">static &#x2F; variable （稳定性）</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>对于可分享（<strong>shareable</strong>）的文件系统，<strong>FHS</strong> 规定</p>
-<blockquote>
-<p>可分享文件能够被存放在一台将被多个用户同时访问的主机上，通常情况下，当一个系统所需的所有文件都存放在一台外部主机上时，可以方便的挂载一个或很少几个目录来使这些文件可用。但是，并不是在文件系统架构中的所有文件都是可分享的，所以<strong>每个系统都至少需要一处能够存放不可共享文件</strong>的本地空间</p>
-</blockquote>
-</li>
-<li><p>对于静态（<strong>static</strong>）文件系统，<strong>FHS</strong> 规定</p>
-<blockquote>
-<p><strong>静态文件需要与动态文件隔离</strong>，因为，不同于动态文件，静态文件可以存放在<strong>只读介质</strong>上（而动态文件不可以），并且不需要和动态文件一起备份</p>
-</blockquote>
-</li>
-<li><p><strong>FHS</strong> 中关于特定文件夹用途和所需包含内容的规定</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;bin: Essential user command binaries (for use by all users)</span><br><span class="line">&#x2F;sbin: System binaries</span><br><span class="line">&#x2F;usr: shareable static</span><br><span class="line">    &#x2F;usr&#x2F;bin: Most user commands</span><br><span class="line">    &#x2F;usr&#x2F;sbin: Non-essential standard system binaries</span><br><span class="line">    &#x2F;usr&#x2F;local: Local hierarchy</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h3 id="bin"><a href="#bin" class="headerlink" title="/bin"></a>/bin</h3><ul>
-<li><p><code>/bin</code>，<strong>binary</strong> 的简称。该目录下为<strong>二进制</strong>的<strong>可执行文件</strong>，显示为<strong>绿色</strong>。包含了引导启动所需的命令或普通用户可使用的命令。多是系统中重要的<strong>系统文件</strong></p>
-</li>
-<li><p>比如说根目录<code>/bin</code>下都是些常用命令的执行文件，再比如说 <strong>Tomcat</strong> 的<code>bin</code>目录下有一些运行脚本，有 <strong>Linux Shell</strong> 执行的<code>.sh</code>结尾的文件，也有 <strong>Windows</strong> 执行的<code>.bat</code>结尾的文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;bin&#x2F;</span><br><span class="line">cat    tar    cp      ls     rm   ...</span><br><span class="line"></span><br><span class="line">$ ls &#x2F;usr&#x2F;local&#x2F;tomcat9&#x2F;bin&#x2F;</span><br><span class="line">shutdown.bat    catalina.bat     shutdown.sh</span><br><span class="line">catalina.sh     startup.bat      startup.sh    ...</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="sbin"><a href="#sbin" class="headerlink" title="/sbin"></a>/sbin</h3><ul>
-<li><p><code>/sbin</code>，<strong>System binaries</strong> 的简称。存放<strong>系统管理员</strong>以及其他需要<strong>root权限</strong>来运行的工具</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;sbin&#x2F;</span><br><span class="line">reboot    shutdown    poweroff    route    sysctl     ...</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="usr"><a href="#usr" class="headerlink" title="/usr"></a>/usr</h3><ul>
-<li><p><code>/usr</code>是文件系统中第二大主要部分，其中存放了<strong>可分享的</strong>、<strong>只读的</strong>数据（即<strong>可分享性</strong>，<strong>静态性数据</strong>）。这说明<code>/usr</code>文件系统需要能够在各种不同的兼容 <strong>FHS</strong> 系统的之间可共享，并且不可被修改。任何依赖于平台或者需要改写的数据，都应该存放在其它位置</p>
-</li>
-<li><p><code>/usr/bin</code>集中了几乎所有用户命令，比如<code>man、info</code>系统自带或者<code>git、docker</code>这种后来安装的三方软件的命令</p>
-</li>
-<li><p><code>/usr/sbin</code>包括了多数服务程序需要管理员权限的命令，比如<code>mysqld、sshd</code></p>
-</li>
-<li><p><code>/usr/local</code>，本地安装的软件和其他文件都可以放在这里</p>
-</li>
-</ul>
-<h3 id="lib"><a href="#lib" class="headerlink" title="/lib"></a>/lib</h3><ul>
-<li><p><code>/lib</code>，<strong>Libraries</strong> 的简称。库文件，存储文件运行需要的依赖库。不如 <strong>Tomcat</strong> 是基于 <strong>Java</strong> 的，它的<code>lib</code>目录下包含了一些依赖 <strong>Jar</strong> 包</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;usr&#x2F;local&#x2F;tomcat9&#x2F;lib</span><br><span class="line">annotations-api.jar       el-api.jar       tomcat-coyote.jar   tomcat-util-scan.jar</span><br><span class="line">catalina-ant.jar          jasper-el.jar</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="etc"><a href="#etc" class="headerlink" title="/etc"></a>/etc</h3><ul>
-<li><p><code>/etc</code>这个文件夹很有意思，也是最开始困扰我很久的，因为它里头什么都有…其实它取名就是取自”<strong>等等</strong>“的缩写词 <strong>etc.</strong> 存放着系统以及各种程序的配置文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls -F &#x2F;etc</span><br><span class="line">hosts    hostname    passwd    nginx&#x2F;    ssh&#x2F;    ...</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>早期 <strong>UNIX</strong> 系统中，对于<code>/etc</code>，贝尔实验室的解释是：<strong>etcetra directory</strong>(or <strong>etc.</strong>) 。表示其他、等等什么的，其实就是用来放不能归类到其他目录中的内容，所以比较杂乱。后来 <strong>FHS</strong> 规定用来放配置文件，就解释为：<strong>Editable Text Configuration</strong> 或者 <strong>Extended Tool Chest</strong></p>
-</li>
-</ul>
-<h3 id="var"><a href="#var" class="headerlink" title="/var"></a>/var</h3><ul>
-<li><p><code>/var</code>，<strong>Variable</strong> 的简称，多用于存放动态变化的文件。也用于某些大文件的<strong>溢出区</strong>，比如各种服务的日志文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;var&#x2F;backups</span><br><span class="line">group.bak    passwd.bak    ....</span><br><span class="line"></span><br><span class="line">$ ls &#x2F;var&#x2F;log</span><br><span class="line">syslog    dpkg.log    auth.log     ...</span><br><span class="line"></span><br><span class="line">$ ls -F &#x2F;var&#x2F;run</span><br><span class="line">nginx.pid    docker.pid    sshd.pid     resolvconf&#x2F;    ...</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>/var/run</code>中包含了进程的ID以及动态生成的配置文件等，比如连接网络时自动生成的<code>/var/run/resolvconf/resolv.conf</code>域名解析服务器的配置信息，其实<code>/etc/resolv.conf</code>文件就是链接到此文件</p>
-</li>
-</ul>
-<h3 id="root"><a href="#root" class="headerlink" title="/root"></a>/root</h3><ul>
-<li><p><code>/root</code>目录是<code>root</code>用户的<strong>用户目录</strong>，<code>~</code>代表当前用户的用户目录，普通用户的目录在<code>/home</code>下，比如我通过<code>su - s1mple</code>切换到 s1mple 用户，用户目录为<code>/home/s1mple</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu-server:~# pwd</span><br><span class="line">&#x2F;root</span><br><span class="line"></span><br><span class="line">s1mple@ubuntu-server:~$ pwd</span><br><span class="line">&#x2F;home&#x2F;s1mple</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="Others"><a href="#Others" class="headerlink" title="Others"></a>Others</h3><ul>
-<li><p><code>/opt</code>，<strong>Optional application software packages</strong> 代表你可以在该目录下安装第三方软件，和<code>/usr/local</code>的作用相似</p>
-</li>
-<li><p><code>/dev</code>，<strong>device</strong> 的简称，该目录存放设备文件，即设备驱动程序，用户通过这些文件访问外部设备。比如，用户可 以通过访问<code>/dev/mouse</code>来访问鼠标的输入，就像访问其他文件一样</p>
-</li>
-<li><p><code>/tmp</code>，<strong>temporary</strong> 的简称，目录存放程序在运行时产生的临时数据，<strong>注意：</strong><code>/var/tmp</code>比<code>/tmp</code>允许更大的或需要存在较长时间的临时文件</p>
-</li>
-<li><p><code>/proc</code>，虚拟的目录，是系统<strong>内存</strong>的映射。可直接访问这个目录来获取系统信息，比如<code>/proc/cpuinfo</code></p>
-</li>
-</ul>
-<hr>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><p><a href="http://mp.weixin.qq.com/s/yUwUawPlIjPThe3v1Ppcug" target="_blank" rel="noopener">Linux 下各文件夹的结构说明及用途介绍</a></p>
-</li>
-<li><p>上个图<br><img src="/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/1.jpg" alt="linux-file"> </p>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3230,7 +3201,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">65</span>
+                    <span class="site-state-item-count">66</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

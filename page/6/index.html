@@ -372,6 +372,253 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/6/index.html">Vue 项目结构</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-12-14 02:11:19" itemprop="dateCreated datePublished" datetime="2017-12-14T02:11:19+08:00">2017-12-14</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/14/Vue 项目结构/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">1.8k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>在已经<a href="https://s1mple.xyz/vue-cli-project-build/" target="_blank" rel="noopener">构建vue-cli项目</a>的基础上，我们来梳理一下vue-cli项目的结构。</p>
+</blockquote>
+<ul>
+<li>vue-cli项目总体结构<br><img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/0.png" alt="vue-project-structure"></li>
+</ul>
+<h2 id="build"><a href="#build" class="headerlink" title="build"></a>build</h2><ul>
+<li><p>build文件主要是<strong>webpack</strong>打包生成静态文件的配置<br><img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/1.png" alt="build"></p>
+</li>
+<li><p>最新的<strong>vue-webpack-template</strong>中已经去掉了<strong>dev-server.js</strong>改用<strong>webpack-dev-server</strong>代替，<strong>webpack-dev-server</strong>是一个独立的NPM包，支持<strong>热重载</strong></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-    &quot;dev&quot;: &quot;node build&#x2F;dev-server.js&quot;,</span><br><span class="line">+    &quot;dev&quot;: &quot;webpack-dev-server --inline --progress --config build&#x2F;webpack.dev.conf.js&quot;,</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="config"><a href="#config" class="headerlink" title="config"></a>config</h2><ul>
+<li>config文件主要是项目相关配置，我们常用的就是当端口冲突时配置监听端口，打包输出路径及命名等<br><img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/2.png" alt="config"></li>
+</ul>
+<h2 id="src"><a href="#src" class="headerlink" title="src"></a>src</h2><ul>
+<li><p>这是项目最初的一个结构图。<strong>assets</strong>不用多说，静态资源文件包括css文件、外部的一些js包都可以放这里。<strong>components</strong>和<strong>router</strong>则是Vue的俩个核心概念：<strong>组件</strong>和<strong>路由</strong></p>
+<p>  <img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/3.png" alt="Screen-Shot-2017-12-16-at-5.13.01-PM"></p>
+</li>
+</ul>
+<h3 id="main-js"><a href="#main-js" class="headerlink" title="main.js"></a>main.js</h3><ul>
+<li><p>项目的入口文件，new了一个Vue实例，将这个实例挂载到<strong>id=app</strong>的<strong>DOM元素</strong>上，并用<strong>App.vue</strong>中的模版替换该元素，这也是为什么我们能看到<strong>App.vue</strong>中的logo图片</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import App from &#39;.&#x2F;App&#39;</span><br><span class="line">new Vue(&#123;</span><br><span class="line">  el: &#39;#app&#39;,</span><br><span class="line">  router,</span><br><span class="line">  template: &#39;&lt;App&#x2F;&gt;&#39;,</span><br><span class="line">  components: &#123; App &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="App-vue"><a href="#App-vue" class="headerlink" title="App.vue"></a>App.vue</h3><ul>
+<li><p>根组件，可以看到 <strong>.vue</strong>文件包含3个部分：<strong>template、script、style</strong>，分别对应<strong>html、JavaScript、css</strong>文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div id&#x3D;&quot;app&quot;&gt;</span><br><span class="line">    &lt;img src&#x3D;&quot;.&#x2F;assets&#x2F;logo.png&quot;&gt;</span><br><span class="line">    &lt;router-view&#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  name: &#39;app&#39;</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">#app &#123;...&#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>&lt;router-view&gt;</code>是路由子视图，类似于一个插槽</p>
+</li>
+</ul>
+<h3 id="router-index-js"><a href="#router-index-js" class="headerlink" title="router/index.js"></a>router/index.js</h3><ul>
+<li><p>路由文件，如果访问跟路径<code>/</code>，那么将<strong>HelloWorld</strong>组件插入到<code>&lt;router-view&gt;</code>中并渲染出来</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import Vue from &#39;vue&#39;</span><br><span class="line">import Router from &#39;vue-router&#39;</span><br><span class="line">import HelloWorld from &#39;@&#x2F;components&#x2F;HelloWorld&#39;</span><br><span class="line"></span><br><span class="line">Vue.use(Router)</span><br><span class="line"></span><br><span class="line">export default new Router(&#123;</span><br><span class="line">  routes: [</span><br><span class="line">    &#123;</span><br><span class="line">      path: &#39;&#x2F;&#39;,</span><br><span class="line">      name: &#39;HelloWorld&#39;,</span><br><span class="line">      component: HelloWorld</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><ul>
+<li><p>可以看到我在浏览器控制台输入app，看到的是<strong>id=app</strong>的DOM元素，也就是<strong>App.vue</strong>中插入了<strong>HelloWorld.vue</strong>的模版文件</p>
+<p>  <img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/4.png" alt="Screen-Shot-2017-12-16-at-5.45.45-PM"></p>
+</li>
+</ul>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="http://www.jianshu.com/p/7006a663fb9f" target="_blank" rel="noopener">vue-cli入门——项目结构</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/13/Vue%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2767,265 +3014,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/07/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E5%85%A8%E8%AE%BE%E7%BD%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/11/07/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E5%85%A8%E8%AE%BE%E7%BD%AE/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/6/index.html">服务器安全设置</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-11-07 09:22:17" itemprop="dateCreated datePublished" datetime="2017-11-07T09:22:17+08:00">2017-11-07</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/07/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E5%85%A8%E8%AE%BE%E7%BD%AE/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/07/服务器安全设置/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">1.6k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>在上个月月底的时候，阿里云通知我服务器在美国被异地登陆了，今天有时间整理了一些关于服务器安全的设置。</p>
-</blockquote>
-<h2 id="Locate-the-Matter"><a href="#Locate-the-Matter" class="headerlink" title="Locate the Matter"></a>Locate the Matter</h2><ul>
-<li><p>当时我正好在用服务器，感觉异常的卡，用<code>htop</code>监控程序查看发现cpu正在被两个一样的进程100%占用，Command是<code>/usr/sbin/ApacheX</code>，去目录下找了下，没有该脚本，网上搜了也没该进程的信息。现在看来应该是黑客伪造的</p>
-</li>
-<li><p>查看日志，<code>vi /var/log/auth.log</code>，发现下面几行<br><img src="/2017/11/07/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E5%85%A8%E8%AE%BE%E7%BD%AE/0.png" alt="-----2017-10-31---11.24.57-1"></p>
-</li>
-<li><p>很奇怪，我平时都是用ssh连接服务器的，正常应该是这样的<br><img src="/2017/11/07/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E5%85%A8%E8%AE%BE%E7%BD%AE/1.png" alt="-----2017-11-08---11.12.08"></p>
-</li>
-<li><p>居然被人用密码登录了，一查IP，果然是美国的。当初测试切换用户时嫌麻烦修改了密码，直接用的root，被人试出来了。</p>
-</li>
-</ul>
-<h2 id="Solve"><a href="#Solve" class="headerlink" title="Solve"></a>Solve</h2><ul>
-<li><p>执行<code>passwd</code>修改密码，不加参数默认当前用户，加参数指定用户</p>
-</li>
-<li><p>修改ssh配置文件<strong>sshd_config</strong>，友情提示修改配置时开启多个窗口，以免登不上去还能用别的窗口修改回来</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;ssh&#x2F;sshd_config</span><br></pre></td></tr></table></figure>
-<p>  <a href="http://blog.csdn.net/chenvast/article/details/72621086" target="_blank" rel="noopener">SSHD配置文件详解</a></p>
-</li>
-<li><p>修改ssh端口，为防止黑客暴力破解22端口</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Port xxx</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ol>
-<li>现在你需要使用<code>ssh {user}@{IP} -p {port}</code>来登录你的服务器。如果觉得麻烦，可以<code>!ssh</code>执行上一次的ssh命令，或者<code>history | grep ssh</code>粘贴命令。</li>
-<li>传输文件时使用<code>scp -P {port}</code>来指定端口。<strong>scp</strong>(secure copy)通过ssh端口就行加密传输。</li>
-<li><strong>ssh_config</strong>是针对客户端的配置文件，<strong>sshd_config</strong>是针对服务器端的配置文件，服务器后台运行的也是<strong>sshd</strong>守护进程(Daemon)。</li>
-</ol>
-<ul>
-<li><p>启用ssh密钥认证，指定密钥存放路径</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RSAAuthentication    yes</span><br><span class="line">PubkeyAuthentication    yes</span><br><span class="line">AuthorizedKeysFile    &#x2F;root&#x2F;.ssh&#x2F;authorized_keys &#x2F;home&#x2F;s1mple&#x2F;.ssh&#x2F;authorized_keys</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>禁用密码登录，只允许ssh登录</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PasswordAuthentication no</span><br><span class="line">UseLogin no</span><br><span class="line">PermitRootLogin yes</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>另外，阿里云的服务器在你终端一段时间没有指令输入会断开，可以这样避免</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClientAliveInterval  30</span><br></pre></td></tr></table></figure>
-<p>  每30s发送一个心跳包</p>
-</li>
-<li><p>修改完成后<code>service sshd restart</code>使配置生效</p>
-</li>
-</ul>
-<h2 id="About-SSH"><a href="#About-SSH" class="headerlink" title="About SSH"></a>About SSH</h2><blockquote>
-<p><strong>SSH</strong>(Secure Shell)协议，专为远程登录会话提供安全性的协议，传输的数据都进行了加密。SSH提供两种级别的安全验证，第一种是<strong>基于口令</strong>的安全验证。第二种是<strong>基于密匙</strong>的安全验证，较之第一种不需要传输口令，但速度稍慢一些。</p>
-</blockquote>
-<h4 id="基于密钥的安全验证"><a href="#基于密钥的安全验证" class="headerlink" title="基于密钥的安全验证"></a>基于密钥的安全验证</h4><blockquote>
-<p>客户端创建<strong>一对密钥</strong>，公钥存放在服务器上，当你想通过ssh远程连接服务器时进行<strong>公钥比对</strong>。如果一致，服务器就用公用密匙加密“质询”(challenge)并把它发送给客户端。客户端收到“质询”之后就可以用你的<strong>私钥解密</strong>再把它发送给服务器。<br>这个配对密钥类似<strong>Https</strong>协议中的对称密钥。是基于<a href="https://zh.wikipedia.org/wiki/RSA%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">RSA算法</a>的。</p>
-</blockquote>
-<ul>
-<li><p>在本地执行<code>ssh-keygen</code>生成配对密钥，在你的<code>~/.ssh</code>目录下会生成两个文件，<code>id_rsa</code>私钥，<code>id_rsa.pub</code>公钥。</p>
-</li>
-<li><p>将公钥拷贝到服务器的<code>~/.ssh/authorized_keys</code>文件中</p>
-</li>
-<li><p>给<code>authorized_keys</code>增加不可修改、删除的权限</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chattr +i authorized_keys</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3077,7 +3065,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">65</span>
+                    <span class="site-state-item-count">66</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

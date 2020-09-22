@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://s1mplecc.github.io/"/>
-  <updated>2020-09-18T01:51:00.018Z</updated>
+  <updated>2020-09-22T13:18:24.876Z</updated>
   <id>https://s1mplecc.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>什么是P, NP, NPC以及NP-Hard问题？</title>
+    <link href="https://s1mplecc.github.io/2020/09/22/%E4%BB%80%E4%B9%88%E6%98%AFP-NP-NPC%E4%BB%A5%E5%8F%8ANP-Hard%E9%97%AE%E9%A2%98%EF%BC%9F/"/>
+    <id>https://s1mplecc.github.io/2020/09/22/什么是P-NP-NPC以及NP-Hard问题？/</id>
+    <published>2020-09-22T13:17:07.000Z</published>
+    <updated>2020-09-22T13:18:24.876Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Concepts" scheme="https://s1mplecc.github.io/categories/Concepts/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>基于DPDK的模拟(D)Dos攻击实验</title>
@@ -505,32 +529,6 @@
     <link href="https://s1mplecc.github.io/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/"/>
     <id>https://s1mplecc.github.io/2018/09/27/Trunk Based Development 主干开发模型/</id>
     <published>2018-09-26T18:35:29.000Z</published>
-    <updated>2020-01-03T11:24:53.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-      <category term="Concepts" scheme="https://s1mplecc.github.io/categories/Concepts/"/>
-    
-    
-      <category term="Git" scheme="https://s1mplecc.github.io/tags/Git/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Git 进阶教程</title>
-    <link href="https://s1mplecc.github.io/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/"/>
-    <id>https://s1mplecc.github.io/2018/09/18/Git 进阶教程/</id>
-    <published>2018-09-17T18:02:04.000Z</published>
     <updated>2020-01-03T11:24:53.000Z</updated>
     
     <summary type="html">
