@@ -112,15 +112,15 @@
 
 
 
-  <meta name="description" content="Npm Npm(or Node Package Manager)，Node 依赖包管理器，官方或权威机构提供了一个公共的软件源（类似 Homebrew、yum），可方便我们下载并管理 JavaScript 依赖   安装了 Node 就包含了 Npm 的安装  安装依赖，-g参数表示全局安装，不带参数则安装在当前目录   12npm install lodashnpm install -g vue">
+  <meta name="description" content="npm npm(node依赖包管理器，node package manager)，官方或权威机构提供了一个公共的软件源（类似 Homebrew、yum），可方便我们下载并管理 JavaScript 依赖  安装了 node 就包含了 npm 的安装 安装依赖，-g参数表示全局安装，不带参数则安装在当前目录 12npm install lodashnpm install -g vue-cli 可查看">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Npm、Nrm &amp; Nvm">
-<meta property="og:url" content="https://s1mplecc.github.io/2017/12/27/Npm%E3%80%81Nrm%20&%20Nvm/index.html">
+<meta property="og:title" content="npm、nrm、nvm的使用以及Mac下如何管理Node版本">
+<meta property="og:url" content="https://s1mplecc.github.io/2017/12/27/npm%E3%80%81nrm%E3%80%81nvm%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8AMac%E4%B8%8B%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86Node%E7%89%88%E6%9C%AC/index.html">
 <meta property="og:site_name" content="s1mple的博客">
-<meta property="og:description" content="Npm Npm(or Node Package Manager)，Node 依赖包管理器，官方或权威机构提供了一个公共的软件源（类似 Homebrew、yum），可方便我们下载并管理 JavaScript 依赖   安装了 Node 就包含了 Npm 的安装  安装依赖，-g参数表示全局安装，不带参数则安装在当前目录   12npm install lodashnpm install -g vue">
+<meta property="og:description" content="npm npm(node依赖包管理器，node package manager)，官方或权威机构提供了一个公共的软件源（类似 Homebrew、yum），可方便我们下载并管理 JavaScript 依赖  安装了 node 就包含了 npm 的安装 安装依赖，-g参数表示全局安装，不带参数则安装在当前目录 12npm install lodashnpm install -g vue-cli 可查看">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2017-12-26T19:01:29.000Z">
-<meta property="article:modified_time" content="2020-09-16T01:48:41.888Z">
+<meta property="article:modified_time" content="2020-09-23T02:43:34.922Z">
 <meta property="article:author" content="s1mple">
 <meta property="article:tag" content="JavaScript">
 <meta property="article:tag" content="Node.js">
@@ -135,7 +135,7 @@
 
 
 
-  <link rel="canonical" href="https://s1mplecc.github.io/2017/12/27/Npm、Nrm & Nvm/"/>
+  <link rel="canonical" href="https://s1mplecc.github.io/2017/12/27/npm、nrm、nvm的使用以及Mac下如何管理Node版本/"/>
 
 
 
@@ -145,7 +145,7 @@
   };
 </script>
 
-  <title>Npm、Nrm & Nvm | s1mple的博客</title>
+  <title>npm、nrm、nvm的使用以及Mac下如何管理Node版本 | s1mple的博客</title>
   
 
 
@@ -375,7 +375,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/27/Npm%E3%80%81Nrm%20&%20Nvm/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/27/npm%E3%80%81nrm%E3%80%81nvm%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8AMac%E4%B8%8B%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86Node%E7%89%88%E6%9C%AC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -392,7 +392,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Npm、Nrm & Nvm
+          <h1 class="post-title" itemprop="name headline">npm、nrm、nvm的使用以及Mac下如何管理Node版本
               
             
           </h1>
@@ -434,7 +434,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
+                <time title="修改时间：2020-09-23 10:43:34" itemprop="dateModified" datetime="2020-09-23T10:43:34+08:00">2020-09-23</time>
               
             
           </span>
@@ -466,10 +466,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/27/Npm%E3%80%81Nrm%20&%20Nvm/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/27/npm%E3%80%81nrm%E3%80%81nvm%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8AMac%E4%B8%8B%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86Node%E7%89%88%E6%9C%AC/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/12/27/Npm、Nrm & Nvm/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/12/27/npm、nrm、nvm的使用以及Mac下如何管理Node版本/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -499,7 +499,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.3k</span>
+                <span title="本文字数">4.3k</span>
               
 
               
@@ -523,86 +523,66 @@
       
 
       
-        <h2 id="Npm"><a href="#Npm" class="headerlink" title="Npm"></a>Npm</h2><blockquote>
-<p><strong>Npm</strong>(or <strong>Node Package Manager</strong>)，<strong>Node</strong> 依赖包管理器，官方或权威机构提供了一个公共的软件源（类似 <strong>Homebrew、yum</strong>），可方便我们下载并管理 <strong>JavaScript</strong> 依赖</p>
+        <h2 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h2><blockquote>
+<p>npm(node依赖包管理器，node package manager)，官方或权威机构提供了一个公共的软件源（类似 Homebrew、yum），可方便我们下载并管理 JavaScript 依赖</p>
 </blockquote>
-<ul>
-<li><p>安装了 <strong>Node</strong> 就包含了 <strong>Npm</strong> 的安装</p>
-</li>
-<li><p>安装依赖，<code>-g</code>参数表示全局安装，不带参数则安装在当前目录</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install lodash</span><br><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可查看已安装的全局依赖（默认安装到<code>/usr/local/lib/node_modules</code>目录下），<code>--depth</code>显示的树深度，不加<code>-g</code>参数查看当前目录安装的依赖</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ npm ls -g --depth&#x3D;0</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;lib</span><br><span class="line">├── npm@5.6.0</span><br><span class="line">├── nrm@1.0.2</span><br><span class="line">└── vue-cli@2.9.2</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>卸载依赖</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm rm lodash</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>搜索某个依赖，以及显示某个依赖的具体信息，另外经测试，只有官方的源可以<code>search</code>，其他源未做相应支持</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm search lodash</span><br><span class="line">npm [view|show|info] lodash</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>npm config ls</code>查看配置信息，<code>-l</code>参数查看详细配置</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">➜ npm config ls</span><br><span class="line">; cli configs</span><br><span class="line">metrics-registry &#x3D; &quot;https:&#x2F;&#x2F;registry.npmjs.org&#x2F;&quot;</span><br><span class="line">scope &#x3D; &quot;&quot;</span><br><span class="line">user-agent &#x3D; &quot;npm&#x2F;5.6.0 node&#x2F;v9.3.0 darwin x64&quot;</span><br><span class="line"></span><br><span class="line">; userconfig &#x2F;Users&#x2F;s1mple&#x2F;.npmrc</span><br><span class="line">registry &#x3D; &quot;https:&#x2F;&#x2F;registry.npmjs.org&#x2F;&quot;</span><br><span class="line"></span><br><span class="line">; builtin config undefined</span><br><span class="line">prefix &#x3D; &quot;&#x2F;usr&#x2F;local&quot;</span><br><span class="line"></span><br><span class="line">; node bin location &#x3D; &#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;node&#x2F;9.3.0_1&#x2F;bin&#x2F;node</span><br><span class="line">; cwd &#x3D; &#x2F;Users&#x2F;s1mple&#x2F;WebstormProjects&#x2F;vue&#x2F;table</span><br><span class="line">; HOME &#x3D; &#x2F;Users&#x2F;s1mple</span><br><span class="line">; &quot;npm config ls -l&quot; to show all defaults.</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>默认软件源为国外的官方软件源，速度较慢，可修改为国内软件源，比如淘宝</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry https:&#x2F;&#x2F;registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>Npm</strong> 还可以登录，需要先在官网注册一个账号，然后<code>npm login</code>登录，就可以将自己写的依赖<code>publish</code>上去，有点类似于 <strong>Docker</strong> 的个人仓库，网站地址为<code>https://www.npmjs.com/~{username}</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;www.npmjs.com&#x2F;~s1mple</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>另外，还有一些命令简写，比如<code>i</code>代替<code>install</code>，<code>rm</code>代替<code>uninstall</code>，执行<code>npm -l</code>查看那些命令下面有哪些 <strong>alias</strong></p>
-</li>
-</ul>
-<hr>
-<h2 id="Nrm"><a href="#Nrm" class="headerlink" title="Nrm"></a>Nrm</h2><blockquote>
-<p><strong>Nrm</strong>(or <strong>Npm Registry Manager</strong>)，<strong>Npm</strong> 注册处管理器，方便我们切换软件源</p>
+<p>安装了 node 就包含了 npm 的安装</p>
+<p>安装依赖，<code>-g</code>参数表示全局安装，不带参数则安装在当前目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install lodash</span><br><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
+<p>可查看已安装的全局依赖（默认安装到 <code>/usr/local/lib/node_modules</code> 目录下），<code>--depth</code>显示的树深度，不加<code>-g</code>参数查看当前目录安装的依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ npm ls -g --depth&#x3D;0</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;lib</span><br><span class="line">├── npm@5.6.0</span><br><span class="line">├── nrm@1.0.2</span><br><span class="line">└── vue-cli@2.9.2</span><br></pre></td></tr></table></figure>
+<p>卸载依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm uninstall lodash</span><br></pre></td></tr></table></figure>
+<p>搜索某个依赖，以及显示某个依赖的具体信息，经测试，只有官方的源可以<code>search</code>，其他源未做相应支持</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm search lodash</span><br><span class="line">npm [view|show|info] lodash</span><br></pre></td></tr></table></figure>
+<p><code>npm config ls</code>查看配置信息，<code>-l</code>参数查看详细配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">➜ npm config ls</span><br><span class="line">; cli configs</span><br><span class="line">metrics-registry &#x3D; &quot;https:&#x2F;&#x2F;registry.npmjs.org&#x2F;&quot;</span><br><span class="line">scope &#x3D; &quot;&quot;</span><br><span class="line">user-agent &#x3D; &quot;npm&#x2F;5.6.0 node&#x2F;v9.3.0 darwin x64&quot;</span><br><span class="line"></span><br><span class="line">; userconfig &#x2F;Users&#x2F;s1mple&#x2F;.npmrc</span><br><span class="line">registry &#x3D; &quot;https:&#x2F;&#x2F;registry.npmjs.org&#x2F;&quot;</span><br><span class="line"></span><br><span class="line">; builtin config undefined</span><br><span class="line">prefix &#x3D; &quot;&#x2F;usr&#x2F;local&quot;</span><br><span class="line"></span><br><span class="line">; node bin location &#x3D; &#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;node&#x2F;9.3.0_1&#x2F;bin&#x2F;node</span><br><span class="line">; cwd &#x3D; &#x2F;Users&#x2F;s1mple&#x2F;WebstormProjects&#x2F;vue&#x2F;table</span><br><span class="line">; HOME &#x3D; &#x2F;Users&#x2F;s1mple</span><br><span class="line">; &quot;npm config ls -l&quot; to show all defaults.</span><br></pre></td></tr></table></figure>
+<p>默认软件源为国外的官方软件源，速度较慢，可修改为国内软件源，比如淘宝</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry https:&#x2F;&#x2F;registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+<p>npm 还可以登录，需要先在官网注册一个账号，然后 <code>npm login</code> 登录，就可以将自己写的模块 <code>publish</code> 上去，有点类似于 Docker 的个人仓库，网站地址为 <code>https://www.npmjs.com/~{username}</code>。另外，还有一些命令简写，比如<code>i</code>代替 <code>install</code>，<code>rm</code> 代替 <code>uninstall</code>，执行 <code>npm -l</code> 查看那些命令下面有哪些 alias</p>
+<h2 id="nrm"><a href="#nrm" class="headerlink" title="nrm"></a>nrm</h2><blockquote>
+<p>nrm(npm注册处管理器，npm registry manager)，方便我们切换软件源</p>
 </blockquote>
-<ul>
-<li><p>全局安装 <strong>nrm</strong></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i -g nrm</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>nrm</strong> 内置了一些软件源，带<code>*</code>星号的表示当前使用的软件源，当然也可以使用<code>nrm current</code>查看</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">➜ nrm ls</span><br><span class="line"></span><br><span class="line">* npm ---- https:&#x2F;&#x2F;registry.npmjs.org&#x2F;</span><br><span class="line">  cnpm --- http:&#x2F;&#x2F;r.cnpmjs.org&#x2F;</span><br><span class="line">  taobao - https:&#x2F;&#x2F;registry.npm.taobao.org&#x2F;</span><br><span class="line">  nj ----- https:&#x2F;&#x2F;registry.nodejitsu.com&#x2F;</span><br><span class="line">  rednpm - http:&#x2F;&#x2F;registry.mirror.cqupt.edu.cn&#x2F;</span><br><span class="line">  npmMirror  https:&#x2F;&#x2F;skimdb.npmjs.com&#x2F;registry&#x2F;</span><br><span class="line">  edunpm - http:&#x2F;&#x2F;registry.enpmjs.org&#x2F;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>切换软件源，比如换成 <strong>taobao</strong> 的</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ nrm use taobao</span><br><span class="line"></span><br><span class="line">    Registry has been set to: https:&#x2F;&#x2F;registry.npm.taobao.org&#x2F;</span><br></pre></td></tr></table></figure>
-<p>  其实就是修改了<code>~/.npmrc</code>中的<code>registry=...</code></p>
-</li>
-<li><p>可以执行<code>nrm test</code>测试网络延迟</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ nrm test npm</span><br><span class="line"></span><br><span class="line">* npm ---- 2608ms</span><br><span class="line"></span><br><span class="line">➜  ~ nrm test taobao</span><br><span class="line"></span><br><span class="line">  taobao - 246ms</span><br><span class="line"></span><br><span class="line">➜  ~ nrm test cnpm</span><br><span class="line"></span><br><span class="line">  cnpm --- 256ms</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>npm home taobao</code>打开对应源的官方网站</p>
-</li>
-</ul>
-<hr>
-<h2 id="Nvm"><a href="#Nvm" class="headerlink" title="Nvm"></a>Nvm</h2><blockquote>
-<p><strong>Nvm</strong>(or <strong>Node Version Manager</strong>)，Github 上一位大神写的<strong>Node</strong> 版本管理器，可以安装、管理不同版本 <strong>Node</strong> 并进行切换</p>
+<p>全局安装 nrm</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i -g nrm</span><br></pre></td></tr></table></figure>
+<p>nrm 内置了一些软件源，带<code>*</code>星号的表示当前使用的软件源，也可以使用 <code>nrm current</code> 查看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">➜ nrm ls</span><br><span class="line"></span><br><span class="line">* npm ---https:&#x2F;&#x2F;registry.npmjs.org&#x2F;</span><br><span class="line">  cnpm --http:&#x2F;&#x2F;r.cnpmjs.org&#x2F;</span><br><span class="line">  taobao https:&#x2F;&#x2F;registry.npm.taobao.org&#x2F;</span><br><span class="line">  nj ----https:&#x2F;&#x2F;registry.nodejitsu.com&#x2F;</span><br><span class="line">  rednpm http:&#x2F;&#x2F;registry.mirror.cqupt.edu.cn&#x2F;</span><br><span class="line">  npmMirror  https:&#x2F;&#x2F;skimdb.npmjs.com&#x2F;registry&#x2F;</span><br><span class="line">  edunpm http:&#x2F;&#x2F;registry.enpmjs.org&#x2F;</span><br></pre></td></tr></table></figure>
+<p>切换软件源，比如换成淘宝的，相当于手动修改了<code>~/.npmrc</code>中的<code>registry</code>配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ nrm use taobao</span><br><span class="line"></span><br><span class="line">    Registry has been set to: https:&#x2F;&#x2F;registry.npm.taobao.org&#x2F;</span><br></pre></td></tr></table></figure>
+<p>可以执行<code>nrm test</code>测试网络延迟</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ nrm test npm</span><br><span class="line"></span><br><span class="line">* npm ---2608ms</span><br><span class="line"></span><br><span class="line">➜  ~ nrm test taobao</span><br><span class="line"></span><br><span class="line">  taobao 246ms</span><br><span class="line"></span><br><span class="line">➜  ~ nrm test cnpm</span><br><span class="line"></span><br><span class="line">  cnpm --256ms</span><br></pre></td></tr></table></figure>
+<p><code>npm home taobao</code>打开对应源的官方网站</p>
+<h2 id="nvm"><a href="#nvm" class="headerlink" title="nvm"></a>nvm</h2><blockquote>
+<p>nvm(node版本管理器，node version manager)，可以安装、管理不同版本 node 并进行切换</p>
 </blockquote>
-<ul>
-<li><p>安装，完成后重启终端</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -o- https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;creationix&#x2F;nvm&#x2F;v0.33.8&#x2F;install.sh | bash</span><br></pre></td></tr></table></figure>
-<p>  这个脚本克隆了 <strong>nvm repository</strong> 到<code>~/.nvm</code>并在<code>~/.bash_profile, ~/.zshrc, ~/.profile, ~/.bashrc</code>中加入环境变量</p>
-</li>
-<li><p>安装最新的 <strong>Node</strong></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm install node</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">Now using node v9.3.0 (npm v5.5.1)</span><br><span class="line">Creating default alias: default -&gt; node (-&gt; v9.3.0)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>或安装指定版本，执行<code>nvm ls-remote</code>可列出所有可以安装的版本</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm install 8.9.3</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查看已安装 <strong>Node</strong> 版本</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm ls</span><br><span class="line">-&gt;       v8.9.3</span><br><span class="line">         v9.3.0</span><br><span class="line">         system</span><br><span class="line">default -&gt; node (-&gt; v9.3.0)</span><br><span class="line">node -&gt; stable (-&gt; v9.3.0) (default)</span><br><span class="line">stable -&gt; 9.3 (-&gt; v9.3.0) (default)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>箭头指向当前使用的版本，切换版本</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm use 9.3.0</span><br><span class="line">Now using node v9.3.0 (npm v5.5.1)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>还可以指定默认的Node版本</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm alias default 8.9.3</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<p>安装，完成后重启终端</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -ohttps:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;creationix&#x2F;nvm&#x2F;v0.33.8&#x2F;install.sh | bash</span><br></pre></td></tr></table></figure>
+<p>这个脚本克隆了 nvm repository 到<code>~/.nvm</code>并在<code>~/.bash_profile, ~/.zshrc, ~/.profile, ~/.bashrc</code>中加入环境变量</p>
+<p>安装最新的 node</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm install node</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">Now using node v9.3.0 (npm v5.5.1)</span><br><span class="line">Creating default alias: default -&gt; node (-&gt; v9.3.0)</span><br></pre></td></tr></table></figure>
+<p>或安装指定版本，执行<code>nvm ls-remote</code>可列出所有可以安装的版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm install 8.9.3</span><br></pre></td></tr></table></figure>
+<p>查看已安装 node 版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm ls</span><br><span class="line">-&gt;       v8.9.3</span><br><span class="line">         v9.3.0</span><br><span class="line">         system</span><br><span class="line">default -&gt; node (-&gt; v9.3.0)</span><br><span class="line">node -&gt; stable (-&gt; v9.3.0) (default)</span><br><span class="line">stable -&gt; 9.3 (-&gt; v9.3.0) (default)</span><br></pre></td></tr></table></figure>
+<p>箭头指向当前使用的版本，切换版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm use 9.3.0</span><br><span class="line">Now using node v9.3.0 (npm v5.5.1)</span><br></pre></td></tr></table></figure>
+<p>还可以指定默认的node版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm alias default 8.9.3</span><br></pre></td></tr></table></figure>
+<h2 id="Mac管理Node版本"><a href="#Mac管理Node版本" class="headerlink" title="Mac管理Node版本"></a>Mac管理Node版本</h2><p>最近有尝试将 Hexo 博客包括 Next 主题进行升级，也是遇到了很多坑，版本进行一点点的改动，都可能导致整个博客网站 run 不起来，无奈之下只能封存了现有的版本，劝自己不要手贱去更新。如果以后有更新的强迫意愿，只能考虑在全新环境下进行博客内容的迁移。</p>
+<p>其中我遇到的一个比较头疼的问题就是 node 的版本问题。Hexo 在 node 版本为8或者14时均不能正常运行，<code>hexo s</code> 以及发布命令 <code>hexo g -d</code> 都跑不起来，只有在 node 版本为10时才可以正常运行。</p>
+<p>我之前使用过 <code>brew install node</code> 安装了最新的版本14，虽然可以用nvm去管理 node 版本，但由于要想使用 nvm，必须先执行 <code>[ -s &quot;$NVM_DIR/nvm.sh&quot; ] &amp;&amp; \. &quot;$NVM_DIR/nvm.sh&quot;</code> 和 <code>[ -s &quot;$NVM_DIR/bash_completion&quot; ] &amp;&amp; \. &quot;$NVM_DIR/bash_completion&quot;</code> 这两条命令（配在了我的 <code>~/.zshrc</code> 中），极大影响了终端的打开速度，每打开一个终端都要跑一遍 <code>.zshrc</code>，效率难以忍受。再者平时切换 node 版本的频率要远低于执行 Hexo 命令的频率。所以我决定还是回到用Mac的 <code>brew</code> 工具去管理 node 版本。</p>
+<p>查看可用版本，并安装需要版本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ brew search node</span><br><span class="line">➜ brew install node@10</span><br></pre></td></tr></table></figure></p>
+<p>现在是有两个版本的，node为原先安装的14版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ brew list | grep node</span><br><span class="line">node</span><br><span class="line">node@10</span><br></pre></td></tr></table></figure>
+<p>解绑原先的 node@14，绑定到 node@10，由于 node 自带 npm，需要先删除原有的 npm 依赖，否则会有冲突</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ brew unlink node</span><br><span class="line">➜ rm -rf &#x2F;usr&#x2F;local&#x2F;lib&#x2F;node_modules&#x2F;npm</span><br><span class="line">➜ brew link node@10 --force</span><br></pre></td></tr></table></figure>
+<p>查看是否绑定成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜ which node</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;bin&#x2F;node</span><br><span class="line">➜ node -v</span><br><span class="line">v10.22.1</span><br></pre></td></tr></table></figure>
+<p>现在 node 版本就切换到10了，新打开的终端中的 node 版本也为10。如果还想切换回 node@14，有两种方法：一是使用 nvm 进行切换，但这样新打开终端 node 版本还是14，适用于短暂的更换 node 版本；第二种办法是使用 <code>brew unlink</code> 解绑再绑定 node@14，这种适用于主环境需要14版本的情况。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://docs.npmjs.com/" target="_blank" rel="noopener">npm 官方文档</a></li>
 <li><a href="https://github.com/creationix/nvm/blob/master/README.md" target="_blank" rel="noopener">nvm Github官方手册</a></li>
+<li><a href="https://mrxf.github.io/2017/04/18/osx-using-the-brew-to-manage-multiple-node-version/" target="_blank" rel="noopener">OS X中使用brew管理多个node版本</a></li>
 </ul>
 
       
@@ -917,7 +897,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Npm"><span class="nav-number">1.</span> <span class="nav-text">Npm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nrm"><span class="nav-number">2.</span> <span class="nav-text">Nrm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nvm"><span class="nav-number">3.</span> <span class="nav-text">Nvm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">4.</span> <span class="nav-text">References</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#npm"><span class="nav-number">1.</span> <span class="nav-text">npm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nrm"><span class="nav-number">2.</span> <span class="nav-text">nrm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nvm"><span class="nav-number">3.</span> <span class="nav-text">nvm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mac管理Node版本"><span class="nav-number">4.</span> <span class="nav-text">Mac管理Node版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
@@ -1103,9 +1083,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2017/12/27/Npm%E3%80%81Nrm%20&%20Nvm/';
-        this.page.identifier = '2017/12/27/Npm、Nrm & Nvm/';
-        this.page.title = 'Npm、Nrm & Nvm';
+        this.page.url = 'https://s1mplecc.github.io/2017/12/27/npm%E3%80%81nrm%E3%80%81nvm%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8AMac%E4%B8%8B%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86Node%E7%89%88%E6%9C%AC/';
+        this.page.identifier = '2017/12/27/npm、nrm、nvm的使用以及Mac下如何管理Node版本/';
+        this.page.title = 'npm、nrm、nvm的使用以及Mac下如何管理Node版本';
         };
       function loadComments () {
         var d = document, s = d.createElement('script');
