@@ -434,7 +434,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -530,12 +530,12 @@
 </ul>
 <h2 id="Merge"><a href="#Merge" class="headerlink" title="Merge"></a>Merge</h2><p><code>git merge</code> 命令把不同分支合并起来。合并前，索引必须和当前提交相同。<strong><code>git merge other</code> 用于将 other 分支上的提交合并到当前分支</strong>。</p>
 <p>如果另一个分支是当前提交的祖父节点，那么合并命令将什么也不做。另一种情况是如果当前提交是另一个分支的祖父节点，就导致 <strong>fast-forward</strong> 合并，HEAD 指针只是简单的移动。<br><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/1.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652d66662e737667"></p>
-<p>否则就是一次真正的合并。默认把当前提交（<em>ed489</em> 如下所示）和另一个提交（<em>33104</em>）以及他们的共同祖父节点（<em>b325c</em>）进行一次<a href="https://en.wikipedia.org/wiki/Merge_(version_control" target="_blank" rel="noopener">三方合并</a>#Three-way_merge)。结果是先保存当前目录和索引，然后和父节点 <em>33104</em> 一起做一次<strong>新提交</strong>。<br><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/2.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652e737667"></p>
+<p>否则就是一次真正的合并。默认把当前提交（_ed489_ 如下所示）和另一个提交（_33104_）以及他们的共同祖父节点（_b325c_）进行一次<a href="https://en.wikipedia.org/wiki/Merge_(version_control" target="_blank" rel="noopener">三方合并</a>#Three-way_merge)。结果是先保存当前目录和索引，然后和父节点 _33104_ 一起做一次<strong>新提交</strong>。<br><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/2.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652e737667"></p>
 <h2 id="Cherry-Pick"><a href="#Cherry-Pick" class="headerlink" title="Cherry Pick"></a>Cherry Pick</h2><p><code>git cherry-pick</code> 命令「复制」一个提交节点并在当前分支做一次完全一样的新提交。</p>
 <p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/3.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6368657272792d7069636b2e737667"></p>
 <h2 id="Rebase"><a href="#Rebase" class="headerlink" title="Rebase"></a>Rebase</h2><p><code>git rebase</code> 是合并命令的另一种选择。merge 把两个分支合并进行一次新提交，提交历史不是线性的。rebase 在当前分支上重演另一个分支的历史，<strong>提交历史是线性的</strong>。</p>
 <p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/4.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f7265626173652e737667"></p>
-<p>上面的命令都在 <em>topic</em> 分支中进行，执行 <code>git rebase master</code> 意味着将 <em>topic</em> 分支基于  <em>master</em> 分支进行重演，在 <em>da985</em> 后附加对应于 <em>169a6</em> 和 <em>2c33a</em> 的两次新提交，所以提交历史是线性的。</p>
+<p>上面的命令都在 _topic_ 分支中进行，执行 <code>git rebase master</code> 意味着将 _topic_ 分支基于  _master_ 分支进行重演，在 _da985_ 后附加对应于 _169a6_ 和 _2c33a_ 的两次新提交，所以提交历史是线性的。</p>
 <h3 id="Difference-between-rebase-amp-merge"><a href="#Difference-between-rebase-amp-merge" class="headerlink" title="Difference between rebase &amp; merge"></a>Difference between rebase &amp; merge</h3><ul>
 <li><p><code>git rebase master</code></p>
   <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">      A---B topic</span><br><span class="line">     /</span><br><span class="line">D---E---F---G master</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">              A<span class="string">'--B'</span> topic</span><br><span class="line">             /</span><br><span class="line">D---E---F---G master</span><br></pre></td></tr></table></figure>
@@ -545,7 +545,7 @@
 </li>
 </ul>
 <blockquote>
-<p>rebase 最大的好处是你的项目历史会非常整洁的线性，它不像 merge 那样引入不必要的合并提交。但同时，rebase 也会带来两个后果：安全性和可跟踪性。使用时要遵守 <strong>rebase 的黄金法则：绝不要在公共的分支上使用它</strong>。可跟踪性是指 rebase 不会有合并提交中附带的信息，你看不到 <em>topic</em> 分支中并入了 <em>master</em> 的哪些更改。</p>
+<p>rebase 最大的好处是你的项目历史会非常整洁的线性，它不像 merge 那样引入不必要的合并提交。但同时，rebase 也会带来两个后果：安全性和可跟踪性。使用时要遵守 <strong>rebase 的黄金法则：绝不要在公共的分支上使用它</strong>。可跟踪性是指 rebase 不会有合并提交中附带的信息，你看不到 _topic_ 分支中并入了 _master_ 的哪些更改。</p>
 </blockquote>
 <h2 id="Reset"><a href="#Reset" class="headerlink" title="Reset"></a>Reset</h2><p><code>git reset</code> 命令把当前分支指向另一个位置，并且有选择的变动工作目录和索引。如果<strong>你的更改还没有共享给别人</strong>，reset 是撤销这些更改的简单方法。当你开发一个功能的时候发现「糟糕，我做了什么？我应该重新来过！」时，reset 就像是 <code>go-to</code> 命令一样。</p>
 <p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/5.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f72657365742d636f6d6d69742e737667"></p>
@@ -560,13 +560,13 @@
 <p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/6.svg" alt="06"></p>
 <p>相比 <code>git reset</code>，它不会改变现在的提交历史。因此，<strong><code>git revert</code> 可以用在公共分支上，<code>git reset</code> 应该用在私有分支上</strong>。你也可以把 <code>git revert</code> 用作撤销已经 push 的更改，而 <code>git reset</code> 用来撤销已经 commit 但没有 push 的更改，或者 <code>git reset HEAD</code> 撤销没有 commit 的更改。</p>
 <h2 id="Checkout"><a href="#Checkout" class="headerlink" title="Checkout"></a>Checkout</h2><p><strong>checkout 命令用于从历史提交（或者暂存区域）中拷贝文件到工作目录，也可用于切换分支</strong>。</p>
-<p>当给出一个（本地）分支时，那么 <em>HEAD</em> 指针将指向那个分支，也就是说，我们「切换」到那个分支了。<strong>stage 缓存和工作目录中的内容会和 <em>HEAD</em> 对应的提交节点一致</strong>。</p>
+<p>当给出一个（本地）分支时，那么 _HEAD_ 指针将指向那个分支，也就是说，我们「切换」到那个分支了。<strong>stage 缓存和工作目录中的内容会和 _HEAD_ 对应的提交节点一致</strong>。</p>
 <p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/7.svg" alt="a"></p>
 <p>当指定的是一个标签、远程分支、SHA-1 值或者是像 master~3 类似的东西，就得到一个<strong>匿名分支</strong>，又称作 <strong>detached HEAD（被分离的 HEAD 标识）</strong>。这样可以很方便地在历史版本之间互相切换。比如说你想要编译 1.2.1 版本，你可以运行 <code>git checkout v1.2.1</code>（这是一个标签 tag<br>，而非分支名），编译，安装，然后切换回原先分支。</p>
 <p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/8.svg" alt="b"></p>
-<h4 id="Detached-HEAD"><a href="#Detached-HEAD" class="headerlink" title="Detached HEAD"></a>Detached HEAD</h4><p>当提交操作涉及到 detached HEAD 时，其行为会略有不同。<em>HEAD</em> 处于分离状态（不依附于任一分支）时，提交操作可以正常进行，但是不会更新任何已命名的分支。你可以认为这是在更新一个匿名分支。</p>
+<h4 id="Detached-HEAD"><a href="#Detached-HEAD" class="headerlink" title="Detached HEAD"></a>Detached HEAD</h4><p>当提交操作涉及到 detached HEAD 时，其行为会略有不同。_HEAD_ 处于分离状态（不依附于任一分支）时，提交操作可以正常进行，但是不会更新任何已命名的分支。你可以认为这是在更新一个匿名分支。</p>
 <p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/9.svg" alt="c"></p>
-<p>一旦此后你切换到别的分支，比如说 <em>master</em>，那么这个提交节点（可能）再也不会被引用到，将会被丢弃掉。</p>
+<p>一旦此后你切换到别的分支，比如说 _master_，那么这个提交节点（可能）再也不会被引用到，将会被丢弃掉。</p>
 <p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/10.svg" alt="d"></p>
 <p>但是，如果你想保存这个状态，可以用命令 <code>git checkout -b name</code> 来创建一个新的分支。</p>
 <p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/11.svg" alt="e"></p>
@@ -693,7 +693,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -948,7 +948,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -1210,7 +1210,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -1364,7 +1364,7 @@
 <p>当然，最终你的程序需要捕获异常，否则会意外终止。但这里的技巧是<strong>在合适的层面捕获异常</strong>，以便你的程序要么可以从异常中有意义地恢复并继续下去，而不导致更深入的错误；要么能够为用户提供明确的信息，引导他们修正错误。如果当前所在方法无法胜任，那么就不要处理异常，而将它抛出直至具备处理这个异常的能力的作用域来处理。</p>
 </blockquote>
 <h3 id="该抛出何种异常"><a href="#该抛出何种异常" class="headerlink" title="该抛出何种异常"></a>该抛出何种异常</h3><blockquote>
-<p>那么抛出异常时该抛出何种异常，是 Checked Exception 还是 Unchecked Exception ？我在网上查阅资料时发现不同的人对此有不同的观点，不管是开发人员还是项目的 Leader。有的认为该全部抛出 Unchecked Exception 类型的异常，并在某一层面做统一捕获处理，这样做的优点是保证了方法的纯粹性。另一种观点则不支持抛出<code>RuntimeException</code>。通过阅读《Thinking in Java》和<a href="https://www.ibm.com/developerworks/cn/java/j-jtp05254/" target="_blank" rel="noopener">关于异常的争论：要检查，还是不要检查？– IBM developerWorks</a>（这是一篇非常优质的文章）发现很多资深的专家甚至是语言的设计者对此持有不同观点。</p>
+<p>那么抛出异常时该抛出何种异常，是 Checked Exception 还是 Unchecked Exception ？我在网上查阅资料时发现不同的人对此有不同的观点，不管是开发人员还是项目的 Leader。有的认为该全部抛出 Unchecked Exception 类型的异常，并在某一层面做统一捕获处理，这样做的优点是保证了方法的纯粹性。另一种观点则不支持抛出<code>RuntimeException</code>。通过阅读《Thinking in Java》和<a href="https://www.ibm.com/developerworks/cn/java/j-jtp05254/" target="_blank" rel="noopener">关于异常的争论：要检查，还是不要检查？— IBM developerWorks</a>（这是一篇非常优质的文章）发现很多资深的专家甚至是语言的设计者对此持有不同观点。</p>
 </blockquote>
 <h4 id="传统的观点"><a href="#传统的观点" class="headerlink" title="传统的观点"></a>传统的观点</h4><hr>
 <p>Sun 公司的 “The Java Tutorial” 摘录中，总结了关于将一个异常声明为检查型还是非检查型的传统观点。“If a client can reasonably be expected to recover from an exception, make it a checked exception. If a client cannot do anything to recover from the exception, make it an unchecked exception.” —— 摘自 The Java Tutorial</p>
@@ -1398,9 +1398,9 @@
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
 <li>《Thinking in Java》</li>
 <li><a href="https://dir.s1mple.xyz/alibaba-java-dev-manual.pdf" target="_blank" rel="noopener">阿里巴巴 Java 开发手册</a></li>
-<li><a href="https://www.ibm.com/developerworks/cn/java/j-jtp05254/" target="_blank" rel="noopener">关于异常的争论：要检查，还是不要检查？– IBM developerWorks</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/28302269" target="_blank" rel="noopener">Java异常的深入研究与分析 – 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/28254987" target="_blank" rel="noopener">如何优雅的处理异常？– 知乎</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/java/j-jtp05254/" target="_blank" rel="noopener">关于异常的争论：要检查，还是不要检查？— IBM developerWorks</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/28302269" target="_blank" rel="noopener">Java异常的深入研究与分析 — 知乎</a></li>
+<li><a href="https://www.zhihu.com/question/28254987" target="_blank" rel="noopener">如何优雅的处理异常？— 知乎</a></li>
 <li><a href="https://www.cnblogs.com/skywang12345/p/3544287.html" target="_blank" rel="noopener">《Effective Java》中关于异常处理的几条建议</a></li>
 </ul>
 
@@ -1521,7 +1521,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -1795,7 +1795,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:42" itemprop="dateModified" datetime="2020-09-16T09:48:42+08:00">2020-09-16</time>
               
             
           </span>
@@ -2085,7 +2085,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -2230,8 +2230,6 @@
 </ul>
 <blockquote>
 <p>从理论上说，函数式语言也不是通过冯诺伊曼体系结构的机器上运行的，而是通过λ演算来运行的，就是通过变量替换的方式进行，变量替换为其值或表达式，函数也替换为其表达式，并根据运算符进行计算。λ演算是<strong>图灵完全 (Turing completeness)</strong> 的，但是大多数情况，函数式程序还是被编译成冯诺依曼机的机器语言的指令执行的</p>
-</blockquote>
-<blockquote>
 <p>函数式编程的最主要的好处主要是不可变性带来的。没有可变的状态，函数就是<strong>引用透明 (Referential Transparency)</strong> 的和<strong>无副作用 (No Side Effect)</strong></p>
 </blockquote>
 <h3 id="引用透明"><a href="#引用透明" class="headerlink" title="引用透明"></a>引用透明</h3><blockquote>
@@ -2375,7 +2373,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -2637,7 +2635,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -2885,7 +2883,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -3037,8 +3035,8 @@
 </li>
 </ul>
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构 – 张逸</a></li>
-<li><a href="https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/paper-boy/demeter.pdf" target="_blank" rel="noopener">The Paperboy, The Wallet, and The Law Of Demeter –  David Bock</a></li>
+<li><a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构 — 张逸</a></li>
+<li><a href="https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/paper-boy/demeter.pdf" target="_blank" rel="noopener">The Paperboy, The Wallet, and The Law Of Demeter —  David Bock</a></li>
 </ul>
 
           

@@ -122,7 +122,7 @@
 <meta property="og:image" content="https://s1mplecc.github.io/2020/09/22/%E4%BB%80%E4%B9%88%E6%98%AFP-NP-NPC%E4%BB%A5%E5%8F%8ANP-Hard%E9%97%AE%E9%A2%98%EF%BC%9F/0.jpg">
 <meta property="og:image" content="https://s1mplecc.github.io/2020/09/22/%E4%BB%80%E4%B9%88%E6%98%AFP-NP-NPC%E4%BB%A5%E5%8F%8ANP-Hard%E9%97%AE%E9%A2%98%EF%BC%9F/1.png">
 <meta property="article:published_time" content="2020-09-22T13:17:07.000Z">
-<meta property="article:modified_time" content="2020-09-22T14:35:37.029Z">
+<meta property="article:modified_time" content="2020-09-23T00:14:41.116Z">
 <meta property="article:author" content="s1mple">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://s1mplecc.github.io/2020/09/22/%E4%BB%80%E4%B9%88%E6%98%AFP-NP-NPC%E4%BB%A5%E5%8F%8ANP-Hard%E9%97%AE%E9%A2%98%EF%BC%9F/0.jpg">
@@ -418,12 +418,24 @@
                 
               
 
-              <time title="创建时间：2020-09-22 21:17:07 / 修改时间：22:35:37" itemprop="dateCreated datePublished" datetime="2020-09-22T21:17:07+08:00">2020-09-22</time>
+              <time title="创建时间：2020-09-22 21:17:07" itemprop="dateCreated datePublished" datetime="2020-09-22T21:17:07+08:00">2020-09-22</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-23 08:14:41" itemprop="dateModified" datetime="2020-09-23T08:14:41+08:00">2020-09-23</time>
               
             
           </span>
@@ -552,7 +564,7 @@
 <p>定义：如果所有NP问题都可以多项式时间归约到某个问题，则称该问题为NP-困难问题（NP-hardness, non-deterministic polynomial-time hardness，缩写为NP-Hard）。</p>
 </blockquote>
 <p>注意到，一个NP-Hard问题未必可以在多项式时间内验证一个解的正确性，即<strong>NP-Hard问题不一定是NP问题</strong>，也就是NP-Hard问题只满足NPC问题定义的第二个条件。因此我们可以<strong>将NPC问题理解为即是NP问题又是NP-Hard问题的一类问题</strong>。也就是说，NP-Hard问题要比NPC问题的范围更广。从时间复杂性上来考虑，由于NP-Hard放宽了限定条件，它将有可能比所有的NPC问题的时间复杂度更高更难以解决。换句话说，即使NPC问题有多项式时间的解（P=NP），NP-Hard问题依然可能没有多项式时间的解。</p>
-<p>研究生数模竞赛中遇到的基本都是NP-Hard问题，在P≠NP的假设下，只能设计启发式算法或者近似算法，求得令人满意的可行解。<strong>启发式算法</strong>是一个基于直观或经验构造的算法，在可接受的花费(指计算时间和空间)下给出待解决优化问题每一个实例的一个可行解，该可行解与最优解的偏离程度一般不能被预计。启发式算法以仿自然体算法为主,主要有遗传算法、蚁群算法、模拟退火法、神经网络等；<strong>近似算法</strong>则可以相当快速地找到合理的解决方案，需要证明解决方案的近似性，即所有实例中最坏情况下可以保证近似解的范围，并且运行时间合理。近似算法对于任何实例通常可得到一个有质量保证的解。近似性常用近似比、近似方案来度量。近似算法往往设计方法不难，比如贪心法、动态规划、基于线性规划的方法，但近似性的证明非常难。两者相辅相成。</p>
+<p>研究生数模竞赛中遇到的基本都是NP-Hard问题，在P≠NP的假设下，只能设计启发式算法或者近似算法，求得令人满意的可行解。<strong>启发式算法</strong>是一个基于直观或经验构造的算法，在可接受的花费(指计算时间和空间)下给出待解决优化问题每一个实例的一个可行解，该可行解与最优解的偏离程度一般不能被预计。启发式算法以仿自然体算法为主，主要有遗传算法、蚁群算法、模拟退火法、神经网络等；<strong>近似算法</strong>则可以相当快速地找到合理的解决方案，需要证明解决方案的近似性，即所有实例中最坏情况下可以保证近似解的范围，并且运行时间合理。近似算法对于任何实例通常可得到一个有质量保证的解。近似性常用近似比、近似方案来度量。近似算法往往设计方法不难，比如贪心法、动态规划、基于线性规划的方法，但近似性的证明非常难。两者相辅相成。</p>
 <h2 id="关系图"><a href="#关系图" class="headerlink" title="关系图"></a>关系图</h2><p>基于P≠NP和P=NP两种猜想，我们得到描述P, NP, NPC，以及NP-Hard之间关系的欧拉图：</p>
 <p><img src="/2020/09/22/%E4%BB%80%E4%B9%88%E6%98%AFP-NP-NPC%E4%BB%A5%E5%8F%8ANP-Hard%E9%97%AE%E9%A2%98%EF%BC%9F/1.png" alt="4dead7744239cc0042d7f029f3c3875a.png"></p>
 <p>可以看到，在P≠NP假设下，P与NPC没有交集，亦即我们之前提到的，NPC问题最不可能化简为P问题。而在P=NP问题下，即使是最复杂的NPC问题也可以化简为P问题，因为从定义来说NPC也是一个NP问题。</p>
@@ -566,7 +578,7 @@
 </ol>
 <p>不难看出图灵机本质上就是状态机，我们可以将机器从开始运行到停机的运作过程记录为一串序列：</p>
 <script type="math/tex; mode=display">q_0 \rightarrow_{\omega_0} q_1 \rightarrow_{\omega_1} q_2 \rightarrow ... \rightarrow_{\omega_{n-1}} q_n</script><p>开始时，机器处于$q_0$状态，读写头指向0号格子；开始运行后，读入格子中的符号$\omega_0$，根据控制规则，机器进入下一状态$q_1$；重复此过程，直至到达终止状态，机器停机。</p>
-<p>终止状态包括两种状态，$q<em>{accept}$称为接受状态，即机器根据控制规则成功运行至终态。$q</em>{reject}$称为拒绝状态，如果在运行中遇到下一个操作没有定义的情况，机器将立刻停机并拒绝输入的字符串。由于整个过程只要初始状态、输入、控制规则确定，机器运行的过程就确定，所以我们将其称之为<strong>确定型</strong>图灵机。</p>
+<p>终止状态包括两种状态，$q_{accept}$称为接受状态，即机器根据控制规则成功运行至终态；$q_{reject}$称为拒绝状态，如果在运行中遇到下一个操作没有定义的情况，机器将立刻停机并拒绝输入的字符串。由于整个过程只要初始状态、输入、控制规则确定，机器运行的过程就确定，所以我们将其称之为<strong>确定型</strong>图灵机。</p>
 <p>如果不加特殊说明，通常所说的图灵机都是确定型图灵机。<strong>非确定型图灵机</strong>和确定型图灵机的不同之处在于，在计算的每一时刻，根据当前状态和读写头所读的符号，<strong>机器存在多种状态转移方案，机器将任意地选择其中一种方案继续运作</strong>，直到最后停机为止。</p>
 <p>图灵机是一个计算机的理论模型，我们通常说，现代计算机是基于冯诺依曼体系的，实际是冯诺依曼机就是基于图灵机模型的实现，包括高度复杂化的运算、控制、存储、输入、输出五个部分。比如纸带（用内存/磁盘模拟）、内部状态寄存器（现代计算机有大量的标志位和大量的寄存器甚至寄存器组）、在纸带上移动（各种跳转指令、各种复杂的寻址操作）、控制规则（CPU指令集）等。到目前为止，依然没有能够超越图灵机的模型。关于人工智能、量子计算机是否超越了图灵机也有非常有趣的讨论，感兴趣的读者可以自行查阅资料。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>

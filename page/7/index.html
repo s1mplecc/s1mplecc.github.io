@@ -434,7 +434,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -693,7 +693,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -953,7 +953,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -1230,7 +1230,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -1287,7 +1287,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3k</span>
+                <span title="本文字数">3.1k</span>
               
 
               
@@ -1341,7 +1341,7 @@
 </ul>
 <h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a><strong>Tips</strong></h4><ol>
 <li>当你执行一条命令，系统会去PATH路径下查找该命令，比如你现在可以执行<code>java -version</code>命令。<code>echo $PATH</code>查看PATH设置。   </li>
-<li>全局环境变量，可以<code>${}</code>或者<code>$</code>引用，你现在可以<code>echo ${JAVA_HOME}</code>打印该值。<code>env</code>查看环境变量设置。</li>
+<li>全局环境变量，可以<script type="math/tex">{}`或者`</script>引用，你现在可以<code>echo ${JAVA_HOME}</code>打印该值。<code>env</code>查看环境变量设置。</li>
 </ol>
 <blockquote>
 <p>如果你觉得官网太麻烦，可以安装openjdk，虽说是阉割版，但足够满足你的需求了</p>
@@ -1362,13 +1362,13 @@
 <li><code>vim /etc/init.d/tomcat</code>加入如下内容  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">JAVA_HOME&#x3D;&#x2F;usr&#x2F;local&#x2F;lib&#x2F;jdk8</span><br><span class="line">JRE_HOME&#x3D;$&#123;JAVA_HOME&#125;&#x2F;jre</span><br><span class="line">CATALINA_HOME&#x3D;&#x2F;usr&#x2F;local&#x2F;lib&#x2F;tomcat9</span><br><span class="line">CLASSPATH&#x3D;.:$&#123;JAVA_HOME&#125;&#x2F;lib:$&#123;CATALINA_HOME&#125;&#x2F;lib</span><br></pre></td></tr></table></figure></li>
 <li>添加<strong>restart</strong>命令，<code>&quot;$1&quot;</code>指输入的第一个参数  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    elif [ &quot;$1&quot; &#x3D; &quot;restart&quot; ] ; then</span><br><span class="line">        service tomcat stop</span><br><span class="line">        sleep 1</span><br><span class="line">        service tomcat start</span><br><span class="line">    &#96;&#96;&#96;    </span><br><span class="line">- 保存退出，现在可以通过&#96;service tomcat [start|stop|restart]&#96;来启动、停止Tomcat。查看是否正常启动</span><br></pre></td></tr></table></figure>
   curl localhost:8080  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### **Tips**</span><br><span class="line"></span><br><span class="line">1. 你的应用程序安装路径在**webapps**下。在部署你自己的应用前执行&#96;rm -r webapps&#x2F;*&#96;清空文件夹    </span><br><span class="line">2. Tomcat的配置文件在&#96;conf&#x2F;server.xml&#96;中</span><br><span class="line"></span><br><span class="line">### **About server.xml**</span><br><span class="line"></span><br><span class="line">- [server.xml详解](http:&#x2F;&#x2F;www.cnblogs.com&#x2F;gugnv&#x2F;archive&#x2F;2012&#x2F;02&#x2F;01&#x2F;2334187.html)</span><br><span class="line"></span><br><span class="line">- 默认开启8080端口，可以修改端口号</span><br></pre></td></tr></table></figure>
-  &lt;Connector port=”8080” protocol=”HTTP/1.1”<pre><code>connectionTimeout=&quot;20000&quot;
-redirectPort=&quot;8443&quot; /&gt;
+  &lt;Connector port=”8080” protocol=”HTTP/1.1”<pre><code>         connectionTimeout=&quot;20000&quot;
+         redirectPort=&quot;8443&quot; /&gt;
 </code></pre>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- &#96;&lt;Host&gt;&#96;标签中，**appBase**解释了为什么将Java Web程序打包放在此目录下。**unpackWARs**为true自动解压war包，**autoDeploy**自动部署。所以在Tomcat启动后识别webapps目录下&#96;.war&#96;结尾的war包自动解压、部署。</span><br></pre></td></tr></table></figure>
-  &lt;Host name=”localhost”  appBase=”webapps”<pre><code>unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;
+  &lt;Host name=”localhost”  appBase=”webapps”<pre><code>    unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;
 </code></pre>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 在&#96;&lt;Host&gt;&#96;标签中可设置&#96;&lt;Context&gt;&#96;上下文标签。**docBase**是应用程序包名，**path**是url前缀，**reloadable**为true时自动检测应用程序的&#96;&#x2F;WEB-INF&#x2F;lib&#96;和&#96;&#x2F;WEB-INF&#x2F;classes&#96;目录的变化，自动装载新的应用程序</span><br></pre></td></tr></table></figure>
   <Context docbase="app" path="/app" reloadable="true">  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 如果不配置&#96;&lt;Context&gt;&#96;标签，将默认以应用程序文件夹名字作为url前缀，如**webapps**目录下应用程序文件夹名为**jpress**，则url为</span><br></pre></td></tr></table></figure>
-  http://{IP}:{port}/jpress/<br>  <code>`</code></Context></li>
+  <a href="http://{IP}:{port}/jpress/">http://{IP}:{port}/jpress/</a><br>  ```</Context></li>
 </ul>
 
           
@@ -1488,7 +1488,7 @@ redirectPort=&quot;8443&quot; /&gt;
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -1764,7 +1764,7 @@ redirectPort=&quot;8443&quot; /&gt;
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:42" itemprop="dateModified" datetime="2020-09-16T09:48:42+08:00">2020-09-16</time>
               
             
           </span>

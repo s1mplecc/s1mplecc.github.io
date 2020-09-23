@@ -434,7 +434,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:42" itemprop="dateModified" datetime="2020-09-16T09:48:42+08:00">2020-09-16</time>
               
             
           </span>
@@ -576,6 +576,7 @@
 <li>CNAME 项用于将所有 <code>*.s1mple.xyz</code> 包含三级域名（不包括 <code>s1mple.xyz</code>）的访问路由到 <code>s1mplecc.github.io</code>。</li>
 <li>A 项将二级域名 <code>s1mple.xyz</code> 路由到 <code>192.30.252.153</code>。此值可通过 <code>ping s1mplecc.github.io</code> 获得。</li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -602,6 +603,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>第二步，在本地 Hexo 的 <code>source</code> 文件夹下添加<strong>名为 CNAME 的文件</strong>，内容为个人域名地址，比如我的 <code>s1mple.xyz</code>。并执行 <code>hexo g -d</code> 部署到服务器。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">'s1mple.xyz'</span> &gt; ./<span class="built_in">source</span>/CNAME</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
 <p>第三步，在 GitHub Pages 项目的配置中<strong>绑定个人域名</strong>，记得将 Enforce HTTPS 选项勾选上（GitHub 提供免费的 HTTPS 服务）。保存成功后如下图提示即可通过 <code>https://s1mple.xyz</code> 访问。</p>
@@ -745,7 +747,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -870,6 +872,7 @@
 <li>对类名使用大写字母开头的单词(如 CapWords，即 Pascal 风格)，但是模块名应该用小写加下划线的方式(如 lower_with_under.py )。尽管已经有很多现存的模块使用类似于CapWords.py 这样的命名，但现在已经不鼓励这样做，因为如果模块名碰巧和类名一致，这会让人困扰。</li>
 </ol>
 <p><strong>Python之父Guido推荐的规范</strong></p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -936,6 +939,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h4 id="Main"><a href="#Main" class="headerlink" title="Main"></a>Main</h4><p><strong>所有的顶级代码在模块导入时都会被执行</strong>。即使是一个打算被用作脚本的文件，也应该是可导入的。并且简单的导入不应该导致这个脚本的主功能(main functionality)被执行，这是一种副作用。主功能应该放在一个函数中，并在执行主程序前总是检查 <code>if __name__ == &#39;__main__&#39;</code>。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">      ...</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
 <p><code>__name__</code> 是内置变量，指代<strong>当前模块名</strong>，当模块被直接运行时模块名为 <code>__main__</code>。这句话的意思就是，当模块被直接运行时，下面代码块将被运行，当模块是被导入时，代码块不被运行。</p>
@@ -1069,7 +1073,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:42" itemprop="dateModified" datetime="2020-09-16T09:48:42+08:00">2020-09-16</time>
               
             
           </span>
@@ -1357,7 +1361,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -1611,7 +1615,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -1849,7 +1853,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -2071,7 +2075,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -2179,8 +2183,8 @@
 <li><code>.reduce((x, y) -&gt; x + y)</code> 这一步貌似会有很多字符串拼接影响效率，实则底层会使用 <code>StringBuilder</code> 或 <code>StringBuffer</code> 帮你做了性能优化</li>
 </ol>
 <h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>关于并行数对爬虫程序的性能影响，实际测试时受网络波动的影响，测试数据可能波动较大，连接每个 Url 的耗时在 50ms ～ 1000ms 波动区间。为减少网络不稳定带来的影响，以下测试分为 100 章、1000 章两个数量级，进行不同并行等级的循环测试，测试 3 轮，时间单位为秒。</p>
-<p><strong>数量级：103 章</strong><br>| PARALLELISM_LEVEL | 1 | 4 | 16 | 64 | 256 |<br>|:–:|:–:|:–:|:–:|:–:|:–:|<br>| 第1次测试 |9|5|2|2|2|<br>| 第2次测试 |8|4|2|2|2|<br>| 第3次测试 |9|3|2|2|3|</p>
-<p><strong>数量级：1180 章</strong><br>| PARALLELISM_LEVEL | 4 | 8 | 16 | 32 | 64 | 128 | 256 |<br>|:–:|:–:|:–:|:–:|:–:|:–:|:–:|:–:|<br>| 第1次测试 |28|16|10|13|12|12|11|<br>| 第2次测试 |23|16|14|11|12|12|14|<br>| 第3次测试 |25|29|14|13|29|20|20|</p>
+<p><strong>数量级：103 章</strong><br>| PARALLELISM_LEVEL | 1 | 4 | 16 | 64 | 256 |<br>|:—:|:—:|:—:|:—:|:—:|:—:|<br>| 第1次测试 |9|5|2|2|2|<br>| 第2次测试 |8|4|2|2|2|<br>| 第3次测试 |9|3|2|2|3|</p>
+<p><strong>数量级：1180 章</strong><br>| PARALLELISM_LEVEL | 4 | 8 | 16 | 32 | 64 | 128 | 256 |<br>|:—:|:—:|:—:|:—:|:—:|:—:|:—:|:—:|<br>| 第1次测试 |28|16|10|13|12|12|11|<br>| 第2次测试 |23|16|14|11|12|12|14|<br>| 第3次测试 |25|29|14|13|29|20|20|</p>
 <h2 id="爬虫思路"><a href="#爬虫思路" class="headerlink" title="爬虫思路"></a>爬虫思路</h2><p>最后说一说自己写这个爬虫时的思路，也算是解决问题的入手点。主要的解析类为 HtmlParser ，负责解析 Html。其实这个程序就是通过 Html 源码解析小说名 Title、小说所含所有章节的 Url、小说每一章的内容，最后将内容 reduce 写入文件。</p>
 <h4 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h4><p>解析小说章节目录网址 Html 源码的 <code>&lt;h1&gt;...&lt;/h1&gt;</code> 标签中的值</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 章节目录网址</span><br><span class="line">http:&#x2F;&#x2F;www.biquge.cm&#x2F;9&#x2F;9422&#x2F;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; html</span><br><span class="line">&lt;h1&gt;大道朝天&lt;&#x2F;h1&gt;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; after parse</span><br><span class="line">大道朝天</span><br></pre></td></tr></table></figure>
@@ -2310,7 +2314,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -2539,7 +2543,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -2766,7 +2770,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>

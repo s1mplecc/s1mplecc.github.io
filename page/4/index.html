@@ -434,7 +434,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -703,7 +703,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -790,7 +790,7 @@
 <p>最近遇到需要在 Spring Cloud 框架中加入<strong>用户认证</strong>的功能，发现 GitHub 有第三方认证功能，遂先写了个 demo 实现通过 GitHub 三方认证完成用户认证，虽然不是最终解决方案，但是有助于理解用户认证的流程</p>
 </blockquote>
 <ul>
-<li><p>代码沿用之前的 <a href="https://s1mple.xyz/sidecar/" target="_blank" rel="noopener">Sidecar – 将Node应用引入Spring Cloud</a> 博客中的代码，用到以下模块</p>
+<li><p>代码沿用之前的 <a href="https://s1mple.xyz/sidecar/" target="_blank" rel="noopener">Sidecar — 将Node应用引入Spring Cloud</a> 博客中的代码，用到以下模块</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">─ sidecar-example</span><br><span class="line">   ├── author-service    &#x2F;&#x2F; 需要认证才能访问的微服务</span><br><span class="line">   ├── eureka-server    &#x2F;&#x2F; 注册中心</span><br><span class="line">   └── api-gateway    &#x2F;&#x2F; 网关，一切访问的入口</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
@@ -1012,7 +1012,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -1232,7 +1232,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -1426,26 +1426,26 @@
 <li><p>需要在主类上加上<code>@EnableZuulProxy</code> Zuul 网关和<code>@EnableDiscoveryClient</code>注解</p>
 </li>
 <li><p>配置文件</p>
-<pre><code class="yml"><span class="attr">spring:</span>
-<span class="attr">  application:</span>
-<span class="attr">    name:</span> <span class="string">api-gateway</span>
-<span class="attr">server:</span>
-<span class="attr">  port:</span> <span class="number">5555</span>
-<span class="attr">  context-path:</span> <span class="string">/</span>
-<span class="attr">eureka:</span>
-<span class="attr">  instance:</span>
-<span class="attr">    hostname:</span> <span class="string">localhost</span>
-<span class="attr">  client:</span>
-<span class="attr">    serviceUrl:</span>
-<span class="attr">      defaultZone:</span> <span class="attr">http://${eureka.instance.hostname}:9090/eureka/</span>
-<span class="attr">zuul:</span>
-<span class="attr">  routes:</span>
-<span class="attr">    author-service:</span>
-<span class="attr">      path:</span> <span class="string">/author-service/**</span>
-<span class="attr">      serviceId:</span> <span class="string">author-service</span>
-<span class="attr">    book-service:</span>
-<span class="attr">      path:</span> <span class="string">/book-service/**</span>
-<span class="attr">      serviceId:</span> <span class="string">node-sidecar</span>
+<pre><code class="lang-yml">  spring:
+    application:
+      name: api-gateway
+  server:
+    port: 5555
+    context-path: /
+  eureka:
+    instance:
+      hostname: localhost
+    client:
+      serviceUrl:
+        defaultZone: http://${eureka.instance.hostname}:9090/eureka/
+  zuul:
+    routes:
+      author-service:
+        path: /author-service/**
+        serviceId: author-service
+      book-service:
+        path: /book-service/**
+        serviceId: node-sidecar
 </code></pre>
 </li>
 <li><p>访问<code>http://localhost:5555/book-service/book/1</code>，在接口层面，<code>node-sidecar</code>其实是不可见的，访问的还是<code>book-service</code>的 API<br><img src="/2018/03/31/Sidecar%20--%20%E5%B0%86Node%E5%BA%94%E7%94%A8%E5%BC%95%E5%85%A5Spring%20Cloud/3.png" alt="WX20180403-110158">  </p>
@@ -1580,7 +1580,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -1871,7 +1871,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -2027,8 +2027,8 @@
 <p>一般来说，如果想达到足以媲美 PostgreSQL 的数据安全性，你应该<strong>同时使用两种持久化功能</strong>。有很多用户都只使用 AOF 持久化，但并不推荐这种方式: 因为定时生成 RDB 快照非常便于进行数据库备份，并且 RDB 恢复数据集的速度也要比 AOF 恢复的速度要快。<br>实际上，官方也提出未来可能会将 AOF 和 RDB 整合成单个持久化模型。</p>
 </blockquote>
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="https://redis.io/topics/persistence" target="_blank" rel="noopener">Redis Persistence — 官网</a></li>
-<li><a href="http://doc.redisfans.com/topic/persistence.html" target="_blank" rel="noopener">Redis持久化 — 中文文档</a></li>
+<li><a href="https://redis.io/topics/persistence" target="_blank" rel="noopener">Redis Persistence —- 官网</a></li>
+<li><a href="http://doc.redisfans.com/topic/persistence.html" target="_blank" rel="noopener">Redis持久化 —- 中文文档</a></li>
 </ul>
 
           
@@ -2148,7 +2148,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -2400,7 +2400,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -2684,7 +2684,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -2794,8 +2794,6 @@
 </ul>
 <h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h2><blockquote>
 <p>使用泛型的时候加上的类型参数，会被编译器在<strong>编译时</strong>去掉(擦除)。这个过程就称为<strong>类型擦除</strong> (<strong>Type Erasure</strong>) 。如在代码中定义的<code>List&lt;Object&gt;</code>和<code>List&lt;String&gt;</code>等类型，在编译之后都会变成 List 。</p>
-</blockquote>
-<blockquote>
 <p>可以说，类型擦除这个令人困惑的 Java 特性，完全是历史遗留问题导致的。因为 JDK5 之前没有泛型，为了旧代码能够正常运行，Java 泛型必须要在编译器层次将类型擦除，所导致的严酷事实就是：<strong>在泛型代码内部，无法获得任何有关泛型参数类型的信息。</strong></p>
 </blockquote>
 <p>很多泛型的特性都与类型擦除的存在有关，包括：</p>
@@ -2995,7 +2993,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>

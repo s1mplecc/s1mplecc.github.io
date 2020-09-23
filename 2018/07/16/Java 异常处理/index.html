@@ -121,7 +121,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s1mplecc.github.io/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/0.jpg">
 <meta property="article:published_time" content="2018-07-15T21:21:06.000Z">
-<meta property="article:modified_time" content="2020-01-03T11:24:53.000Z">
+<meta property="article:modified_time" content="2020-09-16T01:48:41.864Z">
 <meta property="article:author" content="s1mple">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -435,7 +435,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 19:24:53" itemprop="dateModified" datetime="2020-01-03T19:24:53+08:00">2020-01-03</time>
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
               
             
           </span>
@@ -595,7 +595,7 @@
 <p>当然，最终你的程序需要捕获异常，否则会意外终止。但这里的技巧是<strong>在合适的层面捕获异常</strong>，以便你的程序要么可以从异常中有意义地恢复并继续下去，而不导致更深入的错误；要么能够为用户提供明确的信息，引导他们修正错误。如果当前所在方法无法胜任，那么就不要处理异常，而将它抛出直至具备处理这个异常的能力的作用域来处理。</p>
 </blockquote>
 <h3 id="该抛出何种异常"><a href="#该抛出何种异常" class="headerlink" title="该抛出何种异常"></a>该抛出何种异常</h3><blockquote>
-<p>那么抛出异常时该抛出何种异常，是 Checked Exception 还是 Unchecked Exception ？我在网上查阅资料时发现不同的人对此有不同的观点，不管是开发人员还是项目的 Leader。有的认为该全部抛出 Unchecked Exception 类型的异常，并在某一层面做统一捕获处理，这样做的优点是保证了方法的纯粹性。另一种观点则不支持抛出<code>RuntimeException</code>。通过阅读《Thinking in Java》和<a href="https://www.ibm.com/developerworks/cn/java/j-jtp05254/" target="_blank" rel="noopener">关于异常的争论：要检查，还是不要检查？– IBM developerWorks</a>（这是一篇非常优质的文章）发现很多资深的专家甚至是语言的设计者对此持有不同观点。</p>
+<p>那么抛出异常时该抛出何种异常，是 Checked Exception 还是 Unchecked Exception ？我在网上查阅资料时发现不同的人对此有不同的观点，不管是开发人员还是项目的 Leader。有的认为该全部抛出 Unchecked Exception 类型的异常，并在某一层面做统一捕获处理，这样做的优点是保证了方法的纯粹性。另一种观点则不支持抛出<code>RuntimeException</code>。通过阅读《Thinking in Java》和<a href="https://www.ibm.com/developerworks/cn/java/j-jtp05254/" target="_blank" rel="noopener">关于异常的争论：要检查，还是不要检查？— IBM developerWorks</a>（这是一篇非常优质的文章）发现很多资深的专家甚至是语言的设计者对此持有不同观点。</p>
 </blockquote>
 <h4 id="传统的观点"><a href="#传统的观点" class="headerlink" title="传统的观点"></a>传统的观点</h4><hr>
 <p>Sun 公司的 “The Java Tutorial” 摘录中，总结了关于将一个异常声明为检查型还是非检查型的传统观点。“If a client can reasonably be expected to recover from an exception, make it a checked exception. If a client cannot do anything to recover from the exception, make it an unchecked exception.” —— 摘自 The Java Tutorial</p>
@@ -629,9 +629,9 @@
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
 <li>《Thinking in Java》</li>
 <li><a href="https://dir.s1mple.xyz/alibaba-java-dev-manual.pdf" target="_blank" rel="noopener">阿里巴巴 Java 开发手册</a></li>
-<li><a href="https://www.ibm.com/developerworks/cn/java/j-jtp05254/" target="_blank" rel="noopener">关于异常的争论：要检查，还是不要检查？– IBM developerWorks</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/28302269" target="_blank" rel="noopener">Java异常的深入研究与分析 – 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/28254987" target="_blank" rel="noopener">如何优雅的处理异常？– 知乎</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/java/j-jtp05254/" target="_blank" rel="noopener">关于异常的争论：要检查，还是不要检查？— IBM developerWorks</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/28302269" target="_blank" rel="noopener">Java异常的深入研究与分析 — 知乎</a></li>
+<li><a href="https://www.zhihu.com/question/28254987" target="_blank" rel="noopener">如何优雅的处理异常？— 知乎</a></li>
 <li><a href="https://www.cnblogs.com/skywang12345/p/3544287.html" target="_blank" rel="noopener">《Effective Java》中关于异常处理的几条建议</a></li>
 </ul>
 
