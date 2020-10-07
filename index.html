@@ -372,6 +372,314 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">机器学习在网络安全中的应用 —— Chapter 1: Basics of Machine Learning in Cybersecurity</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-10-07 13:17:42 / 修改时间：13:19:01" itemprop="dateCreated datePublished" datetime="2020-10-07T13:17:42+08:00">2020-10-07</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Translations/" itemprop="url" rel="index"><span itemprop="name">Translations</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/10/07/机器学习在网络安全中的应用-——-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">10k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文翻译并总结归纳自 <strong><em>Hands-On Machine Learning for Cybersecurity</em></strong> 书中的 Chapter 1: Basics of Machine Learning in Cybersecurity。该书主要着眼于机器学习在网络安全领域中的应用，介绍了多个方向的原理和解决方案，比如：包时间序列分析、垃圾邮件检测、使用 k-means 算法的网络异常检测等。总的来说，该书的动手操作很多，实战性很强。接下来我会用一个系列，整理归纳书中的各个章节。当然，除了第一章是介绍机器学习的概览之外，其他几个章节内容比较离散，所以顺序可能打乱。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>自诞生以来，机器学习（Machine Learning）一直是一个非常热门的话题，它的出现实实在在地解决了很多问题，比如人脸识别、自动驾驶、购物推荐系统、聊天机器人等。</p>
+<p>而在安全领域方面，老式的威胁检测系统通过使用启发式的和静态的签名（signature）来检测威胁和异常。例如：杀毒软件会根据病毒程序的特征，生成并维持一个病毒的签名库（保持持续更新），在查杀时通过与库中的签名比对来识别病毒程序。基于签名的威胁检测技术虽然容易理解，但并不健壮，它的最大的问题之一是：在数据规模、数据流速显著增大时，如何保证签名比对过程与数据流入速度匹配。每个包需要与数据库中的每个签名比对，如果不能保持同步，那意味着只能抛弃部分数据包，由此就会产生“漏网之鱼”。</p>
+<p>如今，基于签名的系统逐渐被智能网络安全代理（Intelligent cybersecurity agent）所取代。机器学习在识别新型恶意软件、零日漏洞攻击（zero-day attack）、高级可持续威胁（advanced persistent threats，简称 APT）方面取得积极进展。</p>
+<p>一般来说，由于攻击的复杂特性，要做到完全预防是很难的，机器学习能做到在攻击的初期识别攻击并防止其扩散到整个系统。许多网络安全公司使用诸如用户行为分析（user behavior analytics）和预测分析（predictive analytics）的高级分析方法，在威胁生命周期的早期阶段识别 APT 攻击，这种方式能够有效预防身份数据泄漏和内部威胁。规范分析（prescriptive analytics）则更具有响应性，能够在网络攻击发生以后分析该采取什么响应措施能将损失降到最小。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/1.png" alt="48e9cf0bd45e3630c4346d142839c8a1.png"></p>
+<h2 id="机器学习中的数据"><a href="#机器学习中的数据" class="headerlink" title="机器学习中的数据"></a>机器学习中的数据</h2><p>数据是机器学习的核心。数据分为结构化数据和非结构化数据，<strong>结构化数据（structured data）</strong>可以被映射为二维表结构，包含表头（Header）和表内元素，传统的关系型数据库（RDBMS）如 MySQL、Oracle 等都是以这种方式存放结构化数据；而<strong>非结构化数据（unstructured data）</strong>数据结构不规则或不完整，没有预定义的数据模型，例如图片、音频/视频等；融合了结构化和非结构化的数据称为<strong>半结构化数据（semi-structured data）</strong>。</p>
+<p>根据数据是否被打上标记，数据又被分为<strong>有标注数据（labelled data）</strong>和<strong>无标注数据（unlabelled data）</strong>。例如网络安全中的恶意流量检测，可以将样本中的善意流量（white）和恶意流量（black）手动打标（恶意流量可能是自己模拟生成的），构成训练集训练机器学习模型。</p>
+<h3 id="机器学习阶段"><a href="#机器学习阶段" class="headerlink" title="机器学习阶段"></a>机器学习阶段</h3><p>机器学习分为以下四个阶段：</p>
+<ul>
+<li><strong>分析阶段（The analysis phase）</strong>：在这个阶段，采集到的数据需要被提取明确的<strong>特征（features）</strong>或者参数（parameters），来被用于训练模型。</li>
+<li><strong>训练阶段（The training phase）</strong>： 前一阶段的数据将被用来在这个阶段训练机器学习模型（machine learning model），训练阶段是一个<strong>多次迭代</strong>的阶段，目的是为了训练一个更加可信的模型。</li>
+<li><strong>测试阶段（The testing phase）</strong>： 在这一阶段，训练阶段产生的机器学习模型将结合更多的数据进行测试并<strong>评估模型</strong>的性能。测试的数据是前面阶段从未被使用的数据。模型的<strong>演化</strong>可能会需要参数训练（调参）。</li>
+<li><strong>应用阶段（The application phase）</strong> ：模型被部署到<strong>生产环境</strong>，应用于真实数据。</li>
+</ul>
+<h3 id="过拟合和欠拟合"><a href="#过拟合和欠拟合" class="headerlink" title="过拟合和欠拟合"></a>过拟合和欠拟合</h3><p>在训练阶段，由于样本数据的不完备，训练出的机器学习模型可能并不理想（模型的泛化能力不佳），会产生两种现象：过拟合和欠拟合。</p>
+<p><strong>过拟合（Overfitting）</strong>，是指系统太过适应于（fit）或者说太过依赖于训练集数据，导致新来的数据都视为不匹配，通常表现为：模型对于训练集表现很好，对于测试集表现很差（容纳度很低）。产生这种现象的常见原因之一是只使用了有标注的数据来训练模型。</p>
+<blockquote>
+<p>Overfitting: The production of an analysis that corresponds too closely or exactly to a particular set of data, and may therefore fail to fit additional data or predict future observations reliably. — Oxford Dictionary</p>
+</blockquote>
+<p><strong>欠拟合（Underfitting）</strong>，是模型表现差的另一种场景，通常是由于样本数量较少，模型训练依赖特征过少，学习能力低下造成的。</p>
+<p>对于这两种情形，可以通过一些机器学习的常见步骤来消除，比如：数据的交叉验证（cross validation of the data），数据修剪（data pruning）和数据正则化（regularization of the data）。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/2.png" alt="0574cd5346226da66890df7956671e62.png"></p>
+<p>由上图可以看到，当模型层级较低时（模型过于简单），表现为欠拟合，训练集和测试集效果都不好；当模型层级较高时（模型过于复杂），表现为过拟合，训练集效果很好，但由于学习能力过于强大，以至于把训练样本所包含的不太一般的特性都学到了，导致测试集中表现很差。所以我们需要摸索出合适的模型，既不能太简单也不能太复杂，使得在测试集上能有最优表现。</p>
+<h2 id="机器学习分类"><a href="#机器学习分类" class="headerlink" title="机器学习分类"></a>机器学习分类</h2><p>传统上，基于所提供的学习类型，机器学习系统大体上可以分为两类：有监督学习和无监督学习。强化学习和深度学习是后面引入的新的研究分支。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/3.png" alt="49c0d215820883fdc0aa834405891742.png"></p>
+<h3 id="有监督学习"><a href="#有监督学习" class="headerlink" title="有监督学习"></a>有监督学习</h3><p>有监督学习（Supervised learning）是指使用已标注的数据集推导出预测函数，对测试集进行分类和预测。有监督学习包含一些子分支，比如：</p>
+<ul>
+<li><strong>半监督学习（Semi-supervised learning）</strong>：训练阶段的数据集即含有有标注的，也含有未标注的。</li>
+<li><strong>主动学习（Active learning）</strong>：主动学习是指，通过查询函数，从未标注数据集中查询出信息熵最大（可以简单理解为最复杂）的数据，交给督导者进行标注，循环迭代这个过程直至模型达到最佳。主动学习的“主动”，指的是<strong>主动提出标注请求</strong>，为此需要一个外在的能够对其请求进行标注的实体（通常是相关领域人员）。<br><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/4.png" alt="e834d2167c02ba1908f13760cec58005.png"></li>
+</ul>
+<p>有监督学习的常见应用包括：人脸识别，需要人为标注新面孔；垃圾邮件检测，需要对邮件内容文本进行分词处理，所以需要提前对一些敏感词汇做人为标注。</p>
+<h3 id="无监督学习"><a href="#无监督学习" class="headerlink" title="无监督学习"></a>无监督学习</h3><p>无监督学习算法（Unsupervised learning）是指初始数据集是未标注的，数据视图是在处理过程中由系统自学习构建出来的，没有任何外部干涉。如果说有监督学习是：老师提供对错指示，要求学生能够“对于输入数据X能判断对错”，那么无监督学习就是：在没有老师的情况下，学生自学，要求学生能够“<strong>从数据X中归纳总结出知识点</strong>”。无监督学习算法的具体应用案例包括：用户行为分析（User behavior analysis）、购物篮分析（Market basket analysis）等。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/5.png" alt="942767e754efb165eb261f9f9692bbc4.png"></p>
+<h3 id="强化学习"><a href="#强化学习" class="headerlink" title="强化学习"></a>强化学习</h3><p>强化学习（Reinforcement learning）是机器学习的又一分支，它强调如何基于<strong>环境</strong>而行动，以取得最大化的<strong>预期利益</strong>。</p>
+<p>具有强化学习能力的程序或机器人被称为<strong>代理（Agent）</strong>。代理所解决的问题被抽象为<strong>环境（Environment）</strong>，比如迷宫或者棋盘。代理需要有一个基本的<strong>策略（Policy）</strong>，每次迭代根据这个策略选择一个<strong>动作（Action）</strong>作用于环境，环境接受该动作后<strong>状态（State）</strong>发生变化，同时产生一个<strong>信号（Reward）</strong>，正代表奖励，负代表惩罚。代理会根据这个信号评估之前的策略是否适合。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/6.png" alt="25df06c2835f3b3d1e7e198431865384.png"></p>
+<p>强化学习有一些实际的用例，比如自动驾驶汽车，需要对周围复杂环境作出实施迅速的应对；又比如家喻户晓的 AlphaGo，只需要训练4个小时就可以击败世界知名的象棋AI Stockfish。</p>
+<h3 id="深度学习"><a href="#深度学习" class="headerlink" title="深度学习"></a>深度学习</h3><p>深度学习（Deep learning）是机器学习领域的一个新的研究分支，是一种以人工神经网络为架构，对资料进行表征学习的算法。深度学习并不简单的囊括于传统的有监督/无监督分类中，它本身也会用到有监督和无监督的学习方法来训练深度神经网络。</p>
+<p>深度学习的出现，引领了机器学习的又一波热潮，它摧枯拉朽地解决了之前未解决的诸多问题，使得似乎所有的机器辅助功能都变为可能。但它作为目前最热的机器学习方法之一，并不意味着是机器学习的终点，它也具有诸多问题，比如：深度学习需要巨大的数据集做支撑；复杂度较高；深度学习的构想来源于人脑的神经元结构，但人脑的复杂程度要远远超出它所能模拟的范畴。</p>
+<h2 id="机器学习解决的问题"><a href="#机器学习解决的问题" class="headerlink" title="机器学习解决的问题"></a>机器学习解决的问题</h2><p>机器学习可以用于解决以下几类问题：分类问题，集群问题，回归问题，降维问题，密度估算问题等等。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/7.png" alt="53aaf02095bd399d6b16dec0b2332dd7.png"></p>
+<h3 id="分类问题"><a href="#分类问题" class="headerlink" title="分类问题"></a>分类问题</h3><p>分类问题（Classification problems）是指基于特征将数据划分到多个类（class）中的问题。因为训练数据是有标注的，所以分类问题属于有监督学习。网络数据分类是一个经典的分类问题，互联网的内容可以根据它们的文本内容比如新闻、社交媒体、广告等划分到它们对应的类别。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/8.png" alt="d50de17881f0da10019d30b5e4266bef.png"></p>
+<h3 id="聚类问题"><a href="#聚类问题" class="headerlink" title="聚类问题"></a>聚类问题</h3><p>聚类问题（Clustering problems）是指将数据分成若干组并将相似数据归为一组。聚类技术常用语信息检索、模式识别、人口统计分析领域。相比于分类问题，聚类问题并不关心某一类是什么，只需要将相似的数据归为一类。因此，一个聚类算法通常只需要知道如何计算相似度就可以开始工作了，也就是说训练集无需作出预先标注。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/9.png" alt="c118f41b872bc162fd0f3858d25ec368.png"></p>
+<h3 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h3><p>回归问题（Regression problems）指的是确定两种或两种以上变量间相互依赖的定量关系的一种统计分析方法。例如对于图中的二元组数据（x，y），我们可以求出能表示 x，y 关系的线性回归方程，再对接下来的测试数据集进行预测或分类。</p>
+<p>回归包括多种类型，比如：线性回归（linear regression），逻辑回归（logistic regression），多项式回归（polynomial regression）等。回归可以用于欺诈检测系统，股票市场分析和预测。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/10.png" alt="985428a8e920d31726d314abe4af73d0.png"></p>
+<h3 id="降维问题"><a href="#降维问题" class="headerlink" title="降维问题"></a>降维问题</h3><p>现实应用中属性维数经常成千上万，且许多学习方法都涉及距离计算，而高维空间会给距离计算带来很大的麻烦，当维数很高时甚至连计算内积都不再容易。事实上，在高维情形下出现的数据样本稀疏、距离计算困难等问题，是所有机器学习方法共同面临的严重障碍，被称为“维数灾难”（curse of dimensionality）。</p>
+<p>缓解维数灾难的一个重要途径是<strong>降维（Dimension reduction）</strong>，亦称“维数约简”，即通过某种数学变换将原始高维属性空间转变为一个低维“子空间”（subspace），在这个子空间中样本密度大幅提高，距离计算也变得更为容易。降维将含有多个属性的高维数据，用它的主要属性去表示，并且不丢失重要特征。  降维技术经常用于<strong>特征提取</strong>，比如网络包流数据的处理，为了减少数据规模，通常只提取具有代表性的有用特征进行分析。</p>
+<p>下图给出了一个直观的例子，将原始三维空间中的样本点，映射到二维嵌入子空间中。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/11.jpg" alt="d127776fa637378ffec32cc993ce3c49.png"></p>
+<h3 id="密度估算问题"><a href="#密度估算问题" class="headerlink" title="密度估算问题"></a>密度估算问题</h3><p>密度估算问题（Density estimation problems）是用于对密集数据进行机器学习估算的统计学习方法。从技术上讲，它是一种<strong>计算概率密度函数</strong>的技术。在医学分析领域，通常使用这种技术来在庞大的人口中识别疾病相关症状。</p>
+<h2 id="机器学习算法"><a href="#机器学习算法" class="headerlink" title="机器学习算法"></a>机器学习算法</h2><h3 id="SVM"><a href="#SVM" class="headerlink" title="SVM"></a>SVM</h3><p>支持向量机（Support Vector Machines，SVM）属于有监督的算法，被用于解决线性或非线性的分类问题（linear/non linear classification）。由于优秀的性能，SVM 得到了广泛的应用。</p>
+<p>若输入数据所在的特征空间存在作为决策边界（decision boundary）的超平面将样本按正类和负类分开，实际上构造了2个平行的超平面作为间隔边界以判别样本的分类，所有在上间隔边界上方的样本属于正类，在下间隔边界下方的样本属于负类。两个间隔边界的距离被定义为边距（margin），位于间隔边界上的正类和负类样本为支持向量（support vector）。SVM 旨在求解能够划分样本的<strong>最大边距超平面（maximum-margin hyperplane）</strong>。</p>
+<p>对于二维平面，超平面可以理解为可以划分样本的一条「直线」，对于高维特征空间，SVM 可以通过<strong>核方法（kernel method）</strong>进行非线性分类。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/12.png" alt="e44a093db94c73420e3f30d4455b09f1.png"></p>
+<h3 id="贝叶斯网络"><a href="#贝叶斯网络" class="headerlink" title="贝叶斯网络"></a>贝叶斯网络</h3><p>贝叶斯网（Bayesian network，简称 BN）亦称“信念网”（belief network），它借助有向无环图（Direct Acyclic Graph，简称 DAG）来刻画属性之间的依赖关系，并使条件概率表（Conditional Probability Table，简称 CPT）来描述属性的联合概率分布。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/13.jpg" alt="fe9d8ceefb48edd4636364d7b7e00a2a.png"></p>
+<p>上图给出了西瓜问题的一种贝叶斯网结构和属性“根蒂”的条件概率表。从图中网络结构可看出，“色泽”直接依赖于“好瓜”和“甜度”，而“根蒂”则直接依赖于“甜度”；进一步从条件概率表能得到“根蒂”对“甜度”量化依赖关系，如 $P(根蒂=硬挺|甜度=高)=0.1$ 等。</p>
+<h3 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h3><p>决策树（decision tree）是一类常见的机器学习方法。以二分类任务为例，我们希望从给定训练数据集学得一个模型用以对新示例进行分类，这个把样本分类的任务，可看作对“当前样本属于正类吗？“这个问题的“决策”或“判定”过程。</p>
+<p>顾名思义，决策树是基于树结构来进行决策的，这恰是人类在面临决策问题时一种很自然的处理机制。树中非叶子节点表示需要作出分类判断的属性，每个分支代表可能的属性值。下图给出了西瓜问题的一颗决策树。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/14.jpg" alt="babb7185999143d2f546dc0d7fc76680.png"></p>
+<h3 id="随机森林"><a href="#随机森林" class="headerlink" title="随机森林"></a>随机森林</h3><p>首先我们介绍一下 <strong>Bagging</strong>。给定包含 m 个样本的数据集，我们先随机取出一个样本放入采样集中，再把该样本放回初始数据集，使得下次采样时该样本仍有可能被选中，这样，经过m次随机采样操作，我们得到含 m 个样本的采样集，初始训练集中有的样本在采样集里多次出现，有的则从未出现。</p>
+<p>照这样，我们可采样出 T 个含 m 个训练样本的采样集，然后基于每个采样集训练出一个基学习器，再将这些基学习器进行结合。这就是 Bagging 的基本流程。在对预测输出进行结合时，Bagging 通常对分类任务使用简单投票法，对回归任务使用简单平均法。若分类预测时出现两个类收到同样票数的情形，则最简单的做法是随机选择一个，也可进一步考察学习器投票的置信度来确定最终胜者。</p>
+<p>随机森林（Random Forest，简称 RF）是 Bagging 的一个扩展变体。RF 在以决策树为基学习器构建 Bagging 集成的基础上，进一步在决策树的训练过程中引入了随机属性选择。具体来说，传统决策树在选择划分属性时是在当前结点的属性集合（假定有 d 个属性）中选择一个最优属性；而在 RF 中，对基决策树的每个结点，先从该结点的属性集合中随机选择一个包含 k 个属性的子集，然后再从这个子集中选择一个最优属性用于划分。这样使得随机森林中的决策树都能够彼此不同，提升系统的多样性，从而提升分类性能。</p>
+<p>随机森林简单、容易实现、计算开销小，令人惊奇的是，它在很多现实任务中展现出强大的性能，被誉为“代表集成学习技术水平的方法”。</p>
+<h3 id="kNN"><a href="#kNN" class="headerlink" title="kNN"></a>kNN</h3><p>k近邻（k-Nearest Neighbor，简称 kNN）学习是一种常用的监督学习方法，其工作机制非常简单：给定测试样本，基于某种距离度量找出训练集中与其最靠近的 k 个训练样本，然后基于这 k 个“邻居”的信息来进行预测。通常，在分类任务中可使用“投票法”，即选择这 k 个样本中出现最多的类别标记作为预测结果；在回归任务中可使用“平均法，即将这 k 个样本的实值输出标记的平均值作为预测结果；还可基于距离远近进行加权平均或加权投票，距离越近的样本权重越大。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/15.jpg" alt="a5e05733ac1f4912ecc1bd1828535f57.png"></p>
+<p>上图是一个k近邻分类器示意图。虚线为等距线，测试样本在 k=1 或 k=5 时被判别为正例，k=3 时被判别为反例。显然，k 是一个重要参数，当 k 取不同值时，分类结果会有显著不同。</p>
+<h3 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h3><p>神经网络是由具有适应性的简单单元组成的广泛并行互连的网络，它的组织能够模拟生物神经系统对真实世界物体所作出的交互反应。</p>
+<p>神经网络中最基本的成分是神经元（neuron）模型，即上述定义中的“简单单元”。在生物神经网络中，每个神经元与其他神经元相连，当它“兴奋”时，就会向相连的神经元发送化学物质，从而改变这些神经元内的电位；如果某神经元的电位超过一个“阈值”（threshold），那么它就会被激活，即“兴奋”起来，向其他神经元发送化学物质。</p>
+<p>1943年，McMulloch 和 Pitts 将上述情形抽象为下图所示的简单模型，这就是一直沿用至今的“<strong>M-P神经元模型</strong>”。把许多个这样的神经元按一定的层次结构连接起来，就得到了神经网络。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/16.jpg" alt="5ba11eb4ebb4f8dddb0b8806dace6347.png"></p>
+<p>在这个模型中，神经元接收到来自 n 个其他神经元传递过来的输入信号，这些输入信号通过带权重的连接（connection）进行传递，神经元接收到总输入将与神经元的阈值进行比较，然后通过“激活函数”（activation function）处理以产生神经元的输出。</p>
+<h2 id="机器学习架构"><a href="#机器学习架构" class="headerlink" title="机器学习架构"></a>机器学习架构</h2><p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/17.png" alt="8b49f81f455bb0bb519c3659accc8f7d.png"></p>
+<p>注入机器学习系统的数据可能来自不同的源，可以是实时的流数据，也可以是批处理数据或者无交互的定时任务数据。常见的数据源有 Amazon Kinesis、Apache Flume、Apache Kafka 等。注入的数据经过清洗和预处理后被存入数据储存库中，例如 SQL/NoSQL 数据库、数据仓库（data warehouse）、HDFS 分布式系统等等。</p>
+<h3 id="模型引擎"><a href="#模型引擎" class="headerlink" title="模型引擎"></a>模型引擎</h3><ul>
+<li><strong>数据准备（Data preparation）</strong>：数据准备阶段需要进行数据清洗（data cleansing），检查数据一致性和完整性，对数据进行规范化，对拆分的或是聚合的数据进行转换和重组。</li>
+<li><strong>特征生成（Feature generation）</strong>：找到待分析数据的关键特征。特征可以来自原始数据或者聚合后的数据，不同特征通常都是相互独立的。特征提取的首要目标是降低数据维度和提高模型性能。</li>
+<li><strong>模型训练（Model training）</strong>：机器学习模型分析数据间的关联，将数据分类到不同的组。为了获得最佳性能，需要对数据特征进行合适的采样。通常 70～80% 的数据会被用于训练阶段。</li>
+<li><strong>模型测试（Model testing）</strong>：在测试阶段我们验证模型，模型的性能能够被测试并做出调节。交叉验证能够确定模型的性能。通常 20% 的数据会被用于测试阶段。</li>
+</ul>
+<h3 id="性能评估"><a href="#性能评估" class="headerlink" title="性能评估"></a>性能评估</h3><p>性能调节（Performance tuning）和错误检测（error detection）是机器学习系统最重要的迭代过程，能够帮助提升系统的性能。如果系统的泛化功能能够以较高的概率给出较低的<strong>泛化误差（generalization error）</strong>，我们称这个系统拥有最优性能。事实上这属于 PAC 理论的范畴。</p>
+<p>泛化误差与分类的准确度，回归模型预测的精确度直接相关。为了计算泛化误差，我们给出一些评估指标：</p>
+<h4 id="均方误差"><a href="#均方误差" class="headerlink" title="均方误差"></a>均方误差</h4><p>假设现在有一条回归曲线，我们想测量每个点到回归线的距离，而均方误差（Mean squared error，MSE）就能够统计这些偏移量。$P_i$ 为预测值，$A_i$ 为真实值，MSE 对每个点偏移量的平方和求平均：</p>
+<script type="math/tex; mode=display">MSE = \frac{1}{n}\sum_{i=1}^n{(P_i - A_i)^2}</script><p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/18.png" alt="d8c5be836a6aff5b4e312f9b7a4a7a8a.png"></p>
+<h4 id="平均绝对误差"><a href="#平均绝对误差" class="headerlink" title="平均绝对误差"></a>平均绝对误差</h4><p>平均绝对误差（Mean absolute error，MAE) 计算每个点绝对误差的均值。MAE 是时间序列分析中的预测误差的一个常见指标。相比于 MSE，由于 MSE 使用了平方会放大误差，所以 MSE 对于异常数据更加敏感，而 MAE 对异常点有更好的鲁棒性（抗干扰能力更强），更适合用来做预测分析。但对于学习效率来说，误差较大时 MSE 收敛更快精度更高。</p>
+<script type="math/tex; mode=display">MAE = \frac{1}{n}\sum_{i=1}^n{|P_i - A_i|}</script><h4 id="精确率、召回率、准确率"><a href="#精确率、召回率、准确率" class="headerlink" title="精确率、召回率、准确率"></a>精确率、召回率、准确率</h4><p>精确率、召回率和准确率是机器学习分类问题（classification problem）模型评估中常见的性能度量指标：</p>
+<ul>
+<li><strong>精确率（Precision）</strong>，又叫查准率，定义为：$Precision \triangleq \frac{TP}{TP+FP}$</li>
+<li><strong>召回率（Recall）</strong>，又叫查全率，定义为：$Recall \triangleq \frac{TP}{TP+FN}$</li>
+<li><strong>准确率（Accuracy）</strong>，定义为：$Accuracy \triangleq \frac{TP+TN}{TP+TN+FP+FN}$</li>
+</ul>
+<p>上述定义式中 T 代表 True，F 代表 False，T/F 表示预测是否正确；P 代表 Positive，N 代表 Negative，P/N 代表本身是正例还是反例。例如：恶意流量检测系统中，P 代表是恶意流量，那么 TP 就代表正确检测出恶意流量，FN 代表本身不是恶意流量却被错误地识别为恶意流量。</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/19.png" alt="385e4f3b305ced036ed00c0098a74855.png"></p>
+<p>Precision 从预测结果角度出发，描述了<strong>预测出来的正例结果中有多少是真实正例</strong>，关心的是查出来的准不准；Recall 从真实结果角度出发，描述了<strong>测试集中的真实正例有多少被检测出来</strong>，关心的是查的全不全。Accuracy 则代表所有预测中正确预测所占的比例。</p>
+<p>当正负样本分布严重不均匀时，仅仅靠准确率 Accuracy 去评估模型性能是不合适的。就拿恶意流量检测来说，假设恶意流量占总流量的 0.1%，那么考虑一个全部流量都 pass 的检测系统，它的准确率依然能达到 99.9%，但是一条恶意流量都没有检测出来，这显然是不合要求的。所以通常需要结合这三个指标对模型进行整体评估。</p>
+<h3 id="性能改善"><a href="#性能改善" class="headerlink" title="性能改善"></a>性能改善</h3><p>那么如何提高模型的性能呢？通常可以通过：</p>
+<ul>
+<li><strong>改善数据质量</strong>：数据需要清洗、重采样以及规范化，特征提取步骤也可能需要重新审视，缺乏独立性的特征也会导致性能不佳。</li>
+<li><strong>更换算法</strong>：模型的性能不佳也可能是因为没有选对合适的算法，在这种情况下，不同算法的基准测试可以帮助我们做出合适的选择。基准测试包括但不限于：K倍交叉验证。</li>
+<li><strong>使用集成学习（Ensemble Learning)</strong>：同时使用多种学习算法来获得比单独使用任何学习算法具有更好的性能。一些最复杂的人工智能系统就是这类集成的副产物。</li>
+</ul>
+<h2 id="机器学习扩展库"><a href="#机器学习扩展库" class="headerlink" title="机器学习扩展库"></a>机器学习扩展库</h2><p>Python 作为机器学习最常用语言，虽然不是最快的，但因为它的灵活性而被数据科学家们广泛接受。Python 为机器学习专家提供了一系列的工具和扩展库，常用到的有：</p>
+<ul>
+<li><strong>NumPy</strong>：是统计分析和机器学习方面的重要扩展库，提供了支持线性代数、傅立叶变换和其他数值分析的复杂函数库。</li>
+<li><strong>SciPy</strong>：基于 NumPy 的科学计算库，可以处理插值、积分、优化、图像处理、常微分方程数值解的求解、信号处理等问题。</li>
+<li><strong>Scikit-learn</strong>：简单高效的机器学习库，提供了解决分类、集群、回归等问题的机器学习算法模型，Scikit-learn 依赖于 NumPy 和 SciPy。</li>
+<li><strong>pandas</strong>：非常强力的数据统计分析工具。Pandas 纳入了大量库和一些标准的数据模型，提供了高效地操作大型数据集所需的工具。能够很好的读写和呈现表格数据。</li>
+<li><strong>Matplotlib</strong>：绘图工具，常常与 NumPy、SciPy 配合使用。</li>
+</ul>
+<p>下图是 Scikit-learn 在解决不同规模，不同类型问题时推荐使用的算法模型：</p>
+<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/20.png" alt="92b3401d754315d494e32f9bab97e755.png"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>Halder, S. &amp; Ozdemir, S. <em>Hands-On Machine Learning for Cybersecurity: Safeguard your system by making your machines intelligent using the Python ecosystem[M].</em> Packt Publishing Ltd, 2018.</li>
+<li>周志华. 机器学习[M]. 清华大学出版社, 2016.</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/09/22/%E4%BB%80%E4%B9%88%E6%98%AFP-NP-NPC%E4%BB%A5%E5%8F%8ANP-Hard%E9%97%AE%E9%A2%98%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2852,289 +3160,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">Java 日志二三事</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-01-13 18:10:44" itemprop="dateCreated datePublished" datetime="2019-01-13T18:10:44+08:00">2019-01-13</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/13/Java-日志二三事/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">8.5k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Java 拥有功能和性能都非常强大的日志库，但另一方面，Java 日志库依赖看起来丰富的让人眼花缭乱。相信大家或多或少都有这样的疑问，Log4j，SLF4J，Logback，Log4j2 这些日志框架我该如何选择？它们彼此间又有什么关系？本篇文章将介绍这些日志库的历史演进和之间的关系，方便你选择最适合的日志库。文章最后还有日志库使用的最佳实践。</p>
-<h2 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h2><p><strong>Log4j</strong> (Log For Java) 可以当之无愧地说是 Java 日志框架的元老，1999 年发布首个版本，2012 年发布最后一个版本，2015 年正式宣布终止，至今还有无数的系统在使用 Log4j，甚至很多新系统的日志框架选型仍在选择 Log4j。</p>
-<p>然而老的不等于好的，在 IT 技术层面更是如此。尽管 Log4j 有着出色的历史战绩，但早已不是 Java 日志框架的最优选择。</p>
-<p>在 Log4j 被 Apache Foundation 收入门下之后，由于理念不合， Log4j 的作者 Ceki Gülcü 离开并开发了 SLF4J 和 Logback。</p>
-<p><strong>SLF4J</strong> (Simple Log Facade For Java) 因其优秀的性能和理念很快受到了广泛欢迎，2016 年的统计显示，GitHub 上的热门 Java 项目中，SLF4J 是使用率第二名的类库（第一名是 Junit）。</p>
-<p><strong>Logback</strong> 则吸取了 Log4j 的经验，实现了很多强大的新功能，再加上它和 SLF4J 能够无缝集成，也受到了欢迎。</p>
-<p>在这期间，Apache Logging 则一直在关门憋大招，<strong>Log4j2</strong> 在 beta 版鼓捣了几年，终于在 2014 年发布了 GA 版，不仅吸收了 Logback 的先进功能，更通过优秀的锁机制、LMAX Disruptor、”无垃圾”机制等先进特性，在性能上全面超越了 Log4j 和 Logback。</p>
-<h3 id="Log4j-1-x"><a href="#Log4j-1-x" class="headerlink" title="Log4j 1.x"></a>Log4j 1.x</h3><p>Log4j (Log For Java) 是在 Logback 出现之前被广泛使用的日志库，由 Gülcü 于 2001 年发布，后来成为 Apache 基金会的顶级项目。Log4j 在设计上非常优秀，对后续的 Java Log 框架有长久而深远的影响，也产生了 Log4c、Log4s、Log4perl 等到其他语言的移植。Log4j 的短板在于性能，在Logback 和 Log4j2 出来之后，Log4j 的使用也减少了。</p>
-<h3 id="Commons-Logging"><a href="#Commons-Logging" class="headerlink" title="Commons Logging"></a>Commons Logging</h3><p>Commons Logging，简称 JCL，是 Apache 下属项目。JCL 是一个 <strong>Log Facade，只提供 Log API，不提供实现</strong>，然后有 Adapter 来使用 Log4j 或者 JDK 中自带的 JUL（Java Util Logging）作为 <strong>Log Implementation</strong>。</p>
-<p>不同的项目可能各自使用了不同的日志库，如果你的项目依赖的其他项目各自使用了不同的日志库，你想控制日志行为，就需要针对每个日志库都写一个配置文件，那岂不是很麻烦?所以这个时候 JCL 就出现了。</p>
-<p>在程序中日志创建和记录都是用 JCL 中的接口，而真正运行时会搜索当前 ClassPath 中有什么实现，如果有 Log4j 就是用 Log4j，如果啥都没有则使用 JDK 的 JUL。这样，在你的项目中，还有第三方的项目中，大家记录日志都使用 JCL 的接口，然后最终运行程序时，可以按照自己的需求(或者喜好)来选择使用合适的 Log Implementation。比如你想使用 Log4j，就添加 Log4j 的依赖并编写一个 Log4j 的配置文件（通常命名为 <code>log4j.properties</code>）。</p>
-<h3 id="SLF4J-Logback"><a href="#SLF4J-Logback" class="headerlink" title="SLF4J/Logback"></a>SLF4J/Logback</h3><p>SLF4J (Simple Logging <strong>Facade</strong> for Java) 和 Logback 也是 Gülcü 创立的项目，其创立主要是为了提供更高性能的实现。其中，SLF4j 是类似于 JCL 的 Log Facade，Logback 是类似于 Log4j 的 Log Implementation。</p>
-<p>SLF4J 出现的缘由是 Gülcü 认为 JCL 的 API 设计得不好，容易让使用者写出性能有问题的代码。比如在用 JCL 输出一个 debug 级别的 log：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger.debug(<span class="string">"start process request, url: "</span> + url);</span><br></pre></td></tr></table></figure>
-<p>这个有什么问题呢？一般生产环境 log 级别都会设到 info 或者以上，那这条 log 是不会被输出的。然而不管会不会输出，这其中都会做一个字符串连接操作，然后生产一个新的字符串。如果这条语句在循环或者被调用很多次的函数中，就会多做很多无用的字符串连接，影响性能。所以 JCL 的最佳实践推荐这么写：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">    logger.debug(<span class="string">"start process request, url: "</span> + url);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>显然作为 API 来说这太为繁琐，所以 SLF4J 提供了新的 API，方便开发者使用:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger.debug(<span class="string">"start process request, url: &#123;&#125;"</span>, url);</span><br></pre></td></tr></table></figure>
-<p>这样的话，在不输出 log 的时候避免了字符串拼接的开销；在输出的时候需要做一个字符串 format，代价比手工拼接字符串大一些，但是可以接受。</p>
-<p>而 Logback 则是作为 Log4j 的取缔者来开发的，提供了性能更好的实现，以及异步 logger，Filter 等更多的特性。</p>
-<h3 id="Log4j2"><a href="#Log4j2" class="headerlink" title="Log4j2"></a>Log4j2</h3><p>现在有了更好的 SLF4J 和 Logback 正慢慢取代 JCL 和 Log4j，然而维护 Log4j 的人不想坐视用户一点点被 SLF4J /Logback 蚕食，所以 Log4j2 诞生了。Log4j2 和 Log4j1.x 并不兼容，设计上很大程度上模仿了 SLF4J/Logback，性能上也获得了很大的提升。Log4j2 也做了 Facade/Implementation 分离的设计，分成了 log4j-api 和 log4j-core。</p>
-<h2 id="Facade-amp-Implementation"><a href="#Facade-amp-Implementation" class="headerlink" title="Facade &amp; Implementation"></a>Facade &amp; Implementation</h2><p>JCL、SLF4J 和 Log4j2 日志框架都使用了 GoF 设计模式中的门面模式（<strong>Facade Pattern</strong>），将接口和实现分离，定义统一的接口，而实现可以由用户自由选择。现在我们有了三个流行的 Log Facade，以及多个 Log Implementation，那么该如何配合使用呢？</p>
-<h3 id="SLF4J"><a href="#SLF4J" class="headerlink" title="SLF4J"></a>SLF4J</h3><p>Gülcü 是个追求完美的人，他决定让 SLF4J 和这些 Log 之间都能够方便的互相替换，所以做了各种 <strong>Adapter</strong> 和 <strong>Bridge</strong> 来连接:</p>
-<p><img src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/0.jpg" alt="0a9ca27a6fcb038fca91153b1147e5cc.jpeg"></p>
-<p>有趣的是，唯独没有 slf4j-over-log4j2 的桥接库，而且 log4j-to-slf4j 和 log4j-slf4j-impl 也是由 Apache 自己开发的。</p>
-<p>slf4j-api 只是 Log Facade 的依赖，添加了该依赖意味着在编码时你能够使用 <code>Logger log = LoggerFactory.getLogger(Main.class);</code> 和 <code>log.info(&quot;hello, {}&quot;, &quot;world&quot;);</code> 这种方式。除此之外，还需要添加 Log Implementation 的依赖。</p>
-<p>下图是 <a href="https://www.slf4j.org/manual.html" target="_blank" rel="noopener">SLF4J官网</a> 介绍可以绑定的日志实现框架。其中 slf4j-simple 是为小项目提供的简单实现；logback-classic 是官方的原生实现，不需要额外的适配器。而 <code>slf4j-log4j12</code> 和 <code>slf4j-jdk14</code> 分别是适配到 Log4j 和 JUL 的依赖，JUL 由于是 JDK 自带所以不需要额外依赖，而 Log4j 则还需要添加自己的底层实现依赖。</p>
-<p><img src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/1.png" alt="b7d8f119aca4c91e4d72283f7198148f.png"></p>
-<p>下面这张图展示了 SLF4J 绑定不同日志实现框架需要的依赖：</p>
-<p><img src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/2.png" alt="d8261ab119309917e25180ef0ae42abe.png"></p>
-<h3 id="Log4j2-1"><a href="#Log4j2-1" class="headerlink" title="Log4j2"></a>Log4j2</h3><p>关于 Log Facade 选择 SLF4J 还是 Log4j2，个人觉得要看项目需求。总的来说 SLF4J 的兼容性更好，日志实现可以随意搭配使用；虽然 Log4j2 可以通过 log4j-to-slf4j 桥接到 SLF4J 再使用其他的 Log Implementation，但这必然带来多余的性能消耗。</p>
-<p>而 Log4j2 的优点则在于性能，在 <a href="https://stackoverflow.com/questions/41498021/is-it-worth-to-use-slf4j-with-log4j2" target="_blank" rel="noopener">Is it worth to use slf4j with log4j2</a> 这个问题中推荐直接面向 Log4j2 API 编程，理由如下：</p>
-<ul>
-<li>Message API</li>
-<li>Lambdas for lazy logging</li>
-<li>Log any Object instead of just Strings</li>
-<li>Garbage-free: avoid creating varargs or creating Strings where possible</li>
-<li>CloseableThreadContext automatically removes items from the MDC when you’re finished with them</li>
-</ul>
-<p>Logback 和 Log4j2 都宣称自己是 Log4j 的后代，一个是出自同一作者，另一个则是在名字上根正苗红。撇开血统不谈，比较一下 Log4j2 和 Logback：</p>
-<ul>
-<li>Log4j2 比 Logback 更新。Log4j2 的 GA 版在 2014 年底才推出，比 Logback 晚了好几年，这期间 Log4j2 确实吸收了 SLF4J 和 Logback 的一些优点（比如日志模板），同时应用了不少的新技术</li>
-<li>由于采用了更先进的锁机制和 LMAX Disruptor 库，Log4j2 的性能优于 Logback，尤其是在多线程环境下和使用异步日志的环境下</li>
-<li>二者都支持 Filter（应该说是 Log4j2 借鉴了 Logback 的 Filter），能够实现灵活的日志记录规则（例如仅对一部分用户记录 DEBUG 级别的日志）</li>
-<li>二者都支持对配置文件的动态更新</li>
-<li>二者都能够适配 SLF4J， Logback 与 SLF4J 的适配应该会更好一些，毕竟省掉了一层适配库</li>
-<li>Logback 能够自动压缩/删除旧日志</li>
-<li>Logback 提供了对日志的 HTTP 访问功能</li>
-<li>Log4j2 实现了“无垃圾”和“低垃圾”模式。简单地说，Log4j2 在记录日志时，能够重用对象（如String等），尽可能避免实例化新的临时对象，减少因日志记录产生的垃圾对象，减少垃圾回收带来的性能下降</li>
-</ul>
-<p>这是 Apache 官方提供的同步和异步写日志时的性能对比图：</p>
-<p><img src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/3.png" alt="900a0952b7540882925dd50699dc3e29.png"></p>
-<p><img src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/4.png" alt="c5b42a899b63e265a3e2f4300d443ecb.png"></p>
-<p>所以综上所诉，个人的看法是：<strong>如果对性能有要求，且 Log Implementation 想选用 Log4j2 的话，推荐 Log Facade 直接使用 Log4j2 API</strong>。</p>
-<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><h3 id="总是使用-Log-Facade，而不是具体-Log-Implementation"><a href="#总是使用-Log-Facade，而不是具体-Log-Implementation" class="headerlink" title="总是使用 Log Facade，而不是具体 Log Implementation"></a>总是使用 Log Facade，而不是具体 Log Implementation</h3><p>正如之前所说的，使用 Log Facade 可以方便的切换具体的日志实现。而且，如果依赖多个项目，使用了不同的 Log Facade，还可以方便的通过 Adapter 转接到同一个实现上。如果依赖项目使用了多个不同的日志实现，就麻烦的多了。</p>
-<p>具体来说，现在<strong>推荐使用 Log4j2 API 或者 SLF4j</strong>，不推荐继续使用 JCL。</p>
-<h3 id="只添加一个-Log-Implementation-依赖"><a href="#只添加一个-Log-Implementation-依赖" class="headerlink" title="只添加一个 Log Implementation 依赖"></a>只添加一个 Log Implementation 依赖</h3><p>毫无疑问，项目中应该只使用一个具体的 Log Implementation，<strong>建议使用 Logback 或者 Log4j2</strong>。如果有依赖的项目中，使用的 Log Facade 不支持直接使用当前的 Log Implementation，就添加合适的桥接器依赖。</p>
-<h3 id="总是为-Log-Implementation-依赖设置-optional-和-runtime-scope"><a href="#总是为-Log-Implementation-依赖设置-optional-和-runtime-scope" class="headerlink" title="总是为 Log Implementation 依赖设置 optional 和 runtime scope"></a>总是为 Log Implementation 依赖设置 optional 和 runtime scope</h3><p>在项目中，Log Implementation 的依赖强烈建议设置为 runtime scope，并且设置为 optional。例如项目中使用了 SLF4J 作为 Log Facade，然后想使用 Logback 作为 Implementation，那么使用 POM 文件应该这么写：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;slf4j.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>ch.qos.logback<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>logback-classic<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;logback.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>设为 optional，<strong>依赖不会传递</strong>，这样如果你的项目被别的项目依赖，它就不会引入不想要的 Log Implementation 依赖，即<strong>使用你提供的库的用户可以自定义 Log Implementation</strong>；</p>
-<p>Scope 设置为 runtime，是为了防止开发人员在项目中直接使用 Log Implementation 中的类，而不适用 Log Facade 中的类，即<strong>编码时程序员只可见 Log Facade 层面而不必关注实现层面</strong>。</p>
-<h3 id="如果有必要，排除依赖的第三方库中的-Log-Impementation-依赖"><a href="#如果有必要，排除依赖的第三方库中的-Log-Impementation-依赖" class="headerlink" title="如果有必要，排除依赖的第三方库中的 Log Impementation 依赖"></a>如果有必要，排除依赖的第三方库中的 Log Impementation 依赖</h3><p>这是很常见的一个问题，第三方库的开发者未必会把具体的日志实现或者桥接器的依赖设置为 optional，然后你的项目继承了这些依赖。然而具体的日志实现未必是你想使用的，比如他依赖了 Log4j，你想使用 Logback，这样程序在运行时会检测到有多个日志实现类，如下图。另外，如果不同的第三方依赖使用了不同的桥接器和 Log 实现，也容易形成环。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SLF4J: Class path contains multiple SLF4J bindings.</span><br><span class="line">SLF4J: Found binding in [jar:file:&#x2F;Users&#x2F;s1mple&#x2F;.m2&#x2F;repository&#x2F;org&#x2F;slf4j&#x2F;slf4j-log4j12&#x2F;1.7.5&#x2F;slf4j-log4j12-1.7.5.jar!&#x2F;org&#x2F;slf4j&#x2F;impl&#x2F;StaticLoggerBinder.class]</span><br><span class="line">SLF4J: Found binding in [jar:file:&#x2F;Users&#x2F;s1mple&#x2F;.m2&#x2F;repository&#x2F;com&#x2F;caacitc&#x2F;slf4j-jdk14-1.6.1.jar&#x2F;1.0.2&#x2F;slf4j-jdk14-1.6.1.jar-1.0.2.jar!&#x2F;org&#x2F;slf4j&#x2F;impl&#x2F;StaticLoggerBinder.class]</span><br></pre></td></tr></table></figure>
-<p>这种情况下，推荐的处理方法，是<strong>使用 exclude 来排除所有的这些 Log 实现和桥接器的依赖，只保留第三方库里面对 Log Facade 的依赖</strong>。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.jstorm<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jstorm-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>log4j-over-slf4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>ch.qos.logback<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>logback-classic<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>另外，在 IntelliJ IDEA 中，可以使用 <strong>Show Maven Dependencies</strong> 查看依赖关系图，可以方便的搜索依赖并 exclude 掉。</p>
-<h3 id="避免为不会输出的-log-付出代价"><a href="#避免为不会输出的-log-付出代价" class="headerlink" title="避免为不会输出的 log 付出代价"></a>避免为不会输出的 log 付出代价</h3><p>Log 库都可以灵活的设置输出界别，所以每一条程序中的 log，都是有可能不会被输出的。这时候要注意不要额外的付出代价。</p>
-<p>先看两个有问题的写法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">logger.debug(<span class="string">"start process request, url: "</span> + url);</span><br><span class="line">logger.debug(<span class="string">"receive request: &#123;&#125;"</span>, toJson(request));</span><br></pre></td></tr></table></figure>
-<p>第一条是直接做了字符串拼接，所以即使日志级别高于 debug 也会做一个字符串连接操作；第二条虽然用了 SLF4J/Log4j2 中的懒求值方式来避免不必要的字符串拼接开销，但是 <code>toJson()</code> 这个函数却是都会被调用并且开销更大。</p>
-<p>推荐的写法如下:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">logger.debug(<span class="string">"start process request, url:&#123;&#125;"</span>, url); <span class="comment">// SLF4J/LOG4J2</span></span><br><span class="line"><span class="keyword">if</span> (logger.isDebugEnabled()) &#123; <span class="comment">// SLF4J/LOG4J2</span></span><br><span class="line">    logger.debug(<span class="string">"receive request: "</span> + toJson(request)); </span><br><span class="line">&#125;</span><br><span class="line">logger.debug(<span class="string">"receive request: &#123;&#125;"</span>, () -&gt; toJson(request)); <span class="comment">// LOG4J2</span></span><br><span class="line">logger.debug(() -&gt; <span class="string">"receive request: "</span> + toJson(request)); <span class="comment">// LOG4J2</span></span><br></pre></td></tr></table></figure>
-<h3 id="日志中尽量避免输出行号，函数名等字段"><a href="#日志中尽量避免输出行号，函数名等字段" class="headerlink" title="日志中尽量避免输出行号，函数名等字段"></a>日志中尽量避免输出行号，函数名等字段</h3><p>原因是，为了获取语句所在的函数名，或者行号，log 库的实现都是获取当前的 stacktrace，然后分析取出这些信息，而获取 stacktrace 的代价是很昂贵的。如果有很多的日志输出，就会占用大量的 CPU。在没有特殊需要的情况下，建议不要在日志中输出这些这些字段。</p>
-<p>正确做法是使用日志打印的类名和内容定位到代码位置。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(Main.class);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">"hello world"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 16:08:14.913 [main] INFO com.github.s1mplecc.log.Main - hello world</span></span><br></pre></td></tr></table></figure>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://zhuanlan.zhihu.com/p/24272450" target="_blank" rel="noopener">Java 日志框架解析(上) - 历史演进</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/24275518" target="_blank" rel="noopener">Java 日志框架解析(下) - 最佳实践</a></li>
-<li><a href="http://codepub.cn/2017/03/08/Programming-to-the-log4j2-API-instead-of-slf4j/" target="_blank" rel="noopener">面向log4j2 API编程而不是slf4j</a></li>
-<li><a href="https://www.slf4j.org/manual.html" target="_blank" rel="noopener">SLF4J 官方文档</a></li>
-<li><a href="https://logging.apache.org/log4j/2.x/performance.html" target="_blank" rel="noopener">Apache Log4j2 官方文档</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3186,7 +3211,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">66</span>
+                    <span class="site-state-item-count">67</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3300,7 +3325,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">36</span>
+                      
+                    
+                    <span class="site-state-item-count">37</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

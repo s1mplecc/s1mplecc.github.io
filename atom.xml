@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://s1mplecc.github.io/"/>
-  <updated>2020-09-23T00:14:41.116Z</updated>
+  <updated>2020-10-07T05:19:01.884Z</updated>
   <id>https://s1mplecc.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>机器学习在网络安全中的应用 —— Chapter 1: Basics of Machine Learning in Cybersecurity</title>
+    <link href="https://s1mplecc.github.io/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/"/>
+    <id>https://s1mplecc.github.io/2020/10/07/机器学习在网络安全中的应用-——-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/</id>
+    <published>2020-10-07T05:17:42.000Z</published>
+    <updated>2020-10-07T05:19:01.884Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Translations" scheme="https://s1mplecc.github.io/categories/Translations/"/>
+    
+    
+      <category term="Security" scheme="https://s1mplecc.github.io/tags/Security/"/>
+    
+      <category term="ML" scheme="https://s1mplecc.github.io/tags/ML/"/>
+    
+  </entry>
   
   <entry>
     <title>什么是P, NP, NPC以及NP-Hard问题？</title>
@@ -521,32 +549,6 @@
     
     
       <category term="API Design" scheme="https://s1mplecc.github.io/tags/API-Design/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Trunk Based Development 主干开发模型</title>
-    <link href="https://s1mplecc.github.io/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/"/>
-    <id>https://s1mplecc.github.io/2018/09/27/Trunk Based Development 主干开发模型/</id>
-    <published>2018-09-26T18:35:29.000Z</published>
-    <updated>2020-09-16T01:48:41.942Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-      <category term="Concepts" scheme="https://s1mplecc.github.io/categories/Concepts/"/>
-    
-    
-      <category term="Git" scheme="https://s1mplecc.github.io/tags/Git/"/>
     
   </entry>
   
