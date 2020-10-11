@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://s1mplecc.github.io/"/>
-  <updated>2020-10-11T04:35:09.955Z</updated>
+  <updated>2020-10-11T07:23:01.047Z</updated>
   <id>https://s1mplecc.github.io/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>LaTeX数学公式语法</title>
+    <title>LaTeX 数学公式语法</title>
     <link href="https://s1mplecc.github.io/2020/10/11/Latex%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/"/>
     <id>https://s1mplecc.github.io/2020/10/11/Latex数学公式语法/</id>
     <published>2020-10-11T02:05:13.000Z</published>
-    <updated>2020-10-11T04:35:09.955Z</updated>
+    <updated>2020-10-11T07:23:01.047Z</updated>
     
     <summary type="html">
     
@@ -45,7 +45,7 @@
     <link href="https://s1mplecc.github.io/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/"/>
     <id>https://s1mplecc.github.io/2020/10/07/机器学习在网络安全中的应用-——-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/</id>
     <published>2020-10-07T05:17:42.000Z</published>
-    <updated>2020-10-07T05:19:01.884Z</updated>
+    <updated>2020-10-11T07:24:25.866Z</updated>
     
     <summary type="html">
     
@@ -64,16 +64,16 @@
     
       <category term="Security" scheme="https://s1mplecc.github.io/tags/Security/"/>
     
-      <category term="ML" scheme="https://s1mplecc.github.io/tags/ML/"/>
+      <category term="Machine Learning" scheme="https://s1mplecc.github.io/tags/Machine-Learning/"/>
     
   </entry>
   
   <entry>
-    <title>什么是P, NP, NPC以及NP-Hard问题？</title>
+    <title>什么是 P, NP, NPC 以及 NP-Hard 问题？</title>
     <link href="https://s1mplecc.github.io/2020/09/22/%E4%BB%80%E4%B9%88%E6%98%AFP-NP-NPC%E4%BB%A5%E5%8F%8ANP-Hard%E9%97%AE%E9%A2%98%EF%BC%9F/"/>
     <id>https://s1mplecc.github.io/2020/09/22/什么是P-NP-NPC以及NP-Hard问题？/</id>
     <published>2020-09-22T13:17:07.000Z</published>
-    <updated>2020-09-23T00:14:41.116Z</updated>
+    <updated>2020-10-11T07:22:33.989Z</updated>
     
     <summary type="html">
     
@@ -93,11 +93,11 @@
   </entry>
   
   <entry>
-    <title>基于DPDK的模拟(D)Dos攻击实验</title>
+    <title>基于 DPDK 的模拟 (D)Dos 攻击实验</title>
     <link href="https://s1mplecc.github.io/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/"/>
     <id>https://s1mplecc.github.io/2020/09/17/基于DPDK的模拟-D-Dos攻击实验/</id>
     <published>2020-09-17T13:02:12.000Z</published>
-    <updated>2020-09-22T14:03:51.798Z</updated>
+    <updated>2020-10-11T07:22:46.966Z</updated>
     
     <summary type="html">
     
@@ -121,7 +121,7 @@
     <link href="https://s1mplecc.github.io/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/"/>
     <id>https://s1mplecc.github.io/2020/08/09/DataCon2020-加密恶意流量检测初赛-Writeup-及总结反思/</id>
     <published>2020-08-09T15:20:52.000Z</published>
-    <updated>2020-09-18T04:44:17.759Z</updated>
+    <updated>2020-10-11T07:36:48.485Z</updated>
     
     <summary type="html">
     
@@ -135,10 +135,8 @@
     
     </summary>
     
-      <category term="Experiments" scheme="https://s1mplecc.github.io/categories/Experiments/"/>
+      <category term="Projects" scheme="https://s1mplecc.github.io/categories/Projects/"/>
     
-    
-      <category term="Network" scheme="https://s1mplecc.github.io/tags/Network/"/>
     
       <category term="Security" scheme="https://s1mplecc.github.io/tags/Security/"/>
     
@@ -337,7 +335,7 @@
     <link href="https://s1mplecc.github.io/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/"/>
     <id>https://s1mplecc.github.io/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/</id>
     <published>2018-12-27T05:45:37.000Z</published>
-    <updated>2020-09-16T01:48:42.003Z</updated>
+    <updated>2020-10-11T07:22:35.486Z</updated>
     
     <summary type="html">
     
@@ -354,18 +352,16 @@
       <category term="Ops" scheme="https://s1mplecc.github.io/categories/Ops/"/>
     
     
-      <category term="Hexo" scheme="https://s1mplecc.github.io/tags/Hexo/"/>
-    
-      <category term="Ghost" scheme="https://s1mplecc.github.io/tags/Ghost/"/>
+      <category term="Blog Engine" scheme="https://s1mplecc.github.io/tags/Blog-Engine/"/>
     
   </entry>
   
   <entry>
-    <title>50行代码实现一个并发的 Python 爬虫程序</title>
+    <title>50 行代码实现一个并发的 Python 爬虫程序</title>
     <link href="https://s1mplecc.github.io/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/"/>
     <id>https://s1mplecc.github.io/2018/12/03/50行代码实现一个并发的 Python 爬虫程序/</id>
     <published>2018-12-03T05:41:09.000Z</published>
-    <updated>2020-09-16T01:48:41.787Z</updated>
+    <updated>2020-10-11T07:37:09.446Z</updated>
     
     <summary type="html">
     
@@ -379,7 +375,7 @@
     
     </summary>
     
-      <category term="Coding" scheme="https://s1mplecc.github.io/categories/Coding/"/>
+      <category term="Projects" scheme="https://s1mplecc.github.io/categories/Projects/"/>
     
     
       <category term="Python" scheme="https://s1mplecc.github.io/tags/Python/"/>

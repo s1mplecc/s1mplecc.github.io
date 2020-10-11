@@ -33,12 +33,9 @@
       <categories>
         <category>Design</category>
       </categories>
-      <tags>
-        <tag>API Design</tag>
-      </tags>
   </entry>
   <entry>
-    <title>Certbot配置HTTPS</title>
+    <title>Certbot 配置 HTTPS</title>
     <url>/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/</url>
     <content><![CDATA[<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ul>
 <li>Ubuntu 16.04</li>
@@ -89,7 +86,7 @@
     <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
 <p>JPress是基于java的博客平台，我将用它演示如何使用Docker部署Java Web应用。</p>
 </blockquote>
-<h2 id="Prerequisite"><a href="#Prerequisite" class="headerlink" title="Prerequisite"></a>Prerequisite</h2><ul>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
 <li>服务器 ubuntu 16.04</li>
 <li>下载好的jpress.war包，<a href="http://jpress.cnitti.net/c/11.html" target="_blank" rel="noopener">下载地址</a>，下载下来先在Idea里跑了测试一下，以免服务器上出问题</li>
 <li>构建好的java-web开发环境Docker镜像，<a href="http://s1mple.info/deploy-with-docker/" target="_blank" rel="noopener">如何构建</a></li>
@@ -125,16 +122,18 @@
 </blockquote>
 <ul>
 <li>在<code>/home/s1mple/jpress</code>目录下执行，<code>-t</code>给新镜像打上标签  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker build -t s1mple1995&#x2F;jpress .</span><br></pre></td></tr></table></figure></li>
-<li>可以看到控制台输出了一些信息<br><img src="/2017/11/04/Docker%20%E9%83%A8%E7%BD%B2%20Java%20Web%20%E5%BA%94%E7%94%A8/0.png" alt="-----2017-11-04---6.06.30"></li>
+<li>可以看到控制台输出了一些信息</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Sending build context to Docker daemon 20.@6MB</span><br><span class="line">Step 1&#x2F;6 : FROM simple1995&#x2F;jpress</span><br><span class="line"> ---&gt; 6c7F7aa5716d</span><br><span class="line">Step 2&#x2F;6 : USER root</span><br><span class="line"> ---&gt; Running in d29bd2d7cf4e</span><br><span class="line"> ---&gt; 616922ef516c</span><br><span class="line">Removing intermediate container d29bd2d7cf4e</span><br><span class="line">Step 3&#x2F;6 : ENV APP &#x2F;usr&#x2F;local&#x2F;lib&#x2F;tomcat9&#x2F;webapps</span><br><span class="line"> ---&gt; Running in 5667a207¢898</span><br><span class="line"> ---&gt; b6c061148616</span><br><span class="line">Removing intermediate container 5667a267¢898</span><br><span class="line">Step 4&#x2F;6 : ADD .&#x2F;jpress.war SAPP</span><br><span class="line"> ---&gt; a82c14e949e0</span><br><span class="line">Step 5&#x2F;6 : EXPOSE 1110</span><br><span class="line"> ---&gt; Running in b31964ddfefo</span><br><span class="line"> ---&gt; cd9de2d7786F</span><br><span class="line">Removing intermediate container b31964ddfefo</span><br><span class="line">Step 6&#x2F;6 : CMD service tomcat run</span><br><span class="line"> ---&gt; Running in @4a6a78fa77a</span><br><span class="line"> ---&gt; de9b3648553e</span><br><span class="line">Removing intermediate container @4a6a78fa77a</span><br><span class="line">Successfully built de9b3648553e</span><br><span class="line">Successfully tagged s1mple1995&#x2F;jpress:latest</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>Dockerfile里的每一句命令都会在一个新的容器中运行，并生成一个新的镜像，再将中间过渡的容器移除。</p>
 </blockquote>
 <ul>
-<li><p>我们来验证一下，执行<code>docker images</code>看到我的两个镜像<br><img src="/2017/11/04/Docker%20%E9%83%A8%E7%BD%B2%20Java%20Web%20%E5%BA%94%E7%94%A8/1.png" alt="-----2017-11-04---7.05.41"></p>
-</li>
-<li><p>执行<code>docker image history de9</code>查看jpress镜像历史<br><img src="/2017/11/04/Docker%20%E9%83%A8%E7%BD%B2%20Java%20Web%20%E5%BA%94%E7%94%A8/2.png" alt="-----2017-11-04---7.01.30"><br>甚至可以看到我们通过<code>bash</code>修改tomcat配置文件后提交的镜像，你可以通过运行这些镜像来回退你的操作</p>
-</li>
+<li>我们来验证一下，执行<code>docker images</code>看到我的两个镜像</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">REPOSITORY                  TAG          IMAGE ID</span><br><span class="line">s1mple1995&#x2F;jpress           latest       de9b3648553e</span><br><span class="line">simple1995&#x2F;java-web-env     latest       292d98d8d6d4</span><br></pre></td></tr></table></figure>
+<ul>
+<li>执行<code>docker image history de9</code>查看jpress镜像历史<br><img src="/2017/11/04/Docker%20%E9%83%A8%E7%BD%B2%20Java%20Web%20%E5%BA%94%E7%94%A8/2.png" alt="-----2017-11-04---7.01.30"><br>甚至可以看到我们通过<code>bash</code>修改tomcat配置文件后提交的镜像，你可以通过运行这些镜像来回退你的操作</li>
 </ul>
 <h2 id="Run-amp-Install"><a href="#Run-amp-Install" class="headerlink" title="Run&amp;Install"></a>Run&amp;Install</h2><ul>
 <li>运行，<code>-p</code>绑定端口，<code>-v</code>挂载宿主机与容器的共享文件夹  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker run -it -d -p 1110:1110 -v &#x2F;home&#x2F;s1mple&#x2F;jpress&#x2F;:&#x2F;usr&#x2F;local&#x2F;lib&#x2F;tomcat9&#x2F;webapps s1mple1995&#x2F;jpress</span><br></pre></td></tr></table></figure></li>
@@ -167,9 +166,8 @@
         <category>Ops</category>
       </categories>
       <tags>
-        <tag>Server</tag>
         <tag>Docker</tag>
-        <tag>Java</tag>
+        <tag>Web</tag>
       </tags>
   </entry>
   <entry>
@@ -1331,10 +1329,8 @@
         <category>Coding</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
-        <tag>Vue</tag>
         <tag>Web</tag>
-        <tag>Front-end</tag>
+        <tag>Vue.js</tag>
       </tags>
   </entry>
   <entry>
@@ -1461,10 +1457,8 @@
         <category>Coding</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
-        <tag>Vue</tag>
-        <tag>Web</tag>
-        <tag>Front-end</tag>
+        <tag>Vue.js</tag>
+        <tag>web</tag>
       </tags>
   </entry>
   <entry>
@@ -1545,10 +1539,8 @@
         <category>Coding</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
-        <tag>Vue</tag>
-        <tag>Web</tag>
-        <tag>Front-end</tag>
+        <tag>Vue.js</tag>
+        <tag>web</tag>
       </tags>
   </entry>
   <entry>
@@ -2268,7 +2260,7 @@
         <category>Ops</category>
       </categories>
       <tags>
-        <tag>Server</tag>
+        <tag>Blog Engine</tag>
       </tags>
   </entry>
   <entry>
@@ -2374,7 +2366,7 @@
       </tags>
   </entry>
   <entry>
-    <title>50行代码实现一个并发的 Python 爬虫程序</title>
+    <title>50 行代码实现一个并发的 Python 爬虫程序</title>
     <url>/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。</p>
 <p>案例还是用的之前 <a href="https://s1mple.xyz/java-web-crawler/" target="_blank" rel="noopener">Java 网络爬虫</a> 的案例。所需 <code>Python Version &gt;= 3.6</code>，用到的库有：</p>
@@ -2503,14 +2495,14 @@
 </ul>
 ]]></content>
       <categories>
-        <category>Coding</category>
+        <category>Projects</category>
       </categories>
       <tags>
         <tag>Python</tag>
       </tags>
   </entry>
   <entry>
-    <title>Clean Code -- PartDB 案例与模版方法模式</title>
+    <title>Clean Code -- 第三节：PartDB 案例与模版方法模式</title>
     <url>/2018/05/10/Clean%20Code%20--%20PartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。<a href="https://s1mple.online/clean-code-2/" target="_blank" rel="noopener">上一篇</a>我们通过报表参数填充案例复习了<strong>迪米特法则（最小知识法则）</strong>、<strong>信息专家模式：数据和行为应该封装在一起</strong>。本篇我们将通过 PartDB 案例来见识 IDEA 中 <strong>Extract Superclass</strong> 等强大的重构功能，以及与案例相关的设计模式：<strong>模版方法模式</strong>。</p>
 <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
@@ -2559,12 +2551,11 @@
         <category>Coding</category>
       </categories>
       <tags>
-        <tag>Clean Code</tag>
         <tag>Refactoring</tag>
       </tags>
   </entry>
   <entry>
-    <title>Clean Code -- 报表参数填充案例</title>
+    <title>Clean Code -- 第二节：报表参数填充案例</title>
     <url>/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。<a href="https://s1mple.online/clean-code-1/" target="_blank" rel="noopener">上一篇</a>我们介绍了<strong>迪米特法则（最小知识法则）</strong>、<strong>信息专家模式：数据和行为应该封装在一起</strong>，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过<strong>报表参数填充</strong>的案例来加深理解，并见识 IDEA 中更为强大的重构功能。</p>
 <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
@@ -2605,12 +2596,11 @@
         <category>Coding</category>
       </categories>
       <tags>
-        <tag>Clean Code</tag>
         <tag>Refactoring</tag>
       </tags>
   </entry>
   <entry>
-    <title>Clean Code -- 迪米特法则与 Paperboy 案例</title>
+    <title>Clean Code -- 第一节：迪米特法则与 Paperboy 案例</title>
     <url>/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍<strong>迪米特法则</strong>、<strong>信息专家模式</strong>，并结合案例实操在 <strong>IntelliJ IDEA</strong> 中如何重构代码。本文大部分内容转载自张总博客: <a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构</a>。</p>
 <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
@@ -2661,7 +2651,6 @@
         <category>Coding</category>
       </categories>
       <tags>
-        <tag>Clean Code</tag>
         <tag>Refactoring</tag>
       </tags>
   </entry>
@@ -3454,10 +3443,7 @@
         <category>Concepts</category>
       </categories>
       <tags>
-        <tag>Node.js</tag>
         <tag>Redis</tag>
-        <tag>Database</tag>
-        <tag>Koa</tag>
       </tags>
   </entry>
   <entry>
@@ -3704,7 +3690,7 @@
       </categories>
       <tags>
         <tag>Node.js</tag>
-        <tag>Spring Cloud</tag>
+        <tag>Spring</tag>
       </tags>
   </entry>
   <entry>
@@ -3823,8 +3809,8 @@
         <category>Coding</category>
       </categories>
       <tags>
-        <tag>Spring Cloud</tag>
-        <tag>OAuth</tag>
+        <tag>Security</tag>
+        <tag>Spring</tag>
       </tags>
   </entry>
   <entry>
@@ -4053,7 +4039,7 @@
       </categories>
   </entry>
   <entry>
-    <title>什么是P, NP, NPC以及NP-Hard问题？</title>
+    <title>什么是 P, NP, NPC 以及 NP-Hard 问题？</title>
     <url>/2020/09/22/%E4%BB%80%E4%B9%88%E6%98%AFP-NP-NPC%E4%BB%A5%E5%8F%8ANP-Hard%E9%97%AE%E9%A2%98%EF%BC%9F/</url>
     <content><![CDATA[<h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2><p>时间复杂度并不是表示一个程序解决问题需要花多少时间，而是<strong>当问题规模扩大后，程序需要的时间长度增长得有多快</strong>。</p>
 <p>不管数据有多大，程序处理花的时间始终是那么多的，我们就说这个程序性能很好，具有$O(1)$的时间复杂度，也称常数级复杂度；数据规模变得有多大，花的时间也跟着变得有多长，这个程序的时间复杂度就是$O(n)$，比如找n个数中的最大值；而像冒泡排序、插入排序等，数据扩大2倍，时间变慢4倍的，属于$O(n^2)$的复杂度。还有一些穷举类的算法，所需时间长度成几何阶数上涨，这就是$O(a^n)$的指数级复杂度，甚至$O(n!)$的阶乘级复杂度。</p>
@@ -4343,7 +4329,7 @@
       </tags>
   </entry>
   <entry>
-    <title>基于DPDK的模拟(D)Dos攻击实验</title>
+    <title>基于 DPDK 的模拟 (D)Dos 攻击实验</title>
     <url>/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
 <p>该实验是我暑期前往导师实验室，与一群东南大学网安三年级的本科生所做。我的工作是帮他们搭建了实验所需运行的服务器环境，实验数据的采集、制图以及结果分析均是他们所做。由于该实验可能在我研究生阶段进行进一步的研究，所以将它摘至我的博客，文档亦摘录了本科生们所做的实验报告，特此申明。</p>
@@ -4945,9 +4931,8 @@
         <category>Ops</category>
       </categories>
       <tags>
-        <tag>Server</tag>
         <tag>Docker</tag>
-        <tag>Nginx</tag>
+        <tag>Blog Engine</tag>
       </tags>
   </entry>
   <entry>
@@ -5070,8 +5055,7 @@
         <category>Ops</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
-        <tag>Ghost</tag>
+        <tag>Blog Engine</tag>
       </tags>
   </entry>
   <entry>
@@ -5316,10 +5300,9 @@
 </ul>
 ]]></content>
       <categories>
-        <category>Experiments</category>
+        <category>Projects</category>
       </categories>
       <tags>
-        <tag>Network</tag>
         <tag>Security</tag>
       </tags>
   </entry>
@@ -5572,11 +5555,11 @@
       </categories>
       <tags>
         <tag>Security</tag>
-        <tag>ML</tag>
+        <tag>Machine Learning</tag>
       </tags>
   </entry>
   <entry>
-    <title>LaTeX数学公式语法</title>
+    <title>LaTeX 数学公式语法</title>
     <url>/2020/10/11/Latex%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/</url>
     <content><![CDATA[<h2 id="特殊格式"><a href="#特殊格式" class="headerlink" title="特殊格式"></a>特殊格式</h2><div class="table-container">
 <table>
