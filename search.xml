@@ -6089,10 +6089,10 @@
 </table>
 </div>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p><strong>矩阵表示</strong></p>
-<script type="math/tex; mode=display">\left[ \begin{matrix} 1 &2 &\cdots &4\\5 &6 &\cdots &8 \\ \vdots &\vdots &\ddots &\vdots \\ 13 &14 &\cdots &16\end{matrix} \right]</script><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\left[ \begin&#123;matrix&#125; 1 &amp;2 &amp;\cdots &amp;4\\5 &amp;6 &amp;\cdots &amp;8 \\ \vdots &amp;\vdots &amp;\ddots &amp;\vdots \\ 13 &amp;14 &amp;\cdots &amp;16\end&#123;matrix&#125; \right]</span><br></pre></td></tr></table></figure>
-<p><strong>大括号公式</strong></p>
-<script type="math/tex; mode=display">F(n)= \begin{cases} 1 & \text{n = 0 或 1}\\ F(n-1)+F(n-2) & \text{n > 1} \end{cases}</script><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">F(n)&#x3D; \begin&#123;cases&#125; 1 &amp; \text&#123;n &#x3D; 0 或 1&#125;\\ F(n-1)+F(n-2) &amp; \text&#123;n &gt; 1&#125; \end&#123;cases&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="希腊字母"><a href="#希腊字母" class="headerlink" title="希腊字母"></a>希腊字母</h2><div class="table-container">
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\left[ \begin&#123;matrix&#125; 1 &amp;2 &amp;\cdots &amp;4\\5 &amp;6 &amp;\cdots &amp;8 \\ \vdots &amp;\vdots &amp;\ddots &amp;\vdots \\ 13 &amp;14 &amp;\cdots &amp;16\end&#123;matrix&#125; \right]</span><br></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">\left[ \begin{matrix} 1 &2 &\cdots &4\\5 &6 &\cdots &8 \\ \vdots &\vdots &\ddots &\vdots \\ 13 &14 &\cdots &16\end{matrix} \right]</script><p><strong>大括号公式</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">F(n)&#x3D; \begin&#123;cases&#125; 1 &amp; \text&#123;n &#x3D; 0 或 1&#125;\\ F(n-1)+F(n-2) &amp; \text&#123;n &gt; 1&#125; \end&#123;cases&#125;</span><br></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">F(n)= \begin{cases} 1 & \text{n = 0 或 1}\\ F(n-1)+F(n-2) & \text{n > 1} \end{cases}</script><h2 id="希腊字母"><a href="#希腊字母" class="headerlink" title="希腊字母"></a>希腊字母</h2><div class="table-container">
 <table>
 <thead>
 <tr>
