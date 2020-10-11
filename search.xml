@@ -38,67 +38,41 @@
       </tags>
   </entry>
   <entry>
-    <title>Certbot 配置 Https</title>
+    <title>Certbot配置HTTPS</title>
     <url>/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/</url>
-    <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>天天看着自己的网站“不安全”很不开心，在油条那儿了解到一个叫做Certbot的工具，可以简单快捷的配置http为https</p>
-</blockquote>
-<h2 id="Prerequisite"><a href="#Prerequisite" class="headerlink" title="Prerequisite"></a>Prerequisite</h2><ul>
-<li>ubuntu 16.04</li>
-<li>nginx</li>
+    <content><![CDATA[<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ul>
+<li>Ubuntu 16.04</li>
+<li>Nginx</li>
 </ul>
-<h2 id="Get-Started"><a href="#Get-Started" class="headerlink" title="Get Started"></a>Get Started</h2><ul>
-<li><p><a href="https://certbot.eff.org/#ubuntuxenial-nginx" target="_blank" rel="noopener">官方文档</a></p>
-</li>
-<li><p>导入软件源</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install software-properties-common</span><br><span class="line">sudo add-apt-repository ppa:certbot/certbot</span><br></pre></td></tr></table></figure>
-</li>
+<h2 id="安装配置Certbot"><a href="#安装配置Certbot" class="headerlink" title="安装配置Certbot"></a>安装配置Certbot</h2><p>添加软件源：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install software-properties-common</span><br><span class="line">sudo add-apt-repository ppa:certbot/certbot</span><br></pre></td></tr></table></figure>
+<p>可以看到 <code>/etc/apt/sources.list.d</code> 目录下多了个 <code>certbot-ubuntu-certbot-xenial.list</code> 文件，内容如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br><span class="line"># deb-src http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br></pre></td></tr></table></figure></p>
+<p>安装Certbot：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install python-certbot-nginx</span><br></pre></td></tr></table></figure></p>
+<p>使用如下命令自动配置Nginx服务，也可以加上 <code>certonly</code> 参数来手动配置nginx。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo certbot --nginx</span><br></pre></td></tr></table></figure></p>
+<p>出现如下文字，说明Certbot读取了nginx配置文件。默认回车选择所有：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Which names would you like to activate HTTPS for?</span><br><span class="line">-------------------------------------------------</span><br><span class="line">1: s1mple.info</span><br><span class="line">2: www.s1mple.info</span><br></pre></td></tr></table></figure></p>
+<p>选择是否重定位到HTTPS。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.</span><br><span class="line">-------------------------------------------------------------------------------------</span><br><span class="line">1: No redirect - Make no further changes to the webserver configuration.</span><br><span class="line">2: Redirect - Make all requests redirect to secure HTTPS access. Choose this for</span><br><span class="line">new sites, or if you&#39;re confident your site works on HTTPS. You can undo this</span><br><span class="line">change by editing your web server&#39;s configuration.</span><br></pre></td></tr></table></figure>
+<p>配置成功，有效期为90天，过期需要使用 <code>certbot renew</code> 更新新的证书。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">IMPORTANT NOTES:</span><br><span class="line">- Congratulations! Your certificate and chain have been saved at:</span><br><span class="line">  &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;simple. info&#x2F;fullchain.pem</span><br><span class="line">  Your key file has been saved at:</span><br><span class="line">  &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;simple. info&#x2F;privkey.pem</span><br><span class="line">  Your cert will expire on 2018-02-04. To obtain a new or tweaked</span><br><span class="line">  version of this certificate in the future, simply run certbot again</span><br><span class="line">  with the “certonly&quot; option. To non-interactively renew xall* of</span><br><span class="line">  your certificates, run &quot;certbot renew&quot;</span><br></pre></td></tr></table></figure>
+<p>现在你可以通过HTTPS访问你的网站了。</p>
+<p>我们查看一下Nginx配置文件，文件名对应你的域名，以 <code>.conf</code> 结尾，发现新增了如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">listen 443 ssl; # managed by Certbot</span><br><span class="line">ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;fullchain.pem; # managed by Certbot</span><br><span class="line">ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;privkey.pem; # managed by Certbot</span><br><span class="line">include &#x2F;etc&#x2F;letsencrypt&#x2F;options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">ssl_dhparam &#x2F;etc&#x2F;letsencrypt&#x2F;ssl-dhparams.pem; # managed by Certbot</span><br><span class="line"></span><br><span class="line"># Redirect non-https traffic to https</span><br><span class="line">if ($scheme !&#x3D; &quot;https&quot;) &#123;</span><br><span class="line">    return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">&#125; # managed by Certbot</span><br></pre></td></tr></table></figure>
+<p>说明Nginx在监听443端口，并将不是HTTPS的请求重定位到HTTPS。</p>
+<h2 id="协议原理"><a href="#协议原理" class="headerlink" title="协议原理"></a>协议原理</h2><p><strong>HTTPS(Http over Secure Socket Layer)</strong> 是基于SSL加密的更安全的HTTP协议，默认端口443。SSL握手协议过程如下：</p>
+<ol>
+<li>客户端的浏览器向服务器传送客户端SSL协议的版本号，加密算法的种类，产生的随机数，以及其他通讯所需要信息。</li>
+<li>服务器向客户端传送SSL协议的版本号，加密算法的种类，随机数以及其他相关信息，同时<strong>服务器还将向客户端传送自己的证书</strong>。</li>
+<li>客户端利用服务器传过来的信息<strong>验证服务器的合法性</strong>，服务器的合法性包括：证书是否过期，发行服务器证书的CA是否可靠，发行者证书的公钥能否正确解开服务器证书的“发行者的数字签名”，服务器证书上的域名是否和服务器的实际域名相匹配。</li>
+<li>客户端随机产生一个用于后面通讯的“对话密钥”，然后用服务器的公钥（从步骤2中的服务器的证书中获得）对其加密，然后传给服务器。</li>
+<li><strong>服务器用私钥解密</strong>“对话密钥”（此处的公钥和私钥是对应的，公钥加密的数据只能用私钥解密，服务器私钥只在服务器端保留），然后用其作为服务器和客户端的“通话密码”加解密通讯。具体的加密算法详见<a href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">RSA加密算法</a>。</li>
+<li>SSL的握手部分结束，SSL安全通道的数据通讯开始，客户和服务器开始使用对话密钥进行数据通讯，同时进行通讯完整性的检验。</li>
+</ol>
+<p><img src="/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/0.png" alt="78ab162bf20b438ca377faa87f4ea2a2_th"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://certbot.eff.org/#ubuntuxenial-nginx" target="_blank" rel="noopener">Certbot官方文档</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html" target="_blank" rel="noopener">图解SSL/TLS协议 —— 阮一峰</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">RSA加密算法 —— WiKi</a></li>
 </ul>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
-<p>add-apt-repository is a script for adding apt sources.list entries.It can be used to add any repository and also provides a shorthand syntax for adding a Launchpad PPA (Personal Package Archive) repository.</p>
-</blockquote>
-<ul>
-<li><p>可以看到<code>/etc/apt/sources.list.d</code>目录下多了个<code>certbot-ubuntu-certbot-xenial.list</code>文件，内容如下</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br><span class="line"># deb-src http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装<strong>Certbot</strong></p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install python-certbot-nginx</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用如下命令自动配置nginx服务，当然你也可以加上<code>certonly</code>参数来手动配置nginx</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo certbot --nginx</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>出现如下文字，说明certbot可以识别nginx配置文件，读取其中信息<br><img src="/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/0.png" alt="-----2017-11-06---10.49.41"><br>  直接回车选取所有</p>
-</li>
-<li><p>选2的话所有网页都会被重定位到https<br><img src="/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/1.png" alt="-----2017-11-06---11.05.39"></p>
-</li>
-<li><p>配置成功，可以看到有效期是90天，需要使用<code>certbot renew</code>生成新的证书<br><img src="/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/2.png" alt="-----2017-11-06---11.10.43"></p>
-</li>
-<li><p>现在你就可以通过https访问你的网站了</p>
-</li>
-</ul>
-<h3 id="Nginx-Configuration"><a href="#Nginx-Configuration" class="headerlink" title="Nginx Configuration"></a>Nginx Configuration</h3><ul>
-<li><p>我们看一下nginx配置文件，<code>vim /etc/nginx/sites-enabled/s1mple.info.conf</code>，<br>发现新增了如下内容</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">listen 443 ssl; # managed by Certbot</span><br><span class="line">ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;fullchain.pem; # managed by Certbot</span><br><span class="line">ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;privkey.pem; # managed by Certbot</span><br><span class="line">include &#x2F;etc&#x2F;letsencrypt&#x2F;options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">ssl_dhparam &#x2F;etc&#x2F;letsencrypt&#x2F;ssl-dhparams.pem; # managed by Certbot</span><br><span class="line"></span><br><span class="line"># Redirect non-https traffic to https</span><br><span class="line">if ($scheme !&#x3D; &quot;https&quot;) &#123;</span><br><span class="line">    return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">&#125; # managed by Certbot</span><br></pre></td></tr></table></figure>
-<p>  监听443端口，重定位https，301也是重定位的状态码</p>
-</li>
-<li><p>执行<code>netstat -tulpen</code>也可以看到nginx确实在监听443端口</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tcp     0.0.0.0:443     0.0.0.0:*    LISTEN    11873&#x2F;nginx -g daem</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="About-Https"><a href="#About-Https" class="headerlink" title="About Https"></a>About Https</h2><ul>
-<li><a href="http://jingyan.baidu.com/article/e4d08ffdb61f040fd3f60d48.html" target="_blank" rel="noopener">Https协议原理</a></li>
-<li><a href="http://news.ifeng.com/a/20170904/51862764_0.shtml" target="_blank" rel="noopener">Web 加速，协议先行！</a></li>
-</ul>
-<blockquote>
-<p><strong>Https(Http over Secure Socket Layer)</strong> 是基于ssl加密的更安全的http协议，默认端口443。而<strong>Certbot</strong>部署的的<strong>Let’s Encrypt</strong>证书就是“让我们加密”的意思。</p>
-</blockquote>
-<h3 id="SSL握手协议"><a href="#SSL握手协议" class="headerlink" title="SSL握手协议"></a>SSL握手协议</h3><ul>
-<li><a href="http://www.188cf.net/licai/87869x.shtml" target="_blank" rel="noopener">传输层安全协议抓包分析之SSL/TLS</a></li>
-</ul>
-<p><img src="/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/3.jpeg" alt="78ab162bf20b438ca377faa87f4ea2a2_th"></p>
-<blockquote>
-<p>① 客户端的浏览器向服务器传送客户端SSL协议的版本号，加密算法的种类，产生的随机数，以及其他通讯所需要信息。<br>② 服务器向客户端传送SSL协议的版本号，加密算法的种类，随机数以及其他相关信息，同时<strong>服务器还将向客户端传送自己的证书</strong>。<br>③ 客户端利用服务器传过来的信息<strong>验证服务器的合法性</strong>，服务器的合法性包括：证书是否过期，发行服务器证书的CA 是否可靠，发行者证书的公钥能否正确解开服务器证书的“发行者的数字签名”，服务器证书上的域名是否和服务器的实际域名相匹配。<br>④ 客户端随机产生一个用于后面通讯的“<strong>对称密钥</strong>”，然后用服务器的公钥（服务器的公钥从步骤②中的服务器的证书中获得）对其加密，然后传给服务器。<br>⑤ <strong>服务器用私钥解密</strong>“对称密钥”(此处的公钥和私钥是相互关联的，<strong>公钥加密的数据只能用私钥解密</strong>，<strong>私钥只在服务器端保留</strong>。详细请参看： <a href="http://zh.wikipedia.org/wiki/RSA%E7%AE%97%E6%B3%95)，然后用其作为服务器和客户端的“**通话密码**”加解密通讯。同时在SSL通讯过程中还要完成数据通讯的完整性，防止数据通讯中的任何变化。" target="_blank" rel="noopener">http://zh.wikipedia.org/wiki/RSA%E7%AE%97%E6%B3%95)，然后用其作为服务器和客户端的“**通话密码**”加解密通讯。同时在SSL通讯过程中还要完成数据通讯的完整性，防止数据通讯中的任何变化。</a><br>⑥ SSL的握手部分结束，SSL安全通道的数据通讯开始，客户和服务器开始<strong>使用相同的对称密钥进行数据通讯</strong>，同时进行通讯完整性的检验。</p>
-</blockquote>
 ]]></content>
       <categories>
         <category>Ops</category>
@@ -2113,78 +2087,48 @@
     <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
 <p>Docker实现了宿主系统和Docker容器(container)的隔离，使用Docker可以将构建开发所需环境的镜像(images)，再根据镜像生成容器实例。实现不依赖宿主机环境的高效部署、测试。</p>
 </blockquote>
-<ul>
-<li>油条有一篇很好的文章介绍了Docker的工作原理。<a href="https://0x233.com/shen-qi-de-dockerdao-di-zuo-liao-shi-yao/" target="_blank" rel="noopener">链接</a></li>
-</ul>
-<h2 id="Get-Started"><a href="#Get-Started" class="headerlink" title="Get Started"></a>Get Started</h2><ul>
-<li>安装Docker,<a href="https://docs.docker.com/engine/installation/" target="_blank" rel="noopener">官网文档</a></li>
-</ul>
+<p>油条有一篇很好的文章介绍了Docker的工作原理。<a href="https://0x233.com/shen-qi-de-dockerdao-di-zuo-liao-shi-yao/" target="_blank" rel="noopener">链接</a></p>
+<h2 id="Get-Started"><a href="#Get-Started" class="headerlink" title="Get Started"></a>Get Started</h2><p>安装Docker,<a href="https://docs.docker.com/engine/installation/" target="_blank" rel="noopener">官网文档</a></p>
 <blockquote>
 <p>1.官方镜像仓库：<a href="https://hub.docker.com/" target="_blank" rel="noopener">https://hub.docker.com/</a><br>2.官网下载速度较慢，推荐DaoCloud仓库，和官网同步更新的 <a href="https://hub.daocloud.io/" target="_blank" rel="noopener">https://hub.daocloud.io/</a></p>
 </blockquote>
-<ul>
-<li><p>下载ubuntu基础镜像，冒号后是标签</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull daocloud.io&#x2F;library&#x2F;ubuntu:16.04</span><br></pre></td></tr></table></figure>
-<p>  执行<code>docker images</code>查看已下载的镜像</p>
-</li>
-<li><p>创建容器实例，返回容器ID。<code>-d</code>后台运行</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker run -d -it daocloud.io&#x2F;library&#x2F;ubuntu:16.04</span><br></pre></td></tr></table></figure>
-<p>  执行<code>docker ps</code>查看正在运行的容器</p>
-</li>
-</ul>
-<h2 id="Build-Your-Image"><a href="#Build-Your-Image" class="headerlink" title="Build Your Image"></a>Build Your Image</h2><ul>
-<li><p>进入容器，ID输入可区分的几位就可以了</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker exec -it 4e bash</span><br></pre></td></tr></table></figure>
-<p>  可以看到在容器中有一套全新的目录结构，与宿主机是隔离的。</p>
-</li>
-<li><p>安装vim</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install vim</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>更改软件源为阿里云源</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd &#x2F;etc&#x2F;apt&#x2F;</span><br><span class="line">cp sources.list sources.list_backup </span><br><span class="line">cat &#x2F;dev&#x2F;null &gt; sources.list</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>vim sources.list</code>将如下内容加入文件</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial main</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial main</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-updates main</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-updates main</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial universe</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial universe</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-updates universe</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-updates universe</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-security main</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-security main</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-security universe</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-security universe</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>日常<code>apt-get update|upgrade</code>之后着手安装jdk和Tomcat了</p>
-</li>
-<li><p>我的另一篇博客详细介绍了如何<a href="http://s1mple.info/install-java-tomcat/" target="_blank" rel="noopener">安装 JDK&amp;Tomcat</a></p>
-</li>
-</ul>
+<p>下载ubuntu基础镜像，冒号后是标签</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull daocloud.io&#x2F;library&#x2F;ubuntu:16.04</span><br></pre></td></tr></table></figure>
+<p>执行<code>docker images</code>查看已下载的镜像</p>
+<p>创建容器实例，返回容器ID。<code>-d</code>后台运行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker run -d -it daocloud.io&#x2F;library&#x2F;ubuntu:16.04</span><br></pre></td></tr></table></figure>
+<p>执行<code>docker ps</code>查看正在运行的容器</p>
+<h2 id="Build-Your-Image"><a href="#Build-Your-Image" class="headerlink" title="Build Your Image"></a>Build Your Image</h2><p>进入容器，ID输入可区分的几位就可以了</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker exec -it 4e bash</span><br></pre></td></tr></table></figure>
+<p>可以看到在容器中有一套全新的目录结构，与宿主机是隔离的。</p>
+<p>更改软件源为阿里云源</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd &#x2F;etc&#x2F;apt&#x2F;</span><br><span class="line">cp sources.list sources.list_backup </span><br><span class="line">cat &#x2F;dev&#x2F;null &gt; sources.list</span><br></pre></td></tr></table></figure>
+<p><code>vim sources.list</code>将如下内容加入文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial main</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial main</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-updates main</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-updates main</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial universe</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial universe</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-updates universe</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-updates universe</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-security main</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-security main</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-security universe</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.cloud.aliyuncs.com&#x2F;ubuntu&#x2F; xenial-security universe</span><br></pre></td></tr></table></figure>
+<p>日常<code>apt-get update|upgrade</code>之后着手安装jdk和Tomcat了</p>
+<p>我的另一篇博客详细介绍了如何<a href="http://s1mple.info/install-java-tomcat/" target="_blank" rel="noopener">安装 JDK&amp;Tomcat</a></p>
 <blockquote>
 <p>如果你成功到了这里，那恭喜你，你自己的开发环境镜像已经构建完了。还需要一些步骤来将你的镜像推上云端！</p>
 </blockquote>
-<h2 id="Push-It"><a href="#Push-It" class="headerlink" title="Push It !"></a>Push It !</h2><ul>
-<li><p><code>exit</code>或者<code>ctrl+d</code>退出当前容器，<code>docker ps</code>查看容器ID</p>
-</li>
-<li><p>根据容器创建一个新的镜像，不加标签默认<strong>latest</strong></p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker commit 4e s1mple1995&#x2F;java-web-env</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在<code>push</code>前需要在<a href="https://cloud.docker.com/" target="_blank" rel="noopener">docker官网</a>注册账户，用于存放自己的镜像</p>
-</li>
-<li><p>在<strong>Docker Cloud</strong>中<strong>create repository</strong>，镜像名要和服务器中的镜像名一致，不一致可以使用如下命令</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker tag local-image:tagname new-repo:tagname</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>在服务器端登录</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker login</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>执行push命令，等待上传完成</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker push s1mple1995&#x2F;java-web-env</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>现在你的镜像已经存放在Docker Cloud云端了，搜索你的镜像，随时随地可以pull下来。</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker search s1mple1995</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
+<h2 id="Push-It"><a href="#Push-It" class="headerlink" title="Push It !"></a>Push It !</h2><p><code>exit</code>或者<code>ctrl+d</code>退出当前容器，<code>docker ps</code>查看容器ID</p>
+<p>根据容器创建一个新的镜像，不加标签默认<strong>latest</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker commit 4e s1mple1995&#x2F;java-web-env</span><br></pre></td></tr></table></figure>
+<p>在<code>push</code>前需要在<a href="https://cloud.docker.com/" target="_blank" rel="noopener">docker官网</a>注册账户，用于存放自己的镜像</p>
+<p>在<strong>Docker Cloud</strong>中<strong>create repository</strong>，镜像名要和服务器中的镜像名一致，不一致可以使用如下命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker tag local-image:tagname new-repo:tagname</span><br></pre></td></tr></table></figure>
+<p>在服务器端登录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker login</span><br></pre></td></tr></table></figure>
+<p>执行push命令，等待上传完成</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker push s1mple1995&#x2F;java-web-env</span><br></pre></td></tr></table></figure>
+<p>现在你的镜像已经存放在Docker Cloud云端了，搜索你的镜像，随时随地可以pull下来。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker search s1mple1995</span><br></pre></td></tr></table></figure>
 <h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ol>
 <li>Docker的镜像管理很像git的版本控制。</li>
 <li><p>你也可以使用阿里云的容器镜像服务。如果你的服务器是阿里云的ECS，可以使用内网传输，速度非常快。</p>
  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker login registry-vpc.cn-hangzhou.aliyuncs.com</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><a href="https://cloud.docker.com/swarm/s1mple1995/repository/list" target="_blank" rel="noopener">我的官方仓库链接</a></p>
-</li>
 </ol>
+<p>​    </p>
 ]]></content>
       <categories>
         <category>Ops</category>
@@ -2568,62 +2512,43 @@
   <entry>
     <title>Clean Code -- PartDB 案例与模版方法模式</title>
     <url>/2018/05/10/Clean%20Code%20--%20PartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。<a href="https://s1mple.xyz/clean-code-2/" target="_blank" rel="noopener">上一篇</a>我们通过报表参数填充案例复习了<strong>迪米特法则（最小知识法则）</strong>、<strong>信息专家模式：数据和行为应该封装在一起</strong>。本篇我们将通过 PartDB 案例来见识 IDEA 中 <strong>Extract Superclass</strong> 等强大的重构功能，以及与案例相关的设计模式：<strong>模版方法模式</strong></p>
-</blockquote>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目</li>
-<li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，clone 下代码进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 Cmd + D 查看<strong>代码差异</strong></li>
-<li><p><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 Cmd 替换成 Ctrl，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Shift + F6 &#x2F;&#x2F; 重命名方法、属性、文件</span><br><span class="line">Cmd + Alt + M &#x2F;&#x2F; 提取方法（extract method）</span><br><span class="line">Cmd + Alt + N &#x2F;&#x2F; 内联（Inline），与 extract 相反</span><br><span class="line">Cmd + Shift + ⬆️&#x2F; ⬇️ &#x2F;&#x2F; 上下移动声明体（statement）  </span><br><span class="line"></span><br><span class="line">Ctrl + T &#x2F;&#x2F; 重构菜单</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。<a href="https://s1mple.online/clean-code-2/" target="_blank" rel="noopener">上一篇</a>我们通过报表参数填充案例复习了<strong>迪米特法则（最小知识法则）</strong>、<strong>信息专家模式：数据和行为应该封装在一起</strong>。本篇我们将通过 PartDB 案例来见识 IDEA 中 <strong>Extract Superclass</strong> 等强大的重构功能，以及与案例相关的设计模式：<strong>模版方法模式</strong>。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
+<li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目。</li>
+<li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 <code>Cmd + D</code> 查看<strong>代码差异</strong>。</li>
+<li><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 <code>Cmd</code> 替换成 <code>Ctrl</code>，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Shift + F6 &#x2F;&#x2F; 重命名方法、属性、文件</span><br><span class="line">Cmd + Alt + M &#x2F;&#x2F; 提取方法（extract method）</span><br><span class="line">Cmd + Alt + N &#x2F;&#x2F; 内联（Inline），与 extract 相反</span><br><span class="line">Cmd + Shift + ⬆️&#x2F; ⬇️ &#x2F;&#x2F; 上下移动声明体（statement）  </span><br><span class="line"></span><br><span class="line">Ctrl + T &#x2F;&#x2F; 重构菜单</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h2 id="案例代码"><a href="#案例代码" class="headerlink" title="案例代码"></a>案例代码</h2><ul>
-<li><p>我们定义好了一个汽车零件类 Part，现在要通过 PartDB 去访问数据库执行<code>select * from part</code>，并将返回结果填充成一个 PartList</p>
-  <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PartDB</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DRIVER_CLASS = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DB_URL = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String USER = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String PASSWORD = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SQL_SELECT_PARTS = <span class="string">"select * from part"</span>;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Part&gt; partList = <span class="keyword">new</span> ArrayList&lt;Part&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">populate</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Connection c = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Class.forName(DRIVER_CLASS);</span><br><span class="line">            c = DriverManager.getConnection(DB_URL, USER, PASSWORD);</span><br><span class="line">            Statement stmt = c.createStatement();</span><br><span class="line">            ResultSet rs = stmt.executeQuery(SQL_SELECT_PARTS);</span><br><span class="line">            <span class="keyword">while</span> (rs.next()) &#123;</span><br><span class="line">                Part p = <span class="keyword">new</span> Part();</span><br><span class="line">                p.setName(rs.getString(<span class="string">"name"</span>));</span><br><span class="line">                p.setBrand(rs.getString(<span class="string">"brand"</span>));</span><br><span class="line">                p.setRetailPrice(rs.getDouble(<span class="string">"retail_price"</span>));</span><br><span class="line">                partList.add(p);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            c.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>上述代码大概是每一个 Java 程序员都会接触到的：使用 JDBC 访问数据库。加载驱动、创立连接、执行 SQL 返回结果集并且填充到 Java 类中。显然，如果每一步都需要我们手动编写，那若是新增了一个类，比如 CustomerDB 是不是还要去 getConnection 等等，这必然会造成许多<strong>冗余代码</strong>。而现在许多的持久层框架，例如 MyBatis、Hibernate 都是基于 JDBC 进行再封装，避免了重复繁琐的工作。下面我们看看如何重构上述代码。</p>
-</li>
-</ul>
-<h2 id="Refactoring"><a href="#Refactoring" class="headerlink" title="Refactoring"></a>Refactoring</h2><ul>
-<li><p>首先一段整洁易读的代码应该层次分明，如果没想到重构，我们可能会使用注释和换行将代码分段</p>
-  <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// get connection</span></span><br><span class="line">Class.forName(DRIVER_CLASS);</span><br><span class="line">c = DriverManager.getConnection(DB_URL, USER, PASSWORD);</span><br><span class="line"></span><br><span class="line"><span class="comment">// get result set</span></span><br><span class="line">Statement stmt = c.createStatement();</span><br><span class="line">ResultSet rs = stmt.executeQuery(SQL_SELECT_PARTS);</span><br><span class="line"></span><br><span class="line"><span class="comment">// populate parts entity</span></span><br><span class="line"><span class="keyword">while</span> (rs.next()) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>然而，在学会重构之后，我们要习惯使用方法名产生注释的效果，<strong>注释不是越多越好，而要少而精，不必要的注释就不要</strong>。使用 <strong>提取方法（Cmd + Alt + M）</strong> 重构代码，并使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 移动方法顺序<br><img src="/2018/05/10/Clean%20Code%20--%20PartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/0.png" alt="25C7F4CD-951E-4B05-8A98-5A0433520EDA">注意我这里将<code>c</code>重命名（<strong>Shift + F6</strong>）为<code>connection</code>，<strong>命名要遵循在表达清楚业务含义的同时尽可能的短</strong>，<code>rs</code>、<code>err</code>甚至<code>e</code>这种因为频繁使用，基本上可以望文生义，所以可采用业界统一认可的缩写。但<code>c</code>这种命名，一旦代码量增多后，就可能带来阅读上的困扰，应当避免。顺便说一下，应该使用<code>populateParts()</code>而不是<code>populatePartList()</code>这种命名，因为<strong>命名应该站在功能层面，不应该暴露技术实现</strong>，万一哪一天，你改成 Set 了呢？</p>
-</li>
-<li><p>我们来观察提取出的三个方法。<code>getConnection()</code>创建数据库连接，在抽象层面与业务无关的，实现层面我们暂不考虑用户自定义情况（实际上应该由配置文件读入），所以实现层面也与业务无关。<code>getResultSet()</code>执行 SQL 获取结果集，在抽象层面与业务无关。实现层面上由于<code>SQL_SELECT_PARTS</code>所以与业务强耦合。我们可以使用 <strong>Cmd + Alt + N</strong> ，将<code>select * from part</code> SQL 语句<strong>内联</strong>，再提取<code>getSql()</code>方法（<strong>Cmd + Alt + M</strong>）<br><img src="/2018/05/10/Clean%20Code%20--%20PartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/1.png" alt="953ECD52-3430-4BFD-A662-24E78BCAF755"></p>
-</li>
-<li><p>如此一来，<code>getResultSet()</code>在实现层面也与业务无关了。而<code>getSql()</code>方法在抽象层面与业务无关，在实现层面就与业务有关了。<code>populateParts()</code>这个名字容易让人产生误解，我们将其重命名为<code>populateEntities()</code>，这样，它在抽象层面也与业务无关，而在实现层面与业务有关。为什么我一再强调<strong>抽象层面</strong>和<strong>实现层面</strong>与<strong>业务</strong>的关系，就是为了让方法变得纯粹。这也是软件设计中一种重要的设计思维：<strong>关注点分离</strong>，目的是将<strong>解决特定领域问题的代码从业务逻辑中独立出来，业务逻辑的代码中不再含有针对特定领域问题代码的调用，业务逻辑同特定领域问题的关系通过侧面来封装、维护，这样原本分散在在整个应用程序中的变动就可以很好的管理起来</strong>。比方有一个函数叫做<code>CreateNewCustomer()</code>，那么该函数只与客户的数据（属性）打交道，而给新客户自动发优惠券的动作就不能放到这个函数里面</p>
-</li>
-<li><p>现在，我们所有的方法都在抽象层面与业务无关，只有<code>getSql()</code>和<code>populateEntities()</code>在实现层面与业务有关。至此，我们拨开重重迷雾，冰山的一角轰然显现！既然大家都在抽象层面与业务无关，我们就应该<strong>抽象出更高阶的抽象类</strong>，这里就用到了 <strong>Extract Superclass</strong> 这个神奇的重构手法</p>
-</li>
-<li><p>使用 <strong>Ctrl + T</strong> 调出重构菜单，输入 super 就可以看到 Extract Superclass 的提示，敲击回车<br><img src="/2018/05/10/Clean%20Code%20--%20PartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/2.png" alt="F0675E41-8516-4FC3-96BB-928AB1060D40">注意需要勾选组成父类的成员，这里除了最后一个<code>partList</code>是业务独有的，其他全勾选上，而<code>getSql()</code>和<code>populateEntities()</code>方法因为具体实现与业务相关，就应该是子类去重写，所以应当勾选上 Make abstract</p>
-</li>
-<li><p>我们看看重构后的代码，简直太神奇了对不对！<br><img src="/2018/05/10/Clean%20Code%20--%20PartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/3.png" alt="68B462DA-CB1F-41FD-A519-6576CF7BD2FE"><img src="/2018/05/10/Clean%20Code%20--%20PartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/4.png" alt="CC64100D-FC25-4825-85DD-83AECC318E86"></p>
-</li>
-<li><p>为什么我在提取父类时直接将父类命名为 JdbcTemplate，大家应该不难想到，我们重构完成的抽象父类，就是一个最简化的 JdbcTemplate。许多框架亦是如此诞生的，使用者使用时让自己的业务实体类去继承这个模版类，重写业务相关方法。这也是软件设计模式中非常著名的<strong>模版方法模式</strong></p>
-</li>
-</ul>
-<h2 id="模版方法模式"><a href="#模版方法模式" class="headerlink" title="模版方法模式"></a>模版方法模式</h2><blockquote>
-<p>模板方法模式说白了就是：<strong>定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤</strong>。代表具体逻辑步骤的方法称做<strong>基本方法(primitive method)</strong>；而将基本方法汇总穿成一条线的方法叫做<strong>模板方法(template method)</strong>，这个设计模式的名字也是由此而来。 </p>
-</blockquote>
-<ul>
-<li><p>在上述的抽象类 JdbcTemplate 中，我们的模版方法就应该是<code>populate()</code>方法</p>
-  <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">populate</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    Connection connection = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        connection = getConnection();</span><br><span class="line">        ResultSet rs = getResultSet(connection);</span><br><span class="line">        populateEntities(rs);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  类似于写信的模版，类似“尊敬的xxx”、“此致，敬礼”这种千篇一律的套话我们可以定义一个模版，而需要差异化书写的只是信的内容。在<code>populate()</code>中，骨架已经搭好：先创建数据库连接，再执行 SQL 返回结果集，最后填充实体类。所以这里能看出，<strong>模版方法展现了框架的生命周期</strong>。为防止恶意操作，一般模板方法都会加上<code>final</code>关键字，不允许用户重写模版方法</p>
-</li>
-<li><p>基本方法又可以分为三种：抽象方法、具体方法和钩子方法。</p>
+<h2 id="案例代码"><a href="#案例代码" class="headerlink" title="案例代码"></a>案例代码</h2><p>我们定义好了一个汽车零件类 Part，现在要通过 PartDB 去访问数据库执行<code>select * from part</code>，并将返回结果填充成一个 PartList。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PartDB</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DRIVER_CLASS = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DB_URL = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String USER = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String PASSWORD = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SQL_SELECT_PARTS = <span class="string">"select * from part"</span>;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Part&gt; partList = <span class="keyword">new</span> ArrayList&lt;Part&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">populate</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Connection c = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Class.forName(DRIVER_CLASS);</span><br><span class="line">            c = DriverManager.getConnection(DB_URL, USER, PASSWORD);</span><br><span class="line">            Statement stmt = c.createStatement();</span><br><span class="line">            ResultSet rs = stmt.executeQuery(SQL_SELECT_PARTS);</span><br><span class="line">            <span class="keyword">while</span> (rs.next()) &#123;</span><br><span class="line">                Part p = <span class="keyword">new</span> Part();</span><br><span class="line">                p.setName(rs.getString(<span class="string">"name"</span>));</span><br><span class="line">                p.setBrand(rs.getString(<span class="string">"brand"</span>));</span><br><span class="line">                p.setRetailPrice(rs.getDouble(<span class="string">"retail_price"</span>));</span><br><span class="line">                partList.add(p);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            c.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码大概是每一个 Java 程序员都会接触到的：使用 JDBC 访问数据库。加载驱动、创立连接、执行 SQL 返回结果集并且填充到 Java 类中。显然，如果每一步都需要我们手动编写，那若是新增了一个类，比如 CustomerDB 是不是还要去 getConnection 等等，这必然会造成许多<strong>冗余代码</strong>。而现在许多的持久层框架，例如 MyBatis、Hibernate 都是基于 JDBC 进行再封装，避免了重复繁琐的工作。下面我们看看如何重构上述代码。</p>
+<h2 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h2><p>首先一段整洁易读的代码应该层次分明，如果没想到重构，我们可能会使用注释和换行将代码分段。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// get connection</span></span><br><span class="line">Class.forName(DRIVER_CLASS);</span><br><span class="line">c = DriverManager.getConnection(DB_URL, USER, PASSWORD);</span><br><span class="line"></span><br><span class="line"><span class="comment">// get result set</span></span><br><span class="line">Statement stmt = c.createStatement();</span><br><span class="line">ResultSet rs = stmt.executeQuery(SQL_SELECT_PARTS);</span><br><span class="line"></span><br><span class="line"><span class="comment">// populate parts entity</span></span><br><span class="line"><span class="keyword">while</span> (rs.next()) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然而，在学会重构之后，我们要习惯使用方法名产生注释的效果，<strong>注释不是越多越好，而要少而精，不必要的注释就不要</strong>。使用 <strong>提取方法（Cmd + Alt + M）</strong> 重构代码，并使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 移动方法顺序。</p>
+<p><img src="/2018/05/10/Clean%20Code%20--%20PartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/0.png" alt="25C7F4CD-951E-4B05-8A98-5A0433520EDA"></p>
+<p>注意我这里将<code>c</code>重命名（<strong>Shift + F6</strong>）为<code>connection</code>，<strong>命名要遵循在表达清楚业务含义的同时尽可能的短</strong>，<code>rs</code>、<code>err</code>甚至<code>e</code>这种因为频繁使用，基本上可以望文生义，所以可采用业界统一认可的缩写。但<code>c</code>这种命名，一旦代码量增多后，就可能带来阅读上的困扰，应当避免。顺便说一下，应该使用<code>populateParts()</code>而不是<code>populatePartList()</code>这种命名，因为<strong>命名应该站在功能层面，不应该暴露技术实现</strong>，万一哪一天，你改成 Set 了呢？</p>
+<p>我们来观察提取出的三个方法。<code>getConnection()</code>创建数据库连接，在抽象层面与业务无关的，实现层面我们暂不考虑用户自定义情况（实际上应该由配置文件读入），所以实现层面也与业务无关。<code>getResultSet()</code>执行 SQL 获取结果集，在抽象层面与业务无关。实现层面上由于<code>SQL_SELECT_PARTS</code>所以与业务强耦合。我们可以使用 <strong>Cmd + Alt + N</strong> ，将<code>select * from part</code> SQL 语句<strong>内联</strong>，再提取<code>getSql()</code>方法（<strong>Cmd + Alt + M</strong>）。</p>
+<p><img src="/2018/05/10/Clean%20Code%20--%20PartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/1.png" alt="953ECD52-3430-4BFD-A662-24E78BCAF755"></p>
+<p>如此一来，<code>getResultSet()</code>在实现层面也与业务无关了。而<code>getSql()</code>方法在抽象层面与业务无关，在实现层面就与业务有关了。<code>populateParts()</code>这个名字容易让人产生误解，我们将其重命名为<code>populateEntities()</code>，这样，它在抽象层面也与业务无关，而在实现层面与业务有关。为什么我一再强调<strong>抽象层面</strong>和<strong>实现层面</strong>与<strong>业务</strong>的关系，就是为了让方法变得纯粹。这也是软件设计中一种重要的设计思维：<strong>关注点分离</strong>，目的是将<strong>解决特定领域问题的代码从业务逻辑中独立出来，业务逻辑的代码中不再含有针对特定领域问题代码的调用，业务逻辑同特定领域问题的关系通过侧面来封装、维护，这样原本分散在在整个应用程序中的变动就可以很好的管理起来</strong>。比方有一个函数叫做<code>CreateNewCustomer()</code>，那么该函数只与客户的数据（属性）打交道，而给新客户自动发优惠券的动作就不能放到这个函数里面。</p>
+<p>现在，我们所有的方法都在抽象层面与业务无关，只有<code>getSql()</code>和<code>populateEntities()</code>在实现层面与业务有关。至此，我们拨开重重迷雾，冰山的一角轰然显现！既然大家都在抽象层面与业务无关，我们就应该<strong>抽象出更高阶的抽象类</strong>，这里就用到了 <strong>Extract Superclass</strong> 这个神奇的重构手法。</p>
+<p>使用 <strong>Ctrl + T</strong> 调出重构菜单，输入 super 就可以看到 Extract Superclass 的提示，敲击回车<br><img src="/2018/05/10/Clean%20Code%20--%20PartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/2.png" alt="F0675E41-8516-4FC3-96BB-928AB1060D40">注意需要勾选组成父类的成员，这里除了最后一个<code>partList</code>是业务独有的，其他全勾选上，而<code>getSql()</code>和<code>populateEntities()</code>方法因为具体实现与业务相关，就应该是子类去重写，所以应当勾选上 Make abstract。</p>
+<p><strong>重构后的 JdbcTemplate 类</strong>：</p>
+<p><img src="/2018/05/10/Clean%20Code%20--%20PartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/3.png" alt="68B462DA-CB1F-41FD-A519-6576CF7BD2FE"></p>
+<p><strong>重构后的 PartDB 类</strong>：</p>
+<p><img src="/2018/05/10/Clean%20Code%20--%20PartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/4.png" alt="CC64100D-FC25-4825-85DD-83AECC318E86"></p>
+<p>为什么我在提取父类时直接将父类命名为 JdbcTemplate，大家应该不难想到，我们重构完成的抽象父类，就是一个最简化的 JdbcTemplate。许多框架亦是如此诞生的，使用者使用时让自己的业务实体类去继承这个模版类，重写业务相关方法。这也是软件设计模式中非常著名的<strong>模版方法模式</strong>。</p>
+<h2 id="模版方法模式"><a href="#模版方法模式" class="headerlink" title="模版方法模式"></a>模版方法模式</h2><p>模板方法模式说白了就是：<strong>定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤</strong>。代表具体逻辑步骤的方法称做<strong>基本方法(primitive method)</strong>；而将基本方法汇总穿成一条线的方法叫做<strong>模板方法(template method)</strong>，这个设计模式的名字也是由此而来。 </p>
+<p>在上述的抽象类 JdbcTemplate 中，我们的模版方法就应该是<code>populate()</code>方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">populate</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    Connection connection = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        connection = getConnection();</span><br><span class="line">        ResultSet rs = getResultSet(connection);</span><br><span class="line">        populateEntities(rs);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>类似于写信的模版，类似“尊敬的xxx”、“此致，敬礼”这种千篇一律的套话我们可以定义一个模版，而需要差异化书写的只是信的内容。在<code>populate()</code>中，骨架已经搭好：先创建数据库连接，再执行 SQL 返回结果集，最后填充实体类。所以这里能看出，<strong>模版方法展现了框架的生命周期</strong>。为防止恶意操作，一般模板方法都会加上<code>final</code>关键字，不允许用户重写模版方法。</p>
+<p>基本方法又可以分为三种：抽象方法、具体方法和钩子方法：</p>
 <ul>
 <li><strong>抽象方法(Abstract Method)</strong>：一个抽象方法由抽象类声明，由具体子类实现。在 Java 语言里抽象方法以<code>abstract</code>关键字标识。</li>
 <li><strong>具体方法(Concrete Method)</strong>：一个具体方法由抽象类声明并实现，而子类并不实现或置换。可以添加<code>final</code>关键字做强约束不可重写，比如<code>getResultSet()</code></li>
 <li><strong>钩子方法(Hook Method)</strong>：一个钩子方法由抽象类声明并实现，而子类会加以扩展。通常抽象类给出的实现是一个<strong>空实现</strong>，作为方法的默认实现。譬如有些框架的<code>init()</code>方法，用户可以实现也可以不实现，定义成<code>abstract</code>就不合适，所以框架会给个空方法</li>
 </ul>
-</li>
-</ul>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
-<p>讲真的，我在工作当中也使用过 MongoTemplate、RedisTemplate 诸如此类，还从未仔细想过这些类为什么这样命名，不该，不该。直到这次张总通过 IDEA 强大的 <strong>Extract Superclass</strong> 重构手法，给我们展示一个 JdbcTemplate 如何浮出水面的过程，实在是醍醐灌顶，豁然开朗。有兴趣的同学可以看看这些框架的源代码，加深对模版方法模式的理解。</p>
-</blockquote>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我在工作当中也使用过 MongoTemplate、RedisTemplate 诸如此类，还从未仔细想过这些类为什么这样命名。直到这次张总通过 IDEA 强大的 <strong>Extract Superclass</strong> 重构手法，给我们展示一个 JdbcTemplate 如何浮出水面的过程，实在是醍醐灌顶，豁然开朗。有兴趣的同学可以看看这些框架的源代码，加深对模版方法模式的理解。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="http://www.runoob.com/design-pattern/template-pattern.html" target="_blank" rel="noopener">模版方法模式</a></li>
 <li><a href="http://www.cnblogs.com/java-my-life/archive/2012/05/14/2495235.html" target="_blank" rel="noopener">《JAVA与模式》之模板方法模式</a></li>
 <li><a href="https://en.wikipedia.org/wiki/Separation_of_concerns#Internet_protocol_stack" target="_blank" rel="noopener">Separation of concerns - Wiki</a></li>
@@ -2641,53 +2566,40 @@
   <entry>
     <title>Clean Code -- 报表参数填充案例</title>
     <url>/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/</url>
-    <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。<a href="https://s1mple.xyz/clean-code-1/" target="_blank" rel="noopener">上一篇</a>我们介绍了<strong>迪米特法则（最小知识法则）</strong>、<strong>信息专家模式：数据和行为应该封装在一起</strong>，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过<strong>报表参数填充</strong>的案例来加深理解，并见识 IDEA 中更为强大的重构功能</p>
-</blockquote>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目</li>
-<li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，clone 下代码进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 Cmd + D 查看<strong>代码差异</strong></li>
-<li><p><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 Cmd 替换成 Ctrl，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Shift + F6 &#x2F;&#x2F; 重命名方法、属性、文件</span><br><span class="line">F6 &#x2F;&#x2F; 移动方法（move method）</span><br><span class="line">Cmd + Shift + ⬆️&#x2F; ⬇️ &#x2F;&#x2F; 上下移动声明体（statement）</span><br><span class="line">Cmd + Alt + ⬆️&#x2F; ⬇️ &#x2F;&#x2F; 上下移动代码行</span><br><span class="line">Cmd + Alt + M &#x2F;&#x2F; 提取方法（extract method）</span><br><span class="line">Cmd + Alt + N &#x2F;&#x2F; 内联（Inline），与 extract 相反</span><br><span class="line">Cmd + Alt + L &#x2F;&#x2F; 格式化代码</span><br><span class="line"></span><br><span class="line">Alt + Enter &#x2F;&#x2F; IDEA 的智能辅助</span><br><span class="line">Ctrl + T &#x2F;&#x2F; 重构菜单</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。<a href="https://s1mple.online/clean-code-1/" target="_blank" rel="noopener">上一篇</a>我们介绍了<strong>迪米特法则（最小知识法则）</strong>、<strong>信息专家模式：数据和行为应该封装在一起</strong>，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过<strong>报表参数填充</strong>的案例来加深理解，并见识 IDEA 中更为强大的重构功能。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
+<li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目。</li>
+<li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 <code>Cmd + D</code> 查看<strong>代码差异</strong>。</li>
+<li><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 <code>Cmd</code> 替换成 <code>Ctrl</code>，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Shift + F6 &#x2F;&#x2F; 重命名方法、属性、文件</span><br><span class="line">Cmd + Alt + M &#x2F;&#x2F; 提取方法（extract method）</span><br><span class="line">Cmd + Alt + N &#x2F;&#x2F; 内联（Inline），与 extract 相反</span><br><span class="line">Cmd + Shift + ⬆️&#x2F; ⬇️ &#x2F;&#x2F; 上下移动声明体（statement）  </span><br><span class="line"></span><br><span class="line">Ctrl + T &#x2F;&#x2F; 重构菜单</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h2 id="案例：报表系统之参数处理"><a href="#案例：报表系统之参数处理" class="headerlink" title="案例：报表系统之参数处理"></a>案例：报表系统之参数处理</h2><blockquote>
-<p>在示例项目中，需要对客户发出的 Web 请求进行处理，获得需要的参数。参数的值放在 Request 中，实现根据配置文件获得了参数的类型信息。根据项目需求，将参数划分为三种：</p>
-<ol>
+<h2 id="案例：报表系统之参数处理"><a href="#案例：报表系统之参数处理" class="headerlink" title="案例：报表系统之参数处理"></a>案例：报表系统之参数处理</h2><p>在示例项目中，需要对客户发出的 Web 请求进行处理，获得需要的参数。参数的值放在 Request 中，实现根据配置文件获得了参数的类型信息。根据项目需求，将参数划分为三种：</p>
+<ul>
 <li>单一参数（SimpleParameter）</li>
 <li>元素项参数（ItemParameter）</li>
 <li>表参数（TableParameter）</li>
-</ol>
+</ul>
 <p>因为参数的属性是在配置文件中已经配好，所以定义了 ParameterGraph 对象。它能够读取参数的配置信息，并根据参数的类型创建不同的参数类，这些参数类共同实现了 Parameter 接口。</p>
-</blockquote>
-<ul>
-<li><p>最初的实现代码为：</p>
-  <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ParameterCollector</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fillParameters</span><span class="params">(ServletHttpRequest request, ParameterGraph parameterGraph)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (Parameter para : parameterGraph.getParmaeters()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (para <span class="keyword">instanceof</span> SimpleParameter) &#123;</span><br><span class="line">                SimpleParameter simplePara = (SimpleParameter) para;</span><br><span class="line">                String[] values = request.getParameterValues(simplePara.getName());</span><br><span class="line">                simplePara.setValue(values);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (para <span class="keyword">instanceof</span> ItemParameter) &#123;</span><br><span class="line">                    ItemParameter itemPara = (ItemParameter) para;</span><br><span class="line">                    <span class="keyword">for</span> (Item item : itemPara.getItems()) &#123;</span><br><span class="line">                        String[] values = request.getParameterValues(item.getName());</span><br><span class="line">                        item.setValues(values);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    TableParameter tablePara = (TableParameter) para;</span><br><span class="line">                    String[] rows =</span><br><span class="line">                            request.getParameterValues(tablePara.getRowName());</span><br><span class="line">                    String[] columns =</span><br><span class="line">                            request.getParameterValues(tablePara.getColumnName());</span><br><span class="line">                    String[] dataCells =</span><br><span class="line">                            request.getParameterValues(tablePara.getDataCellName());</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">int</span> columnSize = columns.length;</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; rows.length; i++) &#123;</span><br><span class="line">                        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; columns.length; j++) &#123;</span><br><span class="line">                            TableParameterElement element = <span class="keyword">new</span> TableParameterElement();</span><br><span class="line">                            element.setRow(rows[i]);</span><br><span class="line">                            element.setColumn(columns[j]);</span><br><span class="line">                            element.setDataCell(dataCells[columnSize * i + j]);</span><br><span class="line">                            tablePara.addElement(element);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>观察代码，<code>if statement</code>中的三段代码块其实做的都是<strong>填充参数</strong>的事，只不过用<code>instanceof</code>判断了参数类型再执行对应的填充操作。结合之前的 Paperboy 案例，与 Wallet 打交道的应该是 Customer 而不是 Paperboy。上述代码明显也违反了迪米特法则，<strong>参数填充的行为应该交由参数类完成而不是 ParameterCollector</strong></p>
-</li>
-</ul>
-<h2 id="Refactoring"><a href="#Refactoring" class="headerlink" title="Refactoring"></a>Refactoring</h2><ul>
-<li><p>基于代码重用的思想，先将三段代码 <strong>提取方法（Cmd + Alt + M）</strong>，并分别取名为<code>fillSimplePara()</code>、<code>fillItemPara()</code>、<code>fillTablePara()</code>，重构后的方法顺序可能有所差异，可以在方法签名上使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 快捷键移动方法顺序，使之符合正常的阅读习惯<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/0.png" alt="A6C5B629-ACC6-458A-8379-852021771E83"></p>
-</li>
-<li><p>提取了方法后，这一幕是不是似曾相识？之前的 Paperboy 案例中，我们从<code>charge()</code>方法中提取了<code>pay()</code>方法，意识到<code>pay()</code>方法应该归属于 Customer 而不是 Paperboy。这里就要再次强调：<strong>数据和行为应该封装在一起</strong>。显然，ParameterCollector 这个类不应该关注如何填充参数，而是应该收到<code>fillParameters()</code>请求后<strong>委派</strong>给各个 Parameter 类完成填充操作。所以我们采取“<strong>Move Method</strong>”重构手法（<strong>F6</strong>）<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/1.png" alt="17C89C7E-DA4F-4914-AA2A-5F6C8DE8845E">注意，IDEA 通过入参智能提示可以将方法移动到两个类中，显然应该选择 SimpleParameter，同时，方法的访问权限应为 public。接下来分别将<code>fillItemPara()</code>和<code>fillTablePara()</code>方法移动至 ItemParameter 和 TableParameter 中<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/2.png" alt="8FB216EF-394B-42F3-B556-6EC576224FE7"></p>
-</li>
-<li><p>观察上图你会发现，原先的方法有两个参数，但由于我们移动了方法到对应的 Parameter 类中，第二个参数直接变成了用<code>this</code>引用当前对象。<code>ItemParameter itemPara = this;</code>这一步是多余的，直接使用<strong>内联（Cmd + Alt + N</strong>）消除。然后呢，别着急，我们想一想，既然 SimpleParameter、ItemParameter、TableParameter 三个类都有接收一个 request 参数的填充方法，而且他们都实现了 Parameter 接口，那我们为什么不将方法提到接口中，让其他三个类去重写呢？所以接下来先把方法都重命名为<code>fill()</code>，使用 <strong>Shift + F6</strong>进行重命名<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/3.png" alt="74F483BA-13C8-4769-9E94-290369E2B41B-1"></p>
-</li>
-<li><p>接着，不要傻乎乎的去 Parameter 接口中手写<code>fill()</code>抽象方法，还是有快捷键的！那就是 “<strong>Pull Members Up</strong>”重构手法，说真的，当时看张总演示我就震惊了！选中方法，使用 <strong>Ctrl + T</strong> 调出重构菜单，输入一个 pull 你就能看到提示了<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/4.png" alt="C477A0C4-7E53-4C85-BE02-4A37697680B5"></p>
-</li>
-<li><p>IDEA 会提示你将<code>pull()</code>方法提升至 Parameter 接口中并 make abstract<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/5.png" alt="9E0BC21E-0DFB-47AF-8B9E-C99900755E7F"></p>
-</li>
-<li><p>我们看看重构后的效果，甚至于 ItemParameter 的<code>fill()</code>方法还已经帮你添加了<code>@Override</code>注解，但是剩下的两个 Parameter 类中的<code>fill()</code>方法还需要你手动的添加注解<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/6.png" alt="0007121B-DCAA-4629-B1EB-911959D12455"> <img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/7.png" alt="FE508CEB-BABF-4D6F-830E-A6C126BCD693"></p>
-</li>
-<li><p>最后我们回到 ParameterCollector 类，使用 IDEA 的<strong>智能辅助</strong>快捷键（<strong>Alt + Enter</strong>）去 Cleanup code 删除多余的类型转换<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/8.png" alt="5A6909D5-21DC-45BB-B3F0-02ECE946EC10"></p>
-</li>
-<li><p>然后，你就会发现，<code>if statement</code>也是多余的，删除后，<strong>Cmd + Alt + L</strong> 格式化代码<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/9.png" alt="91715C62-8438-4C16-BE77-0C821007877A"></p>
-</li>
-</ul>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
-<p>如此，重构过的代码，可谓是层次清晰、一目了然，可比原来一坨堆在 ParameterCollector 中要美观多了。在重构的过程中，我们意识到，<strong>填充参数的行为应该交由它的专家，即各个 Parameter 类管理</strong>，移动方法后，又意识到既然都实现了 Parameter 接口，就应当使用 Java 接口的特性将<code>fill()</code>提升到 Parameter 接口中成为一个抽象方法。至此，<code>if</code>语句和<code>instanceof</code>也都不需要了，交由 JVM 在运行时识别类类型即可。所以说，<strong>重构的过程还可以帮助程序员梳理编码过程，进行合理的抽象和封装</strong>。当然，没有实践的空想理论是不行的，牢记 IDEA 的快捷键，将重构养成习惯，不时来一波亮瞎狗眼的骚操作，岂不美滋滋？</p>
-</blockquote>
+<p>最初的实现代码为：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ParameterCollector</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fillParameters</span><span class="params">(ServletHttpRequest request, ParameterGraph parameterGraph)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (Parameter para : parameterGraph.getParmaeters()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (para <span class="keyword">instanceof</span> SimpleParameter) &#123;</span><br><span class="line">                SimpleParameter simplePara = (SimpleParameter) para;</span><br><span class="line">                String[] values = request.getParameterValues(simplePara.getName());</span><br><span class="line">                simplePara.setValue(values);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (para <span class="keyword">instanceof</span> ItemParameter) &#123;</span><br><span class="line">                    ItemParameter itemPara = (ItemParameter) para;</span><br><span class="line">                    <span class="keyword">for</span> (Item item : itemPara.getItems()) &#123;</span><br><span class="line">                        String[] values = request.getParameterValues(item.getName());</span><br><span class="line">                        item.setValues(values);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    TableParameter tablePara = (TableParameter) para;</span><br><span class="line">                    String[] rows =</span><br><span class="line">                            request.getParameterValues(tablePara.getRowName());</span><br><span class="line">                    String[] columns =</span><br><span class="line">                            request.getParameterValues(tablePara.getColumnName());</span><br><span class="line">                    String[] dataCells =</span><br><span class="line">                            request.getParameterValues(tablePara.getDataCellName());</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">int</span> columnSize = columns.length;</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; rows.length; i++) &#123;</span><br><span class="line">                        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; columns.length; j++) &#123;</span><br><span class="line">                            TableParameterElement element = <span class="keyword">new</span> TableParameterElement();</span><br><span class="line">                            element.setRow(rows[i]);</span><br><span class="line">                            element.setColumn(columns[j]);</span><br><span class="line">                            element.setDataCell(dataCells[columnSize * i + j]);</span><br><span class="line">                            tablePara.addElement(element);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>观察代码，<code>if statement</code>中的三段代码块其实做的都是<strong>填充参数</strong>的事，只不过用<code>instanceof</code>判断了参数类型再执行对应的填充操作。结合之前的 Paperboy 案例，与 Wallet 打交道的应该是 Customer 而不是 Paperboy。上述代码明显也违反了迪米特法则，<strong>参数填充的行为应该交由参数类完成而不是 ParameterCollector</strong>。</p>
+<h2 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h2><p>基于代码重用的思想，先将三段代码 <strong>提取方法（Cmd + Alt + M）</strong>，并分别取名为<code>fillSimplePara()</code>、<code>fillItemPara()</code>、<code>fillTablePara()</code>，重构后的方法顺序可能有所差异，可以在方法签名上使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 快捷键移动方法顺序，使之符合正常的阅读习惯。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/0.png" alt="A6C5B629-ACC6-458A-8379-852021771E83"></p>
+<p>提取了方法后，这一幕是不是似曾相识？之前的 Paperboy 案例中，我们从<code>charge()</code>方法中提取了<code>pay()</code>方法，意识到<code>pay()</code>方法应该归属于 Customer 而不是 Paperboy。这里就要再次强调：<strong>数据和行为应该封装在一起</strong>。显然，ParameterCollector 这个类不应该关注如何填充参数，而是应该收到<code>fillParameters()</code>请求后<strong>委派</strong>给各个 Parameter 类完成填充操作。所以我们采取“<strong>Move Method</strong>”重构手法（<strong>F6</strong>）。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/1.png" alt="17C89C7E-DA4F-4914-AA2A-5F6C8DE8845E"></p>
+<p>注意，IDEA 通过入参智能提示可以将方法移动到两个类中，显然应该选择 SimpleParameter，同时，方法的访问权限应为 public。接下来分别将<code>fillItemPara()</code>和<code>fillTablePara()</code>方法移动至 ItemParameter 和 TableParameter 中。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/2.png" alt="8FB216EF-394B-42F3-B556-6EC576224FE7"></p>
+<p>观察上图你会发现，原先的方法有两个参数，但由于我们移动了方法到对应的 Parameter 类中，第二个参数直接变成了用<code>this</code>引用当前对象。<code>ItemParameter itemPara = this;</code>这一步是多余的，直接使用<strong>内联（Cmd + Alt + N</strong>）消除。然后呢，别着急，我们想一想，既然 SimpleParameter、ItemParameter、TableParameter 三个类都有接收一个 request 参数的填充方法，而且他们都实现了 Parameter 接口，那我们为什么不将方法提到接口中，让其他三个类去重写呢？所以接下来先把方法都重命名为<code>fill()</code>，使用 <strong>Shift + F6</strong>进行重命名。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/3.png" alt="74F483BA-13C8-4769-9E94-290369E2B41B-1"></p>
+<p>接着，不要傻乎乎的去 Parameter 接口中手写<code>fill()</code>抽象方法，还是有快捷键的！那就是 “<strong>Pull Members Up</strong>”重构手法，说真的，当时看张总演示我就震惊了！选中方法，使用 <strong>Ctrl + T</strong> 调出重构菜单，输入一个 pull 你就能看到提示了。<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/4.png" alt="C477A0C4-7E53-4C85-BE02-4A37697680B5"></p>
+<p>IDEA 会提示你将<code>pull()</code>方法提升至 Parameter 接口中并 make abstract。<br><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/5.png" alt="9E0BC21E-0DFB-47AF-8B9E-C99900755E7F"></p>
+<p>我们看看重构后的效果，甚至于 ItemParameter 的<code>fill()</code>方法还已经帮你添加了<code>@Override</code>注解，但是剩下的两个 Parameter 类中的<code>fill()</code>方法还需要你手动的添加注解。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/6.png" alt="0007121B-DCAA-4629-B1EB-911959D12455"> <img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/7.png" alt="FE508CEB-BABF-4D6F-830E-A6C126BCD693"></p>
+<p>最后我们回到 ParameterCollector 类，使用 IDEA 的<strong>智能辅助</strong>快捷键（<strong>Alt + Enter</strong>）去 Cleanup code 删除多余的类型转换。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/8.png" alt="5A6909D5-21DC-45BB-B3F0-02ECE946EC10"></p>
+<p>然后，你就会发现，<code>if statement</code>也是多余的，删除后，<strong>Cmd + Alt + L</strong> 格式化代码。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/9.png" alt="91715C62-8438-4C16-BE77-0C821007877A"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如此，重构过的代码，可谓是层次清晰、一目了然，可比原来一坨堆在 ParameterCollector 中要美观多了。在重构的过程中，我们意识到，<strong>填充参数的行为应该交由它的专家，即各个 Parameter 类管理</strong>，移动方法后，又意识到既然都实现了 Parameter 接口，就应当使用 Java 接口的特性将<code>fill()</code>提升到 Parameter 接口中成为一个抽象方法。至此，<code>if</code>语句和<code>instanceof</code>也都不需要了，交由 JVM 在运行时识别类类型即可。所以说，<strong>重构的过程还可以帮助程序员梳理编码过程，进行合理的抽象和封装</strong>。当然，没有实践的空想理论是不行的，牢记 IDEA 的快捷键，将重构养成习惯，不时来一波亮瞎狗眼的骚操作，岂不美滋滋？</p>
 ]]></content>
       <categories>
         <category>Coding</category>
@@ -2700,75 +2612,47 @@
   <entry>
     <title>Clean Code -- 迪米特法则与 Paperboy 案例</title>
     <url>/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/</url>
-    <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍<strong>迪米特法则</strong>、<strong>信息专家模式</strong>，并结合案例实操在 <strong>IntelliJ IDEA</strong> 中如何重构代码。本文大部分内容转载自张总博客: <a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构</a></p>
-</blockquote>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目</li>
-<li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，clone 下代码进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 Cmd + D 查看<strong>代码差异</strong></li>
-<li><p><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 Cmd 替换成 Ctrl，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Ctrl + T &#x2F;&#x2F; 重构菜单</span><br><span class="line">Shift + F6 &#x2F;&#x2F; 重命名方法、属性、文件</span><br><span class="line">F6 &#x2F;&#x2F; 移动方法（move method）</span><br><span class="line">Cmd + Alt + M &#x2F;&#x2F; 提取方法（extract method）</span><br><span class="line">Cmd + Alt + V &#x2F;&#x2F; 提取变量（extract variable）</span><br><span class="line">Cmd + Alt + C &#x2F;&#x2F; 提取常量（extract constant）</span><br><span class="line">Cmd + Alt + N &#x2F;&#x2F; 内联（Inline），与 extract 相反</span><br><span class="line"></span><br><span class="line">Cmd + 9 &#x2F;&#x2F; 打开 Version Control</span><br><span class="line">Cmd + D &#x2F;&#x2F; 查看文件差异（show difference）</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍<strong>迪米特法则</strong>、<strong>信息专家模式</strong>，并结合案例实操在 <strong>IntelliJ IDEA</strong> 中如何重构代码。本文大部分内容转载自张总博客: <a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构</a>。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
+<li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目。</li>
+<li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 <code>Cmd + D</code> 查看<strong>代码差异</strong>。</li>
+<li><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 <code>Cmd</code> 替换成 <code>Ctrl</code>，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Shift + F6 &#x2F;&#x2F; 重命名方法、属性、文件</span><br><span class="line">Cmd + Alt + M &#x2F;&#x2F; 提取方法（extract method）</span><br><span class="line">Cmd + Alt + N &#x2F;&#x2F; 内联（Inline），与 extract 相反</span><br><span class="line">Cmd + Shift + ⬆️&#x2F; ⬇️ &#x2F;&#x2F; 上下移动声明体（statement）  </span><br><span class="line"></span><br><span class="line">Ctrl + T &#x2F;&#x2F; 重构菜单</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h2 id="迪米特法则"><a href="#迪米特法则" class="headerlink" title="迪米特法则"></a>迪米特法则</h2><ul>
-<li>在面向对象设计的世界里，有一个寻常却又常常为人所忽略的原则——<strong>迪米特法则（Law of Demeter）</strong>。这个原则认为，任何一个对象或者方法，它应该只能调用下列对象：    <ul>
+<h2 id="迪米特法则"><a href="#迪米特法则" class="headerlink" title="迪米特法则"></a>迪米特法则</h2><p>在面向对象设计的世界里，有一个寻常却又常常为人所忽略的原则——<strong>迪米特法则（Law of Demeter）</strong>。这个原则认为，任何一个对象或者方法，它应该只能调用下列对象：    </p>
+<ul>
 <li>该对象本身</li>
 <li>作为参数传进来的对象（也可以是该对象的字段）</li>
 <li>在方法内创建的对象</li>
 </ul>
-</li>
-</ul>
-<blockquote>
-<p>这个原则用以指导正确的<strong>对象协作</strong>，分清楚哪些对象应该产生协作，哪些对象则对于该对象而言，又应该是无知的</p>
-</blockquote>
-<h2 id="代码案例及分析"><a href="#代码案例及分析" class="headerlink" title="代码案例及分析"></a>代码案例及分析</h2><ul>
-<li><p>如何理解这个原则？我们可以看看 David Bock 就该原则给出的一个<a href="https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/paper-boy/demeter.pdf" target="_blank" rel="noopener">绝佳案例</a>。假设一个超市购物的场景，顾客（Customer）到收银台结账，收银员（Paperboy）负责收钱。我们来看看代码：</p>
-  <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String firstName;</span><br><span class="line">    <span class="keyword">private</span> String lastName;</span><br><span class="line">    <span class="keyword">private</span> Wallet myWallet;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> firstName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getLastName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> lastName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Wallet <span class="title">getWallet</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> myWallet;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Wallet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> value;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">getTotalMoney</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTotalMoney</span><span class="params">(<span class="keyword">float</span> newValue)</span> </span>&#123;</span><br><span class="line">        value = newValue;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addMoney</span><span class="params">(<span class="keyword">float</span> deposit)</span> </span>&#123;</span><br><span class="line">        value += deposit;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">subtractMoney</span><span class="params">(<span class="keyword">float</span> debit)</span> </span>&#123;</span><br><span class="line">        value -= debit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Paperboy</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">(Customer myCustomer, <span class="keyword">float</span> payment)</span> </span>&#123;</span><br><span class="line">        Wallet theWallet = myCustomer.getWallet();</span><br><span class="line">        <span class="keyword">if</span> (theWallet.getTotalMoney() &gt; payment) &#123;</span><br><span class="line">            theWallet.subtractMoney(payment);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//money not enough</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>让我们将 Paperboy 中<code>charge()</code>方法的代码翻译成这幕小话剧的对白。</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">“把钱包交出来!”收银员算出顾客要买的商品总价后，“温柔”地对顾客说道。</span><br><span class="line">顾客言听计从，赶紧将钱包掏出来，恭恭敬敬地递给收银员。</span><br><span class="line">接过钱包，收银员毫不客气地打开，检查里面的钱够不够。噢，不错，钱够了。收银员从钱包取出钱，心满意足地笑了。</span><br></pre></td></tr></table></figure>
-<p>  如果你是顾客，你敢去这样的超市 shopping 吗？</p>
-</li>
-</ul>
-<blockquote>
+<p>这个原则用以指导正确的<strong>对象协作</strong>，分清楚哪些对象应该产生协作，哪些对象则对于该对象而言，又应该是无知的。</p>
+<h2 id="代码案例及分析"><a href="#代码案例及分析" class="headerlink" title="代码案例及分析"></a>代码案例及分析</h2><p>如何理解这个原则？我们可以看看 David Bock 就该原则给出的一个<a href="https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/paper-boy/demeter.pdf" target="_blank" rel="noopener">绝佳案例</a>。假设一个超市购物的场景，顾客（Customer）到收银台结账，收银员（Paperboy）负责收钱。我们来看看代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String firstName;</span><br><span class="line">    <span class="keyword">private</span> String lastName;</span><br><span class="line">    <span class="keyword">private</span> Wallet myWallet;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> firstName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getLastName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> lastName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Wallet <span class="title">getWallet</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> myWallet;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Wallet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> value;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">getTotalMoney</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTotalMoney</span><span class="params">(<span class="keyword">float</span> newValue)</span> </span>&#123;</span><br><span class="line">        value = newValue;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addMoney</span><span class="params">(<span class="keyword">float</span> deposit)</span> </span>&#123;</span><br><span class="line">        value += deposit;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">subtractMoney</span><span class="params">(<span class="keyword">float</span> debit)</span> </span>&#123;</span><br><span class="line">        value -= debit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Paperboy</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">(Customer myCustomer, <span class="keyword">float</span> payment)</span> </span>&#123;</span><br><span class="line">        Wallet theWallet = myCustomer.getWallet();</span><br><span class="line">        <span class="keyword">if</span> (theWallet.getTotalMoney() &gt; payment) &#123;</span><br><span class="line">            theWallet.subtractMoney(payment);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//money not enough</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>让我们将 Paperboy 中<code>charge()</code>方法的代码翻译成这幕小话剧的对白。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">“把钱包交出来!”收银员算出顾客要买的商品总价后，“温柔”地对顾客说道。</span><br><span class="line">顾客言听计从，赶紧将钱包掏出来，恭恭敬敬地递给收银员。</span><br><span class="line">接过钱包，收银员毫不客气地打开，检查里面的钱够不够。噢，不错，钱够了。收银员从钱包取出钱，心满意足地笑了。</span><br></pre></td></tr></table></figure>
+<p>如果你是顾客，你敢去这样的超市 shopping 吗？</p>
 <p>对于 Paperboy 而言，Wallet 不满足迪米特法则三个条件中的任何一个，因此，<strong>不应该让 Paperboy 与 Wallet 对象进行直接交互</strong>。若从<strong>拟人化</strong>的角度思考，则 Wallet 其实属于 Customer 的<strong>隐私</strong>。如此重要的隐私，怎么能直接交给收银员这个陌生人呢？这里所谓的“隐私”，可以视为是“数据”，是“信息”，是“知识”，因此我们往往又将迪米特法则称之为“<strong>最小知识法则</strong>”。</p>
-</blockquote>
-<ul>
-<li>当我们理解“最小知识法则”时，又可以从<strong>职责</strong>的角度去思考以上代码。对于收银员角色，他的职责应该是负责收钱，而不用去管钱包里的钱够不够，如果够了怎么办，如果不够又该怎么办，这些统统都不属于他的职责。设想一下，当超市里人流如织，大家都在购买商品时，如果每一个收银员都要承担这般的职责时，会出现什么样的景象？所以“最小知识法则”乃善法，在对象社区中，我们就应该刻意减少对象之间彼此深入的了解。了解最小的知识，就意味着依赖最小，彼此产生的影响就会最小。这实际上是 <strong>KISS（keep it simple and stupid）</strong> 原则的体现。</li>
-</ul>
-<blockquote>
+<p>当我们理解“最小知识法则”时，又可以从<strong>职责</strong>的角度去思考以上代码。对于收银员角色，他的职责应该是负责收钱，而不用去管钱包里的钱够不够，如果够了怎么办，如果不够又该怎么办，这些统统都不属于他的职责。设想一下，当超市里人流如织，大家都在购买商品时，如果每一个收银员都要承担这般的职责时，会出现什么样的景象？所以“最小知识法则”乃善法，在对象社区中，我们就应该刻意减少对象之间彼此深入的了解。了解最小的知识，就意味着依赖最小，彼此产生的影响就会最小。这实际上是 <strong>KISS（keep it simple and stupid）</strong> 原则的体现。</p>
 <p><strong>信息专家模式</strong>告诉我们：“信息的持有者即为操作该信息的专家”。对于对象，所谓<strong>信息就是该对象内部的字段</strong>。在上述的例子中，Wallet 是 Customer 的字段，那么操作 Wallet 的行为自然就应该分配给 Customer 了。这是题中应有之义。“信息专家模式”其实是面向对象最重要原则“<strong>数据与行为应该封装在一起</strong>”的别名。若在领域建模时能遵循该原则，则可以规避我们设计出贫血模型。</p>
-</blockquote>
-<h2 id="Refactoring"><a href="#Refactoring" class="headerlink" title="Refactoring"></a>Refactoring</h2><ul>
-<li><p>如何修改以上代码？注意，<code>charge()</code>行为仍然属于 Paperboy 的职责，因此我们不应该将该方法整体搬迁到 Customer 中，而应该先进行<strong>方法的提取</strong>，选中代码块，使用 <strong>Cmd + Alt + M</strong> 快捷键提取方法。这块代码执行的是支付的步骤，所以命名为<code>pay()</code><br><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/0.png" alt="781D2706-3961-4C77-ACF8-8BDDCE21B17E"></p>
-</li>
-<li><p>提取后的<code>charge()</code>在接收方法请求后，转而将请求<strong>委派</strong>给了<code>pay()</code>方法。我们可以这样理解：在抽象层面，收款是收银员的职责；在实现层面，是<code>pay()</code>方法支持了收款行为，该实现归属于顾客<br><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/1.png" alt="1AF2B42F-7B13-4284-AF03-9C1D5C5FE0A1"></p>
-</li>
-<li><p>观察<code>pay()</code>方法，我们发现该方法操作的数据皆来自 Customer。我们嗅到了一种坏味道，即 Martin Fowler 所谓的“<strong>特性依恋（Feature Envy）</strong>”。对于该坏味道，老马是这样阐释的：“函数对某个类的兴趣高过对自己所处类的兴趣”。不要再嫉妒了，桥归桥，路归路，让方法回到自己最喜欢的地方吧。运用“<strong>Move Method</strong>”重构手法，将<code>pay()</code>方法移动到 Customer 中。</p>
-</li>
-<li><p>光标在方法签名或方法体中都可，按下 <strong>F6</strong>，IDEA 会根据方法的入参，智能的提示将方法移动到哪个类中，这里只能是 Customer。还要注意方法的访问权限，默认是 Escalate 往上提升一级，这里选择 Public<br><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/2.png" alt="2C6EA6D7-A330-4E90-8B2A-54223072A47A"></p>
-</li>
-<li><p>操作之后，<code>pay()</code>方法移动到 Customer 中<br><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/3.png" alt="F92C14F0-6693-4154-8A6D-F71AB14BF0E2"></p>
-</li>
-<li><p>在将方法移到正确的位置后，我们发现暴露的<code>getWallet()</code>方法根本就没有意义。更何况，将钱包裸露出去，难道是想要炫富吗？还是低调一点为好，隐藏自己的“隐私”，总好过被人觊觎而招来飞来横祸之险。于是，<strong>内联（inline）</strong> 之。将光标放在<code>getWallet()</code>上，按下 <strong>Cmd + Alt + N</strong><br><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/4.png" alt="563C9626-A71E-4DC7-A8DC-BA4DA530EF64"></p>
-</li>
-<li><p><code>getWallet()</code>方法被删除，并被替换为 Customer 的字段<code>myWallet</code>。那现在声明的<code>theWallet</code>就是多余的，继续内联<br><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/5.png" alt="28E463A5-F36A-4250-8611-36BDACF80FCE"></p>
-</li>
-<li><p>最后，重构过的代码应该是这样的。阅读代码一目了然，Paperboy 进行收银，并委派给顾客进行实际的支付，即掏钱包，数钱，付钱。<br><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/6.png" alt="3CA41F80-0556-42F3-8E16-5AEEC39332A3"><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/7.png" alt="E66E7919-9391-4046-8CB4-C46555E561A8"></p>
-</li>
-</ul>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
-<p>判断一段代码是否违背了迪米特法则，有一个小窍门，就是看调用代码是否出现形如<code>a.m1().m2().m3().m4()</code>之类的代码。这种代码在 Martin Fowler《重构》一书中，被名为“<strong>消息链条(Message Chain)</strong>”，有人更加夸张地名其为“火车残骸”。车祸现场啊，真是惨不忍睹。</p>
-</blockquote>
-<ul>
-<li><p>实际上未重构前的代码即是一种消息链条，在<code>charge()</code>方法中实际执行的是<code>myCustomer.getWallet().subtractMoney(payment)</code>，先获取 Customer 的 Wallet，再执行 Wallet 的扣钱方法</p>
-</li>
-<li><p>那么，如下代码是否这样的残骸呢？</p>
-  <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">str.split(<span class="string">"&amp;"</span>)</span><br><span class="line">    .stream()</span><br><span class="line">    .map(str -&gt; str.contains(elementName) ? str.replace(elementName + <span class="string">"="</span>, <span class="string">""</span>) : <span class="string">""</span>)</span><br><span class="line">    .filter(str -&gt; !str.isEmpty())</span><br><span class="line">    .reduce(<span class="string">""</span>, (a, b) -&gt; a + <span class="string">","</span> + b);</span><br></pre></td></tr></table></figure>
-<p>  不是的。这样的代码我们一般称之为“流畅接口或连贯接口（Fluent Interface）”。二者的区别在于<strong>观察形成链条的每个方法返回的是别的对象，还是对象自身。如果返回的是别的对象，就是消息链条</strong>。所谓<code>m1().m2().m3().m4()</code>的调用，其实是调用者不需要也不想知道的“知识”，把这些中间过程的细节暴露出来没有意义，调用者关心的是最终结果；而上述代码中的<code>map()</code>与<code>filter()</code>等方法其实返回的还是 Stream 类。这一调用方式其初衷并非告知中间过程的细节，而是一种声明式的 DSL 表达，调用者可以自由地组合它们。</p>
-</li>
-</ul>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<h2 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h2><p>如何修改以上代码？注意，<code>charge()</code>行为仍然属于 Paperboy 的职责，因此我们不应该将该方法整体搬迁到 Customer 中，而应该先进行<strong>方法的提取</strong>，选中代码块，使用 <strong>Cmd + Alt + M</strong> 快捷键提取方法。这块代码执行的是支付的步骤，所以命名为<code>pay()</code>。</p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/0.png" alt="781D2706-3961-4C77-ACF8-8BDDCE21B17E"></p>
+<p>提取后的<code>charge()</code>在接收方法请求后，转而将请求<strong>委派</strong>给了<code>pay()</code>方法。我们可以这样理解：在抽象层面，收款是收银员的职责；在实现层面，是<code>pay()</code>方法支持了收款行为，该实现归属于顾客。</p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/1.png" alt="1AF2B42F-7B13-4284-AF03-9C1D5C5FE0A1"></p>
+<p>观察<code>pay()</code>方法，我们发现该方法操作的数据皆来自 Customer。我们嗅到了一种坏味道，即 Martin Fowler 所谓的“<strong>特性依恋（Feature Envy）</strong>”。对于该坏味道，老马是这样阐释的：“函数对某个类的兴趣高过对自己所处类的兴趣”。不要再嫉妒了，桥归桥，路归路，让方法回到自己最喜欢的地方吧。运用“<strong>Move Method</strong>”重构手法，将<code>pay()</code>方法移动到 Customer 中。</p>
+<p>光标在方法签名或方法体中都可，按下 <strong>F6</strong>，IDEA 会根据方法的入参，智能的提示将方法移动到哪个类中，这里只能是 Customer。还要注意方法的访问权限，默认是 Escalate 往上提升一级，这里选择 Public。</p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/2.png" alt="2C6EA6D7-A330-4E90-8B2A-54223072A47A"></p>
+<p>操作之后，<code>pay()</code>方法移动到 Customer 中。</p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/3.png" alt="F92C14F0-6693-4154-8A6D-F71AB14BF0E2"></p>
+<p>在将方法移到正确的位置后，我们发现暴露的<code>getWallet()</code>方法根本就没有意义。更何况，将钱包裸露出去，难道是想要炫富吗？还是低调一点为好，隐藏自己的“隐私”，总好过被人觊觎而招来飞来横祸之险。于是，<strong>内联（inline）</strong> 之。将光标放在<code>getWallet()</code>上，按下 <strong>Cmd + Alt + N</strong>。</p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/4.png" alt="563C9626-A71E-4DC7-A8DC-BA4DA530EF64"></p>
+<p><code>getWallet()</code>方法被删除，并被替换为 Customer 的字段<code>myWallet</code>。那现在声明的<code>theWallet</code>就是多余的，继续内联。<br><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/5.png" alt="28E463A5-F36A-4250-8611-36BDACF80FCE"></p>
+<p>最后，重构过的代码应该是这样的。阅读代码一目了然，Paperboy 进行收银，并委派给顾客进行实际的支付，即掏钱包，数钱，付钱。<br><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/6.png" alt="3CA41F80-0556-42F3-8E16-5AEEC39332A3"><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/7.png" alt="E66E7919-9391-4046-8CB4-C46555E561A8"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>判断一段代码是否违背了迪米特法则，有一个小窍门，就是看调用代码是否出现形如<code>a.m1().m2().m3().m4()</code>之类的代码。这种代码在 Martin Fowler《重构》一书中，被名为“<strong>消息链条(Message Chain)</strong>”，有人更加夸张地名其为“火车残骸”。车祸现场啊，真是惨不忍睹。</p>
+<p>实际上未重构前的代码即是一种消息链条，在<code>charge()</code>方法中实际执行的是<code>myCustomer.getWallet().subtractMoney(payment)</code>，先获取 Customer 的 Wallet，再执行 Wallet 的扣钱方法。</p>
+<p>那么，如下代码是否这样的残骸呢？</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">str.split(<span class="string">"&amp;"</span>)</span><br><span class="line">    .stream()</span><br><span class="line">    .map(str -&gt; str.contains(elementName) ? str.replace(elementName + <span class="string">"="</span>, <span class="string">""</span>) : <span class="string">""</span>)</span><br><span class="line">    .filter(str -&gt; !str.isEmpty())</span><br><span class="line">    .reduce(<span class="string">""</span>, (a, b) -&gt; a + <span class="string">","</span> + b);</span><br></pre></td></tr></table></figure>
+<p>答案是：不是。这样的代码我们一般称之为“流畅接口或连贯接口（Fluent Interface）”。二者的区别在于<strong>观察形成链条的每个方法返回的是别的对象，还是对象自身。如果返回的是别的对象，就是消息链条</strong>。所谓<code>m1().m2().m3().m4()</code>的调用，其实是调用者不需要也不想知道的“知识”，把这些中间过程的细节暴露出来没有意义，调用者关心的是最终结果；而上述代码中的<code>map()</code>与<code>filter()</code>等方法其实返回的还是 Stream 类。这一调用方式其初衷并非告知中间过程的细节，而是一种声明式的 DSL 表达，调用者可以自由地组合它们。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构 — 张逸</a></li>
 <li><a href="https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/paper-boy/demeter.pdf" target="_blank" rel="noopener">The Paperboy, The Wallet, and The Law Of Demeter —  David Bock</a></li>
 </ul>
@@ -6153,7 +6037,7 @@
 </tr>
 <tr>
 <td style="text-align:center">$A \xleftarrow{n=0} B \xrightarrow[T]{n&gt;0} C$</td>
-<td style="text-align:center"><script type="math/tex">A \xleftarrow{n=0} B \xrightarrow[T]{n>0} C</script></td>
+<td style="text-align:center"><code>A \xleftarrow{n=0} B \xrightarrow[T]{n&gt;0} C</code></td>
 <td style="text-align:center">上下方可输入公式的箭头</td>
 </tr>
 <tr>
