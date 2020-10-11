@@ -36,7 +36,7 @@ mathjax: true
 | $\log_2 x$ | `\log_2 x` | 对数运算 |
 | $\lim \limits_{n \to \infty}x_n$ | `\lim \limits_{n \to \infty}x_n` | 极限运算 |
 | $\sum \limits_{i=1}^n{x_i}$ | `\sum \limits_{i=1}^n{x_i}` | 求和运算 |
-| $\prod \limits_{i=1}^n{x_i}$ | `\prod \limits_{i=1}^n{x_i}` | 连乘运算 | 
+| $\prod \limits_{i=1}^n{x_i}$ | `\prod \limits_{i=1}^n{x_i}` | 连乘运算 |
 | $\int_{a}^{b} e^x\, dx$ | `\int_{a}^{b} e^x\, dx` | 积分运算 |
 | $\iint \limits_D\, dx\,dy$ | `\iint \limits_D\, dx\,dy` | 双重积分 |
 | $\oint_{L} x+y\, dx\,dy$ | `\oint_{L} x+y\, dx\,dy` | 闭合曲线积分 |
@@ -57,7 +57,7 @@ mathjax: true
 | $\equiv$ | `\equiv` | 恒定等于 |
 | $\bigodot$ | `\bigodot` | 同或 |
 | $\bigotimes$ | `\bigotimes` | 同与 |
-| $\bigoplus$ | `\bigoplus` | 异或 | 
+| $\bigoplus$ | `\bigoplus` | 异或 |
 
 ## 集合运算
 
@@ -105,15 +105,15 @@ mathjax: true
 | $\leftarrow$ | `\leftarrow` | 左箭头 |
 | $\Leftarrow$ | `\Leftarrow` | 左箭头 |
 | $\rightarrow$ | `\rightarrow` | 右箭头 |
-| $\Rightarrow$ | `\Rightarrow` | 右箭头 | 
-| $\longrightarrow$ | `\longrightarrow` | 向右长箭头 | 
+| $\Rightarrow$ | `\Rightarrow` | 右箭头 |
+| $\longrightarrow$ | `\longrightarrow` | 向右长箭头 |
 | $\Longrightarrow$ | `\Longrightarrow` | 向右长箭头 |
-| $A \xleftarrow{n=0} B \xrightarrow[T]{n>0} C$ | `$A \xleftarrow{n=0} B \xrightarrow[T]{n>0} C$` | 上下方可输入公式的箭头 |
+| $A \xleftarrow{n=0} B \xrightarrow[T]{n>0} C$ | `A \xleftarrow{n=0} B \xrightarrow[T]{n>0} C` | 上下方可输入公式的箭头 |
 | $\triangleq$ | `\triangleq` | 定义为 |
-| $\because$ | `\because` | 因为 | 
-| $\therefore$ | `\therefore` | 所以 | 
-| $\forall$ | `\forall` | 任意 | 
-| $\exists$ | `\exists` | 存在 | 
+| $\because$ | `\because` | 因为 |
+| $\therefore$ | `\therefore` | 所以 |
+| $\forall$ | `\forall` | 任意 |
+| $\exists$ | `\exists` | 存在 |
 | $\ldots$ | `\ldots` | 底端对齐的省略号 |
 | $\cdots$ | `\cdots` | 中线对齐的省略号 |
 | $\vdots$ | `\vdots` | 竖直对齐的省略号 |
