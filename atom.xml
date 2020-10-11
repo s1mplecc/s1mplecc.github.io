@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://s1mplecc.github.io/"/>
-  <updated>2020-10-07T05:19:01.884Z</updated>
+  <updated>2020-10-11T02:24:13.284Z</updated>
   <id>https://s1mplecc.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>LaTeX数学公式语法</title>
+    <link href="https://s1mplecc.github.io/2020/10/11/Latex%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/"/>
+    <id>https://s1mplecc.github.io/2020/10/11/Latex数学公式语法/</id>
+    <published>2020-10-11T02:05:13.000Z</published>
+    <updated>2020-10-11T02:24:13.284Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Languages" scheme="https://s1mplecc.github.io/categories/Languages/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>机器学习在网络安全中的应用 —— Chapter 1: Basics of Machine Learning in Cybersecurity</title>
@@ -523,32 +547,6 @@
       <category term="Network" scheme="https://s1mplecc.github.io/tags/Network/"/>
     
       <category term="Security" scheme="https://s1mplecc.github.io/tags/Security/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>API 设计心得</title>
-    <link href="https://s1mplecc.github.io/2018/10/10/API%E8%AE%BE%E8%AE%A1%E5%BF%83%E5%BE%97/"/>
-    <id>https://s1mplecc.github.io/2018/10/10/API设计心得/</id>
-    <published>2018-10-09T22:19:11.000Z</published>
-    <updated>2020-09-16T01:48:41.788Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-      <category term="Design" scheme="https://s1mplecc.github.io/categories/Design/"/>
-    
-    
-      <category term="API Design" scheme="https://s1mplecc.github.io/tags/API-Design/"/>
     
   </entry>
   
