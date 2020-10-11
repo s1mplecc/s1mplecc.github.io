@@ -1,7 +1,7 @@
 ---
 title: Redis 五种数据类型
 date: 2018-03-16T08:27:36.000Z
-tags: ['Database', 'Redis', 'Node.js', 'Koa']
+tags: ['Redis']
 categories: [Concepts]
 ---
 ## Preface

@@ -1,6 +1,6 @@
 ---
 title: '机器学习在网络安全中的应用 —— Chapter 1: Basics of Machine Learning in Cybersecurity'
-tags: ['ML', 'Security']
+tags: ['Machine Learning', 'Security']
 categories: ['Translations']
 date: 2020-10-07 13:17:42
 mathjax: true

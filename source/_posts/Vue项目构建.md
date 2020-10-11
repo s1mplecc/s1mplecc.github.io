@@ -1,7 +1,7 @@
 ---
 title: Vue 项目构建
 date: 2017-12-13T06:36:50.000Z
-tags: ['Vue', 'JavaScript', 'Web', 'Front-end']
+tags: ['Vue.js', 'web']
 categories: [Coding]
 ---
 ## Creating

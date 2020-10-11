@@ -1,7 +1,7 @@
 ---
 title: 部署 Ghost Blog
 date: 2017-11-01T05:08:37.000Z
-tags: ['Server']
+tags: ['Blog Engine']
 categories: [Ops]
 ---
 ## Preface

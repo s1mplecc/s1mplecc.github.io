@@ -1,7 +1,7 @@
 ---
 title: Sidecar -- 将 Node 应用引入 Spring Cloud
 date: 2018-03-31T02:05:08.000Z
-tags: ['Spring Cloud', 'Node.js']
+tags: ['Spring', 'Node.js']
 categories: [Coding]
 ---
 ## Preface

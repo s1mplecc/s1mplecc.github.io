@@ -1,5 +1,5 @@
 ---
-title: '什么是P, NP, NPC以及NP-Hard问题？'
+title: '什么是 P, NP, NPC 以及 NP-Hard 问题？'
 tags: []
 categories: [Concepts]
 date: 2020-09-22 21:17:07

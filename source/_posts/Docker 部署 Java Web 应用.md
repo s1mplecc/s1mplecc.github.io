@@ -1,14 +1,14 @@
 ---
 title: Docker 部署 Java Web 应用
 date: 2017-11-04T05:42:30.000Z
-tags: ['Server', 'Docker', 'Java']
+tags: [Docker, Web]
 categories: [Ops]
 ---
 ## Preface 
 
 > JPress是基于java的博客平台，我将用它演示如何使用Docker部署Java Web应用。
 
-## Prerequisite
+## 准备工作
 
 - 服务器 ubuntu 16.04
 - 下载好的jpress.war包，[下载地址](http://jpress.cnitti.net/c/11.html)，下载下来先在Idea里跑了测试一下，以免服务器上出问题
@@ -82,12 +82,42 @@ categories: [Ops]
     docker build -t s1mple1995/jpress .
     ```
 - 可以看到控制台输出了一些信息
-![-----2017-11-04---6.06.30](/0.png)
+
+```
+Sending build context to Docker daemon 20.@6MB
+Step 1/6 : FROM simple1995/jpress
+ ---> 6c7F7aa5716d
+Step 2/6 : USER root
+ ---> Running in d29bd2d7cf4e
+ ---> 616922ef516c
+Removing intermediate container d29bd2d7cf4e
+Step 3/6 : ENV APP /usr/local/lib/tomcat9/webapps
+ ---> Running in 5667a207¢898
+ ---> b6c061148616
+Removing intermediate container 5667a267¢898
+Step 4/6 : ADD ./jpress.war SAPP
+ ---> a82c14e949e0
+Step 5/6 : EXPOSE 1110
+ ---> Running in b31964ddfefo
+ ---> cd9de2d7786F
+Removing intermediate container b31964ddfefo
+Step 6/6 : CMD service tomcat run
+ ---> Running in @4a6a78fa77a
+ ---> de9b3648553e
+Removing intermediate container @4a6a78fa77a
+Successfully built de9b3648553e
+Successfully tagged s1mple1995/jpress:latest
+```
 
 > Dockerfile里的每一句命令都会在一个新的容器中运行，并生成一个新的镜像，再将中间过渡的容器移除。
 
 - 我们来验证一下，执行`docker images`看到我的两个镜像
-![-----2017-11-04---7.05.41](/1.png)
+
+```
+REPOSITORY                  TAG          IMAGE ID
+s1mple1995/jpress           latest       de9b3648553e
+simple1995/java-web-env     latest       292d98d8d6d4
+```
 
 - 执行`docker image history de9`查看jpress镜像历史
 ![-----2017-11-04---7.01.30](/2.png)

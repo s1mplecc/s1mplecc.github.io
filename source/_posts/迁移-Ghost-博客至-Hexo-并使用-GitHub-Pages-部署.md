@@ -1,7 +1,7 @@
 ---
 title: 迁移 Ghost 博客至 Hexo 并使用 GitHub Pages 部署
 date: 2018-12-27 13:45:37
-tags: [Hexo, Ghost]
+tags: ['Blog Engine']
 categories: [Ops]
 ---
 ## 为什么迁移

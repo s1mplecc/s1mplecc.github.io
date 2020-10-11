@@ -1,5 +1,5 @@
 ---
-title: LaTeX数学公式语法
+title: LaTeX 数学公式语法
 tags: []
 categories: [Languages]
 date: 2020-10-11 10:05:13
@@ -123,18 +123,19 @@ mathjax: true
 
 **矩阵表示**
 
-$$\left[ \begin{matrix} 1 &2 &\cdots &4\\5 &6 &\cdots &8 \\ \vdots &\vdots &\ddots &\vdots \\ 13 &14 &\cdots &16\end{matrix} \right]$$
-
 ```
 \left[ \begin{matrix} 1 &2 &\cdots &4\\5 &6 &\cdots &8 \\ \vdots &\vdots &\ddots &\vdots \\ 13 &14 &\cdots &16\end{matrix} \right]
 ```
 
+$$\left[ \begin{matrix} 1 &2 &\cdots &4\\5 &6 &\cdots &8 \\ \vdots &\vdots &\ddots &\vdots \\ 13 &14 &\cdots &16\end{matrix} \right]$$
+
 **大括号公式**
-$$F(n)= \begin{cases} 1 & \text{n = 0 或 1}\\ F(n-1)+F(n-2) & \text{n > 1} \end{cases}$$
 
 ```
 F(n)= \begin{cases} 1 & \text{n = 0 或 1}\\ F(n-1)+F(n-2) & \text{n > 1} \end{cases}
 ```
+
+$$F(n)= \begin{cases} 1 & \text{n = 0 或 1}\\ F(n-1)+F(n-2) & \text{n > 1} \end{cases}$$
 
 ## 希腊字母
 

@@ -1,7 +1,7 @@
 ---
 title: 迁移 Ghost 博客并使用 Docker  部署
 date: 2018-06-24T14:30:15.000Z
-tags: ['Docker', 'Server', 'Nginx']
+tags: ['Docker','Blog Engine']
 categories: [Ops]
 ---
 ## Preface

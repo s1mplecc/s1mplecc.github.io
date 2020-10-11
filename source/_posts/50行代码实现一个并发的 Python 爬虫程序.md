@@ -1,8 +1,8 @@
 ---
-title: 50行代码实现一个并发的 Python 爬虫程序
+title: 50 行代码实现一个并发的 Python 爬虫程序
 date: 2018-12-03T13:41:09.000Z
-tags: ['Python']
-categories: [Coding]
+tags: [Python]
+categories: [Projects]
 ---
 ## 前言
 
