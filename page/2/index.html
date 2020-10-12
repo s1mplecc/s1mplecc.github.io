@@ -392,7 +392,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2019/01/23/Fluent-Interface-%E2%80%94%E2%80%94-Martin-Fowler-%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/2/index.html">Fluent Interface —— Martin Fowler 博客译文</a>
+                <a href="/2019/01/23/Fluent-Interface-%E2%80%94%E2%80%94-Martin-Fowler-%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/2/index.html">流畅接口 —— Martin Fowler 博客译文</a>
               
             
           </h1>
@@ -434,7 +434,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
+                <time title="修改时间：2020-10-12 10:11:38" itemprop="dateModified" datetime="2020-10-12T10:11:38+08:00">2020-10-12</time>
               
             
           </span>
@@ -517,7 +517,8 @@
       
         
           
-            <h2 id="译文"><a href="#译文" class="headerlink" title="译文"></a>译文</h2><p>几个月前我和 Eric Evans 进行了一次讨论会，他谈到一种接口的设计风格，我们称之为流畅接口（Fluent Interface）。它不是一种常见的风格，但我们觉得应该广为人知。描述它的最直观的方式就是例子。</p>
+            <h2 id="原文链接"><a href="#原文链接" class="headerlink" title="原文链接"></a>原文链接</h2><p><a href="https://www.martinfowler.com/bliki/FluentInterface.html" target="_blank" rel="noopener">Fluent Interface</a>，Matrin Fowler 博客，发表于 2005 年 12 月 20 日。</p>
+<h2 id="译文"><a href="#译文" class="headerlink" title="译文"></a>译文</h2><p>几个月前我和 Eric Evans 进行了一次讨论会，他谈到一种接口的设计风格，我们称之为流畅接口（Fluent Interface）。它不是一种常见的风格，但我们觉得应该广为人知。描述它的最直观的方式就是例子。</p>
 <p>最简单的例子可能就来自 Eric 编写的 <a href="http://timeandmoney.sourceforge.net/" target="_blank" rel="noopener">TimeAndMoney Library</a>。为了指定一段时间间隔，我们通常这么做：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TimePoint fiveOClock, sixOClock;</span><br><span class="line">...</span><br><span class="line">TimeInterval meetingTime = <span class="keyword">new</span> TimeInterval(fiveOClock, sixOClock);</span><br></pre></td></tr></table></figure>
 <p>但是 TimeAndMoney 库的使用者会这样做：</p>
@@ -541,7 +542,6 @@
 <p><a href="https://bofh.org.uk/2005/12/21/fluent-interfaces/" target="_blank" rel="noopener">Piers Cawley</a> 对本文有一个很好的跟进。</p>
 <p><strong>更新</strong>（2008年6月23日）。自从我写这篇文章以来，这个术语被广泛使用，这给了我一种令人愉快的满足感。在我一直在研究的书中，我已经提炼了关于流畅接口和内部 DSLs 的想法。我也注意到了一个常见的误解 —— 很多人似乎将流畅接口与方法链（Method Chaining）等同起来。当然链式接口是使用了流畅接口的一种常用的技术，但真正的流畅接口远不止于此。</p>
 <p>我上面展示的 JMock 示例使用了方法链，但同时也使用嵌套函数和对象作用域。</p>
-<h2 id="原文链接"><a href="#原文链接" class="headerlink" title="原文链接"></a>原文链接</h2><p><a href="https://www.martinfowler.com/bliki/FluentInterface.html" target="_blank" rel="noopener">Fluent Interface</a>，Matrin Fowler 博客，发表于 2005 年 12 月 20 日。</p>
 
           
         

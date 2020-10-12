@@ -277,11 +277,11 @@
   </entry>
   
   <entry>
-    <title>Fluent Interface —— Martin Fowler 博客译文</title>
+    <title>流畅接口 —— Martin Fowler 博客译文</title>
     <link href="https://s1mplecc.github.io/2019/01/23/Fluent-Interface-%E2%80%94%E2%80%94-Martin-Fowler-%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/"/>
     <id>https://s1mplecc.github.io/2019/01/23/Fluent-Interface-——-Martin-Fowler-博客译文/</id>
     <published>2019-01-23T06:15:45.000Z</published>
-    <updated>2020-09-16T01:48:41.852Z</updated>
+    <updated>2020-10-12T02:11:38.849Z</updated>
     
     <summary type="html">
     
@@ -297,10 +297,6 @@
     
       <category term="Translations" scheme="https://s1mplecc.github.io/categories/Translations/"/>
     
-    
-      <category term="API Design" scheme="https://s1mplecc.github.io/tags/API-Design/"/>
-    
-      <category term="DSL" scheme="https://s1mplecc.github.io/tags/DSL/"/>
     
   </entry>
   
