@@ -1,9 +1,13 @@
 ---
-title: Fluent Interface —— Martin Fowler 博客译文
-tags: [DSL, API Design]
+title: 流畅接口 —— Martin Fowler 博客译文
+tags: []
 categories: [Translations]
 date: 2019-01-23 14:15:45
 ---
+## 原文链接
+
+[Fluent Interface](https://www.martinfowler.com/bliki/FluentInterface.html)，Matrin Fowler 博客，发表于 2005 年 12 月 20 日。
+
 ## 译文
 
 几个月前我和 Eric Evans 进行了一次讨论会，他谈到一种接口的设计风格，我们称之为流畅接口（Fluent Interface）。它不是一种常见的风格，但我们觉得应该广为人知。描述它的最直观的方式就是例子。
@@ -84,7 +88,3 @@ Eric 提到的一点是，到目前为止，他使用并看到了流畅的接口
 **更新**（2008年6月23日）。自从我写这篇文章以来，这个术语被广泛使用，这给了我一种令人愉快的满足感。在我一直在研究的书中，我已经提炼了关于流畅接口和内部 DSLs 的想法。我也注意到了一个常见的误解 —— 很多人似乎将流畅接口与方法链（Method Chaining）等同起来。当然链式接口是使用了流畅接口的一种常用的技术，但真正的流畅接口远不止于此。
 
 我上面展示的 JMock 示例使用了方法链，但同时也使用嵌套函数和对象作用域。
-
-## 原文链接
-
-[Fluent Interface](https://www.martinfowler.com/bliki/FluentInterface.html)，Matrin Fowler 博客，发表于 2005 年 12 月 20 日。

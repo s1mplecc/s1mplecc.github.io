@@ -1,22 +1,22 @@
 ---
-title: ESLint -- 代码规约插件
+title: ESLint —— JavaScript代码规约插件
 date: 2018-04-04T02:47:12.000Z
-tags: ['JavaScript']
-categories: [Coding]
+tags: [JavaScript]
+categories: [Languages]
 ---
-## Preface
+## 前言
 
-之前在 Vue 项目中使用`vue-cli`时可以自动添加 ESLint 代码规约插件，所以也没去管怎么手动添加 ESLint 。但是最近在`Koa2`项目中，需要手动的去添加并配置 ESLint 。本文将介绍如何安装以及配置 ESLint 的规则。
+ESLint 是一款 JavaScript 的代码规约插件，可以自定义规则，不符合规则的代码可以设置不同级别的报错。方便对于团队内成员的代码质量进行统一管理。之前在 Vue 项目中使用`vue-cli`时可以自动添加 ESLint 代码规约插件，所以也没去管怎么手动添加 ESLint。但是最近在`Koa2`项目中，需要手动的去添加并配置 ESLint。本文将介绍如何安装以及配置 ESLint 的规则。
 
-## Installing
+## 安装
 
-在项目目录下使用`npm`命令安装 ESLint，并且是开发时依赖需要加上`--save-dev`。不推荐全局安装，这样可以实现项目规则的**自定义化**以及团队成员的**统一化**
+在项目目录下使用`npm`命令安装 ESLint，并且是开发时依赖需要加上`--save-dev`。不推荐全局安装，这样可以实现项目规则的**自定义化**以及团队成员的**统一化**。
 
 ```sh
 npm install --save-dev eslint
 ```
 
-初始化，会询问一些问题用于设置 ESLint，比如回答使用 Airbnb 的风格
+初始化，会询问一些问题用于设置 ESLint，比如回答使用 Airbnb 的风格，不同的风格会有一些预定义的规则。
 
 ```sh
 ➜ ./node_modules/.bin/eslint --init
@@ -26,17 +26,20 @@ npm install --save-dev eslint
 ? Do you use React? No
 ? What format do you want your config file to be in? JavaScript
 ```
-完成后会在项目目录下生成`.eslintrc.js`文件，除此之外还可以手动添加`.eslintignore`，作用和`.gitignore`一样用于 Eslint 忽略检查的文件
 
-接着需要在 WebStorm 中启用 Eslint，勾选`Enable`
+完成后会在项目目录下生成`.eslintrc.js`文件，除此之外还可以手动添加`.eslintignore`，作用和`.gitignore`一样用于 Eslint 忽略检查的文件。
+
+接着需要在 WebStorm 中启用 Eslint，勾选`Enable`。
+
 ![E9C4D048-BFC5-4D13-A4E8-30CD61BEE953](/0.png)
 
-现在代码检测已经启动了，比如规则中定义了句尾不加分号，现在就会报错
+现在代码检测已经启动了，比如规则中定义了句尾不加分号，如果加了分号就会报错。
+
 ![8EAC31A2-7E35-4016-9D0F-0FB7AD8057A6](/1.png)
 
-## Rules
+## 自定义规则
 
-配置自定义规则，以下是我的规则。参考官方文档 [Rules](https://eslint.org/docs/rules/)
+配置自定义规则，以下是我的规则。参考官方文档 [Rules](https://eslint.org/docs/rules/)。
 
 ```
 module.exports = {
@@ -61,9 +64,9 @@ module.exports = {
 }
 ```
 
-## Running
+## 运行
 
-在`package.json`中添加命令脚本
+在`package.json`中添加命令脚本。
 
 ```json
 "scripts": {
@@ -72,7 +75,7 @@ module.exports = {
 }
 ```
 
-这样就可以使用`npm run lint`运行 Eslint 检查程序，结果列出了问题文件所在路径、警告的级别及问题原因
+这样就可以使用`npm run lint`运行 Eslint 检查程序，结果列出了问题文件所在路径、警告的级别及问题原因。
 
 ```
 ➜ npm run lint
@@ -102,8 +105,7 @@ module.exports = {
 
 ```
 
-## Preferences
+## 参考
 
-- [官方文档](https://cn.eslint.org/docs/user-guide/getting-started)
-- [Rules](https://eslint.org/docs/rules/)
-- [中文规则文档](https://cn.eslint.org/docs/rules/)
+- [ESLint 官方文档](https://cn.eslint.org/docs/user-guide/getting-started)
+- [ESLint Rules](https://eslint.org/docs/rules/)
