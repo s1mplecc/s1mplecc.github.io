@@ -112,16 +112,16 @@
 
 
 
-  <meta name="description" content="前言本文介绍在搭建了服务器并且配置了域名后，如何通过 Certbot 将原先的 http:&#x2F;&#x2F; 域名配置为 https:&#x2F;&#x2F; 域名。文章的最后介绍了 HTTPS 基于的 SSL 协议，以及和 SSL 加密通信过程类似的 SSH 协议。 环境准备 Ubuntu 16.04 Nginx  安装配置Certbot添加软件源： 123sudo apt-get updatesudo apt-get inst">
+  <meta name="description" content="前言本文介绍在搭建了服务器并且配置了域名后，如何通过 Certbot 将原先的 http:&#x2F;&#x2F; 域名配置为 https:&#x2F;&#x2F; 域名。文章的最后介绍了 HTTPS 基于的 SSL 协议，以及和 SSL 加密通信过程类似的 SSH 协议。 环境准备 Ubuntu 16.04 Nginx  安装配置 Certbot添加软件源： 123sudo apt-get updatesudo apt-get ins">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用 Certbot 配置 HTTPS">
 <meta property="og:url" content="https://s1mplecc.github.io/2017/11/06/%E4%BD%BF%E7%94%A8%20Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/index.html">
 <meta property="og:site_name" content="s1mple的博客">
-<meta property="og:description" content="前言本文介绍在搭建了服务器并且配置了域名后，如何通过 Certbot 将原先的 http:&#x2F;&#x2F; 域名配置为 https:&#x2F;&#x2F; 域名。文章的最后介绍了 HTTPS 基于的 SSL 协议，以及和 SSL 加密通信过程类似的 SSH 协议。 环境准备 Ubuntu 16.04 Nginx  安装配置Certbot添加软件源： 123sudo apt-get updatesudo apt-get inst">
+<meta property="og:description" content="前言本文介绍在搭建了服务器并且配置了域名后，如何通过 Certbot 将原先的 http:&#x2F;&#x2F; 域名配置为 https:&#x2F;&#x2F; 域名。文章的最后介绍了 HTTPS 基于的 SSL 协议，以及和 SSL 加密通信过程类似的 SSH 协议。 环境准备 Ubuntu 16.04 Nginx  安装配置 Certbot添加软件源： 123sudo apt-get updatesudo apt-get ins">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s1mplecc.github.io/2017/11/06/%E4%BD%BF%E7%94%A8%20Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/0.png">
 <meta property="article:published_time" content="2017-11-05T20:04:46.000Z">
-<meta property="article:modified_time" content="2020-10-13T07:39:17.375Z">
+<meta property="article:modified_time" content="2020-10-13T07:43:16.177Z">
 <meta property="article:author" content="s1mple">
 <meta property="article:tag" content="Server">
 <meta property="article:tag" content="Network">
@@ -437,7 +437,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-10-13 15:39:17" itemprop="dateModified" datetime="2020-10-13T15:39:17+08:00">2020-10-13</time>
+                <time title="修改时间：2020-10-13 15:43:16" itemprop="dateModified" datetime="2020-10-13T15:43:16+08:00">2020-10-13</time>
               
             
           </span>
@@ -531,7 +531,7 @@
 <li>Ubuntu 16.04</li>
 <li>Nginx</li>
 </ul>
-<h2 id="安装配置Certbot"><a href="#安装配置Certbot" class="headerlink" title="安装配置Certbot"></a>安装配置Certbot</h2><p>添加软件源：</p>
+<h2 id="安装配置-Certbot"><a href="#安装配置-Certbot" class="headerlink" title="安装配置 Certbot"></a>安装配置 Certbot</h2><p>添加软件源：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install software-properties-common</span><br><span class="line">sudo add-apt-repository ppa:certbot/certbot</span><br></pre></td></tr></table></figure>
 <p>可以看到 <code>/etc/apt/sources.list.d</code> 目录下多了个 <code>certbot-ubuntu-certbot-xenial.list</code> 文件，内容如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br><span class="line"># deb-src http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br></pre></td></tr></table></figure>
@@ -613,8 +613,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/11/04/Docker%20%E9%83%A8%E7%BD%B2%20Java%20Web%20%E5%BA%94%E7%94%A8/" rel="next" title="Docker 部署 Java Web 应用">
-                <i class="fa fa-chevron-left"></i> Docker 部署 Java Web 应用
+              <a href="/2017/11/04/%E4%BD%BF%E7%94%A8%20Docker%20%E9%83%A8%E7%BD%B2%20Java%20Web%20%E5%BA%94%E7%94%A8/" rel="next" title="使用 Docker 部署 Java Web 应用">
+                <i class="fa fa-chevron-left"></i> 使用 Docker 部署 Java Web 应用
               </a>
             
           </div>
@@ -812,11 +812,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">34</span>
+                    <span class="site-state-item-count">32</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -884,7 +880,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境准备"><span class="nav-number">2.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装配置Certbot"><span class="nav-number">3.</span> <span class="nav-text">安装配置Certbot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协议原理"><span class="nav-number">4.</span> <span class="nav-text">协议原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SSL"><span class="nav-number">4.1.</span> <span class="nav-text">SSL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH"><span class="nav-number">4.2.</span> <span class="nav-text">SSH</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境准备"><span class="nav-number">2.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装配置-Certbot"><span class="nav-number">3.</span> <span class="nav-text">安装配置 Certbot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协议原理"><span class="nav-number">4.</span> <span class="nav-text">协议原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SSL"><span class="nav-number">4.1.</span> <span class="nav-text">SSL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH"><span class="nav-number">4.2.</span> <span class="nav-text">SSH</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
