@@ -277,11 +277,11 @@
   </entry>
   
   <entry>
-    <title>流畅接口 —— Martin Fowler 博客译文</title>
+    <title>Fluent Interface —— Martin Fowler 博客译文</title>
     <link href="https://s1mplecc.github.io/2019/01/23/Fluent%20Interface%20--%20Martin%20Fowler%20%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/"/>
     <id>https://s1mplecc.github.io/2019/01/23/Fluent Interface -- Martin Fowler 博客译文/</id>
     <published>2019-01-23T06:15:45.000Z</published>
-    <updated>2020-10-12T02:11:38.849Z</updated>
+    <updated>2020-10-13T07:15:22.883Z</updated>
     
     <summary type="html">
     
@@ -515,11 +515,11 @@
   </entry>
   
   <entry>
-    <title>HTTPS &amp; SSH 协议</title>
-    <link href="https://s1mplecc.github.io/2018/10/11/HTTPS%20&amp;%20SSH%20%E5%8D%8F%E8%AE%AE/"/>
-    <id>https://s1mplecc.github.io/2018/10/11/HTTPS &amp; SSH 协议/</id>
-    <published>2018-10-10T19:14:36.000Z</published>
-    <updated>2020-09-16T01:48:41.862Z</updated>
+    <title>API 设计心得</title>
+    <link href="https://s1mplecc.github.io/2018/10/10/API%E8%AE%BE%E8%AE%A1%E5%BF%83%E5%BE%97/"/>
+    <id>https://s1mplecc.github.io/2018/10/10/API设计心得/</id>
+    <published>2018-10-09T22:19:11.000Z</published>
+    <updated>2020-10-11T07:33:28.558Z</updated>
     
     <summary type="html">
     
@@ -533,12 +533,8 @@
     
     </summary>
     
-      <category term="Concepts" scheme="https://s1mplecc.github.io/categories/Concepts/"/>
+      <category term="Design" scheme="https://s1mplecc.github.io/categories/Design/"/>
     
-    
-      <category term="Network" scheme="https://s1mplecc.github.io/tags/Network/"/>
-    
-      <category term="Security" scheme="https://s1mplecc.github.io/tags/Security/"/>
     
   </entry>
   

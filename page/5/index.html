@@ -372,315 +372,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Java 泛型之类型擦除</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-02-27 01:47:58" itemprop="dateCreated datePublished" datetime="2018-02-27T01:47:58+08:00">2018-02-27</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/02/27/Java泛型之类型擦除/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">5k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>Java SE5 的重大变化之一就是加入了<strong>泛型</strong>，实现了参数化类型，使得代码可以适用于多种类型。但由于兼容旧版本的考虑，不得不作出了一些牺牲，比如<strong>擦除</strong>，使得泛型使用受到一定局限。本文简要介绍了 Java 泛型以及类型擦除的概念和使用</p>
-</blockquote>
-<h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><blockquote>
-<p><strong>Java泛型</strong> (<strong>Generics</strong>) 是 JDK5 引入的新特性，允许在定义类和接口的时候使用<strong>类型参数</strong> (<strong>Type Parameter</strong>)。声明的类型参数在使用时用具体的类型来替换。泛型最主要的应用是在 JDK5 中的新<strong>集合类</strong>框架中。</p>
-</blockquote>
-<ul>
-<li><p>通过泛型，大大提升了集合类的<strong>可复用性</strong>，你可以定义一个装字符串的 ArrayList，也可以定义一个装整型的 ArrayList</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;String&gt; als &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">als.add(&quot;aaa&quot;);</span><br><span class="line"></span><br><span class="line">ArrayList&lt;Integer&gt; ali &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">ali.add(1); </span><br><span class="line">ali.add(&quot;aaa&quot;);  &#x2F;&#x2F; error</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>自定义泛型类可以参考我的上一篇博客，<a href="https://s1mple.xyz/java-generics-linkedstack/" target="_blank" rel="noopener">Java泛型之LinkedStack</a></p>
-</li>
-</ul>
-<h3 id="使用泛型需要注意"><a href="#使用泛型需要注意" class="headerlink" title="使用泛型需要注意"></a>使用泛型需要注意</h3><hr>
-<blockquote>
-<p>泛型的引入可以解决之前的集合类框架在使用过程中经常出现的运行时类型错误，因为编译器可以在编译时就发现很多明显的错误。但无奈的是，为了保证与旧版本的<strong>兼容性</strong>，Java 泛型的实现上存在着一些不够优雅的地方。</p>
-</blockquote>
-<ul>
-<li><p>开发人员在使用泛型的时候，很容易根据自己的直觉而犯一些错误</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;Object&gt; list) &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  这个方法接收<code>ArrayList&lt;Object&gt;</code>作为形参，但是如果尝试传入一个<code>ArrayList&lt;String&gt;</code>对象，却发现无法通过编译</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void test()&#123;</span><br><span class="line">    testGenerics(new ArrayList&lt;String&gt;()); &#x2F;&#x2F; 编译错误!!!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  虽然从直觉上来说，Object 是 String 的父类，这种类型转换应该是合理的。但是实际上这会产生<strong>隐含的类型转换</strong>问题，因此编译器直接就禁止这样的行为</p>
-</li>
-</ul>
-<h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h2><blockquote>
-<p>使用泛型的时候加上的类型参数，会被编译器在<strong>编译时</strong>去掉(擦除)。这个过程就称为<strong>类型擦除</strong> (<strong>Type Erasure</strong>) 。如在代码中定义的<code>List&lt;Object&gt;</code>和<code>List&lt;String&gt;</code>等类型，在编译之后都会变成 List 。</p>
-<p>可以说，类型擦除这个令人困惑的 Java 特性，完全是历史遗留问题导致的。因为 JDK5 之前没有泛型，为了旧代码能够正常运行，Java 泛型必须要在编译器层次将类型擦除，所导致的严酷事实就是：<strong>在泛型代码内部，无法获得任何有关泛型参数类型的信息。</strong></p>
-</blockquote>
-<p>很多泛型的特性都与类型擦除的存在有关，包括：</p>
-<ul>
-<li><p><strong>泛型类并没有自己独有的 Class 类对象。</strong> 比如并不存在<code>List&lt;String&gt;.class</code>或是<code>List&lt;Integer&gt;.class</code>，而只有<code>List.class</code></p>
-</li>
-<li><p><strong>静态变量是被泛型类的所有实例所共享的。</strong> 对于声明为<code>MyClass&lt;T&gt;</code>的类，访问其中的静态变量的方法仍然是<code>MyClass.myStaticVar</code>。不管是通过<code>new MyClass&lt;String&gt;</code>还是<code>new MyClass&lt;Integer&gt;</code>创建的对象，都是共享一个静态变量</p>
-</li>
-<li><p><strong>泛型的参数类型不能用于 Java异常处理的<code>catch</code>语句中。</strong> 因为异常处理是由 JVM 在运行时刻来进行的。由于类型信息被擦除，JVM 是无法区分两个异常类型<code>MyException&lt;String&gt;</code>和<code>MyException&lt;Integer&gt;</code>的。对于 JVM 来说，它们都是<code>MyException</code>类型的。也就无法执行与异常对应的<code>catch</code>语句</p>
-</li>
-</ul>
-<blockquote>
-<p>简单来说就是：<strong>泛型的类型信息在编译阶段被擦除，运行时刻任何获取泛型参数类型信息的行为都是非法的。</strong> </p>
-</blockquote>
-<h3 id="编译器的类型检查"><a href="#编译器的类型检查" class="headerlink" title="编译器的类型检查"></a>编译器的类型检查</h3><hr>
-<blockquote>
-<p>了解了类型擦除机制之后，就会明白<strong>编译器承担了全部的类型检查工作</strong>。编译器禁止某些泛型的使用方式，正是为了确保类型的安全性。</p>
-</blockquote>
-<ul>
-<li><p>继续用上例代码来做演示</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;Object&gt; list) &#123;</span><br><span class="line">    list.add(1); &#x2F;&#x2F; 合法</span><br><span class="line">    list.add(&quot;aaa&quot;); &#x2F;&#x2F; 合法</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void test()&#123;</span><br><span class="line">    testGenerics(new ArrayList&lt;String&gt;()); &#x2F;&#x2F; 编译错误!!!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  不难理解，为了避免<code>ArrayList&lt;String&gt;</code>中添加一个 Integer 类型的对象，编译器干脆禁止了这样的行为。编译器会尽可能的检查可能存在的类型安全问题。对于确定是违反相关原则的地方，会给出编译错误。当编译器无法判断类型的使用是否正确的时候，会给出警告信息。</p>
-</li>
-</ul>
-<h3 id="通配符与上下界"><a href="#通配符与上下界" class="headerlink" title="通配符与上下界"></a>通配符与上下界</h3><hr>
-<blockquote>
-<p>在使用泛型类的时候，既可以指定一个具体的类型，如<code>List&lt;String&gt;</code>就声明了具体的类型是 String，也可以用 <strong>通配符<code>?</code></strong> 来表示未知类型，比如<code>List&lt;?&gt;</code>。通配符所代表的其实是<strong>一组类型</strong>，但具体的类型<strong>暂时未知</strong>，而是在<strong>使用时再确定</strong>。</p>
-</blockquote>
-<ul>
-<li><p><code>List&lt;?&gt;</code>不同于<code>List&lt;Object&gt;</code>的地方是，<code>List&lt;Object&gt;</code>实际上确定了参数类型是 Object 及其子类。而<code>List&lt;?&gt;</code>则其中所包含的元素类型是不确定。使用时可以用<code>List&lt;String&gt;</code>或<code>List&lt;Integer&gt;</code>替换。如果它包含了 String 的话，往里面添加 Integer 类型的元素就是错误的</p>
-</li>
-<li><p>请看如下代码</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;?&gt; list) &#123;</span><br><span class="line">    list.add(&quot;aaa&quot;); &#x2F;&#x2F; 编译错误!!!</span><br><span class="line">    </span><br><span class="line">    Object obj &#x3D; list.get(0); &#x2F;&#x2F; 合法</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void test()&#123;</span><br><span class="line">    ArrayList&lt;String&gt; list &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    list.add(&quot;aaa&quot;);</span><br><span class="line">    testGenerics(list); &#x2F;&#x2F; 合法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  上述代码有如下几点要注意：</p>
-<ol>
-<li>因为通配符<code>?</code>类型未知，所以为了避免运行时类型错误，<code>list.add(&quot;aaa&quot;)</code>编译不会通过</li>
-<li>虽然类型未知，但肯定是 Object 及其子类，所以<strong>通配符代表的元素可以用 Object 来引用。</strong></li>
-<li>向<code>testGenerics()</code>方法传入的是<code>ArrayList&lt;String&gt;</code>类型的，并且编译通过。即使用时声明具体类型</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<p>由于<code>List&lt;?&gt;</code>中的元素只能用 Object 来引用，显然在需要更精细的类型时并不适用。在这些情况下，可以使用<strong>上下界</strong>来限制未知类型的范围。</p>
-</blockquote>
-<ul>
-<li><p><code>List&lt;? extends Number&gt;</code>说明 List 中可能包含的元素类型是 Number 及其<strong>子类</strong>。</p>
-</li>
-<li><p><code>List&lt;? super Number&gt;</code>则说明 List 中包含的是 Number 及其<strong>父类</strong>。</p>
-</li>
-<li><p>当使用<code>extends</code>引入了上界之后，在使用类型的时候就可以<strong>使用上界类中定义的方法</strong>。查看如下的例子</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public static void testGenerics(ArrayList&lt;? extends Number&gt; list) &#123;</span><br><span class="line">    Number number &#x3D; list.get(0);</span><br><span class="line">    System.out.println(number.intValue());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    ArrayList&lt;Double&gt; doubles &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    doubles.add(2.33333);</span><br><span class="line">    testGenerics(doubles); &#x2F;&#x2F; 运行输出结果：2 </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  形参改为<code>&lt;? extends Number&gt;</code>后，可以看到如下两个性质：</p>
-<ol>
-<li>可以使用 Number 引用</li>
-<li>在<code>testGenerics()</code>方法中可以调用 Number 类的<code>intValue()</code>方法</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<p>上述代码中，我们为了调用<code>intValue()</code>方法，必须给定泛型类的边界，以告诉编译器只能接受遵循这个边界的类型。这里重用了 <strong>extends</strong> 关键字。这样在编译时， <strong>泛型类型参数将擦除到它的第一个边界</strong>，即 Number，这样就可以调用<code>intValue()</code>方法了。</p>
-</blockquote>
-<h3 id="类型系统"><a href="#类型系统" class="headerlink" title="类型系统"></a>类型系统</h3><hr>
-<blockquote>
-<p>引入泛型之后的类型系统增加了<strong>两个维度</strong>：一个是<strong>类型参数自身</strong>的继承体系结构，另外一个是<strong>泛型类或接口自身</strong>的继承体系结构。第一个指的是对于<code>List&lt;String&gt;</code>和<code>List&lt;Object&gt;</code>这样的情况，类型参数 String 继承自 Object 。而第二种指的是<code>List&lt;String&gt;</code>和<code>Collection&lt;String&gt;</code>这种情况。对于这个类型系统，有如下的一些规则：</p>
-</blockquote>
-<ul>
-<li><p>相同类型参数的泛型类的关系取决于泛型类自身的继承体系结构。即<code>List&lt;String&gt;</code>是<code>Collection&lt;String&gt;</code>的子类型，<code>List&lt;String&gt;</code>可以替换<code>Collection&lt;String&gt;</code>。这种情况也适用于带有上下界的类型声明。</p>
-</li>
-<li><p>当泛型类的类型声明中使用了通配符的时候， 其子类型可以在两个维度上分别展开。如对<code>Collection&lt;? extends Number&gt;</code>来说，其子类型可以在 Collection 这个维度上展开，即<code>List&lt;? extends Number&gt;</code>和<code>Set&lt;? extends Number&gt;</code>等；也可以在 Number 这个层次上展开，即<code>Collection&lt;Double&gt;</code>和<code>Collection&lt;Integer&gt;</code>等。如此循环下去，<code>ArrayList&lt;Long&gt;</code>和<code>HashSet&lt;Double&gt;</code>等也都算是<code>Collection&lt;? extends Number&gt;</code>的子类型。</p>
-</li>
-<li><p>如果泛型类中包含多个类型参数，则对于每个类型参数分别应用上面的规则。</p>
-</li>
-</ul>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
-<p>Java泛型确实有些让人困惑的特性，让它使用起来不如 C++ 这种最开始就囊括了泛型的语言舒服。这也是任何有历史的编程语言所需要承担的历史包袱，后续的版本更新会被早期的设计缺陷所拖累。正是这样，如果一门语言长久的停留在过去，必然会被新的语言取代。</p>
-</blockquote>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li>《Java 编程思想》</li>
-<li><a href="http://www.infoq.com/cn/articles/cf-java-generics" target="_blank" rel="noopener">Java深度历险——Java泛型
-</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/02/24/Java%E6%B3%9B%E5%9E%8B%E4%B9%8BLinkedStack/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3192,6 +2883,295 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">探究 HTTP 协议</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-12-25 01:39:59" itemprop="dateCreated datePublished" datetime="2017-12-25T01:39:59+08:00">2017-12-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/25/探究HTTP协议/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">5.2k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>本文摘自油条的知乎文章 <a href="https://zhuanlan.zhihu.com/p/23957087" target="_blank" rel="noopener">摸索HTTP</a>，自己结合实验一步一步探究HTTP协议</p>
+</blockquote>
+<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
+<li>OS: MacOS或Linux各发行版</li>
+<li><code>curl</code>、<code>nc</code>命令</li>
+<li>多台电脑，最好是有自己的服务器</li>
+</ul>
+<h2 id="nc"><a href="#nc" class="headerlink" title="nc"></a>nc</h2><blockquote>
+<p><strong>nc</strong>(or <strong>netcat</strong>)命令用于建立TCP和UDP监听和连接，它可以建立TCP连接、发送UDP包、监听任意TCP和UDP端口、端口扫描和处理IPv4和IPv6等。它比<strong>telnet</strong>命令更加实用，在网络工具中有“瑞士军刀”的美誉。</p>
+</blockquote>
+<ul>
+<li><p>打开两个终端。一个充当客户端，一个充当服务端。</p>
+</li>
+<li><p>让服务端<code>nc</code>启动之后监听8000端口，等待TCP连接</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    nc -l 8000 &#x2F;&#x2F;server</span><br><span class="line">    &#96;&#96;&#96; </span><br><span class="line">    </span><br><span class="line">- 切换到客户端，如果是不同的机器则将&#96;localhost&#96;换成服务端主机的**IP**</span><br></pre></td></tr></table></figure>
+<p>  nc localhost 8000 //client</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 现在在任意一个终端中输入些字符，敲击回车，另一个终端会显示相应字符，说明双方已经成功建立TCP连接进行通信，需要注意的是一定要服务端先建立监听</span><br><span class="line"></span><br><span class="line">#### Tips</span><br><span class="line"></span><br><span class="line">- 可以直接用&#96;nc&#96;命令来传输文件</span><br></pre></td></tr></table></figure>
+<p>  nc -l {port} &gt; filename // 接收端<br>  nc {接受者IP} {port} &lt; filename // 发送端</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 亲测这条命令非常实用，适用于在你的本地和服务器未建立**ssh认证**时（不能使用**scp**），或内网网络传输文件，或你的两台电脑不能登陆同一微信传输文件时</span><br><span class="line"></span><br><span class="line">## HTTP响应</span><br><span class="line"></span><br><span class="line">&gt; 浏览器在访问网站的时候，服务器到底给浏览器回复了一些什么玩意儿呢？有了上面的工具，接下来该探究一下HTTP了，到这里才正式开始切入正题了。首先，使用一下**curl**。**curl**能够向指定的URL发起一个http请求，并显示出请求回应中的内容。</span><br><span class="line"></span><br><span class="line">- 先拿百度开刀，执行如下命令</span><br></pre></td></tr></table></figure>
+<p>  curl -i baidu.com</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 得到如下输出内容</span><br></pre></td></tr></table></figure>
+<p>  HTTP/1.1 200 OK<br>  Date: Mon, 25 Dec 2017 03:19:21 GMT<br>  Server: Apache<br>  Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT<br>  ETag: “51-47cf7e6ee8400”<br>  Accept-Ranges: bytes<br>  Content-Length: 81<br>  Cache-Control: max-age=86400<br>  Expires: Tue, 26 Dec 2017 03:19:21 GMT<br>  Connection: Keep-Alive<br>  Content-Type: text/html</p>
+<p>  <html>
+  <meta http-equiv="refresh" content="0;url=http://www.baidu.com/">
+  </html></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    这里，你所看到的这一大堆数据，便是一个完整的HTTP响应报文。也就是你在浏览器中输入网址 baidu.com 敲下回车之后，baidu服务器返回给浏览器的数据。</span><br><span class="line">    </span><br><span class="line">- **响应报文**包含如下部分：</span><br><span class="line">    - 状态行</span><br><span class="line">    - 响应头</span><br><span class="line">    - 响应正文（可能没有）</span><br><span class="line">    </span><br><span class="line">    ![----](&#x2F;0.png)</span><br><span class="line"></span><br><span class="line">### 解析响应报文</span><br><span class="line"></span><br><span class="line">&gt; 了解HTTP响应的格式，以及其中的各部分字段的含义，有助于我们理解一些Web应用的功能以及浏览器的行为。</span><br><span class="line"></span><br><span class="line">- 这里对HTTP响应的数据稍作分析。上述报文中的第一行：</span><br></pre></td></tr></table></figure>
+<p>  HTTP/1.1 200 OK</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">    为HTTP响应的状态，这里的200代表OK，表示服务器已经成功地处理了请求</span><br><span class="line">    </span><br><span class="line">- 报文往后的内容直到空行部分：</span><br></pre></td></tr></table></figure>
+<p>  Date: Fri, 25 Nov 2016 10:58:59 GMT<br>  Server: Apache<br>  Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT<br>  ETag: “51-47cf7e6ee8400”<br>  Accept-Ranges: bytes<br>  Content-Length: 81<br>  Cache-Control: max-age=86400<br>  Expires: Sat, 26 Nov 2016 10:58:59 GMT<br>  Connection: Keep-Alive<br>  Content-Type: text/html</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    这部分为HTTP响应的头部，其中大部分内容其实是可读性较强的，基本可以直接分析其中的含义。如&#96;Content-Type: text&#x2F;html&#96;表示此次HTTP响应的结果为html文本。如果你访问的是一个图片，那么这里就可能是&#96;Content-Type: image&#x2F;png&#96;了。头部中的&#96;Content-Length: 81&#96;表示整个响应的正文长度为81，这个也比较关键，告诉浏览器整个响应的正文部分数据有多少</span><br><span class="line"></span><br><span class="line">- HTTP响应的头部中有许多非常有用的信息，这些信息往往决定着浏览器收到报文后接下来需要做出什么样的行动。也有一些非必须的内容，比如**Server、Accept-Ranges**</span><br><span class="line"></span><br><span class="line">- 响应中的最后一部分内容，可以看到接下来页面刷新跳转到&#96;http:&#x2F;&#x2F;www.baidu.com&#x2F;&#96;</span><br></pre></td></tr></table></figure>
+<p>  <html>
+  <meta http-equiv="refresh" content="0;url=http://www.baidu.com/">
+  </html></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">    为响应的正文部分，这部分内容的长度是和响应头部的**Content-Length**对应值一致。</span><br><span class="line">    </span><br><span class="line">#### Verify Content Length</span><br><span class="line"></span><br><span class="line">&gt; 我们来验证正文长度是不是81。能用编程解决的就用编程解决，非常推荐平时用**python**或者**JavaScript**这种脚本语言去编程验证一些东西。只需要装个**node**或者**python**解释器就可以了，非常轻量级</span><br><span class="line"></span><br><span class="line">- 这里用javascript，文件名a.js</span><br><span class="line"></span><br><span class="line">    &#96;&#96;&#96;js</span><br><span class="line">    &#x2F;&#x2F; a.js</span><br><span class="line">    </span><br><span class="line">    const s &#x3D; &#96;&lt;html&gt;</span><br><span class="line">    &lt;meta http-equiv&#x3D;&quot;refresh&quot; content&#x3D;&quot;0;url&#x3D;http:&#x2F;&#x2F;www.baidu.com&#x2F;&quot;&gt;</span><br><span class="line">    &lt;&#x2F;html&gt;</span><br><span class="line">    &#96;;</span><br><span class="line">    console.log(s.length);</span><br></pre></td></tr></table></figure>
+<p>  其中<code>` </code>反引号是ES6的新特性，可方便表示多行字符串。注意最后一行有回车</p>
+</li>
+<li><p>执行<code>node a.js</code>得到输出81</p>
+</li>
+</ul>
+<h3 id="模拟HTTP响应"><a href="#模拟HTTP响应" class="headerlink" title="模拟HTTP响应"></a>模拟HTTP响应</h3><blockquote>
+<p>上面大致了解了HTTP响应的大体结构，那么，我们来自己构造一个合法的HTTP响应，看看浏览器能不能做出正常的反应。</p>
+</blockquote>
+<ul>
+<li><p><code>nc -l 8000</code>开启一个服务端，监听8000端口，粘贴如下内容</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">Content-Length: 14</span><br><span class="line">Content-Type: text&#x2F;html</span><br><span class="line"></span><br><span class="line">&lt;h1&gt;Hello&lt;&#x2F;h1&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在浏览器端访问<code>http://localhost:8000/</code>，里面出现了一个大标题Hello</p>
+</li>
+<li><p>其实，浏览器在发起一个请求之后，只要服务器回应它一个符合HTTP标准的报文，它就能正常地解析并做出处理。而无论浏览器访问的对方是真的Web服务器还是假的nc，浏览器并不能知道它访问的目标到底是个什么东西，它只知道按照HTTP规范去解析收到的数据。这里可以看到，在网络中骗过浏览器是非常容易的，如传输的数据是未加密的，在这些传输的过程中很有可能会被拦截甚至篡改，浏览器被欺骗，进而用户被欺骗</p>
+</li>
+</ul>
+<h2 id="HTTP请求"><a href="#HTTP请求" class="headerlink" title="HTTP请求"></a>HTTP请求</h2><blockquote>
+<p>在使用浏览器访问网站的时候，浏览器到底发送了一些什么东西过去呢？</p>
+</blockquote>
+<ul>
+<li><p>其实我们就已经可以在终端里看到浏览器发送的请求报文</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: localhost:8000</span><br><span class="line">Connection: keep-alive</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;63.0.3239.108 Safari&#x2F;537.36</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9,en;q&#x3D;0.8</span><br><span class="line">Cookie: Webstorm-f269b48&#x3D;ebcfcf96-de94-4438-acc1-f68e40c6b6f1; session&#x3D;eyJ1aWQiOjJ9.DR6wAg.ktPekLF--XP9XrDZlpbeT8J0XDE</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>请求报文</strong>包含如下部分：</p>
+<ul>
+<li>请求行</li>
+<li>请求头</li>
+<li><p>请求体（可能没有）</p>
+<p><img src="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/1.png" alt="-----2"></p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>第一行为<strong>请求行</strong>，包含请求方法、请求路径和HTTP协议的版本三个信息。<strong>请求头</strong>通知服务器有关客户端请求的信息，比如上述头部中的<strong>User-Agent</strong>的值代表了浏览器信息，借助于此还可以做到根据不同的浏览器返回不同的页面（比如手机和PC的页面不一样）。最后多一行<strong>回车换行</strong>代表请求头的结束</p>
+</li>
+<li><p><strong>GET请求</strong>没有请求体，请求参数和对应的值附加在URL后面，利用问号<code>?</code>代表URL的结尾与请求参数的开始，与号<code>&amp;</code>连接多个参数。传递参数<strong>长度受限</strong>，并且可以在地址栏清楚的看到，不适合传输私密数据及大量数据</p>
+</li>
+<li><p>而在填写登陆表单点击确认后一般都是发送<strong>POST请求</strong>，请求数据在请求体中，不会显示的展示在地址栏，但是还是可能被黑客获取，所以通常密码等敏感信息需要加密而不是明文传输</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;user&#x2F;login HTTP&#x2F;1.1</span><br><span class="line">Host: example.com</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;54.0.2840.98 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, sdch, br</span><br><span class="line">Accept-Language: en-US,en;q&#x3D;0.8,zh-CN;q&#x3D;0.6,zh;q&#x3D;0.4,zh-TW;q&#x3D;0.2</span><br><span class="line">Content-Length: 27</span><br><span class="line"></span><br><span class="line">username&#x3D;test&amp;password&#x3D;test</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="模拟HTTP请求"><a href="#模拟HTTP请求" class="headerlink" title="模拟HTTP请求"></a>模拟HTTP请求</h3><ul>
+<li><p>同样可以使用<code>nc</code>构造一个HTTP请求，<code>nc baidu.com 80</code>与百度服务器建立连接</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: baidu.com</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>构造一个最精简的请求，敲击回车，终端上打印出响应报文</p>
+</li>
+</ul>
+<h2 id="Postscripts"><a href="#Postscripts" class="headerlink" title="Postscripts"></a>Postscripts</h2><blockquote>
+<p>实际上，按照前面的演示，在网络中，每一个应用都没法知道对面到底是个什么东西，只要双方相互收发的数据符合一定的格式和规则，它们之间就能够相互配合好工作。那么这些格式和规则，就时平时所谓的“协议”。</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -3243,7 +3223,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">68</span>
+                    <span class="site-state-item-count">67</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

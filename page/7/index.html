@@ -372,349 +372,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/15/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/11/15/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/7/index.html">大数据集群部署</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-11-15 07:10:09" itemprop="dateCreated datePublished" datetime="2017-11-15T07:10:09+08:00">2017-11-15</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/15/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/15/大数据集群部署/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">6.2k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li>三台服务器节点，配置均为4核8G，500G硬盘</li>
-<li>OS：Ubuntu 16.04 </li>
-<li>hadoop-2.6.0-cdh5.13.0.tar.gz    <a href="http://archive.cloudera.com/cdh5/cdh/5/" target="_blank" rel="noopener">（hadoop-cdh5官方下载链接）</a></li>
-<li>spark-2.2.0-bin-hadoop2.6.tgz <a href="http://spark.apache.org/downloads.html" target="_blank" rel="noopener">（Spark官网下载链接）</a></li>
-<li>jdk-8u144-linux-x64.tar.gz</li>
-</ul>
-<p>&lt;/br&gt;</p>
-<h2 id="A-服务器相关设置"><a href="#A-服务器相关设置" class="headerlink" title="A. 服务器相关设置"></a>A. 服务器相关设置</h2><blockquote>
-<p>三台服务器节点，采用一主二从的模式，需要<strong>修改主机名</strong>并建立服务器间的ssh通信便于各服务器间<strong>免密访问</strong>。并且为避免权限问题，三个节点都设置了<strong>root账户</strong>登录。</p>
-</blockquote>
-<h3 id="配置root用户登录、ssh免密通信"><a href="#配置root用户登录、ssh免密通信" class="headerlink" title="配置root用户登录、ssh免密通信"></a>配置root用户登录、ssh免密通信</h3><ul>
-<li><p>普通用户登录后，执行<code>sudo passwd root</code>修改root密码，<code>su - root</code>切换为root用户</p>
-</li>
-<li><p>修改<code>/etc/ssh/sshd_config</code>允许root登录</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PermitRootLogin yes</span><br><span class="line">RSAAuthentication yes</span><br><span class="line">PubkeyAuthentication yes</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在<code>/root</code>目录下执行<code>ssh-keygen -t rsa</code>生成<code>.ssh</code>文件夹和公钥私钥</p>
-</li>
-<li><p>将三台服务器以及自己主机的公钥写入<code>/root/.ssh/authorized_keys</code>，并拷贝到三台服务器上</p>
-</li>
-<li><p>执行<code>service sshd restart</code>重启ssh服务</p>
-</li>
-</ul>
-<h3 id="host相关设置"><a href="#host相关设置" class="headerlink" title="host相关设置"></a>host相关设置</h3><ul>
-<li><p>执行<code>vi /etc/hostname</code>修改主机名，主节点命名为<strong>master</strong>，从节点命名为<strong>slave01</strong>和<strong>slave02</strong>，执行<code>reboot</code>重启服务器生效</p>
-</li>
-<li><p>三台服务器都修改<code>/etc/hosts</code>文件，IP地址为内网IP</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.10.6 master</span><br><span class="line">192.168.10.7 slave01</span><br><span class="line">192.168.10.8 slave02</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<blockquote>
-<p>现在已完成了服务器间<strong>ssh免密通信</strong>的功能，并且本地也可以通过 <strong>ssh root@{IP}</strong> 访问服务器，接下来需要安装JDK、Hadoop和Spark。均安装在 <strong>/opt</strong>目录下，并分别命名为jdk8、hadoop、spark。可以在主节点安装后再通过<strong>scp分发</strong>给从节点。</p>
-</blockquote>
-<p>&lt;/br&gt;</p>
-<h2 id="B-安装JDK"><a href="#B-安装JDK" class="headerlink" title="B. 安装JDK"></a>B. 安装JDK</h2><ul>
-<li><p>将本地下载的jdk压缩包<code>scp</code>到master节点的<code>/opt</code>路径下，解压并改名</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xzvf jdk-8u144-linux-x64.tar.gz</span><br><span class="line">mv jdk1.8.0_144&#x2F; jdk8</span><br><span class="line">mv jdk-8u144-linux-x64.tar.gz &#x2F;tmp</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>同理，解压hadoop和spark压缩包至<code>/opt</code>路径下，改名为<strong>hadoop</strong>和<strong>spark</strong>，等改完配置后再将整个 <strong>/opt</strong>文件夹分发给从节点</p>
-</li>
-</ul>
-<h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><ul>
-<li><p><code>vi /etc/profile</code>加入</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME&#x3D;&#x2F;opt&#x2F;jdk8</span><br><span class="line">export JRE_HOME&#x3D;$&#123;JAVA_HOME&#125;&#x2F;jre</span><br><span class="line">export CLASSPATH&#x3D;.:$&#123;JAVA_HOME&#125;&#x2F;lib:$&#123;JRE_HOME&#125;&#x2F;lib</span><br><span class="line">export HADOOP_HOME&#x3D;&#x2F;opt&#x2F;hadoop</span><br><span class="line">export SPARK_HOME&#x3D;&#x2F;opt&#x2F;spark</span><br><span class="line">export PATH&#x3D;$&#123;JAVA_HOME&#125;&#x2F;bin:$HADOOP_HOME&#x2F;sbin:$HADOOP_HOME&#x2F;bin:$SPARK_HOME&#x2F;bin:$SPARK_HOME&#x2F;sbin:$PATH</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>分发配置文件，会覆盖子节点的配置文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp &#x2F;etc&#x2F;profile root@slave01:&#x2F;etc&#x2F;profile</span><br><span class="line">scp &#x2F;etc&#x2F;profile root@slave02:&#x2F;etc&#x2F;profile</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>三台服务器都执行<code>source /etc/profile</code>使配置文件生效</p>
-</li>
-</ul>
-<p>&lt;/br&gt;</p>
-<h2 id="C-配置Hadoop"><a href="#C-配置Hadoop" class="headerlink" title="C. 配置Hadoop"></a>C. 配置Hadoop</h2><p><a href="http://hadoop.apache.org/docs/r2.6.5/hadoop-project-dist/hadoop-common/ClusterSetup.html" target="_blank" rel="noopener">官网配置文档</a> </p>
-<blockquote>
-<p><strong>HDFS</strong>（Hadoop分布式文件系统），启动HDFS时主节点启动<strong>NameNode</strong>，负责管理namespace、控制客户端访问。从节点启动<strong>DataNode</strong>，提供存储和客户端读写操作。<br><strong>Yarn</strong>（资源管理系统）用于改善<strong>MapReduce</strong>的实现，启动Yarn时主节点启动<strong>ResourceManager</strong>，用于调度、分发资源。从节点启动<strong>NodeManager</strong>，用于启动、监控运行应用程序的容器（Container）。<br>Hadoop支持为所有主从节点采用<strong>同一套配置文件</strong>，除非新机器的硬件规格与现有机器不同时，需要一套新的配置文件以充分利用新硬件的额外资源。</p>
-</blockquote>
-<ul>
-<li><p><code>cd /opt/hadoop/etc/hadoop</code>，前往hadoop配置文件目录</p>
-</li>
-<li><p><code>vi hadoop-env.sh</code>,修改运行hadoop时的环境变量</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME&#x3D;&#x2F;opt&#x2F;jdk8</span><br><span class="line">export HADOOP_HEAPSIZE&#x3D;8000</span><br><span class="line">export HADOOP_LOG_DIR&#x3D;&#x2F;var&#x2F;log&#x2F;hadoop</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>vi core-site.xml</code>，该属性描述了HDFS文件系统的URI，默认端口是8020</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;fs.defaultFS&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;hdfs:&#x2F;&#x2F;master:9000&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;&#x2F;configuration&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>vi hdfs-site.xml</code>，Hadoop守护进程配置，包括Namenode、辅助NameNode和DataNode等</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.namenode.name.dir&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;&#x2F;root&#x2F;hdfs&#x2F;name&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.datanode.data.dir&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;&#x2F;root&#x2F;hdfs&#x2F;data&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.namenode.checkpoint.dir&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;&#x2F;root&#x2F;hdfs&#x2F;namesecondary&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;&#x2F;configuration&gt;</span><br></pre></td></tr></table></figure>
-<p>  分别配置了namenode存储永久性文件系统元数据的目录、datanode存储数据块目录、辅助namenode存储文件系统的检查点目录。均可冗余备份，逗号隔开。</p>
-</li>
-<li><p><code>vi yarn-site.xml</code>，Yarn守护进程的配置项，包括资源管理器、web应用代理服务器和节点管理器</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;!-- Site specific YARN configuration properties --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.resourcemanager.hostname&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;master&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.resourcemanager.webapp.address&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;master:10000&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.local-dirs&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;&#x2F;root&#x2F;nm-local-dir&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.resource.memory-mb&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;8192&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.resource.cpu-vcores&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;4&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.aux-services&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;mapreduce.shuffle&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;&#x2F;configuration&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>vi slaves</code>，在该文件中列出所有从节点的主机名或IP</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slave01</span><br><span class="line">slave02</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>&lt;/br&gt;</p>
-<h2 id="D-配置Spark"><a href="#D-配置Spark" class="headerlink" title="D. 配置Spark"></a>D. 配置Spark</h2><blockquote>
-<p><strong>Apache Spark</strong>是专为大规模数据处理而设计的快速通用的计算引擎。它并没有以MapReduce作为执行引擎，而是使用的自己的分布式运行环境在集群上执行工作。Spark与Hadoop紧密集成，可以在Yarn上运行并支持HDFS。</p>
-</blockquote>
-<ul>
-<li><p><code>cd /opt/spark/conf</code>前往Spark配置文件目录</p>
-</li>
-<li><p>拷贝模版文件 </p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp spark-env.sh.template spark-env.sh</span><br><span class="line">cp slaves.template slaves</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>vi slaves</code>添加从节点</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slave01</span><br><span class="line">slave02</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>vi spark-env.sh</code>，配置spark启动环境脚本</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME&#x3D;&#x2F;opt&#x2F;jdk8</span><br><span class="line">export HADOOP_CONF_DIR&#x3D;&#x2F;opt&#x2F;hadoop&#x2F;etc&#x2F;hadoop</span><br><span class="line">export SPARK_MASTER_HOST&#x3D;master</span><br><span class="line">export SPARK_MASTER_PORT&#x3D;7077</span><br><span class="line">export SPARK_WORKER_CORES&#x3D;1</span><br><span class="line">export SPARK_WORKER_MEMORY&#x3D;1g</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>vi spark-defaults.conf</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spark.master                     spark:&#x2F;&#x2F;master:7077</span><br><span class="line">spark.driver.memory              8g</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>&lt;/br&gt;</p>
-<h2 id="E-启动和测试"><a href="#E-启动和测试" class="headerlink" title="E. 启动和测试"></a>E. 启动和测试</h2><blockquote>
-<p>以下操作均在主节点下完成，主节点会启动从节点的相关程序。</p>
-</blockquote>
-<ul>
-<li><p>在<code>/root</code>目录下新建存储文件夹，目录结构如下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── hdfs</span><br><span class="line">│   ├── data</span><br><span class="line">│   ├── name</span><br><span class="line">│   └── namesecondary</span><br><span class="line">└── nm-local-dir</span><br></pre></td></tr></table></figure>
-<p>  分发给从节点</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">scp -r hdfs&#x2F; root@slave01:&#x2F;root&#x2F;</span><br><span class="line">scp -r hdfs&#x2F; root@slave02:&#x2F;root&#x2F;</span><br><span class="line">scp -r nm-local-dir&#x2F; root@slave01:&#x2F;root&#x2F;</span><br><span class="line">scp -r nm-local-dir&#x2F; root@slave02:&#x2F;root&#x2F;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>现在JDK、Hadoop和Spark均已安装配置完成，将<code>/opt</code>文件夹分发给从节点</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r &#x2F;opt root@slave01:&#x2F;</span><br><span class="line">scp -r &#x2F;opt root@slave02:&#x2F;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="启动hadoop"><a href="#启动hadoop" class="headerlink" title="启动hadoop"></a>启动hadoop</h3><ul>
-<li><p>执行<code>ufw disable</code>关闭防火墙</p>
-</li>
-<li><p>初始化文件系统</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs namenode -format</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动Hadoop集群</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start-all.sh</span><br></pre></td></tr></table></figure>
-<p>  该命令其实是包含了<code>start-dfs.sh</code>和<code>start-yarn.sh</code>两个命令</p>
-</li>
-<li><p>在各节点上执行<code>jps</code>查看启动情况，日志文件在<code>/opt/hadoop/logs</code>目录下</p>
-</li>
-<li><p>在本地浏览器上访问<code>{IP}:/50070</code>查看hdfs的WebUI（50070为默认端口）；访问<code>{IP}:/10000</code>查看ResourceManager的WebUI</p>
-</li>
-</ul>
-<h3 id="启动Spark"><a href="#启动Spark" class="headerlink" title="启动Spark"></a>启动Spark</h3><ul>
-<li><p>命令启动Spark集群</p>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;opt&#x2F;spark&#x2F;sbin&#x2F;start-all.sh</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>各节点执行<code>jps</code>可以看到主节点启动了<strong>Master</strong>程序，从节点启动了<strong>Worker</strong>程序</p>
-</li>
-<li><p>可以在本地浏览器上访问<code>{IP}:8080</code>验证Spark已启动</p>
-</li>
-</ul>
-<h3 id="WebUI汇总"><a href="#WebUI汇总" class="headerlink" title="WebUI汇总"></a>WebUI汇总</h3><blockquote>
-<p><strong>hdfs：</strong> <a href="http://172.20.10.92:50070/" target="_blank" rel="noopener">http://172.20.10.92:50070/</a><br><strong>ResourceManager：</strong> <a href="http://172.20.10.92:10000/" target="_blank" rel="noopener">http://172.20.10.92:10000/</a><br><strong>Spark：</strong> <a href="http://172.20.10.92:8080/" target="_blank" rel="noopener">http://172.20.10.92:8080/</a>   </p>
-</blockquote>
-<p>&lt;/br&gt;</p>
-<h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><blockquote>
-<p>有意想使用<strong>Cloudera Manager</strong>这样的集群管理工具，它们提供了简单的WebUI，可以快捷的管理、配置集群。但需要研究如何在没有外网的情况下在服务器上部署。</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/11/MyBatis%20Generator/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1227,7 +884,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/06/Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/06/%E4%BD%BF%E7%94%A8%20Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -1247,7 +904,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2017/11/06/Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/7/index.html">Certbot 配置 HTTPS</a>
+                <a href="/2017/11/06/%E4%BD%BF%E7%94%A8%20Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/7/index.html">使用 Certbot 配置 HTTPS</a>
               
             
           </h1>
@@ -1289,7 +946,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-10-11 15:33:49" itemprop="dateModified" datetime="2020-10-11T15:33:49+08:00">2020-10-11</time>
+                <time title="修改时间：2020-10-13 15:39:17" itemprop="dateModified" datetime="2020-10-13T15:39:17+08:00">2020-10-13</time>
               
             
           </span>
@@ -1321,10 +978,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/11/06/Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/#comments" itemprop="discussionUrl">
+                <a href="/2017/11/06/%E4%BD%BF%E7%94%A8%20Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/06/Certbot 配置 HTTPS/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/11/06/使用 Certbot 配置 HTTPS/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1346,7 +1003,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.1k</span>
+                <span title="本文字数">3.8k</span>
               
 
               
@@ -1372,17 +1029,22 @@
       
         
           
-            <h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ul>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文介绍在搭建了服务器并且配置了域名后，如何通过 Certbot 将原先的 <code>http://</code> 域名配置为 <code>https://</code> 域名。文章的最后介绍了 HTTPS 基于的 SSL 协议，以及和 SSL 加密通信过程类似的 SSH 协议。</p>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ul>
 <li>Ubuntu 16.04</li>
 <li>Nginx</li>
 </ul>
 <h2 id="安装配置Certbot"><a href="#安装配置Certbot" class="headerlink" title="安装配置Certbot"></a>安装配置Certbot</h2><p>添加软件源：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install software-properties-common</span><br><span class="line">sudo add-apt-repository ppa:certbot/certbot</span><br></pre></td></tr></table></figure>
-<p>可以看到 <code>/etc/apt/sources.list.d</code> 目录下多了个 <code>certbot-ubuntu-certbot-xenial.list</code> 文件，内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br><span class="line"># deb-src http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br></pre></td></tr></table></figure></p>
-<p>安装Certbot：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install python-certbot-nginx</span><br></pre></td></tr></table></figure></p>
-<p>使用如下命令自动配置Nginx服务，也可以加上 <code>certonly</code> 参数来手动配置nginx。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo certbot --nginx</span><br></pre></td></tr></table></figure></p>
-<p>出现如下文字，说明Certbot读取了nginx配置文件。默认回车选择所有：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Which names would you like to activate HTTPS for?</span><br><span class="line">-------------------------------------------------</span><br><span class="line">1: s1mple.info</span><br><span class="line">2: www.s1mple.info</span><br></pre></td></tr></table></figure></p>
-<p>选择是否重定位到HTTPS。</p>
+<p>可以看到 <code>/etc/apt/sources.list.d</code> 目录下多了个 <code>certbot-ubuntu-certbot-xenial.list</code> 文件，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br><span class="line"># deb-src http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br></pre></td></tr></table></figure>
+<p>安装Certbot：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install python-certbot-nginx</span><br></pre></td></tr></table></figure>
+<p>使用如下命令自动配置Nginx服务，也可以加上 <code>certonly</code> 参数来手动配置nginx。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo certbot --nginx</span><br></pre></td></tr></table></figure>
+<p>出现如下文字，说明Certbot读取了nginx配置文件。默认回车选择所有：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Which names would you like to activate HTTPS for?</span><br><span class="line">-------------------------------------------------</span><br><span class="line">1: s1mple.info</span><br><span class="line">2: www.s1mple.info</span><br></pre></td></tr></table></figure>
+<p>选择是否重定位到HTTPS：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.</span><br><span class="line">-------------------------------------------------------------------------------------</span><br><span class="line">1: No redirect - Make no further changes to the webserver configuration.</span><br><span class="line">2: Redirect - Make all requests redirect to secure HTTPS access. Choose this for</span><br><span class="line">new sites, or if you&#39;re confident your site works on HTTPS. You can undo this</span><br><span class="line">change by editing your web server&#39;s configuration.</span><br></pre></td></tr></table></figure>
 <p>配置成功，有效期为90天，过期需要使用 <code>certbot renew</code> 更新新的证书。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">IMPORTANT NOTES:</span><br><span class="line">- Congratulations! Your certificate and chain have been saved at:</span><br><span class="line">  &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;simple. info&#x2F;fullchain.pem</span><br><span class="line">  Your key file has been saved at:</span><br><span class="line">  &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;simple. info&#x2F;privkey.pem</span><br><span class="line">  Your cert will expire on 2018-02-04. To obtain a new or tweaked</span><br><span class="line">  version of this certificate in the future, simply run certbot again</span><br><span class="line">  with the “certonly&quot; option. To non-interactively renew xall* of</span><br><span class="line">  your certificates, run &quot;certbot renew&quot;</span><br></pre></td></tr></table></figure>
@@ -1390,7 +1052,7 @@
 <p>我们查看一下Nginx配置文件，文件名对应你的域名，以 <code>.conf</code> 结尾，发现新增了如下内容：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">listen 443 ssl; # managed by Certbot</span><br><span class="line">ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;fullchain.pem; # managed by Certbot</span><br><span class="line">ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;privkey.pem; # managed by Certbot</span><br><span class="line">include &#x2F;etc&#x2F;letsencrypt&#x2F;options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">ssl_dhparam &#x2F;etc&#x2F;letsencrypt&#x2F;ssl-dhparams.pem; # managed by Certbot</span><br><span class="line"></span><br><span class="line"># Redirect non-https traffic to https</span><br><span class="line">if ($scheme !&#x3D; &quot;https&quot;) &#123;</span><br><span class="line">    return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">&#125; # managed by Certbot</span><br></pre></td></tr></table></figure>
 <p>说明Nginx在监听443端口，并将不是HTTPS的请求重定位到HTTPS。</p>
-<h2 id="协议原理"><a href="#协议原理" class="headerlink" title="协议原理"></a>协议原理</h2><p><strong>HTTPS(Http over Secure Socket Layer)</strong> 是基于SSL加密的更安全的HTTP协议，默认端口443。SSL握手协议过程如下：</p>
+<h2 id="协议原理"><a href="#协议原理" class="headerlink" title="协议原理"></a>协议原理</h2><h3 id="SSL"><a href="#SSL" class="headerlink" title="SSL"></a>SSL</h3><p><strong>HTTPS(Http over Secure Socket Layer)</strong> 是基于SSL加密的更安全的HTTP协议，默认端口443。SSL握手协议过程如下：</p>
 <ol>
 <li>客户端的浏览器向服务器传送客户端SSL协议的版本号，加密算法的种类，产生的随机数，以及其他通讯所需要信息。</li>
 <li>服务器向客户端传送SSL协议的版本号，加密算法的种类，随机数以及其他相关信息，同时<strong>服务器还将向客户端传送自己的证书</strong>。</li>
@@ -1399,7 +1061,16 @@
 <li><strong>服务器用私钥解密</strong>“对话密钥”（此处的公钥和私钥是对应的，公钥加密的数据只能用私钥解密，服务器私钥只在服务器端保留），然后用其作为服务器和客户端的“通话密码”加解密通讯。具体的加密算法详见<a href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">RSA加密算法</a>。</li>
 <li>SSL的握手部分结束，SSL安全通道的数据通讯开始，客户和服务器开始使用对话密钥进行数据通讯，同时进行通讯完整性的检验。</li>
 </ol>
-<p><img src="/2017/11/06/Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/0.png" alt="78ab162bf20b438ca377faa87f4ea2a2_th"></p>
+<p><img src="/2017/11/06/%E4%BD%BF%E7%94%A8%20Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/0.png" alt="78ab162bf20b438ca377faa87f4ea2a2_th"></p>
+<h3 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h3><p><strong>SSH(Secure Shell)</strong>协议，专为远程登录会话提供安全性的协议，传输的数据都进行了加密。SSH提供两种级别的安全验证，第一种是<strong>基于口令</strong>的安全验证。第二种是<strong>基于密匙</strong>的安全验证，不需要传输口令，原理同 SSL 类似。下面介绍一下 SSH 基于密钥的安全验证。</p>
+<p>客户端创建<strong>一对密钥</strong>（公钥和私钥），公钥存放在服务器上的 authorized_keys 文件中，当你想通过 ssh 远程连接服务器时会进行<strong>公钥比对</strong>。如果一致，服务器就用公用密匙加密“质询”（challenge）并把它发送给客户端。客户端收到“质询”之后就可以用你的<strong>私钥解密</strong>再把它发送给服务器。</p>
+<p>SSH 通过密钥连接服务器步骤如下：</p>
+<ol>
+<li>在本地执行<code>ssh-keygen</code>生成配对密钥，在你的<code>~/.ssh</code>目录下会生成两个文件，<code>id_rsa</code>私钥，<code>id_rsa.pub</code>公钥。</li>
+<li>将公钥拷贝到服务器的<code>~/.ssh/authorized_keys</code>文件中。</li>
+<li>使用<code>chattr +i authorized_keys</code>命令给<code>authorized_keys</code>增加不可修改、删除的权限。</li>
+<li>在本地使用<code>ssh {username}@{ip}</code>连接服务器。第一次连接会询问你是否继续，选择 yes 则将连接信息添加到<code>~/.ssh/known_hosts</code>文件中，此后连接不再询问。</li>
+</ol>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://certbot.eff.org/#ubuntuxenial-nginx" target="_blank" rel="noopener">Certbot官方文档</a></li>
 <li><a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html" target="_blank" rel="noopener">图解SSL/TLS协议 —— 阮一峰</a></li>
@@ -2496,7 +2167,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">68</span>
+                    <span class="site-state-item-count">67</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3189,8 +2860,6 @@
 
   
   
-    
-      
     
       
     
