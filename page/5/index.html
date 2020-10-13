@@ -372,290 +372,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/02/28/Java%E6%B3%9B%E5%9E%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/02/28/Java%E6%B3%9B%E5%9E%8B/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Java 泛型</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-02-28 06:01:53" itemprop="dateCreated datePublished" datetime="2018-02-28T06:01:53+08:00">2018-02-28</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/02/28/Java%E6%B3%9B%E5%9E%8B/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/02/28/Java泛型/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">3.9k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>我的上一篇博客 <a href="https://s1mple.xyz/java-generic-type-erasure/" target="_blank" rel="noopener">Java泛型与擦除</a>只是对于 Java 泛型和类型擦除做了一个简要的介绍，本文主要是针对 Java 泛型做一些更深入的补充说明。</p>
-</blockquote>
-<h2 id="泛型的引入"><a href="#泛型的引入" class="headerlink" title="泛型的引入"></a>泛型的引入</h2><ul>
-<li><p>在没有泛型之前，我们如果想向一个 Box 类中装入一个不知道类型的对象，只能使用 <strong>Object</strong> 这个顶级父类来操作盒子中的对象</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class Box &#123;</span><br><span class="line">    private Object object;</span><br><span class="line"></span><br><span class="line">    public void set(Object object) &#123; this.object &#x3D; object; &#125;</span><br><span class="line">    public Object get() &#123; return object; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>而引入了泛型自后，代码修改如下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * Generic version of the Box class.</span><br><span class="line"> * @param &lt;T&gt; the type of the value being boxed</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class Box&lt;T&gt; &#123;</span><br><span class="line">    &#x2F;&#x2F; T stands for &quot;Type&quot;</span><br><span class="line">    private T t;</span><br><span class="line"></span><br><span class="line">    public void set(T t) &#123; this.t &#x3D; t; &#125;</span><br><span class="line">    public T get() &#123; return t; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>我们定义了一个装有 <strong>T</strong> 类型的 Box 类。在使用时可以随心所欲，既可创建一个专门装 String 的 Box ，也可创建一个装 Integer 的 Box</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Box&lt;String&gt; bs = <span class="keyword">new</span> Box&lt;String&gt;();</span><br><span class="line">Box&lt;Integer&gt; bi = <span class="keyword">new</span> Box&lt;Integer&gt;();</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>甚至于我们在定义 Box 时可以更加苛刻，只允许这个盒子装入一个数字类型的对象</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public class Box&lt;T extends Number&gt; &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  那么，如果你想在创建一个装 String 的 Box 就得报错了</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Error: Type Parameter &#39;String&#39; is not within its bound; should extend &#39;Number&#39;</span><br><span class="line">&#x2F;&#x2F; Box&lt;String&gt; bs &#x3D; new Box&lt;String&gt;();</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
-<p>在 Java SE 7之后，允许我们使用如下更简洁的语法<code>Box&lt;Integer&gt; integerBox = new Box&lt;&gt;();</code>，因为编译器能够推断出上下文的类型参数，所以没必要做冗余的声明</p>
-</blockquote>
-<h2 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h2><blockquote>
-<p>泛型方法是声明了自己的类型参数的方法。泛型方法的类型参数的<strong>作用域</strong>仅限于声明它的方法内部。允许静态和非静态的泛型方法，即可以用 <strong>static</strong> 修饰。泛型方法的语法是<strong>在方法的返回类型之前包含一个尖括号列出的类型参数列表</strong>。</p>
-</blockquote>
-<ul>
-<li><p>示范代码如下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class TestGenericsMethod &#123;</span><br><span class="line"></span><br><span class="line">    private &lt;T&gt; void printClassName(T x) &#123;</span><br><span class="line">        System.out.println(x.getClass().getSimpleName());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        TestGenericsMethod test &#x3D; new TestGenericsMethod();</span><br><span class="line">        test.printClassName(&quot; &quot;);</span><br><span class="line">        test.printClassName(10);</span><br><span class="line">        test.printClassName(&#39;a&#39;);</span><br><span class="line">        test.printClassName(test);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 运行结果：</span><br><span class="line">String</span><br><span class="line">Integer</span><br><span class="line">Character</span><br><span class="line">TestGenerics</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="泛型的类型变量"><a href="#泛型的类型变量" class="headerlink" title="泛型的类型变量"></a>泛型的类型变量</h2><blockquote>
-<p><strong>类型变量</strong>( or <strong>Type Variable</strong>) ,即上述代码的 <strong>T</strong> ，用于代表一类类型，声明之后可以在 class 中使用</p>
-</blockquote>
-<h3 id="类型参数命名惯例"><a href="#类型参数命名惯例" class="headerlink" title="类型参数命名惯例"></a>类型参数命名惯例</h3><hr>
-<blockquote>
-<p>按照惯例，类型参数使用<strong>单个大写字母</strong>表示，虽然这个字母命名并不强求，比如上述代码中的<code>&lt;T&gt;</code>，你可以使用<code>&lt;U&gt;</code>等等代替，但是如下是<strong>类型参数的命名惯例</strong></p>
-</blockquote>
-<ul>
-<li>T - Type</li>
-<li>S,U,V etc. - 2nd, 3rd, 4th types</li>
-<li>E - Element (被广泛适用于 Java 的集合类中，表示集合中的元素类型)</li>
-<li>K - Key</li>
-<li>V - Value</li>
-<li>N - Number</li>
-</ul>
-<h3 id="多个类型参数"><a href="#多个类型参数" class="headerlink" title="多个类型参数"></a>多个类型参数</h3><hr>
-<blockquote>
-<p>定义泛型类或接口时可以使用多个类型参数</p>
-</blockquote>
-<ul>
-<li><p>一个典型案例就是 Map，它存储一对键值对，我截取了一段 Map.Entry 的源码</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">interface Entry&lt;K,V&gt; &#123;</span><br><span class="line"></span><br><span class="line">    K getKey();</span><br><span class="line">    V getValue();</span><br><span class="line">    V setValue(V value);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>我们知道 HashMap 是继承了 Map 的，所以在使用时可以这样使用</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HashMap&lt;String, Integer&gt; map &#x3D; new HashMap&lt;&gt;();</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="通配符与-T-的区别"><a href="#通配符与-T-的区别" class="headerlink" title="通配符与 T 的区别"></a>通配符与 T 的区别</h3><hr>
-<blockquote>
-<p>在接触泛型之初，我一直好奇 <strong>类型参数</strong>(<strong>type parameters</strong>，即 T, E, etc.) 和 <strong>通配符</strong>(<strong>wildcard</strong>) 之间有什么区别，因为它们的功能看上去有的重叠。以下是我总结自 Java 的官方文档以及 StackOverFlow 上面的解答。</p>
-</blockquote>
-<p><strong>类型参数与通配符的区别：</strong></p>
-<ul>
-<li><p>在定义泛型类或接口时，只能使用类型参数，并可以在类内部引用</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public class Box&lt;T&gt; &#123;</span><br><span class="line">    private T t;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  不可以使用通配符，因为<code>?</code>不能代表一种具体类型，而<code>T</code>代表一种具体类型，只是暂时未定</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public class Box&lt;?&gt; &#123; &#x2F;&#x2F; Error!!!</span><br><span class="line">    private ? t; &#x2F;&#x2F; Error!!!</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>通配符可以使用 <strong>super</strong> 关键字定义<strong>下界</strong>，而类型参数不可以</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void bar(List&lt;? super Number&gt; list) &#123;...&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果需要在泛型类内部定义一个与当前参数类型无关的方法，可以使用<code>&lt;?&gt;</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Box&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private T t;&#x2F;&#x2F; Used type &#39;T&#39;</span><br><span class="line"></span><br><span class="line">    public void printListSize(List&lt;?&gt; list)&#123; &#x2F;&#x2F; Not associated with type &#39;T&#39;</span><br><span class="line">        System.out.println(list.size());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Box&lt;String&gt; box &#x3D; new Box&lt;&gt;();</span><br><span class="line">        box.printListSize(new ArrayList&lt;&gt;(Arrays.asList(1,2,3,&quot;aa&quot;,&#39;s&#39;))); &#x2F;&#x2F; 5</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  实际上，查看 Java 的 <strong>Class</strong> 类的源码，可以看到<code>&lt;?&gt;</code>有被广泛的使用，是因为<code>Class&lt;T&gt;</code>中的大多数的方法都不依赖于 <strong>T</strong></p>
-</li>
-</ul>
-<blockquote>
-<p>有些人认为，如果你不需要使用声明的参数类型，那就可以使用<code>?</code>使得代码更简单更具可读性。所以，如果你需要定义一种可变的类型，并且在限定范围内使用到这种类型，请使用<code>&lt;T&gt;</code>，否则就可以使用<code>&lt;?&gt;</code>。</p>
-</blockquote>
-<h2 id="Preferences"><a href="#Preferences" class="headerlink" title="Preferences"></a>Preferences</h2><ul>
-<li><a href="https://docs.oracle.com/javase/tutorial/java/generics/types.html" target="_blank" rel="noopener">官方文档</a></li>
-<li><a href="https://stackoverflow.com/questions/6008241/what-is-the-difference-between-e-and-t-for-java-generics" target="_blank" rel="noopener">What is the difference between ‘?’, ‘E’, and ‘T’ for Java generics?</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3216,6 +2932,266 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">JavaScript 相关介绍</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-12-26 12:37:23" itemprop="dateCreated datePublished" datetime="2017-12-26T12:37:23+08:00">2017-12-26</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/26/JavaScript相关介绍/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.1k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p><strong>JavaScript</strong>是目前前端开发中最流行的语言，在学习的过程中会遇到各种<strong>JS</strong>有关的名词。本文章的主要目的是介绍<strong>ECMAScript</strong>(or <strong>ES</strong>)、<strong>CommonJS</strong>、<strong>Node.js</strong>、<strong>Vue.js</strong>或<strong>AngularJS</strong>等与<strong>JavaScript</strong>之间的联系</p>
+</blockquote>
+<hr>
+<h2 id="ECMAScript"><a href="#ECMAScript" class="headerlink" title="ECMAScript"></a>ECMAScript</h2><blockquote>
+<p><strong>ECMAScript</strong>和<strong>JavaScript</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>（另外的实现还有<strong>Jscript</strong> 和<strong>ActionScript</strong>等）</p>
+</blockquote>
+<ul>
+<li><p><strong>JavaScript</strong>的创造者<strong>Netscape</strong>公司，将<strong>JavaScript</strong>提交给国际标准化组织<strong>ECMA</strong>，希望这种语言能够成为国际标准，标准委员会最终决定，标准在每年的6月份正式发布一次，作为当年的正式版本</p>
+</li>
+<li><p>目前的几乎所有的浏览器（不包括低版本的IE），都已经支持<strong>ES5</strong>了，而写代码时最好采用<strong>ES6</strong>语法（毕竟语法糖写起来更舒服，还添加了很多必要的新特性，而且浏览器全面支持<strong>ES6</strong>是迟早的事）。不用担心浏览器不能识别新语法，<strong>Bable</strong>就是用来解决这种问题的工具</p>
+</li>
+<li><p><strong>Babel</strong>是一个广泛使用的<strong>ES6</strong>转码器，可以将<strong>ES6</strong>代码转为<strong>ES5</strong>代码，从而在浏览器环境运行</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 转码前</span><br><span class="line">input.map(item &#x3D;&gt; item + 1);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 转码后</span><br><span class="line">input.map(function (item) &#123;</span><br><span class="line">  return item + 1;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><blockquote>
+<p>在介绍<strong>CommonJS</strong>之前有必要先介绍一下<strong>Node.js</strong></p>
+</blockquote>
+<ul>
+<li><p>首先明确一点，<strong>JavaScript</strong>和<strong>Python</strong>一样，是一种脚本语言，或者是<strong>解释型语言</strong>，和<strong>C、C++</strong> 这种需要编译成可执行文件再运行的语言不同，它的运行只需要解释器能够解释执行即可，而不需要编译器。<strong>浏览器</strong>就包含了解释执行网页中的<strong>JavaScript</strong>代码的功能</p>
+</li>
+<li><p>伴随着互联网和<strong>JavaScript</strong>语言的快速发展，人们不仅仅局限于拿JS来做前端开发，所以<strong>Node.js</strong>随之应运而生</p>
+</li>
+<li><p><strong>Node.js</strong>作为一个后端的<strong>Javascrip</strong>t运行环境（解释器），这意味着你可以编写系统级或者服务器端的<strong>Javascript</strong>代码，交给<strong>Node.js</strong>来解释执行</p>
+</li>
+<li><p><strong>Node.js</strong>采用了<strong>Google Chrome</strong>浏览器的V8引擎（<strong>C++编写</strong>），性能很好，同时还提供了很多系统级的API，如文件操作、网络编程等。浏览器端的<strong>Javascript</strong>代码在运行时会受到各种安全性的限制，对客户系统的操作有限。相比之下，<strong>Node.js</strong>则是一个全面的后台运行时，基于<strong>Javascript</strong>提供了其他语言能够实现的许多功能</p>
+</li>
+</ul>
+<hr>
+<h2 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h2><blockquote>
+<p>可以说<strong>CommonJS</strong>和<strong>Node.js</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong></p>
+</blockquote>
+<ul>
+<li><p><strong>ECMAScript</strong>提供核心语言功能，浏览器端的<strong>JavaScript实现</strong>包括了<strong>ES核心</strong>、<strong>DOM</strong>(or <strong>Document Object Model</strong>)和<strong>BOM</strong>(or <strong>Browser Object Model</strong>)，所以你在浏览器的<strong>JS</strong>控制台可以使用<code>document、window、alert...</code>等有关<strong>DOM</strong>和<strong>BOM</strong>的操作</p>
+</li>
+<li><p>而<strong>CommonJS</strong>主要为<strong>非浏览器的应用</strong>定义一套API（比如<strong>Node</strong>应用），从而填补了空白。它的终极目标是提供一个类似<strong>Python、Ruby</strong>和<strong>Java</strong>的<strong>标准库</strong></p>
+</li>
+<li><p>可以看到在<strong>Node</strong>环境中没有定义<code>alert</code>和<code>document</code>，因为<strong>Node</strong>不关心<strong>DOM</strong>和<strong>BOM</strong>操作</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; alert(&#39;!!!&#39;)</span><br><span class="line">ReferenceError: alert is not defined</span><br><span class="line">&gt; document</span><br><span class="line">ReferenceError: document is not defined</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>但是它可以调用读取文件的函数，读取出了<code>a.txt</code>中的<code>Hello!</code>并打印，这是浏览器做不到也不应该去做的</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; const fs &#x3D; require(&#39;fs&#39;);                 </span><br><span class="line">&gt; const content &#x3D; fs.readFileSync(&#39;.&#x2F;a.txt&#39;,&#39;utf-8&#39;);</span><br><span class="line">&gt; console.log(content);</span><br><span class="line">hello!</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="Vue-js、AngularJS…"><a href="#Vue-js、AngularJS…" class="headerlink" title="Vue.js、AngularJS…"></a>Vue.js、AngularJS…</h2><blockquote>
+<p>这些没什么好说的，之所以带上<strong>JS</strong>就是因为它们是用<strong>JavaScript</strong>语言开发的框架，实际上就是个<strong>JS库</strong>，用于简化我们前端代码的编写</p>
+</blockquote>
+<ul>
+<li>至于为什么使用<strong>Vue.js</strong>这些框架需要安装<strong>Node.js</strong>，原因也很简单，因为很多工具（比如<strong>Babel、webpack</strong>）都是用<strong>Node</strong>开发出来的，这也是你为什么可以用<code>npm</code>安装的原因</li>
+</ul>
+<hr>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="http://es6.ruanyifeng.com/#docs/intro" target="_blank" rel="noopener">ECMAScript6简介 - 阮一峰</a></li>
+<li><a href="http://www.commonjs.org/" target="_blank" rel="noopener">CommonJS官网</a></li>
+<li><a href="https://nodejs.org/en/" target="_blank" rel="noopener">Node.js官网</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -3267,7 +3243,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">69</span>
+                    <span class="site-state-item-count">68</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
