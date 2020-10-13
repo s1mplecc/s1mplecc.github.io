@@ -115,21 +115,22 @@
   <meta name="description" content="初赛题目主办方提供了 black&#x2F;white&#x2F;test 三个 pcap 文件夹，其中 black 和 white 分别是检测出有&#x2F;无恶意软件感染的客户端 IP 组，要求选手对 test 数据集进行判定。  解题思路该题的解题过程应分为以下三个大步骤：  特征选择（Feature Selection），选取对于区分正常&#x2F;恶意流量有明显作用的 Features。 特征提取（Feature Extrac">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思">
-<meta property="og:url" content="https://s1mplecc.github.io/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/index.html">
+<meta property="og:url" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/index.html">
 <meta property="og:site_name" content="s1mple的博客">
 <meta property="og:description" content="初赛题目主办方提供了 black&#x2F;white&#x2F;test 三个 pcap 文件夹，其中 black 和 white 分别是检测出有&#x2F;无恶意软件感染的客户端 IP 组，要求选手对 test 数据集进行判定。  解题思路该题的解题过程应分为以下三个大步骤：  特征选择（Feature Selection），选取对于区分正常&#x2F;恶意流量有明显作用的 Features。 特征提取（Feature Extrac">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/0.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/1.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/2.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/3.jpeg">
-<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/4.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/5.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/0.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/1.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/2.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/3.jpeg">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/4.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/5.png">
 <meta property="article:published_time" content="2020-08-09T15:20:52.000Z">
 <meta property="article:modified_time" content="2020-10-11T07:36:48.485Z">
 <meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Security">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/0.png">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/0.png">
 
 
   
@@ -140,7 +141,7 @@
 
 
 
-  <link rel="canonical" href="https://s1mplecc.github.io/2020/08/09/DataCon2020-加密恶意流量检测初赛-Writeup-及总结反思/"/>
+  <link rel="canonical" href="https://s1mplecc.github.io/2020/08/09/DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思/"/>
 
 
 
@@ -380,7 +381,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -445,6 +446,24 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Projects/" itemprop="url" rel="index"><span itemprop="name">Projects</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -453,10 +472,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/#comments" itemprop="discussionUrl">
+                <a href="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/08/09/DataCon2020-加密恶意流量检测初赛-Writeup-及总结反思/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/08/09/DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -511,7 +530,7 @@
 
       
         <h2 id="初赛题目"><a href="#初赛题目" class="headerlink" title="初赛题目"></a>初赛题目</h2><p>主办方提供了 black/white/test 三个 pcap 文件夹，其中 black 和 white 分别是检测出有/无恶意软件感染的客户端 IP 组，要求选手对 test 数据集进行判定。</p>
-<p><img src="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/0.png" alt="09bda35ff290f2e34d88d50e71d98f1a.png"></p>
+<p><img src="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/0.png" alt="09bda35ff290f2e34d88d50e71d98f1a.png"></p>
 <h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>该题的解题过程应分为以下三个大步骤：</p>
 <ol>
 <li><strong>特征选择（Feature Selection）</strong>，选取对于区分正常/恶意流量有明显作用的 Features。</li>
@@ -530,9 +549,9 @@
 <li>客户端传回客户端公钥（<strong>Client Key Exchange</strong>），客户端确立连接；</li>
 <li>服务器端确立连接，开始 HTTP 通信。</li>
 </ol>
-<p><img src="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/1.png" alt="5b01483a65bdc17c68873508796bb85e.png"></p>
+<p><img src="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/1.png" alt="5b01483a65bdc17c68873508796bb85e.png"></p>
 <p>以上加粗的四种消息类型可以通过 TLS 握手协议的 <strong>Handshake Type</strong> 做区分：</p>
-<p><img src="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/2.png" alt="bff6a460bcaa7c442014c3eb89deb26f.png"></p>
+<p><img src="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/2.png" alt="bff6a460bcaa7c442014c3eb89deb26f.png"></p>
 <p>基于此，我们选取了以下特征：</p>
 <ul>
 <li><strong>客户端支持的加密套件数组</strong>（Cipher suites），<strong>服务器端选择的加密套件</strong>。</li>
@@ -618,7 +637,7 @@
 </table>
 </div>
 <p>除 <code>flowmeter.log</code> 之外我们还需要关注 <code>conn.log</code>、<code>ssl.log</code> 和 <code>X509.log</code>。这几个日志共同字段 <code>uid</code> 是 Zeek 根据一次连接的源/目的 IP、源/目的端口四元组生成的唯一 ID。为了方便后续的处理，我们将这几个日志文件统一读入，使用 <code>uid</code> 字段连接后转成 csv 格式输出到文件。<strong>最终我们提取的特征如下：</strong></p>
-<p><img src="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/3.jpeg" alt="7d1475ca9c4d88e2c3e078a126fdfd52.jpeg"></p>
+<p><img src="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/3.jpeg" alt="7d1475ca9c4d88e2c3e078a126fdfd52.jpeg"></p>
 <h3 id="特征向量化"><a href="#特征向量化" class="headerlink" title="特征向量化"></a>特征向量化</h3><p>因为模型训练不支持 <code>str</code> 类型的特征，所以需要对 <code>version</code> 和 <code>server_cipher</code> 等字段进行特征向量化。</p>
 <div class="table-container">
 <table>
@@ -713,7 +732,7 @@
 </div>
 <p>另外需要注意的是，<strong>需要对特征列进行补全</strong>，否则在进行模型训练时会出现特征个数不匹配的问题。例如：white.pcap 文件中 TLS versions 包含 <code>[&#39;TLSv1.0&#39;, &#39;TLSv1.2&#39;, &#39;SSLv3&#39;]</code> 三个版本，而 black 和 test 的 pcap 文件中除这三个版本外还包含 <code>&#39;TLSv1.1&#39;</code> 版本，所以需要在 white 中加入 <code>version=TLSv1.1</code> 全为 0 的列。</p>
 <h3 id="模型选取及参数"><a href="#模型选取及参数" class="headerlink" title="模型选取及参数"></a>模型选取及参数</h3><p>需要注意的是：white 已明确没有被恶意软件感染，所以产生的流量可以全部标注为正常流量，而 black 明确的只是客户端感染了恶意软件，但产生的流量不一定全为恶意流量。所以实际上是<strong>对不平衡样本数据进行训练和预测</strong>。遵循这个思路，可以采用 <strong>Anomaly Detector</strong> + <strong>Misuse Detector</strong> 的联合分类器进行训练。</p>
-<p><img src="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/4.png" alt="fe7a1c020a03492fd8b465e8541a410e.png"></p>
+<p><img src="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/4.png" alt="fe7a1c020a03492fd8b465e8541a410e.png"></p>
 <p>基于全正常流量的 white.pcap 文件进行 <strong>one-class classification</strong> 训练异常检测器 Anomaly Detector；再用该分类器对 black.pcap 文件进行推理预测恶意流量；结合 black 中检测的恶意流量和 white 正常流量训练二分类器；最终采用二分类器对 test 中的流量进行检测。</p>
 <h4 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h4><p>数据集是我们之前经过 Zeek 特征提取、特征向量化后产生的 <code>white.csv</code>、<code>black.csv</code> 和 <code>test.csv</code> 三个 csv 文件，使用 pandas 读入后定义一个列名数组 <code>data_f</code> 来获取相应特征：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">white_df = pd.read_csv(<span class="string">"white.csv"</span>,index_col=<span class="number">0</span>)</span><br><span class="line">black_df = pd.read_csv(<span class="string">"black.csv"</span>,index_col=<span class="number">0</span>)</span><br><span class="line">test_df = pd.read_csv(<span class="string">"test.csv"</span>,index_col=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">white_flow = white_df[data_f]</span><br><span class="line">black_flow = black_df[data_f]</span><br><span class="line">test_flow = test_df[data_f]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 源 IP 用于生成结果 result.txt 文件时使用</span></span><br><span class="line">test_ip = test_df[<span class="string">'id.oirg_h'</span>]</span><br></pre></td></tr></table></figure>
@@ -733,7 +752,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test 数据集上使用模型进行预测</span></span><br><span class="line">xgboost_test = xgb.DMatrix(model_test)</span><br><span class="line">y_predicted = bst.predict(xgboost_test)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># test_ip.txt 是 test 文件夹中的所有文件名</span></span><br><span class="line">ip = pd.read_table(<span class="string">'test_ip.txt'</span>, header=<span class="keyword">None</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文件名去掉对应的 .pcap 就是要预测的 IP</span></span><br><span class="line">ip[<span class="number">0</span>] = ip[<span class="number">0</span>].map(<span class="keyword">lambda</span> x: x.replace(<span class="string">'.pcap'</span>, <span class="string">''</span>))</span><br><span class="line">ip_list = list(ip[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 先将所有客户端 IP 对应的类型标记为 white</span></span><br><span class="line">ip[<span class="number">1</span>] = [<span class="string">'white'</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(ip.shape[<span class="number">0</span>])]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历预测结果</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(y_predicted)):</span><br><span class="line">    <span class="comment"># 如果第 i 条流量为 black</span></span><br><span class="line">    <span class="keyword">if</span> y_predicted[i] == <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># 读取第 i 条流量的源 IP</span></span><br><span class="line">        tmp_ip = list(test_ip[i:i+<span class="number">1</span>])[<span class="number">0</span>]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 遍历所有要预测的客户端 IP</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(len(ip_list)):</span><br><span class="line">            <span class="comment"># 如果是第 i 条流量（恶意）的源 IP</span></span><br><span class="line">            <span class="keyword">if</span> tmp_ip == ip_list[j]:</span><br><span class="line">            <span class="comment"># 将该客户端 IP 标记为 black</span></span><br><span class="line">                ip.loc[j,<span class="number">1</span>] = <span class="string">'black'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># test 数据集恶意 IP 计数</span></span><br><span class="line">malware_ip_count = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(ip.shape[<span class="number">0</span>]):</span><br><span class="line">    <span class="keyword">if</span> ip.loc[i,<span class="number">1</span>] == <span class="string">'black'</span>:</span><br><span class="line">        malware_ip_count += <span class="number">1</span></span><br><span class="line">print(<span class="string">"test数据集恶意ip个数"</span> + str(malware_ip_count) )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将最终结果写入 result.txt</span></span><br><span class="line">ip.to_csv(<span class="string">'result.txt'</span>,sep=<span class="string">','</span>,index=<span class="keyword">False</span>,header=<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="总结与反思"><a href="#总结与反思" class="headerlink" title="总结与反思"></a>总结与反思</h2><p>这次比赛几次提交点的最好成绩是 72.5 分，距离复赛要求的名次差几名，很遗憾无缘复赛。总结了失利的几点原因：</p>
 <ol>
-<li>对恶意流量的特征不熟悉，导致花了很多时间去确定需要提取哪些 Features，浪费了前面的检查点。其实我们最后提取的 Features 还有很大的提升空间，比如数据包的时间序列特征，我们只提取了均值、方差等特征，还有字节分布等重要特征未进行有效提取。<br><img src="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/5.png" alt="e67c9834b783a0c2b314e2dd35719671.png"></li>
+<li>对恶意流量的特征不熟悉，导致花了很多时间去确定需要提取哪些 Features，浪费了前面的检查点。其实我们最后提取的 Features 还有很大的提升空间，比如数据包的时间序列特征，我们只提取了均值、方差等特征，还有字节分布等重要特征未进行有效提取。<br><img src="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/5.png" alt="e67c9834b783a0c2b314e2dd35719671.png"></li>
 <li>对模型的选择和参数认识不够，只是盲目的更换模型和调参，一开始发现模型和参数对结果的影响很大，实际上还是特征提取的不够好。当提取了能有效区分正常/恶意流量的特征后，模型的选择和参数对结果影响就较小了，所以最重要的依然是有效特征的提取。</li>
 </ol>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
@@ -768,6 +787,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Security/" rel="tag"># Security</a>
+          
+        </div>
+      
 
       
       
@@ -777,8 +802,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/" rel="next" title="图流算法之 Bipartiteness Check">
-                <i class="fa fa-chevron-left"></i> 图流算法之 Bipartiteness Check
+              <a href="/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/" rel="next" title="DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思">
+                <i class="fa fa-chevron-left"></i> DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思
               </a>
             
           </div>
@@ -787,8 +812,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/" rel="prev" title="DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思">
-                DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/" rel="prev" title="基于 DPDK 的模拟 (D)Dos 攻击实验">
+                基于 DPDK 的模拟 (D)Dos 攻击实验 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -1234,8 +1259,8 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2020/08/09/DataCon2020-%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B-Writeup-%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/';
-        this.page.identifier = '2020/08/09/DataCon2020-加密恶意流量检测初赛-Writeup-及总结反思/';
+        this.page.url = 'https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/';
+        this.page.identifier = '2020/08/09/DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思/';
         this.page.title = 'DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思';
         };
       function loadComments () {
