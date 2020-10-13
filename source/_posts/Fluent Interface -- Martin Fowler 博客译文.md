@@ -1,5 +1,5 @@
 ---
-title: 流畅接口 —— Martin Fowler 博客译文
+title: Fluent Interface —— Martin Fowler 博客译文
 tags: []
 categories: [Translations]
 date: 2019-01-23 14:15:45

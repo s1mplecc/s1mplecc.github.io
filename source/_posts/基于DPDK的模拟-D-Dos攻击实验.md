@@ -1,7 +1,7 @@
 ---
 title: 基于 DPDK 的模拟 (D)Dos 攻击实验
 tags: []
-categories: [Experiments]
+categories: [Projects]
 date: 2020-09-17 21:02:12
 mathjax: true
 ---

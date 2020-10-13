@@ -1,15 +1,19 @@
 ---
-title: Certbot 配置 HTTPS
+title: 使用 Certbot 配置 HTTPS
 date: 2017-11-06T04:04:46.000Z
 tags: ['Server', 'Network', 'Security']
 categories: [Ops]
 ---
+## 前言
+
+本文介绍在搭建了服务器并且配置了域名后，如何通过 Certbot 将原先的 `http://` 域名配置为 `https://` 域名。文章的最后介绍了 HTTPS 基于的 SSL 协议，以及和 SSL 加密通信过程类似的 SSH 协议。
+
 ## 环境准备
 
 - Ubuntu 16.04
 - Nginx
 
-## 安装配置Certbot
+## 安装配置 Certbot
 
 添加软件源：
 
@@ -20,23 +24,27 @@ sudo add-apt-repository ppa:certbot/certbot
 ```
 
 可以看到 `/etc/apt/sources.list.d` 目录下多了个 `certbot-ubuntu-certbot-xenial.list` 文件，内容如下：
+
 ```
 deb http://ppa.launchpad.net/certbot/certbot/ubuntu xenial main
 # deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu xenial main
 ```
 
 安装Certbot：
+
 ```
 sudo apt-get update
 sudo apt-get install python-certbot-nginx 
 ```
 
 使用如下命令自动配置Nginx服务，也可以加上 `certonly` 参数来手动配置nginx。
+
 ```
 sudo certbot --nginx
 ```
 
 出现如下文字，说明Certbot读取了nginx配置文件。默认回车选择所有：
+
 ```
 Which names would you like to activate HTTPS for?
 -------------------------------------------------
@@ -44,7 +52,7 @@ Which names would you like to activate HTTPS for?
 2: www.s1mple.info
 ```
 
-选择是否重定位到HTTPS。
+选择是否重定位到HTTPS：
 
 ```
 Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.
@@ -85,9 +93,12 @@ if ($scheme != "https") {
     return 301 https://$host$request_uri;
 } # managed by Certbot
 ```
+
 说明Nginx在监听443端口，并将不是HTTPS的请求重定位到HTTPS。
 
 ## 协议原理
+
+### SSL
 
 **HTTPS(Http over Secure Socket Layer)** 是基于SSL加密的更安全的HTTP协议，默认端口443。SSL握手协议过程如下：
 
@@ -100,6 +111,19 @@ if ($scheme != "https") {
 6. SSL的握手部分结束，SSL安全通道的数据通讯开始，客户和服务器开始使用对话密钥进行数据通讯，同时进行通讯完整性的检验。
 
 ![78ab162bf20b438ca377faa87f4ea2a2_th](0.png)
+
+### SSH
+
+**SSH(Secure Shell)**协议，专为远程登录会话提供安全性的协议，传输的数据都进行了加密。SSH提供两种级别的安全验证，第一种是**基于口令**的安全验证。第二种是**基于密匙**的安全验证，不需要传输口令，原理同 SSL 类似。下面介绍一下 SSH 基于密钥的安全验证。
+
+客户端创建**一对密钥**（公钥和私钥），公钥存放在服务器上的 authorized_keys 文件中，当你想通过 ssh 远程连接服务器时会进行**公钥比对**。如果一致，服务器就用公用密匙加密“质询”（challenge）并把它发送给客户端。客户端收到“质询”之后就可以用你的**私钥解密**再把它发送给服务器。
+
+SSH 通过密钥连接服务器步骤如下：
+
+1. 在本地执行`ssh-keygen`生成配对密钥，在你的`~/.ssh`目录下会生成两个文件，`id_rsa`私钥，`id_rsa.pub`公钥。
+2. 将公钥拷贝到服务器的`~/.ssh/authorized_keys`文件中。
+3. 使用`chattr +i authorized_keys`命令给`authorized_keys`增加不可修改、删除的权限。
+4. 在本地使用`ssh {username}@{ip}`连接服务器。第一次连接会询问你是否继续，选择 yes 则将连接信息添加到`~/.ssh/known_hosts`文件中，此后连接不再询问。
 
 ## 参考
 

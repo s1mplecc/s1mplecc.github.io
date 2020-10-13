@@ -41,7 +41,7 @@ const sum = (...nums) => {
 sum(1,2,4)
 // result: 7
 ```
-    
+
 需要特别注意的是，箭头函数**绑定this**，这是和 **function** 定义是不同的：
 
 ```js
@@ -84,17 +84,16 @@ std.getAge()
   let a = 10
   var b = 1
 }
-// result:
-// a ReferenceError: a is not defined.
-// b 1
+print(a) // ReferenceError: a is not defined.
+print(b) // 1
 ```
 
 `const`声明一个只读的常量，并且必须**初始化**。一旦声明，常量的值就不能改变：
 
 ```js
-const a // Missing initializer in const declaration
+const a // Error: Missing initializer in const declaration
 const a = 1
-a = 2 // Assignment to constant variable.
+a = 2 // Error: Assignment to constant variable.
 ```
 
 阮一峰老师的**ES6编程风格**中明确指出在`let`和`const`之间，建议优先使用`const`，尤其是在**全局环境**，不应该设置变量，只应设置常量。**const优于let原因如下:**
@@ -161,11 +160,11 @@ f(...[1,2,3])
 // result: 6
 ```
 
-## for ... of
+## for...of
 
-> **for ... of** 是 ES6 新加入的遍历循环的操作，而传统的 **for ... in** 循环由于历史遗留问题，它遍历的实际上是对象的**属性名**。
+> **for...of** 是 ES6 新加入的遍历循环的操作，而传统的 **for...in** 循环由于历史遗留问题，它遍历的实际上是对象的**属性名**。
 
-我们用`for ... in`遍历对象的**属性名**，需要用`o[prop]`来获取属性的值：
+我们用`for...in`遍历对象的**属性名**，需要用`o[prop]`来获取属性的值：
 
 ```js
 const o = { name: 'Jack', age: 11}
@@ -190,10 +189,10 @@ arr.name = 'Jack'
 2: 9
 name: "Jack"
 length: 3
-__proto__: Array(0)*/
+__proto__: Array(0) */
 ```
 
-我们使用`for ... in`去遍历数组，实际上`for ... in`遍历的是数组的**下标索引**：
+我们使用`for...in`去遍历数组，实际上`for...in`遍历的是数组的**下标索引**：
 
 ```js
 for (let index in arr) { 
@@ -206,7 +205,7 @@ for (let index in arr) {
 // 数组第name个是Jack
 ```
 
-ES6 引入`for ... of`循环，遍历的是集合本身的元素，可以用于遍历 **Array、Set、Map** 等：
+ES6 引入`for...of`循环，遍历的是集合本身的元素，可以用于遍历 **Array、Set、Map** 等：
 
 ```js
 for (let value of arr) { 
@@ -218,7 +217,7 @@ for (let value of arr) {
 // 9
 ```
 
-可以看到我们的`name: "Jack"`被舍弃了，实际上也不推荐这种向数组添加属性的操作。
+可以看到`name: "Jack"`被舍弃了，实际上也不推荐这种向数组添加属性的操作。
 
 ## forEach
 
@@ -272,7 +271,7 @@ let [x, [[y], z]] = [1, [[2], 3]]
 // z = 3
 ```
 
-`...`被解构成一个数组：
+语法糖 `...` 被解构成一个数组：
 
 ```js
 let [a,...rest] = [1,2,3,4]
@@ -294,7 +293,7 @@ let { bar, foo } = { foo: "aaa", bar: "bbb" }
 
 ```js
 function f({x, y, z}) { 
-    return x + y - z ：
+    return x + y - z
 }
 f({z: 3, y: 2, x: 1})
 // result: 0
