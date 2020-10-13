@@ -35,52 +35,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Certbot 配置 HTTPS</title>
-    <url>/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/</url>
-    <content><![CDATA[<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ul>
-<li>Ubuntu 16.04</li>
-<li>Nginx</li>
-</ul>
-<h2 id="安装配置Certbot"><a href="#安装配置Certbot" class="headerlink" title="安装配置Certbot"></a>安装配置Certbot</h2><p>添加软件源：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install software-properties-common</span><br><span class="line">sudo add-apt-repository ppa:certbot/certbot</span><br></pre></td></tr></table></figure>
-<p>可以看到 <code>/etc/apt/sources.list.d</code> 目录下多了个 <code>certbot-ubuntu-certbot-xenial.list</code> 文件，内容如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br><span class="line"># deb-src http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br></pre></td></tr></table></figure></p>
-<p>安装Certbot：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install python-certbot-nginx</span><br></pre></td></tr></table></figure></p>
-<p>使用如下命令自动配置Nginx服务，也可以加上 <code>certonly</code> 参数来手动配置nginx。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo certbot --nginx</span><br></pre></td></tr></table></figure></p>
-<p>出现如下文字，说明Certbot读取了nginx配置文件。默认回车选择所有：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Which names would you like to activate HTTPS for?</span><br><span class="line">-------------------------------------------------</span><br><span class="line">1: s1mple.info</span><br><span class="line">2: www.s1mple.info</span><br></pre></td></tr></table></figure></p>
-<p>选择是否重定位到HTTPS。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.</span><br><span class="line">-------------------------------------------------------------------------------------</span><br><span class="line">1: No redirect - Make no further changes to the webserver configuration.</span><br><span class="line">2: Redirect - Make all requests redirect to secure HTTPS access. Choose this for</span><br><span class="line">new sites, or if you&#39;re confident your site works on HTTPS. You can undo this</span><br><span class="line">change by editing your web server&#39;s configuration.</span><br></pre></td></tr></table></figure>
-<p>配置成功，有效期为90天，过期需要使用 <code>certbot renew</code> 更新新的证书。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">IMPORTANT NOTES:</span><br><span class="line">- Congratulations! Your certificate and chain have been saved at:</span><br><span class="line">  &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;simple. info&#x2F;fullchain.pem</span><br><span class="line">  Your key file has been saved at:</span><br><span class="line">  &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;simple. info&#x2F;privkey.pem</span><br><span class="line">  Your cert will expire on 2018-02-04. To obtain a new or tweaked</span><br><span class="line">  version of this certificate in the future, simply run certbot again</span><br><span class="line">  with the “certonly&quot; option. To non-interactively renew xall* of</span><br><span class="line">  your certificates, run &quot;certbot renew&quot;</span><br></pre></td></tr></table></figure>
-<p>现在你可以通过HTTPS访问你的网站了。</p>
-<p>我们查看一下Nginx配置文件，文件名对应你的域名，以 <code>.conf</code> 结尾，发现新增了如下内容：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">listen 443 ssl; # managed by Certbot</span><br><span class="line">ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;fullchain.pem; # managed by Certbot</span><br><span class="line">ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;privkey.pem; # managed by Certbot</span><br><span class="line">include &#x2F;etc&#x2F;letsencrypt&#x2F;options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">ssl_dhparam &#x2F;etc&#x2F;letsencrypt&#x2F;ssl-dhparams.pem; # managed by Certbot</span><br><span class="line"></span><br><span class="line"># Redirect non-https traffic to https</span><br><span class="line">if ($scheme !&#x3D; &quot;https&quot;) &#123;</span><br><span class="line">    return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">&#125; # managed by Certbot</span><br></pre></td></tr></table></figure>
-<p>说明Nginx在监听443端口，并将不是HTTPS的请求重定位到HTTPS。</p>
-<h2 id="协议原理"><a href="#协议原理" class="headerlink" title="协议原理"></a>协议原理</h2><p><strong>HTTPS(Http over Secure Socket Layer)</strong> 是基于SSL加密的更安全的HTTP协议，默认端口443。SSL握手协议过程如下：</p>
-<ol>
-<li>客户端的浏览器向服务器传送客户端SSL协议的版本号，加密算法的种类，产生的随机数，以及其他通讯所需要信息。</li>
-<li>服务器向客户端传送SSL协议的版本号，加密算法的种类，随机数以及其他相关信息，同时<strong>服务器还将向客户端传送自己的证书</strong>。</li>
-<li>客户端利用服务器传过来的信息<strong>验证服务器的合法性</strong>，服务器的合法性包括：证书是否过期，发行服务器证书的CA是否可靠，发行者证书的公钥能否正确解开服务器证书的“发行者的数字签名”，服务器证书上的域名是否和服务器的实际域名相匹配。</li>
-<li>客户端随机产生一个用于后面通讯的“对话密钥”，然后用服务器的公钥（从步骤2中的服务器的证书中获得）对其加密，然后传给服务器。</li>
-<li><strong>服务器用私钥解密</strong>“对话密钥”（此处的公钥和私钥是对应的，公钥加密的数据只能用私钥解密，服务器私钥只在服务器端保留），然后用其作为服务器和客户端的“通话密码”加解密通讯。具体的加密算法详见<a href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">RSA加密算法</a>。</li>
-<li>SSL的握手部分结束，SSL安全通道的数据通讯开始，客户和服务器开始使用对话密钥进行数据通讯，同时进行通讯完整性的检验。</li>
-</ol>
-<p><img src="/2017/11/06/Certbot%E9%85%8D%E7%BD%AEHttps/0.png" alt="78ab162bf20b438ca377faa87f4ea2a2_th"></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://certbot.eff.org/#ubuntuxenial-nginx" target="_blank" rel="noopener">Certbot官方文档</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html" target="_blank" rel="noopener">图解SSL/TLS协议 —— 阮一峰</a></li>
-<li><a href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">RSA加密算法 —— WiKi</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Ops</category>
-      </categories>
-      <tags>
-        <tag>Server</tag>
-        <tag>Network</tag>
-        <tag>Security</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker 部署 Java Web 应用</title>
     <url>/2017/11/04/Docker%20%E9%83%A8%E7%BD%B2%20Java%20Web%20%E5%BA%94%E7%94%A8/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>JPress是基于JAVA的博客平台，作为一个Web程序，我将用它演示如何构建自己的Docker镜像，以及如何使用Docker部署Java Web应用。</p>
@@ -170,7 +124,7 @@
     <title>Git 命令总结</title>
     <url>/2017/11/28/Git%20%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Git 是目前世界上最先进的分布式版本控制系统。相比较CVS及SVN这种老式的集中式版本控制系统，要更加灵活方便，也更安全稳定。<strong>集中式</strong>是指版本库是放在中央服务器中，需要联网才能工作。<strong>分布式</strong>是指没有中央服务器，每个人电脑上有个完整的版本仓库，可以本地修改代码再联网提交到Git服务器上，Git服务器作用仅仅“交换”大家的修改即代码同步。此外，Git还拥有极其强大的分支管理功能。</p>
-<h2 id="Git-命令"><a href="#Git-命令" class="headerlink" title="Git 命令"></a>Git 命令</h2><p>可以查看Git的常用命令pdf文档：<a href="https://dir.s1mple.xyz/git-cheatsheet.pdf" target="_blank" rel="noopener">git-cheatsheet</a>。</p>
+<h2 id="Git-命令"><a href="#Git-命令" class="headerlink" title="Git 命令"></a>Git 命令</h2><p>可以查看Git的常用命令pdf文档：<a href="https://education.github.com/git-cheat-sheet-education.pdf" target="_blank" rel="noopener">git-cheatsheet</a>。</p>
 <h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p>始终要记住你的<strong>本地和Git服务器上都存在版本仓库（repository）</strong>，Git实现代码同步实际上是同步你的本地仓库和远程仓库。有两种方式创建仓库：1. 从服务器上克隆一个仓库；2. 初始化一个本地仓库。</p>
 <p>从Git服务器上<strong>克隆（clone）</strong>一个仓库下来，可以通过<strong>ssh</strong>或<strong>http</strong>的方式。ssh需要将你的公钥存放在Git服务器上，而http不需要但是速度相较ssh要慢。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone git@github.com:s1mplecc&#x2F;MyHashMap.git</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;s1mplecc&#x2F;MyHashMap.git</span><br></pre></td></tr></table></figure>
@@ -205,7 +159,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git revert &lt;commit id&gt;</span><br></pre></td></tr></table></figure>
 <p>revert与reset的区别在于，revert会生成一次新的提交去移除某些提交（相当于反向操作），在节点线上还是向前走的。而reset是把HEAD指针后移到指定节点，直接从这个节点走出新的一条线。可以参考<a href="http://www.cnblogs.com/houpeiyong/p/5890748.html" target="_blank" rel="noopener">代码回滚：git reset、git checkout和git revert区别和联系</a>。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://dir.s1mple.xyz/git-cheatsheet.pdf" target="_blank" rel="noopener">git-cheatsheet</a></li>
+<li><a href="https://education.github.com/git-cheat-sheet-education.pdf" target="_blank" rel="noopener">git-cheatsheet</a></li>
 <li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000" target="_blank" rel="noopener">Git教程 —— 廖雪峰</a></li>
 </ul>
 ]]></content>
@@ -215,39 +169,6 @@
       <tags>
         <tag>Git</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>流畅接口 —— Martin Fowler 博客译文</title>
-    <url>/2019/01/23/Fluent-Interface-%E2%80%94%E2%80%94-Martin-Fowler-%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/</url>
-    <content><![CDATA[<h2 id="原文链接"><a href="#原文链接" class="headerlink" title="原文链接"></a>原文链接</h2><p><a href="https://www.martinfowler.com/bliki/FluentInterface.html" target="_blank" rel="noopener">Fluent Interface</a>，Matrin Fowler 博客，发表于 2005 年 12 月 20 日。</p>
-<h2 id="译文"><a href="#译文" class="headerlink" title="译文"></a>译文</h2><p>几个月前我和 Eric Evans 进行了一次讨论会，他谈到一种接口的设计风格，我们称之为流畅接口（Fluent Interface）。它不是一种常见的风格，但我们觉得应该广为人知。描述它的最直观的方式就是例子。</p>
-<p>最简单的例子可能就来自 Eric 编写的 <a href="http://timeandmoney.sourceforge.net/" target="_blank" rel="noopener">TimeAndMoney Library</a>。为了指定一段时间间隔，我们通常这么做：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">TimePoint fiveOClock, sixOClock;</span><br><span class="line">...</span><br><span class="line">TimeInterval meetingTime = <span class="keyword">new</span> TimeInterval(fiveOClock, sixOClock);</span><br></pre></td></tr></table></figure>
-<p>但是 TimeAndMoney 库的使用者会这样做：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">TimeInterval meetingTime = fiveOClock.until(sixOClock);</span><br></pre></td></tr></table></figure>
-<p>下面我继续演示“客户下订单”这个例子。一个订单包含多个订单项，每个订单项包含商品项和购买的数量。在提交订单时一个订单项应当是可跳过的，这意味着我更希望在没有此订单项（缺货）的情况下提交订单，而不是推迟提交整个订单。所以这里可以给整个订单一个“急促（rush）”的状态标识。</p>
-<p>要实现上述功能，最常见的编码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeNormal</span><span class="params">(Customer customer)</span> </span>&#123;</span><br><span class="line">    Order o1 = <span class="keyword">new</span> Order();</span><br><span class="line">    customer.addOrder(o1);</span><br><span class="line">    OrderLine line1 = <span class="keyword">new</span> OrderLine(<span class="number">6</span>, Product.find(<span class="string">"TAL"</span>));</span><br><span class="line">    o1.addLine(line1);</span><br><span class="line">    OrderLine line2 = <span class="keyword">new</span> OrderLine(<span class="number">5</span>, Product.find(<span class="string">"HPK"</span>));</span><br><span class="line">    o1.addLine(line2);</span><br><span class="line">    OrderLine line3 = <span class="keyword">new</span> OrderLine(<span class="number">3</span>, Product.find(<span class="string">"LGV"</span>));</span><br><span class="line">    o1.addLine(line3);</span><br><span class="line">    line2.setSkippable(<span class="keyword">true</span>);</span><br><span class="line">    o1.setRush(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>本质上我们创建了多个对象然后将它们组装在一起。如果无法在构造函数中设置所有内容，那么就需要创建临时变量来帮助我们完成组装 —— 尤其是将集合项添加到集合中。</p>
-<p>下面是使用流畅接口实现相同的组装：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeFluent</span><span class="params">(Customer customer)</span> </span>&#123;</span><br><span class="line">    customer.newOrder()</span><br><span class="line">            .with(<span class="number">6</span>, <span class="string">"TAL"</span>)</span><br><span class="line">            .with(<span class="number">5</span>, <span class="string">"HPK"</span>).skippable()</span><br><span class="line">            .with(<span class="number">3</span>, <span class="string">"LGV"</span>)</span><br><span class="line">            .priorityRush();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>关于这种风格最重要的一点就是，基于 Internal DomainSpecificLanguage 将要做的事沿着一条线进行编码（译者注：Domain Specific Language，DSL，领域专用语言）。实际上这也是为什么我们选择用 “Fluent” 一词来描述它，在很多方面这两个术语是同义词。<strong>这种 API 被设计为可读的和流式的，这种流畅性的代价是在设计和构建 API 时需要花更多的功夫</strong>。构造函数、setter 和 add 方法的 API 简单且容易编写，但要想提供一个漂亮的流畅接口则需要更多的思考。</p>
-<p>事实上，刚才我想用在 Calgary 咖啡店吃早餐的时间完成这个小例子的编码，但是我搞砸了，看来好的流畅接口需要花费一些时间去实现。如果你想找一个比较成熟的例子，可以看看 <a href="http://jmock.org/" target="_blank" rel="noopener">JMock</a>。与任何 mocking 库一样，JMock 需要创建复杂的行为规范。在过去几年中已经构建了许多 mocking 库，而 JMock 的这个则包含了非常漂亮的流畅接口，使用体验非常好。这是它的一个例子：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">mock.expects(once())</span><br><span class="line">    .method(<span class="string">"m"</span>)</span><br><span class="line">    .with(or(stringContains(<span class="string">"hello"</span>), stringContains(<span class="string">"howdy"</span>)));</span><br></pre></td></tr></table></figure>
-<p>我看到 Steve Freeman 和 Nat Price 在 <a href="https://www.martinfowler.com/bliki/JAOO2005.html" target="_blank" rel="noopener">JAOO2005</a> 上就 JMock API 的演变发表了精彩的演讲，演讲相关的内容他们已经发表到一篇 <a href="http://www.mockobjects.com/files/evolving_an_edsl.ooplsa2006.pdf" target="_blank" rel="noopener">OOPSLA论文</a> 上。</p>
-<p>到目前为止，我们看到用于创建对象配置的流畅接口通常会涉及到 <a href="https://en.wikipedia.org/wiki/Value_object" target="_blank" rel="noopener">值对象</a>。我不确定这是否属于流畅接口的一个定义特征，虽然我怀疑它们出现在声明性上下文中有某种关联。对我们而言，<strong>流畅性的关键考验在于领域特定语言的质量</strong>。API 使用起来越像流式的语言，它就越流畅。</p>
-<p>像这样构建一个流畅接口会导致一些不符合使用习惯的 API。其中最明显的一个就是 setter 会有返回值（在订单示例中，<code>with</code> 方法为订单添加一个订单项并返回整个订单），而惯例是修改性质的方法返回 <code>void</code>，因为这样遵循 <a href="https://martinfowler.com/bliki/CommandQuerySeparation.html" target="_blank" rel="noopener">CommandQuerySeparation</a> 原则（译者注：CQS，命令查询分离原则）。这个约定确实妨碍了流畅接口，所以我倾向于暂不遵循这个惯例。</p>
-<p>你应该<strong>根据流畅接口的下一个行为（fluent action）去选择返回类型</strong>。JMock 提出了一个重点：根据接下来的需要改变其返回类型。<strong>这种风格的一个很好的优点是方法补完后（intellisense）有助于告诉你接下来要键入什么 —— 有点像 IDE 中的智能提示</strong>。总的来说，我发现动态语言对于 DSL 来说效果更好，因为它们的语法往往更简洁。但是，使用方法补完是静态语言的一个优点。</p>
-<p>流畅接口定义的方法的一个问题是它们可能名不符实。举个例子，你去查看 <code>with</code> 方法的文档可能并没有什么意义，因为这个方法的实现和 <code>with</code> 并没有什么关联。我承认光就方法的命名来说这不是一个好的命名，因为它根本不能表达该方法实际做了什么。只有在流畅行为的上下文中这种命名才能显示出它的优势（译者注：这点我在编码时也深有体会，流畅接口的方法实现与方法命名常常做的是两回事，比如说把值对象传递下去）。解决此问题的一种可能的方法是只在此上下文中使用 builder 对象（译者注：可以参考 Builder Pattern，比如 <code>new BankAccount.Builder(4567L).withOwner(&quot;Homer&quot;).atBranch(&quot;Springfield&quot;).build();</code>，只在最后一步 <code>build()</code> 中进行构建）。</p>
-<p>Eric 提到的一点是，到目前为止，他使用并看到了流畅的接口大多是关于值对象的配置。值对象不具有领域意义的标识（Identity），因此你可以轻松创建并丢弃它们。所以接口的流畅度取决于使用旧值构造新值。从这个意义上讲，订单案例并不典型，因为它属于 <a href="https://www.martinfowler.com/bliki/EvansClassification.html" target="_blank" rel="noopener">EvansClassification</a> 中的实体对象（Entity）。（译者注：Evans Classification，Evans 关于领域对象的分类 Entity、Value Object 和 Service）</p>
-<p>目前为止我还没有看到很多的流畅接口，可以得出结论，我们对它们的优缺点了解还不够。所以任何使用它们的劝告都只能是初步的 —— 但我认为它们已经成熟，可以进行更多的尝试。</p>
-<p><a href="https://bofh.org.uk/2005/12/21/fluent-interfaces/" target="_blank" rel="noopener">Piers Cawley</a> 对本文有一个很好的跟进。</p>
-<p><strong>更新</strong>（2008年6月23日）。自从我写这篇文章以来，这个术语被广泛使用，这给了我一种令人愉快的满足感。在我一直在研究的书中，我已经提炼了关于流畅接口和内部 DSLs 的想法。我也注意到了一个常见的误解 —— 很多人似乎将流畅接口与方法链（Method Chaining）等同起来。当然链式接口是使用了流畅接口的一种常用的技术，但真正的流畅接口远不止于此。</p>
-<p>我上面展示的 JMock 示例使用了方法链，但同时也使用嵌套函数和对象作用域。</p>
-]]></content>
-      <categories>
-        <category>Translations</category>
-      </categories>
   </entry>
   <entry>
     <title>Git 进阶教程</title>
@@ -3237,7 +3158,7 @@
 <li><p>hotfix 分支只能从 master 上拉取，测试通过后合并回 master 分支和 develop 分支。</p>
 </li>
 </ul>
-<h2 id="Git-Flow-工具"><a href="#Git-Flow-工具" class="headerlink" title="Git Flow 工具"></a>Git Flow 工具</h2><p>一旦使用 Git Flow 模型，那么对分支的命令操作必然是频繁且重复的，所幸是有人开发了 Git Flow Script 工具帮助我们简化命令，<a href="https://github.com/nvie/gitflow" target="_blank" rel="noopener">GitHub官网</a>。</p>
+<h2 id="Git-Flow-工具"><a href="#Git-Flow-工具" class="headerlink" title="Git Flow 工具"></a>Git Flow 工具</h2><p>一旦使用 Git Flow 模型，那么对分支的命令操作必然是频繁且重复的，所幸是有人开发了 Git Flow Script 工具帮助我们简化命令：<a href="https://github.com/nvie/gitflow" target="_blank" rel="noopener">gitflow</a>。</p>
 <p>在 Mac 或 Windows 系统上安装：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; OS X</span><br><span class="line">brew install git-flow</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Windows</span><br><span class="line">wget -q -O - --no-check-certificate https:&#x2F;&#x2F;github.com&#x2F;nvie&#x2F;gitflow&#x2F;raw&#x2F;develop&#x2F;contrib&#x2F;gitflow-installer.sh | bash</span><br></pre></td></tr></table></figure>
 <p>使用<code>git flow init</code>进行初始化，会询问你分支的命名，使用默认的即可。初始化完成后自动切换到了 develop 分支。</p>
@@ -6070,5 +5991,84 @@
         <tag>Security</tag>
         <tag>Machine Learning</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Certbot 配置 HTTPS</title>
+    <url>/2017/11/06/Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/</url>
+    <content><![CDATA[<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ul>
+<li>Ubuntu 16.04</li>
+<li>Nginx</li>
+</ul>
+<h2 id="安装配置Certbot"><a href="#安装配置Certbot" class="headerlink" title="安装配置Certbot"></a>安装配置Certbot</h2><p>添加软件源：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install software-properties-common</span><br><span class="line">sudo add-apt-repository ppa:certbot/certbot</span><br></pre></td></tr></table></figure>
+<p>可以看到 <code>/etc/apt/sources.list.d</code> 目录下多了个 <code>certbot-ubuntu-certbot-xenial.list</code> 文件，内容如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br><span class="line"># deb-src http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;certbot&#x2F;certbot&#x2F;ubuntu xenial main</span><br></pre></td></tr></table></figure></p>
+<p>安装Certbot：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install python-certbot-nginx</span><br></pre></td></tr></table></figure></p>
+<p>使用如下命令自动配置Nginx服务，也可以加上 <code>certonly</code> 参数来手动配置nginx。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo certbot --nginx</span><br></pre></td></tr></table></figure></p>
+<p>出现如下文字，说明Certbot读取了nginx配置文件。默认回车选择所有：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Which names would you like to activate HTTPS for?</span><br><span class="line">-------------------------------------------------</span><br><span class="line">1: s1mple.info</span><br><span class="line">2: www.s1mple.info</span><br></pre></td></tr></table></figure></p>
+<p>选择是否重定位到HTTPS。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.</span><br><span class="line">-------------------------------------------------------------------------------------</span><br><span class="line">1: No redirect - Make no further changes to the webserver configuration.</span><br><span class="line">2: Redirect - Make all requests redirect to secure HTTPS access. Choose this for</span><br><span class="line">new sites, or if you&#39;re confident your site works on HTTPS. You can undo this</span><br><span class="line">change by editing your web server&#39;s configuration.</span><br></pre></td></tr></table></figure>
+<p>配置成功，有效期为90天，过期需要使用 <code>certbot renew</code> 更新新的证书。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">IMPORTANT NOTES:</span><br><span class="line">- Congratulations! Your certificate and chain have been saved at:</span><br><span class="line">  &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;simple. info&#x2F;fullchain.pem</span><br><span class="line">  Your key file has been saved at:</span><br><span class="line">  &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;simple. info&#x2F;privkey.pem</span><br><span class="line">  Your cert will expire on 2018-02-04. To obtain a new or tweaked</span><br><span class="line">  version of this certificate in the future, simply run certbot again</span><br><span class="line">  with the “certonly&quot; option. To non-interactively renew xall* of</span><br><span class="line">  your certificates, run &quot;certbot renew&quot;</span><br></pre></td></tr></table></figure>
+<p>现在你可以通过HTTPS访问你的网站了。</p>
+<p>我们查看一下Nginx配置文件，文件名对应你的域名，以 <code>.conf</code> 结尾，发现新增了如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">listen 443 ssl; # managed by Certbot</span><br><span class="line">ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;fullchain.pem; # managed by Certbot</span><br><span class="line">ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;privkey.pem; # managed by Certbot</span><br><span class="line">include &#x2F;etc&#x2F;letsencrypt&#x2F;options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">ssl_dhparam &#x2F;etc&#x2F;letsencrypt&#x2F;ssl-dhparams.pem; # managed by Certbot</span><br><span class="line"></span><br><span class="line"># Redirect non-https traffic to https</span><br><span class="line">if ($scheme !&#x3D; &quot;https&quot;) &#123;</span><br><span class="line">    return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">&#125; # managed by Certbot</span><br></pre></td></tr></table></figure>
+<p>说明Nginx在监听443端口，并将不是HTTPS的请求重定位到HTTPS。</p>
+<h2 id="协议原理"><a href="#协议原理" class="headerlink" title="协议原理"></a>协议原理</h2><p><strong>HTTPS(Http over Secure Socket Layer)</strong> 是基于SSL加密的更安全的HTTP协议，默认端口443。SSL握手协议过程如下：</p>
+<ol>
+<li>客户端的浏览器向服务器传送客户端SSL协议的版本号，加密算法的种类，产生的随机数，以及其他通讯所需要信息。</li>
+<li>服务器向客户端传送SSL协议的版本号，加密算法的种类，随机数以及其他相关信息，同时<strong>服务器还将向客户端传送自己的证书</strong>。</li>
+<li>客户端利用服务器传过来的信息<strong>验证服务器的合法性</strong>，服务器的合法性包括：证书是否过期，发行服务器证书的CA是否可靠，发行者证书的公钥能否正确解开服务器证书的“发行者的数字签名”，服务器证书上的域名是否和服务器的实际域名相匹配。</li>
+<li>客户端随机产生一个用于后面通讯的“对话密钥”，然后用服务器的公钥（从步骤2中的服务器的证书中获得）对其加密，然后传给服务器。</li>
+<li><strong>服务器用私钥解密</strong>“对话密钥”（此处的公钥和私钥是对应的，公钥加密的数据只能用私钥解密，服务器私钥只在服务器端保留），然后用其作为服务器和客户端的“通话密码”加解密通讯。具体的加密算法详见<a href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">RSA加密算法</a>。</li>
+<li>SSL的握手部分结束，SSL安全通道的数据通讯开始，客户和服务器开始使用对话密钥进行数据通讯，同时进行通讯完整性的检验。</li>
+</ol>
+<p><img src="/2017/11/06/Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/0.png" alt="78ab162bf20b438ca377faa87f4ea2a2_th"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://certbot.eff.org/#ubuntuxenial-nginx" target="_blank" rel="noopener">Certbot官方文档</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html" target="_blank" rel="noopener">图解SSL/TLS协议 —— 阮一峰</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">RSA加密算法 —— WiKi</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Ops</category>
+      </categories>
+      <tags>
+        <tag>Server</tag>
+        <tag>Network</tag>
+        <tag>Security</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>流畅接口 —— Martin Fowler 博客译文</title>
+    <url>/2019/01/23/Fluent%20Interface%20--%20Martin%20Fowler%20%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/</url>
+    <content><![CDATA[<h2 id="原文链接"><a href="#原文链接" class="headerlink" title="原文链接"></a>原文链接</h2><p><a href="https://www.martinfowler.com/bliki/FluentInterface.html" target="_blank" rel="noopener">Fluent Interface</a>，Matrin Fowler 博客，发表于 2005 年 12 月 20 日。</p>
+<h2 id="译文"><a href="#译文" class="headerlink" title="译文"></a>译文</h2><p>几个月前我和 Eric Evans 进行了一次讨论会，他谈到一种接口的设计风格，我们称之为流畅接口（Fluent Interface）。它不是一种常见的风格，但我们觉得应该广为人知。描述它的最直观的方式就是例子。</p>
+<p>最简单的例子可能就来自 Eric 编写的 <a href="http://timeandmoney.sourceforge.net/" target="_blank" rel="noopener">TimeAndMoney Library</a>。为了指定一段时间间隔，我们通常这么做：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">TimePoint fiveOClock, sixOClock;</span><br><span class="line">...</span><br><span class="line">TimeInterval meetingTime = <span class="keyword">new</span> TimeInterval(fiveOClock, sixOClock);</span><br></pre></td></tr></table></figure>
+<p>但是 TimeAndMoney 库的使用者会这样做：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">TimeInterval meetingTime = fiveOClock.until(sixOClock);</span><br></pre></td></tr></table></figure>
+<p>下面我继续演示“客户下订单”这个例子。一个订单包含多个订单项，每个订单项包含商品项和购买的数量。在提交订单时一个订单项应当是可跳过的，这意味着我更希望在没有此订单项（缺货）的情况下提交订单，而不是推迟提交整个订单。所以这里可以给整个订单一个“急促（rush）”的状态标识。</p>
+<p>要实现上述功能，最常见的编码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeNormal</span><span class="params">(Customer customer)</span> </span>&#123;</span><br><span class="line">    Order o1 = <span class="keyword">new</span> Order();</span><br><span class="line">    customer.addOrder(o1);</span><br><span class="line">    OrderLine line1 = <span class="keyword">new</span> OrderLine(<span class="number">6</span>, Product.find(<span class="string">"TAL"</span>));</span><br><span class="line">    o1.addLine(line1);</span><br><span class="line">    OrderLine line2 = <span class="keyword">new</span> OrderLine(<span class="number">5</span>, Product.find(<span class="string">"HPK"</span>));</span><br><span class="line">    o1.addLine(line2);</span><br><span class="line">    OrderLine line3 = <span class="keyword">new</span> OrderLine(<span class="number">3</span>, Product.find(<span class="string">"LGV"</span>));</span><br><span class="line">    o1.addLine(line3);</span><br><span class="line">    line2.setSkippable(<span class="keyword">true</span>);</span><br><span class="line">    o1.setRush(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本质上我们创建了多个对象然后将它们组装在一起。如果无法在构造函数中设置所有内容，那么就需要创建临时变量来帮助我们完成组装 —— 尤其是将集合项添加到集合中。</p>
+<p>下面是使用流畅接口实现相同的组装：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeFluent</span><span class="params">(Customer customer)</span> </span>&#123;</span><br><span class="line">    customer.newOrder()</span><br><span class="line">            .with(<span class="number">6</span>, <span class="string">"TAL"</span>)</span><br><span class="line">            .with(<span class="number">5</span>, <span class="string">"HPK"</span>).skippable()</span><br><span class="line">            .with(<span class="number">3</span>, <span class="string">"LGV"</span>)</span><br><span class="line">            .priorityRush();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关于这种风格最重要的一点就是，基于 Internal DomainSpecificLanguage 将要做的事沿着一条线进行编码（译者注：Domain Specific Language，DSL，领域专用语言）。实际上这也是为什么我们选择用 “Fluent” 一词来描述它，在很多方面这两个术语是同义词。<strong>这种 API 被设计为可读的和流式的，这种流畅性的代价是在设计和构建 API 时需要花更多的功夫</strong>。构造函数、setter 和 add 方法的 API 简单且容易编写，但要想提供一个漂亮的流畅接口则需要更多的思考。</p>
+<p>事实上，刚才我想用在 Calgary 咖啡店吃早餐的时间完成这个小例子的编码，但是我搞砸了，看来好的流畅接口需要花费一些时间去实现。如果你想找一个比较成熟的例子，可以看看 <a href="http://jmock.org/" target="_blank" rel="noopener">JMock</a>。与任何 mocking 库一样，JMock 需要创建复杂的行为规范。在过去几年中已经构建了许多 mocking 库，而 JMock 的这个则包含了非常漂亮的流畅接口，使用体验非常好。这是它的一个例子：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">mock.expects(once())</span><br><span class="line">    .method(<span class="string">"m"</span>)</span><br><span class="line">    .with(or(stringContains(<span class="string">"hello"</span>), stringContains(<span class="string">"howdy"</span>)));</span><br></pre></td></tr></table></figure>
+<p>我看到 Steve Freeman 和 Nat Price 在 <a href="https://www.martinfowler.com/bliki/JAOO2005.html" target="_blank" rel="noopener">JAOO2005</a> 上就 JMock API 的演变发表了精彩的演讲，演讲相关的内容他们已经发表到一篇 <a href="http://www.mockobjects.com/files/evolving_an_edsl.ooplsa2006.pdf" target="_blank" rel="noopener">OOPSLA论文</a> 上。</p>
+<p>到目前为止，我们看到用于创建对象配置的流畅接口通常会涉及到 <a href="https://en.wikipedia.org/wiki/Value_object" target="_blank" rel="noopener">值对象</a>。我不确定这是否属于流畅接口的一个定义特征，虽然我怀疑它们出现在声明性上下文中有某种关联。对我们而言，<strong>流畅性的关键考验在于领域特定语言的质量</strong>。API 使用起来越像流式的语言，它就越流畅。</p>
+<p>像这样构建一个流畅接口会导致一些不符合使用习惯的 API。其中最明显的一个就是 setter 会有返回值（在订单示例中，<code>with</code> 方法为订单添加一个订单项并返回整个订单），而惯例是修改性质的方法返回 <code>void</code>，因为这样遵循 <a href="https://martinfowler.com/bliki/CommandQuerySeparation.html" target="_blank" rel="noopener">CommandQuerySeparation</a> 原则（译者注：CQS，命令查询分离原则）。这个约定确实妨碍了流畅接口，所以我倾向于暂不遵循这个惯例。</p>
+<p>你应该<strong>根据流畅接口的下一个行为（fluent action）去选择返回类型</strong>。JMock 提出了一个重点：根据接下来的需要改变其返回类型。<strong>这种风格的一个很好的优点是方法补完后（intellisense）有助于告诉你接下来要键入什么 —— 有点像 IDE 中的智能提示</strong>。总的来说，我发现动态语言对于 DSL 来说效果更好，因为它们的语法往往更简洁。但是，使用方法补完是静态语言的一个优点。</p>
+<p>流畅接口定义的方法的一个问题是它们可能名不符实。举个例子，你去查看 <code>with</code> 方法的文档可能并没有什么意义，因为这个方法的实现和 <code>with</code> 并没有什么关联。我承认光就方法的命名来说这不是一个好的命名，因为它根本不能表达该方法实际做了什么。只有在流畅行为的上下文中这种命名才能显示出它的优势（译者注：这点我在编码时也深有体会，流畅接口的方法实现与方法命名常常做的是两回事，比如说把值对象传递下去）。解决此问题的一种可能的方法是只在此上下文中使用 builder 对象（译者注：可以参考 Builder Pattern，比如 <code>new BankAccount.Builder(4567L).withOwner(&quot;Homer&quot;).atBranch(&quot;Springfield&quot;).build();</code>，只在最后一步 <code>build()</code> 中进行构建）。</p>
+<p>Eric 提到的一点是，到目前为止，他使用并看到了流畅的接口大多是关于值对象的配置。值对象不具有领域意义的标识（Identity），因此你可以轻松创建并丢弃它们。所以接口的流畅度取决于使用旧值构造新值。从这个意义上讲，订单案例并不典型，因为它属于 <a href="https://www.martinfowler.com/bliki/EvansClassification.html" target="_blank" rel="noopener">EvansClassification</a> 中的实体对象（Entity）。（译者注：Evans Classification，Evans 关于领域对象的分类 Entity、Value Object 和 Service）</p>
+<p>目前为止我还没有看到很多的流畅接口，可以得出结论，我们对它们的优缺点了解还不够。所以任何使用它们的劝告都只能是初步的 —— 但我认为它们已经成熟，可以进行更多的尝试。</p>
+<p><a href="https://bofh.org.uk/2005/12/21/fluent-interfaces/" target="_blank" rel="noopener">Piers Cawley</a> 对本文有一个很好的跟进。</p>
+<p><strong>更新</strong>（2008年6月23日）。自从我写这篇文章以来，这个术语被广泛使用，这给了我一种令人愉快的满足感。在我一直在研究的书中，我已经提炼了关于流畅接口和内部 DSLs 的想法。我也注意到了一个常见的误解 —— 很多人似乎将流畅接口与方法链（Method Chaining）等同起来。当然链式接口是使用了流畅接口的一种常用的技术，但真正的流畅接口远不止于此。</p>
+<p>我上面展示的 JMock 示例使用了方法链，但同时也使用嵌套函数和对象作用域。</p>
+]]></content>
+      <categories>
+        <category>Translations</category>
+      </categories>
   </entry>
 </search>
