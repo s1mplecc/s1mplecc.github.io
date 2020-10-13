@@ -97,7 +97,7 @@
     <link href="https://s1mplecc.github.io/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/"/>
     <id>https://s1mplecc.github.io/2020/09/17/基于DPDK的模拟-D-Dos攻击实验/</id>
     <published>2020-09-17T13:02:12.000Z</published>
-    <updated>2020-10-11T07:22:46.966Z</updated>
+    <updated>2020-10-13T04:43:25.589Z</updated>
     
     <summary type="html">
     
@@ -111,7 +111,7 @@
     
     </summary>
     
-      <category term="Experiments" scheme="https://s1mplecc.github.io/categories/Experiments/"/>
+      <category term="Projects" scheme="https://s1mplecc.github.io/categories/Projects/"/>
     
     
   </entry>
@@ -192,11 +192,11 @@
       <category term="Design" scheme="https://s1mplecc.github.io/categories/Design/"/>
     
     
-      <category term="API Design" scheme="https://s1mplecc.github.io/tags/API-Design/"/>
-    
       <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
     
       <category term="DSL" scheme="https://s1mplecc.github.io/tags/DSL/"/>
+    
+      <category term="API Design" scheme="https://s1mplecc.github.io/tags/API-Design/"/>
     
   </entry>
   
