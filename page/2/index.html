@@ -943,7 +943,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-10-11 15:22:35" itemprop="dateModified" datetime="2020-10-11T15:22:35+08:00">2020-10-11</time>
+                <time title="修改时间：2020-10-28 12:07:52" itemprop="dateModified" datetime="2020-10-28T12:07:52+08:00">2020-10-28</time>
               
             
           </span>
@@ -1068,16 +1068,22 @@
 <li><code>public/</code> 生成的静态文件，包括图片、Tags、Categories 等都保存在这里。执行 <code>hexo g</code> 生成；<code>hexo clean</code> 则会清空该文件夹。部署到 GitHub Pages 上的亦即该文件夹下的内容。</li>
 </ul>
 <h3 id="部署到-GitHub"><a href="#部署到-GitHub" class="headerlink" title="部署到 GitHub"></a>部署到 GitHub</h3><p>最开始 <code>source</code> 文件夹中会自带一篇介绍 Hexo 的文章，我们可以直接拿它来测试部署是否成功。</p>
-<p>Hexo 支持本地启动，命令为：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hexo serve</span></span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure><br>启动后访问 <code>http://localhost:4000</code>，就应该能看到自带的那篇文章。但为了能部署到 GitHub Pages 上，我们还需要做两件事：<strong>安装插件</strong>和<strong>修改配置</strong>。</p>
+<p>Hexo 支持本地启动，命令为：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hexo serve</span></span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+<p>启动后访问 <code>http://localhost:4000</code>，就应该能看到自带的那篇文章。但为了能部署到 GitHub Pages 上，我们还需要做两件事：<strong>安装插件</strong>和<strong>修改配置</strong>。</p>
 <p>在项目所在目录下执行：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
 <p>修改 <code>_config.yml</code> 将 repo 指定为自己的仓库地址，发布到的分支默认为 master：</p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="string">git@github.com:username/username.github.io.git</span></span><br><span class="line"><span class="attr">  branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-<p>现在，执行如下命令即可将发布文章：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hexo generate -deploy</span></span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure><br>访问你的网址 <code>https://${github-username}.github.io</code> 去见证成果吧！</p>
+<p>现在，执行如下命令即可将发布文章：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hexo generate -deploy</span></span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
+<p>访问你的网址 <code>https://${github-username}.github.io</code> 去见证成果吧！</p>
 <h2 id="更换主题"><a href="#更换主题" class="headerlink" title="更换主题"></a>更换主题</h2><p>Hexo 自带的默认主题是 landscape，不过我们可以从 <a href="https://hexo.io/themes/" target="_blank" rel="noopener">Hexo主题库</a> 或 GitHub 上找到自己喜欢的主题。Next 是 Hexo 最受欢迎的主题之一，下面我将用它向大家演示如何更换主题。</p>
 <p>Ps: 目前 Next 主题已经升级到 v6.0 版本以上，GitHub 上的仓库从原先的旧版本（v5.1.4 及以下）：<code>https://github.com/iissnan/hexo-theme-next</code> 迁移到了新仓库中：<code>https://github.com/theme-next/hexo-theme-next</code>，目前版本是 v6.6.0。如果安装的是 v5 版本，在启动时会提示升级。</p>
-<p><strong>下载源码</strong>，直接将 Next 项目克隆到 Hexo 目录的 <code>themes</code> 文件夹下<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/theme-next/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure></p>
-<p><strong>启用 Next 主题</strong>，修改 Hexo 的 <code>_config.yml</code><br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># theme: landscape</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>下载源码</strong>，直接将 Next 项目克隆到 Hexo 目录的 <code>themes</code> 文件夹下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/theme-next/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+<p><strong>启用 Next 主题</strong>，修改 Hexo 的 <code>_config.yml</code></p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># theme: landscape</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br></pre></td></tr></table></figure>
 <p>v6.0 版本以上的 <a href="https://theme-next.org/docs/getting-started/" target="_blank" rel="noopener">Next官方文档</a> 也做了迁移，描述的很详细，包含了主题设置、三方服务和插件的配置等。所有要找的 <code>themes/next/_config.yml</code> 中的配置项在官方文档中都能找到。</p>
 <h2 id="更换域名"><a href="#更换域名" class="headerlink" title="更换域名"></a>更换域名</h2><p>部署到 GitHub Pages 上会提供 <code>https://${github-username}.github.io</code> 默认的域名以供访问。除此之外，GitHub Pages 也提供绑定自定义域名的功能。</p>
 <p>首先，你需要在阿里云万网、腾讯云或者 GoDaddy 上购买域名（我选择 GoDaddy 是因为它不需要备案），然后<strong>配置域名解析</strong>。下表是我的个性域名 <code>s1mple.xyz</code> 的配置项。其中：</p>
