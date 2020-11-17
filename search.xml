@@ -1600,9 +1600,7 @@
         <category>Coding</category>
       </categories>
       <tags>
-        <tag>Maven</tag>
         <tag>Mybatis</tag>
-        <tag>Spring</tag>
       </tags>
   </entry>
   <entry>
@@ -1665,8 +1663,6 @@
       </categories>
       <tags>
         <tag>Redis</tag>
-        <tag>Server</tag>
-        <tag>Database</tag>
       </tags>
   </entry>
   <entry>
@@ -2068,7 +2064,6 @@
       </categories>
       <tags>
         <tag>JavaScript</tag>
-        <tag>Node.js</tag>
       </tags>
   </entry>
   <entry>
@@ -3112,7 +3107,7 @@
         <category>Coding</category>
       </categories>
       <tags>
-        <tag>Refactoring</tag>
+        <tag>Code Refactoring</tag>
       </tags>
   </entry>
   <entry>
@@ -3165,7 +3160,7 @@
         <category>Coding</category>
       </categories>
       <tags>
-        <tag>Refactoring</tag>
+        <tag>Code Refactoring</tag>
       </tags>
   </entry>
   <entry>
@@ -3220,7 +3215,7 @@
         <category>Coding</category>
       </categories>
       <tags>
-        <tag>Refactoring</tag>
+        <tag>Code Refactoring</tag>
       </tags>
   </entry>
   <entry>
@@ -3991,7 +3986,6 @@
       </categories>
       <tags>
         <tag>Redis</tag>
-        <tag>Database</tag>
       </tags>
   </entry>
   <entry>
