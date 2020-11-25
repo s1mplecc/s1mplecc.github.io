@@ -392,7 +392,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">流处理框架介绍: Storm、Flink & Spark</a>
+                <a href="/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">流处理框架介绍: Storm、Spark & Flink</a>
               
             
           </h1>
@@ -434,7 +434,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-11-25 19:33:56" itemprop="dateModified" datetime="2020-11-25T19:33:56+08:00">2020-11-25</time>
+                <time title="修改时间：2020-11-25 19:39:41" itemprop="dateModified" datetime="2020-11-25T19:39:41+08:00">2020-11-25</time>
               
             
           </span>
@@ -556,12 +556,12 @@
 <p>在同一年，Hadoop 的创始人受 MapReduce 编程模型等一系列论文的启发，对论文中提出的模型进行了编程实现。时至今日，Hadoop 不仅仅是整个大数据领域的先行者和领导者，更形成了一套围绕 Hadoop 的生态系统，成为企业首选的大数据解决方案。不论是 Storm、Spark 还是 Flink 都是敞开怀抱拥抱 Hadoop 生态并融入成为了生态圈的一部分。</p>
 <p><img src="/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/7.png" alt="e2dc809939ef9af086d3197d3e648b0e.png"></p>
 <p>Hadoop 虽然已被公认为大数据分析领域无可争辩的王者，但它更加专注于批处理，并不适合做实时计算。随着 Hadoop 生态的繁荣发展，诞生了一批流处理框架，本质上它们的核心处理流程也不偏离 MapReduce 思想：</p>
-<p><img src="/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/8.jpg" alt="67fc13f9d829042f7b800522e416d280.jpeg"></p>
 <ul>
 <li><strong>第一代</strong>被广泛采用的流处理框架是 Storm，但由于 Storm 只支持 “at least once” 语义，对于很多对数据准确性要求较高的应用，Storm 有一定劣势。</li>
 <li><strong>第二代</strong>非常流行的流处理框架是 Spark Streaming。Spark Streaming 使用微批处理的思想，每次处理一小批数据，以接近实时处理的效果。也正是由于时间间隔的存在，导致 Spark Streaming 的“实时处理”延迟较大，一般适用于延迟是秒级别的实时计算应用。但 Spark Streaming 的优势是拥有 Spark 这个靠山，用户从 Spark 迁移到 Spark Streaming 的成本较低，因此能给用户提供一个批量和流式于一体的计算框架。</li>
 <li><strong>第三代</strong>流处理框架 Flink 是一个支持在有界和无界数据流上做有状态计算的大数据引擎。它以事件为单位，并且支持 SQL、State、WaterMark 等特性。比起 Storm，它的吞吐量更高，延迟更低，准确性能得到保障；比起 Spark Streaming，它以事件为单位，达到真正意义上的实时计算，且所需计算资源相对更少。</li>
 </ul>
+<p><img src="/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/8.jpg" alt="67fc13f9d829042f7b800522e416d280.jpeg"></p>
 <p>Spark 和 Flink 各有所长，也在相互竞争、相互借鉴。可以说 Spark 是以批处理起家的，通过使用内存计算比传统 Hadoop MapReduce 具有显著性能优势，Spark 已经成为行业内大数据批处理的首选处理引擎。但在处理稍微复杂点的实时流处理场景 (比如各种窗口、状态等) ，Flink 要比 Spark Streaming 更具有显著优势。事实证明，阿里最终在流处理框架选型中选择了 Flink，并在其之上开发了自己的流处理框架 Blink，并对 Flink 社区提供了贡献，包括促进 Flink 流处理、批处理一体化等。</p>
 <h2 id="流批一体"><a href="#流批一体" class="headerlink" title="流批一体"></a>流批一体</h2><p>现如今，流批一体已经越来越成为一种趋势，它旨在将流处理和批处理通过一套相同的处理逻辑来实现。流批一体意味着计算引擎同时具备流计算的低延迟和批计算的高吞吐高稳定性，提供统一编程接口开发两种场景的应用并保证它们的底层执行逻辑是一致的。</p>
 <p>2015 年，Google 提出了 <a href="https://www.vldb.org/pvldb/vol8/p1792-Akidau.pdf" target="_blank" rel="noopener">Dataflow</a> 模型，旨在提供一种统一批处理和流处理的解决方案。作为 Dataflow 模型的最早采用者之一，Apache Flink 在流批一体特性的完成度上在开源项目中是十分领先的。Flink 遵循 Dataflow 模型的理念: <strong>批处理是流处理的特例</strong>，亦即批处理处理的是无界数据流上的一小段有界数据流。Flink 设计之初流处理应用和批处理应用底层都是流处理，但在编程 API 上是分开的。</p>
@@ -575,7 +575,7 @@
 <li><a href="https://confucianzuoyuan.github.io/flink-tutorial/book/chapter03-05-02-%E4%BB%8E%E4%B8%80%E8%87%B4%E6%A3%80%E6%9F%A5%E7%82%B9%E4%B8%AD%E6%81%A2%E5%A4%8D%E7%8A%B6%E6%80%81.html" target="_blank" rel="noopener">尚硅谷Flink教程</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/94302767" target="_blank" rel="noopener">从Hadoop到Spark、Flink，大数据处理框架十年激荡发展史</a></li>
 <li><a href="https://developer.aliyun.com/article/754468" target="_blank" rel="noopener">Flink 流批一体的实践与探索 —— 阿里云开发者社区</a></li>
-<li><a href="https://www.vldb.org/pvldb/vol8/p1792-Akidau.pdf" target="_blank" rel="noopener">The Dataflow Model: A Practical Approach to Balancing<br>Correctness, Latency, and Cost in Massive-Scale,<br>Unbounded, Out-of-Order Data Processing</a></li>
+<li><a href="https://www.vldb.org/pvldb/vol8/p1792-Akidau.pdf" target="_blank" rel="noopener">The Dataflow Model: A Practical Approach to Balancing Correctness, Latency, and Cost in Massive-Scale, Unbounded, Out-of-Order Data Processing</a></li>
 </ul>
 
           

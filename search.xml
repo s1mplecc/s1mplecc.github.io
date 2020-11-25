@@ -215,22 +215,28 @@
   <entry>
     <title>Java 网络爬虫</title>
     <url>/2018/11/05/Java%20%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/</url>
-    <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><p>很早之前写过一个 Java 的爬虫程序，可以爬取笔趣阁上的小说。最近突然有爬点书看看的想法，遂翻到原先的代码，简直不忍直视。好在现在编码能力有所提升，而且团队内一直强调重构的重要性，所以重新拾起这个爬虫程序，好好重构一番。代码已上传至 <a href="https://github.com/s1mplecc/web-crawler" target="_blank" rel="noopener">GitHub</a></p>
-<p>本文主要讲讲：</p>
-<ol>
-<li>使用 <strong>Gradle</strong> 构建项目时遇到的问题以及解决办法</li>
-<li>使用 JDK8 的特性如何简便地进行<strong>并行开发</strong></li>
-<li>写爬虫时的思路</li>
-</ol>
+    <content><![CDATA[<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>编写一个 Java 的爬虫程序，并行爬取小说网站上的小说。代码已上传至 <a href="https://github.com/s1mplecc/web-crawler" target="_blank" rel="noopener">GitHub</a>。本文主要关注：</p>
+<ul>
+<li>爬虫程序思路。</li>
+<li>使用 <strong>Gradle</strong> 构建项目时遇到的问题以及解决办法。</li>
+<li>使用 JDK8 的特性如何简便地进行<strong>并行化开发</strong>。</li>
+</ul>
+<h2 id="爬虫思路"><a href="#爬虫思路" class="headerlink" title="爬虫思路"></a>爬虫思路</h2><p>先说一说自己写这个爬虫时的思路，也算是解决问题的入手点。主要的解析类为 HtmlParser ，负责解析 Html。其实这个程序就是通过 Html 源码解析小说名 Title、小说所含所有章节的 Url、小说每一章的内容，最后将内容按顺序写入文件。</p>
+<h3 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h3><p>解析小说章节目录网址 Html 源码的 <code>&lt;h1&gt;...&lt;/h1&gt;</code> 标签中的值</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 章节目录网址</span><br><span class="line">http:&#x2F;&#x2F;www.biquge.cm&#x2F;9&#x2F;9422&#x2F;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; html</span><br><span class="line">&lt;h1&gt;大道朝天&lt;&#x2F;h1&gt;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; after parse</span><br><span class="line">大道朝天</span><br></pre></td></tr></table></figure>
+<h3 id="Chapter-URIs"><a href="#Chapter-URIs" class="headerlink" title="Chapter URIs"></a>Chapter URIs</h3><p>解析小说章节目录网址 Html 源码的 <code>&lt;div id=&quot;list&quot;&gt;...&lt;/div&gt;</code> 中包含的 <code>&lt;a href=&quot;...&quot;&gt;</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 章节目录网址</span><br><span class="line">http:&#x2F;&#x2F;www.biquge.cm&#x2F;9&#x2F;9422&#x2F;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; html</span><br><span class="line">&lt;div id&#x3D;&quot;list&quot;&gt;</span><br><span class="line">&lt;dl&gt;&lt;dd&gt;&lt;a href&#x3D;&quot;&#x2F;9&#x2F;9422&#x2F;6927857.html&quot;&gt;第一章 三千里禁&lt;&#x2F;a&gt;&lt;&#x2F;dd&gt;</span><br><span class="line">&lt;dd&gt;&lt;a href&#x3D;&quot;&#x2F;9&#x2F;9422&#x2F;6927858.html&quot;&gt;第二章 斩天一剑&lt;&#x2F;a&gt;&lt;&#x2F;dd&gt;</span><br><span class="line">&lt;dd&gt;&lt;a href&#x3D;&quot;&#x2F;9&#x2F;9422&#x2F;6927859.html&quot;&gt;第三章 再次踏进那条河的白衣少年&lt;&#x2F;a&gt;&lt;&#x2F;dd&gt;</span><br><span class="line">...</span><br><span class="line">&lt;&#x2F;dl&gt;&lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; after parse</span><br><span class="line">[&quot;&#x2F;9&#x2F;9422&#x2F;6927859.html&quot;, &quot;&#x2F;9&#x2F;9422&#x2F;6927858.html&quot;, &quot;&#x2F;9&#x2F;9422&#x2F;6927857.html&quot; ...]</span><br></pre></td></tr></table></figure>
+<h3 id="Content"><a href="#Content" class="headerlink" title="Content"></a>Content</h3><p>根据 Chapter URIs 解析每一章的内容，最后拼接在一起写入文件。根据 <code>&lt;div id=&quot;content&quot;&gt;...&lt;/div&gt;</code> 解析，<code>&amp;nbsp;</code> 替换为空格，<code>&lt;br /&gt;</code> 替换为换行符</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 某一章的网址</span><br><span class="line">http:&#x2F;&#x2F;www.biquge.cm&#x2F;9&#x2F;9422&#x2F;6927857.html</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; html</span><br><span class="line">&lt;div id&#x3D;&quot;content&quot;&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;朝天大陆南方，一片青山绵延数千里，数百秀峰终年隐在云雾中。&lt;br &#x2F;&gt;</span><br><span class="line">&lt;br &#x2F;&gt;</span><br><span class="line">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;天下第一修行大派青山宗便在此间，普通人极难一睹真容。&lt;br &#x2F;&gt;</span><br><span class="line">&lt;br &#x2F;&gt;</span><br><span class="line">...</span><br><span class="line">&lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; after parse</span><br><span class="line"></span><br><span class="line">    朝天大陆南方，一片青山绵延数千里，数百秀峰终年隐在云雾中。</span><br><span class="line">    </span><br><span class="line">    天下第一修行大派青山宗便在此间，普通人极难一睹真容。</span><br></pre></td></tr></table></figure>
 <h2 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h2><p>不得不说，Gradle 让我眼前一亮，相比 Maven，它抛弃了冗余繁琐的 XML 格式，使用语法精炼的 <strong>Groovy</strong>，以下就是我的项目构建文件 <strong>build.gradle</strong> 的全部内容，相当于 Maven 的 pom.xml，清爽简短但重要的信息一点不少。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">'java'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">group <span class="string">'xyz.s1mple.crawler'</span></span><br><span class="line">version <span class="string">'1.0-SNAPSHOT'</span></span><br><span class="line"></span><br><span class="line">sourceCompatibility = <span class="number">1.8</span></span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenLocal()</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    testImplementation <span class="string">'org.junit.jupiter:junit-jupiter-api:5.3.1'</span></span><br><span class="line">    testRuntimeOnly <span class="string">'org.junit.jupiter:junit-jupiter-engine:5.3.1'</span></span><br><span class="line">    testCompile <span class="string">'org.assertj:assertj-core:3.11.1'</span></span><br><span class="line">    compile <span class="string">'org.slf4j:slf4j-api:1.7.25'</span></span><br><span class="line">    runtime <span class="string">'org.slf4j:slf4j-simple:1.7.25'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">test &#123;</span><br><span class="line">    useJUnitPlatform()</span><br><span class="line"></span><br><span class="line">    testLogging &#123;</span><br><span class="line">        events <span class="string">"passed"</span>, <span class="string">"skipped"</span>, <span class="string">"failed"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在上面的配置文件中我们可以发现，Gradle 沿用了 Maven 的中央仓库，同时还可以设置 Maven 本地仓库，同时 Gradle 项目生成的构件也可以发布到 Maven 仓库供他人使用，这一点也是支撑 Gradle 快速发展的重要一点。</p>
-<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>关于安装，我使用的 IDE 是 IntelliJ IDEA，使用内置的 Gradle 也可，但最好是下载安装全局的 Gradle，这样可以随时随地跑 Gradle 命令。Mac 下安装十分方便。其他系统如何安装可以在 <a href="https://gradle.org/install/#with-a-package-manager" target="_blank" rel="noopener">Gradle官网</a> 上找到。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>关于安装，我使用的 IDE 是 IntelliJ IDEA，使用内置的 Gradle 也可，但最好是下载安装全局的 Gradle，这样可以随时随地跑 Gradle 命令。Mac 下安装十分方便。其他系统如何安装可以在 <a href="https://gradle.org/install/#with-a-package-manager" target="_blank" rel="noopener">Gradle官网</a> 上找到。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">brew install gradle</span><br></pre></td></tr></table></figure>
-<h4 id="JUnit5"><a href="#JUnit5" class="headerlink" title="JUnit5"></a>JUnit5</h4><p>在使用 Gradle 的时候我遇到了一个问题：明明添加了 JUnit5 也就是 jupiter 的依赖，为什么使用 <code>gradle test</code> 命令没用任何输出。这个问题在我将依赖换回 Junit4 时得到解决，也就是说果然是配置的问题。在 build.gradle 中添加如下配置即可。</p>
+<h3 id="JUnit5"><a href="#JUnit5" class="headerlink" title="JUnit5"></a>JUnit5</h3><p>在使用 Gradle 的时候我遇到了一个问题：明明添加了 JUnit5 也就是 jupiter 的依赖，为什么使用 <code>gradle test</code> 命令没用任何输出。这个问题在我将依赖换回 Junit4 时得到解决，也就是说果然是配置的问题。在 build.gradle 中添加如下配置即可。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    testImplementation <span class="string">'org.junit.jupiter:junit-jupiter-api:5.3.1'</span></span><br><span class="line">    testRuntimeOnly <span class="string">'org.junit.jupiter:junit-jupiter-engine:5.3.1'</span></span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">test &#123;</span><br><span class="line">    useJUnitPlatform()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>还可以添加 <code>testLogging</code>。再运行命令有如下输出<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  web-crawler git:(master) ✗ gradle clean test</span><br><span class="line"></span><br><span class="line">&gt; Task :test</span><br><span class="line"></span><br><span class="line">xyz.s1mple.crawler.HtmlParserTest &gt; should_parse_novel_content_from_html() PASSED</span><br><span class="line"></span><br><span class="line">xyz.s1mple.crawler.HtmlParserTest &gt; should_parse_novel_title_from_html() PASSED</span><br><span class="line"></span><br><span class="line">xyz.s1mple.crawler.HtmlParserTest &gt; should_parse_chapter_uris_from_html() PASSED</span><br><span class="line"></span><br><span class="line">BUILD SUCCESSFUL in 1s</span><br></pre></td></tr></table></figure></p>
-<h2 id="并行"><a href="#并行" class="headerlink" title="并行"></a>并行</h2><p>Java 多线程编程是越来越容易了，从最早的 Thread，Runnable 到 JDK5 的ExecutorService 到 JDK7 的 ForkJoin 框架。现在 JDK8 又提供了<strong>并行流</strong>（<strong>parallelStream</strong>）来简化这一过程。</p>
+<h2 id="并行化"><a href="#并行化" class="headerlink" title="并行化"></a>并行化</h2><p>Java 多线程编程是越来越容易了，从最早的 Thread，Runnable 到 JDK5 的ExecutorService 到 JDK7 的 ForkJoin 框架。现在 JDK8 又提供了<strong>并行流</strong>（<strong>parallelStream</strong>）来简化这一过程。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Integer&gt; cost = Lists.newArrayList(<span class="number">1</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">34</span>);</span><br><span class="line"><span class="keyword">long</span> total = cost.parallelStream()</span><br><span class="line">                    .map(x -&gt; x += <span class="number">1</span>)</span><br><span class="line">                    .reduce((y, z) -&gt; y + z)</span><br><span class="line">                    .get();</span><br></pre></td></tr></table></figure>
 <p>在 parallelStream 中默认线程池大小是机器的 CPU 核数。<strong>默认情况下，所有的 Fork/Join 任务都会共用同一个线程池，线程的数量等于CPU的核数</strong>。所以在未手动设置线程池数量的情况下我的电脑会启动 4 个线程，而爬虫的瓶颈在于网络 I/O 不在 CPU，所以果断自定义线程数。效果也十分显著，爬取两千多章的时间从原先的两分多钟变为 20s。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">final</span> ForkJoinPool pool = <span class="keyword">new</span> ForkJoinPool(PARALLELISM_LEVEL);</span><br><span class="line">pool.submit(() -&gt; urls.parallelStream()</span><br><span class="line">        .map(url -&gt; htmlParser.parseContent(urlReader.read(url)))</span><br><span class="line">        .reduce((x, y) -&gt; x + y)</span><br><span class="line">        .orElse(<span class="string">""</span>))</span><br><span class="line">        .get();</span><br></pre></td></tr></table></figure>
@@ -239,17 +245,98 @@
 <li><code>pool.submit()</code> 该方法为<strong>懒加载</strong>，如果<strong>不调用它的结果则实际不会执行</strong>，最后 <code>.get()</code> 获取执行结果。</li>
 <li><code>.reduce((x, y) -&gt; x + y)</code> 这一步貌似会有很多字符串拼接影响效率，实则底层会使用 <code>StringBuilder</code> 或 <code>StringBuffer</code> 帮你做了性能优化</li>
 </ol>
-<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>关于并行数对爬虫程序的性能影响，实际测试时受网络波动的影响，测试数据可能波动较大，连接每个 Url 的耗时在 50ms ～ 1000ms 波动区间。为减少网络不稳定带来的影响，以下测试分为 100 章、1000 章两个数量级，进行不同并行等级的循环测试，测试 3 轮，时间单位为秒。</p>
-<p><strong>数量级：103 章</strong><br>| PARALLELISM_LEVEL | 1 | 4 | 16 | 64 | 256 |<br>|:—:|:—:|:—:|:—:|:—:|:—:|<br>| 第1次测试 |9|5|2|2|2|<br>| 第2次测试 |8|4|2|2|2|<br>| 第3次测试 |9|3|2|2|3|</p>
-<p><strong>数量级：1180 章</strong><br>| PARALLELISM_LEVEL | 4 | 8 | 16 | 32 | 64 | 128 | 256 |<br>|:—:|:—:|:—:|:—:|:—:|:—:|:—:|:—:|<br>| 第1次测试 |28|16|10|13|12|12|11|<br>| 第2次测试 |23|16|14|11|12|12|14|<br>| 第3次测试 |25|29|14|13|29|20|20|</p>
-<h2 id="爬虫思路"><a href="#爬虫思路" class="headerlink" title="爬虫思路"></a>爬虫思路</h2><p>最后说一说自己写这个爬虫时的思路，也算是解决问题的入手点。主要的解析类为 HtmlParser ，负责解析 Html。其实这个程序就是通过 Html 源码解析小说名 Title、小说所含所有章节的 Url、小说每一章的内容，最后将内容 reduce 写入文件。</p>
-<h4 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h4><p>解析小说章节目录网址 Html 源码的 <code>&lt;h1&gt;...&lt;/h1&gt;</code> 标签中的值</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 章节目录网址</span><br><span class="line">http:&#x2F;&#x2F;www.biquge.cm&#x2F;9&#x2F;9422&#x2F;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; html</span><br><span class="line">&lt;h1&gt;大道朝天&lt;&#x2F;h1&gt;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; after parse</span><br><span class="line">大道朝天</span><br></pre></td></tr></table></figure>
-<h4 id="Chapter-URIs"><a href="#Chapter-URIs" class="headerlink" title="Chapter URIs"></a>Chapter URIs</h4><p>解析小说章节目录网址 Html 源码的 <code>&lt;div id=&quot;list&quot;&gt;...&lt;/div&gt;</code> 中包含的 <code>&lt;a href=&quot;...&quot;&gt;</code></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 章节目录网址</span><br><span class="line">http:&#x2F;&#x2F;www.biquge.cm&#x2F;9&#x2F;9422&#x2F;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; html</span><br><span class="line">&lt;div id&#x3D;&quot;list&quot;&gt;</span><br><span class="line">&lt;dl&gt;&lt;dd&gt;&lt;a href&#x3D;&quot;&#x2F;9&#x2F;9422&#x2F;6927857.html&quot;&gt;第一章 三千里禁&lt;&#x2F;a&gt;&lt;&#x2F;dd&gt;</span><br><span class="line">&lt;dd&gt;&lt;a href&#x3D;&quot;&#x2F;9&#x2F;9422&#x2F;6927858.html&quot;&gt;第二章 斩天一剑&lt;&#x2F;a&gt;&lt;&#x2F;dd&gt;</span><br><span class="line">&lt;dd&gt;&lt;a href&#x3D;&quot;&#x2F;9&#x2F;9422&#x2F;6927859.html&quot;&gt;第三章 再次踏进那条河的白衣少年&lt;&#x2F;a&gt;&lt;&#x2F;dd&gt;</span><br><span class="line">...</span><br><span class="line">&lt;&#x2F;dl&gt;&lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; after parse</span><br><span class="line">[&quot;&#x2F;9&#x2F;9422&#x2F;6927859.html&quot;, &quot;&#x2F;9&#x2F;9422&#x2F;6927858.html&quot;, &quot;&#x2F;9&#x2F;9422&#x2F;6927857.html&quot; ...]</span><br></pre></td></tr></table></figure>
-<h4 id="Content"><a href="#Content" class="headerlink" title="Content"></a>Content</h4><p>根据 Chapter URIs 解析每一章的内容，最后拼接在一起写入文件。根据 <code>&lt;div id=&quot;content&quot;&gt;...&lt;/div&gt;</code> 解析，<code>&amp;nbsp;</code> 替换为空格，<code>&lt;br /&gt;</code> 替换为换行符</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 某一章的网址</span><br><span class="line">http:&#x2F;&#x2F;www.biquge.cm&#x2F;9&#x2F;9422&#x2F;6927857.html</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; html</span><br><span class="line">&lt;div id&#x3D;&quot;content&quot;&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;朝天大陆南方，一片青山绵延数千里，数百秀峰终年隐在云雾中。&lt;br &#x2F;&gt;</span><br><span class="line">&lt;br &#x2F;&gt;</span><br><span class="line">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;天下第一修行大派青山宗便在此间，普通人极难一睹真容。&lt;br &#x2F;&gt;</span><br><span class="line">&lt;br &#x2F;&gt;</span><br><span class="line">...</span><br><span class="line">&lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; after parse</span><br><span class="line"></span><br><span class="line">    朝天大陆南方，一片青山绵延数千里，数百秀峰终年隐在云雾中。</span><br><span class="line">    </span><br><span class="line">    天下第一修行大派青山宗便在此间，普通人极难一睹真容。</span><br></pre></td></tr></table></figure>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><p>关于并行数对爬虫程序的性能影响，实际测试时受网络波动的影响，测试数据可能波动较大，连接每个 Url 的耗时在 50ms ～ 1000ms 波动区间。为减少网络不稳定带来的影响，以下测试分为 100 章、1000 章两个数量级，进行不同并行等级的循环测试，测试 3 轮，时间单位为秒。</p>
+<p><strong>数量级：103 章</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">PARALLELISM_LEVEL</th>
+<th style="text-align:center">1</th>
+<th style="text-align:center">4</th>
+<th style="text-align:center">16</th>
+<th style="text-align:center">64</th>
+<th style="text-align:center">256</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">第1次测试</td>
+<td style="text-align:center">9</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+</tr>
+<tr>
+<td style="text-align:center">第2次测试</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+</tr>
+<tr>
+<td style="text-align:center">第3次测试</td>
+<td style="text-align:center">9</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>数量级：1180 章</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">PARALLELISM_LEVEL</th>
+<th style="text-align:center">4</th>
+<th style="text-align:center">8</th>
+<th style="text-align:center">16</th>
+<th style="text-align:center">32</th>
+<th style="text-align:center">64</th>
+<th style="text-align:center">128</th>
+<th style="text-align:center">256</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">第1次测试</td>
+<td style="text-align:center">28</td>
+<td style="text-align:center">16</td>
+<td style="text-align:center">10</td>
+<td style="text-align:center">13</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">11</td>
+</tr>
+<tr>
+<td style="text-align:center">第2次测试</td>
+<td style="text-align:center">23</td>
+<td style="text-align:center">16</td>
+<td style="text-align:center">14</td>
+<td style="text-align:center">11</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">14</td>
+</tr>
+<tr>
+<td style="text-align:center">第3次测试</td>
+<td style="text-align:center">25</td>
+<td style="text-align:center">29</td>
+<td style="text-align:center">14</td>
+<td style="text-align:center">13</td>
+<td style="text-align:center">29</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">20</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="http://www.infoq.com/cn/news/2011/04/xxb-maven-6-gradle" target="_blank" rel="noopener">Gradle，构建工具的未来？</a></li>
 <li><a href="https://medium.com/@jonashavers/how-to-use-junit-5-with-gradle-fb7c5c3286cc" target="_blank" rel="noopener">How to use JUnit 5 with Gradle</a></li>
 </ul>
@@ -5976,7 +6063,7 @@
       </tags>
   </entry>
   <entry>
-    <title>流处理框架介绍: Storm、Flink &amp; Spark</title>
+    <title>流处理框架介绍: Storm、Spark &amp; Flink</title>
     <url>/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>与传统的批处理（Batch processing）相比，流处理（Streaming processing）处理的是实时的持续数据流，也被称为无界数据集（unbounded datasets），亦即能够持续增长的、不可预测的无限数据集。而批处理处理的是有界数据集（bounded datasets），有界数据集是有限的不变的，存在开始和结束，也被称之为历史数据集（historic datasets）。</p>
 <p>通常，为了应对高速流动的无界数据流，流处理对于处理效率要求更高，内存占用要求更低，与之相对的，相较批处理对于错误的容忍度要更高。</p>
@@ -6017,12 +6104,12 @@
 <p>在同一年，Hadoop 的创始人受 MapReduce 编程模型等一系列论文的启发，对论文中提出的模型进行了编程实现。时至今日，Hadoop 不仅仅是整个大数据领域的先行者和领导者，更形成了一套围绕 Hadoop 的生态系统，成为企业首选的大数据解决方案。不论是 Storm、Spark 还是 Flink 都是敞开怀抱拥抱 Hadoop 生态并融入成为了生态圈的一部分。</p>
 <p><img src="/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/7.png" alt="e2dc809939ef9af086d3197d3e648b0e.png"></p>
 <p>Hadoop 虽然已被公认为大数据分析领域无可争辩的王者，但它更加专注于批处理，并不适合做实时计算。随着 Hadoop 生态的繁荣发展，诞生了一批流处理框架，本质上它们的核心处理流程也不偏离 MapReduce 思想：</p>
-<p><img src="/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/8.jpg" alt="67fc13f9d829042f7b800522e416d280.jpeg"></p>
 <ul>
 <li><strong>第一代</strong>被广泛采用的流处理框架是 Storm，但由于 Storm 只支持 “at least once” 语义，对于很多对数据准确性要求较高的应用，Storm 有一定劣势。</li>
 <li><strong>第二代</strong>非常流行的流处理框架是 Spark Streaming。Spark Streaming 使用微批处理的思想，每次处理一小批数据，以接近实时处理的效果。也正是由于时间间隔的存在，导致 Spark Streaming 的“实时处理”延迟较大，一般适用于延迟是秒级别的实时计算应用。但 Spark Streaming 的优势是拥有 Spark 这个靠山，用户从 Spark 迁移到 Spark Streaming 的成本较低，因此能给用户提供一个批量和流式于一体的计算框架。</li>
 <li><strong>第三代</strong>流处理框架 Flink 是一个支持在有界和无界数据流上做有状态计算的大数据引擎。它以事件为单位，并且支持 SQL、State、WaterMark 等特性。比起 Storm，它的吞吐量更高，延迟更低，准确性能得到保障；比起 Spark Streaming，它以事件为单位，达到真正意义上的实时计算，且所需计算资源相对更少。</li>
 </ul>
+<p><img src="/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/8.jpg" alt="67fc13f9d829042f7b800522e416d280.jpeg"></p>
 <p>Spark 和 Flink 各有所长，也在相互竞争、相互借鉴。可以说 Spark 是以批处理起家的，通过使用内存计算比传统 Hadoop MapReduce 具有显著性能优势，Spark 已经成为行业内大数据批处理的首选处理引擎。但在处理稍微复杂点的实时流处理场景 (比如各种窗口、状态等) ，Flink 要比 Spark Streaming 更具有显著优势。事实证明，阿里最终在流处理框架选型中选择了 Flink，并在其之上开发了自己的流处理框架 Blink，并对 Flink 社区提供了贡献，包括促进 Flink 流处理、批处理一体化等。</p>
 <h2 id="流批一体"><a href="#流批一体" class="headerlink" title="流批一体"></a>流批一体</h2><p>现如今，流批一体已经越来越成为一种趋势，它旨在将流处理和批处理通过一套相同的处理逻辑来实现。流批一体意味着计算引擎同时具备流计算的低延迟和批计算的高吞吐高稳定性，提供统一编程接口开发两种场景的应用并保证它们的底层执行逻辑是一致的。</p>
 <p>2015 年，Google 提出了 <a href="https://www.vldb.org/pvldb/vol8/p1792-Akidau.pdf" target="_blank" rel="noopener">Dataflow</a> 模型，旨在提供一种统一批处理和流处理的解决方案。作为 Dataflow 模型的最早采用者之一，Apache Flink 在流批一体特性的完成度上在开源项目中是十分领先的。Flink 遵循 Dataflow 模型的理念: <strong>批处理是流处理的特例</strong>，亦即批处理处理的是无界数据流上的一小段有界数据流。Flink 设计之初流处理应用和批处理应用底层都是流处理，但在编程 API 上是分开的。</p>
@@ -6036,7 +6123,7 @@
 <li><a href="https://confucianzuoyuan.github.io/flink-tutorial/book/chapter03-05-02-%E4%BB%8E%E4%B8%80%E8%87%B4%E6%A3%80%E6%9F%A5%E7%82%B9%E4%B8%AD%E6%81%A2%E5%A4%8D%E7%8A%B6%E6%80%81.html" target="_blank" rel="noopener">尚硅谷Flink教程</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/94302767" target="_blank" rel="noopener">从Hadoop到Spark、Flink，大数据处理框架十年激荡发展史</a></li>
 <li><a href="https://developer.aliyun.com/article/754468" target="_blank" rel="noopener">Flink 流批一体的实践与探索 —— 阿里云开发者社区</a></li>
-<li><a href="https://www.vldb.org/pvldb/vol8/p1792-Akidau.pdf" target="_blank" rel="noopener">The Dataflow Model: A Practical Approach to Balancing<br>Correctness, Latency, and Cost in Massive-Scale,<br>Unbounded, Out-of-Order Data Processing</a></li>
+<li><a href="https://www.vldb.org/pvldb/vol8/p1792-Akidau.pdf" target="_blank" rel="noopener">The Dataflow Model: A Practical Approach to Balancing Correctness, Latency, and Cost in Massive-Scale, Unbounded, Out-of-Order Data Processing</a></li>
 </ul>
 ]]></content>
       <categories>

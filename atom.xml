@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://s1mplecc.github.io/"/>
-  <updated>2020-11-25T11:33:56.467Z</updated>
+  <updated>2020-11-25T11:39:41.443Z</updated>
   <id>https://s1mplecc.github.io/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>流处理框架介绍: Storm、Flink &amp; Spark</title>
+    <title>流处理框架介绍: Storm、Spark &amp; Flink</title>
     <link href="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/"/>
     <id>https://s1mplecc.github.io/2020/11/23/流处理框架介绍-Storm、Flink-Spark/</id>
     <published>2020-11-23T09:03:00.000Z</published>
-    <updated>2020-11-25T11:33:56.467Z</updated>
+    <updated>2020-11-25T11:39:41.443Z</updated>
     
     <summary type="html">
     
@@ -521,7 +521,7 @@
     <link href="https://s1mplecc.github.io/2018/11/05/Java%20%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/"/>
     <id>https://s1mplecc.github.io/2018/11/05/Java 网络爬虫/</id>
     <published>2018-11-05T05:15:21.000Z</published>
-    <updated>2020-09-16T01:48:41.867Z</updated>
+    <updated>2020-11-25T11:46:56.646Z</updated>
     
     <summary type="html">
     
