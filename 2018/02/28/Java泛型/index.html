@@ -120,7 +120,7 @@
 <meta property="og:description" content="前言我的上一篇博客 Java泛型与擦除只是对于 Java 泛型和类型擦除做了一个简要的介绍，本文主要是针对 Java 泛型做一些更深入的补充说明。 泛型的引入在没有泛型之前，我们如果想向一个 Box 类中装入一个不知道类型的对象，只能使用 Object 这个顶级父类来操作盒子中的对象。 123456public class Box &amp;#123;    private Object object;">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-02-27T22:01:53.000Z">
-<meta property="article:modified_time" content="2020-11-25T12:19:58.132Z">
+<meta property="article:modified_time" content="2020-11-25T12:31:58.480Z">
 <meta property="article:author" content="s1mple">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -433,7 +433,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-11-25 20:19:58" itemprop="dateModified" datetime="2020-11-25T20:19:58+08:00">2020-11-25</time>
+                <time title="修改时间：2020-11-25 20:31:58" itemprop="dateModified" datetime="2020-11-25T20:31:58+08:00">2020-11-25</time>
               
             
           </span>
@@ -525,28 +525,56 @@
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我的上一篇博客 <a href="https://s1mple.online/java-generic-type-erasure/" target="_blank" rel="noopener">Java泛型与擦除</a>只是对于 Java 泛型和类型擦除做了一个简要的介绍，本文主要是针对 Java 泛型做一些更深入的补充说明。</p>
 <h2 id="泛型的引入"><a href="#泛型的引入" class="headerlink" title="泛型的引入"></a>泛型的引入</h2><p>在没有泛型之前，我们如果想向一个 Box 类中装入一个不知道类型的对象，只能使用 <strong>Object</strong> 这个顶级父类来操作盒子中的对象。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object object;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(Object object)</span> </span>&#123; <span class="keyword">this</span>.object = object; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">get</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> object; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>而引入了泛型自后，代码修改如下：</p>
+<p>而引入了泛型之后，代码修改如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Generic version of the Box class.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;T&gt; the type of the value being boxed</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">// T stands for "Type"</span></span><br><span class="line">    <span class="keyword">private</span> T t;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(T t)</span> </span>&#123; <span class="keyword">this</span>.t = t; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> t; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们定义了一个装有 <strong>T</strong> 类型的 Box 类。在使用时可以随心所欲，既可创建一个专门装 String 的 Box ，也可创建一个装 Integer 的 Box。</p>
+<p>我们定义了一个装有 T 类型的 Box 类。在使用时可以随心所欲，既可创建一个专门装 String 的 Box ，也可创建一个装 Integer 的 Box。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Box&lt;String&gt; bs = <span class="keyword">new</span> Box&lt;String&gt;();</span><br><span class="line">Box&lt;Integer&gt; bi = <span class="keyword">new</span> Box&lt;Integer&gt;();</span><br></pre></td></tr></table></figure>
 <p>甚至于我们在定义 Box 时可以更加苛刻，只允许这个盒子装入一个数字类型的对象。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Number</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>那么，如果你想在创建一个装 String 的 Box 就得报错了。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Error: Type Parameter 'String' is not within its bound; should extend 'Number'</span></span><br><span class="line"><span class="comment">// Box&lt;String&gt; bs = new Box&lt;String&gt;();</span></span><br></pre></td></tr></table></figure>
-<p><strong>Tips</strong>：在 Java SE 7之后，允许我们使用如下更简洁的语法<code>Box&lt;Integer&gt; integerBox = new Box&lt;&gt;();</code>，因为编译器能够推断出上下文的类型参数，所以没必要做冗余的声明。</p>
+<p><strong>Tips</strong>：在 Java SE 7之后，允许我们使用如下更简洁的语法 <code>Box&lt;Integer&gt; integerBox = new Box&lt;&gt;();</code>，因为编译器能够推断出上下文的类型参数，所以没必要做冗余的声明。</p>
 <h2 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h2><p>泛型方法是声明了自己的类型参数的方法。泛型方法的类型参数的<strong>作用域</strong>仅限于声明它的方法内部。允许静态和非静态的泛型方法，即可以用 <strong>static</strong> 修饰。泛型方法的语法是<strong>在方法的返回类型之前包含一个尖括号列出的类型参数列表</strong>。</p>
 <p>示范代码如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestGenericsMethod</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">printClassName</span><span class="params">(T x)</span> </span>&#123;</span><br><span class="line">        System.out.println(x.getClass().getSimpleName());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        TestGenericsMethod test = <span class="keyword">new</span> TestGenericsMethod();</span><br><span class="line">        test.printClassName(<span class="string">" "</span>);</span><br><span class="line">        test.printClassName(<span class="number">10</span>);</span><br><span class="line">        test.printClassName(<span class="string">'a'</span>);</span><br><span class="line">        test.printClassName(test);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// String</span></span><br><span class="line"><span class="comment">// Integer</span></span><br><span class="line"><span class="comment">// Character</span></span><br><span class="line"><span class="comment">// TestGenerics</span></span><br></pre></td></tr></table></figure>
-<h2 id="泛型的类型变量"><a href="#泛型的类型变量" class="headerlink" title="泛型的类型变量"></a>泛型的类型变量</h2><p><strong>类型变量</strong>( or <strong>Type Variable</strong>) ,即上述代码的 <strong>T</strong> ，用于代表一类类型，声明之后可以在 class 中使用。</p>
-<h3 id="类型参数命名惯例"><a href="#类型参数命名惯例" class="headerlink" title="类型参数命名惯例"></a>类型参数命名惯例</h3><p>按照惯例，类型参数使用<strong>单个大写字母</strong>表示，虽然这个字母命名并不强求，比如上述代码中的<code>&lt;T&gt;</code>，你可以使用<code>&lt;U&gt;</code>等等代替，但是如下是<strong>类型参数的命名惯例</strong>：</p>
-<ul>
-<li>T - Type</li>
-<li>S,U,V etc. - 2nd, 3rd, 4th types</li>
-<li>E - Element (被广泛适用于 Java 的集合类中，表示集合中的元素类型)</li>
-<li>K - Key</li>
-<li>V - Value</li>
-<li>N - Number</li>
-</ul>
+<h2 id="泛型的类型变量"><a href="#泛型的类型变量" class="headerlink" title="泛型的类型变量"></a>泛型的类型变量</h2><p><strong>类型变量</strong>( or <strong>Type Variable</strong>) ,即上述代码的 T，用于代表一类类型，声明之后可以在 class 中使用。</p>
+<h3 id="命名惯例"><a href="#命名惯例" class="headerlink" title="命名惯例"></a>命名惯例</h3><p>按照惯例，类型参数使用<strong>单个大写字母</strong>表示，虽然这个字母命名并不强求，比如上述代码中的<code>&lt;T&gt;</code>，你可以使用<code>&lt;U&gt;</code>等等代替，但是如下是<strong>类型参数的命名惯例</strong>：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命名简写</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">T</td>
+<td>Type</td>
+</tr>
+<tr>
+<td style="text-align:center">S,U,V etc.</td>
+<td>2nd, 3rd, 4th types</td>
+</tr>
+<tr>
+<td style="text-align:center">E</td>
+<td>Element (被广泛适用于 Java 的集合类中，表示集合中的元素类型)</td>
+</tr>
+<tr>
+<td style="text-align:center">K</td>
+<td>Key</td>
+</tr>
+<tr>
+<td style="text-align:center">V</td>
+<td>Value</td>
+</tr>
+<tr>
+<td style="text-align:center">N</td>
+<td>Number</td>
+</tr>
+</tbody>
+</table>
+</div>
 <h3 id="多个类型参数"><a href="#多个类型参数" class="headerlink" title="多个类型参数"></a>多个类型参数</h3><p>定义泛型类或接口时可以使用多个类型参数，一个典型案例就是 Map，它存储一对键值对，我截取了一段 Map.Entry 的源码：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">K <span class="title">getKey</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">V <span class="title">getValue</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">V <span class="title">setValue</span><span class="params">(V value)</span></span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>我们知道 HashMap 是继承了 Map 的，所以在使用时可以这样使用：</p>
@@ -866,7 +894,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型的引入"><span class="nav-number">2.</span> <span class="nav-text">泛型的引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型方法"><span class="nav-number">3.</span> <span class="nav-text">泛型方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型的类型变量"><span class="nav-number">4.</span> <span class="nav-text">泛型的类型变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类型参数命名惯例"><span class="nav-number">4.1.</span> <span class="nav-text">类型参数命名惯例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多个类型参数"><span class="nav-number">4.2.</span> <span class="nav-text">多个类型参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通配符与-T-的区别"><span class="nav-number">4.3.</span> <span class="nav-text">通配符与 T 的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型示例之-LinkedStack"><span class="nav-number">5.</span> <span class="nav-text">泛型示例之 LinkedStack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型的引入"><span class="nav-number">2.</span> <span class="nav-text">泛型的引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型方法"><span class="nav-number">3.</span> <span class="nav-text">泛型方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型的类型变量"><span class="nav-number">4.</span> <span class="nav-text">泛型的类型变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#命名惯例"><span class="nav-number">4.1.</span> <span class="nav-text">命名惯例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多个类型参数"><span class="nav-number">4.2.</span> <span class="nav-text">多个类型参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通配符与-T-的区别"><span class="nav-number">4.3.</span> <span class="nav-text">通配符与 T 的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型示例之-LinkedStack"><span class="nav-number">5.</span> <span class="nav-text">泛型示例之 LinkedStack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
