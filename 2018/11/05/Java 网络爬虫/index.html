@@ -112,15 +112,15 @@
 
 
 
-  <meta name="description" content="目标编写一个 Java 的爬虫程序，并行爬取小说网站上的小说。代码已上传至 GitHub。本文主要关注：  爬虫程序思路。 使用 Gradle 构建项目时遇到的问题以及解决办法。 使用 JDK8 的特性如何简便地进行并行化开发。  爬虫思路先说一说自己写这个爬虫时的思路，也算是解决问题的入手点。主要的解析类为 HtmlParser ，负责解析 Html。其实这个程序就是通过 Html 源码解析小说">
+  <meta name="description" content="目标编写一个 Java 的爬虫程序，并行爬取小说网站上的小说。代码已上传至 GitHub。Python 编写的爬虫请见50 行代码实现一个并发的 Python 爬虫程序。本文主要关注：  爬虫程序思路 使用 Gradle 构建项目时遇到的问题以及解决办法 使用 JDK8 的特性如何简便地进行并行化开发  爬虫思路先说一说自己写这个爬虫时的思路，也算是解决问题的入手点。主要的解析类为 HtmlPar">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 网络爬虫">
 <meta property="og:url" content="https://s1mplecc.github.io/2018/11/05/Java%20%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/index.html">
 <meta property="og:site_name" content="s1mple的博客">
-<meta property="og:description" content="目标编写一个 Java 的爬虫程序，并行爬取小说网站上的小说。代码已上传至 GitHub。本文主要关注：  爬虫程序思路。 使用 Gradle 构建项目时遇到的问题以及解决办法。 使用 JDK8 的特性如何简便地进行并行化开发。  爬虫思路先说一说自己写这个爬虫时的思路，也算是解决问题的入手点。主要的解析类为 HtmlParser ，负责解析 Html。其实这个程序就是通过 Html 源码解析小说">
+<meta property="og:description" content="目标编写一个 Java 的爬虫程序，并行爬取小说网站上的小说。代码已上传至 GitHub。Python 编写的爬虫请见50 行代码实现一个并发的 Python 爬虫程序。本文主要关注：  爬虫程序思路 使用 Gradle 构建项目时遇到的问题以及解决办法 使用 JDK8 的特性如何简便地进行并行化开发  爬虫思路先说一说自己写这个爬虫时的思路，也算是解决问题的入手点。主要的解析类为 HtmlPar">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-11-05T05:15:21.000Z">
-<meta property="article:modified_time" content="2020-11-25T11:46:56.646Z">
+<meta property="article:modified_time" content="2020-11-25T11:55:30.168Z">
 <meta property="article:author" content="s1mple">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -433,7 +433,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-11-25 19:46:56" itemprop="dateModified" datetime="2020-11-25T19:46:56+08:00">2020-11-25</time>
+                <time title="修改时间：2020-11-25 19:55:30" itemprop="dateModified" datetime="2020-11-25T19:55:30+08:00">2020-11-25</time>
               
             
           </span>
@@ -498,7 +498,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">5k</span>
+                <span title="本文字数">5.1k</span>
               
 
               
@@ -522,11 +522,11 @@
       
 
       
-        <h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>编写一个 Java 的爬虫程序，并行爬取小说网站上的小说。代码已上传至 <a href="https://github.com/s1mplecc/web-crawler" target="_blank" rel="noopener">GitHub</a>。本文主要关注：</p>
+        <h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>编写一个 Java 的爬虫程序，并行爬取小说网站上的小说。代码已上传至 <a href="https://github.com/s1mplecc/web-crawler" target="_blank" rel="noopener">GitHub</a>。Python 编写的爬虫请见<a href="https://s1mple.online/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/" target="_blank" rel="noopener">50 行代码实现一个并发的 Python 爬虫程序</a>。本文主要关注：</p>
 <ul>
-<li>爬虫程序思路。</li>
-<li>使用 <strong>Gradle</strong> 构建项目时遇到的问题以及解决办法。</li>
-<li>使用 JDK8 的特性如何简便地进行<strong>并行化开发</strong>。</li>
+<li>爬虫程序思路</li>
+<li>使用 <strong>Gradle</strong> 构建项目时遇到的问题以及解决办法</li>
+<li>使用 JDK8 的特性如何简便地进行<strong>并行化开发</strong></li>
 </ul>
 <h2 id="爬虫思路"><a href="#爬虫思路" class="headerlink" title="爬虫思路"></a>爬虫思路</h2><p>先说一说自己写这个爬虫时的思路，也算是解决问题的入手点。主要的解析类为 HtmlParser ，负责解析 Html。其实这个程序就是通过 Html 源码解析小说名 Title、小说所含所有章节的 Url、小说每一章的内容，最后将内容按顺序写入文件。</p>
 <h3 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h3><p>解析小说章节目录网址 Html 源码的 <code>&lt;h1&gt;...&lt;/h1&gt;</code> 标签中的值</p>
@@ -548,10 +548,10 @@
 <p>在 parallelStream 中默认线程池大小是机器的 CPU 核数。<strong>默认情况下，所有的 Fork/Join 任务都会共用同一个线程池，线程的数量等于CPU的核数</strong>。所以在未手动设置线程池数量的情况下我的电脑会启动 4 个线程，而爬虫的瓶颈在于网络 I/O 不在 CPU，所以果断自定义线程数。效果也十分显著，爬取两千多章的时间从原先的两分多钟变为 20s。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> ForkJoinPool pool = <span class="keyword">new</span> ForkJoinPool(PARALLELISM_LEVEL);</span><br><span class="line">pool.submit(() -&gt; urls.parallelStream()</span><br><span class="line">        .map(url -&gt; htmlParser.parseContent(urlReader.read(url)))</span><br><span class="line">        .reduce((x, y) -&gt; x + y)</span><br><span class="line">        .orElse(<span class="string">""</span>))</span><br><span class="line">        .get();</span><br></pre></td></tr></table></figure>
 <p>需要注意两点：</p>
-<ol>
+<ul>
 <li><code>pool.submit()</code> 该方法为<strong>懒加载</strong>，如果<strong>不调用它的结果则实际不会执行</strong>，最后 <code>.get()</code> 获取执行结果。</li>
-<li><code>.reduce((x, y) -&gt; x + y)</code> 这一步貌似会有很多字符串拼接影响效率，实则底层会使用 <code>StringBuilder</code> 或 <code>StringBuffer</code> 帮你做了性能优化</li>
-</ol>
+<li><code>.reduce((x, y) -&gt; x + y)</code> 这一步貌似会有很多字符串拼接影响效率，实则底层会使用 <code>StringBuilder</code> 或 <code>StringBuffer</code> 帮你做了性能优化。</li>
+</ul>
 <h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><p>关于并行数对爬虫程序的性能影响，实际测试时受网络波动的影响，测试数据可能波动较大，连接每个 Url 的耗时在 50ms ～ 1000ms 波动区间。为减少网络不稳定带来的影响，以下测试分为 100 章、1000 章两个数量级，进行不同并行等级的循环测试，测试 3 轮，时间单位为秒。</p>
 <p><strong>数量级：103 章</strong></p>
 <div class="table-container">
@@ -776,7 +776,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">68</span>
+                    <span class="site-state-item-count">67</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -876,9 +876,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-count">29</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

@@ -681,238 +681,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/02/24/Java%E6%B3%9B%E5%9E%8B%E4%B9%8BLinkedStack/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/02/24/Java%E6%B3%9B%E5%9E%8B%E4%B9%8BLinkedStack/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Java 泛型之 LinkedStack</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-02-24 03:38:55" itemprop="dateCreated datePublished" datetime="2018-02-24T03:38:55+08:00">2018-02-24</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/02/24/Java%E6%B3%9B%E5%9E%8B%E4%B9%8BLinkedStack/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/02/24/Java泛型之LinkedStack/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">2.7k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>Java 泛型可以说是大大增强了这门语言的动态性和灵活性，本文基于《Java 编程思想》上的代码案例，实现了一个带泛型的<strong>下推堆栈 LinkedStack</strong> ，也算是巩固一下 Java 泛型和数据结构的知识</p>
-</blockquote>
-<ul>
-<li>示例代码已经提交到 Github 上，<a href="https://github.com/s1mplecc/MyLinkedStack" target="_blank" rel="noopener">链接</a></li>
-</ul>
-<h2 id="LinkedStack"><a href="#LinkedStack" class="headerlink" title="LinkedStack"></a>LinkedStack</h2><ul>
-<li><p><strong>LinkedStack</strong> 类的代码</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">package info.s1mple;</span><br><span class="line"></span><br><span class="line">public class LinkedStack&lt;T&gt; &#123;</span><br><span class="line">    private static class Node&lt;T&gt; &#123;</span><br><span class="line">        T item;</span><br><span class="line">        Node&lt;T&gt; next; &#x2F;&#x2F;下一个节点的引用，类似于C中的指针</span><br><span class="line"></span><br><span class="line">        Node() &#123; &#x2F;&#x2F;没有参数的Constructor，用于初始化时生成栈顶</span><br><span class="line">            item &#x3D; null;</span><br><span class="line">            next &#x3D; null;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Node(T item, Node&lt;T&gt; next) &#123;</span><br><span class="line">            this.item &#x3D; item;</span><br><span class="line">            this.next &#x3D; next;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        boolean isEmpty() &#123; &#x2F;&#x2F;栈空标记</span><br><span class="line">            return item &#x3D;&#x3D; null &amp;&amp; next &#x3D;&#x3D; null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Node&lt;T&gt; top &#x3D; new Node&lt;&gt;(); &#x2F;&#x2F;初始化栈顶</span><br><span class="line"></span><br><span class="line">    public void push(T item) &#123;</span><br><span class="line">        top &#x3D; new Node&lt;&gt;(item, top); &#x2F;&#x2F;与上一节点链接</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public T pop() &#123;</span><br><span class="line">        T result &#x3D; top.item;</span><br><span class="line">        if (!top.isEmpty()) &#123;</span><br><span class="line">            top &#x3D; top.next; &#x2F;&#x2F;指针后移</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<blockquote>
-<p>定义了一个 <strong>LinkedStack</strong> 类，包含一个内部类 <strong>Node</strong> ，模型化了链表的 Node 节点，包括<strong>值</strong>和<strong>指向下一个节点的指针</strong>俩个部分，<strong>堆栈可以看成最左边是栈顶的单链表</strong>，通过<code>top = new Node&lt;&gt;(item,top);</code>将节点串联起来</p>
-</blockquote>
-<p><img src="/2018/02/24/Java%E6%B3%9B%E5%9E%8B%E4%B9%8BLinkedStack/0.png" alt="linked"></p>
-<h2 id="Testing"><a href="#Testing" class="headerlink" title="Testing"></a>Testing</h2><ul>
-<li><p>测试类的代码，测试 String 和 Integer 两种类型</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import info.s1mple.LinkedStack;</span><br><span class="line">import org.junit.jupiter.api.Test;</span><br><span class="line"></span><br><span class="line">class LinkedStackTest &#123;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    void should_string_success() &#123;</span><br><span class="line">        LinkedStack&lt;String&gt; lss &#x3D; new LinkedStack&lt;&gt;();</span><br><span class="line">        for (String s : &quot;This is an Apple.&quot;.split(&quot; &quot;)) &#123;</span><br><span class="line">            lss.push(s);</span><br><span class="line">        &#125;</span><br><span class="line">        String s;</span><br><span class="line">        while ((s &#x3D; lss.pop()) !&#x3D; null) &#123;</span><br><span class="line">            System.out.println(s);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    void should_integer_success() &#123;</span><br><span class="line">        LinkedStack&lt;Integer&gt; lsi &#x3D; new LinkedStack&lt;&gt;();</span><br><span class="line">        for (int i : new int[]&#123;1, 2, 3, 4, 5&#125;) &#123;</span><br><span class="line">            lsi.push(i);</span><br><span class="line">        &#125;</span><br><span class="line">        Integer i;</span><br><span class="line">        while ((i &#x3D; lsi.pop()) !&#x3D; null) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<blockquote>
-<p>需要注意的是，上述代码第24行<code>Integer i</code>必须是 <strong>Integer</strong> 而不能是 <strong>int</strong> ，否则25行<code>!=null</code>会报错。这是因为 Java 的<strong>自动包装机制</strong> ，基础数据类型会被包装成对应的对象 ，泛型只支持 <strong>Object</strong> 对象，也正是通过自动包装机制而间接支持基础数据类型</p>
-</blockquote>
-<ul>
-<li><p>String 类型和 Integer 类型的测试结果<br>  <img src="/2018/02/24/Java%E6%B3%9B%E5%9E%8B%E4%B9%8BLinkedStack/1.png" alt="Screen-Shot-2018-02-24-at-2.29.06-PM-2"></p>
-<p>  <img src="/2018/02/24/Java%E6%B3%9B%E5%9E%8B%E4%B9%8BLinkedStack/2.png" alt="Screen-Shot-2018-02-24-at-2.32.11-PM"></p>
-</li>
-</ul>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
-<p>可以看到两种类型都可以正常运行，并满足堆栈<strong>先进后出</strong>的特点。在定义 <strong>LinkedStack</strong> 时通过<code>&lt;T&gt;</code>和<code>T item</code>引用泛型。在使用时通过<code>LinkedStack&lt;String&gt; lss = new LinkedStack&lt;&gt;();</code>或者<code>LinkedStack&lt;Integer&gt; lsi = new LinkedStack&lt;&gt;();</code>指定具体类型。而正是泛型给 Java 这种静态语言提供了<strong>动态性</strong></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2967,7 +2735,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">JavaScript 相关介绍</a>
+                <a href="/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">JavaScript 简介</a>
               
             
           </h1>
@@ -3009,7 +2777,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
+                <time title="修改时间：2020-11-25 20:07:16" itemprop="dateModified" datetime="2020-11-25T20:07:16+08:00">2020-11-25</time>
               
             
           </span>
@@ -3066,7 +2834,231 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">2.1k</span>
+                <span title="本文字数">2k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>JavaScript</strong>是目前前端开发中最流行的语言，在学习的过程中会遇到各种<strong>JS</strong>有关的名词。本文章的主要目的是介绍<strong>ECMAScript</strong>(or <strong>ES</strong>)、<strong>CommonJS</strong>、<strong>Node.js</strong>、<strong>Vue.js</strong>或<strong>AngularJS</strong>等与<strong>JavaScript</strong>之间的联系。</p>
+<h2 id="ECMAScript"><a href="#ECMAScript" class="headerlink" title="ECMAScript"></a>ECMAScript</h2><p><strong>ECMAScript</strong>和<strong>JavaScript</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>（另外的实现还有<strong>Jscript</strong> 和<strong>ActionScript</strong>等）。</p>
+<p><strong>JavaScript</strong>的创造者<strong>Netscape</strong>公司，将<strong>JavaScript</strong>提交给国际标准化组织<strong>ECMA</strong>，希望这种语言能够成为国际标准，标准委员会最终决定，标准在每年的6月份正式发布一次，作为当年的正式版本。</p>
+<p>目前的几乎所有的浏览器（不包括低版本的IE），都已经支持<strong>ES5</strong>了，而写代码时最好采用<strong>ES6</strong>语法（毕竟语法糖写起来更舒服，还添加了很多必要的新特性，而且浏览器全面支持<strong>ES6</strong>是迟早的事）。不用担心浏览器不能识别新语法，<strong>Bable</strong>就是用来解决这种问题的工具。</p>
+<p><strong>Babel</strong>是一个广泛使用的<strong>ES6</strong>转码器，可以将<strong>ES6</strong>代码转为<strong>ES5</strong>代码，从而在浏览器环境运行。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 转码前</span></span><br><span class="line">input.map(<span class="function"><span class="params">item</span> =&gt;</span> item + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转码后</span></span><br><span class="line">input.map(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item + <span class="number">1</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><p>在介绍<strong>CommonJS</strong>之前有必要先介绍一下<strong>Node.js</strong>。首先明确一点，<strong>JavaScript</strong>和<strong>Python</strong>一样，是一种脚本语言，或者是<strong>解释型语言</strong>，和<strong>C、C++</strong> 这种需要编译成可执行文件再运行的语言不同，它的运行只需要解释器能够解释执行即可，而不需要编译器。<strong>浏览器</strong>就包含了解释执行网页中的<strong>JavaScript</strong>代码的功能。</p>
+<p>伴随着互联网和<strong>JavaScript</strong>语言的快速发展，人们不仅仅局限于拿JS来做前端开发，所以<strong>Node.js</strong>随之应运而生。<strong>Node.js</strong>作为一个后端的<strong>Javascrip</strong>t运行环境（解释器），这意味着你可以编写系统级或者服务器端的<strong>Javascript</strong>代码，交给<strong>Node.js</strong>来解释执行。</p>
+<p><strong>Node.js</strong>采用了<strong>Google Chrome</strong>浏览器的V8引擎（<strong>C++编写</strong>），性能很好，同时还提供了很多系统级的API，如文件操作、网络编程等。浏览器端的<strong>Javascript</strong>代码在运行时会受到各种安全性的限制，对客户系统的操作有限。相比之下，<strong>Node.js</strong>则是一个全面的后台运行时，基于<strong>Javascript</strong>提供了其他语言能够实现的许多功能。</p>
+<h2 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h2><p>可以说<strong>CommonJS</strong>和<strong>Node.js</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>。</p>
+<p><strong>ECMAScript</strong>提供核心语言功能，浏览器端的<strong>JavaScript实现</strong>包括了<strong>ES核心</strong>、<strong>DOM</strong>(or <strong>Document Object Model</strong>)和<strong>BOM</strong>(or <strong>Browser Object Model</strong>)，所以你在浏览器的<strong>JS</strong>控制台可以使用<code>document、window、alert...</code>等有关<strong>DOM</strong>和<strong>BOM</strong>的操作。</p>
+<p>而<strong>CommonJS</strong>主要为<strong>非浏览器的应用</strong>定义一套API（比如<strong>Node</strong>应用），从而填补了空白。它的终极目标是提供一个类似<strong>Python、Ruby</strong>和<strong>Java</strong>的<strong>标准库</strong>。</p>
+<p>可以看到在<strong>Node</strong>环境中没有定义<code>alert</code>和<code>document</code>，因为<strong>Node</strong>不关心<strong>DOM</strong>和<strong>BOM</strong>操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; alert(&#39;!!!&#39;)</span><br><span class="line">ReferenceError: alert is not defined</span><br><span class="line">&gt; document</span><br><span class="line">ReferenceError: document is not defined</span><br></pre></td></tr></table></figure>
+<p>但是它可以调用读取文件的函数，读取出了<code>a.txt</code>中的<code>Hello!</code>并打印，这是浏览器做不到也不应该去做的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; const fs &#x3D; require(&#39;fs&#39;);                 </span><br><span class="line">&gt; const content &#x3D; fs.readFileSync(&#39;.&#x2F;a.txt&#39;,&#39;utf-8&#39;);</span><br><span class="line">&gt; console.log(content);</span><br><span class="line">hello!</span><br></pre></td></tr></table></figure>
+<h2 id="Vue-js、AngularJS…"><a href="#Vue-js、AngularJS…" class="headerlink" title="Vue.js、AngularJS…"></a>Vue.js、AngularJS…</h2><p>这些没什么好说的，之所以带上<strong>JS</strong>就是因为它们是用<strong>JavaScript</strong>语言开发的框架，实际上就是个<strong>JS库</strong>，用于简化我们前端代码的编写。</p>
+<p>至于为什么使用<strong>Vue.js</strong>这些框架需要安装<strong>Node.js</strong>，原因也很简单，因为很多工具（比如<strong>Babel、webpack</strong>）都是用<strong>Node</strong>开发出来的，这也是你为什么可以用<code>npm</code>安装的原因。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://es6.ruanyifeng.com/#docs/intro" target="_blank" rel="noopener">ECMAScript6简介 - 阮一峰</a></li>
+<li><a href="http://www.commonjs.org/" target="_blank" rel="noopener">CommonJS官网</a></li>
+<li><a href="https://nodejs.org/en/" target="_blank" rel="noopener">Node.js官网</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">探究 HTTP 协议</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-12-25 01:39:59" itemprop="dateCreated datePublished" datetime="2017-12-25T01:39:59+08:00">2017-12-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/25/探究HTTP协议/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">5.2k</span>
               
 
               
@@ -3093,64 +3085,93 @@
         
           
             <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p><strong>JavaScript</strong>是目前前端开发中最流行的语言，在学习的过程中会遇到各种<strong>JS</strong>有关的名词。本文章的主要目的是介绍<strong>ECMAScript</strong>(or <strong>ES</strong>)、<strong>CommonJS</strong>、<strong>Node.js</strong>、<strong>Vue.js</strong>或<strong>AngularJS</strong>等与<strong>JavaScript</strong>之间的联系</p>
+<p>本文摘自油条的知乎文章 <a href="https://zhuanlan.zhihu.com/p/23957087" target="_blank" rel="noopener">摸索HTTP</a>，自己结合实验一步一步探究HTTP协议</p>
 </blockquote>
-<hr>
-<h2 id="ECMAScript"><a href="#ECMAScript" class="headerlink" title="ECMAScript"></a>ECMAScript</h2><blockquote>
-<p><strong>ECMAScript</strong>和<strong>JavaScript</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>（另外的实现还有<strong>Jscript</strong> 和<strong>ActionScript</strong>等）</p>
-</blockquote>
-<ul>
-<li><p><strong>JavaScript</strong>的创造者<strong>Netscape</strong>公司，将<strong>JavaScript</strong>提交给国际标准化组织<strong>ECMA</strong>，希望这种语言能够成为国际标准，标准委员会最终决定，标准在每年的6月份正式发布一次，作为当年的正式版本</p>
-</li>
-<li><p>目前的几乎所有的浏览器（不包括低版本的IE），都已经支持<strong>ES5</strong>了，而写代码时最好采用<strong>ES6</strong>语法（毕竟语法糖写起来更舒服，还添加了很多必要的新特性，而且浏览器全面支持<strong>ES6</strong>是迟早的事）。不用担心浏览器不能识别新语法，<strong>Bable</strong>就是用来解决这种问题的工具</p>
-</li>
-<li><p><strong>Babel</strong>是一个广泛使用的<strong>ES6</strong>转码器，可以将<strong>ES6</strong>代码转为<strong>ES5</strong>代码，从而在浏览器环境运行</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 转码前</span><br><span class="line">input.map(item &#x3D;&gt; item + 1);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 转码后</span><br><span class="line">input.map(function (item) &#123;</span><br><span class="line">  return item + 1;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-</li>
+<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
+<li>OS: MacOS或Linux各发行版</li>
+<li><code>curl</code>、<code>nc</code>命令</li>
+<li>多台电脑，最好是有自己的服务器</li>
 </ul>
-<hr>
-<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><blockquote>
-<p>在介绍<strong>CommonJS</strong>之前有必要先介绍一下<strong>Node.js</strong></p>
+<h2 id="nc"><a href="#nc" class="headerlink" title="nc"></a>nc</h2><blockquote>
+<p><strong>nc</strong>(or <strong>netcat</strong>)命令用于建立TCP和UDP监听和连接，它可以建立TCP连接、发送UDP包、监听任意TCP和UDP端口、端口扫描和处理IPv4和IPv6等。它比<strong>telnet</strong>命令更加实用，在网络工具中有“瑞士军刀”的美誉。</p>
 </blockquote>
 <ul>
-<li><p>首先明确一点，<strong>JavaScript</strong>和<strong>Python</strong>一样，是一种脚本语言，或者是<strong>解释型语言</strong>，和<strong>C、C++</strong> 这种需要编译成可执行文件再运行的语言不同，它的运行只需要解释器能够解释执行即可，而不需要编译器。<strong>浏览器</strong>就包含了解释执行网页中的<strong>JavaScript</strong>代码的功能</p>
+<li><p>打开两个终端。一个充当客户端，一个充当服务端。</p>
 </li>
-<li><p>伴随着互联网和<strong>JavaScript</strong>语言的快速发展，人们不仅仅局限于拿JS来做前端开发，所以<strong>Node.js</strong>随之应运而生</p>
+<li><p>让服务端<code>nc</code>启动之后监听8000端口，等待TCP连接</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    nc -l 8000 &#x2F;&#x2F;server</span><br><span class="line">    &#96;&#96;&#96; </span><br><span class="line">    </span><br><span class="line">- 切换到客户端，如果是不同的机器则将&#96;localhost&#96;换成服务端主机的**IP**</span><br></pre></td></tr></table></figure>
+<p>  nc localhost 8000 //client</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 现在在任意一个终端中输入些字符，敲击回车，另一个终端会显示相应字符，说明双方已经成功建立TCP连接进行通信，需要注意的是一定要服务端先建立监听</span><br><span class="line"></span><br><span class="line">#### Tips</span><br><span class="line"></span><br><span class="line">- 可以直接用&#96;nc&#96;命令来传输文件</span><br></pre></td></tr></table></figure>
+<p>  nc -l {port} &gt; filename // 接收端<br>  nc {接受者IP} {port} &lt; filename // 发送端</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 亲测这条命令非常实用，适用于在你的本地和服务器未建立**ssh认证**时（不能使用**scp**），或内网网络传输文件，或你的两台电脑不能登陆同一微信传输文件时</span><br><span class="line"></span><br><span class="line">## HTTP响应</span><br><span class="line"></span><br><span class="line">&gt; 浏览器在访问网站的时候，服务器到底给浏览器回复了一些什么玩意儿呢？有了上面的工具，接下来该探究一下HTTP了，到这里才正式开始切入正题了。首先，使用一下**curl**。**curl**能够向指定的URL发起一个http请求，并显示出请求回应中的内容。</span><br><span class="line"></span><br><span class="line">- 先拿百度开刀，执行如下命令</span><br></pre></td></tr></table></figure>
+<p>  curl -i baidu.com</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 得到如下输出内容</span><br></pre></td></tr></table></figure>
+<p>  HTTP/1.1 200 OK<br>  Date: Mon, 25 Dec 2017 03:19:21 GMT<br>  Server: Apache<br>  Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT<br>  ETag: “51-47cf7e6ee8400”<br>  Accept-Ranges: bytes<br>  Content-Length: 81<br>  Cache-Control: max-age=86400<br>  Expires: Tue, 26 Dec 2017 03:19:21 GMT<br>  Connection: Keep-Alive<br>  Content-Type: text/html</p>
+<p>  <html>
+  <meta http-equiv="refresh" content="0;url=http://www.baidu.com/">
+  </html></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    这里，你所看到的这一大堆数据，便是一个完整的HTTP响应报文。也就是你在浏览器中输入网址 baidu.com 敲下回车之后，baidu服务器返回给浏览器的数据。</span><br><span class="line">    </span><br><span class="line">- **响应报文**包含如下部分：</span><br><span class="line">    - 状态行</span><br><span class="line">    - 响应头</span><br><span class="line">    - 响应正文（可能没有）</span><br><span class="line">    </span><br><span class="line">    ![----](&#x2F;0.png)</span><br><span class="line"></span><br><span class="line">### 解析响应报文</span><br><span class="line"></span><br><span class="line">&gt; 了解HTTP响应的格式，以及其中的各部分字段的含义，有助于我们理解一些Web应用的功能以及浏览器的行为。</span><br><span class="line"></span><br><span class="line">- 这里对HTTP响应的数据稍作分析。上述报文中的第一行：</span><br></pre></td></tr></table></figure>
+<p>  HTTP/1.1 200 OK</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">    为HTTP响应的状态，这里的200代表OK，表示服务器已经成功地处理了请求</span><br><span class="line">    </span><br><span class="line">- 报文往后的内容直到空行部分：</span><br></pre></td></tr></table></figure>
+<p>  Date: Fri, 25 Nov 2016 10:58:59 GMT<br>  Server: Apache<br>  Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT<br>  ETag: “51-47cf7e6ee8400”<br>  Accept-Ranges: bytes<br>  Content-Length: 81<br>  Cache-Control: max-age=86400<br>  Expires: Sat, 26 Nov 2016 10:58:59 GMT<br>  Connection: Keep-Alive<br>  Content-Type: text/html</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    这部分为HTTP响应的头部，其中大部分内容其实是可读性较强的，基本可以直接分析其中的含义。如&#96;Content-Type: text&#x2F;html&#96;表示此次HTTP响应的结果为html文本。如果你访问的是一个图片，那么这里就可能是&#96;Content-Type: image&#x2F;png&#96;了。头部中的&#96;Content-Length: 81&#96;表示整个响应的正文长度为81，这个也比较关键，告诉浏览器整个响应的正文部分数据有多少</span><br><span class="line"></span><br><span class="line">- HTTP响应的头部中有许多非常有用的信息，这些信息往往决定着浏览器收到报文后接下来需要做出什么样的行动。也有一些非必须的内容，比如**Server、Accept-Ranges**</span><br><span class="line"></span><br><span class="line">- 响应中的最后一部分内容，可以看到接下来页面刷新跳转到&#96;http:&#x2F;&#x2F;www.baidu.com&#x2F;&#96;</span><br></pre></td></tr></table></figure>
+<p>  <html>
+  <meta http-equiv="refresh" content="0;url=http://www.baidu.com/">
+  </html></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">    为响应的正文部分，这部分内容的长度是和响应头部的**Content-Length**对应值一致。</span><br><span class="line">    </span><br><span class="line">#### Verify Content Length</span><br><span class="line"></span><br><span class="line">&gt; 我们来验证正文长度是不是81。能用编程解决的就用编程解决，非常推荐平时用**python**或者**JavaScript**这种脚本语言去编程验证一些东西。只需要装个**node**或者**python**解释器就可以了，非常轻量级</span><br><span class="line"></span><br><span class="line">- 这里用javascript，文件名a.js</span><br><span class="line"></span><br><span class="line">    &#96;&#96;&#96;js</span><br><span class="line">    &#x2F;&#x2F; a.js</span><br><span class="line">    </span><br><span class="line">    const s &#x3D; &#96;&lt;html&gt;</span><br><span class="line">    &lt;meta http-equiv&#x3D;&quot;refresh&quot; content&#x3D;&quot;0;url&#x3D;http:&#x2F;&#x2F;www.baidu.com&#x2F;&quot;&gt;</span><br><span class="line">    &lt;&#x2F;html&gt;</span><br><span class="line">    &#96;;</span><br><span class="line">    console.log(s.length);</span><br></pre></td></tr></table></figure>
+<p>  其中<code>` </code>反引号是ES6的新特性，可方便表示多行字符串。注意最后一行有回车</p>
 </li>
-<li><p><strong>Node.js</strong>作为一个后端的<strong>Javascrip</strong>t运行环境（解释器），这意味着你可以编写系统级或者服务器端的<strong>Javascript</strong>代码，交给<strong>Node.js</strong>来解释执行</p>
-</li>
-<li><p><strong>Node.js</strong>采用了<strong>Google Chrome</strong>浏览器的V8引擎（<strong>C++编写</strong>），性能很好，同时还提供了很多系统级的API，如文件操作、网络编程等。浏览器端的<strong>Javascript</strong>代码在运行时会受到各种安全性的限制，对客户系统的操作有限。相比之下，<strong>Node.js</strong>则是一个全面的后台运行时，基于<strong>Javascript</strong>提供了其他语言能够实现的许多功能</p>
+<li><p>执行<code>node a.js</code>得到输出81</p>
 </li>
 </ul>
-<hr>
-<h2 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h2><blockquote>
-<p>可以说<strong>CommonJS</strong>和<strong>Node.js</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong></p>
+<h3 id="模拟HTTP响应"><a href="#模拟HTTP响应" class="headerlink" title="模拟HTTP响应"></a>模拟HTTP响应</h3><blockquote>
+<p>上面大致了解了HTTP响应的大体结构，那么，我们来自己构造一个合法的HTTP响应，看看浏览器能不能做出正常的反应。</p>
 </blockquote>
 <ul>
-<li><p><strong>ECMAScript</strong>提供核心语言功能，浏览器端的<strong>JavaScript实现</strong>包括了<strong>ES核心</strong>、<strong>DOM</strong>(or <strong>Document Object Model</strong>)和<strong>BOM</strong>(or <strong>Browser Object Model</strong>)，所以你在浏览器的<strong>JS</strong>控制台可以使用<code>document、window、alert...</code>等有关<strong>DOM</strong>和<strong>BOM</strong>的操作</p>
+<li><p><code>nc -l 8000</code>开启一个服务端，监听8000端口，粘贴如下内容</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">Content-Length: 14</span><br><span class="line">Content-Type: text&#x2F;html</span><br><span class="line"></span><br><span class="line">&lt;h1&gt;Hello&lt;&#x2F;h1&gt;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>而<strong>CommonJS</strong>主要为<strong>非浏览器的应用</strong>定义一套API（比如<strong>Node</strong>应用），从而填补了空白。它的终极目标是提供一个类似<strong>Python、Ruby</strong>和<strong>Java</strong>的<strong>标准库</strong></p>
+<li><p>在浏览器端访问<code>http://localhost:8000/</code>，里面出现了一个大标题Hello</p>
 </li>
-<li><p>可以看到在<strong>Node</strong>环境中没有定义<code>alert</code>和<code>document</code>，因为<strong>Node</strong>不关心<strong>DOM</strong>和<strong>BOM</strong>操作</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; alert(&#39;!!!&#39;)</span><br><span class="line">ReferenceError: alert is not defined</span><br><span class="line">&gt; document</span><br><span class="line">ReferenceError: document is not defined</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>但是它可以调用读取文件的函数，读取出了<code>a.txt</code>中的<code>Hello!</code>并打印，这是浏览器做不到也不应该去做的</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; const fs &#x3D; require(&#39;fs&#39;);                 </span><br><span class="line">&gt; const content &#x3D; fs.readFileSync(&#39;.&#x2F;a.txt&#39;,&#39;utf-8&#39;);</span><br><span class="line">&gt; console.log(content);</span><br><span class="line">hello!</span><br></pre></td></tr></table></figure>
+<li><p>其实，浏览器在发起一个请求之后，只要服务器回应它一个符合HTTP标准的报文，它就能正常地解析并做出处理。而无论浏览器访问的对方是真的Web服务器还是假的nc，浏览器并不能知道它访问的目标到底是个什么东西，它只知道按照HTTP规范去解析收到的数据。这里可以看到，在网络中骗过浏览器是非常容易的，如传输的数据是未加密的，在这些传输的过程中很有可能会被拦截甚至篡改，浏览器被欺骗，进而用户被欺骗</p>
 </li>
 </ul>
-<hr>
-<h2 id="Vue-js、AngularJS…"><a href="#Vue-js、AngularJS…" class="headerlink" title="Vue.js、AngularJS…"></a>Vue.js、AngularJS…</h2><blockquote>
-<p>这些没什么好说的，之所以带上<strong>JS</strong>就是因为它们是用<strong>JavaScript</strong>语言开发的框架，实际上就是个<strong>JS库</strong>，用于简化我们前端代码的编写</p>
+<h2 id="HTTP请求"><a href="#HTTP请求" class="headerlink" title="HTTP请求"></a>HTTP请求</h2><blockquote>
+<p>在使用浏览器访问网站的时候，浏览器到底发送了一些什么东西过去呢？</p>
 </blockquote>
 <ul>
-<li>至于为什么使用<strong>Vue.js</strong>这些框架需要安装<strong>Node.js</strong>，原因也很简单，因为很多工具（比如<strong>Babel、webpack</strong>）都是用<strong>Node</strong>开发出来的，这也是你为什么可以用<code>npm</code>安装的原因</li>
+<li><p>其实我们就已经可以在终端里看到浏览器发送的请求报文</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: localhost:8000</span><br><span class="line">Connection: keep-alive</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;63.0.3239.108 Safari&#x2F;537.36</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9,en;q&#x3D;0.8</span><br><span class="line">Cookie: Webstorm-f269b48&#x3D;ebcfcf96-de94-4438-acc1-f68e40c6b6f1; session&#x3D;eyJ1aWQiOjJ9.DR6wAg.ktPekLF--XP9XrDZlpbeT8J0XDE</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>请求报文</strong>包含如下部分：</p>
+<ul>
+<li>请求行</li>
+<li>请求头</li>
+<li><p>请求体（可能没有）</p>
+<p><img src="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/1.png" alt="-----2"></p>
+</li>
 </ul>
-<hr>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><a href="http://es6.ruanyifeng.com/#docs/intro" target="_blank" rel="noopener">ECMAScript6简介 - 阮一峰</a></li>
-<li><a href="http://www.commonjs.org/" target="_blank" rel="noopener">CommonJS官网</a></li>
-<li><a href="https://nodejs.org/en/" target="_blank" rel="noopener">Node.js官网</a></li>
+</li>
 </ul>
+<ul>
+<li><p>第一行为<strong>请求行</strong>，包含请求方法、请求路径和HTTP协议的版本三个信息。<strong>请求头</strong>通知服务器有关客户端请求的信息，比如上述头部中的<strong>User-Agent</strong>的值代表了浏览器信息，借助于此还可以做到根据不同的浏览器返回不同的页面（比如手机和PC的页面不一样）。最后多一行<strong>回车换行</strong>代表请求头的结束</p>
+</li>
+<li><p><strong>GET请求</strong>没有请求体，请求参数和对应的值附加在URL后面，利用问号<code>?</code>代表URL的结尾与请求参数的开始，与号<code>&amp;</code>连接多个参数。传递参数<strong>长度受限</strong>，并且可以在地址栏清楚的看到，不适合传输私密数据及大量数据</p>
+</li>
+<li><p>而在填写登陆表单点击确认后一般都是发送<strong>POST请求</strong>，请求数据在请求体中，不会显示的展示在地址栏，但是还是可能被黑客获取，所以通常密码等敏感信息需要加密而不是明文传输</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;user&#x2F;login HTTP&#x2F;1.1</span><br><span class="line">Host: example.com</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;54.0.2840.98 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, sdch, br</span><br><span class="line">Accept-Language: en-US,en;q&#x3D;0.8,zh-CN;q&#x3D;0.6,zh;q&#x3D;0.4,zh-TW;q&#x3D;0.2</span><br><span class="line">Content-Length: 27</span><br><span class="line"></span><br><span class="line">username&#x3D;test&amp;password&#x3D;test</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="模拟HTTP请求"><a href="#模拟HTTP请求" class="headerlink" title="模拟HTTP请求"></a>模拟HTTP请求</h3><ul>
+<li><p>同样可以使用<code>nc</code>构造一个HTTP请求，<code>nc baidu.com 80</code>与百度服务器建立连接</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: baidu.com</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>构造一个最精简的请求，敲击回车，终端上打印出响应报文</p>
+</li>
+</ul>
+<h2 id="Postscripts"><a href="#Postscripts" class="headerlink" title="Postscripts"></a>Postscripts</h2><blockquote>
+<p>实际上，按照前面的演示，在网络中，每一个应用都没法知道对面到底是个什么东西，只要双方相互收发的数据符合一定的格式和规则，它们之间就能够相互配合好工作。那么这些格式和规则，就时平时所谓的“协议”。</p>
+</blockquote>
 
           
         
@@ -3243,7 +3264,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">68</span>
+                    <span class="site-state-item-count">67</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3343,9 +3364,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-count">29</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

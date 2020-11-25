@@ -372,295 +372,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/6/index.html">探究 HTTP 协议</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-12-25 01:39:59" itemprop="dateCreated datePublished" datetime="2017-12-25T01:39:59+08:00">2017-12-25</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/12/25/探究HTTP协议/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">5.2k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>本文摘自油条的知乎文章 <a href="https://zhuanlan.zhihu.com/p/23957087" target="_blank" rel="noopener">摸索HTTP</a>，自己结合实验一步一步探究HTTP协议</p>
-</blockquote>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li>OS: MacOS或Linux各发行版</li>
-<li><code>curl</code>、<code>nc</code>命令</li>
-<li>多台电脑，最好是有自己的服务器</li>
-</ul>
-<h2 id="nc"><a href="#nc" class="headerlink" title="nc"></a>nc</h2><blockquote>
-<p><strong>nc</strong>(or <strong>netcat</strong>)命令用于建立TCP和UDP监听和连接，它可以建立TCP连接、发送UDP包、监听任意TCP和UDP端口、端口扫描和处理IPv4和IPv6等。它比<strong>telnet</strong>命令更加实用，在网络工具中有“瑞士军刀”的美誉。</p>
-</blockquote>
-<ul>
-<li><p>打开两个终端。一个充当客户端，一个充当服务端。</p>
-</li>
-<li><p>让服务端<code>nc</code>启动之后监听8000端口，等待TCP连接</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    nc -l 8000 &#x2F;&#x2F;server</span><br><span class="line">    &#96;&#96;&#96; </span><br><span class="line">    </span><br><span class="line">- 切换到客户端，如果是不同的机器则将&#96;localhost&#96;换成服务端主机的**IP**</span><br></pre></td></tr></table></figure>
-<p>  nc localhost 8000 //client</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 现在在任意一个终端中输入些字符，敲击回车，另一个终端会显示相应字符，说明双方已经成功建立TCP连接进行通信，需要注意的是一定要服务端先建立监听</span><br><span class="line"></span><br><span class="line">#### Tips</span><br><span class="line"></span><br><span class="line">- 可以直接用&#96;nc&#96;命令来传输文件</span><br></pre></td></tr></table></figure>
-<p>  nc -l {port} &gt; filename // 接收端<br>  nc {接受者IP} {port} &lt; filename // 发送端</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 亲测这条命令非常实用，适用于在你的本地和服务器未建立**ssh认证**时（不能使用**scp**），或内网网络传输文件，或你的两台电脑不能登陆同一微信传输文件时</span><br><span class="line"></span><br><span class="line">## HTTP响应</span><br><span class="line"></span><br><span class="line">&gt; 浏览器在访问网站的时候，服务器到底给浏览器回复了一些什么玩意儿呢？有了上面的工具，接下来该探究一下HTTP了，到这里才正式开始切入正题了。首先，使用一下**curl**。**curl**能够向指定的URL发起一个http请求，并显示出请求回应中的内容。</span><br><span class="line"></span><br><span class="line">- 先拿百度开刀，执行如下命令</span><br></pre></td></tr></table></figure>
-<p>  curl -i baidu.com</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 得到如下输出内容</span><br></pre></td></tr></table></figure>
-<p>  HTTP/1.1 200 OK<br>  Date: Mon, 25 Dec 2017 03:19:21 GMT<br>  Server: Apache<br>  Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT<br>  ETag: “51-47cf7e6ee8400”<br>  Accept-Ranges: bytes<br>  Content-Length: 81<br>  Cache-Control: max-age=86400<br>  Expires: Tue, 26 Dec 2017 03:19:21 GMT<br>  Connection: Keep-Alive<br>  Content-Type: text/html</p>
-<p>  <html>
-  <meta http-equiv="refresh" content="0;url=http://www.baidu.com/">
-  </html></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    这里，你所看到的这一大堆数据，便是一个完整的HTTP响应报文。也就是你在浏览器中输入网址 baidu.com 敲下回车之后，baidu服务器返回给浏览器的数据。</span><br><span class="line">    </span><br><span class="line">- **响应报文**包含如下部分：</span><br><span class="line">    - 状态行</span><br><span class="line">    - 响应头</span><br><span class="line">    - 响应正文（可能没有）</span><br><span class="line">    </span><br><span class="line">    ![----](&#x2F;0.png)</span><br><span class="line"></span><br><span class="line">### 解析响应报文</span><br><span class="line"></span><br><span class="line">&gt; 了解HTTP响应的格式，以及其中的各部分字段的含义，有助于我们理解一些Web应用的功能以及浏览器的行为。</span><br><span class="line"></span><br><span class="line">- 这里对HTTP响应的数据稍作分析。上述报文中的第一行：</span><br></pre></td></tr></table></figure>
-<p>  HTTP/1.1 200 OK</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">    为HTTP响应的状态，这里的200代表OK，表示服务器已经成功地处理了请求</span><br><span class="line">    </span><br><span class="line">- 报文往后的内容直到空行部分：</span><br></pre></td></tr></table></figure>
-<p>  Date: Fri, 25 Nov 2016 10:58:59 GMT<br>  Server: Apache<br>  Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT<br>  ETag: “51-47cf7e6ee8400”<br>  Accept-Ranges: bytes<br>  Content-Length: 81<br>  Cache-Control: max-age=86400<br>  Expires: Sat, 26 Nov 2016 10:58:59 GMT<br>  Connection: Keep-Alive<br>  Content-Type: text/html</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    这部分为HTTP响应的头部，其中大部分内容其实是可读性较强的，基本可以直接分析其中的含义。如&#96;Content-Type: text&#x2F;html&#96;表示此次HTTP响应的结果为html文本。如果你访问的是一个图片，那么这里就可能是&#96;Content-Type: image&#x2F;png&#96;了。头部中的&#96;Content-Length: 81&#96;表示整个响应的正文长度为81，这个也比较关键，告诉浏览器整个响应的正文部分数据有多少</span><br><span class="line"></span><br><span class="line">- HTTP响应的头部中有许多非常有用的信息，这些信息往往决定着浏览器收到报文后接下来需要做出什么样的行动。也有一些非必须的内容，比如**Server、Accept-Ranges**</span><br><span class="line"></span><br><span class="line">- 响应中的最后一部分内容，可以看到接下来页面刷新跳转到&#96;http:&#x2F;&#x2F;www.baidu.com&#x2F;&#96;</span><br></pre></td></tr></table></figure>
-<p>  <html>
-  <meta http-equiv="refresh" content="0;url=http://www.baidu.com/">
-  </html></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">    为响应的正文部分，这部分内容的长度是和响应头部的**Content-Length**对应值一致。</span><br><span class="line">    </span><br><span class="line">#### Verify Content Length</span><br><span class="line"></span><br><span class="line">&gt; 我们来验证正文长度是不是81。能用编程解决的就用编程解决，非常推荐平时用**python**或者**JavaScript**这种脚本语言去编程验证一些东西。只需要装个**node**或者**python**解释器就可以了，非常轻量级</span><br><span class="line"></span><br><span class="line">- 这里用javascript，文件名a.js</span><br><span class="line"></span><br><span class="line">    &#96;&#96;&#96;js</span><br><span class="line">    &#x2F;&#x2F; a.js</span><br><span class="line">    </span><br><span class="line">    const s &#x3D; &#96;&lt;html&gt;</span><br><span class="line">    &lt;meta http-equiv&#x3D;&quot;refresh&quot; content&#x3D;&quot;0;url&#x3D;http:&#x2F;&#x2F;www.baidu.com&#x2F;&quot;&gt;</span><br><span class="line">    &lt;&#x2F;html&gt;</span><br><span class="line">    &#96;;</span><br><span class="line">    console.log(s.length);</span><br></pre></td></tr></table></figure>
-<p>  其中<code>` </code>反引号是ES6的新特性，可方便表示多行字符串。注意最后一行有回车</p>
-</li>
-<li><p>执行<code>node a.js</code>得到输出81</p>
-</li>
-</ul>
-<h3 id="模拟HTTP响应"><a href="#模拟HTTP响应" class="headerlink" title="模拟HTTP响应"></a>模拟HTTP响应</h3><blockquote>
-<p>上面大致了解了HTTP响应的大体结构，那么，我们来自己构造一个合法的HTTP响应，看看浏览器能不能做出正常的反应。</p>
-</blockquote>
-<ul>
-<li><p><code>nc -l 8000</code>开启一个服务端，监听8000端口，粘贴如下内容</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">Content-Length: 14</span><br><span class="line">Content-Type: text&#x2F;html</span><br><span class="line"></span><br><span class="line">&lt;h1&gt;Hello&lt;&#x2F;h1&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在浏览器端访问<code>http://localhost:8000/</code>，里面出现了一个大标题Hello</p>
-</li>
-<li><p>其实，浏览器在发起一个请求之后，只要服务器回应它一个符合HTTP标准的报文，它就能正常地解析并做出处理。而无论浏览器访问的对方是真的Web服务器还是假的nc，浏览器并不能知道它访问的目标到底是个什么东西，它只知道按照HTTP规范去解析收到的数据。这里可以看到，在网络中骗过浏览器是非常容易的，如传输的数据是未加密的，在这些传输的过程中很有可能会被拦截甚至篡改，浏览器被欺骗，进而用户被欺骗</p>
-</li>
-</ul>
-<h2 id="HTTP请求"><a href="#HTTP请求" class="headerlink" title="HTTP请求"></a>HTTP请求</h2><blockquote>
-<p>在使用浏览器访问网站的时候，浏览器到底发送了一些什么东西过去呢？</p>
-</blockquote>
-<ul>
-<li><p>其实我们就已经可以在终端里看到浏览器发送的请求报文</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: localhost:8000</span><br><span class="line">Connection: keep-alive</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;63.0.3239.108 Safari&#x2F;537.36</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9,en;q&#x3D;0.8</span><br><span class="line">Cookie: Webstorm-f269b48&#x3D;ebcfcf96-de94-4438-acc1-f68e40c6b6f1; session&#x3D;eyJ1aWQiOjJ9.DR6wAg.ktPekLF--XP9XrDZlpbeT8J0XDE</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>请求报文</strong>包含如下部分：</p>
-<ul>
-<li>请求行</li>
-<li>请求头</li>
-<li><p>请求体（可能没有）</p>
-<p><img src="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/1.png" alt="-----2"></p>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p>第一行为<strong>请求行</strong>，包含请求方法、请求路径和HTTP协议的版本三个信息。<strong>请求头</strong>通知服务器有关客户端请求的信息，比如上述头部中的<strong>User-Agent</strong>的值代表了浏览器信息，借助于此还可以做到根据不同的浏览器返回不同的页面（比如手机和PC的页面不一样）。最后多一行<strong>回车换行</strong>代表请求头的结束</p>
-</li>
-<li><p><strong>GET请求</strong>没有请求体，请求参数和对应的值附加在URL后面，利用问号<code>?</code>代表URL的结尾与请求参数的开始，与号<code>&amp;</code>连接多个参数。传递参数<strong>长度受限</strong>，并且可以在地址栏清楚的看到，不适合传输私密数据及大量数据</p>
-</li>
-<li><p>而在填写登陆表单点击确认后一般都是发送<strong>POST请求</strong>，请求数据在请求体中，不会显示的展示在地址栏，但是还是可能被黑客获取，所以通常密码等敏感信息需要加密而不是明文传输</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;user&#x2F;login HTTP&#x2F;1.1</span><br><span class="line">Host: example.com</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;54.0.2840.98 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, sdch, br</span><br><span class="line">Accept-Language: en-US,en;q&#x3D;0.8,zh-CN;q&#x3D;0.6,zh;q&#x3D;0.4,zh-TW;q&#x3D;0.2</span><br><span class="line">Content-Length: 27</span><br><span class="line"></span><br><span class="line">username&#x3D;test&amp;password&#x3D;test</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="模拟HTTP请求"><a href="#模拟HTTP请求" class="headerlink" title="模拟HTTP请求"></a>模拟HTTP请求</h3><ul>
-<li><p>同样可以使用<code>nc</code>构造一个HTTP请求，<code>nc baidu.com 80</code>与百度服务器建立连接</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: baidu.com</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>构造一个最精简的请求，敲击回车，终端上打印出响应报文</p>
-</li>
-</ul>
-<h2 id="Postscripts"><a href="#Postscripts" class="headerlink" title="Postscripts"></a>Postscripts</h2><blockquote>
-<p>实际上，按照前面的演示，在网络中，每一个应用都没法知道对面到底是个什么东西，只要双方相互收发的数据符合一定的格式和规则，它们之间就能够相互配合好工作。那么这些格式和规则，就时平时所谓的“协议”。</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/14/Vue%E5%88%9D%E8%AF%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2955,6 +2666,349 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/15/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/11/15/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/6/index.html">大数据集群部署</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-11-15 07:10:09" itemprop="dateCreated datePublished" datetime="2017-11-15T07:10:09+08:00">2017-11-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/15/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/15/大数据集群部署/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6.2k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
+<li>三台服务器节点，配置均为4核8G，500G硬盘</li>
+<li>OS：Ubuntu 16.04 </li>
+<li>hadoop-2.6.0-cdh5.13.0.tar.gz    <a href="http://archive.cloudera.com/cdh5/cdh/5/" target="_blank" rel="noopener">（hadoop-cdh5官方下载链接）</a></li>
+<li>spark-2.2.0-bin-hadoop2.6.tgz <a href="http://spark.apache.org/downloads.html" target="_blank" rel="noopener">（Spark官网下载链接）</a></li>
+<li>jdk-8u144-linux-x64.tar.gz</li>
+</ul>
+<p>&lt;/br&gt;</p>
+<h2 id="A-服务器相关设置"><a href="#A-服务器相关设置" class="headerlink" title="A. 服务器相关设置"></a>A. 服务器相关设置</h2><blockquote>
+<p>三台服务器节点，采用一主二从的模式，需要<strong>修改主机名</strong>并建立服务器间的ssh通信便于各服务器间<strong>免密访问</strong>。并且为避免权限问题，三个节点都设置了<strong>root账户</strong>登录。</p>
+</blockquote>
+<h3 id="配置root用户登录、ssh免密通信"><a href="#配置root用户登录、ssh免密通信" class="headerlink" title="配置root用户登录、ssh免密通信"></a>配置root用户登录、ssh免密通信</h3><ul>
+<li><p>普通用户登录后，执行<code>sudo passwd root</code>修改root密码，<code>su - root</code>切换为root用户</p>
+</li>
+<li><p>修改<code>/etc/ssh/sshd_config</code>允许root登录</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PermitRootLogin yes</span><br><span class="line">RSAAuthentication yes</span><br><span class="line">PubkeyAuthentication yes</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>/root</code>目录下执行<code>ssh-keygen -t rsa</code>生成<code>.ssh</code>文件夹和公钥私钥</p>
+</li>
+<li><p>将三台服务器以及自己主机的公钥写入<code>/root/.ssh/authorized_keys</code>，并拷贝到三台服务器上</p>
+</li>
+<li><p>执行<code>service sshd restart</code>重启ssh服务</p>
+</li>
+</ul>
+<h3 id="host相关设置"><a href="#host相关设置" class="headerlink" title="host相关设置"></a>host相关设置</h3><ul>
+<li><p>执行<code>vi /etc/hostname</code>修改主机名，主节点命名为<strong>master</strong>，从节点命名为<strong>slave01</strong>和<strong>slave02</strong>，执行<code>reboot</code>重启服务器生效</p>
+</li>
+<li><p>三台服务器都修改<code>/etc/hosts</code>文件，IP地址为内网IP</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.10.6 master</span><br><span class="line">192.168.10.7 slave01</span><br><span class="line">192.168.10.8 slave02</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>现在已完成了服务器间<strong>ssh免密通信</strong>的功能，并且本地也可以通过 <strong>ssh root@{IP}</strong> 访问服务器，接下来需要安装JDK、Hadoop和Spark。均安装在 <strong>/opt</strong>目录下，并分别命名为jdk8、hadoop、spark。可以在主节点安装后再通过<strong>scp分发</strong>给从节点。</p>
+</blockquote>
+<p>&lt;/br&gt;</p>
+<h2 id="B-安装JDK"><a href="#B-安装JDK" class="headerlink" title="B. 安装JDK"></a>B. 安装JDK</h2><ul>
+<li><p>将本地下载的jdk压缩包<code>scp</code>到master节点的<code>/opt</code>路径下，解压并改名</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xzvf jdk-8u144-linux-x64.tar.gz</span><br><span class="line">mv jdk1.8.0_144&#x2F; jdk8</span><br><span class="line">mv jdk-8u144-linux-x64.tar.gz &#x2F;tmp</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>同理，解压hadoop和spark压缩包至<code>/opt</code>路径下，改名为<strong>hadoop</strong>和<strong>spark</strong>，等改完配置后再将整个 <strong>/opt</strong>文件夹分发给从节点</p>
+</li>
+</ul>
+<h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><ul>
+<li><p><code>vi /etc/profile</code>加入</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME&#x3D;&#x2F;opt&#x2F;jdk8</span><br><span class="line">export JRE_HOME&#x3D;$&#123;JAVA_HOME&#125;&#x2F;jre</span><br><span class="line">export CLASSPATH&#x3D;.:$&#123;JAVA_HOME&#125;&#x2F;lib:$&#123;JRE_HOME&#125;&#x2F;lib</span><br><span class="line">export HADOOP_HOME&#x3D;&#x2F;opt&#x2F;hadoop</span><br><span class="line">export SPARK_HOME&#x3D;&#x2F;opt&#x2F;spark</span><br><span class="line">export PATH&#x3D;$&#123;JAVA_HOME&#125;&#x2F;bin:$HADOOP_HOME&#x2F;sbin:$HADOOP_HOME&#x2F;bin:$SPARK_HOME&#x2F;bin:$SPARK_HOME&#x2F;sbin:$PATH</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>分发配置文件，会覆盖子节点的配置文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp &#x2F;etc&#x2F;profile root@slave01:&#x2F;etc&#x2F;profile</span><br><span class="line">scp &#x2F;etc&#x2F;profile root@slave02:&#x2F;etc&#x2F;profile</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>三台服务器都执行<code>source /etc/profile</code>使配置文件生效</p>
+</li>
+</ul>
+<p>&lt;/br&gt;</p>
+<h2 id="C-配置Hadoop"><a href="#C-配置Hadoop" class="headerlink" title="C. 配置Hadoop"></a>C. 配置Hadoop</h2><p><a href="http://hadoop.apache.org/docs/r2.6.5/hadoop-project-dist/hadoop-common/ClusterSetup.html" target="_blank" rel="noopener">官网配置文档</a> </p>
+<blockquote>
+<p><strong>HDFS</strong>（Hadoop分布式文件系统），启动HDFS时主节点启动<strong>NameNode</strong>，负责管理namespace、控制客户端访问。从节点启动<strong>DataNode</strong>，提供存储和客户端读写操作。<br><strong>Yarn</strong>（资源管理系统）用于改善<strong>MapReduce</strong>的实现，启动Yarn时主节点启动<strong>ResourceManager</strong>，用于调度、分发资源。从节点启动<strong>NodeManager</strong>，用于启动、监控运行应用程序的容器（Container）。<br>Hadoop支持为所有主从节点采用<strong>同一套配置文件</strong>，除非新机器的硬件规格与现有机器不同时，需要一套新的配置文件以充分利用新硬件的额外资源。</p>
+</blockquote>
+<ul>
+<li><p><code>cd /opt/hadoop/etc/hadoop</code>，前往hadoop配置文件目录</p>
+</li>
+<li><p><code>vi hadoop-env.sh</code>,修改运行hadoop时的环境变量</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME&#x3D;&#x2F;opt&#x2F;jdk8</span><br><span class="line">export HADOOP_HEAPSIZE&#x3D;8000</span><br><span class="line">export HADOOP_LOG_DIR&#x3D;&#x2F;var&#x2F;log&#x2F;hadoop</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>vi core-site.xml</code>，该属性描述了HDFS文件系统的URI，默认端口是8020</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;fs.defaultFS&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;hdfs:&#x2F;&#x2F;master:9000&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;&#x2F;configuration&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>vi hdfs-site.xml</code>，Hadoop守护进程配置，包括Namenode、辅助NameNode和DataNode等</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.namenode.name.dir&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;&#x2F;root&#x2F;hdfs&#x2F;name&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.datanode.data.dir&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;&#x2F;root&#x2F;hdfs&#x2F;data&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.namenode.checkpoint.dir&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;&#x2F;root&#x2F;hdfs&#x2F;namesecondary&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;&#x2F;configuration&gt;</span><br></pre></td></tr></table></figure>
+<p>  分别配置了namenode存储永久性文件系统元数据的目录、datanode存储数据块目录、辅助namenode存储文件系统的检查点目录。均可冗余备份，逗号隔开。</p>
+</li>
+<li><p><code>vi yarn-site.xml</code>，Yarn守护进程的配置项，包括资源管理器、web应用代理服务器和节点管理器</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;!-- Site specific YARN configuration properties --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.resourcemanager.hostname&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;master&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.resourcemanager.webapp.address&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;master:10000&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.local-dirs&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;&#x2F;root&#x2F;nm-local-dir&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.resource.memory-mb&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;8192&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.resource.cpu-vcores&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;4&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.aux-services&lt;&#x2F;name&gt;</span><br><span class="line">  &lt;value&gt;mapreduce.shuffle&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;&#x2F;configuration&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>vi slaves</code>，在该文件中列出所有从节点的主机名或IP</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slave01</span><br><span class="line">slave02</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>&lt;/br&gt;</p>
+<h2 id="D-配置Spark"><a href="#D-配置Spark" class="headerlink" title="D. 配置Spark"></a>D. 配置Spark</h2><blockquote>
+<p><strong>Apache Spark</strong>是专为大规模数据处理而设计的快速通用的计算引擎。它并没有以MapReduce作为执行引擎，而是使用的自己的分布式运行环境在集群上执行工作。Spark与Hadoop紧密集成，可以在Yarn上运行并支持HDFS。</p>
+</blockquote>
+<ul>
+<li><p><code>cd /opt/spark/conf</code>前往Spark配置文件目录</p>
+</li>
+<li><p>拷贝模版文件 </p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp spark-env.sh.template spark-env.sh</span><br><span class="line">cp slaves.template slaves</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>vi slaves</code>添加从节点</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slave01</span><br><span class="line">slave02</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>vi spark-env.sh</code>，配置spark启动环境脚本</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME&#x3D;&#x2F;opt&#x2F;jdk8</span><br><span class="line">export HADOOP_CONF_DIR&#x3D;&#x2F;opt&#x2F;hadoop&#x2F;etc&#x2F;hadoop</span><br><span class="line">export SPARK_MASTER_HOST&#x3D;master</span><br><span class="line">export SPARK_MASTER_PORT&#x3D;7077</span><br><span class="line">export SPARK_WORKER_CORES&#x3D;1</span><br><span class="line">export SPARK_WORKER_MEMORY&#x3D;1g</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>vi spark-defaults.conf</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spark.master                     spark:&#x2F;&#x2F;master:7077</span><br><span class="line">spark.driver.memory              8g</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>&lt;/br&gt;</p>
+<h2 id="E-启动和测试"><a href="#E-启动和测试" class="headerlink" title="E. 启动和测试"></a>E. 启动和测试</h2><blockquote>
+<p>以下操作均在主节点下完成，主节点会启动从节点的相关程序。</p>
+</blockquote>
+<ul>
+<li><p>在<code>/root</code>目录下新建存储文件夹，目录结构如下</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── hdfs</span><br><span class="line">│   ├── data</span><br><span class="line">│   ├── name</span><br><span class="line">│   └── namesecondary</span><br><span class="line">└── nm-local-dir</span><br></pre></td></tr></table></figure>
+<p>  分发给从节点</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">scp -r hdfs&#x2F; root@slave01:&#x2F;root&#x2F;</span><br><span class="line">scp -r hdfs&#x2F; root@slave02:&#x2F;root&#x2F;</span><br><span class="line">scp -r nm-local-dir&#x2F; root@slave01:&#x2F;root&#x2F;</span><br><span class="line">scp -r nm-local-dir&#x2F; root@slave02:&#x2F;root&#x2F;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>现在JDK、Hadoop和Spark均已安装配置完成，将<code>/opt</code>文件夹分发给从节点</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r &#x2F;opt root@slave01:&#x2F;</span><br><span class="line">scp -r &#x2F;opt root@slave02:&#x2F;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="启动hadoop"><a href="#启动hadoop" class="headerlink" title="启动hadoop"></a>启动hadoop</h3><ul>
+<li><p>执行<code>ufw disable</code>关闭防火墙</p>
+</li>
+<li><p>初始化文件系统</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs namenode -format</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动Hadoop集群</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start-all.sh</span><br></pre></td></tr></table></figure>
+<p>  该命令其实是包含了<code>start-dfs.sh</code>和<code>start-yarn.sh</code>两个命令</p>
+</li>
+<li><p>在各节点上执行<code>jps</code>查看启动情况，日志文件在<code>/opt/hadoop/logs</code>目录下</p>
+</li>
+<li><p>在本地浏览器上访问<code>{IP}:/50070</code>查看hdfs的WebUI（50070为默认端口）；访问<code>{IP}:/10000</code>查看ResourceManager的WebUI</p>
+</li>
+</ul>
+<h3 id="启动Spark"><a href="#启动Spark" class="headerlink" title="启动Spark"></a>启动Spark</h3><ul>
+<li><p>命令启动Spark集群</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;opt&#x2F;spark&#x2F;sbin&#x2F;start-all.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>各节点执行<code>jps</code>可以看到主节点启动了<strong>Master</strong>程序，从节点启动了<strong>Worker</strong>程序</p>
+</li>
+<li><p>可以在本地浏览器上访问<code>{IP}:8080</code>验证Spark已启动</p>
+</li>
+</ul>
+<h3 id="WebUI汇总"><a href="#WebUI汇总" class="headerlink" title="WebUI汇总"></a>WebUI汇总</h3><blockquote>
+<p><strong>hdfs：</strong> <a href="http://172.20.10.92:50070/" target="_blank" rel="noopener">http://172.20.10.92:50070/</a><br><strong>ResourceManager：</strong> <a href="http://172.20.10.92:10000/" target="_blank" rel="noopener">http://172.20.10.92:10000/</a><br><strong>Spark：</strong> <a href="http://172.20.10.92:8080/" target="_blank" rel="noopener">http://172.20.10.92:8080/</a>   </p>
+</blockquote>
+<p>&lt;/br&gt;</p>
+<h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><blockquote>
+<p>有意想使用<strong>Cloudera Manager</strong>这样的集群管理工具，它们提供了简单的WebUI，可以快捷的管理、配置集群。但需要研究如何在没有外网的情况下在服务器上部署。</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -3006,7 +3060,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">68</span>
+                    <span class="site-state-item-count">67</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3106,9 +3160,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-count">29</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
