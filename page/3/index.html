@@ -1657,7 +1657,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-10-13 16:24:17" itemprop="dateModified" datetime="2020-10-13T16:24:17+08:00">2020-10-13</time>
+                <time title="修改时间：2020-12-03 16:26:22" itemprop="dateModified" datetime="2020-12-03T16:26:22+08:00">2020-12-03</time>
               
             
           </span>
@@ -1801,7 +1801,7 @@
 <h3 id="该使用何种异常"><a href="#该使用何种异常" class="headerlink" title="该使用何种异常"></a>该使用何种异常</h3><p>关于是否使用检查型异常的决定是复杂的，并且很显然没有明显的答案。Sun 的建议是对于任何情况使用它们，而 C# 方法（也就是 Eckel 和其他人所赞同的）是对于任何情况都不使用它们。其他人表示可以折中考虑。个人认为并没有绝对的对与错，<strong>选择何种异常在于团队的统一规范</strong>。非检查型异常的最大风险之一就是它并没有按照检查型异常采用的方式那样自我<strong>文档化</strong>。阅读 Java 源码发现，不管是检查型异常还是非检查型异常，都在文档中标明了该方法会抛出何种异常。在决定使用非检查型异常更需如此，不管是提示自己还是使用你提供的类库的其他人员。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li>《Thinking in Java》</li>
-<li><a href="https://dir.s1mple.xyz/alibaba-java-dev-manual.pdf" target="_blank" rel="noopener">阿里巴巴 Java 开发手册</a></li>
+<li><a href="https://dir.s1mple.online/alibaba-java-dev-manual.pdf" target="_blank" rel="noopener">阿里巴巴 Java 开发手册</a></li>
 <li><a href="https://www.ibm.com/developerworks/cn/java/j-jtp05254/" target="_blank" rel="noopener">关于异常的争论：要检查，还是不要检查？— IBM developerWorks</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/28302269" target="_blank" rel="noopener">Java异常的深入研究与分析 — 知乎</a></li>
 <li><a href="https://www.zhihu.com/question/28254987" target="_blank" rel="noopener">如何优雅的处理异常？— 知乎</a></li>
@@ -2183,7 +2183,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-10-11 15:22:39" itemprop="dateModified" datetime="2020-10-11T15:22:39+08:00">2020-10-11</time>
+                <time title="修改时间：2020-12-03 16:26:22" itemprop="dateModified" datetime="2020-12-03T16:26:22+08:00">2020-12-03</time>
               
             
           </span>
@@ -2278,7 +2278,7 @@
 </li>
 <li><p>接下来去修改你的域名设置，我是在 <a href="https://sg.godaddy.com/zh" target="_blank" rel="noopener">GoDaddy</a> 上购买的域名，所以去狗爹网修改配置如下<br><img src="/2018/06/24/%E8%BF%81%E7%A7%BB%20Ghost%20%E5%8D%9A%E5%AE%A2%E5%B9%B6%E4%BD%BF%E7%94%A8%20Docker%20%20%E9%83%A8%E7%BD%B2/1.png" alt="64F8A358-E544-4FA3-819C-7F38F5327A5A"></p>
 </li>
-<li><p>准备工作已经做好，剩下的就是在新服务器上搭建环境和部署博客了。必要的东西也就三个，Nginx 用于做端口映射，Docker 用于运行 Ghost 容器，Certbot 用来配置 Https。Nginx 在 Ubuntu 上安装很简单，使用<code>apt-get</code>命令即可。Certbot 安装在我的另一篇博客<a href="https://s1mple.xyz/configure-https-with-certbot/" target="_blank" rel="noopener">Certbot配置Https</a>中有详细介绍。我们着重介绍一下如何安装 Docker</p>
+<li><p>准备工作已经做好，剩下的就是在新服务器上搭建环境和部署博客了。必要的东西也就三个，Nginx 用于做端口映射，Docker 用于运行 Ghost 容器，Certbot 用来配置 Https。Nginx 在 Ubuntu 上安装很简单，使用<code>apt-get</code>命令即可。Certbot 安装在我的另一篇博客<a href="https://s1mple.online/configure-https-with-certbot/" target="_blank" rel="noopener">Certbot配置Https</a>中有详细介绍。我们着重介绍一下如何安装 Docker</p>
 </li>
 </ul>
 <h2 id="Installing-Docker"><a href="#Installing-Docker" class="headerlink" title="Installing Docker"></a>Installing Docker</h2><blockquote>
@@ -2310,7 +2310,7 @@
 <p>  上述命令表示以交互式终端执行容器的<code>bash</code>命令，其中 16 是刚才启动的容器 ID 前两位，可以使用<code>docker ps</code>查看，通常使用可以唯一标识的前几位即可</p>
 </li>
 <li><p>进入容器后默认在<code>/var/lib/ghost</code>即 Ghost 安装路径下，修改其下的<code>config.production.json</code>配置文件，其实该文件链接到<code>config.development.json</code>，所以修改哪一个都一样，只需要修改 url 和 server 即可</p>
-  <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">"url": "https://s1mple.xyz",</span><br><span class="line">"server": &#123;</span><br><span class="line">    "port": 2368,</span><br><span class="line">    "host": "0.0.0.0"</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">"url": "https://s1mple.online/",</span><br><span class="line">"server": &#123;</span><br><span class="line">    "port": 2368,</span><br><span class="line">    "host": "0.0.0.0"</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
 <p>  退出容器后使用<code>docker restart 16</code>重启容器</p>
 </li>
 <li><p>主题可以在网页上直接上传。图片还需要我们拷贝到容器中，使用如下命令</p>
@@ -2327,13 +2327,13 @@
 </li>
 </ul>
 <h4 id="Configuring-Https"><a href="#Configuring-Https" class="headerlink" title="Configuring Https"></a>Configuring Https</h4><ul>
-<li><p>使用 Certbot 工具配置 Https，如何安装运行可以参考我的另一篇博客<a href="https://s1mple.xyz/configure-https-with-certbot/" target="_blank" rel="noopener"><br>Certbot配置Https</a>。实际上它会读取 Nginx 配置文件并修改它们，可以发现，配置完成后的 ghost.conf 多了如下一些内容，其中就包括重定位到 Https 端口 443</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    # 省略...</span><br><span class="line"></span><br><span class="line">    listen [::]:443 ssl ipv6only&#x3D;on; # managed by Certbot</span><br><span class="line">    listen 443 ssl; # managed by Certbot</span><br><span class="line">    ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;fullchain.pem; # managed by Certbot</span><br><span class="line">    ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;privkey.pem; # managed by Certbot</span><br><span class="line">    include &#x2F;etc&#x2F;letsencrypt&#x2F;options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">    ssl_dhparam &#x2F;etc&#x2F;letsencrypt&#x2F;ssl-dhparams.pem; # managed by Certbot</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    if ($host &#x3D; www.s1mple.info) &#123;</span><br><span class="line">        return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    if ($host &#x3D; s1mple.info) &#123;</span><br><span class="line">        return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line">    listen 80; </span><br><span class="line">    listen [::]:80;</span><br><span class="line"></span><br><span class="line">    server_name s1mple.info www.s1mple.info;</span><br><span class="line">    return 404; # managed by Certbot</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  大功告成！现在就可以通过 <a href="https://s1mple.xyz" target="_blank" rel="noopener">https://s1mple.xyz</a> 访问我的博客网站了！</p>
+<li><p>使用 Certbot 工具配置 Https，如何安装运行可以参考我的另一篇博客<a href="https://s1mple.online/configure-https-with-certbot/" target="_blank" rel="noopener"><br>Certbot配置Https</a>。实际上它会读取 Nginx 配置文件并修改它们，可以发现，配置完成后的 ghost.conf 多了如下一些内容，其中就包括重定位到 Https 端口 443</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    # 省略...</span><br><span class="line"></span><br><span class="line">    listen [::]:443 ssl ipv6only&#x3D;on; # managed by Certbot</span><br><span class="line">    listen 443 ssl; # managed by Certbot</span><br><span class="line">    ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.online&#x2F;fullchain.pem; # managed by Certbot</span><br><span class="line">    ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.online&#x2F;privkey.pem; # managed by Certbot</span><br><span class="line">    include &#x2F;etc&#x2F;letsencrypt&#x2F;options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">    ssl_dhparam &#x2F;etc&#x2F;letsencrypt&#x2F;ssl-dhparams.pem; # managed by Certbot</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    if ($host &#x3D; www.s1mple.info) &#123;</span><br><span class="line">        return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    if ($host &#x3D; s1mple.info) &#123;</span><br><span class="line">        return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line">    listen 80; </span><br><span class="line">    listen [::]:80;</span><br><span class="line"></span><br><span class="line">    server_name s1mple.info www.s1mple.info;</span><br><span class="line">    return 404; # managed by Certbot</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  大功告成！现在就可以通过 <a href="https://s1mple.online/" target="_blank" rel="noopener">https://s1mple.online/</a> 访问我的博客网站了！</p>
 </li>
 </ul>
 <h2 id="Docker-image"><a href="#Docker-image" class="headerlink" title="Docker image"></a>Docker image</h2><blockquote>
-<p>接下来我们将经过修改的容器（包含文章、图片、Kaldorei 主题、修改后的配置文件）提交为一个镜像，上传到云端。以后迁移直接<code>pull</code>下来即可。可以参考我之前的博客 <a href="https://s1mple.xyz/build-docker-images/" target="_blank" rel="noopener">构建你的Docker镜像</a></p>
+<p>接下来我们将经过修改的容器（包含文章、图片、Kaldorei 主题、修改后的配置文件）提交为一个镜像，上传到云端。以后迁移直接<code>pull</code>下来即可。可以参考我之前的博客 <a href="https://s1mple.online/build-docker-images/" target="_blank" rel="noopener">构建你的Docker镜像</a></p>
 </blockquote>
 <ul>
 <li><p>首先需要在 <a href="https://cloud.docker.com/" target="_blank" rel="noopener">Docker Cloud官网</a> 注册自己的账号，然后在服务器使用命令登陆</p>

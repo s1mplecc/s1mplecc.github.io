@@ -1195,7 +1195,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-10-28 12:07:52" itemprop="dateModified" datetime="2020-10-28T12:07:52+08:00">2020-10-28</time>
+                <time title="修改时间：2020-12-03 16:29:36" itemprop="dateModified" datetime="2020-12-03T16:29:36+08:00">2020-12-03</time>
               
             
           </span>
@@ -1338,10 +1338,10 @@
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># theme: landscape</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br></pre></td></tr></table></figure>
 <p>v6.0 版本以上的 <a href="https://theme-next.org/docs/getting-started/" target="_blank" rel="noopener">Next官方文档</a> 也做了迁移，描述的很详细，包含了主题设置、三方服务和插件的配置等。所有要找的 <code>themes/next/_config.yml</code> 中的配置项在官方文档中都能找到。</p>
 <h2 id="更换域名"><a href="#更换域名" class="headerlink" title="更换域名"></a>更换域名</h2><p>部署到 GitHub Pages 上会提供 <code>https://${github-username}.github.io</code> 默认的域名以供访问。除此之外，GitHub Pages 也提供绑定自定义域名的功能。</p>
-<p>首先，你需要在阿里云万网、腾讯云或者 GoDaddy 上购买域名（我选择 GoDaddy 是因为它不需要备案），然后<strong>配置域名解析</strong>。下表是我的个性域名 <code>s1mple.xyz</code> 的配置项。其中：</p>
+<p>首先，你需要在阿里云万网、腾讯云或者 GoDaddy 上购买域名（我选择 GoDaddy 是因为它不需要备案），然后<strong>配置域名解析</strong>。下表是我的个性域名 <code>s1mple.online</code> 的配置项。其中：</p>
 <ul>
-<li>CNAME 项用于将所有 <code>*.s1mple.xyz</code> 包含三级域名（不包括 <code>s1mple.xyz</code>）的访问路由到 <code>s1mplecc.github.io</code>。</li>
-<li>A 项将二级域名 <code>s1mple.xyz</code> 路由到 <code>192.30.252.153</code>。此值可通过 <code>ping s1mplecc.github.io</code> 获得。</li>
+<li>CNAME 项用于将所有 <code>*.s1mple.online</code> 包含三级域名（不包括 <code>s1mple.online</code>）的访问路由到 <code>s1mplecc.github.io</code>。</li>
+<li>A 项将二级域名 <code>s1mple.online</code> 路由到 <code>192.30.252.153</code>。此值可通过 <code>ping s1mplecc.github.io</code> 获得。</li>
 </ul>
 <div class="table-container">
 <table>
@@ -1371,9 +1371,9 @@
 </tbody>
 </table>
 </div>
-<p>第二步，在本地 Hexo 的 <code>source</code> 文件夹下添加<strong>名为 CNAME 的文件</strong>，内容为个人域名地址，比如我的 <code>s1mple.xyz</code>。并执行 <code>hexo g -d</code> 部署到服务器。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">'s1mple.xyz'</span> &gt; ./<span class="built_in">source</span>/CNAME</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
-<p>第三步，在 GitHub Pages 项目的配置中<strong>绑定个人域名</strong>，记得将 Enforce HTTPS 选项勾选上（GitHub 提供免费的 HTTPS 服务）。保存成功后如下图提示即可通过 <code>https://s1mple.xyz</code> 访问。</p>
+<p>第二步，在本地 Hexo 的 <code>source</code> 文件夹下添加<strong>名为 CNAME 的文件</strong>，内容为个人域名地址，比如我的 <code>s1mple.online</code>。并执行 <code>hexo g -d</code> 部署到服务器。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">'s1mple.online'</span> &gt; ./<span class="built_in">source</span>/CNAME</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
+<p>第三步，在 GitHub Pages 项目的配置中<strong>绑定个人域名</strong>，记得将 Enforce HTTPS 选项勾选上（GitHub 提供免费的 HTTPS 服务）。保存成功后如下图提示即可通过 <code>https://s1mple.online</code> 访问。</p>
 <p><img src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/5.png" alt="5"></p>
 <h2 id="图片引用"><a href="#图片引用" class="headerlink" title="图片引用"></a>图片引用</h2><p>当项目中只用到少量图片时，可以将图片统一放在 <code>source/images</code> 文件夹中，通过绝对路径访问。比如头像。</p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Markdown</span></span><br><span class="line"><span class="string">![avatar](/images/avatar.jpeg)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># themes/next/_config.yml</span></span><br><span class="line"><span class="attr">avatar:</span></span><br><span class="line"><span class="attr">  url:</span> <span class="string">/images/avatar.jpeg</span></span><br></pre></td></tr></table></figure>
@@ -1514,7 +1514,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-10-11 15:37:09" itemprop="dateModified" datetime="2020-10-11T15:37:09+08:00">2020-10-11</time>
+                <time title="修改时间：2020-12-03 16:26:22" itemprop="dateModified" datetime="2020-12-03T16:26:22+08:00">2020-12-03</time>
               
             
           </span>
@@ -1598,7 +1598,7 @@
         
           
             <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。</p>
-<p>案例还是用的之前 <a href="https://s1mple.xyz/java-web-crawler/" target="_blank" rel="noopener">Java 网络爬虫</a> 的案例。所需 <code>Python Version &gt;= 3.6</code>，用到的库有：</p>
+<p>案例还是用的之前 <a href="https://s1mple.online/java-web-crawler/" target="_blank" rel="noopener">Java 网络爬虫</a> 的案例。所需 <code>Python Version &gt;= 3.6</code>，用到的库有：</p>
 <ul>
 <li><strong>beautifulsoup4</strong> 三方库用于解析 Html，执行 <code>pip install beautifulsoup4</code> 安装</li>
 <li>内置的 <strong>urllib</strong> 用于发起网络请求获取响应内容</li>
@@ -2128,7 +2128,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
+                <time title="修改时间：2020-12-03 16:26:22" itemprop="dateModified" datetime="2020-12-03T16:26:22+08:00">2020-12-03</time>
               
             
           </span>
@@ -2228,7 +2228,7 @@
 <p>但我想说的是，Optional 的初衷不是为了让我们仅仅使用这两个方法，事实上也应当尽量避免使用这两个方法，而是多使用 <code>ifPresent()</code> 和 <code>orElse()</code> 等方法代替。因为一旦你这样用，就和使用 <code>if(xxx != null){}</code> 没什么区别了。</p>
 <p>Optional 真正的核心就在于下面这些方法。</p>
 <h2 id="Optional-与函数接口"><a href="#Optional-与函数接口" class="headerlink" title="Optional 与函数接口"></a>Optional 与函数接口</h2><p>Optional 对于 Java8 提供的四种<strong>函数接口</strong>：<code>Function</code>、<code>Predicate</code>、<code>Consumer</code>、<code>Supplier</code> 都包装了相应的方法，以满足我们可以进行<strong>函数式</strong>风格的编码。本部分介绍这些方法的实现和使用，为了直观，部分代码使用匿名内部类的方式。</p>
-<p>关于函数接口（<strong>Functional Interfaces</strong>），我的上一篇博客 <a href="https://s1mple.xyz/java-functional-interfaces/" target="_blank" rel="noopener">Java8 函数接口</a>中有详细介绍。</p>
+<p>关于函数接口（<strong>Functional Interfaces</strong>），我的上一篇博客 <a href="https://s1mple.online/java-functional-interfaces/" target="_blank" rel="noopener">Java8 函数接口</a>中有详细介绍。</p>
 <h3 id="ifPresent"><a href="#ifPresent" class="headerlink" title="ifPresent"></a>ifPresent</h3><p><code>ifPresent(consumer)</code> 方法接受一个<strong>消费者函数</strong> <code>Consumer</code> 入参，如果 Optional 容器中的值不为空，则调用 <code>Consumer</code> 的 <code>accept(value)</code> 方法消费容器中的值。若值为空则什么都不做。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ifPresent</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; consumer)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value != <span class="keyword">null</span>)</span><br><span class="line">        consumer.accept(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如下代码会打印容器中的值 “abc”</p>

@@ -1758,7 +1758,7 @@
     <title>Vue 项目结构</title>
     <url>/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/</url>
     <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>在已经<a href="https://s1mple.xyz/vue-cli-project-build/" target="_blank" rel="noopener">构建vue-cli项目</a>的基础上，我们来梳理一下vue-cli项目的结构。</p>
+<p>在已经<a href="https://s1mple.online/vue-cli-project-build/" target="_blank" rel="noopener">构建vue-cli项目</a>的基础上，我们来梳理一下vue-cli项目的结构。</p>
 </blockquote>
 <ul>
 <li>vue-cli项目总体结构<br><img src="/2017/12/14/Vue%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/0.png" alt="vue-project-structure"></li>
@@ -2816,7 +2816,7 @@
 <p>有个端口号看着很丑，等备案完成，删掉<code>ghost_8080.conf</code>就行了。（你看，国外主机就不用备案）</p>
 </blockquote>
 <h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><ul>
-<li>本来想在docker容器中部署Ghost,但是可能由于docker和宿主系统隔离的原因，systemd命令不能正常运行<code>Failed to connect to bus: No such file or directory</code>。暂时没找到解决方法。不过我在docker里部署了另一个博客平台jPress。<a href="https://jpress.s1mple.info/" target="_blank" rel="noopener">跳转链接</a></li>
+<li>本来想在docker容器中部署Ghost,但是可能由于docker和宿主系统隔离的原因，systemd命令不能正常运行<code>Failed to connect to bus: No such file or directory</code>。暂时没找到解决方法。不过我在docker里部署了另一个博客平台jPress。<a href="https://jpress.s1mple.online/" target="_blank" rel="noopener">跳转链接</a></li>
 <li>jPress是基于java的轻量级博客平台，前身是WordPress。也许下个博客我会介绍如何用docker部署jPress，谁知道呢。</li>
 </ul>
 ]]></content>
@@ -2933,7 +2933,7 @@
     <title>50 行代码实现一个并发的 Python 爬虫程序</title>
     <url>/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。</p>
-<p>案例还是用的之前 <a href="https://s1mple.xyz/java-web-crawler/" target="_blank" rel="noopener">Java 网络爬虫</a> 的案例。所需 <code>Python Version &gt;= 3.6</code>，用到的库有：</p>
+<p>案例还是用的之前 <a href="https://s1mple.online/java-web-crawler/" target="_blank" rel="noopener">Java 网络爬虫</a> 的案例。所需 <code>Python Version &gt;= 3.6</code>，用到的库有：</p>
 <ul>
 <li><strong>beautifulsoup4</strong> 三方库用于解析 Html，执行 <code>pip install beautifulsoup4</code> 安装</li>
 <li>内置的 <strong>urllib</strong> 用于发起网络请求获取响应内容</li>
@@ -3557,7 +3557,7 @@
 <p>但我想说的是，Optional 的初衷不是为了让我们仅仅使用这两个方法，事实上也应当尽量避免使用这两个方法，而是多使用 <code>ifPresent()</code> 和 <code>orElse()</code> 等方法代替。因为一旦你这样用，就和使用 <code>if(xxx != null){}</code> 没什么区别了。</p>
 <p>Optional 真正的核心就在于下面这些方法。</p>
 <h2 id="Optional-与函数接口"><a href="#Optional-与函数接口" class="headerlink" title="Optional 与函数接口"></a>Optional 与函数接口</h2><p>Optional 对于 Java8 提供的四种<strong>函数接口</strong>：<code>Function</code>、<code>Predicate</code>、<code>Consumer</code>、<code>Supplier</code> 都包装了相应的方法，以满足我们可以进行<strong>函数式</strong>风格的编码。本部分介绍这些方法的实现和使用，为了直观，部分代码使用匿名内部类的方式。</p>
-<p>关于函数接口（<strong>Functional Interfaces</strong>），我的上一篇博客 <a href="https://s1mple.xyz/java-functional-interfaces/" target="_blank" rel="noopener">Java8 函数接口</a>中有详细介绍。</p>
+<p>关于函数接口（<strong>Functional Interfaces</strong>），我的上一篇博客 <a href="https://s1mple.online/java-functional-interfaces/" target="_blank" rel="noopener">Java8 函数接口</a>中有详细介绍。</p>
 <h3 id="ifPresent"><a href="#ifPresent" class="headerlink" title="ifPresent"></a>ifPresent</h3><p><code>ifPresent(consumer)</code> 方法接受一个<strong>消费者函数</strong> <code>Consumer</code> 入参，如果 Optional 容器中的值不为空，则调用 <code>Consumer</code> 的 <code>accept(value)</code> 方法消费容器中的值。若值为空则什么都不做。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ifPresent</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; consumer)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value != <span class="keyword">null</span>)</span><br><span class="line">        consumer.accept(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如下代码会打印容器中的值 “abc”</p>
@@ -3667,7 +3667,7 @@
 <li><p>通过泛型，大大提升了集合类的<strong>可复用性</strong>，你可以定义一个装字符串的 ArrayList，也可以定义一个装整型的 ArrayList</p>
   <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ArrayList&lt;String&gt; als &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">als.add(&quot;aaa&quot;);</span><br><span class="line"></span><br><span class="line">ArrayList&lt;Integer&gt; ali &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">ali.add(1); </span><br><span class="line">ali.add(&quot;aaa&quot;);  &#x2F;&#x2F; error</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>自定义泛型类可以参考我的上一篇博客，<a href="https://s1mple.xyz/java-generics-linkedstack/" target="_blank" rel="noopener">Java泛型之LinkedStack</a></p>
+<li><p>自定义泛型类可以参考我的上一篇博客，<a href="https://s1mple.online/java-generics-linkedstack/" target="_blank" rel="noopener">Java泛型之LinkedStack</a></p>
 </li>
 </ul>
 <h3 id="使用泛型需要注意"><a href="#使用泛型需要注意" class="headerlink" title="使用泛型需要注意"></a>使用泛型需要注意</h3><hr>
@@ -4127,7 +4127,7 @@
 <p>最近遇到需要在 Spring Cloud 框架中加入<strong>用户认证</strong>的功能，发现 GitHub 有第三方认证功能，遂先写了个 demo 实现通过 GitHub 三方认证完成用户认证，虽然不是最终解决方案，但是有助于理解用户认证的流程</p>
 </blockquote>
 <ul>
-<li><p>代码沿用之前的 <a href="https://s1mple.xyz/sidecar/" target="_blank" rel="noopener">Sidecar — 将Node应用引入Spring Cloud</a> 博客中的代码，用到以下模块</p>
+<li><p>代码沿用之前的 <a href="https://s1mple.online/sidecar/" target="_blank" rel="noopener">Sidecar — 将Node应用引入Spring Cloud</a> 博客中的代码，用到以下模块</p>
   <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">─ sidecar-example</span><br><span class="line">   ├── author-service    &#x2F;&#x2F; 需要认证才能访问的微服务</span><br><span class="line">   ├── eureka-server    &#x2F;&#x2F; 注册中心</span><br><span class="line">   └── api-gateway    &#x2F;&#x2F; 网关，一切访问的入口</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
@@ -5276,7 +5276,7 @@
 </li>
 <li><p>接下来去修改你的域名设置，我是在 <a href="https://sg.godaddy.com/zh" target="_blank" rel="noopener">GoDaddy</a> 上购买的域名，所以去狗爹网修改配置如下<br><img src="/2018/06/24/%E8%BF%81%E7%A7%BB%20Ghost%20%E5%8D%9A%E5%AE%A2%E5%B9%B6%E4%BD%BF%E7%94%A8%20Docker%20%20%E9%83%A8%E7%BD%B2/1.png" alt="64F8A358-E544-4FA3-819C-7F38F5327A5A"></p>
 </li>
-<li><p>准备工作已经做好，剩下的就是在新服务器上搭建环境和部署博客了。必要的东西也就三个，Nginx 用于做端口映射，Docker 用于运行 Ghost 容器，Certbot 用来配置 Https。Nginx 在 Ubuntu 上安装很简单，使用<code>apt-get</code>命令即可。Certbot 安装在我的另一篇博客<a href="https://s1mple.xyz/configure-https-with-certbot/" target="_blank" rel="noopener">Certbot配置Https</a>中有详细介绍。我们着重介绍一下如何安装 Docker</p>
+<li><p>准备工作已经做好，剩下的就是在新服务器上搭建环境和部署博客了。必要的东西也就三个，Nginx 用于做端口映射，Docker 用于运行 Ghost 容器，Certbot 用来配置 Https。Nginx 在 Ubuntu 上安装很简单，使用<code>apt-get</code>命令即可。Certbot 安装在我的另一篇博客<a href="https://s1mple.online/configure-https-with-certbot/" target="_blank" rel="noopener">Certbot配置Https</a>中有详细介绍。我们着重介绍一下如何安装 Docker</p>
 </li>
 </ul>
 <h2 id="Installing-Docker"><a href="#Installing-Docker" class="headerlink" title="Installing Docker"></a>Installing Docker</h2><blockquote>
@@ -5308,7 +5308,7 @@
 <p>  上述命令表示以交互式终端执行容器的<code>bash</code>命令，其中 16 是刚才启动的容器 ID 前两位，可以使用<code>docker ps</code>查看，通常使用可以唯一标识的前几位即可</p>
 </li>
 <li><p>进入容器后默认在<code>/var/lib/ghost</code>即 Ghost 安装路径下，修改其下的<code>config.production.json</code>配置文件，其实该文件链接到<code>config.development.json</code>，所以修改哪一个都一样，只需要修改 url 和 server 即可</p>
-  <figure class="highlight"><table><tr><td class="code"><pre><span class="line">"url": "https://s1mple.xyz",</span><br><span class="line">"server": &#123;</span><br><span class="line">    "port": 2368,</span><br><span class="line">    "host": "0.0.0.0"</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+  <figure class="highlight"><table><tr><td class="code"><pre><span class="line">"url": "https://s1mple.online/",</span><br><span class="line">"server": &#123;</span><br><span class="line">    "port": 2368,</span><br><span class="line">    "host": "0.0.0.0"</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
 <p>  退出容器后使用<code>docker restart 16</code>重启容器</p>
 </li>
 <li><p>主题可以在网页上直接上传。图片还需要我们拷贝到容器中，使用如下命令</p>
@@ -5325,13 +5325,13 @@
 </li>
 </ul>
 <h4 id="Configuring-Https"><a href="#Configuring-Https" class="headerlink" title="Configuring Https"></a>Configuring Https</h4><ul>
-<li><p>使用 Certbot 工具配置 Https，如何安装运行可以参考我的另一篇博客<a href="https://s1mple.xyz/configure-https-with-certbot/" target="_blank" rel="noopener"><br>Certbot配置Https</a>。实际上它会读取 Nginx 配置文件并修改它们，可以发现，配置完成后的 ghost.conf 多了如下一些内容，其中就包括重定位到 Https 端口 443</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    # 省略...</span><br><span class="line"></span><br><span class="line">    listen [::]:443 ssl ipv6only&#x3D;on; # managed by Certbot</span><br><span class="line">    listen 443 ssl; # managed by Certbot</span><br><span class="line">    ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;fullchain.pem; # managed by Certbot</span><br><span class="line">    ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;privkey.pem; # managed by Certbot</span><br><span class="line">    include &#x2F;etc&#x2F;letsencrypt&#x2F;options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">    ssl_dhparam &#x2F;etc&#x2F;letsencrypt&#x2F;ssl-dhparams.pem; # managed by Certbot</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    if ($host &#x3D; www.s1mple.info) &#123;</span><br><span class="line">        return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    if ($host &#x3D; s1mple.info) &#123;</span><br><span class="line">        return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line">    listen 80; </span><br><span class="line">    listen [::]:80;</span><br><span class="line"></span><br><span class="line">    server_name s1mple.info www.s1mple.info;</span><br><span class="line">    return 404; # managed by Certbot</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  大功告成！现在就可以通过 <a href="https://s1mple.xyz" target="_blank" rel="noopener">https://s1mple.xyz</a> 访问我的博客网站了！</p>
+<li><p>使用 Certbot 工具配置 Https，如何安装运行可以参考我的另一篇博客<a href="https://s1mple.online/configure-https-with-certbot/" target="_blank" rel="noopener"><br>Certbot配置Https</a>。实际上它会读取 Nginx 配置文件并修改它们，可以发现，配置完成后的 ghost.conf 多了如下一些内容，其中就包括重定位到 Https 端口 443</p>
+  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    # 省略...</span><br><span class="line"></span><br><span class="line">    listen [::]:443 ssl ipv6only&#x3D;on; # managed by Certbot</span><br><span class="line">    listen 443 ssl; # managed by Certbot</span><br><span class="line">    ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.online&#x2F;fullchain.pem; # managed by Certbot</span><br><span class="line">    ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.online&#x2F;privkey.pem; # managed by Certbot</span><br><span class="line">    include &#x2F;etc&#x2F;letsencrypt&#x2F;options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">    ssl_dhparam &#x2F;etc&#x2F;letsencrypt&#x2F;ssl-dhparams.pem; # managed by Certbot</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    if ($host &#x3D; www.s1mple.info) &#123;</span><br><span class="line">        return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    if ($host &#x3D; s1mple.info) &#123;</span><br><span class="line">        return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line">    listen 80; </span><br><span class="line">    listen [::]:80;</span><br><span class="line"></span><br><span class="line">    server_name s1mple.info www.s1mple.info;</span><br><span class="line">    return 404; # managed by Certbot</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  大功告成！现在就可以通过 <a href="https://s1mple.online/" target="_blank" rel="noopener">https://s1mple.online/</a> 访问我的博客网站了！</p>
 </li>
 </ul>
 <h2 id="Docker-image"><a href="#Docker-image" class="headerlink" title="Docker image"></a>Docker image</h2><blockquote>
-<p>接下来我们将经过修改的容器（包含文章、图片、Kaldorei 主题、修改后的配置文件）提交为一个镜像，上传到云端。以后迁移直接<code>pull</code>下来即可。可以参考我之前的博客 <a href="https://s1mple.xyz/build-docker-images/" target="_blank" rel="noopener">构建你的Docker镜像</a></p>
+<p>接下来我们将经过修改的容器（包含文章、图片、Kaldorei 主题、修改后的配置文件）提交为一个镜像，上传到云端。以后迁移直接<code>pull</code>下来即可。可以参考我之前的博客 <a href="https://s1mple.online/build-docker-images/" target="_blank" rel="noopener">构建你的Docker镜像</a></p>
 </blockquote>
 <ul>
 <li><p>首先需要在 <a href="https://cloud.docker.com/" target="_blank" rel="noopener">Docker Cloud官网</a> 注册自己的账号，然后在服务器使用命令登陆</p>
@@ -5425,10 +5425,10 @@
 <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># theme: landscape</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br></pre></td></tr></table></figure>
 <p>v6.0 版本以上的 <a href="https://theme-next.org/docs/getting-started/" target="_blank" rel="noopener">Next官方文档</a> 也做了迁移，描述的很详细，包含了主题设置、三方服务和插件的配置等。所有要找的 <code>themes/next/_config.yml</code> 中的配置项在官方文档中都能找到。</p>
 <h2 id="更换域名"><a href="#更换域名" class="headerlink" title="更换域名"></a>更换域名</h2><p>部署到 GitHub Pages 上会提供 <code>https://${github-username}.github.io</code> 默认的域名以供访问。除此之外，GitHub Pages 也提供绑定自定义域名的功能。</p>
-<p>首先，你需要在阿里云万网、腾讯云或者 GoDaddy 上购买域名（我选择 GoDaddy 是因为它不需要备案），然后<strong>配置域名解析</strong>。下表是我的个性域名 <code>s1mple.xyz</code> 的配置项。其中：</p>
+<p>首先，你需要在阿里云万网、腾讯云或者 GoDaddy 上购买域名（我选择 GoDaddy 是因为它不需要备案），然后<strong>配置域名解析</strong>。下表是我的个性域名 <code>s1mple.online</code> 的配置项。其中：</p>
 <ul>
-<li>CNAME 项用于将所有 <code>*.s1mple.xyz</code> 包含三级域名（不包括 <code>s1mple.xyz</code>）的访问路由到 <code>s1mplecc.github.io</code>。</li>
-<li>A 项将二级域名 <code>s1mple.xyz</code> 路由到 <code>192.30.252.153</code>。此值可通过 <code>ping s1mplecc.github.io</code> 获得。</li>
+<li>CNAME 项用于将所有 <code>*.s1mple.online</code> 包含三级域名（不包括 <code>s1mple.online</code>）的访问路由到 <code>s1mplecc.github.io</code>。</li>
+<li>A 项将二级域名 <code>s1mple.online</code> 路由到 <code>192.30.252.153</code>。此值可通过 <code>ping s1mplecc.github.io</code> 获得。</li>
 </ul>
 <div class="table-container">
 <table>
@@ -5458,9 +5458,9 @@
 </tbody>
 </table>
 </div>
-<p>第二步，在本地 Hexo 的 <code>source</code> 文件夹下添加<strong>名为 CNAME 的文件</strong>，内容为个人域名地址，比如我的 <code>s1mple.xyz</code>。并执行 <code>hexo g -d</code> 部署到服务器。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">'s1mple.xyz'</span> &gt; ./<span class="built_in">source</span>/CNAME</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
-<p>第三步，在 GitHub Pages 项目的配置中<strong>绑定个人域名</strong>，记得将 Enforce HTTPS 选项勾选上（GitHub 提供免费的 HTTPS 服务）。保存成功后如下图提示即可通过 <code>https://s1mple.xyz</code> 访问。</p>
+<p>第二步，在本地 Hexo 的 <code>source</code> 文件夹下添加<strong>名为 CNAME 的文件</strong>，内容为个人域名地址，比如我的 <code>s1mple.online</code>。并执行 <code>hexo g -d</code> 部署到服务器。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">'s1mple.online'</span> &gt; ./<span class="built_in">source</span>/CNAME</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
+<p>第三步，在 GitHub Pages 项目的配置中<strong>绑定个人域名</strong>，记得将 Enforce HTTPS 选项勾选上（GitHub 提供免费的 HTTPS 服务）。保存成功后如下图提示即可通过 <code>https://s1mple.online</code> 访问。</p>
 <p><img src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/5.png" alt="5"></p>
 <h2 id="图片引用"><a href="#图片引用" class="headerlink" title="图片引用"></a>图片引用</h2><p>当项目中只用到少量图片时，可以将图片统一放在 <code>source/images</code> 文件夹中，通过绝对路径访问。比如头像。</p>
 <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Markdown</span></span><br><span class="line"><span class="string">![avatar](/images/avatar.jpeg)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># themes/next/_config.yml</span></span><br><span class="line"><span class="attr">avatar:</span></span><br><span class="line"><span class="attr">  url:</span> <span class="string">/images/avatar.jpeg</span></span><br></pre></td></tr></table></figure>
@@ -5803,7 +5803,7 @@
 <h3 id="该使用何种异常"><a href="#该使用何种异常" class="headerlink" title="该使用何种异常"></a>该使用何种异常</h3><p>关于是否使用检查型异常的决定是复杂的，并且很显然没有明显的答案。Sun 的建议是对于任何情况使用它们，而 C# 方法（也就是 Eckel 和其他人所赞同的）是对于任何情况都不使用它们。其他人表示可以折中考虑。个人认为并没有绝对的对与错，<strong>选择何种异常在于团队的统一规范</strong>。非检查型异常的最大风险之一就是它并没有按照检查型异常采用的方式那样自我<strong>文档化</strong>。阅读 Java 源码发现，不管是检查型异常还是非检查型异常，都在文档中标明了该方法会抛出何种异常。在决定使用非检查型异常更需如此，不管是提示自己还是使用你提供的类库的其他人员。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li>《Thinking in Java》</li>
-<li><a href="https://dir.s1mple.xyz/alibaba-java-dev-manual.pdf" target="_blank" rel="noopener">阿里巴巴 Java 开发手册</a></li>
+<li><a href="https://dir.s1mple.online/alibaba-java-dev-manual.pdf" target="_blank" rel="noopener">阿里巴巴 Java 开发手册</a></li>
 <li><a href="https://www.ibm.com/developerworks/cn/java/j-jtp05254/" target="_blank" rel="noopener">关于异常的争论：要检查，还是不要检查？— IBM developerWorks</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/28302269" target="_blank" rel="noopener">Java异常的深入研究与分析 — 知乎</a></li>
 <li><a href="https://www.zhihu.com/question/28254987" target="_blank" rel="noopener">如何优雅的处理异常？— 知乎</a></li>
