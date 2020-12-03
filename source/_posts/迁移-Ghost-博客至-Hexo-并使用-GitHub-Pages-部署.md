@@ -153,10 +153,10 @@ v6.0 版本以上的 [Next官方文档](https://theme-next.org/docs/getting-star
 
 部署到 GitHub Pages 上会提供 `https://${github-username}.github.io` 默认的域名以供访问。除此之外，GitHub Pages 也提供绑定自定义域名的功能。
 
-首先，你需要在阿里云万网、腾讯云或者 GoDaddy 上购买域名（我选择 GoDaddy 是因为它不需要备案），然后**配置域名解析**。下表是我的个性域名 `s1mple.xyz` 的配置项。其中：
+首先，你需要在阿里云万网、腾讯云或者 GoDaddy 上购买域名（我选择 GoDaddy 是因为它不需要备案），然后**配置域名解析**。下表是我的个性域名 `s1mple.online` 的配置项。其中：
 
-- CNAME 项用于将所有 `*.s1mple.xyz` 包含三级域名（不包括 `s1mple.xyz`）的访问路由到 `s1mplecc.github.io`。
-- A 项将二级域名 `s1mple.xyz` 路由到 `192.30.252.153`。此值可通过 `ping s1mplecc.github.io` 获得。
+- CNAME 项用于将所有 `*.s1mple.online` 包含三级域名（不包括 `s1mple.online`）的访问路由到 `s1mplecc.github.io`。
+- A 项将二级域名 `s1mple.online` 路由到 `192.30.252.153`。此值可通过 `ping s1mplecc.github.io` 获得。
 
 |记录类型|记录类型|记录值|
 |--|--|--|
@@ -164,14 +164,14 @@ v6.0 版本以上的 [Next官方文档](https://theme-next.org/docs/getting-star
 | CNAME  |   * | s1mplecc.github.io |
 | A      |   @ |         192.30.252.153|
 
-第二步，在本地 Hexo 的 `source` 文件夹下添加**名为 CNAME 的文件**，内容为个人域名地址，比如我的 `s1mple.xyz`。并执行 `hexo g -d` 部署到服务器。
+第二步，在本地 Hexo 的 `source` 文件夹下添加**名为 CNAME 的文件**，内容为个人域名地址，比如我的 `s1mple.online`。并执行 `hexo g -d` 部署到服务器。
 
 ```sh
-echo 's1mple.xyz' > ./source/CNAME
+echo 's1mple.online' > ./source/CNAME
 hexo g -d
 ```
 
-第三步，在 GitHub Pages 项目的配置中**绑定个人域名**，记得将 Enforce HTTPS 选项勾选上（GitHub 提供免费的 HTTPS 服务）。保存成功后如下图提示即可通过 `https://s1mple.xyz` 访问。
+第三步，在 GitHub Pages 项目的配置中**绑定个人域名**，记得将 Enforce HTTPS 选项勾选上（GitHub 提供免费的 HTTPS 服务）。保存成功后如下图提示即可通过 `https://s1mple.online` 访问。
 
 
 ![5](5.png)

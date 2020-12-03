@@ -6,7 +6,7 @@ categories: [Coding]
 ---
 ## Preface
 
-> 在已经[构建vue-cli项目](https://s1mple.xyz/vue-cli-project-build/)的基础上，我们来梳理一下vue-cli项目的结构。
+> 在已经[构建vue-cli项目](https://s1mple.online/vue-cli-project-build/)的基础上，我们来梳理一下vue-cli项目的结构。
  
 - vue-cli项目总体结构
 ![vue-project-structure](/0.png)

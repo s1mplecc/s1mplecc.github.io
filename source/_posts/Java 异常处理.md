@@ -170,7 +170,7 @@ Rod Johnson 采取一个不太激进的方法。他提出，**一些异常本质
 ## 参考
 
 - 《Thinking in Java》
-- [阿里巴巴 Java 开发手册](https://dir.s1mple.xyz/alibaba-java-dev-manual.pdf)
+- [阿里巴巴 Java 开发手册](https://dir.s1mple.online/alibaba-java-dev-manual.pdf)
 - [关于异常的争论：要检查，还是不要检查？-- IBM developerWorks](https://www.ibm.com/developerworks/cn/java/j-jtp05254/)
 - [Java异常的深入研究与分析 -- 知乎](https://zhuanlan.zhihu.com/p/28302269)
 - [如何优雅的处理异常？-- 知乎](https://www.zhihu.com/question/28254987)

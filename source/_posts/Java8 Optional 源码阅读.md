@@ -113,7 +113,7 @@ Optional 真正的核心就在于下面这些方法。
 
 Optional 对于 Java8 提供的四种**函数接口**：`Function`、`Predicate`、`Consumer`、`Supplier` 都包装了相应的方法，以满足我们可以进行**函数式**风格的编码。本部分介绍这些方法的实现和使用，为了直观，部分代码使用匿名内部类的方式。
 
-关于函数接口（**Functional Interfaces**），我的上一篇博客 [Java8 函数接口](https://s1mple.xyz/java-functional-interfaces/)中有详细介绍。
+关于函数接口（**Functional Interfaces**），我的上一篇博客 [Java8 函数接口](https://s1mple.online/java-functional-interfaces/)中有详细介绍。
 
 ### ifPresent
 

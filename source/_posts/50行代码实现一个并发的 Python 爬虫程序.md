@@ -8,7 +8,7 @@ categories: [Projects]
 
 得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。
 
-案例还是用的之前 [Java 网络爬虫](https://s1mple.xyz/java-web-crawler/) 的案例。所需 `Python Version >= 3.6`，用到的库有：
+案例还是用的之前 [Java 网络爬虫](https://s1mple.online/java-web-crawler/) 的案例。所需 `Python Version >= 3.6`，用到的库有：
 
 - **beautifulsoup4** 三方库用于解析 Html，执行 `pip install beautifulsoup4` 安装
 - 内置的 **urllib** 用于发起网络请求获取响应内容
