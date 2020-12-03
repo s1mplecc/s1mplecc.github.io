@@ -1,7 +1,7 @@
 ---
 title: npm、nrm、nvm的使用以及Mac下如何管理Node版本
 date: 2017-12-27T03:01:29.000Z
-tags: ['JavaScript', 'Node.js']
+tags: ['JavaScript']
 categories: [Ops]
 ---
 ## npm

@@ -61,6 +61,7 @@ Hexo 和 Ghost 一样，都是使用 Node.js 编写的，所以使用 npm 安装
 ```sh
 npm install hexo-cli -g
 ```
+
 完成后执行 `hexo -v` 验证是否正确安装。
 
 ### 生成 Hexo 项目
@@ -95,10 +96,12 @@ db.json            package.json       source/
 最开始 `source` 文件夹中会自带一篇介绍 Hexo 的文章，我们可以直接拿它来测试部署是否成功。
 
 Hexo 支持本地启动，命令为：
+
 ```sh
 # hexo serve
 hexo s
 ```
+
 启动后访问 `http://localhost:4000`，就应该能看到自带的那篇文章。但为了能部署到 GitHub Pages 上，我们还需要做两件事：**安装插件**和**修改配置**。
 
 在项目所在目录下执行：
@@ -117,10 +120,12 @@ deploy:
 ```
 
 现在，执行如下命令即可将发布文章：
+
 ```sh
 # hexo generate -deploy
 hexo g -d
 ```
+
 访问你的网址 `https://${github-username}.github.io` 去见证成果吧！
 
 ## 更换主题
@@ -130,11 +135,13 @@ Hexo 自带的默认主题是 landscape，不过我们可以从 [Hexo主题库](
 Ps: 目前 Next 主题已经升级到 v6.0 版本以上，GitHub 上的仓库从原先的旧版本（v5.1.4 及以下）：`https://github.com/iissnan/hexo-theme-next` 迁移到了新仓库中：`https://github.com/theme-next/hexo-theme-next`，目前版本是 v6.6.0。如果安装的是 v5 版本，在启动时会提示升级。
 
 **下载源码**，直接将 Next 项目克隆到 Hexo 目录的 `themes` 文件夹下
+
 ```sh
 git clone https://github.com/theme-next/hexo-theme-next themes/next
 ```
 
 **启用 Next 主题**，修改 Hexo 的 `_config.yml`
+
 ```yml
 # theme: landscape
 theme: next

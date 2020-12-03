@@ -1,7 +1,7 @@
 ---
 title: Redis 持久化
 date: 2018-03-16T08:25:31.000Z
-tags: ['Redis', 'Database']
+tags: ['Redis']
 categories: [Concepts]
 ---
 ## Preface

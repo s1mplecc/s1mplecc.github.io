@@ -1,7 +1,7 @@
 ---
 title: Vue 初识
 date: 2017-12-14T11:40:31.000Z
-tags: ['Vue.js', 'web']
+tags: ['Vue.js', 'Web']
 categories: [Coding]
 ---
 ## What is Vue.js

@@ -51,7 +51,7 @@ urls.parallelStream()
         .orElse("");
 ```
 
-### 谓词 Predicate
+## 谓词 Predicate
 
 在计算机语言的环境下，谓词是指条件表达式的求值返回真或假的过程。在 Java 中就是进行逻辑判断后返回值为 `boolean` 的函数，对应函数接口为 `Predicate<T>`。在针对集合进行筛选时，通常会使用谓词对集合元素进行条件判断。
 
@@ -92,7 +92,7 @@ Predicate<Apple> p2 = p ‑> p.getSize() == Size.Medium;
 apples.stream().filter(p1.and(p2));
 ```
 
-### 函数 Function
+## 函数 Function
 
 `Function<T, R>` 接口代表一个函数，准确地说，代表了具有输入输出的函数，这也是最常见的函数定义。具有两个入参的函数对应接口为 `BiFunction<T, U, R>` 。
 
@@ -126,7 +126,7 @@ public interface Function<T, R> {
 - `compose(before)`，组合前一个函数，相当于 `V -> T -> R` 
 - `andThen(after)`，组合后一个函数，相当于 `T -> R -> V`
 
-### 提供者 Supplier
+## 提供者 Supplier
 
 当一个函数仅仅用于返回结果时，我们可以将这种函数称为**提供者**，接口定义为 `Supplier<T>`。
 
@@ -139,7 +139,7 @@ public interface Supplier<T> {
 
 只提供一个 `get()` 方法，我们可以将这种提供者代表的函数看做是一种 Query 操作。
 
-### 消费者 Consumer
+## 消费者 Consumer
 
 与提供者对应的接口则被称之为**消费者**，用以接收一个输入，但却并不关心返回结果，即返回值为 `void`。消费者的对应接口为 `Consumer<T>`。
 

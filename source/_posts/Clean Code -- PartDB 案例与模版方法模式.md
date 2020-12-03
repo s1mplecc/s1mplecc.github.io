@@ -1,7 +1,7 @@
 ---
 title: Clean Code -- 第三节：PartDB 案例与模版方法模式
 date: 2018-05-10T01:24:34.000Z
-tags: [Refactoring]
+tags: ['Code Refactoring']
 categories: [Coding]
 ---
 ## 前言

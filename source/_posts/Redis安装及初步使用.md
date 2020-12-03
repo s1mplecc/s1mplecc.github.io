@@ -1,7 +1,7 @@
 ---
 title: Redis 安装及初步使用
 date: 2018-03-15T03:04:12.000Z
-tags: ['Redis', 'Server', 'Database']
+tags: ['Redis']
 categories: [Ops]
 ---
 ## Preface
