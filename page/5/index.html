@@ -372,6 +372,282 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/02/28/Java%E6%B3%9B%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/02/28/Java%E6%B3%9B%E5%9E%8B/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Java 泛型</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-02-28 06:01:53" itemprop="dateCreated datePublished" datetime="2018-02-28T06:01:53+08:00">2018-02-28</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-25 20:31:58" itemprop="dateModified" datetime="2020-11-25T20:31:58+08:00">2020-11-25</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/02/28/Java%E6%B3%9B%E5%9E%8B/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/02/28/Java泛型/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.5k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我的上一篇博客 <a href="https://s1mple.online/java-generic-type-erasure/" target="_blank" rel="noopener">Java泛型与擦除</a>只是对于 Java 泛型和类型擦除做了一个简要的介绍，本文主要是针对 Java 泛型做一些更深入的补充说明。</p>
+<h2 id="泛型的引入"><a href="#泛型的引入" class="headerlink" title="泛型的引入"></a>泛型的引入</h2><p>在没有泛型之前，我们如果想向一个 Box 类中装入一个不知道类型的对象，只能使用 <strong>Object</strong> 这个顶级父类来操作盒子中的对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object object;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(Object object)</span> </span>&#123; <span class="keyword">this</span>.object = object; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">get</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> object; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而引入了泛型之后，代码修改如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Generic version of the Box class.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;T&gt; the type of the value being boxed</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">// T stands for "Type"</span></span><br><span class="line">    <span class="keyword">private</span> T t;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(T t)</span> </span>&#123; <span class="keyword">this</span>.t = t; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> t; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们定义了一个装有 T 类型的 Box 类。在使用时可以随心所欲，既可创建一个专门装 String 的 Box ，也可创建一个装 Integer 的 Box。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Box&lt;String&gt; bs = <span class="keyword">new</span> Box&lt;String&gt;();</span><br><span class="line">Box&lt;Integer&gt; bi = <span class="keyword">new</span> Box&lt;Integer&gt;();</span><br></pre></td></tr></table></figure>
+<p>甚至于我们在定义 Box 时可以更加苛刻，只允许这个盒子装入一个数字类型的对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Number</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么，如果你想在创建一个装 String 的 Box 就得报错了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Error: Type Parameter 'String' is not within its bound; should extend 'Number'</span></span><br><span class="line"><span class="comment">// Box&lt;String&gt; bs = new Box&lt;String&gt;();</span></span><br></pre></td></tr></table></figure>
+<p><strong>Tips</strong>：在 Java SE 7之后，允许我们使用如下更简洁的语法 <code>Box&lt;Integer&gt; integerBox = new Box&lt;&gt;();</code>，因为编译器能够推断出上下文的类型参数，所以没必要做冗余的声明。</p>
+<h2 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h2><p>泛型方法是声明了自己的类型参数的方法。泛型方法的类型参数的<strong>作用域</strong>仅限于声明它的方法内部。允许静态和非静态的泛型方法，即可以用 <strong>static</strong> 修饰。泛型方法的语法是<strong>在方法的返回类型之前包含一个尖括号列出的类型参数列表</strong>。</p>
+<p>示范代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestGenericsMethod</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">printClassName</span><span class="params">(T x)</span> </span>&#123;</span><br><span class="line">        System.out.println(x.getClass().getSimpleName());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        TestGenericsMethod test = <span class="keyword">new</span> TestGenericsMethod();</span><br><span class="line">        test.printClassName(<span class="string">" "</span>);</span><br><span class="line">        test.printClassName(<span class="number">10</span>);</span><br><span class="line">        test.printClassName(<span class="string">'a'</span>);</span><br><span class="line">        test.printClassName(test);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// String</span></span><br><span class="line"><span class="comment">// Integer</span></span><br><span class="line"><span class="comment">// Character</span></span><br><span class="line"><span class="comment">// TestGenerics</span></span><br></pre></td></tr></table></figure>
+<h2 id="泛型的类型变量"><a href="#泛型的类型变量" class="headerlink" title="泛型的类型变量"></a>泛型的类型变量</h2><p><strong>类型变量</strong>( or <strong>Type Variable</strong>) ,即上述代码的 T，用于代表一类类型，声明之后可以在 class 中使用。</p>
+<h3 id="命名惯例"><a href="#命名惯例" class="headerlink" title="命名惯例"></a>命名惯例</h3><p>按照惯例，类型参数使用<strong>单个大写字母</strong>表示，虽然这个字母命名并不强求，比如上述代码中的<code>&lt;T&gt;</code>，你可以使用<code>&lt;U&gt;</code>等等代替，但是如下是<strong>类型参数的命名惯例</strong>：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命名简写</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">T</td>
+<td>Type</td>
+</tr>
+<tr>
+<td style="text-align:center">S,U,V etc.</td>
+<td>2nd, 3rd, 4th types</td>
+</tr>
+<tr>
+<td style="text-align:center">E</td>
+<td>Element (被广泛适用于 Java 的集合类中，表示集合中的元素类型)</td>
+</tr>
+<tr>
+<td style="text-align:center">K</td>
+<td>Key</td>
+</tr>
+<tr>
+<td style="text-align:center">V</td>
+<td>Value</td>
+</tr>
+<tr>
+<td style="text-align:center">N</td>
+<td>Number</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="多个类型参数"><a href="#多个类型参数" class="headerlink" title="多个类型参数"></a>多个类型参数</h3><p>定义泛型类或接口时可以使用多个类型参数，一个典型案例就是 Map，它存储一对键值对，我截取了一段 Map.Entry 的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">K <span class="title">getKey</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">V <span class="title">getValue</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">V <span class="title">setValue</span><span class="params">(V value)</span></span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们知道 HashMap 是继承了 Map 的，所以在使用时可以这样使用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HashMap&lt;String, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br></pre></td></tr></table></figure>
+<h3 id="通配符与-T-的区别"><a href="#通配符与-T-的区别" class="headerlink" title="通配符与 T 的区别"></a>通配符与 T 的区别</h3><p>在接触泛型之初，我一直好奇 <strong>类型参数</strong>(<strong>type parameters</strong>，即 T, E, etc.) 和 <strong>通配符</strong>(<strong>wildcard</strong>) 之间有什么区别，因为它们的功能看上去有的重叠。以下是我总结自 Java 的官方文档以及 StackOverFlow 上面的解答。</p>
+<p><strong>类型参数与通配符的区别：</strong></p>
+<p>在定义泛型类或接口时，只能使用类型参数，并可以在类内部引用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> T t;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不可以使用通配符，因为<code>?</code>不能代表一种具体类型，而<code>T</code>代表一种具体类型，只是暂时未定。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;?&gt; </span>&#123; <span class="comment">// Error!!!</span></span><br><span class="line">    <span class="keyword">private</span> ? t; <span class="comment">// Error!!!</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通配符可以使用 <strong>super</strong> 关键字定义<strong>下界</strong>，而类型参数不可以。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bar</span><span class="params">(List&lt;? <span class="keyword">super</span> Number&gt; list)</span> </span>&#123;...&#125;</span><br></pre></td></tr></table></figure>
+<p>如果需要在泛型类内部定义一个与当前参数类型无关的方法，可以使用<code>&lt;?&gt;</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> T t;<span class="comment">// Used type 'T'</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printListSize</span><span class="params">(List&lt;?&gt; list)</span></span>&#123; <span class="comment">// Not associated with type 'T'</span></span><br><span class="line">        System.out.println(list.size());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Box&lt;String&gt; box = <span class="keyword">new</span> Box&lt;&gt;();</span><br><span class="line">        box.printListSize(<span class="keyword">new</span> ArrayList&lt;&gt;(Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="string">"aa"</span>,<span class="string">'s'</span>))); <span class="comment">// 5</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实际上，查看 Java 的 <strong>Class</strong> 类的源码，可以看到<code>&lt;?&gt;</code>有被广泛的使用，是因为<code>Class&lt;T&gt;</code>中的大多数的方法都不依赖于 T。</p>
+<p>有些人认为，如果你不需要使用声明的参数类型，那就可以使用<code>?</code>使得代码更简单更具可读性。所以，如果你需要定义一种可变的类型，并且在限定范围内使用到这种类型，请使用<code>&lt;T&gt;</code>，否则就可以使用<code>&lt;?&gt;</code>。</p>
+<h2 id="泛型示例之-LinkedStack"><a href="#泛型示例之-LinkedStack" class="headerlink" title="泛型示例之 LinkedStack"></a>泛型示例之 LinkedStack</h2><p>下面是一个使用 Java 泛型编写的 LinkedStack 的实例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedStack</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">        T item;</span><br><span class="line">        Node&lt;T&gt; next; <span class="comment">//下一个节点的引用，类似于C中的指针</span></span><br><span class="line"></span><br><span class="line">        Node() &#123; <span class="comment">//没有参数的Constructor，用于初始化时生成栈顶</span></span><br><span class="line">            item = <span class="keyword">null</span>;</span><br><span class="line">            next = <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Node(T item, Node&lt;T&gt; next) &#123;</span><br><span class="line">            <span class="keyword">this</span>.item = item;</span><br><span class="line">            <span class="keyword">this</span>.next = next;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123; <span class="comment">//栈空标记</span></span><br><span class="line">            <span class="keyword">return</span> item == <span class="keyword">null</span> &amp;&amp; next == <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Node&lt;T&gt; top = <span class="keyword">new</span> Node&lt;&gt;(); <span class="comment">//初始化栈顶</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(T item)</span> </span>&#123;</span><br><span class="line">        top = <span class="keyword">new</span> Node&lt;&gt;(item, top); <span class="comment">//与上一节点链接</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        T result = top.item;</span><br><span class="line">        <span class="keyword">if</span> (!top.isEmpty()) &#123;</span><br><span class="line">            top = top.next; <span class="comment">//指针后移</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/generics/types.html" target="_blank" rel="noopener">官方文档</a></li>
+<li><a href="https://stackoverflow.com/questions/6008241/what-is-the-difference-between-e-and-t-for-java-generics" target="_blank" rel="noopener">What is the difference between ‘?’, ‘E’, and ‘T’ for Java generics?</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2924,295 +3200,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">探究 HTTP 协议</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-12-25 01:39:59" itemprop="dateCreated datePublished" datetime="2017-12-25T01:39:59+08:00">2017-12-25</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/12/25/探究HTTP协议/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">5.2k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>本文摘自油条的知乎文章 <a href="https://zhuanlan.zhihu.com/p/23957087" target="_blank" rel="noopener">摸索HTTP</a>，自己结合实验一步一步探究HTTP协议</p>
-</blockquote>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li>OS: MacOS或Linux各发行版</li>
-<li><code>curl</code>、<code>nc</code>命令</li>
-<li>多台电脑，最好是有自己的服务器</li>
-</ul>
-<h2 id="nc"><a href="#nc" class="headerlink" title="nc"></a>nc</h2><blockquote>
-<p><strong>nc</strong>(or <strong>netcat</strong>)命令用于建立TCP和UDP监听和连接，它可以建立TCP连接、发送UDP包、监听任意TCP和UDP端口、端口扫描和处理IPv4和IPv6等。它比<strong>telnet</strong>命令更加实用，在网络工具中有“瑞士军刀”的美誉。</p>
-</blockquote>
-<ul>
-<li><p>打开两个终端。一个充当客户端，一个充当服务端。</p>
-</li>
-<li><p>让服务端<code>nc</code>启动之后监听8000端口，等待TCP连接</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    nc -l 8000 &#x2F;&#x2F;server</span><br><span class="line">    &#96;&#96;&#96; </span><br><span class="line">    </span><br><span class="line">- 切换到客户端，如果是不同的机器则将&#96;localhost&#96;换成服务端主机的**IP**</span><br></pre></td></tr></table></figure>
-<p>  nc localhost 8000 //client</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 现在在任意一个终端中输入些字符，敲击回车，另一个终端会显示相应字符，说明双方已经成功建立TCP连接进行通信，需要注意的是一定要服务端先建立监听</span><br><span class="line"></span><br><span class="line">#### Tips</span><br><span class="line"></span><br><span class="line">- 可以直接用&#96;nc&#96;命令来传输文件</span><br></pre></td></tr></table></figure>
-<p>  nc -l {port} &gt; filename // 接收端<br>  nc {接受者IP} {port} &lt; filename // 发送端</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 亲测这条命令非常实用，适用于在你的本地和服务器未建立**ssh认证**时（不能使用**scp**），或内网网络传输文件，或你的两台电脑不能登陆同一微信传输文件时</span><br><span class="line"></span><br><span class="line">## HTTP响应</span><br><span class="line"></span><br><span class="line">&gt; 浏览器在访问网站的时候，服务器到底给浏览器回复了一些什么玩意儿呢？有了上面的工具，接下来该探究一下HTTP了，到这里才正式开始切入正题了。首先，使用一下**curl**。**curl**能够向指定的URL发起一个http请求，并显示出请求回应中的内容。</span><br><span class="line"></span><br><span class="line">- 先拿百度开刀，执行如下命令</span><br></pre></td></tr></table></figure>
-<p>  curl -i baidu.com</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 得到如下输出内容</span><br></pre></td></tr></table></figure>
-<p>  HTTP/1.1 200 OK<br>  Date: Mon, 25 Dec 2017 03:19:21 GMT<br>  Server: Apache<br>  Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT<br>  ETag: “51-47cf7e6ee8400”<br>  Accept-Ranges: bytes<br>  Content-Length: 81<br>  Cache-Control: max-age=86400<br>  Expires: Tue, 26 Dec 2017 03:19:21 GMT<br>  Connection: Keep-Alive<br>  Content-Type: text/html</p>
-<p>  <html>
-  <meta http-equiv="refresh" content="0;url=http://www.baidu.com/">
-  </html></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    这里，你所看到的这一大堆数据，便是一个完整的HTTP响应报文。也就是你在浏览器中输入网址 baidu.com 敲下回车之后，baidu服务器返回给浏览器的数据。</span><br><span class="line">    </span><br><span class="line">- **响应报文**包含如下部分：</span><br><span class="line">    - 状态行</span><br><span class="line">    - 响应头</span><br><span class="line">    - 响应正文（可能没有）</span><br><span class="line">    </span><br><span class="line">    ![----](&#x2F;0.png)</span><br><span class="line"></span><br><span class="line">### 解析响应报文</span><br><span class="line"></span><br><span class="line">&gt; 了解HTTP响应的格式，以及其中的各部分字段的含义，有助于我们理解一些Web应用的功能以及浏览器的行为。</span><br><span class="line"></span><br><span class="line">- 这里对HTTP响应的数据稍作分析。上述报文中的第一行：</span><br></pre></td></tr></table></figure>
-<p>  HTTP/1.1 200 OK</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">    为HTTP响应的状态，这里的200代表OK，表示服务器已经成功地处理了请求</span><br><span class="line">    </span><br><span class="line">- 报文往后的内容直到空行部分：</span><br></pre></td></tr></table></figure>
-<p>  Date: Fri, 25 Nov 2016 10:58:59 GMT<br>  Server: Apache<br>  Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT<br>  ETag: “51-47cf7e6ee8400”<br>  Accept-Ranges: bytes<br>  Content-Length: 81<br>  Cache-Control: max-age=86400<br>  Expires: Sat, 26 Nov 2016 10:58:59 GMT<br>  Connection: Keep-Alive<br>  Content-Type: text/html</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    这部分为HTTP响应的头部，其中大部分内容其实是可读性较强的，基本可以直接分析其中的含义。如&#96;Content-Type: text&#x2F;html&#96;表示此次HTTP响应的结果为html文本。如果你访问的是一个图片，那么这里就可能是&#96;Content-Type: image&#x2F;png&#96;了。头部中的&#96;Content-Length: 81&#96;表示整个响应的正文长度为81，这个也比较关键，告诉浏览器整个响应的正文部分数据有多少</span><br><span class="line"></span><br><span class="line">- HTTP响应的头部中有许多非常有用的信息，这些信息往往决定着浏览器收到报文后接下来需要做出什么样的行动。也有一些非必须的内容，比如**Server、Accept-Ranges**</span><br><span class="line"></span><br><span class="line">- 响应中的最后一部分内容，可以看到接下来页面刷新跳转到&#96;http:&#x2F;&#x2F;www.baidu.com&#x2F;&#96;</span><br></pre></td></tr></table></figure>
-<p>  <html>
-  <meta http-equiv="refresh" content="0;url=http://www.baidu.com/">
-  </html></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">    为响应的正文部分，这部分内容的长度是和响应头部的**Content-Length**对应值一致。</span><br><span class="line">    </span><br><span class="line">#### Verify Content Length</span><br><span class="line"></span><br><span class="line">&gt; 我们来验证正文长度是不是81。能用编程解决的就用编程解决，非常推荐平时用**python**或者**JavaScript**这种脚本语言去编程验证一些东西。只需要装个**node**或者**python**解释器就可以了，非常轻量级</span><br><span class="line"></span><br><span class="line">- 这里用javascript，文件名a.js</span><br><span class="line"></span><br><span class="line">    &#96;&#96;&#96;js</span><br><span class="line">    &#x2F;&#x2F; a.js</span><br><span class="line">    </span><br><span class="line">    const s &#x3D; &#96;&lt;html&gt;</span><br><span class="line">    &lt;meta http-equiv&#x3D;&quot;refresh&quot; content&#x3D;&quot;0;url&#x3D;http:&#x2F;&#x2F;www.baidu.com&#x2F;&quot;&gt;</span><br><span class="line">    &lt;&#x2F;html&gt;</span><br><span class="line">    &#96;;</span><br><span class="line">    console.log(s.length);</span><br></pre></td></tr></table></figure>
-<p>  其中<code>` </code>反引号是ES6的新特性，可方便表示多行字符串。注意最后一行有回车</p>
-</li>
-<li><p>执行<code>node a.js</code>得到输出81</p>
-</li>
-</ul>
-<h3 id="模拟HTTP响应"><a href="#模拟HTTP响应" class="headerlink" title="模拟HTTP响应"></a>模拟HTTP响应</h3><blockquote>
-<p>上面大致了解了HTTP响应的大体结构，那么，我们来自己构造一个合法的HTTP响应，看看浏览器能不能做出正常的反应。</p>
-</blockquote>
-<ul>
-<li><p><code>nc -l 8000</code>开启一个服务端，监听8000端口，粘贴如下内容</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">Content-Length: 14</span><br><span class="line">Content-Type: text&#x2F;html</span><br><span class="line"></span><br><span class="line">&lt;h1&gt;Hello&lt;&#x2F;h1&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在浏览器端访问<code>http://localhost:8000/</code>，里面出现了一个大标题Hello</p>
-</li>
-<li><p>其实，浏览器在发起一个请求之后，只要服务器回应它一个符合HTTP标准的报文，它就能正常地解析并做出处理。而无论浏览器访问的对方是真的Web服务器还是假的nc，浏览器并不能知道它访问的目标到底是个什么东西，它只知道按照HTTP规范去解析收到的数据。这里可以看到，在网络中骗过浏览器是非常容易的，如传输的数据是未加密的，在这些传输的过程中很有可能会被拦截甚至篡改，浏览器被欺骗，进而用户被欺骗</p>
-</li>
-</ul>
-<h2 id="HTTP请求"><a href="#HTTP请求" class="headerlink" title="HTTP请求"></a>HTTP请求</h2><blockquote>
-<p>在使用浏览器访问网站的时候，浏览器到底发送了一些什么东西过去呢？</p>
-</blockquote>
-<ul>
-<li><p>其实我们就已经可以在终端里看到浏览器发送的请求报文</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: localhost:8000</span><br><span class="line">Connection: keep-alive</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;63.0.3239.108 Safari&#x2F;537.36</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9,en;q&#x3D;0.8</span><br><span class="line">Cookie: Webstorm-f269b48&#x3D;ebcfcf96-de94-4438-acc1-f68e40c6b6f1; session&#x3D;eyJ1aWQiOjJ9.DR6wAg.ktPekLF--XP9XrDZlpbeT8J0XDE</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>请求报文</strong>包含如下部分：</p>
-<ul>
-<li>请求行</li>
-<li>请求头</li>
-<li><p>请求体（可能没有）</p>
-<p><img src="/2017/12/25/%E6%8E%A2%E7%A9%B6HTTP%E5%8D%8F%E8%AE%AE/1.png" alt="-----2"></p>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p>第一行为<strong>请求行</strong>，包含请求方法、请求路径和HTTP协议的版本三个信息。<strong>请求头</strong>通知服务器有关客户端请求的信息，比如上述头部中的<strong>User-Agent</strong>的值代表了浏览器信息，借助于此还可以做到根据不同的浏览器返回不同的页面（比如手机和PC的页面不一样）。最后多一行<strong>回车换行</strong>代表请求头的结束</p>
-</li>
-<li><p><strong>GET请求</strong>没有请求体，请求参数和对应的值附加在URL后面，利用问号<code>?</code>代表URL的结尾与请求参数的开始，与号<code>&amp;</code>连接多个参数。传递参数<strong>长度受限</strong>，并且可以在地址栏清楚的看到，不适合传输私密数据及大量数据</p>
-</li>
-<li><p>而在填写登陆表单点击确认后一般都是发送<strong>POST请求</strong>，请求数据在请求体中，不会显示的展示在地址栏，但是还是可能被黑客获取，所以通常密码等敏感信息需要加密而不是明文传输</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;user&#x2F;login HTTP&#x2F;1.1</span><br><span class="line">Host: example.com</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;54.0.2840.98 Safari&#x2F;537.36</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Encoding: gzip, deflate, sdch, br</span><br><span class="line">Accept-Language: en-US,en;q&#x3D;0.8,zh-CN;q&#x3D;0.6,zh;q&#x3D;0.4,zh-TW;q&#x3D;0.2</span><br><span class="line">Content-Length: 27</span><br><span class="line"></span><br><span class="line">username&#x3D;test&amp;password&#x3D;test</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="模拟HTTP请求"><a href="#模拟HTTP请求" class="headerlink" title="模拟HTTP请求"></a>模拟HTTP请求</h3><ul>
-<li><p>同样可以使用<code>nc</code>构造一个HTTP请求，<code>nc baidu.com 80</code>与百度服务器建立连接</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1</span><br><span class="line">Host: baidu.com</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>构造一个最精简的请求，敲击回车，终端上打印出响应报文</p>
-</li>
-</ul>
-<h2 id="Postscripts"><a href="#Postscripts" class="headerlink" title="Postscripts"></a>Postscripts</h2><blockquote>
-<p>实际上，按照前面的演示，在网络中，每一个应用都没法知道对面到底是个什么东西，只要双方相互收发的数据符合一定的格式和规则，它们之间就能够相互配合好工作。那么这些格式和规则，就时平时所谓的“协议”。</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3264,7 +3251,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">67</span>
+                    <span class="site-state-item-count">68</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
