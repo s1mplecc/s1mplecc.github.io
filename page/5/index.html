@@ -710,7 +710,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-12-20 19:14:00" itemprop="dateModified" datetime="2020-12-20T19:14:00+08:00">2020-12-20</time>
+                <time title="修改时间：2020-12-20 20:44:03" itemprop="dateModified" datetime="2020-12-20T20:44:03+08:00">2020-12-20</time>
               
             
           </span>
@@ -767,7 +767,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">5k</span>
+                <span title="本文字数">4.6k</span>
               
 
               
@@ -793,113 +793,57 @@
       
         
           
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>Java SE5 的重大变化之一就是加入了<strong>泛型</strong>，实现了参数化类型，使得代码可以适用于多种类型。但由于兼容旧版本的考虑，不得不作出了一些牺牲，比如<strong>擦除</strong>，使得泛型使用受到一定局限。本文简要介绍了 Java 泛型以及类型擦除的概念和使用</p>
-</blockquote>
-<h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><blockquote>
-<p><strong>Java泛型</strong> (<strong>Generics</strong>) 是 JDK5 引入的新特性，允许在定义类和接口的时候使用<strong>类型参数</strong> (<strong>Type Parameter</strong>)。声明的类型参数在使用时用具体的类型来替换。泛型最主要的应用是在 JDK5 中的新<strong>集合类</strong>框架中。</p>
-</blockquote>
-<ul>
-<li><p>通过泛型，大大提升了集合类的<strong>可复用性</strong>，你可以定义一个装字符串的 ArrayList，也可以定义一个装整型的 ArrayList</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;String&gt; als &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">als.add(&quot;aaa&quot;);</span><br><span class="line"></span><br><span class="line">ArrayList&lt;Integer&gt; ali &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">ali.add(1); </span><br><span class="line">ali.add(&quot;aaa&quot;);  &#x2F;&#x2F; error</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>自定义泛型类可以参考我的上一篇博客，<a href="https://s2mple.xyz/java-generics-linkedstack/" target="_blank" rel="noopener">Java泛型之LinkedStack</a></p>
-</li>
-</ul>
-<h3 id="使用泛型需要注意"><a href="#使用泛型需要注意" class="headerlink" title="使用泛型需要注意"></a>使用泛型需要注意</h3><hr>
-<blockquote>
-<p>泛型的引入可以解决之前的集合类框架在使用过程中经常出现的运行时类型错误，因为编译器可以在编译时就发现很多明显的错误。但无奈的是，为了保证与旧版本的<strong>兼容性</strong>，Java 泛型的实现上存在着一些不够优雅的地方。</p>
-</blockquote>
-<ul>
-<li><p>开发人员在使用泛型的时候，很容易根据自己的直觉而犯一些错误</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;Object&gt; list) &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  这个方法接收<code>ArrayList&lt;Object&gt;</code>作为形参，但是如果尝试传入一个<code>ArrayList&lt;String&gt;</code>对象，却发现无法通过编译</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void test()&#123;</span><br><span class="line">    testGenerics(new ArrayList&lt;String&gt;()); &#x2F;&#x2F; 编译错误!!!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  虽然从直觉上来说，Object 是 String 的父类，这种类型转换应该是合理的。但是实际上这会产生<strong>隐含的类型转换</strong>问题，因此编译器直接就禁止这样的行为</p>
-</li>
-</ul>
-<h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h2><blockquote>
-<p>使用泛型的时候加上的类型参数，会被编译器在<strong>编译时</strong>去掉(擦除)。这个过程就称为<strong>类型擦除</strong> (<strong>Type Erasure</strong>) 。如在代码中定义的<code>List&lt;Object&gt;</code>和<code>List&lt;String&gt;</code>等类型，在编译之后都会变成 List 。</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Java SE5 的重大变化之一就是加入了<strong>泛型</strong>，实现了参数化类型，使得代码可以适用于多种类型。但由于兼容旧版本的考虑，不得不作出了一些牺牲，比如<strong>擦除</strong>，使得泛型使用受到一定局限。本文简要介绍了 Java 泛型以及类型擦除的概念和使用</p>
+<h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><p><strong>Java泛型</strong> (<strong>Generics</strong>) 是 JDK5 引入的新特性，允许在定义类和接口的时候使用<strong>类型参数</strong> (<strong>Type Parameter</strong>)。声明的类型参数在使用时用具体的类型来替换。泛型最主要的应用是在 JDK5 中的新<strong>集合类</strong>框架中。</p>
+<p>通过泛型，大大提升了集合类的<strong>可复用性</strong>，你可以定义一个装字符串的 ArrayList，也可以定义一个装整型的 ArrayList</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;Stringals = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">als.add(<span class="string">"aaa"</span>);</span><br><span class="line"></span><br><span class="line">ArrayList&lt;Integerali = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">ali.add(<span class="number">1</span>); </span><br><span class="line">ali.add(<span class="string">"aaa"</span>);  <span class="comment">// error</span></span><br></pre></td></tr></table></figure>
+<p>自定义泛型类可以参考我的上一篇博客，<a href="https://s2mple.xyz/java-generics-linkedstack/" target="_blank" rel="noopener">Java泛型之LinkedStack</a></p>
+<h3 id="使用泛型需要注意"><a href="#使用泛型需要注意" class="headerlink" title="使用泛型需要注意"></a>使用泛型需要注意</h3><p>泛型的引入可以解决之前的集合类框架在使用过程中经常出现的运行时类型错误，因为编译器可以在编译时就发现很多明显的错误。但无奈的是，为了保证与旧版本的<strong>兼容性</strong>，Java 泛型的实现上存在着一些不够优雅的地方。</p>
+<p>开发人员在使用泛型的时候，很容易根据自己的直觉而犯一些错误</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testGenerics</span><span class="params">(ArrayList&lt;Objectlist)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法接收<code>ArrayList&lt;Object&gt;</code>作为形参，但是如果尝试传入一个<code>ArrayList&lt;String&gt;</code>对象，却发现无法通过编译</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    testGenerics(<span class="keyword">new</span> ArrayList&lt;String&gt;()); <span class="comment">// 编译错误!!!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然从直觉上来说，Object 是 String 的父类，这种类型转换应该是合理的。但是实际上这会产生<strong>隐含的类型转换</strong>问题，因此编译器直接就禁止这样的行为</p>
+<h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h2><p>使用泛型的时候加上的类型参数，会被编译器在<strong>编译时</strong>去掉(擦除)。这个过程就称为<strong>类型擦除</strong> (<strong>Type Erasure</strong>) 。如在代码中定义的<code>List&lt;Object&gt;</code>和<code>List&lt;String&gt;</code>等类型，在编译之后都会变成 List 。</p>
 <p>可以说，类型擦除这个令人困惑的 Java 特性，完全是历史遗留问题导致的。因为 JDK5 之前没有泛型，为了旧代码能够正常运行，Java 泛型必须要在编译器层次将类型擦除，所导致的严酷事实就是：<strong>在泛型代码内部，无法获得任何有关泛型参数类型的信息。</strong></p>
-</blockquote>
 <p>很多泛型的特性都与类型擦除的存在有关，包括：</p>
-<ul>
-<li><p><strong>泛型类并没有自己独有的 Class 类对象。</strong> 比如并不存在<code>List&lt;String&gt;.class</code>或是<code>List&lt;Integer&gt;.class</code>，而只有<code>List.class</code></p>
-</li>
-<li><p><strong>静态变量是被泛型类的所有实例所共享的。</strong> 对于声明为<code>MyClass&lt;T&gt;</code>的类，访问其中的静态变量的方法仍然是<code>MyClass.myStaticVar</code>。不管是通过<code>new MyClass&lt;String&gt;</code>还是<code>new MyClass&lt;Integer&gt;</code>创建的对象，都是共享一个静态变量</p>
-</li>
-<li><p><strong>泛型的参数类型不能用于 Java异常处理的<code>catch</code>语句中。</strong> 因为异常处理是由 JVM 在运行时刻来进行的。由于类型信息被擦除，JVM 是无法区分两个异常类型<code>MyException&lt;String&gt;</code>和<code>MyException&lt;Integer&gt;</code>的。对于 JVM 来说，它们都是<code>MyException</code>类型的。也就无法执行与异常对应的<code>catch</code>语句</p>
-</li>
-</ul>
-<blockquote>
+<p><strong>泛型类并没有自己独有的 Class 类对象。</strong> 比如并不存在<code>List&lt;String&gt;.class</code>或是<code>List&lt;Integer&gt;.class</code>，而只有<code>List.class</code></p>
+<p><strong>静态变量是被泛型类的所有实例所共享的。</strong> 对于声明为<code>MyClass&lt;T&gt;</code>的类，访问其中的静态变量的方法仍然是<code>MyClass.myStaticVar</code>。不管是通过<code>new MyClass&lt;String&gt;</code>还是<code>new MyClass&lt;Integer&gt;</code>创建的对象，都是共享一个静态变量</p>
+<p><strong>泛型的参数类型不能用于 Java异常处理的<code>catch</code>语句中。</strong> 因为异常处理是由 JVM 在运行时刻来进行的。由于类型信息被擦除，JVM 是无法区分两个异常类型<code>MyException&lt;String&gt;</code>和<code>MyException&lt;Integer&gt;</code>的。对于 JVM 来说，它们都是<code>MyException</code>类型的。也就无法执行与异常对应的<code>catch</code>语句</p>
 <p>简单来说就是：<strong>泛型的类型信息在编译阶段被擦除，运行时刻任何获取泛型参数类型信息的行为都是非法的。</strong> </p>
-</blockquote>
-<h3 id="编译器的类型检查"><a href="#编译器的类型检查" class="headerlink" title="编译器的类型检查"></a>编译器的类型检查</h3><hr>
-<blockquote>
-<p>了解了类型擦除机制之后，就会明白<strong>编译器承担了全部的类型检查工作</strong>。编译器禁止某些泛型的使用方式，正是为了确保类型的安全性。</p>
-</blockquote>
-<ul>
-<li><p>继续用上例代码来做演示</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;Object&gt; list) &#123;</span><br><span class="line">    list.add(1); &#x2F;&#x2F; 合法</span><br><span class="line">    list.add(&quot;aaa&quot;); &#x2F;&#x2F; 合法</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void test()&#123;</span><br><span class="line">    testGenerics(new ArrayList&lt;String&gt;()); &#x2F;&#x2F; 编译错误!!!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  不难理解，为了避免<code>ArrayList&lt;String&gt;</code>中添加一个 Integer 类型的对象，编译器干脆禁止了这样的行为。编译器会尽可能的检查可能存在的类型安全问题。对于确定是违反相关原则的地方，会给出编译错误。当编译器无法判断类型的使用是否正确的时候，会给出警告信息。</p>
-</li>
-</ul>
-<h3 id="通配符与上下界"><a href="#通配符与上下界" class="headerlink" title="通配符与上下界"></a>通配符与上下界</h3><hr>
-<blockquote>
-<p>在使用泛型类的时候，既可以指定一个具体的类型，如<code>List&lt;String&gt;</code>就声明了具体的类型是 String，也可以用 <strong>通配符<code>?</code></strong> 来表示未知类型，比如<code>List&lt;?&gt;</code>。通配符所代表的其实是<strong>一组类型</strong>，但具体的类型<strong>暂时未知</strong>，而是在<strong>使用时再确定</strong>。</p>
-</blockquote>
-<ul>
-<li><p><code>List&lt;?&gt;</code>不同于<code>List&lt;Object&gt;</code>的地方是，<code>List&lt;Object&gt;</code>实际上确定了参数类型是 Object 及其子类。而<code>List&lt;?&gt;</code>则其中所包含的元素类型是不确定。使用时可以用<code>List&lt;String&gt;</code>或<code>List&lt;Integer&gt;</code>替换。如果它包含了 String 的话，往里面添加 Integer 类型的元素就是错误的</p>
-</li>
-<li><p>请看如下代码</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public void testGenerics(ArrayList&lt;?&gt; list) &#123;</span><br><span class="line">    list.add(&quot;aaa&quot;); &#x2F;&#x2F; 编译错误!!!</span><br><span class="line">    </span><br><span class="line">    Object obj &#x3D; list.get(0); &#x2F;&#x2F; 合法</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void test()&#123;</span><br><span class="line">    ArrayList&lt;String&gt; list &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    list.add(&quot;aaa&quot;);</span><br><span class="line">    testGenerics(list); &#x2F;&#x2F; 合法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  上述代码有如下几点要注意：</p>
+<h3 id="编译器的类型检查"><a href="#编译器的类型检查" class="headerlink" title="编译器的类型检查"></a>编译器的类型检查</h3><p>了解了类型擦除机制之后，就会明白<strong>编译器承担了全部的类型检查工作</strong>。编译器禁止某些泛型的使用方式，正是为了确保类型的安全性。</p>
+<p>继续用上例代码来做演示</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testGenerics</span><span class="params">(ArrayList&lt;Objectlist)</span> </span>&#123;</span><br><span class="line">    list.add(<span class="number">1</span>); <span class="comment">// 合法</span></span><br><span class="line">    list.add(<span class="string">"aaa"</span>); <span class="comment">// 合法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    testGenerics(<span class="keyword">new</span> ArrayList&lt;String&gt;()); <span class="comment">// 编译错误!!!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不难理解，为了避免<code>ArrayList&lt;String&gt;</code>中添加一个 Integer 类型的对象，编译器干脆禁止了这样的行为。编译器会尽可能的检查可能存在的类型安全问题。对于确定是违反相关原则的地方，会给出编译错误。当编译器无法判断类型的使用是否正确的时候，会给出警告信息。</p>
+<h3 id="通配符与上下界"><a href="#通配符与上下界" class="headerlink" title="通配符与上下界"></a>通配符与上下界</h3><p>在使用泛型类的时候，既可以指定一个具体的类型，如<code>List&lt;String&gt;</code>就声明了具体的类型是 String，也可以用 <strong>通配符<code>?</code></strong> 来表示未知类型，比如<code>List&lt;?&gt;</code>。通配符所代表的其实是<strong>一组类型</strong>，但具体的类型<strong>暂时未知</strong>，而是在<strong>使用时再确定</strong>。</p>
+<p><code>List&lt;?&gt;</code>不同于<code>List&lt;Object&gt;</code>的地方是，<code>List&lt;Object&gt;</code>实际上确定了参数类型是 Object 及其子类。而<code>List&lt;?&gt;</code>则其中所包含的元素类型是不确定。使用时可以用<code>List&lt;String&gt;</code>或<code>List&lt;Integer&gt;</code>替换。如果它包含了 String 的话，往里面添加 Integer 类型的元素就是错误的</p>
+<p>请看如下代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testGenerics</span><span class="params">(ArrayList&lt;?list)</span> </span>&#123;</span><br><span class="line">    list.add(<span class="string">"aaa"</span>); <span class="comment">// 编译错误!!!</span></span><br><span class="line">    </span><br><span class="line">    Object obj = list.get(<span class="number">0</span>); <span class="comment">// 合法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ArrayList&lt;Stringlist = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    list.add(<span class="string">"aaa"</span>);</span><br><span class="line">    testGenerics(list); <span class="comment">// 合法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码有如下几点要注意：</p>
 <ol>
 <li>因为通配符<code>?</code>类型未知，所以为了避免运行时类型错误，<code>list.add(&quot;aaa&quot;)</code>编译不会通过</li>
 <li>虽然类型未知，但肯定是 Object 及其子类，所以<strong>通配符代表的元素可以用 Object 来引用。</strong></li>
 <li>向<code>testGenerics()</code>方法传入的是<code>ArrayList&lt;String&gt;</code>类型的，并且编译通过。即使用时声明具体类型</li>
 </ol>
-</li>
-</ul>
-<blockquote>
 <p>由于<code>List&lt;?&gt;</code>中的元素只能用 Object 来引用，显然在需要更精细的类型时并不适用。在这些情况下，可以使用<strong>上下界</strong>来限制未知类型的范围。</p>
-</blockquote>
+<p><code>List&lt;? extends Number&gt;</code>说明 List 中可能包含的元素类型是 Number 及其<strong>子类</strong>。</p>
+<p><code>List&lt;? super Number&gt;</code>则说明 List 中包含的是 Number 及其<strong>父类</strong>。</p>
+<p>当使用<code>extends</code>引入了上界之后，在使用类型的时候就可以<strong>使用上界类中定义的方法</strong>。查看如下的例子</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testGenerics</span><span class="params">(ArrayList&lt;? extends Numberlist)</span> </span>&#123;</span><br><span class="line">    Number number = list.get(<span class="number">0</span>);</span><br><span class="line">    System.out.println(number.intValue());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    ArrayList&lt;Doubledoubles = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    doubles.add(<span class="number">2.33333</span>);</span><br><span class="line">    testGenerics(doubles); <span class="comment">// 运行输出结果：2 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>形参改为<code>&lt;? extends Number&gt;</code>后，可以看到如下两个性质：</p>
 <ul>
-<li><p><code>List&lt;? extends Number&gt;</code>说明 List 中可能包含的元素类型是 Number 及其<strong>子类</strong>。</p>
-</li>
-<li><p><code>List&lt;? super Number&gt;</code>则说明 List 中包含的是 Number 及其<strong>父类</strong>。</p>
-</li>
-<li><p>当使用<code>extends</code>引入了上界之后，在使用类型的时候就可以<strong>使用上界类中定义的方法</strong>。查看如下的例子</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public static void testGenerics(ArrayList&lt;? extends Number&gt; list) &#123;</span><br><span class="line">    Number number &#x3D; list.get(0);</span><br><span class="line">    System.out.println(number.intValue());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    ArrayList&lt;Double&gt; doubles &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    doubles.add(2.33333);</span><br><span class="line">    testGenerics(doubles); &#x2F;&#x2F; 运行输出结果：2 </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  形参改为<code>&lt;? extends Number&gt;</code>后，可以看到如下两个性质：</p>
-<ol>
 <li>可以使用 Number 引用</li>
 <li>在<code>testGenerics()</code>方法中可以调用 Number 类的<code>intValue()</code>方法</li>
-</ol>
-</li>
 </ul>
-<blockquote>
 <p>上述代码中，我们为了调用<code>intValue()</code>方法，必须给定泛型类的边界，以告诉编译器只能接受遵循这个边界的类型。这里重用了 <strong>extends</strong> 关键字。这样在编译时， <strong>泛型类型参数将擦除到它的第一个边界</strong>，即 Number，这样就可以调用<code>intValue()</code>方法了。</p>
-</blockquote>
-<h3 id="类型系统"><a href="#类型系统" class="headerlink" title="类型系统"></a>类型系统</h3><hr>
-<blockquote>
-<p>引入泛型之后的类型系统增加了<strong>两个维度</strong>：一个是<strong>类型参数自身</strong>的继承体系结构，另外一个是<strong>泛型类或接口自身</strong>的继承体系结构。第一个指的是对于<code>List&lt;String&gt;</code>和<code>List&lt;Object&gt;</code>这样的情况，类型参数 String 继承自 Object 。而第二种指的是<code>List&lt;String&gt;</code>和<code>Collection&lt;String&gt;</code>这种情况。对于这个类型系统，有如下的一些规则：</p>
-</blockquote>
-<ul>
-<li><p>相同类型参数的泛型类的关系取决于泛型类自身的继承体系结构。即<code>List&lt;String&gt;</code>是<code>Collection&lt;String&gt;</code>的子类型，<code>List&lt;String&gt;</code>可以替换<code>Collection&lt;String&gt;</code>。这种情况也适用于带有上下界的类型声明。</p>
-</li>
-<li><p>当泛型类的类型声明中使用了通配符的时候， 其子类型可以在两个维度上分别展开。如对<code>Collection&lt;? extends Number&gt;</code>来说，其子类型可以在 Collection 这个维度上展开，即<code>List&lt;? extends Number&gt;</code>和<code>Set&lt;? extends Number&gt;</code>等；也可以在 Number 这个层次上展开，即<code>Collection&lt;Double&gt;</code>和<code>Collection&lt;Integer&gt;</code>等。如此循环下去，<code>ArrayList&lt;Long&gt;</code>和<code>HashSet&lt;Double&gt;</code>等也都算是<code>Collection&lt;? extends Number&gt;</code>的子类型。</p>
-</li>
-<li><p>如果泛型类中包含多个类型参数，则对于每个类型参数分别应用上面的规则。</p>
-</li>
-</ul>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
-<p>Java泛型确实有些让人困惑的特性，让它使用起来不如 C++ 这种最开始就囊括了泛型的语言舒服。这也是任何有历史的编程语言所需要承担的历史包袱，后续的版本更新会被早期的设计缺陷所拖累。正是这样，如果一门语言长久的停留在过去，必然会被新的语言取代。</p>
-</blockquote>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<h3 id="类型系统"><a href="#类型系统" class="headerlink" title="类型系统"></a>类型系统</h3><p>引入泛型之后的类型系统增加了<strong>两个维度</strong>：一个是<strong>类型参数自身</strong>的继承体系结构，另外一个是<strong>泛型类或接口自身</strong>的继承体系结构。第一个指的是对于<code>List&lt;String&gt;</code>和<code>List&lt;Object&gt;</code>这样的情况，类型参数 String 继承自 Object 。而第二种指的是<code>List&lt;String&gt;</code>和<code>Collection&lt;String&gt;</code>这种情况。对于这个类型系统，有如下的一些规则：</p>
+<p>相同类型参数的泛型类的关系取决于泛型类自身的继承体系结构。即<code>List&lt;String&gt;</code>是<code>Collection&lt;String&gt;</code>的子类型，<code>List&lt;String&gt;</code>可以替换<code>Collection&lt;String&gt;</code>。这种情况也适用于带有上下界的类型声明。</p>
+<p>当泛型类的类型声明中使用了通配符的时候， 其子类型可以在两个维度上分别展开。如对<code>Collection&lt;? extends Number&gt;</code>来说，其子类型可以在 Collection 这个维度上展开，即<code>List&lt;? extends Number&gt;</code>和<code>Set&lt;? extends Number&gt;</code>等；也可以在 Number 这个层次上展开，即<code>Collection&lt;Double&gt;</code>和<code>Collection&lt;Integer&gt;</code>等。如此循环下去，<code>ArrayList&lt;Long&gt;</code>和<code>HashSet&lt;Double&gt;</code>等也都算是<code>Collection&lt;? extends Number&gt;</code>的子类型。</p>
+<p>如果泛型类中包含多个类型参数，则对于每个类型参数分别应用上面的规则。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Java泛型确实有些让人困惑的特性，这也是任何有历史的编程语言所需要承担的历史包袱，后续的版本更新会被早期的设计缺陷所拖累。正是这样，如果一门语言长久的停留在过去，必然会被新的语言取代。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li>《Java 编程思想》</li>
-<li><a href="http://www.infoq.com/cn/articles/cf-java-generics" target="_blank" rel="noopener">Java深度历险——Java泛型
-</a></li>
+<li><a href="http://www.infoq.com/cn/articles/cf-java-generics" target="_blank" rel="noopener">Java深度历险——Java泛型</a></li>
 </ul>
 
           
@@ -1019,7 +963,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
+                <time title="修改时间：2020-12-20 21:14:32" itemprop="dateModified" datetime="2020-12-20T21:14:32+08:00">2020-12-20</time>
               
             
           </span>
@@ -1076,7 +1020,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.3k</span>
+                <span title="本文字数">3.2k</span>
               
 
               
@@ -1102,102 +1046,42 @@
       
         
           
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>初学 <strong>Linux</strong> 总是好奇 <strong>Linux</strong> 系统下各个文件夹为什么这么命名，它们的用途是什么。本文主要介绍 <strong>Linux</strong> 下各文件夹的结构和用途说明</p>
-</blockquote>
-<ul>
-<li><p>使用的环境为 <strong>Aliyun</strong> 的服务器，系统为 <strong>Ubuntu 16.04</strong> 版本</p>
-</li>
-<li><p>不同的系统文件结构必然有所不同，但是只要是 <strong>Linux</strong> 发行版，就应该遵循 <strong>Linux</strong> 文件系统</p>
-</li>
-</ul>
-<h2 id="Color"><a href="#Color" class="headerlink" title="Color"></a>Color</h2><ul>
-<li>一般人性化点的 <strong>Shell</strong> 都会有文件的不同颜色显示。下图为 <strong>Linux</strong> 下不同颜色的文件代表的含义。比如可执行文件显示绿色，目录显示蓝色，链接文件显示浅蓝色等<br><img src="/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/0.png" alt="linuxfilecolor"></li>
-</ul>
-<h2 id="FHS"><a href="#FHS" class="headerlink" title="FHS"></a>FHS</h2><blockquote>
-<p><strong>Linux</strong> 有专门的指导文件系统的标准，叫做 <strong>FHS</strong>(or <strong>Filesystem Hierarchy Standard</strong>)</p>
-</blockquote>
-<ul>
-<li><p><strong>Linux</strong> 所依赖的文件系统，有两个基本的概念：</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shareable &#x2F; unshareable （共享性）</span><br><span class="line">static &#x2F; variable （稳定性）</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>对于可分享（<strong>shareable</strong>）的文件系统，<strong>FHS</strong> 规定</p>
-<blockquote>
-<p>可分享文件能够被存放在一台将被多个用户同时访问的主机上，通常情况下，当一个系统所需的所有文件都存放在一台外部主机上时，可以方便的挂载一个或很少几个目录来使这些文件可用。但是，并不是在文件系统架构中的所有文件都是可分享的，所以<strong>每个系统都至少需要一处能够存放不可共享文件</strong>的本地空间</p>
-</blockquote>
-</li>
-<li><p>对于静态（<strong>static</strong>）文件系统，<strong>FHS</strong> 规定</p>
-<blockquote>
-<p><strong>静态文件需要与动态文件隔离</strong>，因为，不同于动态文件，静态文件可以存放在<strong>只读介质</strong>上（而动态文件不可以），并且不需要和动态文件一起备份</p>
-</blockquote>
-</li>
-<li><p><strong>FHS</strong> 中关于特定文件夹用途和所需包含内容的规定</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;bin: Essential user command binaries (for use by all users)</span><br><span class="line">&#x2F;sbin: System binaries</span><br><span class="line">&#x2F;usr: shareable static</span><br><span class="line">    &#x2F;usr&#x2F;bin: Most user commands</span><br><span class="line">    &#x2F;usr&#x2F;sbin: Non-essential standard system binaries</span><br><span class="line">    &#x2F;usr&#x2F;local: Local hierarchy</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h3 id="bin"><a href="#bin" class="headerlink" title="/bin"></a>/bin</h3><ul>
-<li><p><code>/bin</code>，<strong>binary</strong> 的简称。该目录下为<strong>二进制</strong>的<strong>可执行文件</strong>，显示为<strong>绿色</strong>。包含了引导启动所需的命令或普通用户可使用的命令。多是系统中重要的<strong>系统文件</strong></p>
-</li>
-<li><p>比如说根目录<code>/bin</code>下都是些常用命令的执行文件，再比如说 <strong>Tomcat</strong> 的<code>bin</code>目录下有一些运行脚本，有 <strong>Linux Shell</strong> 执行的<code>.sh</code>结尾的文件，也有 <strong>Windows</strong> 执行的<code>.bat</code>结尾的文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;bin&#x2F;</span><br><span class="line">cat    tar    cp      ls     rm   ...</span><br><span class="line"></span><br><span class="line">$ ls &#x2F;usr&#x2F;local&#x2F;tomcat9&#x2F;bin&#x2F;</span><br><span class="line">shutdown.bat    catalina.bat     shutdown.sh</span><br><span class="line">catalina.sh     startup.bat      startup.sh    ...</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="sbin"><a href="#sbin" class="headerlink" title="/sbin"></a>/sbin</h3><ul>
-<li><p><code>/sbin</code>，<strong>System binaries</strong> 的简称。存放<strong>系统管理员</strong>以及其他需要<strong>root权限</strong>来运行的工具</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;sbin&#x2F;</span><br><span class="line">reboot    shutdown    poweroff    route    sysctl     ...</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="usr"><a href="#usr" class="headerlink" title="/usr"></a>/usr</h3><ul>
-<li><p><code>/usr</code>是文件系统中第二大主要部分，其中存放了<strong>可分享的</strong>、<strong>只读的</strong>数据（即<strong>可分享性</strong>，<strong>静态性数据</strong>）。这说明<code>/usr</code>文件系统需要能够在各种不同的兼容 <strong>FHS</strong> 系统的之间可共享，并且不可被修改。任何依赖于平台或者需要改写的数据，都应该存放在其它位置</p>
-</li>
-<li><p><code>/usr/bin</code>集中了几乎所有用户命令，比如<code>man、info</code>系统自带或者<code>git、docker</code>这种后来安装的三方软件的命令</p>
-</li>
-<li><p><code>/usr/sbin</code>包括了多数服务程序需要管理员权限的命令，比如<code>mysqld、sshd</code></p>
-</li>
-<li><p><code>/usr/local</code>，本地安装的软件和其他文件都可以放在这里</p>
-</li>
-</ul>
-<h3 id="lib"><a href="#lib" class="headerlink" title="/lib"></a>/lib</h3><ul>
-<li><p><code>/lib</code>，<strong>Libraries</strong> 的简称。库文件，存储文件运行需要的依赖库。不如 <strong>Tomcat</strong> 是基于 <strong>Java</strong> 的，它的<code>lib</code>目录下包含了一些依赖 <strong>Jar</strong> 包</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;usr&#x2F;local&#x2F;tomcat9&#x2F;lib</span><br><span class="line">annotations-api.jar       el-api.jar       tomcat-coyote.jar   tomcat-util-scan.jar</span><br><span class="line">catalina-ant.jar          jasper-el.jar</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="etc"><a href="#etc" class="headerlink" title="/etc"></a>/etc</h3><ul>
-<li><p><code>/etc</code>这个文件夹很有意思，也是最开始困扰我很久的，因为它里头什么都有…其实它取名就是取自”<strong>等等</strong>“的缩写词 <strong>etc.</strong> 存放着系统以及各种程序的配置文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls -F &#x2F;etc</span><br><span class="line">hosts    hostname    passwd    nginx&#x2F;    ssh&#x2F;    ...</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>早期 <strong>UNIX</strong> 系统中，对于<code>/etc</code>，贝尔实验室的解释是：<strong>etcetra directory</strong>(or <strong>etc.</strong>) 。表示其他、等等什么的，其实就是用来放不能归类到其他目录中的内容，所以比较杂乱。后来 <strong>FHS</strong> 规定用来放配置文件，就解释为：<strong>Editable Text Configuration</strong> 或者 <strong>Extended Tool Chest</strong></p>
-</li>
-</ul>
-<h3 id="var"><a href="#var" class="headerlink" title="/var"></a>/var</h3><ul>
-<li><p><code>/var</code>，<strong>Variable</strong> 的简称，多用于存放动态变化的文件。也用于某些大文件的<strong>溢出区</strong>，比如各种服务的日志文件</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;var&#x2F;backups</span><br><span class="line">group.bak    passwd.bak    ....</span><br><span class="line"></span><br><span class="line">$ ls &#x2F;var&#x2F;log</span><br><span class="line">syslog    dpkg.log    auth.log     ...</span><br><span class="line"></span><br><span class="line">$ ls -F &#x2F;var&#x2F;run</span><br><span class="line">nginx.pid    docker.pid    sshd.pid     resolvconf&#x2F;    ...</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>/var/run</code>中包含了进程的ID以及动态生成的配置文件等，比如连接网络时自动生成的<code>/var/run/resolvconf/resolv.conf</code>域名解析服务器的配置信息，其实<code>/etc/resolv.conf</code>文件就是链接到此文件</p>
-</li>
-</ul>
-<h3 id="root"><a href="#root" class="headerlink" title="/root"></a>/root</h3><ul>
-<li><p><code>/root</code>目录是<code>root</code>用户的<strong>用户目录</strong>，<code>~</code>代表当前用户的用户目录，普通用户的目录在<code>/home</code>下，比如我通过<code>su - s1mple</code>切换到 s1mple 用户，用户目录为<code>/home/s1mple</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu-server:~# pwd</span><br><span class="line">&#x2F;root</span><br><span class="line"></span><br><span class="line">s1mple@ubuntu-server:~$ pwd</span><br><span class="line">&#x2F;home&#x2F;s1mple</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="Others"><a href="#Others" class="headerlink" title="Others"></a>Others</h3><ul>
-<li><p><code>/opt</code>，<strong>Optional application software packages</strong> 代表你可以在该目录下安装第三方软件，和<code>/usr/local</code>的作用相似</p>
-</li>
-<li><p><code>/dev</code>，<strong>device</strong> 的简称，该目录存放设备文件，即设备驱动程序，用户通过这些文件访问外部设备。比如，用户可 以通过访问<code>/dev/mouse</code>来访问鼠标的输入，就像访问其他文件一样</p>
-</li>
-<li><p><code>/tmp</code>，<strong>temporary</strong> 的简称，目录存放程序在运行时产生的临时数据，<strong>注意：</strong><code>/var/tmp</code>比<code>/tmp</code>允许更大的或需要存在较长时间的临时文件</p>
-</li>
-<li><p><code>/proc</code>，虚拟的目录，是系统<strong>内存</strong>的映射。可直接访问这个目录来获取系统信息，比如<code>/proc/cpuinfo</code></p>
-</li>
-</ul>
-<hr>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><p><a href="http://mp.weixin.qq.com/s/yUwUawPlIjPThe3v1Ppcug" target="_blank" rel="noopener">Linux 下各文件夹的结构说明及用途介绍</a></p>
-</li>
-<li><p>上个图<br><img src="/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/1.jpg" alt="linux-file"> </p>
-</li>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>初学 <strong>Linux</strong> 总是好奇 <strong>Linux</strong> 系统下各个文件夹为什么这么命名，它们的用途是什么。本文主要介绍 <strong>Linux</strong> 下各文件夹的结构和用途说明</p>
+<p>使用的环境为 <strong>Aliyun</strong> 的服务器，系统为 <strong>Ubuntu 16.04</strong> 版本</p>
+<p>不同的系统文件结构必然有所不同，但是只要是 <strong>Linux</strong> 发行版，就应该遵循 <strong>Linux</strong> 文件系统</p>
+<h2 id="Color"><a href="#Color" class="headerlink" title="Color"></a>Color</h2><p>一般人性化点的 <strong>Shell</strong> 都会有文件的不同颜色显示。下图为 <strong>Linux</strong> 下不同颜色的文件代表的含义。比如可执行文件显示绿色，目录显示蓝色，链接文件显示浅蓝色等<br><img src="/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/0.png" alt="linuxfilecolor"></p>
+<h2 id="FHS"><a href="#FHS" class="headerlink" title="FHS"></a>FHS</h2><p><strong>Linux</strong> 有专门的指导文件系统的标准，叫做 <strong>FHS</strong>(or <strong>Filesystem Hierarchy Standard</strong>)</p>
+<p><strong>Linux</strong> 所依赖的文件系统，有两个基本的概念：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shareable &#x2F; unshareable （共享性）</span><br><span class="line">static &#x2F; variable （稳定性）</span><br></pre></td></tr></table></figure>
+<p>对于可分享（<strong>shareable</strong>）的文件系统，<strong>FHS</strong> 规定<br>可分享文件能够被存放在一台将被多个用户同时访问的主机上，通常情况下，当一个系统所需的所有文件都存放在一台外部主机上时，可以方便的挂载一个或很少几个目录来使这些文件可用。但是，并不是在文件系统架构中的所有文件都是可分享的，所以<strong>每个系统都至少需要一处能够存放不可共享文件</strong>的本地空间</p>
+<p>对于静态（<strong>static</strong>）文件系统，<strong>FHS</strong> 规定<br><strong>静态文件需要与动态文件隔离</strong>，因为，不同于动态文件，静态文件可以存放在<strong>只读介质</strong>上（而动态文件不可以），并且不需要和动态文件一起备份</p>
+<p><strong>FHS</strong> 中关于特定文件夹用途和所需包含内容的规定</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;bin: Essential user command binaries (for use by all users)</span><br><span class="line">&#x2F;sbin: System binaries</span><br><span class="line">&#x2F;usr: shareable static</span><br><span class="line">    &#x2F;usr&#x2F;bin: Most user commands</span><br><span class="line">    &#x2F;usr&#x2F;sbin: Non-essential standard system binaries</span><br><span class="line">    &#x2F;usr&#x2F;local: Local hierarchy</span><br></pre></td></tr></table></figure>
+<h3 id="bin"><a href="#bin" class="headerlink" title="/bin"></a>/bin</h3><p><code>/bin</code>，<strong>binary</strong> 的简称。该目录下为<strong>二进制</strong>的<strong>可执行文件</strong>，显示为<strong>绿色</strong>。包含了引导启动所需的命令或普通用户可使用的命令。多是系统中重要的<strong>系统文件</strong></p>
+<p>比如说根目录<code>/bin</code>下都是些常用命令的执行文件，再比如说 <strong>Tomcat</strong> 的<code>bin</code>目录下有一些运行脚本，有 <strong>Linux Shell</strong> 执行的<code>.sh</code>结尾的文件，也有 <strong>Windows</strong> 执行的<code>.bat</code>结尾的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;bin&#x2F;</span><br><span class="line">cat    tar    cp      ls     rm   ...</span><br><span class="line"></span><br><span class="line">$ ls &#x2F;usr&#x2F;local&#x2F;tomcat9&#x2F;bin&#x2F;</span><br><span class="line">shutdown.bat    catalina.bat     shutdown.sh</span><br><span class="line">catalina.sh     startup.bat      startup.sh    ...</span><br></pre></td></tr></table></figure>
+<h3 id="sbin"><a href="#sbin" class="headerlink" title="/sbin"></a>/sbin</h3><p><code>/sbin</code>，<strong>System binaries</strong> 的简称。存放<strong>系统管理员</strong>以及其他需要<strong>root权限</strong>来运行的工具</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;sbin&#x2F;</span><br><span class="line">reboot    shutdown    poweroff    route    sysctl     ...</span><br></pre></td></tr></table></figure>
+<h3 id="usr"><a href="#usr" class="headerlink" title="/usr"></a>/usr</h3><p><code>/usr</code>是文件系统中第二大主要部分，其中存放了<strong>可分享的</strong>、<strong>只读的</strong>数据（即<strong>可分享性</strong>，<strong>静态性数据</strong>）。这说明<code>/usr</code>文件系统需要能够在各种不同的兼容 <strong>FHS</strong> 系统的之间可共享，并且不可被修改。任何依赖于平台或者需要改写的数据，都应该存放在其它位置</p>
+<p><code>/usr/bin</code>集中了几乎所有用户命令，比如<code>man、info</code>系统自带或者<code>git、docker</code>这种后来安装的三方软件的命令</p>
+<p><code>/usr/sbin</code>包括了多数服务程序需要管理员权限的命令，比如<code>mysqld、sshd</code></p>
+<p><code>/usr/local</code>，本地安装的软件和其他文件都可以放在这里</p>
+<h3 id="lib"><a href="#lib" class="headerlink" title="/lib"></a>/lib</h3><p><code>/lib</code>，<strong>Libraries</strong> 的简称。库文件，存储文件运行需要的依赖库。不如 <strong>Tomcat</strong> 是基于 <strong>Java</strong> 的，它的<code>lib</code>目录下包含了一些依赖 <strong>Jar</strong> 包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;usr&#x2F;local&#x2F;tomcat9&#x2F;lib</span><br><span class="line">annotations-api.jar       el-api.jar       tomcat-coyote.jar   tomcat-util-scan.jar</span><br><span class="line">catalina-ant.jar          jasper-el.jar</span><br></pre></td></tr></table></figure>
+<h3 id="etc"><a href="#etc" class="headerlink" title="/etc"></a>/etc</h3><p><code>/etc</code>这个文件夹很有意思，也是最开始困扰我很久的，因为它里头什么都有…其实它取名就是取自”<strong>等等</strong>“的缩写词 <strong>etc.</strong> 存放着系统以及各种程序的配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls -F &#x2F;etc</span><br><span class="line">hosts    hostname    passwd    nginx&#x2F;    ssh&#x2F;    ...</span><br></pre></td></tr></table></figure>
+<p>早期 <strong>UNIX</strong> 系统中，对于<code>/etc</code>，贝尔实验室的解释是：<strong>etcetra directory</strong>(or <strong>etc.</strong>) 。表示其他、等等什么的，其实就是用来放不能归类到其他目录中的内容，所以比较杂乱。后来 <strong>FHS</strong> 规定用来放配置文件，就解释为：<strong>Editable Text Configuration</strong> 或者 <strong>Extended Tool Chest</strong></p>
+<h3 id="var"><a href="#var" class="headerlink" title="/var"></a>/var</h3><p><code>/var</code>，<strong>Variable</strong> 的简称，多用于存放动态变化的文件。也用于某些大文件的<strong>溢出区</strong>，比如各种服务的日志文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;var&#x2F;backups</span><br><span class="line">group.bak    passwd.bak    ....</span><br><span class="line"></span><br><span class="line">$ ls &#x2F;var&#x2F;log</span><br><span class="line">syslog    dpkg.log    auth.log     ...</span><br><span class="line"></span><br><span class="line">$ ls -F &#x2F;var&#x2F;run</span><br><span class="line">nginx.pid    docker.pid    sshd.pid     resolvconf&#x2F;    ...</span><br></pre></td></tr></table></figure>
+<p><code>/var/run</code>中包含了进程的ID以及动态生成的配置文件等，比如连接网络时自动生成的<code>/var/run/resolvconf/resolv.conf</code>域名解析服务器的配置信息，其实<code>/etc/resolv.conf</code>文件就是链接到此文件</p>
+<h3 id="root"><a href="#root" class="headerlink" title="/root"></a>/root</h3><p><code>/root</code>目录是<code>root</code>用户的<strong>用户目录</strong>，<code>~</code>代表当前用户的用户目录，普通用户的目录在<code>/home</code>下，比如我通过<code>su s1mple</code>切换到 s1mple 用户，用户目录为<code>/home/s1mple</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu-server:~# pwd</span><br><span class="line">&#x2F;root</span><br><span class="line"></span><br><span class="line">s1mple@ubuntu-server:~$ pwd</span><br><span class="line">&#x2F;home&#x2F;s1mple</span><br></pre></td></tr></table></figure>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p><code>/opt</code>，<strong>Optional application software packages</strong> 代表你可以在该目录下安装第三方软件，和<code>/usr/local</code>的作用相似</p>
+<p><code>/dev</code>，<strong>device</strong> 的简称，该目录存放设备文件，即设备驱动程序，用户通过这些文件访问外部设备。比如，用户可 以通过访问<code>/dev/mouse</code>来访问鼠标的输入，就像访问其他文件一样</p>
+<p><code>/tmp</code>，<strong>temporary</strong> 的简称，目录存放程序在运行时产生的临时数据，<strong>注意：</strong><code>/var/tmp</code>比<code>/tmp</code>允许更大的或需要存在较长时间的临时文件</p>
+<p><code>/proc</code>，虚拟的目录，是系统<strong>内存</strong>的映射。可直接访问这个目录来获取系统信息，比如<code>/proc/cpuinfo</code></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://mp.weixin.qq.com/s/yUwUawPlIjPThe3v1Ppcug" target="_blank" rel="noopener">Linux 下各文件夹的结构说明及用途介绍</a></li>
 </ul>
 
           
