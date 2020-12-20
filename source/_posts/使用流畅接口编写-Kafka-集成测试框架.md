@@ -8,7 +8,7 @@ date: 2020-01-03 19:26:40
 
 该文档是我在团队中负责集成测试模块时为团队成员编写的 API 接口文档，这次拿过来修改了一下，并已经将业务无关的代码剥离出来上传到 [GitHub](https://github.com/s1mplecc/kafka-integration-test) 上。主要是向大家展示一种流畅接口设计框架代码的模式。
 
-所谓流畅接口，可以参考我之前翻译的 Martin Flower 的[博客译文](https://s1mple.online/2019/01/23/Fluent-Interface-%E2%80%94%E2%80%94-Martin-Fowler-%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/)。简单来说，流畅接口被设计为**可读的**和**流式的**，使用起来几乎和自然语言一般流畅，并且配合 IDE 的智能提示，易于 API 使用者的理解和使用。譬如下面我编写的集成测试用例：
+所谓流畅接口，可以参考我之前翻译的 Martin Flower 的[博客译文](https://s2mple.xyz/2019/01/23/Fluent-Interface-%E2%80%94%E2%80%94-Martin-Fowler-%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/)。简单来说，流畅接口被设计为**可读的**和**流式的**，使用起来几乎和自然语言一般流畅，并且配合 IDE 的智能提示，易于 API 使用者的理解和使用。譬如下面我编写的集成测试用例：
 
 ```java
 public class InboundToOutboundExampleJobTest extends JobIntegrationTest {

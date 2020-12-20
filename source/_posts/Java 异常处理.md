@@ -119,7 +119,7 @@ Exception in thread "main" java.lang.NullPointerException
     at info.s1mple.exceptiondemo.ExceptionDemo.readFile(ExceptionDemo.java:32)
     at info.s1mple.exceptiondemo.ExceptionDemo.main(ExceptionDemo.java:16) */
 ```
-    
+
 上面的代码在完全没有能力从`FileNotFoundException`中恢复过来的情况下就捕获了它。如果文件无法找到，那么`in.read()`就不应该执行。尽管我们捕获了`FileNotFoundException`异常并打印了日志，但是一个更让人头疼的`NullPointerException`将被抛出。错误信息不仅误导了我们出了什么错（真正的错误是文件找不到而不是空指针），还误导了错误的出处，不应该在`in.read()`而应该在`new FileInputStream(filename)`。
 
 所以`readFile()`真正应该做的事情不是捕获这些异常，那应该是什么？看起来有点有悖常理，通常最合适的做法其实是什么都不做，不要马上捕获异常。把责任交给`readFile()`的调用者，让它来决定文件缺失的处理方法，有可能会提示用户指定其他文件，或者使用默认值，实在不行的话警告用户并退出程序。
@@ -129,7 +129,7 @@ Exception in thread "main" java.lang.NullPointerException
 ## 该抛出何种异常
 
 那么抛出异常时该抛出何种异常，是 Checked Exception 还是 Unchecked Exception ？我在网上查阅资料时发现不同的人对此有不同的观点，不管是开发人员还是项目的 Leader。有的认为该全部抛出 Unchecked Exception 类型的异常，并在某一层面做统一捕获处理，这样做的优点是保证了方法的纯粹性。另一种观点则不支持抛出`RuntimeException`。通过阅读《Thinking in Java》和[关于异常的争论：要检查，还是不要检查？-- IBM developerWorks](https://www.ibm.com/developerworks/cn/java/j-jtp05254/)（这是一篇非常优质的文章）发现很多资深的专家甚至是语言的设计者对此持有不同观点。
- 
+
 ### 传统的观点
 
 > “If a client can reasonably be expected to recover from an exception, make it a checked exception. If a client cannot do anything to recover from the exception, make it an unchecked exception.” —— *The Java Tutorial*
@@ -170,7 +170,6 @@ Rod Johnson 采取一个不太激进的方法。他提出，**一些异常本质
 ## 参考
 
 - 《Thinking in Java》
-- [阿里巴巴 Java 开发手册](https://dir.s1mple.online/alibaba-java-dev-manual.pdf)
 - [关于异常的争论：要检查，还是不要检查？-- IBM developerWorks](https://www.ibm.com/developerworks/cn/java/j-jtp05254/)
 - [Java异常的深入研究与分析 -- 知乎](https://zhuanlan.zhihu.com/p/28302269)
 - [如何优雅的处理异常？-- 知乎](https://www.zhihu.com/question/28254987)

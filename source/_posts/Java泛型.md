@@ -6,7 +6,7 @@ categories: [Languages]
 ---
 ## 前言
 
-我的上一篇博客 [Java泛型与擦除](https://s1mple.online/java-generic-type-erasure/)只是对于 Java 泛型和类型擦除做了一个简要的介绍，本文主要是针对 Java 泛型做一些更深入的补充说明。
+我的上一篇博客[Java 泛型之类型擦除](https://s2mple.xyz/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/)只是对于 Java 泛型和类型擦除做了一个简要的介绍，本文主要是针对 Java 泛型做一些更深入的补充说明。
 
 ## 泛型的引入
 

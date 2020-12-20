@@ -8,7 +8,7 @@ categories: [Coding]
 
 > 最近遇到需要在 Spring Cloud 框架中加入**用户认证**的功能，发现 GitHub 有第三方认证功能，遂先写了个 demo 实现通过 GitHub 三方认证完成用户认证，虽然不是最终解决方案，但是有助于理解用户认证的流程
  
-- 代码沿用之前的 [Sidecar -- 将Node应用引入Spring Cloud](https://s1mple.online/sidecar/) 博客中的代码，用到以下模块
+- 代码沿用之前的 [Sidecar -- 将Node应用引入Spring Cloud](https://s2mple.xyz/sidecar/) 博客中的代码，用到以下模块
 
     ```
     ─ sidecar-example

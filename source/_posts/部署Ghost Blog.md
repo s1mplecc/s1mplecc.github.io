@@ -80,7 +80,7 @@ categories: [Ops]
 
 ## Postscript
 
-* 本来想在docker容器中部署Ghost,但是可能由于docker和宿主系统隔离的原因，systemd命令不能正常运行`Failed to connect to bus: No such file or directory`。暂时没找到解决方法。不过我在docker里部署了另一个博客平台jPress。[跳转链接](https://jpress.s1mple.online/)
+* 本来想在docker容器中部署Ghost,但是可能由于docker和宿主系统隔离的原因，systemd命令不能正常运行`Failed to connect to bus: No such file or directory`。暂时没找到解决方法。不过我在docker里部署了另一个博客平台jPress。[跳转链接](https://jpress.s2mple.xyz/)
 * jPress是基于java的轻量级博客平台，前身是WordPress。也许下个博客我会介绍如何用docker部署jPress，谁知道呢。
 
 

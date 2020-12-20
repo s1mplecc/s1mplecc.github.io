@@ -113,7 +113,7 @@ Optional 真正的核心就在于下面这些方法。
 
 Optional 对于 Java8 提供的四种**函数接口**：`Function`、`Predicate`、`Consumer`、`Supplier` 都包装了相应的方法，以满足我们可以进行**函数式**风格的编码。本部分介绍这些方法的实现和使用，为了直观，部分代码使用匿名内部类的方式。
 
-关于函数接口（**Functional Interfaces**），我的上一篇博客 [Java8 函数接口](https://s1mple.online/java-functional-interfaces/)中有详细介绍。
+关于函数接口（**Functional Interfaces**），我的上一篇博客 [Java8 函数接口](https://s2mple.xyz/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/)中有详细介绍。
 
 ### ifPresent
 
@@ -203,7 +203,7 @@ Optional.of("abc")
 // Lambda
 Optional.of("abc").map(s -> s.length()); // Optional<Integer>
 ```
-	
+
 ### flatMap
 
 `flatMap` 可以视作一种特殊的 `map` 操作，可以视为 map + flatten 操作。仔细观察，它的入参接受的 Function 函数的输出泛型为 `Optional<U>`，所以不需要像 `map` 方法中再用 `ofNullable()` 包装成 Optional 容器。

@@ -23,7 +23,7 @@ categories: [Languages]
     ali.add("aaa");  // error
     ```
     
-- 自定义泛型类可以参考我的上一篇博客，[Java泛型之LinkedStack](https://s1mple.online/java-generics-linkedstack/)
+- 自定义泛型类可以参考我的上一篇博客，[Java泛型之LinkedStack](https://s2mple.xyz/java-generics-linkedstack/)
 
 ### 使用泛型需要注意
 ---

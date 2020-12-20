@@ -6,7 +6,7 @@ categories: [Coding]
 ---
 ## 目标
 
-编写一个 Java 的爬虫程序，并行爬取小说网站上的小说。代码已上传至 [GitHub](https://github.com/s1mplecc/web-crawler)。Python 编写的爬虫请见[50 行代码实现一个并发的 Python 爬虫程序](https://s1mple.online/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/)。本文主要关注：
+编写一个 Java 的爬虫程序，并行爬取小说网站上的小说。代码已上传至 [GitHub](https://github.com/s1mplecc/web-crawler)。Python 编写的爬虫请见[50 行代码实现一个并发的 Python 爬虫程序](https://s2mple.xyz/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/)。本文主要关注：
 
 - 爬虫程序思路
 - 使用 **Gradle** 构建项目时遇到的问题以及解决办法

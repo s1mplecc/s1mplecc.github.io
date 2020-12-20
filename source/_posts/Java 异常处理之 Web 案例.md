@@ -6,7 +6,7 @@ categories: [Coding]
 ---
 ## 前言
 
-基于我的上一篇博客：[Java 异常处理](https://s1mple.online/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/)中的观点，我编写了一个简单的 Web 案例，包括自定义异常类，在合适的层面处理，以及遇到的由于代码 Bug 抛出运行时异常的情形。示例代码已经上传至 [GitHub](https://github.com/s1mplecc/exception-demo)，包含基于 Spring Boot 的 Java 后端代码以及基于 Vue.js 的前端代码两个部分。
+基于我的上一篇博客：[Java 异常处理](https://s2mple.xyz/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/)中的观点，我编写了一个简单的 Web 案例，包括自定义异常类，在合适的层面处理，以及遇到的由于代码 Bug 抛出运行时异常的情形。示例代码已经上传至 [GitHub](https://github.com/s1mplecc/exception-demo)，包含基于 Spring Boot 的 Java 后端代码以及基于 Vue.js 的前端代码两个部分。
  
 我们的演示案例有两个功能，获取用户列表以及注册新用户，界面如下所示：
 

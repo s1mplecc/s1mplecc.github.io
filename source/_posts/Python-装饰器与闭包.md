@@ -60,7 +60,7 @@ public interface Consumer<T> {
 // consumer.accept("hello");
 ```
 
-所以在 Java8 中，看似函数可以作为参数传入，但实际上传入的依旧是类的实例。如果对 Java8 的函数式编程感兴趣可以参考这篇：[Java8 函数接口](https://s1mple.online/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/)。
+所以在 Java8 中，看似函数可以作为参数传入，但实际上传入的依旧是类的实例。如果对 Java8 的函数式编程感兴趣可以参考这篇：[Java8 函数接口](https://s2mple.xyz/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/)。
 
 言归正传，既然已经清楚了 Python 中可以定义高阶函数，那么接下来就可以探讨一下 Python 怎么使用高阶函数实现装饰器的。但在这之前，不得不提及一下什么是闭包。
 
@@ -207,5 +207,5 @@ running sleep_ms(100): 0.10072612899966771s
 ## 参考
 
 - 《流畅的 Python》
-- [函数式编程](https://s1mple.online/2018/05/24/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/)
+- [函数式编程](https://s2mple.xyz/2018/05/24/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/)
 - [Which Programming Languages Are Functional?](http://blog.jenkster.com/2015/12/which-programming-languages-are-functional.html)

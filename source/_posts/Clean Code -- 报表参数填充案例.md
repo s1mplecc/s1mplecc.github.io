@@ -6,7 +6,7 @@ categories: [Coding]
 ---
 ## 前言
 
-该系列源于[张逸总监](http://zhangyi.xyz/)的 **Clean Code** 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。[上一篇](https://s1mple.online/clean-code-1/)我们介绍了**迪米特法则（最小知识法则）**、**信息专家模式：数据和行为应该封装在一起**，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过**报表参数填充**的案例来加深理解，并见识 IDEA 中更为强大的重构功能。
+该系列源于[张逸总监](http://zhangyi.xyz/)的 **Clean Code** 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。[上一篇](https://s2mple.xyz/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/)我们介绍了**迪米特法则（最小知识法则）**、**信息专家模式：数据和行为应该封装在一起**，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过**报表参数填充**的案例来加深理解，并见识 IDEA 中更为强大的重构功能。
 
 ## 准备工作
 
@@ -21,7 +21,7 @@ Cmd + Shift + ⬆️/ ⬇️ // 上下移动声明体（statement）
 
 Ctrl + T // 重构菜单
 ```
-    
+
 ## 案例：报表系统之参数处理
 
 在示例项目中，需要对客户发出的 Web 请求进行处理，获得需要的参数。参数的值放在 Request 中，实现根据配置文件获得了参数的类型信息。根据项目需求，将参数划分为三种：
@@ -29,7 +29,7 @@ Ctrl + T // 重构菜单
 - 单一参数（SimpleParameter）
 - 元素项参数（ItemParameter）
 - 表参数（TableParameter）
- 
+
 因为参数的属性是在配置文件中已经配好，所以定义了 ParameterGraph 对象。它能够读取参数的配置信息，并根据参数的类型创建不同的参数类，这些参数类共同实现了 Parameter 接口。
 
 最初的实现代码为：
@@ -74,7 +74,7 @@ public class ParameterCollector {
     }
 }
 ```
-    
+
 观察代码，`if statement`中的三段代码块其实做的都是**填充参数**的事，只不过用`instanceof`判断了参数类型再执行对应的填充操作。结合之前的 Paperboy 案例，与 Wallet 打交道的应该是 Customer 而不是 Paperboy。上述代码明显也违反了迪米特法则，**参数填充的行为应该交由参数类完成而不是 ParameterCollector**。
     
 ## 重构

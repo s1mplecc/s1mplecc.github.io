@@ -10,7 +10,7 @@ Git 是目前世界上最先进的分布式版本控制系统。相比较CVS及S
 
 ## Git 命令
 
-本文主要介绍基础的 Git 命令，更加复杂的 Git 命令可以查看：[Git 进阶教程](https://s1mple.online/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/)。另外 Git 的常用命令文档可以参考：[git-cheatsheet](https://education.github.com/git-cheat-sheet-education.pdf)。
+本文主要介绍基础的 Git 命令，更加复杂的 Git 命令可以查看：[Git 进阶教程](https://s2mple.xyz/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/)。另外 Git 的常用命令文档可以参考：[git-cheatsheet](https://education.github.com/git-cheat-sheet-education.pdf)。
 
 ### 创建仓库
 
