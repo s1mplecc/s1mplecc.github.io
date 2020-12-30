@@ -112,19 +112,29 @@
 
 
 
-  <meta name="description" content="Preface单例模式为GOF设计模式中的一种，当我们创建的对象需要昂贵的资源，且该对象又被频繁使用，同时，这个对象的状态是共享的，为了避免资源的浪费以及加载资源的时间，我们往往会引入单例模式。因此，要实现单例模式，其核心就是要在已有该类的实例前提下，阻止其他开发人员再创建类的新实例。 在Java语言中，通常提供了如下几种单例模式的实现方式。 懒汉模式12345678910111213public">
+  <meta name="description" content="前言该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。上一篇我们介绍了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过报表参数填充案例来加深理解，并见识 IDEA 中更为强大的重构功能。 准备工作 IntelliJ I">
 <meta property="og:type" content="article">
-<meta property="og:title" content="单例模式">
-<meta property="og:url" content="https://s1mplecc.github.io/2018/11/12/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:title" content="Clean Code -- 第二节：报表参数填充案例">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/index.html">
 <meta property="og:site_name" content="s1mple的博客">
-<meta property="og:description" content="Preface单例模式为GOF设计模式中的一种，当我们创建的对象需要昂贵的资源，且该对象又被频繁使用，同时，这个对象的状态是共享的，为了避免资源的浪费以及加载资源的时间，我们往往会引入单例模式。因此，要实现单例模式，其核心就是要在已有该类的实例前提下，阻止其他开发人员再创建类的新实例。 在Java语言中，通常提供了如下几种单例模式的实现方式。 懒汉模式12345678910111213public">
+<meta property="og:description" content="前言该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。上一篇我们介绍了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过报表参数填充案例来加深理解，并见识 IDEA 中更为强大的重构功能。 准备工作 IntelliJ I">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2018-11-12T05:42:03.000Z">
-<meta property="article:modified_time" content="2020-09-16T01:48:41.967Z">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/0.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/1.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/2.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/3.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/4.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/5.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/6.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/7.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/8.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/9.png">
+<meta property="article:published_time" content="2018-05-07T05:39:03.000Z">
+<meta property="article:modified_time" content="2020-12-30T12:13:11.497Z">
 <meta property="article:author" content="s1mple">
-<meta property="article:tag" content="Java">
-<meta property="article:tag" content="Design Pattern">
+<meta property="article:tag" content="Code Refactoring">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/0.png">
 
 
   
@@ -135,7 +145,7 @@
 
 
 
-  <link rel="canonical" href="https://s1mplecc.github.io/2018/11/12/单例模式/"/>
+  <link rel="canonical" href="https://s1mplecc.github.io/2018/05/07/Clean Code -- 第二节：报表参数填充案例/"/>
 
 
 
@@ -145,7 +155,7 @@
   };
 </script>
 
-  <title>单例模式 | s1mple的博客</title>
+  <title>Clean Code -- 第二节：报表参数填充案例 | s1mple的博客</title>
   
 
 
@@ -375,7 +385,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/12/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -392,7 +402,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">单例模式
+          <h1 class="post-title" itemprop="name headline">Clean Code -- 第二节：报表参数填充案例
               
             
           </h1>
@@ -417,7 +427,7 @@
                 
               
 
-              <time title="创建时间：2018-11-12 13:42:03" itemprop="dateCreated datePublished" datetime="2018-11-12T13:42:03+08:00">2018-11-12</time>
+              <time title="创建时间：2018-05-07 13:39:03" itemprop="dateCreated datePublished" datetime="2018-05-07T13:39:03+08:00">2018-05-07</time>
             
 
             
@@ -434,7 +444,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
+                <time title="修改时间：2020-12-30 20:13:11" itemprop="dateModified" datetime="2020-12-30T20:13:11+08:00">2020-12-30</time>
               
             
           </span>
@@ -451,7 +461,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Design/" itemprop="url" rel="index"><span itemprop="name">Design</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
 
                 
                 
@@ -466,10 +476,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/11/12/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
+                <a href="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/11/12/单例模式/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/05/07/Clean Code -- 第二节：报表参数填充案例/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -499,7 +509,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.1k</span>
+                <span title="本文字数">4.7k</span>
               
 
               
@@ -523,27 +533,71 @@
       
 
       
-        <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><p>单例模式为GOF设计模式中的一种，当我们创建的对象需要昂贵的资源，且该对象又被频繁使用，同时，这个对象的状态是共享的，为了避免资源的浪费以及加载资源的时间，我们往往会引入单例模式。因此，要实现单例模式，其核心就是要<strong>在已有该类的实例前提下，阻止其他开发人员再创建类的新实例</strong>。</p>
-<p>在Java语言中，通常提供了如下几种单例模式的实现方式。</p>
-<h4 id="懒汉模式"><a href="#懒汉模式" class="headerlink" title="懒汉模式"></a>懒汉模式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingletonDemo instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>通过提供一个静态的对象 <code>instance</code>，利用 <code>private</code> 权限的构造方法和 <code>getInstance()</code> 方法来给予访问者一个单例。缺点是，没有考虑到线程安全，可能存在多个访问者同时访问，并同时构造了多个对象的问题。之所以叫做懒汉模式，主要是因为此种方法可以非常明显的 <strong>lazy loading</strong>。针对懒汉模式<strong>线程不安全</strong>的问题，我们自然想到了，在 <code>getInstance()</code> 方法前加锁，于是就有了第二种实现。</p>
-<h4 id="线程安全的懒汉模式"><a href="#线程安全的懒汉模式" class="headerlink" title="线程安全的懒汉模式"></a>线程安全的懒汉模式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingletonDemo instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然而并发其实是一种特殊情况，大多时候这个锁占用的额外资源都浪费了，这种打补丁方式写出来的结构效率很低。</p>
-<h4 id="饿汉模式"><a href="#饿汉模式" class="headerlink" title="饿汉模式"></a>饿汉模式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingletonDemo instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singleton has loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hello"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>由于 <code>instance</code> 成员变量使用 <code>static</code> 修饰，在 JVM 首次加载该类时单例对象 <code>instance</code> 会被创建并<strong>常驻内存</strong>，所以是线程安全的。但显然，这种方法没有起到 lazy loading 的效果。举个例子，也许你只想调用 <code>SingletonDemo.printHello()</code> 方法，但同时打印了 ”Singleton has loaded“，这可能是你不想见到的。</p>
-<p>所以我们引入静态类内部加载的方式，也算是单例模式较为完善的解决方案。</p>
-<h4 id="静态类内部加载"><a href="#静态类内部加载" class="headerlink" title="静态类内部加载"></a>静态类内部加载</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingletonHolder.instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> SingletonDemo instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用<strong>私有内部类</strong>的好处是，静态内部类不会在单例加载时就加载，而是在调用 <code>getInstance()</code> 方法时才进行加载。且单例的创建是在 SingletonHolder 被 JVM 加载时完成，故而也是线程安全的。因此该方法兼备了以上两种实现的优点。</p>
-<h4 id="双重校验锁法"><a href="#双重校验锁法" class="headerlink" title="双重校验锁法"></a>双重校验锁法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> SingletonDemo instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Singletonhasloaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDemo <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (SingletonDemo.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> SingletonDemo();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>接下来我解释一下在并发时，双重校验锁法会有怎样的情景：</p>
-<ul>
-<li>STEP 1. 线程A访问 <code>getInstance()</code> 方法，因为单例还没有实例化，所以进入了锁定块。</li>
-<li>STEP 2. 线程B访问 <code>getInstance()</code> 方法，因为单例还没有实例化，得以访问接下来代码块，而接下来代码块已经被线程1锁定。</li>
-<li>STEP 3. 线程A进入下一判断，因为单例还没有实例化，所以进行单例实例化，成功实例化后退出代码块，解除锁定。</li>
-<li>STEP 4. 线程B进入接下来代码块，锁定线程，进入下一判断，因为已经实例化，退出代码块，解除锁定。</li>
-<li>STEP 5. 线程A初始化并获取到了单例实例并返回，线程B获取了在线程A中初始化的单例。</li>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。<a href="https://s2mple.xyz/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/" target="_blank" rel="noopener">上一篇</a>我们介绍了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过报表参数填充案例来加深理解，并见识 IDEA 中更为强大的重构功能。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
+<li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目。</li>
+<li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 <code>Cmd + D</code> 查看<strong>代码差异</strong>。</li>
+<li><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 <code>Cmd</code> 替换成 <code>Ctrl</code>，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键。</li>
 </ul>
-<p>理论上双重校验锁法是线程安全的，并且，这种方法实现了lazy loading。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl + T</td>
+<td>重构菜单</td>
+</tr>
+<tr>
+<td>Shift + F6</td>
+<td>重命名方法、属性、文件</td>
+</tr>
+<tr>
+<td>Cmd + Alt + M</td>
+<td>提取方法（extract method）</td>
+</tr>
+<tr>
+<td>Cmd + Alt + N</td>
+<td>内联（Inline），与 extract 相反</td>
+</tr>
+<tr>
+<td>Cmd + Shift + 上下箭头</td>
+<td>上下移动声明体（statement）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="案例：报表系统之参数处理"><a href="#案例：报表系统之参数处理" class="headerlink" title="案例：报表系统之参数处理"></a>案例：报表系统之参数处理</h2><p>在示例项目中，需要对客户发出的 Web 请求进行处理，获得需要的参数。参数的值放在 Request 中，实现根据配置文件获得了参数的类型信息。根据项目需求，将参数划分为三种：</p>
+<ul>
+<li>单一参数（SimpleParameter）</li>
+<li>元素项参数（ItemParameter）</li>
+<li>表参数（TableParameter）</li>
+</ul>
+<p>因为参数的属性是在配置文件中已经配好，所以定义了 ParameterGraph 对象。它能够读取参数的配置信息，并根据参数的类型创建不同的参数类，这些参数类共同实现了 Parameter 接口。</p>
+<p>最初的实现代码为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ParameterCollector</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fillParameters</span><span class="params">(ServletHttpRequest request, ParameterGraph parameterGraph)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (Parameter para : parameterGraph.getParmaeters()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (para <span class="keyword">instanceof</span> SimpleParameter) &#123;</span><br><span class="line">                SimpleParameter simplePara = (SimpleParameter) para;</span><br><span class="line">                String[] values = request.getParameterValues(simplePara.getName());</span><br><span class="line">                simplePara.setValue(values);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (para <span class="keyword">instanceof</span> ItemParameter) &#123;</span><br><span class="line">                    ItemParameter itemPara = (ItemParameter) para;</span><br><span class="line">                    <span class="keyword">for</span> (Item item : itemPara.getItems()) &#123;</span><br><span class="line">                        String[] values = request.getParameterValues(item.getName());</span><br><span class="line">                        item.setValues(values);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    TableParameter tablePara = (TableParameter) para;</span><br><span class="line">                    String[] rows =</span><br><span class="line">                            request.getParameterValues(tablePara.getRowName());</span><br><span class="line">                    String[] columns =</span><br><span class="line">                            request.getParameterValues(tablePara.getColumnName());</span><br><span class="line">                    String[] dataCells =</span><br><span class="line">                            request.getParameterValues(tablePara.getDataCellName());</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">int</span> columnSize = columns.length;</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; rows.length; i++) &#123;</span><br><span class="line">                        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; columns.length; j++) &#123;</span><br><span class="line">                            TableParameterElement element = <span class="keyword">new</span> TableParameterElement();</span><br><span class="line">                            element.setRow(rows[i]);</span><br><span class="line">                            element.setColumn(columns[j]);</span><br><span class="line">                            element.setDataCell(dataCells[columnSize * i + j]);</span><br><span class="line">                            tablePara.addElement(element);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>观察代码，<code>if statement</code>中的三段代码块其实做的都是<strong>填充参数</strong>的事，只不过用<code>instanceof</code>判断了参数类型再执行对应的填充操作。结合之前的 Paperboy 案例，与 Wallet 打交道的应该是 Customer 而不是 Paperboy。上述代码明显也违反了迪米特法则，<strong>参数填充的行为应该交由参数类完成而不是 ParameterCollector</strong>。</p>
+<h2 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h2><p>基于代码重用的思想，先将三段代码 <strong>提取方法（Cmd + Alt + M）</strong>，并分别取名为<code>fillSimplePara()</code>、<code>fillItemPara()</code>、<code>fillTablePara()</code>，重构后的方法顺序可能有所差异，可以在方法签名上使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 快捷键移动方法顺序，使之符合正常的阅读习惯。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/0.png" alt="A6C5B629-ACC6-458A-8379-852021771E83"></p>
+<p>提取了方法后，这一幕是不是似曾相识？之前的 Paperboy 案例中，我们从<code>charge()</code>方法中提取了<code>pay()</code>方法，意识到<code>pay()</code>方法应该归属于 Customer 而不是 Paperboy。这里就要再次强调：<strong>数据和行为应该封装在一起</strong>。显然，ParameterCollector 这个类不应该关注如何填充参数，而是应该收到<code>fillParameters()</code>请求后<strong>委派</strong>给各个 Parameter 类完成填充操作。所以我们采取“<strong>Move Method</strong>”重构手法（<strong>F6</strong>）。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/1.png" alt="17C89C7E-DA4F-4914-AA2A-5F6C8DE8845E"></p>
+<p>注意，IDEA 通过入参智能提示可以将方法移动到两个类中，显然应该选择 SimpleParameter，同时，方法的访问权限应为 public。接下来分别将<code>fillItemPara()</code>和<code>fillTablePara()</code>方法移动至 ItemParameter 和 TableParameter 中。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/2.png" alt="8FB216EF-394B-42F3-B556-6EC576224FE7"></p>
+<p>观察上图你会发现，原先的方法有两个参数，但由于我们移动了方法到对应的 Parameter 类中，第二个参数直接变成了用<code>this</code>引用当前对象。<code>ItemParameter itemPara = this;</code>这一步是多余的，直接使用<strong>内联（Cmd + Alt + N</strong>）消除。然后呢，别着急，我们想一想，既然 SimpleParameter、ItemParameter、TableParameter 三个类都有接收一个 request 参数的填充方法，而且他们都实现了 Parameter 接口，那我们为什么不将方法提到接口中，让其他三个类去重写呢？所以接下来先把方法都重命名为<code>fill()</code>，使用 <strong>Shift + F6</strong>进行重命名。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/3.png" alt="74F483BA-13C8-4769-9E94-290369E2B41B-1"></p>
+<p>接着，不要傻乎乎的去 Parameter 接口中手写<code>fill()</code>抽象方法，还是有快捷键的！那就是 “<strong>Pull Members Up</strong>”重构手法，说真的，当时看张总演示我就震惊了！选中方法，使用 <strong>Ctrl + T</strong> 调出重构菜单，输入一个 pull 你就能看到提示了。<br><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/4.png" alt="C477A0C4-7E53-4C85-BE02-4A37697680B5"></p>
+<p>IDEA 会提示你将<code>pull()</code>方法提升至 Parameter 接口中并 make abstract。<br><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/5.png" alt="9E0BC21E-0DFB-47AF-8B9E-C99900755E7F"></p>
+<p>我们看看重构后的效果，甚至于 ItemParameter 的<code>fill()</code>方法还已经帮你添加了<code>@Override</code>注解，但是剩下的两个 Parameter 类中的<code>fill()</code>方法还需要你手动的添加注解。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/6.png" alt="0007121B-DCAA-4629-B1EB-911959D12455"> <img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/7.png" alt="FE508CEB-BABF-4D6F-830E-A6C126BCD693"></p>
+<p>最后我们回到 ParameterCollector 类，使用 IDEA 的<strong>智能辅助</strong>快捷键（<strong>Alt + Enter</strong>）去 Cleanup code 删除多余的类型转换。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/8.png" alt="5A6909D5-21DC-45BB-B3F0-02ECE946EC10"></p>
+<p>然后，你就会发现，<code>if statement</code>也是多余的，删除后，<strong>Cmd + Alt + L</strong> 格式化代码。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/9.png" alt="91715C62-8438-4C16-BE77-0C821007877A"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如此，重构过的代码，可谓是层次清晰、一目了然，可比原来一坨堆在 ParameterCollector 中要美观多了。在重构的过程中，我们意识到，<strong>填充参数的行为应该交由它的专家，即各个 Parameter 类管理</strong>，移动方法后，又意识到既然都实现了 Parameter 接口，就应当使用 Java 接口的特性将<code>fill()</code>提升到 Parameter 接口中成为一个抽象方法。至此，<code>if</code>语句和<code>instanceof</code>也都不需要了，交由 JVM 在运行时识别类类型即可。所以说，<strong>重构的过程还可以帮助程序员梳理编码过程，进行合理的抽象和封装</strong>。当然，没有实践的空想理论是不行的，牢记 IDEA 的快捷键，将重构养成习惯，不时来一波亮瞎狗眼的骚操作，岂不美滋滋？</p>
 
       
     </div>
@@ -567,9 +621,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java/" rel="tag"># Java</a>
-          
-            <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
+            <a href="/tags/Code-Refactoring/" rel="tag"># Code Refactoring</a>
           
         </div>
       
@@ -582,8 +634,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/05/Java%20%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/" rel="next" title="Java 网络爬虫">
-                <i class="fa fa-chevron-left"></i> Java 网络爬虫
+              <a href="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/" rel="next" title="Clean Code -- 第一节：迪米特法则与 Paperboy 案例">
+                <i class="fa fa-chevron-left"></i> Clean Code -- 第一节：迪米特法则与 Paperboy 案例
               </a>
             
           </div>
@@ -592,8 +644,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/" rel="prev" title="Java8 函数接口">
-                Java8 函数接口 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/" rel="prev" title="Clean Code -- 第二节：报表参数填充案例">
+                Clean Code -- 第二节：报表参数填充案例 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -843,7 +895,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#懒汉模式"><span class="nav-number">1.0.1.</span> <span class="nav-text">懒汉模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程安全的懒汉模式"><span class="nav-number">1.0.2.</span> <span class="nav-text">线程安全的懒汉模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#饿汉模式"><span class="nav-number">1.0.3.</span> <span class="nav-text">饿汉模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态类内部加载"><span class="nav-number">1.0.4.</span> <span class="nav-text">静态类内部加载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#双重校验锁法"><span class="nav-number">1.0.5.</span> <span class="nav-text">双重校验锁法</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备工作"><span class="nav-number">2.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#案例：报表系统之参数处理"><span class="nav-number">3.</span> <span class="nav-text">案例：报表系统之参数处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重构"><span class="nav-number">4.</span> <span class="nav-text">重构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -1029,9 +1081,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://s1mplecc.github.io/2018/11/12/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/';
-        this.page.identifier = '2018/11/12/单例模式/';
-        this.page.title = '单例模式';
+        this.page.url = 'https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/';
+        this.page.identifier = '2018/05/07/Clean Code -- 第二节：报表参数填充案例/';
+        this.page.title = 'Clean Code -- 第二节：报表参数填充案例';
         };
       function loadComments () {
         var d = document, s = d.createElement('script');

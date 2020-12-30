@@ -434,7 +434,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-12-30 19:33:56" itemprop="dateModified" datetime="2020-12-30T19:33:56+08:00">2020-12-30</time>
+                <time title="修改时间：2020-12-30 20:13:45" itemprop="dateModified" datetime="2020-12-30T20:13:45+08:00">2020-12-30</time>
               
             
           </span>
@@ -517,7 +517,7 @@
       
         
           
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。<a href="https://s2mple.xyz/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/" target="_blank" rel="noopener">上一篇</a>我们通过报表参数填充案例复习了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起。本篇我们将通过 PartDB 案例来见识 IDEA 中 <strong>Extract Superclass</strong> 等强大的重构功能，以及与案例相关的设计模式：<strong>模版方法模式</strong>。</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。<a href="https://s2mple.xyz/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/" target="_blank" rel="noopener">上一篇</a>我们通过报表参数填充案例复习了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起。本篇我们将通过 PartDB 案例来见识 IDEA 中 <strong>Extract Superclass</strong> 等强大的重构功能，以及与案例相关的设计模式：<strong>模版方法模式</strong>。</p>
 <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
 <li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目。</li>
 <li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 <code>Cmd + D</code> 查看<strong>代码差异</strong>。</li>
@@ -714,24 +714,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -881,7 +863,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="s1mple">
@@ -901,7 +883,273 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">Clean Code -- 第一节：迪米特法则与 Paperboy 案例</a>
+                <a href="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">Clean Code -- 第二节：报表参数填充案例</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-07 13:39:03" itemprop="dateCreated datePublished" datetime="2018-05-07T13:39:03+08:00">2018-05-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-30 20:13:11" itemprop="dateModified" datetime="2020-12-30T20:13:11+08:00">2020-12-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/07/Clean Code -- 第二节：报表参数填充案例/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.7k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。<a href="https://s2mple.xyz/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/" target="_blank" rel="noopener">上一篇</a>我们介绍了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过报表参数填充案例来加深理解，并见识 IDEA 中更为强大的重构功能。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
+<li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目。</li>
+<li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 <code>Cmd + D</code> 查看<strong>代码差异</strong>。</li>
+<li><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 <code>Cmd</code> 替换成 <code>Ctrl</code>，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键。</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl + T</td>
+<td>重构菜单</td>
+</tr>
+<tr>
+<td>Shift + F6</td>
+<td>重命名方法、属性、文件</td>
+</tr>
+<tr>
+<td>Cmd + Alt + M</td>
+<td>提取方法（extract method）</td>
+</tr>
+<tr>
+<td>Cmd + Alt + N</td>
+<td>内联（Inline），与 extract 相反</td>
+</tr>
+<tr>
+<td>Cmd + Shift + 上下箭头</td>
+<td>上下移动声明体（statement）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="案例：报表系统之参数处理"><a href="#案例：报表系统之参数处理" class="headerlink" title="案例：报表系统之参数处理"></a>案例：报表系统之参数处理</h2><p>在示例项目中，需要对客户发出的 Web 请求进行处理，获得需要的参数。参数的值放在 Request 中，实现根据配置文件获得了参数的类型信息。根据项目需求，将参数划分为三种：</p>
+<ul>
+<li>单一参数（SimpleParameter）</li>
+<li>元素项参数（ItemParameter）</li>
+<li>表参数（TableParameter）</li>
+</ul>
+<p>因为参数的属性是在配置文件中已经配好，所以定义了 ParameterGraph 对象。它能够读取参数的配置信息，并根据参数的类型创建不同的参数类，这些参数类共同实现了 Parameter 接口。</p>
+<p>最初的实现代码为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ParameterCollector</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fillParameters</span><span class="params">(ServletHttpRequest request, ParameterGraph parameterGraph)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (Parameter para : parameterGraph.getParmaeters()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (para <span class="keyword">instanceof</span> SimpleParameter) &#123;</span><br><span class="line">                SimpleParameter simplePara = (SimpleParameter) para;</span><br><span class="line">                String[] values = request.getParameterValues(simplePara.getName());</span><br><span class="line">                simplePara.setValue(values);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (para <span class="keyword">instanceof</span> ItemParameter) &#123;</span><br><span class="line">                    ItemParameter itemPara = (ItemParameter) para;</span><br><span class="line">                    <span class="keyword">for</span> (Item item : itemPara.getItems()) &#123;</span><br><span class="line">                        String[] values = request.getParameterValues(item.getName());</span><br><span class="line">                        item.setValues(values);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    TableParameter tablePara = (TableParameter) para;</span><br><span class="line">                    String[] rows =</span><br><span class="line">                            request.getParameterValues(tablePara.getRowName());</span><br><span class="line">                    String[] columns =</span><br><span class="line">                            request.getParameterValues(tablePara.getColumnName());</span><br><span class="line">                    String[] dataCells =</span><br><span class="line">                            request.getParameterValues(tablePara.getDataCellName());</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">int</span> columnSize = columns.length;</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; rows.length; i++) &#123;</span><br><span class="line">                        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; columns.length; j++) &#123;</span><br><span class="line">                            TableParameterElement element = <span class="keyword">new</span> TableParameterElement();</span><br><span class="line">                            element.setRow(rows[i]);</span><br><span class="line">                            element.setColumn(columns[j]);</span><br><span class="line">                            element.setDataCell(dataCells[columnSize * i + j]);</span><br><span class="line">                            tablePara.addElement(element);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>观察代码，<code>if statement</code>中的三段代码块其实做的都是<strong>填充参数</strong>的事，只不过用<code>instanceof</code>判断了参数类型再执行对应的填充操作。结合之前的 Paperboy 案例，与 Wallet 打交道的应该是 Customer 而不是 Paperboy。上述代码明显也违反了迪米特法则，<strong>参数填充的行为应该交由参数类完成而不是 ParameterCollector</strong>。</p>
+<h2 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h2><p>基于代码重用的思想，先将三段代码 <strong>提取方法（Cmd + Alt + M）</strong>，并分别取名为<code>fillSimplePara()</code>、<code>fillItemPara()</code>、<code>fillTablePara()</code>，重构后的方法顺序可能有所差异，可以在方法签名上使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 快捷键移动方法顺序，使之符合正常的阅读习惯。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/0.png" alt="A6C5B629-ACC6-458A-8379-852021771E83"></p>
+<p>提取了方法后，这一幕是不是似曾相识？之前的 Paperboy 案例中，我们从<code>charge()</code>方法中提取了<code>pay()</code>方法，意识到<code>pay()</code>方法应该归属于 Customer 而不是 Paperboy。这里就要再次强调：<strong>数据和行为应该封装在一起</strong>。显然，ParameterCollector 这个类不应该关注如何填充参数，而是应该收到<code>fillParameters()</code>请求后<strong>委派</strong>给各个 Parameter 类完成填充操作。所以我们采取“<strong>Move Method</strong>”重构手法（<strong>F6</strong>）。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/1.png" alt="17C89C7E-DA4F-4914-AA2A-5F6C8DE8845E"></p>
+<p>注意，IDEA 通过入参智能提示可以将方法移动到两个类中，显然应该选择 SimpleParameter，同时，方法的访问权限应为 public。接下来分别将<code>fillItemPara()</code>和<code>fillTablePara()</code>方法移动至 ItemParameter 和 TableParameter 中。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/2.png" alt="8FB216EF-394B-42F3-B556-6EC576224FE7"></p>
+<p>观察上图你会发现，原先的方法有两个参数，但由于我们移动了方法到对应的 Parameter 类中，第二个参数直接变成了用<code>this</code>引用当前对象。<code>ItemParameter itemPara = this;</code>这一步是多余的，直接使用<strong>内联（Cmd + Alt + N</strong>）消除。然后呢，别着急，我们想一想，既然 SimpleParameter、ItemParameter、TableParameter 三个类都有接收一个 request 参数的填充方法，而且他们都实现了 Parameter 接口，那我们为什么不将方法提到接口中，让其他三个类去重写呢？所以接下来先把方法都重命名为<code>fill()</code>，使用 <strong>Shift + F6</strong>进行重命名。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/3.png" alt="74F483BA-13C8-4769-9E94-290369E2B41B-1"></p>
+<p>接着，不要傻乎乎的去 Parameter 接口中手写<code>fill()</code>抽象方法，还是有快捷键的！那就是 “<strong>Pull Members Up</strong>”重构手法，说真的，当时看张总演示我就震惊了！选中方法，使用 <strong>Ctrl + T</strong> 调出重构菜单，输入一个 pull 你就能看到提示了。<br><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/4.png" alt="C477A0C4-7E53-4C85-BE02-4A37697680B5"></p>
+<p>IDEA 会提示你将<code>pull()</code>方法提升至 Parameter 接口中并 make abstract。<br><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/5.png" alt="9E0BC21E-0DFB-47AF-8B9E-C99900755E7F"></p>
+<p>我们看看重构后的效果，甚至于 ItemParameter 的<code>fill()</code>方法还已经帮你添加了<code>@Override</code>注解，但是剩下的两个 Parameter 类中的<code>fill()</code>方法还需要你手动的添加注解。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/6.png" alt="0007121B-DCAA-4629-B1EB-911959D12455"> <img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/7.png" alt="FE508CEB-BABF-4D6F-830E-A6C126BCD693"></p>
+<p>最后我们回到 ParameterCollector 类，使用 IDEA 的<strong>智能辅助</strong>快捷键（<strong>Alt + Enter</strong>）去 Cleanup code 删除多余的类型转换。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/8.png" alt="5A6909D5-21DC-45BB-B3F0-02ECE946EC10"></p>
+<p>然后，你就会发现，<code>if statement</code>也是多余的，删除后，<strong>Cmd + Alt + L</strong> 格式化代码。</p>
+<p><img src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/9.png" alt="91715C62-8438-4C16-BE77-0C821007877A"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如此，重构过的代码，可谓是层次清晰、一目了然，可比原来一坨堆在 ParameterCollector 中要美观多了。在重构的过程中，我们意识到，<strong>填充参数的行为应该交由它的专家，即各个 Parameter 类管理</strong>，移动方法后，又意识到既然都实现了 Parameter 接口，就应当使用 Java 接口的特性将<code>fill()</code>提升到 Parameter 接口中成为一个抽象方法。至此，<code>if</code>语句和<code>instanceof</code>也都不需要了，交由 JVM 在运行时识别类类型即可。所以说，<strong>重构的过程还可以帮助程序员梳理编码过程，进行合理的抽象和封装</strong>。当然，没有实践的空想理论是不行的，牢记 IDEA 的快捷键，将重构养成习惯，不时来一波亮瞎狗眼的骚操作，岂不美滋滋？</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">Clean Code -- 第一节：迪米特法则与 Paperboy 案例</a>
               
             
           </h1>
@@ -943,7 +1191,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-11-17 20:05:21" itemprop="dateModified" datetime="2020-11-17T20:05:21+08:00">2020-11-17</time>
+                <time title="修改时间：2020-12-30 20:14:21" itemprop="dateModified" datetime="2020-12-30T20:14:21+08:00">2020-12-30</time>
               
             
           </span>
@@ -975,10 +1223,10 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/#comments" itemprop="discussionUrl">
+                <a href="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/#comments" itemprop="discussionUrl">
                 
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/04/Clean Code -- 迪米特法则与 Paperboy 案例/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/05/04/Clean Code -- 第一节：迪米特法则与 Paperboy 案例/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1026,13 +1274,44 @@
       
         
           
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 <strong>Clean Code</strong> 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍<strong>迪米特法则</strong>、<strong>信息专家模式</strong>，并结合案例实操在 <strong>IntelliJ IDEA</strong> 中如何重构代码。本文大部分内容转载自张总博客: <a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构</a>。</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍<strong>迪米特法则</strong>和<strong>信息专家模式</strong>，并结合案例实操在 IntelliJ IDEA 中如何重构代码。本文大部分内容转载自张总博客: <a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构</a>。</p>
 <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
 <li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目。</li>
 <li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 <code>Cmd + D</code> 查看<strong>代码差异</strong>。</li>
-<li><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 <code>Cmd</code> 替换成 <code>Ctrl</code>，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Shift + F6 &#x2F;&#x2F; 重命名方法、属性、文件</span><br><span class="line">Cmd + Alt + M &#x2F;&#x2F; 提取方法（extract method）</span><br><span class="line">Cmd + Alt + N &#x2F;&#x2F; 内联（Inline），与 extract 相反</span><br><span class="line">Cmd + Shift + ⬆️&#x2F; ⬇️ &#x2F;&#x2F; 上下移动声明体（statement）  </span><br><span class="line"></span><br><span class="line">Ctrl + T &#x2F;&#x2F; 重构菜单</span><br></pre></td></tr></table></figure>
-</li>
+<li><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 <code>Cmd</code> 替换成 <code>Ctrl</code>，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键。</li>
 </ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl + T</td>
+<td>重构菜单</td>
+</tr>
+<tr>
+<td>Shift + F6</td>
+<td>重命名方法、属性、文件</td>
+</tr>
+<tr>
+<td>Cmd + Alt + M</td>
+<td>提取方法（extract method）</td>
+</tr>
+<tr>
+<td>Cmd + Alt + N</td>
+<td>内联（Inline），与 extract 相反</td>
+</tr>
+<tr>
+<td>Cmd + Shift + 上下箭头</td>
+<td>上下移动声明体（statement）</td>
+</tr>
+</tbody>
+</table>
+</div>
 <h2 id="迪米特法则"><a href="#迪米特法则" class="headerlink" title="迪米特法则"></a>迪米特法则</h2><p>在面向对象设计的世界里，有一个寻常却又常常为人所忽略的原则——<strong>迪米特法则（Law of Demeter）</strong>。这个原则认为，任何一个对象或者方法，它应该只能调用下列对象：    </p>
 <ul>
 <li>该对象本身</li>
@@ -1049,18 +1328,18 @@
 <p>当我们理解“最小知识法则”时，又可以从<strong>职责</strong>的角度去思考以上代码。对于收银员角色，他的职责应该是负责收钱，而不用去管钱包里的钱够不够，如果够了怎么办，如果不够又该怎么办，这些统统都不属于他的职责。设想一下，当超市里人流如织，大家都在购买商品时，如果每一个收银员都要承担这般的职责时，会出现什么样的景象？所以“最小知识法则”乃善法，在对象社区中，我们就应该刻意减少对象之间彼此深入的了解。了解最小的知识，就意味着依赖最小，彼此产生的影响就会最小。这实际上是 <strong>KISS（keep it simple and stupid）</strong> 原则的体现。</p>
 <p><strong>信息专家模式</strong>告诉我们：“信息的持有者即为操作该信息的专家”。对于对象，所谓<strong>信息就是该对象内部的字段</strong>。在上述的例子中，Wallet 是 Customer 的字段，那么操作 Wallet 的行为自然就应该分配给 Customer 了。这是题中应有之义。“信息专家模式”其实是面向对象最重要原则“<strong>数据与行为应该封装在一起</strong>”的别名。若在领域建模时能遵循该原则，则可以规避我们设计出贫血模型。</p>
 <h2 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h2><p>如何修改以上代码？注意，<code>charge()</code>行为仍然属于 Paperboy 的职责，因此我们不应该将该方法整体搬迁到 Customer 中，而应该先进行<strong>方法的提取</strong>，选中代码块，使用 <strong>Cmd + Alt + M</strong> 快捷键提取方法。这块代码执行的是支付的步骤，所以命名为<code>pay()</code>。</p>
-<p><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/0.png" alt="781D2706-3961-4C77-ACF8-8BDDCE21B17E"></p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/0.png" alt="781D2706-3961-4C77-ACF8-8BDDCE21B17E"></p>
 <p>提取后的<code>charge()</code>在接收方法请求后，转而将请求<strong>委派</strong>给了<code>pay()</code>方法。我们可以这样理解：在抽象层面，收款是收银员的职责；在实现层面，是<code>pay()</code>方法支持了收款行为，该实现归属于顾客。</p>
-<p><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/1.png" alt="1AF2B42F-7B13-4284-AF03-9C1D5C5FE0A1"></p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/1.png" alt="1AF2B42F-7B13-4284-AF03-9C1D5C5FE0A1"></p>
 <p>观察<code>pay()</code>方法，我们发现该方法操作的数据皆来自 Customer。我们嗅到了一种坏味道，即 Martin Fowler 所谓的“<strong>特性依恋（Feature Envy）</strong>”。对于该坏味道，老马是这样阐释的：“函数对某个类的兴趣高过对自己所处类的兴趣”。不要再嫉妒了，桥归桥，路归路，让方法回到自己最喜欢的地方吧。运用“<strong>Move Method</strong>”重构手法，将<code>pay()</code>方法移动到 Customer 中。</p>
 <p>光标在方法签名或方法体中都可，按下 <strong>F6</strong>，IDEA 会根据方法的入参，智能的提示将方法移动到哪个类中，这里只能是 Customer。还要注意方法的访问权限，默认是 Escalate 往上提升一级，这里选择 Public。</p>
-<p><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/2.png" alt="2C6EA6D7-A330-4E90-8B2A-54223072A47A"></p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/2.png" alt="2C6EA6D7-A330-4E90-8B2A-54223072A47A"></p>
 <p>操作之后，<code>pay()</code>方法移动到 Customer 中。</p>
-<p><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/3.png" alt="F92C14F0-6693-4154-8A6D-F71AB14BF0E2"></p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/3.png" alt="F92C14F0-6693-4154-8A6D-F71AB14BF0E2"></p>
 <p>在将方法移到正确的位置后，我们发现暴露的<code>getWallet()</code>方法根本就没有意义。更何况，将钱包裸露出去，难道是想要炫富吗？还是低调一点为好，隐藏自己的“隐私”，总好过被人觊觎而招来飞来横祸之险。于是，<strong>内联（inline）</strong> 之。将光标放在<code>getWallet()</code>上，按下 <strong>Cmd + Alt + N</strong>。</p>
-<p><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/4.png" alt="563C9626-A71E-4DC7-A8DC-BA4DA530EF64"></p>
-<p><code>getWallet()</code>方法被删除，并被替换为 Customer 的字段<code>myWallet</code>。那现在声明的<code>theWallet</code>就是多余的，继续内联。<br><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/5.png" alt="28E463A5-F36A-4250-8611-36BDACF80FCE"></p>
-<p>最后，重构过的代码应该是这样的。阅读代码一目了然，Paperboy 进行收银，并委派给顾客进行实际的支付，即掏钱包，数钱，付钱。<br><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/6.png" alt="3CA41F80-0556-42F3-8E16-5AEEC39332A3"><img src="/2018/05/04/Clean%20Code%20--%20%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/7.png" alt="E66E7919-9391-4046-8CB4-C46555E561A8"></p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/4.png" alt="563C9626-A71E-4DC7-A8DC-BA4DA530EF64"></p>
+<p><code>getWallet()</code>方法被删除，并被替换为 Customer 的字段<code>myWallet</code>。那现在声明的<code>theWallet</code>就是多余的，继续内联。<br><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/5.png" alt="28E463A5-F36A-4250-8611-36BDACF80FCE"></p>
+<p>最后，重构过的代码应该是这样的。阅读代码一目了然，Paperboy 进行收银，并委派给顾客进行实际的支付，即掏钱包，数钱，付钱。<br><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/6.png" alt="3CA41F80-0556-42F3-8E16-5AEEC39332A3"><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/7.png" alt="E66E7919-9391-4046-8CB4-C46555E561A8"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>判断一段代码是否违背了迪米特法则，有一个小窍门，就是看调用代码是否出现形如<code>a.m1().m2().m3().m4()</code>之类的代码。这种代码在 Martin Fowler《重构》一书中，被名为“<strong>消息链条(Message Chain)</strong>”，有人更加夸张地名其为“火车残骸”。车祸现场啊，真是惨不忍睹。</p>
 <p>实际上未重构前的代码即是一种消息链条，在<code>charge()</code>方法中实际执行的是<code>myCustomer.getWallet().subtractMoney(payment)</code>，先获取 Customer 的 Wallet，再执行 Wallet 的扣钱方法。</p>
 <p>那么，如下代码是否这样的残骸呢？</p>
@@ -2799,258 +3078,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/03/15/Redis%E5%AE%89%E8%A3%85%E5%8F%8A%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/03/15/Redis%E5%AE%89%E8%A3%85%E5%8F%8A%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">Redis 安装及初步使用</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-03-15 03:04:12" itemprop="dateCreated datePublished" datetime="2018-03-15T03:04:12+08:00">2018-03-15</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-17 20:06:33" itemprop="dateModified" datetime="2020-11-17T20:06:33+08:00">2020-11-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/03/15/Redis%E5%AE%89%E8%A3%85%E5%8F%8A%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/03/15/Redis安装及初步使用/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">1.7k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p><strong>Redis</strong> 是一个开源的使用 ANSI C 语言编写的高性能 <strong>Key-Value</strong> 数据库，是一个<strong>可基于内存亦可持久化的日志型</strong>的 <strong>NoSQL</strong> 数据库。它将数据保存在内存中，在项目中可用于保存编码表、Token 等<strong>少量数据存储，高速读写访问</strong>的场景</p>
-</blockquote>
-<h2 id="Installing"><a href="#Installing" class="headerlink" title="Installing"></a>Installing</h2><ul>
-<li><p>我的服务器系统为 Ubuntu 16.04 ，直接使用 <strong>apt</strong> 安装。当然也可以在<a href="https://redis.io/download" target="_blank" rel="noopener">官网</a>下载压缩包解压安装</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install -y redis-server</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Redis 的命令主要有两个，一个是服务端命令<code>redis-server</code>，用于启动 Redis 。还有个客户端命令<code>redis-cli</code>，可用于访问 Redis</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">redis-server -v    &#x2F;&#x2F; 查看版本</span><br><span class="line">redis-server -h    &#x2F;&#x2F; 查看帮助</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装完成后 redis-server 已经启动了，默认端口号 <strong>6379</strong>     </p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ps -ef | grep redis</span><br><span class="line">redis    14689     1  0 10:43 ?     00:00:00 &#x2F;usr&#x2F;bin&#x2F;redis-server 127.0.0.1:6379</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>注意到 Redis 默认启动时只允许本机（即 127.0.0.1）访问，如果要允许其他主机访问或使用 <strong>GUI</strong> 图形化管理工具，可以修改配置文件<code>/etc/redis/redis.conf</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bind 127.0.0.1 &#x3D;&gt; bind 0.0.0.0</span><br></pre></td></tr></table></figure>
-<p>  如果只需某几个 IP 访问 Redis 服务器，可以修改为对应 IP 以增强安全性</p>
-</li>
-<li><p>修改完成后重启 Redis</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service redis-server restart</span><br></pre></td></tr></table></figure>
-<p>  使用<code>service redis-server status</code>命令可以查看 Redis 状态</p>
-</li>
-</ul>
-<h2 id="redis-cli"><a href="#redis-cli" class="headerlink" title="redis-cli"></a>redis-cli</h2><blockquote>
-<p><code>redis-cli</code>是客户端程序，可以使用一些命令操作 Redis 数据库，具体命令参考 <a href="https://redis.io/commands" target="_blank" rel="noopener">Redis 官网</a>，或者 <a href="http://doc.redisfans.com/" target="_blank" rel="noopener">Redis 命令参考</a></p>
-</blockquote>
-<ul>
-<li><p>直接输入<code>redis-cli</code>进入客户端，设置一个键值对</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ redis-cli</span><br><span class="line">127.0.0.1:6379&gt; set foo &quot;bar&quot;</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get foo</span><br><span class="line">&quot;bar&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>redis-cli</code>也可查看 Redis 的配置，使用<code>config get</code>，命令大小写不敏感，可以使用<code>TAB</code>补全</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; CONFIG GET bind</span><br><span class="line">1) &quot;bind&quot;</span><br><span class="line">2) &quot;0.0.0.0&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>也可以修改配置，比如我们可以设置 Redis 数据库的密码，默认是不设密码的</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; CONFIG SET requirepass passwd</span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; CONFIG GET requirepass</span><br><span class="line">(error) NOAUTH Authentication required.</span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; AUTH passwd</span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; CONFIG GET requirepass</span><br><span class="line">1) &quot;requirepass&quot;</span><br><span class="line">2) &quot;passwd&quot;</span><br></pre></td></tr></table></figure>
-<p>  修改密码的格式为<code>CONFIG SET requirepass password</code>，修改后需要先登录认证，命令为<code>AUTH password</code></p>
-</li>
-</ul>
-<h2 id="GUI"><a href="#GUI" class="headerlink" title="GUI"></a>GUI</h2><blockquote>
-<p>Mac 下我使用的 Redis 图形化管理工具是 <strong>Redis Desktop Manager</strong></p>
-</blockquote>
-<ul>
-<li><p>输入配置信息连接 Redis 服务器<br><img src="/2018/03/15/Redis%E5%AE%89%E8%A3%85%E5%8F%8A%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/0.png" alt="99B23802-7EA6-4ECE-9A1F-A63F31624FA0"></p>
-</li>
-<li><p>连接上后查看我们刚才设置的键值对<br><img src="/2018/03/15/Redis%E5%AE%89%E8%A3%85%E5%8F%8A%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/1.png" alt="92EF26D6-3278-43C7-BB81-C34D0D6E6DC7"></p>
-</li>
-</ul>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="https://redis.io/" target="_blank" rel="noopener">Redis 官网</a></li>
-<li><a href="http://doc.redisfans.com/" target="_blank" rel="noopener">Redis 命令参考</a></li>
-<li><a href="http://www.redis.net.cn/tutorial/3501.html" target="_blank" rel="noopener">Redis 中文网</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3102,7 +3129,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">68</span>
+                    <span class="site-state-item-count">69</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

@@ -372,6 +372,241 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/19/%E9%85%8D%E7%BD%AENginx%E7%9B%AE%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/11/19/%E9%85%8D%E7%BD%AENginx%E7%9B%AE%E5%BD%95/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/7/index.html">配置 Nginx 目录</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-11-19 02:07:54" itemprop="dateCreated datePublished" datetime="2017-11-19T02:07:54+08:00">2017-11-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-16 09:48:42" itemprop="dateModified" datetime="2020-09-16T09:48:42+08:00">2020-09-16</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/19/%E9%85%8D%E7%BD%AENginx%E7%9B%AE%E5%BD%95/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/19/配置Nginx目录/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">1.6k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>配置Nginx目录，可以很方便的下载镜像，查看文件等等</p>
+</blockquote>
+<ul>
+<li>效果图<br><img src="/2017/11/19/%E9%85%8D%E7%BD%AENginx%E7%9B%AE%E5%BD%95/0.png" alt="-----2017-11-19---10.54.27"></li>
+</ul>
+<h2 id="Configure-Nginx"><a href="#Configure-Nginx" class="headerlink" title="Configure Nginx"></a>Configure Nginx</h2><ul>
+<li><p>前往nginx配置目录</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;etc&#x2F;nginx&#x2F;sites-enabled</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>vi dir_80.conf</code>添加配置文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    listen [::]:80;</span><br><span class="line"></span><br><span class="line">    server_name dir.s1mple.info www.dir.s1mple.info;</span><br><span class="line">    root &#x2F;var&#x2F;www&#x2F;html;</span><br><span class="line"></span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $http_host;</span><br><span class="line">        autoindex on;</span><br><span class="line">        autoindex_exact_size off;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    listen 443 ssl; # managed by Certbot</span><br><span class="line">    ssl_certificate &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;fullchain.pem; # managed by Certbot</span><br><span class="line">    ssl_certificate_key &#x2F;etc&#x2F;letsencrypt&#x2F;live&#x2F;s1mple.info&#x2F;privkey.pem; # managed by Certbot</span><br><span class="line">    include &#x2F;etc&#x2F;letsencrypt&#x2F;options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">    ssl_dhparam &#x2F;etc&#x2F;letsencrypt&#x2F;ssl-dhparams.pem; # managed by Certbot</span><br><span class="line"></span><br><span class="line">    # Redirect non-https traffic to https</span><br><span class="line">    if ($scheme !&#x3D; &quot;https&quot;) &#123;</span><br><span class="line">        return 301 https:&#x2F;&#x2F;$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>service nginx restart</code>重启nginx服务</p>
+</li>
+</ul>
+<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ol>
+<li>监听80端口，域名为dir.s1mple.info和www.dir.s1mple.info</li>
+<li>根目录为/var/www/html</li>
+<li><strong>autoindex on</strong>打开目录浏览功能</li>
+<li><strong>autoindex_exact_size</strong>默认为on，显示文件确切大小，单位bytes，改为off后显示大概大小，单位kB或者MB或者GB</li>
+<li>剩下的是<strong>Certbot</strong>重定位https的配置</li>
+</ol>
+<h2 id="Configure-Certbot"><a href="#Configure-Certbot" class="headerlink" title="Configure Certbot"></a>Configure Certbot</h2><ul>
+<li><p>重新配置Certbot</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certbot run</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>它会自动检测nginx的配置文件<br><img src="/2017/11/19/%E9%85%8D%E7%BD%AENginx%E7%9B%AE%E5%BD%95/1.png" alt="-----2017-11-19---10.31.17"></p>
+</li>
+<li><p>提示已经存在证书，并且已经配置了一些域名，询问是否扩充，选择E<br><img src="/2017/11/19/%E9%85%8D%E7%BD%AENginx%E7%9B%AE%E5%BD%95/2.png" alt="-----2017-11-19---10.32.45"></p>
+</li>
+<li><p>询问是否将HTTP重定位到HTTPS，选择2是所有请求均重定位到HTTPS<br><img src="/2017/11/19/%E9%85%8D%E7%BD%AENginx%E7%9B%AE%E5%BD%95/3.png" alt="-----2017-11-19---10.38.24"></p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/15/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2510,7 +2745,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">68</span>
+                    <span class="site-state-item-count">69</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3193,6 +3428,8 @@
 
   
   
+    
+      
     
       
     
