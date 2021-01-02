@@ -372,6 +372,330 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2021/01/02/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB-Python-%E6%BA%90%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/01/02/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB-Python-%E6%BA%90%E7%A0%81/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">如何阅读 Python 源码</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-01-02 22:34:23 / 修改时间：23:12:29" itemprop="dateCreated datePublished" datetime="2021-01-02T22:34:23+08:00">2021-01-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/01/02/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB-Python-%E6%BA%90%E7%A0%81/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2021/01/02/如何阅读-Python-源码/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">8.9k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>阅读源码是每个程序员都应当具备的技能，阅读源码不仅能帮助你理解一个模块实现的细节，也能让你从优秀的源码中汲取经验，遵循更好的编码规范，编写出更 Pythonic 的代码。但不可否认的是，阅读源码需要一定的编码功底，盲目的阅读并不能取得应有的效果。在阅读源码之前我们要明白阅读的目的，如果是想了解一个模块的实现细节自不必多说，但如果是想提高自己的 Python 编码水平，那么就应该从 Python 标准库以及一些优秀的第三方开源代码下手。</p>
+<p>在《Python编程之美：最佳实践指南》这本书中，作者 Kenneth Reitz 从简单的 HowDoI 项目，到大一点的 requests 库（他本身也是这个库的开发者），再到后面的 Web 框架 Flask，逐步递进地展示如何阅读高质量的代码。如果想阅读优秀的第三方库源码，可以从他在书中罗列出的经典项目开始。除此之外，GitHub 上也有人整理了比较详尽的目录：<a href="https://github.com/programthink/opensource/blob/master/libs/python.wiki" target="_blank" rel="noopener">Python 开源库及示例代码</a>。项目很多，但不是每个都必读。还是强调的那一点：不要盲目的阅读源码，确定有必要的时候再去阅读。</p>
+<p>抛开这些问题不谈，本篇我想通过阅读源码的案例（主要是 typing 模块和 re 模块），介绍一些阅读源码前需要掌握的先验知识，以及如何结合开发工具在 PyCharm IDE 中高效地阅读源码。让我们先从 Python 代码的类型提示开始。</p>
+<h2 id="函数注解"><a href="#函数注解" class="headerlink" title="函数注解"></a>函数注解</h2><blockquote>
+<p><strong>PEP 3107 — Function Annotations</strong> : Python Version 3.0, Created Time 2-Dec-2006. This PEP introduces a syntax for adding arbitrary metadata annotations to Python functions.</p>
+</blockquote>
+<p>Python 3 添加了对类型提示（Type Hints）的支持，在此之前 Python 2.x 一直缺乏一种统一的方式去对函数参数和返回值进行标注，一些工具或三方库通过 docstring、注释或者函数装饰器等其他方法尝试去弥补这种缺陷。而自从 Python 3.0 开始，Python 通过 PEP 3107 提案引入了<strong>函数注解</strong>，也就是 Function Annotations，提供了一种标准的解决方案，用于<strong>为函数声明中的参数和返回值附加元数据</strong>。</p>
+<p>函数注解的语法如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(a: expression, b: expression = <span class="number">5</span>)</span> -&gt; expression:</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>函数声明中的各个参数可以在 <code>:</code> 之后添加注解表达式。如果参数有默认值，表达式后可以跟 <code>=</code> 指定默认值，且与常规函数声明一样，指定默认值参数要出现在无默认值参数之后。注解表达式最常使用的是类型（如 str 或 int），也可以是一个字符串（如 ‘int &gt; 0’）。如果想注解返回值，在 <code>)</code> 与 <code>:</code> 之间添加 <code>-&gt;</code> 和一个表达式，表达式可以是任意类型，如果函数无返回值则为 None。</p>
+<p>本质上来说，PEP 3107 只是一种前导的语法规范，不对注解任何实质处理，你可以将其理解为官方规定的函数声明的注释。换句话说，<strong>注解只是元数据</strong>，Python 解释器对其不做检查、不做强制、不做验证。Python 对注解所做的唯一的事情，就是将它们存储在函数的 <code>__annotations__</code> 属性中：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(a: <span class="string">'x'</span>, b: <span class="number">5</span> + <span class="number">6</span>, c: list)</span> -&gt; max(2, 9):</span> ...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo.__annotations__</span><br><span class="line">&#123;'a': 'x', 'b': 11, 'c': &lt;class 'list'&gt;, 'return': 9&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 return 键保存的是返回值的注解，即函数声明里以 <code>-&gt;</code> 标记的部分。从这个例子我们可以看出，注解表达式的约束非常的宽泛，不管你是类型，还是字符串，或是个表达式。</p>
+<p>注解可以供 IDE、框架和装饰器等工具使用，举个例子，框架可以对 <code>price: &#39;int &gt; 0&#39;</code> 这样的字符串注解转换为对参数的验证。注解最大的作用是为 IDE 和 lint 程序中的<strong>静态类型检查</strong>功能提供额外的类型信息，也就是我们接下来要讨论的类型提示。</p>
+<p><strong>延伸</strong>：Java 中的注解也称为 Annotation，使用 <code>@</code> 符号标注，本质上也是元数据，本身 Java 解释器不会对其做任何处理，只有结合 Java 运行时的反射（getAnnotation 方法）才能获取注解内容从而针对性地制定处理逻辑，这在一些框架例如 Spring 中使用颇多。这与 Python 中的注解是否存在异曲同工之处呢？我们有理由相信，Python 中的静态类型检查工具也是获取了函数的 <code>__annotations__</code> 属性从而进行处理。</p>
+<h2 id="类型提示"><a href="#类型提示" class="headerlink" title="类型提示"></a>类型提示</h2><blockquote>
+<p><strong>PEP 484 — Type Hints</strong> : Python Version 3.5, Created Time 29-Sep-2014. This PEP aims to provide a standard syntax for type annotations, opening up Python code to easier static analysis and refactoring, potential runtime type checking, and (perhaps, in some contexts) code generation utilizing type information.</p>
+</blockquote>
+<p>在 PEP 3107 提案提出后，已经有一些第三方工具结合函数注解做了静态类型检查方面的工作，其中被采用较多的就是 Jukka Lehtosalo 开发的 mypy 项目。PEP 484 提案受 mypy 的强烈启发（Jukka 也参与了提案的制订），规定了如何给 Python 代码添加<strong>类型提示（Type Hints）</strong>，主要方式就是使用注解，以及引入了一个新模块：<strong>typing 模块</strong>。</p>
+<h3 id="typing-模块"><a href="#typing-模块" class="headerlink" title="typing 模块"></a>typing 模块</h3><p>为了给 Python 静态类型检查提供统一的命名空间，标准库以渐进定型（gradual typing）的方式引入名为 <a href="https://docs.python.org/3/library/typing.html" target="_blank" rel="noopener">typing</a> 的新模块，新模块不会影响现有程序的正常运行，只会对不规范的类型作出提示。</p>
+<p>在 typing 模块中，定义了一些<strong>特殊类型</strong>（_SpecialForm），包括 Any, NoReturn, ClassVar, Union, Optional 等，从名称可以大概猜出这些类型的作用，比如：Any 代表任意类型；联合类型 <code>Union[X, Y]</code> 表示类型非 X 即 Y；Optional 作用则与 Java8 中的 Optional 类似，允许传入参数为空，可以避免空值引用的问题。</p>
+<p>除此之外，还有一些常见的数据类型，比如 List、Tuple、Dict、Sequence，它们只是作为标准库类型的别名存在，如：<code>List = _alias(list, T, inst=False)</code>。typing 模块也提供了对于<strong>泛型</strong>（Generics）的支持，让我们得以像 <code>List[int]</code> 这样去定义特定类型集合。想了解更多 typing 模块的功能，建议阅读 PEP 484文档或者直接阅读源码，源码的文档注释介绍了该模块的结构，通过 <code>__all__</code> 属性也可以查明 typing 模块都提供了哪些功能。</p>
+<p>PEP 484 旨在为类型注解提供一种标准语法，让 Python 代码更易于静态分析和重构，尽管 typing 模块也提供了一些潜在的用于运行时类型检查的功能模块，尤其是 <code>get_type_hints()</code> 函数，但它本身不对其做直接支持，仍然需要开发第三方库才能实现特定的运行时类型检查功能，比如使用装饰器或元类。<code>get_type_hints</code> 函数用于获取对象的类型提示，它的源码中包含这么一行：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hints = getattr(obj, <span class="string">'__annotations__'</span>, <span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
+<p>这说明默认情况下类型提示会去查询对象的 <code>__annotations__</code> 属性，此外该方法还会对注解字符串进行验证，我们将这个方法再应用到之前随意注解的 foo 函数时就会报错：找不到 “x” 类型。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> typing <span class="keyword">import</span> get_type_hints</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(a: <span class="string">'x'</span>, b: <span class="number">5</span> + <span class="number">6</span>, c: list)</span> -&gt; max(2, 9):</span> ...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo.__annotations__  <span class="comment"># No error</span></span><br><span class="line">&#123;'a': 'x', 'b': 11, 'c': &lt;class 'list'&gt;, 'return': 9&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>get_type_hints(foo)  <span class="comment"># Error</span></span><br><span class="line">NameError: name <span class="string">'x'</span> <span class="keyword">is</span> <span class="keyword">not</span> defined</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">(a: int)</span> -&gt; str:</span> ...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>get_type_hints(bar)</span><br><span class="line">&#123;'a': &lt;class 'int'&gt;, 'return': &lt;class 'str'&gt;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="变量注解"><a href="#变量注解" class="headerlink" title="变量注解"></a>变量注解</h3><blockquote>
+<p><strong>PEP 526 — Syntax for Variable Annotations</strong> : Python Version 3.6, Created Time 09-Aug-2016. This PEP aims at adding syntax to Python for annotating the types of variables (including class variables and instance variables), instead of expressing them through comments.</p>
+</blockquote>
+<p>为了丰富类型提示的功能，Python 随即在 3.6 版本中引入了<strong>变量注解（Variable Annotations）</strong>，用于规定变量的类型。与函数注解相同，变量注解也只是元数据，Python 解释器不对其做任何处理，仅供框架和工具做类型检查。语法上变量注解与函数注解类似，使用 <code>:</code> 后接参数类型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">primes: List[int] = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">signal</span><span class="params">(flag: bool)</span>:</span></span><br><span class="line">    color: str  <span class="comment"># Note: no initial value!</span></span><br><span class="line">    <span class="keyword">if</span> flag: color = <span class="string">'green'</span></span><br><span class="line">    <span class="keyword">else</span>: color = <span class="string">'red'</span></span><br><span class="line">    <span class="keyword">return</span> color</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Starship</span>:</span></span><br><span class="line">    captain: str = <span class="string">'Picard'</span>  <span class="comment"># instance variable with initial value</span></span><br><span class="line">    stats: ClassVar[Dict[str, int]] = &#123;&#125;  <span class="comment"># class variable</span></span><br></pre></td></tr></table></figure>
+<p>变量注解适用于全局变量、局部变量、类属性以及实例属性。上述代码中的 ClassVar 是由 typing 模块定义的特殊类型，向静态类型检查程序标示在类实例中不允许对该变量进行赋值。注解的同时可以对变量进行初始化，如果省略初始化，也能很方面的在后续的条件分支中进行初始化。</p>
+<p>全局变量的注解存储在当前模块（也就是 <code>__main__</code>）的 <code>__annotations__</code> 字典中：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a: int = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b: str</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>__annotations__</span><br><span class="line">&#123;'a': &lt;class 'int'&gt;, 'b': &lt;class 'str'&gt;&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> __main__</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>get_type_hints(__main__)</span><br><span class="line">&#123;'a': &lt;class 'int'&gt;, 'b': &lt;class 'str'&gt;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="何时使用类型提示"><a href="#何时使用类型提示" class="headerlink" title="何时使用类型提示"></a>何时使用类型提示</h3><p>PEP 484 中强调了 Python 将继续维持作为动态语言的特性，从来没有将类型提示强制化或是惯例化的想法。那么何时采用类型提示呢？一般而言，如果你开发的是供他人使用的第三方库（尤其是在  PyPI 上发布的库中），或是在一个多人协作的稍大项目中，推荐使用类型提示。一方面，这会帮助使用库的用户正确地调用接口。另一方面，类型提示也可以帮助理解类型是如何在代码中传播的。</p>
+<p>Bernat Gabor 认为类型提示与单元测试重要性一致，本质上都是为了验证你的代码库的输入输出类型，只是表现形式不同。在他的文章 <a href="https://www.bernat.tech/the-state-of-type-hints-in-python/" target="_blank" rel="noopener">the state of type hints in Python</a> 的最后总结中提到：<strong>只要值得编写单元测试，就应该添加类型提示</strong>，即使代码只有十行，只要你日后需要维护它。所以他给出的建议是，在编写单元测试的同时添加类型提示。虽然会添加额外的代码量，但为了代码平稳工作值得付出这个代价，尤其是发生代码变更时。</p>
+<p>我们可以在存根文件中使用类型注解来启用类型提示。并且如果参数声明带有默认值，则可以不指定实际的默认值而使用省略号 <code>...</code> 代替，这与冒号后的函数体使用省略号一样，将省略号用作占位符。对于变量，一般只声明类型不给出初值。例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(x: AnyStr, y: AnyStr = ...)</span> -&gt; AnyStr:</span> ...</span><br><span class="line"></span><br><span class="line">stream: IO[str]</span><br></pre></td></tr></table></figure>
+<h2 id="pyi-存根文件"><a href="#pyi-存根文件" class="headerlink" title=".pyi 存根文件"></a>.pyi 存根文件</h2><p>由于 Python 是动态语言，不对类型做强制约束，所以 IDE 在类型检查、类型推断、代码补全以及重构等方面必然不如 Java 等静态语言来的方便。<strong>存根文件是包含类型提示信息的文件</strong>，运行时不会用到，而是<strong>提供给第三方工具做静态类型检查和类型推断</strong>，这方面 PyCharm 做的很好。</p>
+<p>在 PyCharm 中，如果某一行的左边有 <em> 号标识，则说明这一行（可以是类、属性或函数）在存根文件中有定义，你可以点击 </em> 号跳转到该文件对应的存根文件，通常是存放在 Python 库文件的 Typeshed Stubs 目录中，文件名以 <code>.pyi</code> 后缀结尾。同时，存根文件也是 GitHub 上一个单独的项目，项目地址：<a href="https://github.com/python/typeshed" target="_blank" rel="noopener">https://github.com/python/typeshed</a> ，Python 的标准库以及内置 builtins 存根可以在该项目的 stdlib 目录下找到。</p>
+<p>我们来看看 Python 正则库 re 的存根文件和源文件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># re.pyi</span></span><br><span class="line"><span class="meta">@overload</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compile</span><span class="params">(pattern: AnyStr, flags: _FlagsType = ...)</span> -&gt; Pattern[AnyStr]:</span> ...</span><br><span class="line"><span class="meta">@overload</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compile</span><span class="params">(pattern: Pattern[AnyStr], flags: _FlagsType = ...)</span> -&gt; Pattern[AnyStr]:</span> ...</span><br><span class="line">  </span><br><span class="line"><span class="comment"># re.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compile</span><span class="params">(pattern, flags=<span class="number">0</span>)</span>:</span></span><br><span class="line">    <span class="string">"Compile a regular expression pattern, returning a Pattern object."</span></span><br><span class="line">    <span class="keyword">return</span> _compile(pattern, flags)</span><br></pre></td></tr></table></figure>
+<p>这里只截取了源码中的一段 compile 函数。从形式上看，存根文件与 C 语言中的头文件有相似之处，将函数声明与函数定义分文件存放，但与其将存根文件理解为函数声明文件，不如理解为函数接口（Interface）文件，接口的意义就是让用户在调用时可以清晰地查看函数的参数和返回值类型。这也是为什么 PEP 484 的作者之一 Jukka Lehtosalo 说可以将 <code>.pyi</code> 中的 i 理解为 Interface。</p>
+<p>上述源文件中的 compile 函数，调用了私有的 _compile 函数并返回一个 Pattern 对象，作用是将字符串处理（编译）成正则表达式模版。进一步 _compile 的源码会发现，如果传入的 pattern 参数本来就是 Pattern 类型的，为了避免重复处理，方法会直接返回 pattern，如下面的代码所示。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_compile</span><span class="params">(pattern, flags)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> isinstance(pattern, Pattern):</span><br><span class="line">        <span class="keyword">if</span> flags:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(</span><br><span class="line">                <span class="string">"cannot process flags argument with a compiled pattern"</span>)</span><br><span class="line">        <span class="keyword">return</span> pattern</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>这也解释了为什么存根文件中会存在两个 compile 函数声明，其中的第二个就是接收 Pattern 类型作为参数的。除了 compile 函数之外，re 存根文件中的大多数函数都有两个重载函数，原因就是它们实现时都调用了 _compile 函数。事实上，为了防止用户多次调用 _compile 引起不必要的开销，_compile 也设置了缓存优化，这点留给读者自行阅读源码分析。</p>
+<p>在最新的 PyCharm 2020.3 版本中，支持直接创建 Python stub 类型的 Python File，只需要存根文件与源文件同名，PyCharm 就会自动按照存根文件中指定的类型进行静态类型检查。并且，你也可以像 Typeshed 项目为存根文件分配单独的文件夹，具体操作详见 JetBrains 官网的 PyCharm 手册：<a href="https://www.jetbrains.com/help/pycharm/stubs.html" target="_blank" rel="noopener">Python Stubs</a>。</p>
+<h2 id="PyCharm-高效阅读源码"><a href="#PyCharm-高效阅读源码" class="headerlink" title="PyCharm 高效阅读源码"></a>PyCharm 高效阅读源码</h2><p>除了标注存根文件，PyCharm 还对子类父类方法重载进行了标注，分别用 <code>O↑</code> 表示这一行重载了父类方法，点击可以跳转到父类实现；<code>O↓</code> 表示这一行有子类重载，点击可以跳转到子类实现。其中 O 代表的是 Override 的含义。</p>
+<p>比如我们阅读 Python 内置的列表 list 的源码，append 方法这一行既是重载自父类也有子类重载（存根文件中标注的）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">list</span><span class="params">(MutableSequence[_T], Generic[_T])</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">append</span><span class="params">(self, __object: _T)</span> -&gt; <span class="keyword">None</span>:</span> ...</span><br></pre></td></tr></table></figure>
+<p>可以看到 list 多重继承自 MutableSequence 和 Generic，如果点击 append 左侧 <code>O↑</code>，就会跳转到父类 MutableSequence 的 append 实现处。如果点击 <code>O↓</code>，可以选择某个子类并进行跳转（list 存在多个子类）。这在阅读一个具有继承结构的源码时会有所帮助。</p>
+<p>当然，如果想在 PyCharm 中高效阅读源码，需要结合快捷键来使用。这里列出一些 Mac OS 下的快捷键，Windows 下一般是将 Cmd 替换为 Ctrl，你也可以打开 PyCharm 设置自行查阅 Keymap 快捷键：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">快捷键</th>
+<th style="text-align:left">作用</th>
+<th style="text-align:left">PyCharm Keymap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Cmd + U</td>
+<td style="text-align:left">跳转到父类实现</td>
+<td style="text-align:left">Go to Super Method</td>
+</tr>
+<tr>
+<td style="text-align:left">Cmd + Alt + B/Left Click</td>
+<td style="text-align:left">跳转到子类实现</td>
+<td style="text-align:left">Go to Implementations</td>
+</tr>
+<tr>
+<td style="text-align:left">Cmd + B/Left Click</td>
+<td style="text-align:left">跳转到定义处或调用处</td>
+<td style="text-align:left">Go to Declaration or Usages</td>
+</tr>
+<tr>
+<td style="text-align:left">Cmd + [</td>
+<td style="text-align:left">跳转到鼠标停留的上一个位置</td>
+<td style="text-align:left">Back</td>
+</tr>
+<tr>
+<td style="text-align:left">Cmd + ]</td>
+<td style="text-align:left">跳转到鼠标停留的下一个位置</td>
+<td style="text-align:left">Forward</td>
+</tr>
+<tr>
+<td style="text-align:left">Cmd + E</td>
+<td style="text-align:left">跳转到最近浏览的文件</td>
+<td style="text-align:left">Iterate Recent Files</td>
+</tr>
+<tr>
+<td style="text-align:left">Cmd + Shift + O</td>
+<td style="text-align:left">以文件名查询并跳转</td>
+<td style="text-align:left">Go to File</td>
+</tr>
+<tr>
+<td style="text-align:left">Cmd + O</td>
+<td style="text-align:left">以类名查询并跳转</td>
+<td style="text-align:left">Go to Class</td>
+</tr>
+<tr>
+<td style="text-align:left">Cmd + Alt + O</td>
+<td style="text-align:left">以符号查询并跳转，可以查询函数和全局变量</td>
+<td style="text-align:left">Go to Symbol</td>
+</tr>
+<tr>
+<td style="text-align:left">双击 Shift</td>
+<td style="text-align:left">整合了所有查询</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">Cmd + F</td>
+<td style="text-align:left">搜索当前文件下内容</td>
+<td style="text-align:left">Find</td>
+</tr>
+<tr>
+<td style="text-align:left">Cmd + Shift + F</td>
+<td style="text-align:left">搜索项目文件中的内容</td>
+<td style="text-align:left">Find in Files</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>这些都是 PyCharm 中非常实用的快捷键，不管是阅读源码还是自己编码，熟悉这些快捷键有助于快速定位到某个文件，某个函数或是某个变量，从而提高我们的效率。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://docs.python-guide.org/writing/reading/" target="_blank" rel="noopener">Reading Great Code — Kenneth Reitz</a></li>
+<li><a href="https://www.python.org/dev/peps/pep-3107/" target="_blank" rel="noopener">PEP 3107 — Function Annotations</a></li>
+<li><a href="https://www.python.org/dev/peps/pep-0484/" target="_blank" rel="noopener">PEP 484 — Type Hints</a></li>
+<li><a href="https://www.python.org/dev/peps/pep-0526/#abstract" target="_blank" rel="noopener">PEP 526 — Syntax for Variable Annotations</a></li>
+<li><a href="https://docs.python.org/3/library/typing.html" target="_blank" rel="noopener">Python 官方文档：typing — Support for type hints</a></li>
+<li><a href="https://realpython.com/python-type-checking/#function-annotations" target="_blank" rel="noopener">Python Type Checking (Guide)</a></li>
+<li><a href="https://sikasjc.github.io/2018/07/14/type-hint-in-python/#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E7%B1%BB%E5%9E%8B%E6%8F%90%E7%A4%BA" target="_blank" rel="noopener">译文：全面理解 Python 中的类型提示（Type Hints）</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2021/01/02/Python-%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3541,244 +3865,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/01/03/%E4%BD%BF%E7%94%A8%E6%B5%81%E7%95%85%E6%8E%A5%E5%8F%A3%E7%BC%96%E5%86%99-Kafka-%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/01/03/%E4%BD%BF%E7%94%A8%E6%B5%81%E7%95%85%E6%8E%A5%E5%8F%A3%E7%BC%96%E5%86%99-Kafka-%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">使用流畅接口编写 Kafka 集成测试框架</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2020-01-03 19:26:40" itemprop="dateCreated datePublished" datetime="2020-01-03T19:26:40+08:00">2020-01-03</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-20 19:13:59" itemprop="dateModified" datetime="2020-12-20T19:13:59+08:00">2020-12-20</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Design/" itemprop="url" rel="index"><span itemprop="name">Design</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/01/03/%E4%BD%BF%E7%94%A8%E6%B5%81%E7%95%85%E6%8E%A5%E5%8F%A3%E7%BC%96%E5%86%99-Kafka-%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/01/03/使用流畅接口编写-Kafka-集成测试框架/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">9k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该文档是我在团队中负责集成测试模块时为团队成员编写的 API 接口文档，这次拿过来修改了一下，并已经将业务无关的代码剥离出来上传到 <a href="https://github.com/s1mplecc/kafka-integration-test" target="_blank" rel="noopener">GitHub</a> 上。主要是向大家展示一种流畅接口设计框架代码的模式。</p>
-<p>所谓流畅接口，可以参考我之前翻译的 Martin Flower 的<a href="https://s2mple.xyz/2019/01/23/Fluent-Interface-%E2%80%94%E2%80%94-Martin-Fowler-%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/" target="_blank" rel="noopener">博客译文</a>。简单来说，流畅接口被设计为<strong>可读的</strong>和<strong>流式的</strong>，使用起来几乎和自然语言一般流畅，并且配合 IDE 的智能提示，易于 API 使用者的理解和使用。譬如下面我编写的集成测试用例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InboundToOutboundExampleJobTest</span> <span class="keyword">extends</span> <span class="title">JobIntegrationTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_send_ACTT_and_receive_trigger_event_from_kafka</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        kafkaSuite.send(<span class="keyword">new</span> ResourceFile(<span class="string">"sample/send/pek/ACTT.xml"</span>))</span><br><span class="line">                .toTopic()</span><br><span class="line">                .ofConfig(<span class="string">"inbound_imf"</span>);</span><br><span class="line"></span><br><span class="line">        SubjectEvent event = kafkaSuite</span><br><span class="line">                .await().latestOne()</span><br><span class="line">                .fromTopic()</span><br><span class="line">                .ofConfig(<span class="string">"trigger"</span>)</span><br><span class="line">                .toJavaObject(SubjectEvent.class);</span><br><span class="line"></span><br><span class="line">        assertThat(event.getEventName()).isEqualTo(<span class="string">"FLOP_ACTT"</span>);</span><br><span class="line">        assertThat(event.getGids().size()).isEqualTo(<span class="number">1</span>);</span><br><span class="line">        assertThat(event.getGids().get(<span class="number">0</span>)).isEqualTo(<span class="string">"PEK_80664162170310656"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>代码读起来非常明了，<code>KafkaSuite</code> 是我编写的 Kafka 集成测试套件，负责将 xml 文件发送至 Kafka 的一个 Topic 中，该 Topic 配置在配置文件中，对应着 <code>inbound_imf</code> 项。同时 <code>KafkaSuite</code> 监听另一个 Topic <code>trigger</code> 的最新一条消息并转换成 Java 对象，对结果进行验证（其间过程 xml 文件会被其他模块解析并经过一系列的业务处理）。</p>
-<p>上述代码中，<code>assertThat().isEqualTo()</code> 就是断言框架 <code>assertj</code> 的 API，它是一个非常优秀的流畅接口的框架，建议大家阅读其源代码。我在编写 Kafka 集成测试框架时就借鉴了这种编码模式。</p>
-<h2 id="集成测试"><a href="#集成测试" class="headerlink" title="集成测试"></a>集成测试</h2><p>代码目前完成了 Kafka 集成测试的发送和监听功能。我们的流处理框架采用的是 Flink，将任务分解为一个个 Job 独立运行，所以集成测试首先得启动 Job，并且加载包括 Kafka IP地址等相关配置。为此我编写了 <code>JobIntegrationTest</code> 类，并规定所有集成测试用例必须继承该类。此外，<code>KafkaSuite</code> 是负责 Kafka 集成测试的套件，封装了各种流畅接口 API。</p>
-<h3 id="JobIntegrationTest"><a href="#JobIntegrationTest" class="headerlink" title="JobIntegrationTest"></a>JobIntegrationTest</h3><p>所有的集成测试必需继承 JobIntegrationTest 类，该类提供 final 的 <code>setUp()</code> 方法和 <code>tearDown()</code> 方法。</p>
-<p>集成测试运行的流程是 <code>SetUp -&gt; All Tests -&gt; TearDown</code>：</p>
-<ol>
-<li><p><code>setUp()</code> 方法中使用了单独的线程启动 Job，所以<strong>不会阻塞主线程（测试方法）的运行</strong>。</p>
-</li>
-<li><p>测试方法主体由集成测试使用者编写，如果用到 KafkaSuite 的 send 和 await 方法则会被阻塞，直到<strong>成功发送或者接收到消息</strong>，或者<strong>超时抛出异常</strong>退出。</p>
-</li>
-<li><p><code>tearDown()</code> 方法关闭 Job 和用到的资源。</p>
-</li>
-</ol>
-<h3 id="KafkaSuite"><a href="#KafkaSuite" class="headerlink" title="KafkaSuite"></a>KafkaSuite</h3><p>目前集成测试实现了 Kafka 消息的<strong>阻塞发送</strong>和<strong>阻塞监听</strong>，抽象出来的 KafkaSuite 提供了流畅接口以支持集成测试。<code>kafkaSuite</code> 作为 JobIntegrationTest 的 protected 字段可以直接在集成测试类中使用。我将 KafkaSuite 的流畅接口分为三大阶段：配置阶段（PrepareStep）、发送阶段（SendStep）和接受阶段（AwaitStep）。具体的流畅接口使用可以查看 KafkaSuiteTest 或者直接阅读源码 JavaDoc。</p>
-<h4 id="PrepareStep"><a href="#PrepareStep" class="headerlink" title="PrepareStep"></a>PrepareStep</h4><p>由于 JobIntegrationTest 会加载配置文件并由此创建 KafakSuite 实例，所以正常情况下不需要独立配置 IP、端口等。但为提供给特殊需求使用，仍设计相关接口：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kafkaSuite.clusterIps(<span class="string">"172.20.10.120:9092,172.20.10.152:9092,172.20.10.171:9092"</span>)</span><br><span class="line">            .noSsl()</span><br><span class="line">            .send() <span class="comment">//...</span></span><br></pre></td></tr></table></figure>
-<h4 id="SendStep"><a href="#SendStep" class="headerlink" title="SendStep"></a>SendStep</h4><p>KafkaSuite 发送消息是阻塞的，设置的超时时间是 10s，<strong>如果 10s 未发送成功则会抛出 SendTimeoutException 异常</strong>，这时候需要检查配置文件中的 IP 和 SSL 配置是否正确。</p>
-<p>API 使用如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kafkaSuite.send(<span class="keyword">new</span> ResourceFile(<span class="string">"kafka/test-suite.json"</span>))</span><br><span class="line">            .toTopic()</span><br><span class="line">            .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br></pre></td></tr></table></figure>
-<p><code>send()</code> 方法提供发送字符串、文件或数据流的接口：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DSLSendStep</span> </span>&#123;</span><br><span class="line">    <span class="function">DSLSendToStep <span class="title">send</span><span class="params">(String value)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLSendToStep <span class="title">send</span><span class="params">(ResourceFile file)</span> <span class="keyword">throws</span> ResourceFileNotFoundException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLSendToStep <span class="title">send</span><span class="params">(InputStream inputStream)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>toTopic()</code> 方法可以直接 <code>toTopic(&quot;xxx&quot;)</code> 指定明确 Topic，但更加推荐从配置文件读取的写法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DSLSendToStep</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">toTopic</span><span class="params">(String topic)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLSentLoadConfigStep <span class="title">toTopic</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="AwaitStep"><a href="#AwaitStep" class="headerlink" title="AwaitStep"></a>AwaitStep</h4><p>KafkaSuite 监听消息同样是阻塞的。设置的<strong>默认超时时间是 60s</strong>，也提供自定义超时时间的接口如 <code>await(300)</code>，单位为秒，<strong>超过这个时间未接收到消息则抛出 AwaitTimeoutException</strong>。理论上我们都是先发再收，所以如果发送成功则代表 Kafka 连接不存在问题（也就是配置没有问题），接收不到就应该是业务代码有问题，这时候就需要 Debug 排查问题。</p>
-<p>监听结果提供<strong>监听一条</strong>和<strong>监听多条</strong>的 API，但不管是使用哪一个，<code>await()</code> 后会取到 Kafka 该 Topic 的上一个 offset 以来的所有新消息，然后变更 offset。可以根据 Index 获取多条消息里的某一条，Index 从 0 开始计算。大致用法是：使用 <code>await().latestOne()</code> 获取最新一条，<code>await().multi()</code> 或者直接 <code>await()</code> 获取多条。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DSLAwaitIndexStep</span> <span class="keyword">extends</span> <span class="title">DSLAwaitMultiFromStep</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line">    <span class="comment">//  Kafka Consumer Fetch latest one record</span></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">latestOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">lastOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line">    <span class="comment">//  Kafka Consumer Fetch record by index in records</span></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">one</span><span class="params">(<span class="keyword">int</span> index)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">firstOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">secondOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitOneFromStep <span class="title">thirdOne</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line">    <span class="comment">//  Kafka Consumer Fetch all latest records</span></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitMultiFromStep <span class="title">all</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DSLAwaitMultiFromStep <span class="title">multi</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line">    <span class="comment">//  Kafka Consumer Fetch multi records directly from topic</span></span><br><span class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">DSLAwaitMultiLoadConfigStep <span class="title">fromTopic</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">DSLAwaitMultiRecordsStep <span class="title">fromTopic</span><span class="params">(String topic)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">DSLAwaitMultiRecordsStep <span class="title">fromTopic</span><span class="params">(String topic, String groupId)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>下面是<strong>监听一条并且验证消息是否正确</strong>的写法，这里使用了 <code>toJavaObject()</code> 转成了 Java 对象，这个是我提供的转换消息的 API，后面会有介绍。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">kafkaSuite.send(<span class="string">"&#123;\"name\":\"jack\",\"age\":25&#125;"</span>)</span><br><span class="line">                .toTopic()</span><br><span class="line">                .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br><span class="line">                </span><br><span class="line">Person record = kafkaSuite</span><br><span class="line">                .await().latestOne()</span><br><span class="line">                .fromTopic()</span><br><span class="line">                .ofConfig(<span class="string">"INTEGRATION-TEST"</span>)</span><br><span class="line">                .toJavaObject(Person.class);</span><br><span class="line">                </span><br><span class="line">assertThat(record.getName()).isEqualTo(<span class="string">"jack"</span>);</span><br><span class="line">assertThat(record.getAge()).isEqualTo(<span class="number">25</span>);</span><br></pre></td></tr></table></figure>
-<p><strong>由于有的业务场景会出口多条消息，所以接下来演示验证多条消息的正确写法</strong>。提供了 <code>fetchFirstOne()</code> 和 <code>fetchOne(int index)</code> 根据 Index 获取多条中的一条等 API：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">kafkaSuite.send(<span class="string">"&#123;\"name\": \"jack\", \"age\": 25&#125;"</span>)</span><br><span class="line">        .toTopic()</span><br><span class="line">        .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br><span class="line"></span><br><span class="line">kafkaSuite.send(<span class="string">"&#123;\"name\": \"tony\", \"age\": 20&#125;"</span>)</span><br><span class="line">        .toTopic()</span><br><span class="line">        .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br><span class="line"></span><br><span class="line">DSLAwaitMultiRecordsStep records = kafkaSuite</span><br><span class="line">        .await().multi()</span><br><span class="line">        .fromTopic()</span><br><span class="line">        .ofConfig(<span class="string">"INTEGRATION-TEST"</span>);</span><br><span class="line"></span><br><span class="line">Person jack = records.fetchFirstOne().toJavaObject(Person.class);</span><br><span class="line">Person tony = records.fetchOne(<span class="number">1</span>).toJavaObject(Person.class);</span><br><span class="line"></span><br><span class="line">assertThat(jack.getName()).isEqualTo(<span class="string">"jack"</span>);</span><br><span class="line">assertThat(jack.getAge()).isEqualTo(<span class="number">25</span>);</span><br><span class="line">assertThat(tony.getName()).isEqualTo(<span class="string">"tony"</span>);</span><br><span class="line">assertThat(tony.getAge()).isEqualTo(<span class="number">20</span>);</span><br></pre></td></tr></table></figure>
-<p>最后结果的<strong>输出提供了转换和输出到文件的 API</strong>。需要注意，输出到文件只是方便调试 Bug 时使用，不应该出现在正式的代码中；输出的文件被写入到 <code>target/test-classes/resources</code> 下。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DSLAwaitOneRecordStep</span> <span class="keyword">extends</span> <span class="title">DSLAwaitRecordStep</span>, <span class="title">DSLAwaitOneRecordOutputStep</span>, <span class="title">DSLAwaitOneRecordConvertStep</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">String <span class="title">toString</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">JsonObject <span class="title">toJsonObject</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">JSONArray <span class="title">toJsonArray</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">toXml</span><span class="params">()</span></span>; <span class="comment">// 编码未完成</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    &lt;T&gt; <span class="function">T <span class="title">toJavaObject</span><span class="params">(Class&lt;T&gt; clazz)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">writeAsTxt</span><span class="params">(String absolutePath)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">writeAsTxt</span><span class="params">(ResourceFile resourceFile)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h2><p>流畅接口 API 的设计一个重中之重就是<strong>接口和抽象类的使用</strong>，为了契合流式接口，有时不能按照面向对象的模式设计接口继承关系。简言之，在编写流畅接口 API 框架时，大致思路是先编写接口（Interface），按照流式的原则设计接口之间的继承关系，然后再编写具体的实现类。以下是我的代码结构，与 <code>impl</code> 文件夹并列的都是接口。具体代码详见我的 <a href="https://github.com/s1mplecc/kafka-integration-test" target="_blank" rel="noopener">GitHub</a> 项目。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── Assertions.java</span><br><span class="line">├── JobIntegrationTest.java</span><br><span class="line">├── KafkaSuite.java</span><br><span class="line">└── core</span><br><span class="line">    ├── dsl</span><br><span class="line">    │   ├── await</span><br><span class="line">    │   │   ├── DSLAwaitFromStep.java</span><br><span class="line">    │   │   ├── DSLAwaitIndexStep.java</span><br><span class="line">    │   │   ├── DSLAwaitLoadConfigStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiFromStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiLoadConfigStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiRecordsConvertStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiRecordsFetchOneStep.java</span><br><span class="line">    │   │   ├── DSLAwaitMultiRecordsStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneFromStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneLoadConfigStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneRecordConvertStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneRecordOutputStep.java</span><br><span class="line">    │   │   ├── DSLAwaitOneRecordStep.java</span><br><span class="line">    │   │   ├── DSLAwaitRecordStep.java</span><br><span class="line">    │   │   ├── DSLAwaitStep.java</span><br><span class="line">    │   │   └── impl</span><br><span class="line">    │   │       ├── AbstractDSLAwaitFromStep.java</span><br><span class="line">    │   │       ├── AbstractDSLAwaitLoadConfigStep.java</span><br><span class="line">    │   │       ├── DSLAwaitIndexStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitMultiFromStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitMultiLoadConfigStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitMultiRecordsStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitOneFromStepImpl.java</span><br><span class="line">    │   │       ├── DSLAwaitOneLoadConfigStepImpl.java</span><br><span class="line">    │   │       └── DSLAwaitOneRecordStepImpl.java</span><br><span class="line">    │   ├── send</span><br><span class="line">    │   │   ├── DSLSendStep.java</span><br><span class="line">    │   │   ├── DSLSendToStep.java</span><br><span class="line">    │   │   ├── DSLSentLoadConfigStep.java</span><br><span class="line">    │   │   └── impl</span><br><span class="line">    │   │       ├── DSLSendToStepImpl.java</span><br><span class="line">    │   │       └── DSLSentLoadConfigStepImpl.java</span><br><span class="line">    │   └── start</span><br><span class="line">    │       ├── DSLPrepareStep.java</span><br><span class="line">    │       └── DSLStartStep.java</span><br><span class="line">    └── exceptions</span><br><span class="line">        ├── AwaitTimeoutException.java</span><br><span class="line">        ├── InvalidIntegrationTestNameException.java</span><br><span class="line">        ├── SendNullValueException.java</span><br><span class="line">        └── SendTimeoutException.java</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3830,7 +3916,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">69</span>
+                    <span class="site-state-item-count">70</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -4521,9 +4607,9 @@
       
     
       
-        
-      
     
+      
+        
       
     
       

@@ -372,6 +372,283 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/03/16/Redis%E6%8C%81%E4%B9%85%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/03/16/Redis%E6%8C%81%E4%B9%85%E5%8C%96/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Redis 持久化</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-03-16 08:25:31" itemprop="dateCreated datePublished" datetime="2018-03-16T08:25:31+08:00">2018-03-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-17 20:06:36" itemprop="dateModified" datetime="2020-11-17T20:06:36+08:00">2020-11-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/16/Redis%E6%8C%81%E4%B9%85%E5%8C%96/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/16/Redis持久化/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6.2k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>Redis 不仅可以基于内存进行高速的数据读写，还提供了两种持久化方式，即 <strong>RDB</strong>(or <strong>Redis Database</strong>) 和 <strong>AOF</strong>(or <strong>Append Only File</strong>)，本文主要介绍这两种持久化方式的原理及区别</p>
+</blockquote>
+<h2 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h2><blockquote>
+<p>RDB 持久化可以在指定的时间间隔内生成数据集的<strong>快照</strong>(snapshot)</p>
+</blockquote>
+<ul>
+<li><p>我们可以在配置文件<code>/etc/redis/redis.conf</code>中查看 RDB 持久化的配置</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">################################ SNAPSHOTTING  ################################           </span><br><span class="line">#</span><br><span class="line"># Save the DB on disk:</span><br><span class="line">#</span><br><span class="line">#   save &lt;seconds&gt; &lt;changes&gt;</span><br><span class="line">#</span><br><span class="line">#   Will save the DB if both the given number of seconds and the given</span><br><span class="line">#   number of write operations against the DB occurred.</span><br><span class="line">#</span><br><span class="line">#   In the example below the behaviour will be to save:</span><br><span class="line">#   after 900 sec (15 min) if at least 1 key changed</span><br><span class="line">#   after 300 sec (5 min) if at least 10 keys changed</span><br><span class="line">#   after 60 sec if at least 10000 keys changed</span><br><span class="line"></span><br><span class="line">save 900 1</span><br><span class="line">save 300 10</span><br><span class="line">save 60 10000</span><br></pre></td></tr></table></figure>
+<p>  格式如下<code>save &lt;seconds&gt; &lt;changes&gt;</code>，比如<code>save 900 1</code>就表示 <strong>900秒内如果有超过一个键被修改就自动保存一次数据集</strong></p>
+</li>
+<li><p>另外两个重要信息就是快照写入的文件名以及文件夹路径</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># The filename where to dump the DB</span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"># The working directory.</span><br><span class="line">#</span><br><span class="line"># The DB will be written inside this directory, with the filename specified</span><br><span class="line"># above using the &#39;dbfilename&#39; configuration directive.</span><br><span class="line">#</span><br><span class="line"># The Append Only File will also be created inside this directory.</span><br><span class="line">#</span><br><span class="line"># Note that you must specify a directory here, not a file name.</span><br><span class="line">dir &#x2F;var&#x2F;lib&#x2F;redis</span><br></pre></td></tr></table></figure>
+<p>  可以看到快照的文件名是<code>dump.rdb</code>，保存路径<code>/var/lib/redis</code>，<strong>RDB 和 AOF 的持久化文件都保存在这个目录下</strong></p>
+</li>
+<li><p>另外也可以在<code>redis-cli</code>中查看配置</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; CONFIG GET save</span><br><span class="line">1) &quot;save&quot;</span><br><span class="line">2) &quot;900 1 300 10 60 10000&quot;</span><br></pre></td></tr></table></figure>
+<p>  可以通过调用<code>SAVE</code>或<code>BGSAVE</code> (background save)，手动进行数据集保存</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SAVE</span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="RDB-的特性"><a href="#RDB-的特性" class="headerlink" title="RDB 的特性"></a>RDB 的特性</h3><ul>
+<li><p>RDB 是一个非常紧凑的文件，它保存了 Redis 在某个时间点上的数据集。 这种文件非常适合用于备份</p>
+</li>
+<li><p>RDB 可以最大化 Redis 的性能：父进程在保存 RDB 文件时唯一要做的就是 <strong><code>fork</code>出一个子进程</strong>，然后这个子进程就会处理接下来的所有保存工作，父进程无须执行任何磁盘 I/O 操作</p>
+</li>
+<li><p><strong>RDB 在恢复大数据集时的速度比 AOF 的恢复速度要快</strong></p>
+</li>
+<li><p>如果你需要尽量避免在服务器故障时丢失数据，那么 RDB 不适合你。 虽然你可以通过设置来控制保存 RDB 文件的频率。但是，因为 RDB 文件需要保存整个数据集的状态，所以它并不是一个轻松的操作。因此你可能会至少 5 分钟才保存一次 RDB 文件。 在这种情况下，一旦发生故障停机，你就可能会丢失好几分钟的数据</p>
+</li>
+<li><p>每次保存 RDB 的时候，Redis 都要<code>fork</code>出一个子进程，并由子进程来进行实际的持久化工作。<strong>在数据集比较庞大时，<code>fork</code>可能会非常耗时</strong>，造成服务器在某某毫秒内停止处理客户端；如果数据集非常巨大，并且 CPU 时间非常紧张的话，甚至可能会停止长达整整一秒。虽然 AOF 重写也需要进行<code>fork</code>，但无论 AOF 重写的执行间隔有多长，数据的耐久性都不会有任何损失</p>
+</li>
+</ul>
+<h2 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h2><blockquote>
+<p>AOF 持久化记录服务器执行的所有<strong>写操作命令</strong>，并在服务器启动时，通过重新执行这些命令来还原数据集。 AOF 文件中的命令全部以 Redis 协议的格式来保存，新命令会被 <strong>追加(append)</strong> 到文件的末尾。 Redis 还可以在后台对 AOF 文件进行 <strong>重写(rewrite)</strong> ，使得 AOF 文件的体积不会超出保存数据集状态所需的实际大小</p>
+</blockquote>
+<ul>
+<li><p>在配置文件中查看 AOF 设置</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">############################## APPEND ONLY MODE ###############################</span><br><span class="line"></span><br><span class="line"># By default Redis asynchronously dumps the dataset on disk. This mode is</span><br><span class="line"># good enough in many applications, but an issue with the Redis process or</span><br><span class="line"># a power outage may result into a few minutes of writes lost (depending on</span><br><span class="line"># the configured save points).</span><br><span class="line">#</span><br><span class="line"># The Append Only File is an alternative persistence mode that provides</span><br><span class="line"># much better durability. For instance using the default data fsync policy</span><br><span class="line"># (see later in the config file) Redis can lose just one second of writes in a</span><br><span class="line"># dramatic event like a server power outage, or a single write if something</span><br><span class="line"># wrong with the Redis process itself happens, but the operating system is</span><br><span class="line"># still running correctly.</span><br><span class="line">#</span><br><span class="line"># AOF and RDB persistence can be enabled at the same time without problems.</span><br><span class="line"># If the AOF is enabled on startup Redis will load the AOF, that is the file</span><br><span class="line"># with the better durability guarantees.</span><br><span class="line"></span><br><span class="line">appendonly no</span><br><span class="line"></span><br><span class="line"># The name of the append only file (default: &quot;appendonly.aof&quot;)</span><br><span class="line"></span><br><span class="line">appendfilename &quot;appendonly.aof&quot;</span><br><span class="line"></span><br><span class="line"># The fsync() call tells the Operating System to actually write data on disk</span><br><span class="line"># instead of waiting for more data in the output buffer. Some OS will really flush</span><br><span class="line"># data on disk, some other OS will just try to do it ASAP.</span><br><span class="line">#</span><br><span class="line"># Redis supports three different modes:</span><br><span class="line">#</span><br><span class="line"># no: don&#39;t fsync, just let the OS flush the data when it wants. Faster.</span><br><span class="line"># always: fsync after every write to the append only log. Slow, Safest.</span><br><span class="line"># everysec: fsync only one time every second. Compromise.</span><br><span class="line">#</span><br><span class="line"># The default is &quot;everysec&quot;, as that&#39;s usually the right compromise between</span><br><span class="line"># speed and data safety. It&#39;s up to you to understand if you can relax this to</span><br><span class="line"># &quot;no&quot; that will let the operating system flush the output buffer when</span><br><span class="line"># it wants, for better performances (but if you can live with the idea of</span><br><span class="line"># some data loss consider the default persistence mode that&#39;s snapshotting),</span><br><span class="line"># or on the contrary, use &quot;always&quot; that&#39;s very slow but a bit safer than</span><br><span class="line"># everysec.</span><br><span class="line">#</span><br><span class="line"># If unsure, use &quot;everysec&quot;.</span><br><span class="line"></span><br><span class="line"># appendfsync always</span><br><span class="line">appendfsync everysec</span><br><span class="line"># appendfsync no</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>默认<code>appendonly no</code>，需要改为<code>yes</code>开启 AOF 功能，修改后重启<code>redis-server</code>，发现<code>/var/lib/redis</code>多了个<code>appendonly.aof</code>文件，即以 Redis 协议格式保存的一条条命令</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;var&#x2F;lib&#x2F;redis</span><br><span class="line">appendonly.aof  dump.rdb</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>我们打开<code>redis-cli</code>执行一些写操作</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set foo &quot;foooo&quot;</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set bar &quot;barrr&quot;</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; keys *</span><br><span class="line">1) &quot;foo&quot;</span><br><span class="line">2) &quot;bar&quot;</span><br></pre></td></tr></table></figure>
+<p>  查看<code>appendonly.aof</code>，文件可读性很强，<code>*3</code>表示命令由 3 个短语构成，<code>$3</code>表示短语长度为 3，第一句<code>SELECT 0</code>表示选中第一个数据库</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">*2</span><br><span class="line">$6</span><br><span class="line">SELECT</span><br><span class="line">$1</span><br><span class="line">0</span><br><span class="line">*3</span><br><span class="line">$3</span><br><span class="line">set</span><br><span class="line">$3</span><br><span class="line">foo</span><br><span class="line">$5</span><br><span class="line">foooo</span><br><span class="line">*3</span><br><span class="line">$3</span><br><span class="line">set</span><br><span class="line">$3</span><br><span class="line">bar</span><br><span class="line">$5</span><br><span class="line">barrr</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>我们将上述文件 13 ~ 19 行删除，重启<code>redis-server</code>，发现第二个键已被我们人工删除。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; keys *</span><br><span class="line">1) &quot;foo&quot;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>实际上，Redis 服务器在重启时会读入 AOF 文件，按顺序执行每条命令来还原数据集</p>
+</blockquote>
+<h3 id="AOF-的特性"><a href="#AOF-的特性" class="headerlink" title="AOF 的特性"></a>AOF 的特性</h3><ul>
+<li><p>从配置文件的注释也可以看出 <strong>AOF 持久化比 Redis 持久化更耐用(durability)</strong>。可以设置不同的 fsync 策略</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># appendfsync always    &#x2F;&#x2F; 每次执行写入命令时 fsync</span><br><span class="line">appendfsync everysec    &#x2F;&#x2F; 每秒钟一次 fsync</span><br><span class="line"># appendfsync no    &#x2F;&#x2F; 无 fsync</span><br></pre></td></tr></table></figure>
+<p>  默认策略为每秒钟 fsync 一次，在这种配置下，Redis 仍然可以保持良好的性能，并且就算发生故障停机，也最多只会丢失一秒钟的数据</p>
+</li>
+<li><p>当 Redis 启动时，如果 RDB 持久化和 AOF 持久化都被打开了，那么程序会优先使用 AOF 文件来恢复数据集，因为 <strong>AOF 文件所保存的数据通常是最完整的</strong></p>
+</li>
+<li><p>AOF 文件有序地保存了对数据库执行的所有写入操作，可读性很高，可用于分析、操作回滚。举个例子，如果你不小心执行了<code>FLUSHALL</code>命令， 但只要 AOF 文件未被重写，那么只要停止服务器，移除 AOF 文件末尾的 <code>FLUSHALL</code>命令，并重启 Redis ，就可以将数据集恢复到<code>FLUSHALL</code>执行之前的状态</p>
+</li>
+<li><p>Redis 可以在 AOF 文件体积变得过大时，自动地在后台对 AOF 进行重写，<strong>重写后的新 AOF 文件包含了恢复当前数据集所需的最小命令集合</strong>。也可以通过<code>BGREWRITEAOF</code>命令手动重写 AOF 文件，因此我们可以做个测试，一直<code>SET</code>和<code>DEL</code>某个 key，在重写后发现 AOF 文件中多余的步骤已被删除</p>
+</li>
+<li><p>根据所使用的 fsync 策略，AOF 的速度可能会慢于 RDB 。在一般情况下，<code>appendfsync everysec</code>性能依然非常高，因为它是性能和数据安全性之间的平衡点。<code>appendfsync always</code>策略在实际使用中非常慢，频繁调用 fsync 注定了这种策略不可能快得起来</p>
+</li>
+</ul>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
+<p>一般来说，如果想达到足以媲美 PostgreSQL 的数据安全性，你应该<strong>同时使用两种持久化功能</strong>。有很多用户都只使用 AOF 持久化，但并不推荐这种方式: 因为定时生成 RDB 快照非常便于进行数据库备份，并且 RDB 恢复数据集的速度也要比 AOF 恢复的速度要快。<br>实际上，官方也提出未来可能会将 AOF 和 RDB 整合成单个持久化模型。</p>
+</blockquote>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://redis.io/topics/persistence" target="_blank" rel="noopener">Redis Persistence —- 官网</a></li>
+<li><a href="http://doc.redisfans.com/topic/persistence.html" target="_blank" rel="noopener">Redis持久化 —- 中文文档</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/03/15/Redis%E5%AE%89%E8%A3%85%E5%8F%8A%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2850,268 +3127,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/27/npm%E3%80%81nrm%E3%80%81nvm%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8AMac%E4%B8%8B%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86Node%E7%89%88%E6%9C%AC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/12/27/npm%E3%80%81nrm%E3%80%81nvm%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8AMac%E4%B8%8B%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86Node%E7%89%88%E6%9C%AC/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">npm、nrm、nvm的使用以及Mac下如何管理Node版本</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-12-27 03:01:29" itemprop="dateCreated datePublished" datetime="2017-12-27T03:01:29+08:00">2017-12-27</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-17 20:07:15" itemprop="dateModified" datetime="2020-11-17T20:07:15+08:00">2020-11-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/12/27/npm%E3%80%81nrm%E3%80%81nvm%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8AMac%E4%B8%8B%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86Node%E7%89%88%E6%9C%AC/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/12/27/npm、nrm、nvm的使用以及Mac下如何管理Node版本/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">4.3k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h2><blockquote>
-<p>npm(node依赖包管理器，node package manager)，官方或权威机构提供了一个公共的软件源（类似 Homebrew、yum），可方便我们下载并管理 JavaScript 依赖</p>
-</blockquote>
-<p>安装了 node 就包含了 npm 的安装</p>
-<p>安装依赖，<code>-g</code>参数表示全局安装，不带参数则安装在当前目录</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install lodash</span><br><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
-<p>可查看已安装的全局依赖（默认安装到 <code>/usr/local/lib/node_modules</code> 目录下），<code>--depth</code>显示的树深度，不加<code>-g</code>参数查看当前目录安装的依赖</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ npm ls -g --depth&#x3D;0</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;lib</span><br><span class="line">├── npm@5.6.0</span><br><span class="line">├── nrm@1.0.2</span><br><span class="line">└── vue-cli@2.9.2</span><br></pre></td></tr></table></figure>
-<p>卸载依赖</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm uninstall lodash</span><br></pre></td></tr></table></figure>
-<p>搜索某个依赖，以及显示某个依赖的具体信息，经测试，只有官方的源可以<code>search</code>，其他源未做相应支持</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm search lodash</span><br><span class="line">npm [view|show|info] lodash</span><br></pre></td></tr></table></figure>
-<p><code>npm config ls</code>查看配置信息，<code>-l</code>参数查看详细配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">➜ npm config ls</span><br><span class="line">; cli configs</span><br><span class="line">metrics-registry &#x3D; &quot;https:&#x2F;&#x2F;registry.npmjs.org&#x2F;&quot;</span><br><span class="line">scope &#x3D; &quot;&quot;</span><br><span class="line">user-agent &#x3D; &quot;npm&#x2F;5.6.0 node&#x2F;v9.3.0 darwin x64&quot;</span><br><span class="line"></span><br><span class="line">; userconfig &#x2F;Users&#x2F;s1mple&#x2F;.npmrc</span><br><span class="line">registry &#x3D; &quot;https:&#x2F;&#x2F;registry.npmjs.org&#x2F;&quot;</span><br><span class="line"></span><br><span class="line">; builtin config undefined</span><br><span class="line">prefix &#x3D; &quot;&#x2F;usr&#x2F;local&quot;</span><br><span class="line"></span><br><span class="line">; node bin location &#x3D; &#x2F;usr&#x2F;local&#x2F;Cellar&#x2F;node&#x2F;9.3.0_1&#x2F;bin&#x2F;node</span><br><span class="line">; cwd &#x3D; &#x2F;Users&#x2F;s1mple&#x2F;WebstormProjects&#x2F;vue&#x2F;table</span><br><span class="line">; HOME &#x3D; &#x2F;Users&#x2F;s1mple</span><br><span class="line">; &quot;npm config ls -l&quot; to show all defaults.</span><br></pre></td></tr></table></figure>
-<p>默认软件源为国外的官方软件源，速度较慢，可修改为国内软件源，比如淘宝</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry https:&#x2F;&#x2F;registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
-<p>npm 还可以登录，需要先在官网注册一个账号，然后 <code>npm login</code> 登录，就可以将自己写的模块 <code>publish</code> 上去，有点类似于 Docker 的个人仓库，网站地址为 <code>https://www.npmjs.com/~{username}</code>。另外，还有一些命令简写，比如<code>i</code>代替 <code>install</code>，<code>rm</code> 代替 <code>uninstall</code>，执行 <code>npm -l</code> 查看那些命令下面有哪些 alias</p>
-<h2 id="nrm"><a href="#nrm" class="headerlink" title="nrm"></a>nrm</h2><blockquote>
-<p>nrm(npm注册处管理器，npm registry manager)，方便我们切换软件源</p>
-</blockquote>
-<p>全局安装 nrm</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i -g nrm</span><br></pre></td></tr></table></figure>
-<p>nrm 内置了一些软件源，带<code>*</code>星号的表示当前使用的软件源，也可以使用 <code>nrm current</code> 查看</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">➜ nrm ls</span><br><span class="line"></span><br><span class="line">* npm ---https:&#x2F;&#x2F;registry.npmjs.org&#x2F;</span><br><span class="line">  cnpm --http:&#x2F;&#x2F;r.cnpmjs.org&#x2F;</span><br><span class="line">  taobao https:&#x2F;&#x2F;registry.npm.taobao.org&#x2F;</span><br><span class="line">  nj ----https:&#x2F;&#x2F;registry.nodejitsu.com&#x2F;</span><br><span class="line">  rednpm http:&#x2F;&#x2F;registry.mirror.cqupt.edu.cn&#x2F;</span><br><span class="line">  npmMirror  https:&#x2F;&#x2F;skimdb.npmjs.com&#x2F;registry&#x2F;</span><br><span class="line">  edunpm http:&#x2F;&#x2F;registry.enpmjs.org&#x2F;</span><br></pre></td></tr></table></figure>
-<p>切换软件源，比如换成淘宝的，相当于手动修改了<code>~/.npmrc</code>中的<code>registry</code>配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ nrm use taobao</span><br><span class="line"></span><br><span class="line">    Registry has been set to: https:&#x2F;&#x2F;registry.npm.taobao.org&#x2F;</span><br></pre></td></tr></table></figure>
-<p>可以执行<code>nrm test</code>测试网络延迟</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ nrm test npm</span><br><span class="line"></span><br><span class="line">* npm ---2608ms</span><br><span class="line"></span><br><span class="line">➜  ~ nrm test taobao</span><br><span class="line"></span><br><span class="line">  taobao 246ms</span><br><span class="line"></span><br><span class="line">➜  ~ nrm test cnpm</span><br><span class="line"></span><br><span class="line">  cnpm --256ms</span><br></pre></td></tr></table></figure>
-<p><code>npm home taobao</code>打开对应源的官方网站</p>
-<h2 id="nvm"><a href="#nvm" class="headerlink" title="nvm"></a>nvm</h2><blockquote>
-<p>nvm(node版本管理器，node version manager)，可以安装、管理不同版本 node 并进行切换</p>
-</blockquote>
-<p>安装，完成后重启终端</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -ohttps:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;creationix&#x2F;nvm&#x2F;v0.33.8&#x2F;install.sh | bash</span><br></pre></td></tr></table></figure>
-<p>这个脚本克隆了 nvm repository 到<code>~/.nvm</code>并在<code>~/.bash_profile, ~/.zshrc, ~/.profile, ~/.bashrc</code>中加入环境变量</p>
-<p>安装最新的 node</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm install node</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">Now using node v9.3.0 (npm v5.5.1)</span><br><span class="line">Creating default alias: default -&gt; node (-&gt; v9.3.0)</span><br></pre></td></tr></table></figure>
-<p>或安装指定版本，执行<code>nvm ls-remote</code>可列出所有可以安装的版本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm install 8.9.3</span><br></pre></td></tr></table></figure>
-<p>查看已安装 node 版本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm ls</span><br><span class="line">-&gt;       v8.9.3</span><br><span class="line">         v9.3.0</span><br><span class="line">         system</span><br><span class="line">default -&gt; node (-&gt; v9.3.0)</span><br><span class="line">node -&gt; stable (-&gt; v9.3.0) (default)</span><br><span class="line">stable -&gt; 9.3 (-&gt; v9.3.0) (default)</span><br></pre></td></tr></table></figure>
-<p>箭头指向当前使用的版本，切换版本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ nvm use 9.3.0</span><br><span class="line">Now using node v9.3.0 (npm v5.5.1)</span><br></pre></td></tr></table></figure>
-<p>还可以指定默认的node版本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm alias default 8.9.3</span><br></pre></td></tr></table></figure>
-<h2 id="Mac管理Node版本"><a href="#Mac管理Node版本" class="headerlink" title="Mac管理Node版本"></a>Mac管理Node版本</h2><p>最近有尝试将 Hexo 博客包括 Next 主题进行升级，也是遇到了很多坑，版本进行一点点的改动，都可能导致整个博客网站 run 不起来，无奈之下只能封存了现有的版本，劝自己不要手贱去更新。如果以后有更新的强迫意愿，只能考虑在全新环境下进行博客内容的迁移。</p>
-<p>其中我遇到的一个比较头疼的问题就是 node 的版本问题。Hexo 在 node 版本为8或者14时均不能正常运行，<code>hexo s</code> 以及发布命令 <code>hexo g -d</code> 都跑不起来，只有在 node 版本为10时才可以正常运行。</p>
-<p>我之前使用过 <code>brew install node</code> 安装了最新的版本14，虽然可以用nvm去管理 node 版本，但由于要想使用 nvm，必须先执行 <code>[ -s &quot;$NVM_DIR/nvm.sh&quot; ] &amp;&amp; \. &quot;$NVM_DIR/nvm.sh&quot;</code> 和 <code>[ -s &quot;$NVM_DIR/bash_completion&quot; ] &amp;&amp; \. &quot;$NVM_DIR/bash_completion&quot;</code> 这两条命令（配在了我的 <code>~/.zshrc</code> 中），极大影响了终端的打开速度，每打开一个终端都要跑一遍 <code>.zshrc</code>，效率难以忍受。再者平时切换 node 版本的频率要远低于执行 Hexo 命令的频率。所以我决定还是回到用Mac的 <code>brew</code> 工具去管理 node 版本。</p>
-<p>查看可用版本，并安装需要版本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ brew search node</span><br><span class="line">➜ brew install node@10</span><br></pre></td></tr></table></figure></p>
-<p>现在是有两个版本的，node为原先安装的14版本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ brew list | grep node</span><br><span class="line">node</span><br><span class="line">node@10</span><br></pre></td></tr></table></figure>
-<p>解绑原先的 node@14，绑定到 node@10，由于 node 自带 npm，需要先删除原有的 npm 依赖，否则会有冲突</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ brew unlink node</span><br><span class="line">➜ rm -rf &#x2F;usr&#x2F;local&#x2F;lib&#x2F;node_modules&#x2F;npm</span><br><span class="line">➜ brew link node@10 --force</span><br></pre></td></tr></table></figure>
-<p>查看是否绑定成功</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜ which node</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;bin&#x2F;node</span><br><span class="line">➜ node -v</span><br><span class="line">v10.22.1</span><br></pre></td></tr></table></figure>
-<p>现在 node 版本就切换到10了，新打开的终端中的 node 版本也为10。如果还想切换回 node@14，有两种方法：一是使用 nvm 进行切换，但这样新打开终端 node 版本还是14，适用于短暂的更换 node 版本；第二种办法是使用 <code>brew unlink</code> 解绑再绑定 node@14，这种适用于主环境需要14版本的情况。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://docs.npmjs.com/" target="_blank" rel="noopener">npm 官方文档</a></li>
-<li><a href="https://github.com/creationix/nvm/blob/master/README.md" target="_blank" rel="noopener">nvm Github官方手册</a></li>
-<li><a href="https://mrxf.github.io/2017/04/18/osx-using-the-brew-to-manage-multiple-node-version/" target="_blank" rel="noopener">OS X中使用brew管理多个node版本</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3163,7 +3178,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">69</span>
+                    <span class="site-state-item-count">70</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

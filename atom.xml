@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://s1mplecc.github.io/"/>
-  <updated>2021-01-02T09:06:33.816Z</updated>
+  <updated>2021-01-02T15:12:29.731Z</updated>
   <id>https://s1mplecc.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>如何阅读 Python 源码</title>
+    <link href="https://s1mplecc.github.io/2021/01/02/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB-Python-%E6%BA%90%E7%A0%81/"/>
+    <id>https://s1mplecc.github.io/2021/01/02/如何阅读-Python-源码/</id>
+    <published>2021-01-02T14:34:23.000Z</published>
+    <updated>2021-01-02T15:12:29.731Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Languages" scheme="https://s1mplecc.github.io/categories/Languages/"/>
+    
+    
+      <category term="Python" scheme="https://s1mplecc.github.io/tags/Python/"/>
+    
+  </entry>
   
   <entry>
     <title>Python 编码规范</title>
@@ -492,34 +518,6 @@
     <id>https://s1mplecc.github.io/2018/11/27/Java8 Optional 源码阅读/</id>
     <published>2018-11-27T05:26:41.000Z</published>
     <updated>2020-12-20T11:20:24.872Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-      <category term="Languages" scheme="https://s1mplecc.github.io/categories/Languages/"/>
-    
-    
-      <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
-    
-      <category term="FP" scheme="https://s1mplecc.github.io/tags/FP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java8 函数接口</title>
-    <link href="https://s1mplecc.github.io/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/"/>
-    <id>https://s1mplecc.github.io/2018/11/16/Java8 函数接口/</id>
-    <published>2018-11-16T04:33:17.000Z</published>
-    <updated>2020-11-25T11:52:44.134Z</updated>
     
     <summary type="html">
     

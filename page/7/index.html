@@ -372,6 +372,317 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/21/%E6%90%AD%E5%BB%BAGit%E5%92%8CMaven%E7%A7%81%E6%9C%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/11/21/%E6%90%AD%E5%BB%BAGit%E5%92%8CMaven%E7%A7%81%E6%9C%8D/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/7/index.html">搭建 Git 和 Maven 私服</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-11-21 04:52:17" itemprop="dateCreated datePublished" datetime="2017-11-21T04:52:17+08:00">2017-11-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/21/%E6%90%AD%E5%BB%BAGit%E5%92%8CMaven%E7%A7%81%E6%9C%8D/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/21/搭建Git和Maven私服/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">3.6k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>应公司需求，搭建Git和Maven的企业私服，Maven私服使用Nexus搭建。</p>
+</blockquote>
+<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
+<li>一台服务器，4核8G、1TB硬盘，Ubuntu 16.04</li>
+<li>apache-maven-3.5.2-bin.tar.gz</li>
+<li>nexus-3.6.1-02-unix.tar.gz，<a href="https://www.sonatype.com/download-oss-sonatype" target="_blank" rel="noopener">官网下载</a></li>
+<li>jdk-8u151-linux-x64.tar.gz</li>
+</ul>
+<h2 id="搭建Git"><a href="#搭建Git" class="headerlink" title="搭建Git"></a>搭建Git</h2><ul>
+<li><p>安装Git，<code>git --version</code>查看版本</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建git用户，该命令会创建git组、git用户，并设置<code>/home/git</code>为用户目录</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adduser git</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为了安全，禁止git用户bash登录，<code>vi /etc/passwd</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git:x:1001:1001:,,,:&#x2F;home&#x2F;git:&#x2F;bin&#x2F;bash</span><br></pre></td></tr></table></figure>
+<p>  修改为</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git:x:1001:1001:,,,:&#x2F;home&#x2F;git:&#x2F;usr&#x2F;bin&#x2F;git-shell</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
+<p><strong>git-shell :</strong> 提供了受限的git访问，只允许<strong>push/pull</strong>命令，官网解释：<br>This is a login shell for SSH accounts to provide restricted Git access. It permits execution only of server-side Git commands implementing the pull/push functionality, plus custom commands present in a subdirectory named git-shell-commands in the user’s home directory.</p>
+</blockquote>
+<h2 id="测试Git"><a href="#测试Git" class="headerlink" title="测试Git"></a>测试Git</h2><ul>
+<li><p>在<code>/opt</code>创建文件夹，<code>mkdir git-repo</code>，并<code>cd</code>进去</p>
+</li>
+<li><p>初始化一个Git仓库，在当前目录下生成了一个空的Git仓库，包含了一些初始文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init --bare helloworld.git</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更改权限</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown -R git:git helloworld.git</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将用户的ssh公钥加入到<code>/home/git/.ssh/authorized_keys</code>中，并重启sshd服务</p>
+</li>
+<li><p>在<strong>本地机器</strong>上将其<strong>clone</strong>下来</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@&#123;IP&#125;:&#x2F;opt&#x2F;git-repo&#x2F;helloworld.git</span><br></pre></td></tr></table></figure>
+<p>  会发现当前目录下多了个名为helloworld的文件夹</p>
+</li>
+<li><p>现在我们添加一个文件，测试将其push到服务器上</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">touch abc.txt</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;first commit&quot;</span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="搭建Maven私服"><a href="#搭建Maven私服" class="headerlink" title="搭建Maven私服"></a>搭建Maven私服</h2><blockquote>
+<p>Nexus是目前Sonatype公司开发的搭建Maven企业级私服的工具，有付费版本<strong>Pro</strong>和开源版本<strong>OSS</strong> (Open Source Software)</p>
+</blockquote>
+<ul>
+<li><p>上传jdk、maven和nexus的tar包并解压改名，如下</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@git-maven:&#x2F;opt# ls</span><br><span class="line">git-repo  jdk  maven  nexus sonatype-work</span><br></pre></td></tr></table></figure>
+<p>  其中<code>sonatype-work</code>文件夹用于存放私服的配置，日志文件和依赖包</p>
+</li>
+<li><p>修改环境变量，<code>vi /etc/profile</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># maven</span><br><span class="line">export M3_HOME&#x3D;&#x2F;opt&#x2F;maven</span><br><span class="line">export PATH&#x3D;$M3_HOME&#x2F;bin:$PATH</span><br><span class="line"></span><br><span class="line"># jdk</span><br><span class="line">export JAVA_HOME&#x3D;&#x2F;opt&#x2F;jdk</span><br><span class="line">export JRE_HOME&#x3D;$&#123;JAVA_HOME&#125;&#x2F;jre</span><br><span class="line">export CLASSPATH&#x3D;.:$&#123;JAVA_HOME&#125;&#x2F;lib:$&#123;JRE_HOME&#125;&#x2F;lib</span><br><span class="line">export PATH&#x3D;$&#123;JAVA_HOME&#125;&#x2F;bin:$PATH</span><br><span class="line"></span><br><span class="line"># nexus</span><br><span class="line">export PATH&#x3D;&#x2F;opt&#x2F;nexus&#x2F;bin:$PATH</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使环境变量生效，<code>source /etc/profile</code>，现在可以执行<code>nexus</code>命令查看它的一些操作，如下</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Usage: nexus &#123; console | start | stop | restart | status | dump &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>nexus不建议使用root用户启动，所以我们新建nexus用户，<code>adduser nexus</code>。<strong>注意</strong>，关于nexus的操作最好都在nexus用户下执行</p>
+</li>
+<li><p>切换到nexus用户，<code>su - nexus</code>，启动nexus</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nexus start</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果已正常启动，访问<code>{IP}:8081</code>即可前往控制台，8081为nexus默认端口，默认用户名admin，密码admin123，可在控制台中修改密码<br><img src="/2017/11/21/%E6%90%AD%E5%BB%BAGit%E5%92%8CMaven%E7%A7%81%E6%9C%8D/0.png" alt="-----2017-11-22---4.40.57"></p>
+</li>
+</ul>
+<h4 id="Tips-1"><a href="#Tips-1" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
+<p>其中<strong>maven-public</strong>是一个组，包含了<strong>maven-central</strong>(代理中央仓库，存放依赖构件)、<strong>maven-releases</strong>(存放发行版本)、<strong>maven-snapshots</strong>(存放快照版本)。</p>
+</blockquote>
+<h2 id="导入依赖包"><a href="#导入依赖包" class="headerlink" title="导入依赖包"></a>导入依赖包</h2><ul>
+<li><a href="http://mvnrepository.com/" target="_blank" rel="noopener">Maven中央仓库网址</a></li>
+</ul>
+<blockquote>
+<p>现在已经成功部署了Nexus。可以通过配置你的项目，使其从你的私服上拉取依赖包，如果拉取不到，它会到Maven中央仓库拉取依赖并保存在服务器上</p>
+</blockquote>
+<ul>
+<li><p>新建Maven项目，修改<code>pom.xml</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;repositories&gt;</span><br><span class="line">    &lt;repository&gt;</span><br><span class="line">        &lt;id&gt;nexus&lt;&#x2F;id&gt;</span><br><span class="line">        &lt;name&gt;nexus&lt;&#x2F;name&gt;</span><br><span class="line">        &lt;url&gt;http:&#x2F;&#x2F;&#123;IP&#125;:8081&#x2F;repository&#x2F;maven-public&#x2F;&lt;&#x2F;url&gt;</span><br><span class="line">    &lt;&#x2F;repository&gt;</span><br><span class="line">&lt;&#x2F;repositories&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>&lt;dependencies&gt;</code>中添加你需要的依赖，执行<code>mvn package</code>打包项目即可</p>
+</li>
+<li><p>控制台上查看服务器上已经存储的依赖包<br><img src="/2017/11/21/%E6%90%AD%E5%BB%BAGit%E5%92%8CMaven%E7%A7%81%E6%9C%8D/1.png" alt="-----2017-11-22---4.41.17"></p>
+</li>
+</ul>
+<h2 id="搭建GitLab"><a href="#搭建GitLab" class="headerlink" title="搭建GitLab"></a>搭建GitLab</h2><ul>
+<li><a href="https://mirror.tuna.tsinghua.edu.cn/help/gitlab-ce/" target="_blank" rel="noopener">清华大学开源软件镜像站</a></li>
+</ul>
+<blockquote>
+<p>有空搭了个Gitlab，可以方便管理项目和成员公钥。但是运行GitLab对服务器内存的要求较高。官网明确要求内存至少4G</p>
+</blockquote>
+<ul>
+<li><p>信任GitLab的GPG公钥</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https:&#x2F;&#x2F;packages.gitlab.com&#x2F;gpg.key 2&gt; &#x2F;dev&#x2F;null | sudo apt-key add - &amp;&gt;&#x2F;dev&#x2F;null</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加清华的镜像源，<code>touch /etc/apt/sources.list.d/gitlab-ce.list</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deb https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;gitlab-ce&#x2F;ubuntu xenial main</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装gitlab-ce</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install gitlab-ce</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改GitLab的Url，<code>vi /etc/gitlab/gitlab.rb</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">external_url &#39;http:&#x2F;&#x2F;&#123;domain or IP&#125;&#39;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动GitLab</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>访问你的Url进行注册登录即可，可以创建Groups、Projects，并添加你的SSH公钥。另外修改root用户密码参考文章：<a href="http://blog.csdn.net/yin138/article/details/51394868" target="_blank" rel="noopener">http://blog.csdn.net/yin138/article/details/51394868</a></p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/19/%E9%85%8D%E7%BD%AENginx%E7%9B%AE%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2745,7 +3056,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">69</span>
+                    <span class="site-state-item-count">70</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3428,6 +3739,8 @@
 
   
   
+    
+      
     
       
     
