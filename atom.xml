@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://s1mplecc.github.io/"/>
-  <updated>2020-12-21T10:55:00.510Z</updated>
+  <updated>2021-01-02T08:47:16.161Z</updated>
   <id>https://s1mplecc.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Python 编码规范</title>
+    <link href="https://s1mplecc.github.io/2021/01/02/Python-%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/"/>
+    <id>https://s1mplecc.github.io/2021/01/02/Python-编码规范/</id>
+    <published>2021-01-02T08:46:14.000Z</published>
+    <updated>2021-01-02T08:47:16.161Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Languages" scheme="https://s1mplecc.github.io/categories/Languages/"/>
+    
+    
+      <category term="Python" scheme="https://s1mplecc.github.io/tags/Python/"/>
+    
+  </entry>
   
   <entry>
     <title>Python 装饰器与闭包</title>
@@ -513,34 +539,6 @@
       <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
     
       <category term="FP" scheme="https://s1mplecc.github.io/tags/FP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>单例模式</title>
-    <link href="https://s1mplecc.github.io/2018/11/12/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/"/>
-    <id>https://s1mplecc.github.io/2018/11/12/单例模式/</id>
-    <published>2018-11-12T05:42:03.000Z</published>
-    <updated>2020-09-16T01:48:41.967Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-      <category term="Design" scheme="https://s1mplecc.github.io/categories/Design/"/>
-    
-    
-      <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
-    
-      <category term="Design Pattern" scheme="https://s1mplecc.github.io/tags/Design-Pattern/"/>
     
   </entry>
   

@@ -125,7 +125,7 @@
 <meta property="og:image" content="https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20%E7%AC%AC%E4%B8%89%E8%8A%82%EF%BC%9APartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/3.png">
 <meta property="og:image" content="https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20%E7%AC%AC%E4%B8%89%E8%8A%82%EF%BC%9APartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/4.png">
 <meta property="article:published_time" content="2018-05-09T17:24:34.000Z">
-<meta property="article:modified_time" content="2020-12-30T12:13:45.879Z">
+<meta property="article:modified_time" content="2020-12-30T13:33:02.966Z">
 <meta property="article:author" content="s1mple">
 <meta property="article:tag" content="Code Refactoring">
 <meta name="twitter:card" content="summary">
@@ -439,7 +439,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-12-30 20:13:45" itemprop="dateModified" datetime="2020-12-30T20:13:45+08:00">2020-12-30</time>
+                <time title="修改时间：2020-12-30 21:33:02" itemprop="dateModified" datetime="2020-12-30T21:33:02+08:00">2020-12-30</time>
               
             
           </span>
@@ -528,7 +528,7 @@
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。<a href="https://s2mple.xyz/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/" target="_blank" rel="noopener">上一篇</a>我们通过报表参数填充案例复习了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起。本篇我们将通过 PartDB 案例来见识 IDEA 中 <strong>Extract Superclass</strong> 等强大的重构功能，以及与案例相关的设计模式：<strong>模版方法模式</strong>。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。<a href="https://s2mple.xyz/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/" target="_blank" rel="noopener">上一篇</a>我们通过报表参数填充案例复习了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起。本篇我们将通过 PartDB 案例来见识 IDEA 中 <strong>Extract Superclass</strong> 等强大的重构功能，以及与案例相关的设计模式：<strong>模版方法模式</strong>。</p>
 <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
 <li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目。</li>
 <li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 <code>Cmd + D</code> 查看<strong>代码差异</strong>。</li>
@@ -730,7 +730,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">68</span>
+                    <span class="site-state-item-count">69</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -918,7 +918,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
