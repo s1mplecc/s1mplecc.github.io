@@ -6095,7 +6095,7 @@
   </entry>
   <entry>
     <title>如何阅读 Python 源码</title>
-    <url>/2021/01/02/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB-Python-%E6%BA%90%E7%A0%81/</url>
+    <url>/2021/01/09/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB-Python-%E6%BA%90%E7%A0%81/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>阅读源码是每个程序员都应当具备的技能，阅读源码不仅能帮助你理解一个模块实现的细节，也能让你从优秀的源码中汲取经验，遵循更好的编码规范，编写出更 Pythonic 的代码。但不可否认的是，阅读源码需要一定的编码功底，盲目的阅读并不能取得应有的效果。在阅读源码之前我们要明白阅读的目的，如果是想了解一个模块的实现细节自不必多说，但如果是想提高自己的 Python 编码水平，那么就应该从 Python 标准库以及一些优秀的第三方开源代码下手。</p>
 <p>在《Python编程之美：最佳实践指南》这本书中，作者 Kenneth Reitz 从简单的 HowDoI 项目，到大一点的 requests 库（他本身也是这个库的开发者），再到后面的 Web 框架 Flask，逐步递进地展示如何阅读高质量的代码。如果想阅读优秀的第三方库源码，可以从他在书中罗列出的经典项目开始。除此之外，GitHub 上也有人整理了比较详尽的目录：<a href="https://github.com/programthink/opensource/blob/master/libs/python.wiki" target="_blank" rel="noopener">Python 开源库及示例代码</a>。项目很多，但不是每个都必读。还是强调的那一点：不要盲目的阅读源码，确定有必要的时候再去阅读。</p>
 <p>抛开这些问题不谈，本篇我想结合我自己在阅读标准库源码（主要是 typing 模块和 re 模块）时的一点理解，介绍一些阅读源码前需要掌握的先验知识，以及如何结合开发工具在 PyCharm IDE 中高效地阅读源码。让我们先从 Python 代码的类型提示开始。</p>
@@ -6230,6 +6230,62 @@
 <li><a href="https://docs.python.org/3/library/typing.html" target="_blank" rel="noopener">Python 官方文档：typing — Support for type hints</a></li>
 <li><a href="https://realpython.com/python-type-checking/#function-annotations" target="_blank" rel="noopener">Python Type Checking (Guide)</a></li>
 <li><a href="https://sikasjc.github.io/2018/07/14/type-hint-in-python/#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E7%B1%BB%E5%9E%8B%E6%8F%90%E7%A4%BA" target="_blank" rel="noopener">译文：全面理解 Python 中的类型提示（Type Hints）</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Languages</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python 环境准备</title>
+    <url>/2021/01/18/Python-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87/</url>
+    <content><![CDATA[<h2 id="Python-版本"><a href="#Python-版本" class="headerlink" title="Python 版本"></a>Python 版本</h2><p>目前 Python 主要活跃的有 Python 2.x 和 Python 3.x 两个大版本，与 C++ 和 Java 这种向后兼容的语言不同，Python 的两个版本互不兼容。舍弃兼容性是一种设计上的取舍，在我看来 Python 这种尤为注重“简约”的语言，敢于大胆摒弃一些有设计缺陷的旧包袱，从而拥抱新特性的作风，未尝不是一种 Pythonic 的体现，很大程度上避免了走向像 C++ 一样越来越臃肿晦涩的道路。</p>
+<p>Python 核心团队已于 2019 年正式宣布将在 2020 年停止对 Python2 的更新，在此期间会对 Python2 版本进行一些 bug 修复、安全增强以及移植等工作，以便使开发者顺利的从 Python2 迁移到 Python3。Python 2.7 是 2.x 系列的最后一个版本，官网上最新的 Python 2.7.18 版本发布于 2020 年 4 月 20 日。官方停止 Python2 更新的主要动机是想进行 Python3 的推广，以及同时维护两个版本给他们带来的工作负担。目前大部分 Python 开源项目已经兼容 Python3 了，所以<strong>强烈建议使用 Python3 来开发新的项目</strong>。</p>
+<p>一般较新的 Linux 发行版已经预装了 Python2 和 Python3，如果没有，也可以通过各自的包管理器进行安装和更新。Mac OS 环境下可以通过 Homebrew 工具来安装 Python，可以附加 <code>@ + 版本号</code> 安装指定版本。在一般情况下（不手动修改软链接），命令行中的 <code>python</code> 通常是 python 2.7 或其旧版本的别名，<code>python3</code> 才指代 Python3 版本，可以通过 <code>--version</code> 参数来查看安装的具体版本。由于两个版本互不兼容，在命令行运行 Python 脚本前需要先确定其所用的 Python 版本。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ brew install python  <span class="comment"># brew install python@2.7</span></span><br><span class="line">➜ python --version </span><br><span class="line">Python 2.7.10</span><br><span class="line"></span><br><span class="line">➜ brew install python3  <span class="comment"># brew install python@3.8</span></span><br><span class="line">➜ python3 --version</span><br><span class="line">Python 3.8.6</span><br></pre></td></tr></table></figure>
+<p>有时也需要在代码中，也就是<strong>运行时确定 Python 版本</strong>，此时用到的是内置的 sys 模块：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> sys</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(sys.version)</span><br><span class="line"><span class="number">3.8</span><span class="number">.6</span> (default, Oct  <span class="number">8</span> <span class="number">2020</span>, <span class="number">14</span>:<span class="number">07</span>:<span class="number">53</span>) </span><br><span class="line">[Clang <span class="number">11.0</span><span class="number">.0</span> (clang<span class="number">-1100.0</span><span class="number">.33</span><span class="number">.17</span>)]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(sys.version_info)</span><br><span class="line">sys.version_info(major=<span class="number">3</span>, minor=<span class="number">8</span>, micro=<span class="number">6</span>, releaselevel=<span class="string">'final'</span>, serial=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>可以通过在运行时判断 Python 版本从而达到较好的兼容性，这在 Python 的内置模块以及标准库中使用较多。由于 <code>version_info</code> 本身是个 tuple 类型，重载了比较运算符，所以可以像下面这样直接进行比较：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># builtins.pyi</span></span><br><span class="line"><span class="keyword">if</span> sys.version_info &gt;= (<span class="number">3</span>, <span class="number">9</span>):</span><br><span class="line">    <span class="keyword">from</span> types <span class="keyword">import</span> GenericAlias</span><br><span class="line"></span><br><span class="line"><span class="comment"># contextlib2.py</span></span><br><span class="line"><span class="keyword">if</span> sys.version_info[:<span class="number">2</span>] &gt;= (<span class="number">3</span>, <span class="number">4</span>):</span><br><span class="line">    _abc_ABC = abc.ABC</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    _abc_ABC = abc.ABCMeta(<span class="string">'ABC'</span>, (object,), &#123;<span class="string">'__slots__'</span>: ()&#125;)</span><br></pre></td></tr></table></figure>
+<p>上面的源码来自于两个不同的文件，阅读源码可以发现一些 Python 版本变更的内容。比如自 Python 3.9 引入的 GenericAlias 类型；Python 3.4 之前继承抽象类时还得使用 ABCMeta 形式。</p>
+<p>一般情况下，除非你开发的是供他人使用的第三方库，并不需要你在运行时显式判断版本。一方面是版本对于你是可控的，另一方面是如果滥用版本判断会降低代码的整洁性。如果不得不这么做，可以像内置模块 builtins.pyi 一样在存根文件中统一进行处理。</p>
+<h2 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h2><blockquote>
+<p><strong>pip</strong> - The Python Package Installer. You can use pip to install packages from the Python Package Index (PyPI) and other indexes.</p>
+</blockquote>
+<p><a href="https://pip.pypa.io/en/stable/" target="_blank" rel="noopener">pip</a> 是 Python 的包安装和管理工具，类似于 npm 之于 JavaScript。Python 3.x 以上的发行版本中都是自带 pip 的。在使用之前先确定 pip 的版本，Python3 中的 pip 是 pip3 的别名，但如果安装了 Python2 的 pip，那么在为 Python3 项目安装依赖时请使用 pip3 命令，因为这两个命令会将依赖安装在不同的目录下。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ pip --version</span><br><span class="line">pip 20.3.3 from /usr/<span class="built_in">local</span>/lib/python3.8/site-packages/pip (python 3.8)</span><br></pre></td></tr></table></figure>
+<p>常见的 pip 命令使用可以查阅官方文档，或者 <code>pip -h</code> 查阅帮助文档。与 JavaScript 的 package.json 一样，Python 也提供了统一管理依赖的配置文件 <strong>requirements.txt</strong>。文件中可以指定依赖的版本号，如果缺省则默认安装最新依赖。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">####### example-requirements.txt #######</span><br><span class="line">beautifulsoup4              # Requirements without Version Specifiers</span><br><span class="line">docopt &#x3D;&#x3D; 0.6.1             # Version Matching. Must be version 0.6.1</span><br><span class="line">keyring &gt;&#x3D; 4.1.1            # Minimum version 4.1.1</span><br><span class="line">coverage !&#x3D; 3.5             # Version Exclusion. Anything except version 3.5</span><br><span class="line">Mopidy-Dirble ~&#x3D; 1.1        # Compatible release. Same as &gt;&#x3D; 1.1, &#x3D;&#x3D; 1.*</span><br></pre></td></tr></table></figure>
+<p>使用 <code>-r</code> 参数指定通过 requirements.txt 文件安装依赖：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+<p>有时我们需要进行项目迁移，比如将本地项目部署至服务器，为了保证重新安装依赖时不影响项目的正常运行，可以使用 freeze 指令将所需的依赖和具体版本号写入 requirements.txt 文件中，再一次性安装所有依赖。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ pip freeze &gt; requirements.txt</span><br><span class="line">➜ cat requirements.txt </span><br><span class="line">certifi==2020.11.8</span><br><span class="line">matplotlib==3.3.2</span><br><span class="line">numpy==1.19.4</span><br><span class="line">six==1.15.0</span><br></pre></td></tr></table></figure>
+<h2 id="环境隔离"><a href="#环境隔离" class="headerlink" title="环境隔离"></a>环境隔离</h2><p>在 JavaScript 中，使用 npm 安装依赖会在当前目录下生成一个 node_modules 文件夹，依赖会被安装在这个文件夹中。除非指定 <code>-g</code> 或 <code>--global</code> 参数，将会在全局环境中安装依赖，在 Mac OS 或 Linux 系统中一般会被安装到 <code>/usr/local/lib/node_modules</code> 目录下。这样做的好处是将全局环境与局部环境隔离，避免依赖冲突，尤其是两个项目依赖同一个库的不同版本时。</p>
+<p>Python 中也有类似的问题，《Effective Python — 编写高质量Python代码的59个有效方法》一书中的协作开发章节就提到：<strong>使用虚拟环境隔离项目</strong>。问题在于，通过 pip 命令安装的依赖是全局性的，这意味着这些安装好的模块可能会影响系统内的所有 Python 程序。全局依赖会被安装在特定 Python 版本的目录下，如 <code>/usr/local/lib/python3.8/site-packages</code>，对于使用 Python 3.8 的所有项目来说依赖是共享的。</p>
+<p>为此，Python 提供了一种解决方案，类似于 JavaScript 的局部环境，隔离出一个单独的 Python 局部环境，这种方案的典型就是 venv。</p>
+<h3 id="venv"><a href="#venv" class="headerlink" title="venv"></a>venv</h3><blockquote>
+<p><strong>venv</strong> (for Python 3) and <strong>virtualenv</strong> (for Python 2) allow you to manage separate package installations for different projects. If you are using Python 3.3 or newer, the venv module is the preferred way to create and manage virtual environments. venv is included in the Python standard library and requires no additional installation.</p>
+</blockquote>
+<p>从 Python 2.7 开始，Python 社区开发了一些较底层的创建<strong>虚拟环境</strong>（virtual environment）的工具，在 Python 2.7 中这个工具叫做 virtualenv，这是一个三方工具，需要使用 pip 安装。而《Effective Python》一书中提到的工具 pyvenv 是 Python 3.3 所引入的，但由于一些缺陷在 Python 3.6 中已被弃用。取而代之的是 Python 3.5 引入的内置模块 venv，可以通过 <code>python3 -m venv</code> 使用这个命令。</p>
+<p><a href="https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment" target="_blank" rel="noopener">官方文档</a>中已经明确给出建议，如果使用的是 Python 3.3 及以后的版本，更加推荐使用 venv 去管理你的虚拟环境。下面我们扼要的介绍一下 venv 命令的使用方式。</p>
+<p>首先创建一个空项目 myproject，在该目录下执行 <code>python3 -m venv venv</code> 命令，第二个 venv 是创建的虚拟环境的文件夹名，系统中的环境会被拷贝到该目录下，包括 bin 中的 pip 和 python 命令，而 pip 安装的依赖会存放在 lib 目录中。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ mkdir myproject; <span class="built_in">cd</span> myproject</span><br><span class="line">➜ python3 -m venv venv</span><br><span class="line">➜ ls -F</span><br><span class="line">venv/</span><br><span class="line">➜ ls -F venv</span><br><span class="line">bin/        include/    lib/        pyvenv.cfg</span><br></pre></td></tr></table></figure>
+<p>为了启用这套虚拟环境需要先运行<strong>激活</strong>脚本，启用后会发现命令行多了 <code>(venv)</code>  前缀，这明确的提示了开发者现在处于虚拟环境中。默认情况下虚拟环境只安装了 pip 和 setuptools 两个初始依赖，此时的环境已经独立于全局环境，全局依赖不会影响到此项目。pip 和 python3 命令都指向虚拟环境 bin 目录下的命令。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ <span class="built_in">source</span> venv/bin/activate</span><br><span class="line">(venv) ➜ pip list    </span><br><span class="line">Package    Version</span><br><span class="line">---------- -------</span><br><span class="line">pip        20.2.1</span><br><span class="line">setuptools 49.2.1</span><br><span class="line">(venv) ➜ <span class="built_in">which</span> python3</span><br><span class="line">/Users/s1mple/Downloads/myproject/venv/bin/python3</span><br><span class="line">(venv) ➜ python3 --version</span><br><span class="line">Python 3.8.6</span><br></pre></td></tr></table></figure>
+<p>退出虚拟环境时使用 <code>deactivate</code> 命令。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">(venv) ➜ deactivate</span><br><span class="line">➜ <span class="built_in">which</span> python3</span><br><span class="line">/usr/<span class="built_in">local</span>/bin/python3</span><br></pre></td></tr></table></figure>
+<p>为了代替手动的在命令行创建虚拟环境，PyCharm 集成了 virtualenv 工具，并且官方文档已经标明：Python 3.3 版本之前使用第三方的 virtualenv 工具，Python 3.3 之后使用内置的 venv 模块。在新建项目时可以选择 New Virtualenv Environment 自动创建虚拟环境。</p>
+<p>有了虚拟环境，我们就可以使用 <code>pip freeze</code> 命令和 requirements.txt 文件很方便的重现一套环境。此外，在使用 venv 时，应当尽量避免移动环境目录，包括重命名项目名称，因为所有的路径（包括 python3 命令所指向的路径），都以硬编码的形式写在了安装目录中，更改目录路径将导致环境失效。解决办法是修改 <code>bin/active</code> 脚本中的 VIRTUAL_ENV 路径值，并重新激活。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># active</span></span><br><span class="line">VIRTUAL_ENV=<span class="string">"/Users/s1mple/Downloads/myproject/venv"</span></span><br></pre></td></tr></table></figure>
+<h3 id="Anaconda"><a href="#Anaconda" class="headerlink" title="Anaconda"></a>Anaconda</h3><p>如果你觉得 pip + venv 的方式太过底层，也可以使用 Anaconda。Anaconda 是一个更高层次的包管理器和环境管理器，它依托于 conda 之上开发的，conda 可以理解为整合了 pip 和 venv 的功能，区别在于 conda 是跨平台和不限语言的（支持 R 语言）。PyCharm 也对 conda 提供了支持，可以直接通过 conda 创建虚拟环境。</p>
+<p>Anaconda 的下载文件较大（500MB），不仅自带 Python 还附带了许多常用数据科学包，已经成为了数据科学方向百宝箱式的存在。Anaconda 也提供可视化界面。总的来说，对于不太熟悉底层操作的数据分析师来说，Anaconda 易于上手体验友好。但对于软件开发来说，Anaconda 显得过于臃肿，这也是我不选择使用它的原因。现如今的 Python 环境支持官方库已经做的很好，如果不是做数据科学方向的，建议使用原生的 pip + venv。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment" target="_blank" rel="noopener">官方文档 Installing packages using pip and virtual environments</a></li>
+<li><a href="https://docs.python.org/3/library/venv.html" target="_blank" rel="noopener">官方文档 venv — Creation of virtual environments</a></li>
+<li><a href="https://stackoverflow.com/questions/41573587/what-is-the-difference-between-venv-pyvenv-pyenv-virtualenv-virtualenvwrappe" target="_blank" rel="noopener">What is the difference between venv, pyvenv, pyenv, virtualenv, virtualenvwrapper, pipenv, etc?</a></li>
 </ul>
 ]]></content>
       <categories>

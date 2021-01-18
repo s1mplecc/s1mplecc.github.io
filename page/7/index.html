@@ -372,6 +372,246 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/28/Git%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/11/28/Git%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/7/index.html">Git 基础教程</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-11-28 03:03:52" itemprop="dateCreated datePublished" datetime="2017-11-28T03:03:52+08:00">2017-11-28</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-20 19:14:00" itemprop="dateModified" datetime="2020-12-20T19:14:00+08:00">2020-12-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/28/Git%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/28/Git 基础教程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">3.6k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Git 是目前世界上最先进的分布式版本控制系统。相比较CVS及SVN这种老式的集中式版本控制系统，要更加灵活方便，也更安全稳定。<strong>集中式</strong>是指版本库是放在中央服务器中，需要联网才能工作。<strong>分布式</strong>是指没有中央服务器，每个人电脑上有个完整的版本仓库，可以本地修改代码再联网提交到Git服务器上，Git服务器作用仅仅“交换”大家的修改即代码同步。此外，Git还拥有极其强大的分支管理功能。</p>
+<h2 id="Git-命令"><a href="#Git-命令" class="headerlink" title="Git 命令"></a>Git 命令</h2><p>本文主要介绍基础的 Git 命令，更加复杂的 Git 命令可以查看：<a href="https://s2mple.xyz/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/" target="_blank" rel="noopener">Git 进阶教程</a>。另外 Git 的常用命令文档可以参考：<a href="https://education.github.com/git-cheat-sheet-education.pdf" target="_blank" rel="noopener">git-cheatsheet</a>。</p>
+<h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p>始终要记住你的<strong>本地和Git服务器上都存在版本仓库（repository）</strong>，Git实现代码同步实际上是同步你的本地仓库和远程仓库。有两种方式创建仓库：1. 从服务器上克隆一个仓库；2. 初始化一个本地仓库。</p>
+<p>从Git服务器上<strong>克隆（clone）</strong>一个仓库下来，可以通过<strong>ssh</strong>或<strong>http</strong>的方式。ssh需要将你的公钥存放在Git服务器上，而http不需要但是速度相较ssh要慢。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone git@github.com:s1mplecc&#x2F;MyHashMap.git</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;s1mplecc&#x2F;MyHashMap.git</span><br></pre></td></tr></table></figure>
+<p>从远程库克隆下来的是完整的版本库，含有<code>.git</code>文件夹，其下的<code>config</code>文件夹包括了本仓库的配置信息。包含了url、远程库的名字以及分支等：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">➜ cat .git&#x2F;config</span><br><span class="line"></span><br><span class="line">[remote &quot;origin&quot;]</span><br><span class="line">    url &#x3D; git@github.com:s1mplecc&#x2F;MyHashMap.git</span><br><span class="line">    fetch &#x3D; +refs&#x2F;heads&#x2F;*:refs&#x2F;remotes&#x2F;origin&#x2F;*</span><br><span class="line">[branch &quot;master&quot;]</span><br><span class="line">    remote &#x3D; origin</span><br><span class="line">    merge &#x3D; refs&#x2F;heads&#x2F;master</span><br></pre></td></tr></table></figure>
+<p>第二种方式，<code>git init</code>是将当前目录初始化为Git可以管理的仓库。会在当前目录下生成了<code>.git</code>文件夹。</p>
+<p>如果要将本地仓库推到服务器上，需要现在服务器上创建一个repository，然后在本地目录下绑定服务器上的repository，origin是版本库默认的名字：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin git@github.com:s1mplecc&#x2F;MyHashMap.git</span><br></pre></td></tr></table></figure>
+<h3 id="提交变更"><a href="#提交变更" class="headerlink" title="提交变更"></a>提交变更</h3><p>当你对版本库中的文件做了变更（增删改），可以使用<code>git status</code>命令查看当前版本库的状态：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">➜  github.io git:(hexo) ✗ git status</span><br><span class="line">On branch hexo</span><br><span class="line">Your branch is ahead of &#39;origin&#x2F;hexo&#39; by 9 commits.</span><br><span class="line">  (use &quot;git push&quot; to publish your local commits)</span><br><span class="line"></span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span><br><span class="line"></span><br><span class="line">    modified:   &quot;source&#x2F;_posts&#x2F;ES6\346\226\260\347\211\271\346\200\247.md&quot;</span><br><span class="line">    modified:   &quot;source&#x2F;_posts&#x2F;Git Flow \346\250\241\345\236\213\344\273\245\345\217\212\345\267\245\345\205\267\347\232\204\344\275\277\347\224\250.md&quot;</span><br><span class="line"></span><br><span class="line">no changes added to commit (use &quot;git add&quot; and&#x2F;or &quot;git commit -a&quot;)</span><br></pre></td></tr></table></figure>
+<p><code>git add .</code>或者<code>git add all</code>将所有修改提交到暂存区。<code>.</code>表示当前目录下所有修改了的文件，当然也可以指定某个文件。</p>
+<p>将暂存区的所有内容提交到当前分支，默认分支即Git为我们自动创建的<strong>master</strong>分支。<code>-m</code>参数后面接提交的message：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &quot;balabala&quot;</span><br></pre></td></tr></table></figure>
+<p>将当前分支提交到远程库中，<code>-u</code>第一次使用时将本地的master分支绑定到远程库的master分支，以后可以省略不加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+<p>从远程库拉取修改：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
+<p>在开发过程中会有频繁的提交，所以日常中我们用到最多的就是上述命令了。本质上本地与远程版本库的同步就是记录下每次的<strong>修改信息</strong>。Git会帮我们记录下每次提交的修改，方便我们进行同步、回退以及合并。</p>
+<h4 id="gitignore"><a href="#gitignore" class="headerlink" title=".gitignore"></a>.gitignore</h4><p>说到<code>add</code>不得不提<code>.gitignore</code>这个文件，它的作用是忽略一些文件的提交，比如IntelliJ IDEA生成的<code>.idea</code>文件、编译生成的<code>target</code>文件等等。这类文件不需要提交到服务器污染大家的环境。关于<code>.gitignore</code>的编写github上都有现成的模版。另外IDE也可以安装相应的gitignore插件。</p>
+<h3 id="查看提交历史"><a href="#查看提交历史" class="headerlink" title="查看提交历史"></a>查看提交历史</h3><p>正是Git帮我们记录了每次提交的修改，我们可以通过命令查看历史信息，以及每次做了什么修改。</p>
+<p><code>git log</code>查看提交历史，每条记录有一个唯一的id用于标识，使用时可以使用可以唯一表示的前几位。添加参数<code>-p &lt;file&gt;/&lt;commit id&gt;</code>查看指定文件或某次commit的历史信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">commit 24345a1a74184f99eb32202bfcc1cd0fd6ac945d (HEAD -&gt; master)</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:33:56 2017 +0800</span><br><span class="line"></span><br><span class="line">    second commit</span><br><span class="line"></span><br><span class="line">commit b90b6da1573d55ef59a900d435d903e41667f61e</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:31:43 2017 +0800</span><br><span class="line"></span><br><span class="line">    first commit</span><br></pre></td></tr></table></figure>
+<p><code>git diff b90b6da</code>查看某次提交后与当前版本的区别，可以看到我在文本中添加了一行second：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@@ -1 +1,2 @@</span><br><span class="line"> first</span><br><span class="line">+second</span><br></pre></td></tr></table></figure>
+<p><code>git reflog</code>查看命令操作历史。</p>
+<h3 id="撤销变更"><a href="#撤销变更" class="headerlink" title="撤销变更"></a>撤销变更</h3><p>如果你在提交了某次变更后又想撤销这次变更，Git也提供了撤销和回退的功能。Git将提交记录（节点）串成一条线，<strong>HEAD</strong>就是一指向当前版本的指针，做回退操作其实就是这个指针在这条线上的节点间移动。牢记：<strong>Git跟踪并管理的是修改，而非文件</strong>。</p>
+<p><code>reset</code>命令回退到指定的某个版本，<code>HEAD</code>表示当前版本，<code>HEAD^</code>表示上一个版本。也可以用具体的 commit id：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard HEAD^</span><br></pre></td></tr></table></figure>
+<p>如果你修改了某个文件，但还没有<code>add</code>，可以直接舍弃这次修改：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -- &lt;file&gt;</span><br></pre></td></tr></table></figure>
+<p>如果你已经<code>commit</code>了，也可以还原回去：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git revert &lt;commit id&gt;</span><br></pre></td></tr></table></figure>
+<p>revert与reset的区别在于，revert会生成一次新的提交去移除某些提交（相当于反向操作），在节点线上还是向前走的。而reset是把HEAD指针后移到指定节点，直接从这个节点走出新的一条线。可以参考<a href="http://www.cnblogs.com/houpeiyong/p/5890748.html" target="_blank" rel="noopener">代码回滚：git reset、git checkout和git revert区别和联系</a>。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://education.github.com/git-cheat-sheet-education.pdf" target="_blank" rel="noopener">git-cheatsheet</a></li>
+<li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000" target="_blank" rel="noopener">Git教程 —— 廖雪峰</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/21/%E6%90%AD%E5%BB%BAGit%E5%92%8CMaven%E7%A7%81%E6%9C%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2754,262 +2994,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/7/index.html">部署 Ghost Blog</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-11-01 05:08:37" itemprop="dateCreated datePublished" datetime="2017-11-01T05:08:37+08:00">2017-11-01</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-20 19:13:59" itemprop="dateModified" datetime="2020-12-20T19:13:59+08:00">2020-12-20</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/01/部署Ghost Blog/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">2.1k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>Ghost是比较简约、轻量级的博客平台，而且文档编写使用markdown完成的。所以本片博客将介绍如何在服务器上搭建了Ghost。</p>
-</blockquote>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li>Ubuntu 16.04</li>
-<li>MySQL</li>
-<li>NGINX (minimum of 1.9.5 for SSL)</li>
-<li>Systemd</li>
-<li>Node v6 installed via NodeSource</li>
-<li>At least 1GB memory (swap can be used)</li>
-<li>A non-root user for running ghost commands</li>
-</ul>
-<h2 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h2><p><a href="https://docs.ghost.org/v1.0.0/docs/install" target="_blank" rel="noopener">官网安装文档</a>   </p>
-<blockquote>
-<p>如果你的数据库在其他服务器上，可以不安装mysql</p>
-</blockquote>
-<ul>
-<li>更新软件包源以及更新通过包源安装的软件  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br></pre></td></tr></table></figure></li>
-<li>mysql、ngnix、systemd都可以通过<code>sudo apt-get install</code>命令安装</li>
-<li>由于ghost是基于nodejs开发的，所以要安装nodejs，执行下面这俩条命令  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -sL https:&#x2F;&#x2F;deb.nodesource.com&#x2F;setup_6.x | sudo -E bash </span><br><span class="line">sudo apt-get install -y nodejs</span><br></pre></td></tr></table></figure></li>
-<li>安装ghost-cli命令行程序  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm i -g ghost-cli</span><br></pre></td></tr></table></figure></li>
-<li>安装完成后可以使用<code>ghost</code>命令，<code>ghost help</code>查看帮助，ghost安装需要一个空的文件夹  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#x2F;home&#x2F;s1mple&#x2F;ghost</span><br></pre></td></tr></table></figure></li>
-<li><code>cd</code>到这个目录下，执行<code>ghost install</code>命令即可</li>
-</ul>
-<blockquote>
-<p>1.安装过程中会配置数据库，需要提前建个空的database。如果mysql装在本机，就输入localhost，装在别的服务器上就需要输入服务器IP<br>2.询问是否使用nginx可以选no，可以自己手动配置nginx。实际上他帮你配置将80端口的请求转发到ghost的2368端口<br>3.询问是否新建”ghost”用户可以选no，若选yes他会在数据库中新建此用户，并且在ghost后台管理可以看到此用户和一些默认文章。</p>
-</blockquote>
-<h3 id="After-Installation"><a href="#After-Installation" class="headerlink" title="After Installation"></a>After Installation</h3><ul>
-<li>安装后当前文件下会生成<strong>config.production.json</strong>文件，配置信息在这里。<code>ghost ls</code>查看当前ghost运行实例信息，<code>ghost restart</code>重启ghost。</li>
-<li>安装完成后，访问<code>／ghost</code>进入后台管理系统，根据引导创建用户。</li>
-<li>在后台Design模块中可以导入主题zip压缩包，<code>/ghost/#/settings/design</code>。在Ghost Marketplace下找了个时间轴的主题，并修改了部分视觉效果。<a href="https://github.com/s1mplecc/ghost-theme" target="_blank" rel="noopener">时间轴主题下载链接</a></li>
-</ul>
-<h3 id="Redirect-Port-With-Nginx"><a href="#Redirect-Port-With-Nginx" class="headerlink" title="Redirect Port With Nginx"></a>Redirect Port With Nginx</h3><blockquote>
-<p>很尴尬，因为Aliyun的服务器需要备案，80端口有时候会出现抽风的情况。所以有必要先配置个其他端口（2368端口太难记了），比如8080。</p>
-</blockquote>
-<ul>
-<li><code>cat /etc/nginx/nginx.conf</code>发现nginx配置文件包括如下两行  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">include &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;*.conf;</span><br><span class="line">include &#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;*;</span><br></pre></td></tr></table></figure>
-  意思就是配置文件会导入上述两个目录中的文件。所以我们可以<code>cd /etc/nginx/sites-enabled/</code>中。</li>
-<li>发现目录下有个<strong>s1mple.info.conf</strong>文件，这其实就是ghost配置nginx的文件。  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp s1mple.info.conf ghost_8080.conf</span><br></pre></td></tr></table></figure></li>
-<li>修改<code>ghost_8080.conf</code>中的监听端口80为8080,<code>service nginx restart</code>重启nginx</li>
-<li>修改ghost安装目录下的<strong>config.production.json</strong>,重启ghost  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;url&quot;: &quot;http:&#x2F;&#x2F;s1mple.info:8080&quot;,</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<blockquote>
-<p>有个端口号看着很丑，等备案完成，删掉<code>ghost_8080.conf</code>就行了。（你看，国外主机就不用备案）</p>
-</blockquote>
-<h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><ul>
-<li>本来想在docker容器中部署Ghost,但是可能由于docker和宿主系统隔离的原因，systemd命令不能正常运行<code>Failed to connect to bus: No such file or directory</code>。暂时没找到解决方法。不过我在docker里部署了另一个博客平台jPress。<a href="https://jpress.s2mple.xyz/" target="_blank" rel="noopener">跳转链接</a></li>
-<li>jPress是基于java的轻量级博客平台，前身是WordPress。也许下个博客我会介绍如何用docker部署jPress，谁知道呢。</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span>
+    <a class="extend prev" rel="prev" href="/page/6/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/8/">下一页</a>
   </nav>
 
 
@@ -3056,7 +3045,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">70</span>
+                    <span class="site-state-item-count">71</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

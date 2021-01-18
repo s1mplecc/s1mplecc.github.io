@@ -372,6 +372,264 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/07/03/Git%20Flow%20%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/07/03/Git%20Flow%20%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">Git Flow 模型以及工具的使用</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-03 08:11:51" itemprop="dateCreated datePublished" datetime="2018-07-03T08:11:51+08:00">2018-07-03</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-13 14:13:51" itemprop="dateModified" datetime="2020-10-13T14:13:51+08:00">2020-10-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/03/Git%20Flow%20%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/03/Git Flow 模型以及工具的使用/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">5.2k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Git-Flow-是什么？"><a href="#Git-Flow-是什么？" class="headerlink" title="Git Flow 是什么？"></a>Git Flow 是什么？</h2><p>2010 年 5 月，在一篇名为 “<a href="https://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="noopener">A successful Git branching model</a>” 的博文中，Vincent Driessen 介绍了一种构建在 Git 之上的软件开发模型。<strong>通过利用 Git 创建和管理分支的能力，为每个分支设定具有特定的含义名称，并将软件生命周期中的各类活动归并到不同的分支上，实现了软件开发过程不同阶段的相互隔离</strong>。这种软件开发的活动模型被 Vincent 称为 “<strong>Git Flow</strong>”。</p>
+<h2 id="Git-Flow-流程图"><a href="#Git-Flow-流程图" class="headerlink" title="Git Flow 流程图"></a>Git Flow 流程图</h2><p>这是 Vincent 博文中的 Git FLow 流程图，该图从右向左，从上到下看：</p>
+<p><img src="/2018/07/03/Git%20Flow%20%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/0.png" alt="git-flow-model"></p>
+<h2 id="Git-Flow-Branches"><a href="#Git-Flow-Branches" class="headerlink" title="Git Flow Branches"></a>Git Flow Branches</h2><p>Git Flow 的核心就是<strong>分支（Branch）</strong>，通过在项目的不同阶段对 Branch 的不同操作（包括但不限于 create、merge、rebase 等）来实现一个完整的高效率的工作流程。Git Flow Branches 主要分为两大类：<strong>Main Branches（主分支）</strong> 和 <strong>Supporting branches（辅助分支）</strong>。 其中 Main Branches 中又包含了 <strong>Master</strong> 和 <strong>Develop</strong>，而 Supporting branches 中包含了 <strong>Feature</strong>、<strong>Release</strong>、<strong>Hotfix</strong> 以及其他自定义分支。</p>
+<h3 id="Master"><a href="#Master" class="headerlink" title="Master"></a>Master</h3><ul>
+<li><p><strong>master 分支上存放的是最稳定的正式版本</strong>，并且该分支的代码应该是随时可在生产环境中使用的代码（<strong>Production Ready state</strong>）。当一个版本开发完毕后，产生了一份新的稳定的可供发布的代码时，master 分支上的代码要被更新。同时，每一次更新，都需要在 master 上打上对应的版本号（tag）。</p>
+</li>
+<li><p><strong>任何人不允许在 master 上进行代码的直接提交，只接受其他分支的合入</strong>。原则上 master 上的代码必须是合并自经过多轮测试且已经发布一段时间且线上稳定的 release 分支（预发分支）。</p>
+</li>
+</ul>
+<h3 id="Develop"><a href="#Develop" class="headerlink" title="Develop"></a>Develop</h3><ul>
+<li><p><strong>develop 分支是主开发分支，其上更新的代码始终反映着下一个发布版本需要交付的新功能</strong>。当 develop 分支到达一个稳定的点并准备好发布时，应该从该点拉取一个 release 分支并附上发布版本号。也有人称 develop 分支为 “integration branch”，因为会基于该分支和持续集成工具做自动化的 Nightly builds。</p>
+</li>
+<li><p>develop 分支接受其他 Supporting branches 分支的合入，最常见的就是 feature 分支，开发一个新功能时拉取新的 feature 分支，开发完成后再并入 develop 分支。需要注意的是，<strong>合入 develop 的分支必须保证功能完整，不影响 develop 分支的正常运行</strong>。</p>
+</li>
+</ul>
+<h3 id="Feature"><a href="#Feature" class="headerlink" title="Feature"></a>Feature</h3><ul>
+<li><p>feature 分支又叫做<strong>功能分支</strong>，一般命名为 feature/xxx，用于<strong>开发即将发布版本或未来版本的新功能或者探索新功能</strong>。该分支通常存在于开发人员的本地代码库而不要求提交到远程代码库上，除非几个人合作在同一个 feature 分支开发。关于这点，ThoughtWorks 洞见上有一篇文章 “<a href="https://insights.thoughtworks.cn/gitflow-consider-harmful/" target="_blank" rel="noopener">Gitflow 有害论</a>” 做了非常有意思的阐述，文章下的评论也异常激烈。也许该文章的名字可能有失偏颇，但文章的本意以及评论传达了一个观点：<strong>feature 分支要求足够细粒度以避免成为 long-lived branch，应当小步小步 merge 而不是一次 merge 大量代码</strong>。</p>
+</li>
+<li><p>feature 分支只能拉取自 develop 分支，开发完成后要么合并回 develop 分支，要么因为新功能的尝试不如人意而直接丢弃。</p>
+</li>
+</ul>
+<h3 id="Release"><a href="#Release" class="headerlink" title="Release"></a>Release</h3><ul>
+<li><p>release 分支又叫做<strong>预发分支</strong>，一般命名为 release/1.2（后面接版本号），<strong>该分支专为测试—发布新的版本而开辟，允许做小量级的 Bug 修复和准备发布版本的元数据信息（版本号、编译时间等）</strong>。通过创建 release 分支，使得 develop 分支得以空闲出来接受下一个版本的新的 feature 分支的合入。</p>
+</li>
+<li><p>release 分支需要提交到服务器上，交由 QA 进行测试，并由 Dev 修复 Bug。同时根据该分支的特性我们可以部署自动化测试以及生产环境代码的自动化更新和部署。</p>
+</li>
+<li><p>release 分支只能拉取自 develop 分支，合并回 develop 和 master 分支。</p>
+</li>
+</ul>
+<h3 id="Hotfix"><a href="#Hotfix" class="headerlink" title="Hotfix"></a>Hotfix</h3><ul>
+<li><p>hotfix 分支又叫<strong>热修复分支</strong>，一般命名为 hotfix/1.2.1（后面接版本号），<strong>当生产环境的代码（master 上代码）遇到了严重到必须立即修复的缺陷时，就需要从 master 分支上指定的 tag 版本（比如 1.2）拉取 hotfix 分支进行代码的紧急修复，并附上版本号（比如 1.2.1）</strong>。这样做的好处是不会打断正在进行的 develop 分支的开发工作，能够让团队中负责 feature 开发的人与负责 hotfix 的人并行、独立的开展工作。</p>
+</li>
+<li><p>hotfix 分支只能从 master 上拉取，测试通过后合并回 master 分支和 develop 分支。</p>
+</li>
+</ul>
+<h2 id="Git-Flow-工具"><a href="#Git-Flow-工具" class="headerlink" title="Git Flow 工具"></a>Git Flow 工具</h2><p>一旦使用 Git Flow 模型，那么对分支的命令操作必然是频繁且重复的，所幸是有人开发了 Git Flow Script 工具帮助我们简化命令：<a href="https://github.com/nvie/gitflow" target="_blank" rel="noopener">gitflow</a>。</p>
+<p>在 Mac 或 Windows 系统上安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; OS X</span><br><span class="line">brew install git-flow</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Windows</span><br><span class="line">wget -q -O - --no-check-certificate https:&#x2F;&#x2F;github.com&#x2F;nvie&#x2F;gitflow&#x2F;raw&#x2F;develop&#x2F;contrib&#x2F;gitflow-installer.sh | bash</span><br></pre></td></tr></table></figure>
+<p>使用<code>git flow init</code>进行初始化，会询问你分支的命名，使用默认的即可。初始化完成后自动切换到了 develop 分支。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">➜  demo git:(master) ✗ git flow init</span><br><span class="line">No branches exist yet. Base branches must be created now.</span><br><span class="line">Branch name for production releases: [master] </span><br><span class="line">Branch name for &quot;next release&quot; development: [develop] </span><br><span class="line"></span><br><span class="line">How to name your supporting branch prefixes?</span><br><span class="line">Feature branches? [feature&#x2F;] </span><br><span class="line">Release branches? [release&#x2F;] </span><br><span class="line">Hotfix branches? [hotfix&#x2F;] </span><br><span class="line">Support branches? [support&#x2F;] </span><br><span class="line">Version tag prefix? []</span><br><span class="line"></span><br><span class="line">➜  demo git:(develop) ✗</span><br></pre></td></tr></table></figure>
+<p>下面使用 feature 分支演示 Git Flow 功能。<code>git flow feature start my-feature</code>该命令用于新建一个 feature 分支。可以看到，基于 develop 的 feature/my-feature 分支已被创建，并且自动切换到该分支。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">➜  demo git:(develop) ✗ git flow feature start my-feature</span><br><span class="line">Switched to a new branch &#39;feature&#x2F;my-feature&#39;</span><br><span class="line"></span><br><span class="line">Summary of actions:</span><br><span class="line">- A new branch &#39;feature&#x2F;my-feature&#39; was created, based on &#39;develop&#39;</span><br><span class="line">- You are now on branch &#39;feature&#x2F;my-feature&#39;</span><br><span class="line"></span><br><span class="line">Now, start committing on your feature. When done, use:</span><br><span class="line"></span><br><span class="line">     git flow feature finish my-feature</span><br><span class="line"></span><br><span class="line">➜  demo git:(feature&#x2F;my-feature) ✗</span><br></pre></td></tr></table></figure>
+<p>在该功能分支下我创建了 a.txt 文件并 commit 到本地仓库，下面演示结束 feature 分支。<code>finish</code>命令用于将 feature/my-feature 分支合并入 develop 分支并删除该分支。此时已切换到了 develop 分支。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">➜  demo git:(feature&#x2F;my-feature) git flow feature finish my-feature</span><br><span class="line">Switched to branch &#39;develop&#39;</span><br><span class="line">Updating 6c6e4cb..345a380</span><br><span class="line">Fast-forward</span><br><span class="line"> a.txt | 0</span><br><span class="line"> 1 file changed, 0 insertions(+), 0 deletions(-)</span><br><span class="line"> create mode 100644 a.txt</span><br><span class="line">Deleted branch feature&#x2F;my-feature (was 345a380).</span><br><span class="line"></span><br><span class="line">Summary of actions:</span><br><span class="line">- The feature branch &#39;feature&#x2F;my-feature&#39; was merged into &#39;develop&#39;</span><br><span class="line">- Feature branch &#39;feature&#x2F;my-feature&#39; has been removed</span><br><span class="line">- You are now on branch &#39;develop&#39;</span><br><span class="line"></span><br><span class="line">➜  demo git:(develop)</span><br></pre></td></tr></table></figure>
+<p>release 和 hotfix 的命令使用和 feature 一样。需要注意的是它们实际的操作细节会有一些区别，比如 release finish 时会打上版本号，以及合并入 master 和 develop 两个分支。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  demo git:(release&#x2F;1.2) git flow release finish 1.2 </span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Summary of actions:</span><br><span class="line">- Latest objects have been fetched from &#39;origin&#39;</span><br><span class="line">- Release branch has been merged into &#39;master&#39;</span><br><span class="line">- The release was tagged &#39;1.2&#39;</span><br><span class="line">- Release branch has been back-merged into &#39;develop&#39;</span><br><span class="line">- Release branch &#39;release&#x2F;1.2&#39; has been deleted</span><br><span class="line"></span><br><span class="line">➜  demo git:(master)</span><br></pre></td></tr></table></figure>
+<p>还有将分支 push 到远程代码仓库和拉取远程代码仓库分支的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  demo git:(release&#x2F;1.2) git flow release publish 1.2 </span><br><span class="line">➜  demo git:(release&#x2F;1.2) git flow release pull 1.2</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Git Flow 模型通过不同的分支从源代码管理的角度对软件开发活动进行了约束，为我们的软件开发提供了一个可供参考的管理模型。Git Flow 模型让代码仓库保持整洁，让小组各个成员之间的开发相互隔离，能够有效避免处于开发状态中的代码相互影响而导致的效率低下和混乱。但同时，不同的开发团队存在不同的文化，在不同的项目背景情况下都可能<strong>根据该模型进行适当的精简或扩充</strong>。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="noopener">A successful Git branching model —— Vincent Driessen</a></li>
+<li><a href="https://juejin.im/entry/5b7fe2745188253010325bf6" target="_blank" rel="noopener">Git Flow流程 —— 掘金</a></li>
+<li><a href="http://deshui.wang/%E6%95%8F%E6%8D%B7/2015/10/27/sourcecode-management" target="_blank" rel="noopener">敏捷实践系列(四)：代码管理流程</a></li>
+<li><a href="https://www.jianshu.com/p/36292d36e41d" target="_blank" rel="noopener">Git Flow的使用 —— 简书</a></li>
+<li><a href="https://insights.thoughtworks.cn/gitflow-consider-harmful/" target="_blank" rel="noopener">Git Flow有害论 —— ThoughtWorks洞见</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/06/24/%E8%BF%81%E7%A7%BB%20Ghost%20%E5%8D%9A%E5%AE%A2%E5%B9%B6%E4%BD%BF%E7%94%A8%20Docker%20%20%E9%83%A8%E7%BD%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2871,302 +3129,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/03/16/Redis%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/03/16/Redis%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">Redis 五种数据类型</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-03-16 08:27:36" itemprop="dateCreated datePublished" datetime="2018-03-16T08:27:36+08:00">2018-03-16</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-11 15:32:01" itemprop="dateModified" datetime="2020-10-11T15:32:01+08:00">2020-10-11</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/03/16/Redis%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/03/16/Redis五种数据类型/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">7.5k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>本文介绍 Redis 的五种数据类型，并结合<code>redis-cli</code>和 Koa 应用演示如何与 Redis 的五种数据类型进行 CRUD 操作，在文章最后还有关于<strong>过期时间设置</strong>的介绍</p>
-</blockquote>
-<ul>
-<li>代码已上传至 <a href="https://github.com/s1mplecc/koa-redis-example" target="_blank" rel="noopener">GitHub</a></li>
-<li>Node 框架使用 Koa2，与 Redis 的操作都使用 Restful API 的形式展现，使用 Postman 测试接口</li>
-<li>使用的依赖为<code>ioredis</code>，执行<code>npm i ioredis</code>即可安装依赖。之前有尝试<code>noderedis</code>，但是在服务器上部署运行有连接不上 Redis 的 Bug 出现</li>
-</ul>
-<h2 id="Data-Type"><a href="#Data-Type" class="headerlink" title="Data Type"></a>Data Type</h2><blockquote>
-<p>Redis 通常被称为<strong>数据结构服务器</strong>，因为它提供了五种数据类型用于数据存储，包括 <strong>String</strong> 字符串、<strong>Hash</strong> 哈希、<strong>List</strong> 列表、<strong>Set</strong> 集合、<strong>Zset</strong> 有序集合</p>
-</blockquote>
-<h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><blockquote>
-<p>Redis String 是 Redis 最基本的类型，用于保存字符串类型的 Key-Value 键值对</p>
-</blockquote>
-<ul>
-<li><p><code>redis-cli</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SET string:s1 hello</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; GET string:s1</span><br><span class="line">&quot;hello&quot;</span><br><span class="line">127.0.0.1:6379&gt; DEL string:s1</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>contollers/string.js</code></p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> router = <span class="built_in">require</span>(<span class="string">'koa-router'</span>)()</span><br><span class="line"><span class="keyword">const</span> redis = <span class="built_in">require</span>(<span class="string">'../config/redis'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> setString = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.set(<span class="string">'string:s1'</span>, <span class="string">'hello world'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> getString = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.get(<span class="string">'string:s1'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> delString = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.del(<span class="string">'string:s1'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/string'</span>, setString)</span><br><span class="line">router.get(<span class="string">'/string'</span>, getString)</span><br><span class="line">router.delete(<span class="string">'/string'</span>, delString)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = router</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h3><blockquote>
-<p>Redis Hash 是一个 String 类型的 Field-Value 映射表，类似于 Java 的 HashMap，特别适合用于<strong>存储对象</strong>。</p>
-</blockquote>
-<ul>
-<li><p><code>redis-cli</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; HMSET hash:hash1 name &quot;jack&quot; age 10 score 90</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; HGET hash:hash1 name</span><br><span class="line">&quot;jack&quot;</span><br><span class="line">127.0.0.1:6379&gt; HGETALL hash:hash1</span><br><span class="line">1) &quot;name&quot;</span><br><span class="line">2) &quot;jack&quot;</span><br><span class="line">3) &quot;age&quot;</span><br><span class="line">4) &quot;10&quot;</span><br><span class="line">5) &quot;score&quot;</span><br><span class="line">6) &quot;90&quot;</span><br><span class="line">127.0.0.1:6379&gt; HDEL hash:hash1 name age</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; HGETALL hash:hash1</span><br><span class="line">1) &quot;score&quot;</span><br><span class="line">2) &quot;90&quot;</span><br><span class="line">127.0.0.1:6379&gt; DEL hash:hash1</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
-<p>  需要特别注意的是，<code>HGETALL key</code>命令用于获取键的映射列表，<code>HGETALL key field</code>用于获取某个字段的值，<code>HDEL key field</code>用于删除键的某个字段，<code>DEL key</code>才是删除整个键</p>
-</li>
-<li><p><code>contollers/hash.js</code></p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> setHash = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> student = &#123;</span><br><span class="line">    name: <span class="string">'Jack'</span>,</span><br><span class="line">    age: <span class="number">18</span>,</span><br><span class="line">    score: <span class="number">90</span></span><br><span class="line">  &#125;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.hmset(<span class="string">'hash:hash1'</span>, student)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> getHashAll = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.hgetall(<span class="string">'hash:hash1'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> getHashByField = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.hget(<span class="string">'hash:hash1'</span>, ctx.params.field)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> delHash = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.del(<span class="string">'hash:hash1'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> delHashByField = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.hdel(<span class="string">'hash:hash1'</span>, ctx.params.field)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/hash'</span>, setHash)</span><br><span class="line">router.get(<span class="string">'/hash'</span>, getHashAll)</span><br><span class="line">router.get(<span class="string">'/hash/:field'</span>, getHashByField)</span><br><span class="line">router.delete(<span class="string">'/hash'</span>, delHash)</span><br><span class="line">router.delete(<span class="string">'/hash/:field'</span>, delHashByField)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><blockquote>
-<p>Redis 列表是简单的字符串列表，<strong>按照插入顺序排序</strong>。你可以添加一个元素到列表的头部（左边）或者尾部（右边），列表中的<strong>元素可以重复</strong></p>
-</blockquote>
-<ul>
-<li><p><code>redis-cli</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; LPUSH list:list1 hello</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; LPUSH list:list1 world my friend</span><br><span class="line">(integer) 4</span><br><span class="line">127.0.0.1:6379&gt; RPUSH list:list1 right push</span><br><span class="line">(integer) 6</span><br><span class="line">127.0.0.1:6379&gt; LLEN list:list1</span><br><span class="line">(integer) 6</span><br><span class="line">127.0.0.1:6379&gt; LRANGE list:list1 0 5</span><br><span class="line">1) &quot;friend&quot;</span><br><span class="line">2) &quot;my&quot;</span><br><span class="line">3) &quot;world&quot;</span><br><span class="line">4) &quot;hello&quot;</span><br><span class="line">5) &quot;right&quot;</span><br><span class="line">6) &quot;push&quot;</span><br><span class="line">127.0.0.1:6379&gt; LPOP list:list1</span><br><span class="line">&quot;friend&quot;</span><br><span class="line">127.0.0.1:6379&gt; RPOP list:list1</span><br><span class="line">&quot;push&quot;</span><br><span class="line">127.0.0.1:6379&gt; LINDEX list:list1 2</span><br><span class="line">&quot;hello&quot;</span><br></pre></td></tr></table></figure>
-<p>  <code>LPUSH</code>添加到列表头部（Left Push），<code>RPUSH</code>添加到列表头部（Right Push）。相应的，<code>LPOP</code>和<code>RPOP</code>即从列表头和列表尾移除一个元素并获取该值。</p>
-</li>
-<li><p><code>LREM</code>根据参数<code>count</code>的值，移除列表中与参数 value 相等的元素</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">count &gt; 0 : 从表头开始向表尾搜索，移除与 value 相等的元素，数量为 count 。</span><br><span class="line">count &lt; 0 : 从表尾开始向表头搜索，移除与 value 相等的元素，数量为 count 的绝对值。</span><br><span class="line">count &#x3D; 0 : 移除表中所有与 VALUE 相等的值。</span><br></pre></td></tr></table></figure>
-<p>  语法如下：<code>LREM key count value</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; LRANGE list:list1 0 100</span><br><span class="line">1) &quot;my&quot;</span><br><span class="line">2) &quot;world&quot;</span><br><span class="line">3) &quot;hello&quot;</span><br><span class="line">4) &quot;right&quot;</span><br><span class="line">5) &quot;hello&quot;</span><br><span class="line">6) &quot;foo&quot;</span><br><span class="line">7) &quot;hello&quot;</span><br><span class="line">127.0.0.1:6379&gt; LREM list:list1 -2 hello</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; LRANGE list:list1 0 100</span><br><span class="line">1) &quot;my&quot;</span><br><span class="line">2) &quot;world&quot;</span><br><span class="line">3) &quot;hello&quot;</span><br><span class="line">4) &quot;right&quot;</span><br><span class="line">5) &quot;foo&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>contollers/list.js</code></p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pushListAndGetAll = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">    redis.lpush(<span class="string">'list:list1'</span>, i)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">5</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    redis.rpush(<span class="string">'list:list1'</span>, i)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> length = <span class="keyword">await</span> redis.llen(<span class="string">'list:list1'</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'length'</span>, length)</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.lrange(<span class="string">'list:list1'</span>, <span class="number">0</span>, length)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> popList = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> lPopValue = <span class="keyword">await</span> redis.lpop(<span class="string">'list:list1'</span>)</span><br><span class="line">  <span class="keyword">const</span> rPopValue = <span class="keyword">await</span> redis.rpop(<span class="string">'list:list1'</span>)</span><br><span class="line">  ctx.body = &#123; lPopValue, rPopValue &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> deleteListByValue = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.lrem(<span class="string">'list:list1'</span>, <span class="number">0</span>, ctx.params.value)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/list'</span>, pushListAndGetAll)</span><br><span class="line">router.delete(<span class="string">'/list'</span>, popList)</span><br><span class="line">router.delete(<span class="string">'/list/:value'</span>, deleteListByValue)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><blockquote>
-<p>Redis 的 Set 是 String 类型的<strong>无序集合</strong>。集合是通过哈希表实现的，所以添加、删除、查找的复杂度都是 O(1)</p>
-</blockquote>
-<ul>
-<li><p><code>redis-cli</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SADD set:set1 hello</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; SADD set:set1 my friend hello world</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS set:set1</span><br><span class="line">1) &quot;hello&quot;</span><br><span class="line">2) &quot;world&quot;</span><br><span class="line">3) &quot;friend&quot;</span><br><span class="line">4) &quot;my&quot;</span><br><span class="line">127.0.0.1:6379&gt; SREM set:set1 my</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; SPOP set:set1</span><br><span class="line">&quot;hello&quot;</span><br><span class="line">127.0.0.1:6379&gt; SMEMBERS set:set1</span><br><span class="line">1) &quot;world&quot;</span><br><span class="line">2) &quot;friend&quot;</span><br></pre></td></tr></table></figure>
-<p>  <code>SMEMBERS</code>返回集合中的所有成员，<code>SPOP</code>移除并返回集合中的一个随机元素，<code>SREM</code>移除集合中一个或多个成员</p>
-</li>
-<li><p><code>contollers/set.js</code></p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> addMembersAndGetAll = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  redis.sadd(<span class="string">'set:set1'</span>, <span class="string">'hello'</span>, <span class="string">'world'</span>, <span class="string">'my'</span>, <span class="string">'friend'</span>, <span class="string">'hello'</span>)</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.smembers(<span class="string">'set:set1'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> popRandomMember = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.spop(<span class="string">'set:set1'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> removeMemberByValue = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.srem(<span class="string">'set:set1'</span>, ctx.params.value)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/set'</span>, addMembersAndGetAll)</span><br><span class="line">router.delete(<span class="string">'/set/random'</span>, popRandomMember)</span><br><span class="line">router.delete(<span class="string">'/set/:value'</span>, removeMemberByValue)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="Zset"><a href="#Zset" class="headerlink" title="Zset"></a>Zset</h3><blockquote>
-<p>Redis Zset，即有序集合（sorted set），和集合一样也是 String 类型元素的集合,且不允许重复的成员。不同的是每个元素都会关联一个 Double 类型的<strong>分数</strong> (<strong>Score</strong>)。Redis 正是通过分数来为集合中的成员进行从小到大的排序。有序集合的成员是唯一的,但分数却可以重复。</p>
-</blockquote>
-<ul>
-<li><p><code>redis-cli</code></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ZADD zset:zset1 1 a</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; ZADD zset:zset1 2 b 3 c 4 d 5 e</span><br><span class="line">(integer) 4</span><br><span class="line">127.0.0.1:6379&gt; ZRANGE zset:zset1 0 4</span><br><span class="line">1) &quot;a&quot;</span><br><span class="line">2) &quot;b&quot;</span><br><span class="line">3) &quot;c&quot;</span><br><span class="line">4) &quot;d&quot;</span><br><span class="line">5) &quot;e&quot;</span><br><span class="line">127.0.0.1:6379&gt; ZREM zset:zset1 c</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; ZRANK zset:zset1 d</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; ZSCORE zset:zset1 d</span><br><span class="line">&quot;4&quot;</span><br></pre></td></tr></table></figure>
-<p>  <code>ZREM</code>移除有序集合中的一个或多个成员，<code>ZRANK key member</code>返回有序集合中指定成员的索引，<code>ZSCORE</code>返回有序集中，成员的分数值</p>
-</li>
-<li><p><code>contollers/set.js</code></p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> addMembersAndGetAll = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> students = [[<span class="string">'Jack'</span>, <span class="number">99</span>], [<span class="string">'John'</span>, <span class="number">90</span>], [<span class="string">'Tony'</span>, <span class="number">88</span>], [<span class="string">'Helen'</span>, <span class="number">92</span>]]</span><br><span class="line">  students.forEach(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">    redis.zadd(<span class="string">'zset:zset1'</span>, item[<span class="number">1</span>], item[<span class="number">0</span>])</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">const</span> count = <span class="keyword">await</span> redis.zcard(<span class="string">'zset:zset1'</span>)</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.zrange(<span class="string">'zset:zset1'</span>, <span class="number">0</span>, count)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> removeMemberByValue = <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="keyword">await</span> redis.zrem(<span class="string">'zset:zset1'</span>, ctx.params.value)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/zset'</span>, addMembersAndGetAll)</span><br><span class="line">router.delete(<span class="string">'/zset/:value'</span>, removeMemberByValue)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="Expire"><a href="#Expire" class="headerlink" title="Expire"></a>Expire</h2><blockquote>
-<p>在使用 Redis 的时候遇到了需要设置过期时间的情况，需要注意的是：<strong>Redis 只能针对最顶级的 KEY，也就是五种数据结构设置过期时间</strong>，而不能针对譬如 Hash 中的某一条映射设置。在设计数据存储类型时需要考虑到这点</p>
-</blockquote>
-<ul>
-<li><p>设置过期时间使用<code>EXPIRE</code>关键字，时间单位为秒(s)，时间到后，整个 hash:hash1 键将被删除</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; EXPIRE hash:hash1 60</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可以使用<code>TTL</code>查看 KEY 的剩余过期时间，<code>TTL</code>为 -1 表示未设置过期时间</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; TTL hash:hash1</span><br><span class="line">(integer) 46</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="http://www.runoob.com/redis/redis-tutorial.html" target="_blank" rel="noopener">Redis 教程</a></li>
-<li><a href="http://www.redis.cn/commands/expire.html" target="_blank" rel="noopener">Redis 过期时间</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/3/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/5/">下一页</a>
   </nav>
 
 
@@ -3213,7 +3180,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">70</span>
+                    <span class="site-state-item-count">71</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

@@ -372,6 +372,260 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/27/Java8%20Optional%20%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/27/Java8%20Optional%20%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/3/index.html">Java8 Optional 源码阅读</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-27 13:26:41" itemprop="dateCreated datePublished" datetime="2018-11-27T13:26:41+08:00">2018-11-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-20 19:20:24" itemprop="dateModified" datetime="2020-12-20T19:20:24+08:00">2020-12-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/27/Java8%20Optional%20%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/11/27/Java8 Optional 源码阅读/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">8.7k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Optional 是 Java8 引入的一个重要特性，它是一个容器，里面装着一个可能为空可能不为空的对象。在它出现之前，为避免空指针异常我们可能会这样编码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getLastFour</span><span class="params">(Employee employee)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(employee != <span class="keyword">null</span>) &#123;</span><br><span class="line">        Address address = employee.getPrimaryAddress();</span><br><span class="line">        <span class="keyword">if</span>(address != <span class="keyword">null</span>) &#123;</span><br><span class="line">            ZipCode zip = address.getZipCode();</span><br><span class="line">            <span class="keyword">if</span>(zip != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> zip.getLastFour()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> FMLException(<span class="string">"Missing data"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>显然代码嵌套层次很深不够整洁。而用 Optional 将值包裹起来后，我们可以不再关注于值会不会为 <code>null</code>，会不会抛空指针，而将注意力集中在<strong>对数据的操作</strong>。并且 Optional 提供了 <code>map</code>、<code>flatMap</code>、<code>filter</code> 等方法让我们可以进行<strong>函数式风格</strong>的编码。那么上诉代码可以如此改写：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getLastFour</span><span class="params">(Optional&lt;Employee&gt; employee)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> employee.flatMap(employee -&gt; employee.getPrimaryAddress())</span><br><span class="line">                   .flatMap(address -&gt; address.getZipCode())</span><br><span class="line">                   .flatMap(zip -&gt; zip.getLastFour())</span><br><span class="line">                   .orElseThrow(() -&gt; <span class="keyword">new</span> FMLException(<span class="string">"Missing data"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更确切的说，Optional 是一个 <strong>Monad</strong> 容器。那什么是 Monad 呢？可以参考下面这段话：<code>Think of monads as an object that wraps a value and allows us to apply a set of transformations on that value and get it back out with all the transformations applied.</code> 简单的说，Monad 是一个包裹了一个值的容器（值可以是单个对象也可以是集合），允许我们对该值进行一系列的转换（函数操作）后返回给m我们期望的值。也就是说，Monad 封装了接收函数作为入参的一些方法（filter、map、flatMap 等）。</p>
+<p>那么现在，让我们从源码开始一步一步揭开它的神秘面纱。</p>
+<h2 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h2><p>Optional 使用私有化的构造函数和单例模式提供了<strong>值为空的单例</strong>，暴露的静态工厂方法为 <code>Optional.empty()</code>。该种设计感觉和 Java 设计模式中的<strong>空对象模式</strong>有异曲同工之妙，也是避免空指针的核心所在，后面我们将会提到。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Common instance for &#123;<span class="doctag">@code</span> empty()&#125;.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Optional&lt;?&gt; EMPTY = <span class="keyword">new</span> Optional&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Optional</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span>&lt;T&gt; Optional&lt;T&gt; <span class="title">empty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">    Optional&lt;T&gt; t = (Optional&lt;T&gt;) EMPTY;</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同时提供 <code>Optional.of(value)</code> 和 <code>Optional.ofNullable(value)</code> 两个工厂方法用于将 value 装入 Optional 容器中。注意 <code>of()</code> 方法在值为空时会抛出<strong>空指针异常</strong>。所以在允许入参值为空时使用 <code>ofNullable()</code>，它在值为空时调用 <code>Optional.empty()</code> 返回 <code>EMPTY</code> 单例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Optional&lt;T&gt; <span class="title">of</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Optional&lt;&gt;(value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> NullPointerException if value is null</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Optional</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = Objects.requireNonNull(value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Optional&lt;T&gt; <span class="title">ofNullable</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value == <span class="keyword">null</span> ? empty() : of(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="isPresent-和-get"><a href="#isPresent-和-get" class="headerlink" title="isPresent 和 get"></a>isPresent 和 get</h2><p>Optional 提供的 <code>isPresent()</code> 用于判断容器中的值是否为空，<code>get()</code> 方法用来获取容器中的值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isPresent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value != <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException(<span class="string">"No value present"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这两个方法通常会组合起来使用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Optional&lt;String&gt; optString = Optional.of(<span class="string">"aaa"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (optString.isPresent()) &#123;</span><br><span class="line">    System.out.println(optString.get());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但我想说的是，Optional 的初衷不是为了让我们仅仅使用这两个方法，事实上也应当尽量避免使用这两个方法，而是多使用 <code>ifPresent()</code> 和 <code>orElse()</code> 等方法代替。因为一旦你这样用，就和使用 <code>if(xxx != null){}</code> 没什么区别了。</p>
+<p>Optional 真正的核心就在于下面这些方法。</p>
+<h2 id="Optional-与函数接口"><a href="#Optional-与函数接口" class="headerlink" title="Optional 与函数接口"></a>Optional 与函数接口</h2><p>Optional 对于 Java8 提供的四种<strong>函数接口</strong>：<code>Function</code>、<code>Predicate</code>、<code>Consumer</code>、<code>Supplier</code> 都包装了相应的方法，以满足我们可以进行<strong>函数式</strong>风格的编码。本部分介绍这些方法的实现和使用，为了直观，部分代码使用匿名内部类的方式。</p>
+<p>关于函数接口（<strong>Functional Interfaces</strong>），我的上一篇博客 <a href="https://s2mple.xyz/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/" target="_blank" rel="noopener">Java8 函数接口</a>中有详细介绍。</p>
+<h3 id="ifPresent"><a href="#ifPresent" class="headerlink" title="ifPresent"></a>ifPresent</h3><p><code>ifPresent(consumer)</code> 方法接受一个<strong>消费者函数</strong> <code>Consumer</code> 入参，如果 Optional 容器中的值不为空，则调用 <code>Consumer</code> 的 <code>accept(value)</code> 方法消费容器中的值。若值为空则什么都不做。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ifPresent</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; consumer)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value != <span class="keyword">null</span>)</span><br><span class="line">        consumer.accept(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如下代码会打印容器中的值 “abc”</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Optional.of(<span class="string">"abc"</span>)</span><br><span class="line">        .ifPresent(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                System.out.println(s);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;); <span class="comment">// print abc</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).ifPresent(s -&gt; System.out.println(s));</span><br></pre></td></tr></table></figure>
+<h3 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h3><p><code>filter(predicate)</code> 方法接受一个<strong>谓词函数</strong> <code>Predicate</code> 入参，调用谓词的 <code>test(value)</code> 判断容器中的值是否满足谓词条件，<strong>满足则返回该容器本身</strong>，不满足或值为空时返回 <code>Optional.empty()</code> 单例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Optional&lt;T&gt; <span class="title">filter</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; predicate)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(predicate);</span><br><span class="line">    <span class="keyword">if</span> (!isPresent())</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> predicate.test(value) ? <span class="keyword">this</span> : empty();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以下代码分别展示了 <code>filter</code> 通过和不通过的情况：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Optional.of(<span class="string">"abc"</span>)</span><br><span class="line">        .filter(<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">test</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> s.length() &gt; <span class="number">5</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .ifPresent(System.out::println); <span class="comment">// do nothing</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">"abc"</span>)</span><br><span class="line">        .filter(s -&gt; s.length() == <span class="number">3</span>)</span><br><span class="line">        .ifPresent(System.out::println); <span class="comment">// print abc</span></span><br></pre></td></tr></table></figure>
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p><code>map(mapper)</code> 方法接受一个<strong>函数</strong> <code>Function</code> 入参，将容器中的值执行 <code>apply(value)</code> 操作后返回，返回的依然是 <code>Optional</code> 包裹的值，值的类型为 <code>apply()</code>  方法的返回类型，即 <code>map</code> 可能<strong>改变容器中值的类型</strong>。同样，值为空或 <code>apply()</code> 为空则返回 <code>empty()</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span>&lt;U&gt; Optional&lt;U&gt; <span class="title">map</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, ? extends U&gt; mapper)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(mapper);</span><br><span class="line">    <span class="keyword">if</span> (!isPresent())</span><br><span class="line">        <span class="keyword">return</span> empty();</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Optional.ofNullable(mapper.apply(value));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以下代码展示了 <code>map</code> 的用法，通过 <code>.map(s -&gt; s.length())</code> 返回类型已经从 <code>Optional&lt;String&gt;</code> 变为 <code>Optional&lt;Integer&gt;</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Optional.of(<span class="string">"abc"</span>)</span><br><span class="line">        .map(<span class="keyword">new</span> Function&lt;String, Integer&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Integer <span class="title">apply</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> s.length();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .ifPresent(System.out::println); <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).map(s -&gt; s.length()); <span class="comment">// Optional&lt;Integer&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap"></a>flatMap</h3><p><code>flatMap</code> 可以视作一种特殊的 <code>map</code> 操作，可以视为 map + flatten 操作。仔细观察，它的入参接受的 Function 函数的输出泛型为 <code>Optional&lt;U&gt;</code>，所以不需要像 <code>map</code> 方法中再用 <code>ofNullable()</code> 包装成 Optional 容器。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span>&lt;U&gt; Optional&lt;U&gt; <span class="title">flatMap</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, Optional&lt;U&gt;&gt; mapper)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(mapper);</span><br><span class="line">    <span class="keyword">if</span> (!isPresent())</span><br><span class="line">        <span class="keyword">return</span> empty();</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Objects.requireNonNull(mapper.apply(value));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>map</code> 与 <code>flatMap</code> 的区别如下。自定义的 <code>optionalLength(string)</code> 返回 <code>Optional&lt;Integer&gt;</code> 类型，所以 <code>map</code> 会返回 <code>Optional&lt;Optional&lt;Integer&gt;&gt;</code> 类型，只有调用 <code>flatMap</code> 才返回 <code>Optional&lt;Integer&gt;</code> 类型，相当于多做了一步 flatten 操作将其拍平为一维纬度。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> Optional&lt;Integer&gt; <span class="title">optionalLength</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> Optional.empty();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Optional.of(s.length());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).map(s -&gt; optionalLength(s)); <span class="comment">// Optional&lt;Optional&lt;Integer&gt;&gt;</span></span><br><span class="line">Optional.of(<span class="string">"abc"</span>).flatMap(s -&gt; optionalLength(s)); <span class="comment">// Optional&lt;Integer&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="orElseGet-和-orElseThrow"><a href="#orElseGet-和-orElseThrow" class="headerlink" title="orElseGet 和 orElseThrow"></a>orElseGet 和 orElseThrow</h3><p><code>orElseGet(other)</code> 接受<strong>提供者函数</strong> <code>Supplier</code> 作为入参，当容器中的值为空时调用 <code>Supplier</code> 的 <code>get()</code> 方法获取值。<code>orElseThrow(supplier)</code> 则是值为空时抛出异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">orElseGet</span><span class="params">(Supplier&lt;? extends T&gt; other)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value != <span class="keyword">null</span> ? value : other.get();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> &lt;X extends Throwable&gt; <span class="function">T <span class="title">orElseThrow</span><span class="params">(Supplier&lt;? extends X&gt; exceptionSupplier)</span> <span class="keyword">throws</span> X </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> exceptionSupplier.get();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用时如下，若当前容器中的值为空则返回 <code>anotherString()</code> 的值。注意这一步已经跳出了 Optional 容器，返回的类型为容器中值的类型。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> String <span class="title">anotherString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"anotherString"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">"abc"</span>)</span><br><span class="line">        .filter(s -&gt; s.startsWith(<span class="string">"zzz"</span>)) <span class="comment">// Optional.empty()</span></span><br><span class="line">        .orElseGet(<span class="keyword">new</span> Supplier&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> String <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> anotherString();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;); <span class="comment">// "anotherString"</span></span><br><span class="line">        </span><br><span class="line">Optional.of(<span class="string">"abc"</span>)</span><br><span class="line">        .filter(s -&gt; s.length() == <span class="number">3</span>) <span class="comment">// Optional["abc"]</span></span><br><span class="line">        .orElseGet(() -&gt; anotherString()); <span class="comment">// "abc"</span></span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">"abc"</span>)</span><br><span class="line">        .filter(s -&gt; s.startsWith(<span class="string">"zzz"</span>)) <span class="comment">// Optional.empty()</span></span><br><span class="line">        .orElseThrow(() -&gt; <span class="keyword">new</span> RuntimeException(<span class="string">"no eligible values"</span>));</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Optional 提供的这些方法让我们不再关注于是否会抛出空指针异常，而是通过函数的自由组合专注于对数据的操作，比如如下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Optional.ofNullable(people)</span><br><span class="line">        .flatMap(people -&gt; people.getName())</span><br><span class="line">        .map(name -&gt; name.toUpperCase())</span><br><span class="line">        .filter(name -&gt; name.startsWith(<span class="string">"T"</span>))</span><br><span class="line">        .orElse(<span class="string">"TONY"</span>);</span><br></pre></td></tr></table></figure>
+<p>其实 Optional 的核心在于提供的 <code>empty()</code> 单例，使得如上代码整条链路不会在某一步中断抛出空指针异常，而是只要其中一步值为空后，<code>Optional.empty()</code> <strong>将在这条链路上继续向下传播</strong>，直到最后 <code>orElse()</code> 等方法指名默认处理并跳出容器。</p>
+<p>Optional 源码时有诸多值得我们借鉴取经的地方，诸如：</p>
+<ul>
+<li>Monad 容器的思想。容器接收一个值，进行函数操作后依然返回该容器，比如 <code>map</code>、<code>flatMap</code>、<code>filter</code>。这就使得我们可以随意组合以上方法，编写函数式风格的代码。类似的还有 Java 8 的 <code>Stream</code> 接口。</li>
+<li>提供 <code>Optional.empty()</code> 类似空对象模式的空值单例。</li>
+<li>严谨的编码，源码中有许多 <code>Objects.requireNonNull()</code> 对极端情况进行验证，比如 <code>flatMap</code> 方法中的 <code>Objects.requireNonNull(mapper);</code> 和 <code>Optional.ofNullable(mapper.apply(value));</code> 对于入参函数不为空和调用 <code>apply()</code> 后返回值不为空的验证。</li>
+<li>API 的全面性，当容器中没有你期待的值时提供 <code>orElse</code>、<code>orElseGet</code>、<code>orElseThrow</code> 等其他处理手段，不管是设置默认值还是抛出异常，API 都考虑到了。</li>
+</ul>
+<p>目前在一些 ORM 框架中也加入了 Optional 的支持，比如 Hibernate 从 5.2 版本后提供 <code>loadOptional()</code> 方法返回 <code>Optional&lt;T&gt;</code> 类型。有兴趣的可以自己去研究。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html" target="_blank" rel="noopener">Functors, Applicatives, And Monads In Pictures</a></li>
+<li><a href="https://medium.com/coding-with-clarity/understanding-the-optional-monad-in-java-8-e3000d85ffd2" target="_blank" rel="noopener">Understanding the Optional Monad in Java 8</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2633,269 +2887,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/07/03/Git%20Flow%20%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/07/03/Git%20Flow%20%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/3/index.html">Git Flow 模型以及工具的使用</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-07-03 08:11:51" itemprop="dateCreated datePublished" datetime="2018-07-03T08:11:51+08:00">2018-07-03</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-13 14:13:51" itemprop="dateModified" datetime="2020-10-13T14:13:51+08:00">2020-10-13</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/07/03/Git%20Flow%20%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/03/Git Flow 模型以及工具的使用/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">5.2k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Git-Flow-是什么？"><a href="#Git-Flow-是什么？" class="headerlink" title="Git Flow 是什么？"></a>Git Flow 是什么？</h2><p>2010 年 5 月，在一篇名为 “<a href="https://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="noopener">A successful Git branching model</a>” 的博文中，Vincent Driessen 介绍了一种构建在 Git 之上的软件开发模型。<strong>通过利用 Git 创建和管理分支的能力，为每个分支设定具有特定的含义名称，并将软件生命周期中的各类活动归并到不同的分支上，实现了软件开发过程不同阶段的相互隔离</strong>。这种软件开发的活动模型被 Vincent 称为 “<strong>Git Flow</strong>”。</p>
-<h2 id="Git-Flow-流程图"><a href="#Git-Flow-流程图" class="headerlink" title="Git Flow 流程图"></a>Git Flow 流程图</h2><p>这是 Vincent 博文中的 Git FLow 流程图，该图从右向左，从上到下看：</p>
-<p><img src="/2018/07/03/Git%20Flow%20%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/0.png" alt="git-flow-model"></p>
-<h2 id="Git-Flow-Branches"><a href="#Git-Flow-Branches" class="headerlink" title="Git Flow Branches"></a>Git Flow Branches</h2><p>Git Flow 的核心就是<strong>分支（Branch）</strong>，通过在项目的不同阶段对 Branch 的不同操作（包括但不限于 create、merge、rebase 等）来实现一个完整的高效率的工作流程。Git Flow Branches 主要分为两大类：<strong>Main Branches（主分支）</strong> 和 <strong>Supporting branches（辅助分支）</strong>。 其中 Main Branches 中又包含了 <strong>Master</strong> 和 <strong>Develop</strong>，而 Supporting branches 中包含了 <strong>Feature</strong>、<strong>Release</strong>、<strong>Hotfix</strong> 以及其他自定义分支。</p>
-<h3 id="Master"><a href="#Master" class="headerlink" title="Master"></a>Master</h3><ul>
-<li><p><strong>master 分支上存放的是最稳定的正式版本</strong>，并且该分支的代码应该是随时可在生产环境中使用的代码（<strong>Production Ready state</strong>）。当一个版本开发完毕后，产生了一份新的稳定的可供发布的代码时，master 分支上的代码要被更新。同时，每一次更新，都需要在 master 上打上对应的版本号（tag）。</p>
-</li>
-<li><p><strong>任何人不允许在 master 上进行代码的直接提交，只接受其他分支的合入</strong>。原则上 master 上的代码必须是合并自经过多轮测试且已经发布一段时间且线上稳定的 release 分支（预发分支）。</p>
-</li>
-</ul>
-<h3 id="Develop"><a href="#Develop" class="headerlink" title="Develop"></a>Develop</h3><ul>
-<li><p><strong>develop 分支是主开发分支，其上更新的代码始终反映着下一个发布版本需要交付的新功能</strong>。当 develop 分支到达一个稳定的点并准备好发布时，应该从该点拉取一个 release 分支并附上发布版本号。也有人称 develop 分支为 “integration branch”，因为会基于该分支和持续集成工具做自动化的 Nightly builds。</p>
-</li>
-<li><p>develop 分支接受其他 Supporting branches 分支的合入，最常见的就是 feature 分支，开发一个新功能时拉取新的 feature 分支，开发完成后再并入 develop 分支。需要注意的是，<strong>合入 develop 的分支必须保证功能完整，不影响 develop 分支的正常运行</strong>。</p>
-</li>
-</ul>
-<h3 id="Feature"><a href="#Feature" class="headerlink" title="Feature"></a>Feature</h3><ul>
-<li><p>feature 分支又叫做<strong>功能分支</strong>，一般命名为 feature/xxx，用于<strong>开发即将发布版本或未来版本的新功能或者探索新功能</strong>。该分支通常存在于开发人员的本地代码库而不要求提交到远程代码库上，除非几个人合作在同一个 feature 分支开发。关于这点，ThoughtWorks 洞见上有一篇文章 “<a href="https://insights.thoughtworks.cn/gitflow-consider-harmful/" target="_blank" rel="noopener">Gitflow 有害论</a>” 做了非常有意思的阐述，文章下的评论也异常激烈。也许该文章的名字可能有失偏颇，但文章的本意以及评论传达了一个观点：<strong>feature 分支要求足够细粒度以避免成为 long-lived branch，应当小步小步 merge 而不是一次 merge 大量代码</strong>。</p>
-</li>
-<li><p>feature 分支只能拉取自 develop 分支，开发完成后要么合并回 develop 分支，要么因为新功能的尝试不如人意而直接丢弃。</p>
-</li>
-</ul>
-<h3 id="Release"><a href="#Release" class="headerlink" title="Release"></a>Release</h3><ul>
-<li><p>release 分支又叫做<strong>预发分支</strong>，一般命名为 release/1.2（后面接版本号），<strong>该分支专为测试—发布新的版本而开辟，允许做小量级的 Bug 修复和准备发布版本的元数据信息（版本号、编译时间等）</strong>。通过创建 release 分支，使得 develop 分支得以空闲出来接受下一个版本的新的 feature 分支的合入。</p>
-</li>
-<li><p>release 分支需要提交到服务器上，交由 QA 进行测试，并由 Dev 修复 Bug。同时根据该分支的特性我们可以部署自动化测试以及生产环境代码的自动化更新和部署。</p>
-</li>
-<li><p>release 分支只能拉取自 develop 分支，合并回 develop 和 master 分支。</p>
-</li>
-</ul>
-<h3 id="Hotfix"><a href="#Hotfix" class="headerlink" title="Hotfix"></a>Hotfix</h3><ul>
-<li><p>hotfix 分支又叫<strong>热修复分支</strong>，一般命名为 hotfix/1.2.1（后面接版本号），<strong>当生产环境的代码（master 上代码）遇到了严重到必须立即修复的缺陷时，就需要从 master 分支上指定的 tag 版本（比如 1.2）拉取 hotfix 分支进行代码的紧急修复，并附上版本号（比如 1.2.1）</strong>。这样做的好处是不会打断正在进行的 develop 分支的开发工作，能够让团队中负责 feature 开发的人与负责 hotfix 的人并行、独立的开展工作。</p>
-</li>
-<li><p>hotfix 分支只能从 master 上拉取，测试通过后合并回 master 分支和 develop 分支。</p>
-</li>
-</ul>
-<h2 id="Git-Flow-工具"><a href="#Git-Flow-工具" class="headerlink" title="Git Flow 工具"></a>Git Flow 工具</h2><p>一旦使用 Git Flow 模型，那么对分支的命令操作必然是频繁且重复的，所幸是有人开发了 Git Flow Script 工具帮助我们简化命令：<a href="https://github.com/nvie/gitflow" target="_blank" rel="noopener">gitflow</a>。</p>
-<p>在 Mac 或 Windows 系统上安装：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; OS X</span><br><span class="line">brew install git-flow</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Windows</span><br><span class="line">wget -q -O - --no-check-certificate https:&#x2F;&#x2F;github.com&#x2F;nvie&#x2F;gitflow&#x2F;raw&#x2F;develop&#x2F;contrib&#x2F;gitflow-installer.sh | bash</span><br></pre></td></tr></table></figure>
-<p>使用<code>git flow init</code>进行初始化，会询问你分支的命名，使用默认的即可。初始化完成后自动切换到了 develop 分支。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">➜  demo git:(master) ✗ git flow init</span><br><span class="line">No branches exist yet. Base branches must be created now.</span><br><span class="line">Branch name for production releases: [master] </span><br><span class="line">Branch name for &quot;next release&quot; development: [develop] </span><br><span class="line"></span><br><span class="line">How to name your supporting branch prefixes?</span><br><span class="line">Feature branches? [feature&#x2F;] </span><br><span class="line">Release branches? [release&#x2F;] </span><br><span class="line">Hotfix branches? [hotfix&#x2F;] </span><br><span class="line">Support branches? [support&#x2F;] </span><br><span class="line">Version tag prefix? []</span><br><span class="line"></span><br><span class="line">➜  demo git:(develop) ✗</span><br></pre></td></tr></table></figure>
-<p>下面使用 feature 分支演示 Git Flow 功能。<code>git flow feature start my-feature</code>该命令用于新建一个 feature 分支。可以看到，基于 develop 的 feature/my-feature 分支已被创建，并且自动切换到该分支。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">➜  demo git:(develop) ✗ git flow feature start my-feature</span><br><span class="line">Switched to a new branch &#39;feature&#x2F;my-feature&#39;</span><br><span class="line"></span><br><span class="line">Summary of actions:</span><br><span class="line">- A new branch &#39;feature&#x2F;my-feature&#39; was created, based on &#39;develop&#39;</span><br><span class="line">- You are now on branch &#39;feature&#x2F;my-feature&#39;</span><br><span class="line"></span><br><span class="line">Now, start committing on your feature. When done, use:</span><br><span class="line"></span><br><span class="line">     git flow feature finish my-feature</span><br><span class="line"></span><br><span class="line">➜  demo git:(feature&#x2F;my-feature) ✗</span><br></pre></td></tr></table></figure>
-<p>在该功能分支下我创建了 a.txt 文件并 commit 到本地仓库，下面演示结束 feature 分支。<code>finish</code>命令用于将 feature/my-feature 分支合并入 develop 分支并删除该分支。此时已切换到了 develop 分支。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">➜  demo git:(feature&#x2F;my-feature) git flow feature finish my-feature</span><br><span class="line">Switched to branch &#39;develop&#39;</span><br><span class="line">Updating 6c6e4cb..345a380</span><br><span class="line">Fast-forward</span><br><span class="line"> a.txt | 0</span><br><span class="line"> 1 file changed, 0 insertions(+), 0 deletions(-)</span><br><span class="line"> create mode 100644 a.txt</span><br><span class="line">Deleted branch feature&#x2F;my-feature (was 345a380).</span><br><span class="line"></span><br><span class="line">Summary of actions:</span><br><span class="line">- The feature branch &#39;feature&#x2F;my-feature&#39; was merged into &#39;develop&#39;</span><br><span class="line">- Feature branch &#39;feature&#x2F;my-feature&#39; has been removed</span><br><span class="line">- You are now on branch &#39;develop&#39;</span><br><span class="line"></span><br><span class="line">➜  demo git:(develop)</span><br></pre></td></tr></table></figure>
-<p>release 和 hotfix 的命令使用和 feature 一样。需要注意的是它们实际的操作细节会有一些区别，比如 release finish 时会打上版本号，以及合并入 master 和 develop 两个分支。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  demo git:(release&#x2F;1.2) git flow release finish 1.2 </span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Summary of actions:</span><br><span class="line">- Latest objects have been fetched from &#39;origin&#39;</span><br><span class="line">- Release branch has been merged into &#39;master&#39;</span><br><span class="line">- The release was tagged &#39;1.2&#39;</span><br><span class="line">- Release branch has been back-merged into &#39;develop&#39;</span><br><span class="line">- Release branch &#39;release&#x2F;1.2&#39; has been deleted</span><br><span class="line"></span><br><span class="line">➜  demo git:(master)</span><br></pre></td></tr></table></figure>
-<p>还有将分支 push 到远程代码仓库和拉取远程代码仓库分支的命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  demo git:(release&#x2F;1.2) git flow release publish 1.2 </span><br><span class="line">➜  demo git:(release&#x2F;1.2) git flow release pull 1.2</span><br></pre></td></tr></table></figure>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Git Flow 模型通过不同的分支从源代码管理的角度对软件开发活动进行了约束，为我们的软件开发提供了一个可供参考的管理模型。Git Flow 模型让代码仓库保持整洁，让小组各个成员之间的开发相互隔离，能够有效避免处于开发状态中的代码相互影响而导致的效率低下和混乱。但同时，不同的开发团队存在不同的文化，在不同的项目背景情况下都可能<strong>根据该模型进行适当的精简或扩充</strong>。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="noopener">A successful Git branching model —— Vincent Driessen</a></li>
-<li><a href="https://juejin.im/entry/5b7fe2745188253010325bf6" target="_blank" rel="noopener">Git Flow流程 —— 掘金</a></li>
-<li><a href="http://deshui.wang/%E6%95%8F%E6%8D%B7/2015/10/27/sourcecode-management" target="_blank" rel="noopener">敏捷实践系列(四)：代码管理流程</a></li>
-<li><a href="https://www.jianshu.com/p/36292d36e41d" target="_blank" rel="noopener">Git Flow的使用 —— 简书</a></li>
-<li><a href="https://insights.thoughtworks.cn/gitflow-consider-harmful/" target="_blank" rel="noopener">Git Flow有害论 —— ThoughtWorks洞见</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/">上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/2/">上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/4/">下一页</a>
   </nav>
 
 
@@ -2942,7 +2938,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">70</span>
+                    <span class="site-state-item-count">71</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

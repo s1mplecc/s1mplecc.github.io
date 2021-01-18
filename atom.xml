@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://s1mplecc.github.io/"/>
-  <updated>2021-01-03T02:13:10.287Z</updated>
+  <updated>2021-01-18T04:41:53.111Z</updated>
   <id>https://s1mplecc.github.io/</id>
   
   <author>
@@ -17,11 +17,37 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Python 环境准备</title>
+    <link href="https://s1mplecc.github.io/2021/01/18/Python-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87/"/>
+    <id>https://s1mplecc.github.io/2021/01/18/Python-环境准备/</id>
+    <published>2021-01-18T04:41:16.000Z</published>
+    <updated>2021-01-18T04:41:53.111Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Languages" scheme="https://s1mplecc.github.io/categories/Languages/"/>
+    
+    
+      <category term="Python" scheme="https://s1mplecc.github.io/tags/Python/"/>
+    
+  </entry>
+  
+  <entry>
     <title>如何阅读 Python 源码</title>
-    <link href="https://s1mplecc.github.io/2021/01/02/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB-Python-%E6%BA%90%E7%A0%81/"/>
-    <id>https://s1mplecc.github.io/2021/01/02/如何阅读-Python-源码/</id>
-    <published>2021-01-02T14:34:23.000Z</published>
-    <updated>2021-01-03T02:13:10.287Z</updated>
+    <link href="https://s1mplecc.github.io/2021/01/09/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB-Python-%E6%BA%90%E7%A0%81/"/>
+    <id>https://s1mplecc.github.io/2021/01/09/如何阅读-Python-源码/</id>
+    <published>2021-01-09T14:34:23.000Z</published>
+    <updated>2021-01-18T02:56:43.372Z</updated>
     
     <summary type="html">
     
@@ -509,34 +535,6 @@
     
     
       <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java8 Optional 源码阅读</title>
-    <link href="https://s1mplecc.github.io/2018/11/27/Java8%20Optional%20%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/"/>
-    <id>https://s1mplecc.github.io/2018/11/27/Java8 Optional 源码阅读/</id>
-    <published>2018-11-27T05:26:41.000Z</published>
-    <updated>2020-12-20T11:20:24.872Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-      <category term="Languages" scheme="https://s1mplecc.github.io/categories/Languages/"/>
-    
-    
-      <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
-    
-      <category term="FP" scheme="https://s1mplecc.github.io/tags/FP/"/>
     
   </entry>
   
