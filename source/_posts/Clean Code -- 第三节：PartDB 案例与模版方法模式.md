@@ -6,21 +6,21 @@ categories: [Coding]
 ---
 ## 前言
 
-该系列源于[张逸总监](http://zhangyi.xyz/)的 **Clean Code** 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。[上一篇](https://s2mple.xyz/2018/05/07/Clean%20Code%20--%20%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/)我们通过报表参数填充案例复习了**迪米特法则（最小知识法则）**、**信息专家模式：数据和行为应该封装在一起**。本篇我们将通过 PartDB 案例来见识 IDEA 中 **Extract Superclass** 等强大的重构功能，以及与案例相关的设计模式：**模版方法模式**。
+该系列源于[张逸总监](http://zhangyi.xyz/)的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。[上一篇](https://s2mple.xyz/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/)我们通过报表参数填充案例复习了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起。本篇我们将通过 PartDB 案例来见识 IDEA 中 **Extract Superclass** 等强大的重构功能，以及与案例相关的设计模式：**模版方法模式**。
 
 ## 准备工作
 
 - **IntelliJ IDEA**，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目。
 - **示例代码**地址 https://github.com/agiledon/cleancode.git ，进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，**after-refactoring** 分支为重构后代码，可以使用快捷键 `Cmd + D` 查看**代码差异**。
 - **活用快捷键**，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 `Cmd` 替换成 `Ctrl`，或者在 IDEA 的 **Refactor** 菜单中查看快捷键。
-```
-Shift + F6 // 重命名方法、属性、文件
-Cmd + Alt + M // 提取方法（extract method）
-Cmd + Alt + N // 内联（Inline），与 extract 相反
-Cmd + Shift + ⬆️/ ⬇️ // 上下移动声明体（statement）  
 
-Ctrl + T // 重构菜单
-```
+| 快捷键 | 作用 |
+|------|------|
+|Ctrl + T | 重构菜单 |
+|Shift + F6 | 重命名方法、属性、文件 |
+|Cmd + Alt + M | 提取方法（extract method） |
+|Cmd + Alt + N | 内联（Inline），与 extract 相反 |
+|Cmd + Shift + 上下箭头 | 上下移动声明体（statement） |
 
 ## 案例代码
 

@@ -6,21 +6,21 @@ categories: [Coding]
 ---
 ## 前言
 
-该系列源于[张逸总监](http://zhangyi.xyz/)的 **Clean Code** 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍**迪米特法则**、**信息专家模式**，并结合案例实操在 **IntelliJ IDEA** 中如何重构代码。本文大部分内容转载自张总博客: [迪米特法则与重构](http://zhangyi.xyz/demeter-law-and-refactoring/#more)。
+该系列源于[张逸总监](http://zhangyi.xyz/)的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍**迪米特法则**和**信息专家模式**，并结合案例实操在 IntelliJ IDEA 中如何重构代码。本文大部分内容转载自张总博客: [迪米特法则与重构](http://zhangyi.xyz/demeter-law-and-refactoring/#more)。
 
 ## 准备工作
 
 - **IntelliJ IDEA**，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目。
 - **示例代码**地址 https://github.com/agiledon/cleancode.git ，进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，**after-refactoring** 分支为重构后代码，可以使用快捷键 `Cmd + D` 查看**代码差异**。
 - **活用快捷键**，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 `Cmd` 替换成 `Ctrl`，或者在 IDEA 的 **Refactor** 菜单中查看快捷键。
-```
-Shift + F6 // 重命名方法、属性、文件
-Cmd + Alt + M // 提取方法（extract method）
-Cmd + Alt + N // 内联（Inline），与 extract 相反
-Cmd + Shift + ⬆️/ ⬇️ // 上下移动声明体（statement）  
 
-Ctrl + T // 重构菜单
-```
+| 快捷键 | 作用 |
+|------|------|
+|Ctrl + T | 重构菜单 |  
+|Shift + F6 | 重命名方法、属性、文件 |
+|Cmd + Alt + M | 提取方法（extract method） |
+|Cmd + Alt + N | 内联（Inline），与 extract 相反 |
+|Cmd + Shift + 上下箭头 | 上下移动声明体（statement） | 
 
 ## 迪米特法则
 
