@@ -112,15 +112,15 @@
 
 
 
-  <meta name="description" content="关于Maven的settings.xml以及pom.xml的介绍  settings.xml settings.xml会在两个位置  ${MAVEN_HOME}&#x2F;conf&#x2F;settings.xml全局配置，该文件里有很全面的英文注释  ${USER_HOME}&#x2F;.m2&#x2F;settings.xml个人配置，建议将全局文件拷贝过来再修改。加载时会覆盖全局设置  修改镜像源为aliyun，这样Maven">
+  <meta name="description" content="关于Maven的settings.xml以及pom.xml的介绍  settings.xml settings.xml会在两个位置${MAVEN_HOME}&#x2F;conf&#x2F;settings.xml全局配置，该文件里有很全面的英文注释${USER_HOME}&#x2F;.m2&#x2F;settings.xml个人配置，建议将全局文件拷贝过来再修改。加载时会覆盖全局设置  修改镜像源为aliyun，这样Maven会从al">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Maven 配置 &amp; POM">
 <meta property="og:url" content="https://s1mplecc.github.io/2017/12/05/Maven%20%E9%85%8D%E7%BD%AE%20&%20POM/index.html">
 <meta property="og:site_name" content="s1mple的博客">
-<meta property="og:description" content="关于Maven的settings.xml以及pom.xml的介绍  settings.xml settings.xml会在两个位置  ${MAVEN_HOME}&#x2F;conf&#x2F;settings.xml全局配置，该文件里有很全面的英文注释  ${USER_HOME}&#x2F;.m2&#x2F;settings.xml个人配置，建议将全局文件拷贝过来再修改。加载时会覆盖全局设置  修改镜像源为aliyun，这样Maven">
+<meta property="og:description" content="关于Maven的settings.xml以及pom.xml的介绍  settings.xml settings.xml会在两个位置${MAVEN_HOME}&#x2F;conf&#x2F;settings.xml全局配置，该文件里有很全面的英文注释${USER_HOME}&#x2F;.m2&#x2F;settings.xml个人配置，建议将全局文件拷贝过来再修改。加载时会覆盖全局设置  修改镜像源为aliyun，这样Maven会从al">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2017-12-04T18:00:52.000Z">
-<meta property="article:modified_time" content="2020-09-16T01:48:41.884Z">
+<meta property="article:modified_time" content="2021-03-07T07:16:28.331Z">
 <meta property="article:author" content="s1mple">
 <meta property="article:tag" content="Maven">
 <meta name="twitter:card" content="summary">
@@ -433,7 +433,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
+                <time title="修改时间：2021-03-07 15:16:28" itemprop="dateModified" datetime="2021-03-07T15:16:28+08:00">2021-03-07</time>
               
             
           </span>
@@ -498,7 +498,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">2.7k</span>
+                <span title="本文字数">2.6k</span>
               
 
               
@@ -526,17 +526,17 @@
 <p>关于<strong>Maven</strong>的<strong>settings.xml</strong>以及<strong>pom.xml</strong>的介绍</p>
 </blockquote>
 <h1 id="settings-xml"><a href="#settings-xml" class="headerlink" title="settings.xml"></a>settings.xml</h1><ul>
-<li><p><strong>settings.xml</strong>会在两个位置<br>  <code>${MAVEN_HOME}/conf/settings.xml</code>全局配置，该文件里有很全面的英文注释<br>  <code>${USER_HOME}/.m2/settings.xml</code>个人配置，建议将全局文件拷贝过来再修改。加载时会覆盖全局设置</p>
+<li><p><strong>settings.xml</strong>会在两个位置<br><code>${MAVEN_HOME}/conf/settings.xml</code>全局配置，该文件里有很全面的英文注释<br><code>${USER_HOME}/.m2/settings.xml</code>个人配置，建议将全局文件拷贝过来再修改。加载时会覆盖全局设置</p>
 </li>
 <li><p>修改镜像源为aliyun，这样Maven会从aliyun拉取依赖，而不是速度巨慢的官方中央仓库，<strong>id</strong>和<strong>name</strong>都是自己取的用作唯一标识</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;mirror&gt;</span><br><span class="line">    &lt;id&gt;nexus-aliyun&lt;&#x2F;id&gt;</span><br><span class="line">    &lt;mirrorOf&gt;central&lt;&#x2F;mirrorOf&gt;</span><br><span class="line">    &lt;name&gt;Nexus aliyun&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;url&gt;http:&#x2F;&#x2F;maven.aliyun.com&#x2F;nexus&#x2F;content&#x2F;groups&#x2F;public&#x2F;&lt;&#x2F;url&gt;</span><br><span class="line">&lt;&#x2F;mirror&gt;</span><br></pre></td></tr></table></figure>
-<p>  这样的效果和在项目中的<strong>pom.xml</strong>中加入如下内容的作用是一样的，只不过是针对全局所有项目的</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;repositories&gt;</span><br><span class="line">    &lt;repository&gt;</span><br><span class="line">        &lt;id&gt;nexus-aliyun&lt;&#x2F;id&gt;</span><br><span class="line">        &lt;name&gt;Nexus aliyun&lt;&#x2F;name&gt;</span><br><span class="line">        &lt;url&gt;http:&#x2F;&#x2F;maven.aliyun.com&#x2F;nexus&#x2F;content&#x2F;groups&#x2F;public&#x2F;&lt;&#x2F;url&gt;</span><br><span class="line">    &lt;&#x2F;repository&gt;</span><br><span class="line">&lt;&#x2F;repositories&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果你搭建了Maven私服，你可能会在<strong>pom.xml</strong>中添加 <code>&lt;repositoriy&gt;</code>去下载和部署Jar包，需要进行认证的<strong>username</strong>和<strong>password</strong>不应该放在pom文件中而是放在<strong>settings.xml</strong>的<code>&lt;server&gt;</code>标签中</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;server&gt;</span><br><span class="line">  &lt;id&gt;xxx&lt;&#x2F;id&gt;</span><br><span class="line">  &lt;username&gt;xxx&lt;&#x2F;username&gt;</span><br><span class="line">  &lt;password&gt;xxx&lt;&#x2F;password&gt;</span><br><span class="line">&lt;&#x2F;server&gt;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;mirror&gt;</span><br><span class="line">    &lt;id&gt;nexus-aliyun&lt;&#x2F;id&gt;</span><br><span class="line">    &lt;mirrorOf&gt;central&lt;&#x2F;mirrorOf&gt;</span><br><span class="line">    &lt;name&gt;Nexus aliyun&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;url&gt;http:&#x2F;&#x2F;maven.aliyun.com&#x2F;nexus&#x2F;content&#x2F;groups&#x2F;public&#x2F;&lt;&#x2F;url&gt;</span><br><span class="line">&lt;&#x2F;mirror&gt;</span><br></pre></td></tr></table></figure>
+<p>这样的效果和在项目中的<strong>pom.xml</strong>中加入如下内容的作用是一样的，只不过是针对全局所有项目的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;repositories&gt;</span><br><span class="line">    &lt;repository&gt;</span><br><span class="line">        &lt;id&gt;nexus-aliyun&lt;&#x2F;id&gt;</span><br><span class="line">        &lt;name&gt;Nexus aliyun&lt;&#x2F;name&gt;</span><br><span class="line">        &lt;url&gt;http:&#x2F;&#x2F;maven.aliyun.com&#x2F;nexus&#x2F;content&#x2F;groups&#x2F;public&#x2F;&lt;&#x2F;url&gt;</span><br><span class="line">    &lt;&#x2F;repository&gt;</span><br><span class="line">&lt;&#x2F;repositories&gt;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>如果你搭建了Maven私服，你可能会在<strong>pom.xml</strong>中添加 <code>&lt;repositoriy&gt;</code>去下载和部署Jar包，需要进行认证的<strong>username</strong>和<strong>password</strong>不应该放在pom文件中而是放在<strong>settings.xml</strong>的<code>&lt;server&gt;</code>标签中</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;server&gt;</span><br><span class="line">  &lt;id&gt;xxx&lt;&#x2F;id&gt;</span><br><span class="line">  &lt;username&gt;xxx&lt;&#x2F;username&gt;</span><br><span class="line">  &lt;password&gt;xxx&lt;&#x2F;password&gt;</span><br><span class="line">&lt;&#x2F;server&gt;</span><br></pre></td></tr></table></figure>
 <h4 id="Other-Settings"><a href="#Other-Settings" class="headerlink" title="Other Settings"></a>Other Settings</h4><ul>
 <li><code>&lt;localRepository&gt;</code>定义了Maven的本地仓库地址，默认值<code>${USER_HOME}/.m2/repository</code></li>
 <li><code>&lt;interactiveMode&gt;</code>定义Maven与用户输入的交互模式，默认为true</li>
@@ -555,10 +555,9 @@
 </li>
 </ul>
 <h3 id="Dependencies"><a href="#Dependencies" class="headerlink" title="Dependencies"></a>Dependencies</h3><ul>
-<li><p>Maven最强力的地方之一就是对于依赖的管理，Maven会自动下载依赖的Jar包并在编译时链接</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependencies&gt;</span><br><span class="line">  &lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;junit&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;junit&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;4.0&lt;&#x2F;version&gt;</span><br><span class="line">  &lt;&#x2F;dependency&gt;</span><br><span class="line">  ...</span><br><span class="line">&lt;&#x2F;dependencies&gt;</span><br></pre></td></tr></table></figure>
-</li>
+<li>Maven最强力的地方之一就是对于依赖的管理，Maven会自动下载依赖的Jar包并在编译时链接</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependencies&gt;</span><br><span class="line">  &lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;junit&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;junit&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;4.0&lt;&#x2F;version&gt;</span><br><span class="line">  &lt;&#x2F;dependency&gt;</span><br><span class="line">  ...</span><br><span class="line">&lt;&#x2F;dependencies&gt;</span><br></pre></td></tr></table></figure>
 <h3 id="Inheritance"><a href="#Inheritance" class="headerlink" title="Inheritance"></a>Inheritance</h3><ul>
 <li><p>如果是多模块的Maven项目，<strong>parent POM</strong>文件中应该加入<code>&lt;packaging&gt;pom&lt;/packaging&gt;</code>，子模块会继承父模块的POM</p>
 </li>
@@ -570,10 +569,9 @@
 </li>
 </ul>
 <h3 id="Properties"><a href="#Properties" class="headerlink" title="Properties"></a>Properties</h3><ul>
-<li><p>定义属性值，使用时<code>${mysql.version}</code>这样引用</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties&gt;</span><br><span class="line">  &lt;mysql.version&gt;5.1.40&lt;&#x2F;mysql.version&gt;</span><br><span class="line">  ...</span><br><span class="line">&lt;&#x2F;properties&gt;</span><br></pre></td></tr></table></figure></li>
+<li>定义属性值，使用时<code>${mysql.version}</code>这样引用</li>
 </ul>
-
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties&gt;</span><br><span class="line">  &lt;mysql.version&gt;5.1.40&lt;&#x2F;mysql.version&gt;</span><br><span class="line">  ...</span><br><span class="line">&lt;&#x2F;properties&gt;</span><br></pre></td></tr></table></figure>
       
     </div>
 

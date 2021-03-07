@@ -122,7 +122,7 @@
 <meta property="og:image" content="https://s1mplecc.github.io/2017/12/27/Linux%20%E7%AE%A1%E9%81%93%E4%B8%8E%E9%87%8D%E5%AE%9A%E5%90%91/0.png">
 <meta property="og:image" content="https://s1mplecc.github.io/2017/12/27/Linux%20%E7%AE%A1%E9%81%93%E4%B8%8E%E9%87%8D%E5%AE%9A%E5%90%91/1.png">
 <meta property="article:published_time" content="2017-12-27T04:32:23.000Z">
-<meta property="article:modified_time" content="2021-03-07T07:11:12.017Z">
+<meta property="article:modified_time" content="2021-03-07T07:15:15.972Z">
 <meta property="article:author" content="s1mple">
 <meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
@@ -436,7 +436,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2021-03-07 15:11:12" itemprop="dateModified" datetime="2021-03-07T15:11:12+08:00">2021-03-07</time>
+                <time title="修改时间：2021-03-07 15:15:15" itemprop="dateModified" datetime="2021-03-07T15:15:15+08:00">2021-03-07</time>
               
             
           </span>
@@ -525,9 +525,10 @@
       
 
       
-        <h2 id="标准-I-O-流"><a href="#标准-I-O-流" class="headerlink" title="标准 I/O 流"></a>标准 I/O 流</h2><p>Linux shell 可以接收和发送字符序列或字符流形式的输入和输出。无论实际的字符流是来自还是来自文件，键盘，显示器上的窗口或其他IO设备，字符流都可以通过<strong>文件IO</strong>技术进行访问。Linux shell 使用3种<strong>标准的I/O流</strong>，每种流都与一个<strong>文件描述符</strong>。Linux 内核采用文件描述符（file descriptor）来访问文件。文件描述符是<strong>非负整数</strong>。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件。输入流通常通过终端敲击键盘为程序提供输入。输出流通常向终端输出显示文本字符。</p>
+        <h2 id="标准-I-O-流"><a href="#标准-I-O-流" class="headerlink" title="标准 I/O 流"></a>标准 I/O 流</h2><p>Linux shell 可以接收和发送字符序列或字符流形式的输入和输出。无论实际的字符流是来自还是来自文件，键盘，显示器上的窗口或其他IO设备，字符流都可以通过<strong>文件IO</strong>技术进行访问。Linux shell 使用3种<strong>标准的I/O流</strong>，每种流都与一个<strong>文件描述符</strong>。Linux 内核采用文件描述符（file descriptor）来访问文件。文件描述符是<strong>非负整数</strong>。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">stdout   &#x2F;&#x2F;标准输出流，它显示命令运行的输出，文件描述符为 1</span><br><span class="line">stderr   &#x2F;&#x2F;标准错误流，它显示命令运行的错误输出，文件描述符为 2</span><br><span class="line">stdin    &#x2F;&#x2F;标准输入流，它为命令提供输入，文件描述符为 0</span><br></pre></td></tr></table></figure>
-<p>一条Linux命令执行的流程图如下所示。<br><img src="/2017/12/27/Linux%20%E7%AE%A1%E9%81%93%E4%B8%8E%E9%87%8D%E5%AE%9A%E5%90%91/0.png" alt="linuxcom"></p>
+<p>输入流通常通过终端敲击键盘为程序提供输入。输出流通常向终端输出显示文本字符。</p>
+<p><img src="/2017/12/27/Linux%20%E7%AE%A1%E9%81%93%E4%B8%8E%E9%87%8D%E5%AE%9A%E5%90%91/0.png" alt="linuxcom"></p>
 <h2 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h2><p>在Linux命令行模式中，如果命令所需的输入不是来自键盘，而是来自指定的文件，这就是输入重定向。同理，命令的输出也可以不显示在屏幕上，而是写入到指定文件中，这就是输出重定向。</p>
 <h3 id="gt-符号"><a href="#gt-符号" class="headerlink" title="&gt; 符号"></a>&gt; 符号</h3><p>格式 <code>{stdout|stderr} &gt; filename</code>，使用 <code>&gt;</code> 符号将左侧输出重定向到一个文件中。需要注意的是：如果<strong>文件名不存在则创建它，如果存在则覆盖</strong>。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ <span class="built_in">echo</span> <span class="string">"hello"</span> &gt; a.txt</span><br><span class="line">➜ cat a.txt</span><br><span class="line">hello</span><br></pre></td></tr></table></figure>

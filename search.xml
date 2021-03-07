@@ -1253,17 +1253,17 @@
 <p>关于<strong>Maven</strong>的<strong>settings.xml</strong>以及<strong>pom.xml</strong>的介绍</p>
 </blockquote>
 <h1 id="settings-xml"><a href="#settings-xml" class="headerlink" title="settings.xml"></a>settings.xml</h1><ul>
-<li><p><strong>settings.xml</strong>会在两个位置<br>  <code>${MAVEN_HOME}/conf/settings.xml</code>全局配置，该文件里有很全面的英文注释<br>  <code>${USER_HOME}/.m2/settings.xml</code>个人配置，建议将全局文件拷贝过来再修改。加载时会覆盖全局设置</p>
+<li><p><strong>settings.xml</strong>会在两个位置<br><code>${MAVEN_HOME}/conf/settings.xml</code>全局配置，该文件里有很全面的英文注释<br><code>${USER_HOME}/.m2/settings.xml</code>个人配置，建议将全局文件拷贝过来再修改。加载时会覆盖全局设置</p>
 </li>
 <li><p>修改镜像源为aliyun，这样Maven会从aliyun拉取依赖，而不是速度巨慢的官方中央仓库，<strong>id</strong>和<strong>name</strong>都是自己取的用作唯一标识</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;mirror&gt;</span><br><span class="line">    &lt;id&gt;nexus-aliyun&lt;&#x2F;id&gt;</span><br><span class="line">    &lt;mirrorOf&gt;central&lt;&#x2F;mirrorOf&gt;</span><br><span class="line">    &lt;name&gt;Nexus aliyun&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;url&gt;http:&#x2F;&#x2F;maven.aliyun.com&#x2F;nexus&#x2F;content&#x2F;groups&#x2F;public&#x2F;&lt;&#x2F;url&gt;</span><br><span class="line">&lt;&#x2F;mirror&gt;</span><br></pre></td></tr></table></figure>
-<p>  这样的效果和在项目中的<strong>pom.xml</strong>中加入如下内容的作用是一样的，只不过是针对全局所有项目的</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;repositories&gt;</span><br><span class="line">    &lt;repository&gt;</span><br><span class="line">        &lt;id&gt;nexus-aliyun&lt;&#x2F;id&gt;</span><br><span class="line">        &lt;name&gt;Nexus aliyun&lt;&#x2F;name&gt;</span><br><span class="line">        &lt;url&gt;http:&#x2F;&#x2F;maven.aliyun.com&#x2F;nexus&#x2F;content&#x2F;groups&#x2F;public&#x2F;&lt;&#x2F;url&gt;</span><br><span class="line">    &lt;&#x2F;repository&gt;</span><br><span class="line">&lt;&#x2F;repositories&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果你搭建了Maven私服，你可能会在<strong>pom.xml</strong>中添加 <code>&lt;repositoriy&gt;</code>去下载和部署Jar包，需要进行认证的<strong>username</strong>和<strong>password</strong>不应该放在pom文件中而是放在<strong>settings.xml</strong>的<code>&lt;server&gt;</code>标签中</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;server&gt;</span><br><span class="line">  &lt;id&gt;xxx&lt;&#x2F;id&gt;</span><br><span class="line">  &lt;username&gt;xxx&lt;&#x2F;username&gt;</span><br><span class="line">  &lt;password&gt;xxx&lt;&#x2F;password&gt;</span><br><span class="line">&lt;&#x2F;server&gt;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;mirror&gt;</span><br><span class="line">    &lt;id&gt;nexus-aliyun&lt;&#x2F;id&gt;</span><br><span class="line">    &lt;mirrorOf&gt;central&lt;&#x2F;mirrorOf&gt;</span><br><span class="line">    &lt;name&gt;Nexus aliyun&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;url&gt;http:&#x2F;&#x2F;maven.aliyun.com&#x2F;nexus&#x2F;content&#x2F;groups&#x2F;public&#x2F;&lt;&#x2F;url&gt;</span><br><span class="line">&lt;&#x2F;mirror&gt;</span><br></pre></td></tr></table></figure>
+<p>这样的效果和在项目中的<strong>pom.xml</strong>中加入如下内容的作用是一样的，只不过是针对全局所有项目的<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;repositories&gt;</span><br><span class="line">    &lt;repository&gt;</span><br><span class="line">        &lt;id&gt;nexus-aliyun&lt;&#x2F;id&gt;</span><br><span class="line">        &lt;name&gt;Nexus aliyun&lt;&#x2F;name&gt;</span><br><span class="line">        &lt;url&gt;http:&#x2F;&#x2F;maven.aliyun.com&#x2F;nexus&#x2F;content&#x2F;groups&#x2F;public&#x2F;&lt;&#x2F;url&gt;</span><br><span class="line">    &lt;&#x2F;repository&gt;</span><br><span class="line">&lt;&#x2F;repositories&gt;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>如果你搭建了Maven私服，你可能会在<strong>pom.xml</strong>中添加 <code>&lt;repositoriy&gt;</code>去下载和部署Jar包，需要进行认证的<strong>username</strong>和<strong>password</strong>不应该放在pom文件中而是放在<strong>settings.xml</strong>的<code>&lt;server&gt;</code>标签中</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;server&gt;</span><br><span class="line">  &lt;id&gt;xxx&lt;&#x2F;id&gt;</span><br><span class="line">  &lt;username&gt;xxx&lt;&#x2F;username&gt;</span><br><span class="line">  &lt;password&gt;xxx&lt;&#x2F;password&gt;</span><br><span class="line">&lt;&#x2F;server&gt;</span><br></pre></td></tr></table></figure>
 <h4 id="Other-Settings"><a href="#Other-Settings" class="headerlink" title="Other Settings"></a>Other Settings</h4><ul>
 <li><code>&lt;localRepository&gt;</code>定义了Maven的本地仓库地址，默认值<code>${USER_HOME}/.m2/repository</code></li>
 <li><code>&lt;interactiveMode&gt;</code>定义Maven与用户输入的交互模式，默认为true</li>
@@ -1282,10 +1282,9 @@
 </li>
 </ul>
 <h3 id="Dependencies"><a href="#Dependencies" class="headerlink" title="Dependencies"></a>Dependencies</h3><ul>
-<li><p>Maven最强力的地方之一就是对于依赖的管理，Maven会自动下载依赖的Jar包并在编译时链接</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dependencies&gt;</span><br><span class="line">  &lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;junit&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;junit&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;4.0&lt;&#x2F;version&gt;</span><br><span class="line">  &lt;&#x2F;dependency&gt;</span><br><span class="line">  ...</span><br><span class="line">&lt;&#x2F;dependencies&gt;</span><br></pre></td></tr></table></figure>
-</li>
+<li>Maven最强力的地方之一就是对于依赖的管理，Maven会自动下载依赖的Jar包并在编译时链接</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dependencies&gt;</span><br><span class="line">  &lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;junit&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;junit&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;4.0&lt;&#x2F;version&gt;</span><br><span class="line">  &lt;&#x2F;dependency&gt;</span><br><span class="line">  ...</span><br><span class="line">&lt;&#x2F;dependencies&gt;</span><br></pre></td></tr></table></figure>
 <h3 id="Inheritance"><a href="#Inheritance" class="headerlink" title="Inheritance"></a>Inheritance</h3><ul>
 <li><p>如果是多模块的Maven项目，<strong>parent POM</strong>文件中应该加入<code>&lt;packaging&gt;pom&lt;/packaging&gt;</code>，子模块会继承父模块的POM</p>
 </li>
@@ -1297,10 +1296,9 @@
 </li>
 </ul>
 <h3 id="Properties"><a href="#Properties" class="headerlink" title="Properties"></a>Properties</h3><ul>
-<li><p>定义属性值，使用时<code>${mysql.version}</code>这样引用</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;properties&gt;</span><br><span class="line">  &lt;mysql.version&gt;5.1.40&lt;&#x2F;mysql.version&gt;</span><br><span class="line">  ...</span><br><span class="line">&lt;&#x2F;properties&gt;</span><br></pre></td></tr></table></figure></li>
+<li>定义属性值，使用时<code>${mysql.version}</code>这样引用</li>
 </ul>
-]]></content>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;properties&gt;</span><br><span class="line">  &lt;mysql.version&gt;5.1.40&lt;&#x2F;mysql.version&gt;</span><br><span class="line">  ...</span><br><span class="line">&lt;&#x2F;properties&gt;</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>Coding</category>
       </categories>
@@ -1311,36 +1309,35 @@
   <entry>
     <title>Mac 的终极 Shell -- ZSH</title>
     <url>/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/</url>
-    <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>目前常用的 Linux 系统和 OS X 系统的默认 Shell 都是 bash，但是真正强大的 Shell 是深藏不露的 zsh， 这货绝对是马车中的跑车，跑车中的飞行车，史称『终极 Shell』，但是由于配置过于复杂，所以初期无人问津，很多人跑过来看看 zsh 的配置指南，什么都不说转身就走了。直到有一天，国外某位大牛开源出一个能够让你快速上手的 zsh 项目，叫做『oh my zsh』，使得 zsh 逐渐流行起来。</p>
-</blockquote>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>目前常用的 Linux 系统和 OS X 系统的默认 Shell 都是 bash，但是真正强大的 Shell 是深藏不露的 zsh， 这货绝对是马车中的跑车，跑车中的飞行车，史称『终极 Shell』，但是由于配置过于复杂，所以初期无人问津，很多人跑过来看看 zsh 的配置指南，什么都不说转身就走了。直到有一天，国外某位大牛开源出一个能够让你快速上手的 zsh 项目，叫做『oh my zsh』，使得 zsh 逐渐流行起来。</p>
 <h2 id="ZSH"><a href="#ZSH" class="headerlink" title="ZSH"></a>ZSH</h2><ul>
-<li><p>安装 zsh</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install zsh</span><br></pre></td></tr></table></figure>
-<p>  安装完后在 Terminal 的设置中设置默认使用 zsh<img src="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/0.png" alt="8F9622E7-901E-46F0-94D7-B5E7AEE04C08"></p>
-</li>
+<li>安装 zsh</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install zsh</span><br></pre></td></tr></table></figure>
+<p>安装完后在 Terminal 的设置中设置默认使用 zsh<img src="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/0.png" alt="8F9622E7-901E-46F0-94D7-B5E7AEE04C08"></p>
 <h2 id="Oh-My-Zsh"><a href="#Oh-My-Zsh" class="headerlink" title="Oh My Zsh"></a>Oh My Zsh</h2><ul>
 <li><p>oh-my-zsh 是最为流行的 zsh 配置文件，提供了完善的插件体系，相关的文件在<code>~/.oh-my-zsh/plugins</code>目录下。<a href="https://github.com/robbyrussell/oh-my-zsh" target="_blank" rel="noopener">GitHub 链接</a></p>
 </li>
 <li><p>安装 <a href="https://github.com/robbyrussell/oh-my-zsh" target="_blank" rel="noopener">oh-my-zsh</a></p>
-  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)</span>"</span></span><br></pre></td></tr></table></figure>
-<p>  安装完成后<code>source ~/.zshrc</code>使之生效</p>
 </li>
 </ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)</span>"</span></span><br></pre></td></tr></table></figure>
+<p>安装完成后<code>source ~/.zshrc</code>使之生效</p>
 <h3 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h3><ul>
-<li><p>在<code>.zshrc</code>中添加配置，其中可以自定义<code>alias</code>用于简化命令，这里贴出我的配置。<code>alias -s</code>意为 define suffix aliases，譬如命令行输入<code>xxx.gz</code>就相当于<code>tar -xzvf xxx.gz</code></p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># compress relatived</span><br><span class="line">alias -s gz&#x3D;&#39;tar -xzvf&#39;</span><br><span class="line">alias -s tgz&#x3D;&#39;tar -xzvf&#39;</span><br><span class="line">alias -s zip&#x3D;&#39;unzip&#39;</span><br><span class="line">alias -s bz2&#x3D;&#39;tar -xjvf&#39;</span><br><span class="line"></span><br><span class="line"># sublime text</span><br><span class="line">alias subl&#x3D;&quot;open -a &#39;Sublime Text&#39;&quot;</span><br><span class="line">alias -s php&#x3D;subl</span><br><span class="line">alias -s rb&#x3D;subl</span><br><span class="line">alias -s html&#x3D;crm</span><br><span class="line">alias -s xml&#x3D;subl</span><br><span class="line">alias -s txt&#x3D;subl</span><br><span class="line">alias -s hbs&#x3D;subl</span><br><span class="line"></span><br><span class="line"># macdown</span><br><span class="line">alias macdown&#x3D;&quot;open -a MacDown&quot;</span><br><span class="line">alias -s md&#x3D;macdown</span><br><span class="line"></span><br><span class="line"># git relatived</span><br><span class="line">alias gpom&#x3D;&#39;git push -u origin master&#39;</span><br><span class="line">alias grao&#x3D;&#39;git remote add origin&#39;</span><br><span class="line"></span><br><span class="line"># others</span><br><span class="line">alias his&#x3D;&#39;history&#39;</span><br><span class="line">alias la&#x3D;&#39;ls -a&#39;</span><br><span class="line">alias ll&#x3D;&#39;ls -alh&#39;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>添加如下配置后，可以使用<code>subl a.txt</code>或者直接输入<code>a.txt</code>通过 Sublime 打开文本文件</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">alias subl&#x3D;&quot;open -a &#39;Sublime Text&#39;&quot;</span><br><span class="line">alias -s txt&#x3D;subl</span><br></pre></td></tr></table></figure></li>
+<li>在<code>.zshrc</code>中添加配置，其中可以自定义<code>alias</code>用于简化命令，这里贴出我的配置。<code>alias -s</code>意为 define suffix aliases，譬如命令行输入<code>xxx.gz</code>就相当于<code>tar -xzvf xxx.gz</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># compress relatived</span><br><span class="line">alias -s gz&#x3D;&#39;tar -xzvf&#39;</span><br><span class="line">alias -s tgz&#x3D;&#39;tar -xzvf&#39;</span><br><span class="line">alias -s zip&#x3D;&#39;unzip&#39;</span><br><span class="line">alias -s bz2&#x3D;&#39;tar -xjvf&#39;</span><br><span class="line"></span><br><span class="line"># sublime text</span><br><span class="line">alias subl&#x3D;&quot;open -a &#39;Sublime Text&#39;&quot;</span><br><span class="line">alias -s php&#x3D;subl</span><br><span class="line">alias -s rb&#x3D;subl</span><br><span class="line">alias -s html&#x3D;crm</span><br><span class="line">alias -s xml&#x3D;subl</span><br><span class="line">alias -s txt&#x3D;subl</span><br><span class="line">alias -s hbs&#x3D;subl</span><br><span class="line"></span><br><span class="line"># macdown</span><br><span class="line">alias macdown&#x3D;&quot;open -a MacDown&quot;</span><br><span class="line">alias -s md&#x3D;macdown</span><br><span class="line"></span><br><span class="line"># git relatived</span><br><span class="line">alias gpom&#x3D;&#39;git push -u origin master&#39;</span><br><span class="line">alias grao&#x3D;&#39;git remote add origin&#39;</span><br><span class="line"></span><br><span class="line"># others</span><br><span class="line">alias his&#x3D;&#39;history&#39;</span><br><span class="line">alias la&#x3D;&#39;ls -a&#39;</span><br><span class="line">alias ll&#x3D;&#39;ls -alh&#39;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>添加如下配置后，可以使用<code>subl a.txt</code>或者直接输入<code>a.txt</code>通过 Sublime 打开文本文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">alias subl&#x3D;&quot;open -a &#39;Sublime Text&#39;&quot;</span><br><span class="line">alias -s txt&#x3D;subl</span><br></pre></td></tr></table></figure>
+<ul>
 <li>另外，添加了两个常用 Git 命令的缩写，其实 Oh My Zsh 已经包含了许多 Git 的简写命令，比如常用的<code>gst</code>即<code>git status</code>的简写。可以使用命令<code>alias</code>查看还有哪些简写命令</li>
 </ul>
 <h3 id="Plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a>Plugins</h3><ul>
-<li><p>oh-my-zsh 有很多提升命令行效率的实用工具，我目前使用了如下四个插件，确实在使用过程中体验到效率的提升。安装完成后在<code>.zshrc</code>中打开插件，其中 git 是默认安装并开启的插件，前面也提到有许多简写命令，这里不多赘述，请自行查阅</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">plugins&#x3D;(</span><br><span class="line">  git</span><br><span class="line">  Z</span><br><span class="line">  zsh-syntax-highlighting</span><br><span class="line">  zsh-autosuggestions</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-</li>
+<li>oh-my-zsh 有很多提升命令行效率的实用工具，我目前使用了如下四个插件，确实在使用过程中体验到效率的提升。安装完成后在<code>.zshrc</code>中打开插件，其中 git 是默认安装并开启的插件，前面也提到有许多简写命令，这里不多赘述，请自行查阅</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">plugins&#x3D;(</span><br><span class="line">  git</span><br><span class="line">  Z</span><br><span class="line">  zsh-syntax-highlighting</span><br><span class="line">  zsh-autosuggestions</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <h4 id="Z"><a href="#Z" class="headerlink" title="Z"></a>Z</h4><ul>
 <li><p>功能和 autojump 类似，使用<code>z {path}</code>实现目录间快速跳转，并且作为 oh-my-zsh 的内置组件，只需要在<code>.zshrc</code>中打开即可。<a href="https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/z" target="_blank" rel="noopener">GitHub 链接</a></p>
 </li>
@@ -1351,17 +1348,17 @@
 <li><p>终端输入的命令正确会<strong>绿色高亮</strong>显示，输入错误会显示红色，用于在执行命令前检查是否有语法错误。<a href="https://github.com/zsh-users/zsh-syntax-highlighting" target="_blank" rel="noopener">GitHub 链接</a><br><img src="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/2.png" alt="82881CCA-A343-45D1-9A1D-4DD8E77E1B78"></p>
 </li>
 <li><p>安装，完成后在<code>.zshrc</code>中添加</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;zsh-syntax-highlighting.git $&#123;ZSH_CUSTOM:-~&#x2F;.oh-my-zsh&#x2F;custom&#125;&#x2F;plugins&#x2F;zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;zsh-syntax-highlighting.git $&#123;ZSH_CUSTOM:-~&#x2F;.oh-my-zsh&#x2F;custom&#125;&#x2F;plugins&#x2F;zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
 <h4 id="zsh-autosuggestions"><a href="#zsh-autosuggestions" class="headerlink" title="zsh-autosuggestions"></a>zsh-autosuggestions</h4><ul>
 <li><p>效率神器。如图输入命令时，会给出建议的命令（灰色部分）按键盘 → 补全。<a href="https://github.com/zsh-users/zsh-autosuggestions" target="_blank" rel="noopener">GitHub 链接</a><br><img src="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/3.png" alt="8B1B4FDE-F810-4E90-B20A-37274ABDDFDE"></p>
 </li>
 <li><p>安装，完成后在<code>.zshrc</code>中添加</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;zsh-autosuggestions $ZSH_CUSTOM&#x2F;plugins&#x2F;zsh-autosuggestions</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;zsh-autosuggestions $ZSH_CUSTOM&#x2F;plugins&#x2F;zsh-autosuggestions</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://zhuanlan.zhihu.com/p/19556676" target="_blank" rel="noopener">终极 Shell——ZSH - 知乎专栏</a></li>
 <li><a href="http://wulfric.me/2015/08/zsh/" target="_blank" rel="noopener">一些命令行效率工具</a></li>
 </ul>
@@ -6191,9 +6188,10 @@
   <entry>
     <title>Linux 管道与重定向</title>
     <url>/2017/12/27/Linux%20%E7%AE%A1%E9%81%93%E4%B8%8E%E9%87%8D%E5%AE%9A%E5%90%91/</url>
-    <content><![CDATA[<h2 id="标准-I-O-流"><a href="#标准-I-O-流" class="headerlink" title="标准 I/O 流"></a>标准 I/O 流</h2><p>Linux shell 可以接收和发送字符序列或字符流形式的输入和输出。无论实际的字符流是来自还是来自文件，键盘，显示器上的窗口或其他IO设备，字符流都可以通过<strong>文件IO</strong>技术进行访问。Linux shell 使用3种<strong>标准的I/O流</strong>，每种流都与一个<strong>文件描述符</strong>。Linux 内核采用文件描述符（file descriptor）来访问文件。文件描述符是<strong>非负整数</strong>。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件。输入流通常通过终端敲击键盘为程序提供输入。输出流通常向终端输出显示文本字符。</p>
+    <content><![CDATA[<h2 id="标准-I-O-流"><a href="#标准-I-O-流" class="headerlink" title="标准 I/O 流"></a>标准 I/O 流</h2><p>Linux shell 可以接收和发送字符序列或字符流形式的输入和输出。无论实际的字符流是来自还是来自文件，键盘，显示器上的窗口或其他IO设备，字符流都可以通过<strong>文件IO</strong>技术进行访问。Linux shell 使用3种<strong>标准的I/O流</strong>，每种流都与一个<strong>文件描述符</strong>。Linux 内核采用文件描述符（file descriptor）来访问文件。文件描述符是<strong>非负整数</strong>。打开现存文件或新建文件时，内核会返回一个文件描述符。读写文件也需要使用文件描述符来指定待读写的文件。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">stdout   &#x2F;&#x2F;标准输出流，它显示命令运行的输出，文件描述符为 1</span><br><span class="line">stderr   &#x2F;&#x2F;标准错误流，它显示命令运行的错误输出，文件描述符为 2</span><br><span class="line">stdin    &#x2F;&#x2F;标准输入流，它为命令提供输入，文件描述符为 0</span><br></pre></td></tr></table></figure>
-<p>一条Linux命令执行的流程图如下所示。<br><img src="/2017/12/27/Linux%20%E7%AE%A1%E9%81%93%E4%B8%8E%E9%87%8D%E5%AE%9A%E5%90%91/0.png" alt="linuxcom"></p>
+<p>输入流通常通过终端敲击键盘为程序提供输入。输出流通常向终端输出显示文本字符。</p>
+<p><img src="/2017/12/27/Linux%20%E7%AE%A1%E9%81%93%E4%B8%8E%E9%87%8D%E5%AE%9A%E5%90%91/0.png" alt="linuxcom"></p>
 <h2 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h2><p>在Linux命令行模式中，如果命令所需的输入不是来自键盘，而是来自指定的文件，这就是输入重定向。同理，命令的输出也可以不显示在屏幕上，而是写入到指定文件中，这就是输出重定向。</p>
 <h3 id="gt-符号"><a href="#gt-符号" class="headerlink" title="&gt; 符号"></a>&gt; 符号</h3><p>格式 <code>{stdout|stderr} &gt; filename</code>，使用 <code>&gt;</code> 符号将左侧输出重定向到一个文件中。需要注意的是：如果<strong>文件名不存在则创建它，如果存在则覆盖</strong>。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ <span class="built_in">echo</span> <span class="string">"hello"</span> &gt; a.txt</span><br><span class="line">➜ cat a.txt</span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
