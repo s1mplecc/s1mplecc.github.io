@@ -9,41 +9,41 @@ categories: [Coding]
 # settings.xml
 
 - **settings.xml**会在两个位置
-    `${MAVEN_HOME}/conf/settings.xml`全局配置，该文件里有很全面的英文注释
-    `${USER_HOME}/.m2/settings.xml`个人配置，建议将全局文件拷贝过来再修改。加载时会覆盖全局设置
+`${MAVEN_HOME}/conf/settings.xml`全局配置，该文件里有很全面的英文注释
+`${USER_HOME}/.m2/settings.xml`个人配置，建议将全局文件拷贝过来再修改。加载时会覆盖全局设置
 
 - 修改镜像源为aliyun，这样Maven会从aliyun拉取依赖，而不是速度巨慢的官方中央仓库，**id**和**name**都是自己取的用作唯一标识
-    
-    ```
-    <mirror>
+
+```
+<mirror>
+    <id>nexus-aliyun</id>
+    <mirrorOf>central</mirrorOf>
+    <name>Nexus aliyun</name>
+    <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+</mirror>
+```
+
+这样的效果和在项目中的**pom.xml**中加入如下内容的作用是一样的，只不过是针对全局所有项目的
+```
+<repositories>
+    <repository>
         <id>nexus-aliyun</id>
-        <mirrorOf>central</mirrorOf>
         <name>Nexus aliyun</name>
         <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-    </mirror>
-    ```
-
-    这样的效果和在项目中的**pom.xml**中加入如下内容的作用是一样的，只不过是针对全局所有项目的
-    ```
-    <repositories>
-        <repository>
-            <id>nexus-aliyun</id>
-            <name>Nexus aliyun</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
-    ```
+    </repository>
+</repositories>
+```
 
 - 如果你搭建了Maven私服，你可能会在**pom.xml**中添加 `<repositoriy>`去下载和部署Jar包，需要进行认证的**username**和**password**不应该放在pom文件中而是放在**settings.xml**的`<server>`标签中
 
-    ```
-    <server>
-      <id>xxx</id>
-      <username>xxx</username>
-      <password>xxx</password>
-    </server>
-    ```
-    
+```
+<server>
+  <id>xxx</id>
+  <username>xxx</username>
+  <password>xxx</password>
+</server>
+```
+
 #### Other Settings
 
 - `<localRepository>`定义了Maven的本地仓库地址，默认值`${USER_HOME}/.m2/repository`
@@ -67,18 +67,18 @@ categories: [Coding]
 ### Dependencies
 
 - Maven最强力的地方之一就是对于依赖的管理，Maven会自动下载依赖的Jar包并在编译时链接
-    
-    ```
-    <dependencies>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.0</version>
-      </dependency>
-      ...
-    </dependencies>
-    ```
-    
+
+```
+<dependencies>
+  <dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.0</version>
+  </dependency>
+  ...
+</dependencies>
+```
+
 ### Inheritance
 
 - 如果是多模块的Maven项目，**parent POM**文件中应该加入`<packaging>pom</packaging>`，子模块会继承父模块的POM
@@ -93,9 +93,9 @@ categories: [Coding]
 
 - 定义属性值，使用时`${mysql.version}`这样引用
 
-    ```
-    <properties>
-      <mysql.version>5.1.40</mysql.version>
-      ...
-    </properties>
-    ```
+```
+<properties>
+  <mysql.version>5.1.40</mysql.version>
+  ...
+</properties>
+```
