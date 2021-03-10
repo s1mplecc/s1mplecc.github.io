@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://s1mplecc.github.io/"/>
-  <updated>2021-01-18T04:41:53.111Z</updated>
+  <updated>2021-03-10T14:20:13.550Z</updated>
   <id>https://s1mplecc.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Python 鸭子类型和特殊方法</title>
+    <link href="https://s1mplecc.github.io/2021/03/10/Python-%E9%B8%AD%E5%AD%90%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%89%B9%E6%AE%8A%E6%96%B9%E6%B3%95/"/>
+    <id>https://s1mplecc.github.io/2021/03/10/Python-鸭子类型和特殊方法/</id>
+    <published>2021-03-10T14:19:15.000Z</published>
+    <updated>2021-03-10T14:20:13.550Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Languages" scheme="https://s1mplecc.github.io/categories/Languages/"/>
+    
+    
+      <category term="Python" scheme="https://s1mplecc.github.io/tags/Python/"/>
+    
+  </entry>
   
   <entry>
     <title>Python 环境准备</title>
@@ -509,32 +535,6 @@
     
     
       <category term="Python" scheme="https://s1mplecc.github.io/tags/Python/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>结合案例使用 Java 注解和反射</title>
-    <link href="https://s1mplecc.github.io/2018/11/29/%E7%BB%93%E5%90%88%E6%A1%88%E4%BE%8B%E4%BD%BF%E7%94%A8%20Java%20%E6%B3%A8%E8%A7%A3%E5%92%8C%E5%8F%8D%E5%B0%84/"/>
-    <id>https://s1mplecc.github.io/2018/11/29/结合案例使用 Java 注解和反射/</id>
-    <published>2018-11-28T20:53:50.000Z</published>
-    <updated>2020-09-16T01:48:42.001Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-      <category term="Coding" scheme="https://s1mplecc.github.io/categories/Coding/"/>
-    
-    
-      <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
     
   </entry>
   

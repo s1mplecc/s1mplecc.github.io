@@ -372,6 +372,294 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/29/%E7%BB%93%E5%90%88%E6%A1%88%E4%BE%8B%E4%BD%BF%E7%94%A8%20Java%20%E6%B3%A8%E8%A7%A3%E5%92%8C%E5%8F%8D%E5%B0%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/29/%E7%BB%93%E5%90%88%E6%A1%88%E4%BE%8B%E4%BD%BF%E7%94%A8%20Java%20%E6%B3%A8%E8%A7%A3%E5%92%8C%E5%8F%8D%E5%B0%84/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/3/index.html">结合案例使用 Java 注解和反射</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-29 04:53:50" itemprop="dateCreated datePublished" datetime="2018-11-29T04:53:50+08:00">2018-11-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-16 09:48:42" itemprop="dateModified" datetime="2020-09-16T09:48:42+08:00">2020-09-16</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/29/%E7%BB%93%E5%90%88%E6%A1%88%E4%BE%8B%E4%BD%BF%E7%94%A8%20Java%20%E6%B3%A8%E8%A7%A3%E5%92%8C%E5%8F%8D%E5%B0%84/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/11/29/结合案例使用 Java 注解和反射/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">8.5k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在项目开发时遇到这样一个场景：从上游传过来一个实体类对象 <code>newEntity</code>，但它只有部分字段，需要去库中查出对应的旧对象 <code>oldEntity</code> 做一次补全（相当于一次部分更新）。</p>
+<p>一开始我们这样编码的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> FlightBasic <span class="title">merge</span><span class="params">(FlightBasic newEntity)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getAirportCode() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setAirportCode(newEntity.getAirportCode());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getCraftNo() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setCraftNo(newEntity.getCraftNo());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getCraftType() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setCraftType(newEntity.getCraftType());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// too long ...</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很快我们发现了问题：不仅类的字段很多，这样的 Entity 也有很多，所以到处都是又臭又长的 <code>merge</code> 方法。</p>
+<p>其实不难总结这些代码的共性：</p>
+<ul>
+<li>一个 Entity 只能和本身的类型 Merge</li>
+<li>代码都是判空后对属性的 <code>getter/setter</code> 方法的重复调用</li>
+</ul>
+<p>为了简化代码（偷懒），就在想能不能通过统一的处理完成这些 Merge 逻辑。首先想到的是代码生成，类似 MyBatis Generator，重复的工作交给脚本或者工具多好。但是很快就否定了这种方案，配置这些类的工作量也不小，而且很多类中有自己的业务逻辑，一不小心覆盖了也不行。那注解行不行呢？Spring Boot 就大量使用注解替换了之前配置繁杂的 XML 文件。实际编码后验证是可行的！本文将介绍如何<strong>配合使用 Java 的注解和反射</strong>实现上述问题中的 Merge 操作。示例代码已上传到 <a href="https://github.com/s1mplecc/merging" target="_blank" rel="noopener">GitHub</a> 上。</p>
+<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p>每当你创建描述符性质的类或者接口时，一旦其中包含重复性的工作，就可以考虑使用注解来简化与自动化该过程。一个注解准确意义上来说，只不过是一种特殊的注释而已，如果没有<strong>解析</strong>它的代码，它可能连注释都不如。而解析注解往往有两种方式，一种是<strong>编译期扫描</strong>，典型的例如 <code>@Override</code>，这种只适用于编译器已经认识的注解，一般都是 JDK 内置注解；另一种则是通过<strong>运行期反射</strong>，也是在我们自定义注解后需要自己编码的。</p>
+<h3 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h3><p>Java提供了四种元注解，专门负责<strong>修饰其他注解</strong>：</p>
+<ul>
+<li><code>@Target</code>：注解的作用目标</li>
+<li><code>@Retention</code>：注解的生命周期</li>
+<li><code>@Documented</code>：注解是否要包含在 JavaDoc 文档中</li>
+<li><code>@Inherited</code>：子类是否继承该注解</li>
+</ul>
+<h4 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h4><p><code>@Target</code> 用于定义注解的<strong>作用域</strong>，源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.ANNOTATION_TYPE)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Target &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns an array of the kinds of elements an annotation type</span></span><br><span class="line"><span class="comment">     * can be applied to.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    ElementType[] value();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>ElementType</code> 是一个枚举类型，包含以下值：</p>
+<ul>
+<li><code>ElementType.TYPE</code>：允许注解作用在类、接口和枚举上</li>
+<li><code>ElementType.FIELD</code>：允许作用在属性字段上</li>
+<li><code>ElementType.METHOD</code>：允许作用在方法上</li>
+<li><code>ElementType.PARAMETER</code>：允许作用在方法参数上</li>
+<li><code>ElementType.CONSTRUCTOR</code>：允许作用在构造器上</li>
+<li><code>ElementType.LOCAL_VARIABLE</code>：允许作用在本地局部变量上</li>
+<li><code>ElementType.ANNOTATION_TYPE</code>：允许作用在注解上</li>
+<li><code>ElementType.PACKAGE</code>：允许作用在包上</li>
+</ul>
+<p>当允许有多个作用域时使用花括号 <code>{}</code> 包裹，比如这样：<code>@Target({ ElementType.TYPE, ElementType.FIELD })</code></p>
+<h4 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h4><p><code>@Retention</code> 用于标明注解存在的<strong>生命周期</strong>，源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.ANNOTATION_TYPE)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Retention &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns the retention policy.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">RetentionPolicy <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>RetentionPolicy</code> 也是一个枚举类型，包含以下值：</p>
+<ul>
+<li><code>RetentionPolicy.SOURCE</code>：在源文件中保留，编译为 .class 文件时会被丢弃，比如 <code>@Override</code>、<code>@SuppressWarnings</code></li>
+<li><code>RetentionPolicy.CLASS</code>：.class 文件中会保留，但运行时丢弃</li>
+<li><code>RetentionPolicy.RUNTIME</code>：运行时保留，可以通过<strong>反射获取</strong></li>
+</ul>
+<p>剩下两种类型的注解用的不多，也比较简单，这里不再详细的介绍了，只需要知道他们各自的作用即可。<code>@Documented</code> 修饰的注解，当执行 JavaDoc 文档打包时会被保存进文档，否则将被丢弃。<code>@Inherited</code> 注解修饰的注解是有<strong>继承性</strong>的，也就说我们的注解修饰了一个类，而该类的子类将自动继承父类的该注解。该注解只作用于类，对属性或方法无效。</p>
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>Java 反射机制是指在<strong>程序运行时（Runtime）识别和使用对象的类型信息</strong>。以下内容摘自《Thinking in Java》，是我认为的有利于理解反射的核心概念。</p>
+<blockquote>
+<p>要理解反射的工作原理，首先必须知道<strong>类型信息</strong>在运行时是如何表示的。这项工作是由称为 <strong>Class</strong> 对象的特殊对象完成的，它包含了与类有关的信息。事实上，Class 对象就是用来创建类的所有“常规”对象的。</p>
+<p>类是程序的一部分，每个类都有一个 Class 对象。换言之，每当编写并且编译了一个新类，就会产生一个 Class 对象（更恰当地说，是被保存在一个同名的 <code>.class</code> 文中）。为了生成这个类的对象，运行这个程序的 Java 虚拟机（JVM）将使用被称为<strong>类加载器</strong>的子系统。类加载器首先检查这个类的 Class 对象是否已经加载。如果尚未加载，默认的类加载器就会根据类名查找 <code>.class</code> 文件。<strong>一旦某个类的 Class 对象被载入内存，它就被用来创建这个类的所有对象</strong>。</p>
+<p><code>Class</code> 类和 <code>java.lang.reflect</code> 类库一起对反射的概念提供了支持，该类库包含 <code>Field</code>、<code>Method</code> 以及 <code>Constructor</code> 类。这些类型的对象是由 JVM 在运行时创建的，用以<strong>表示未知类里对应的成员</strong>。这样你就可以使用 <code>Constructor</code> 创建新的对象，用 <code>get()</code> 和 <code>set()</code> 方法读取和修改与 <code>Field</code> 对象关联的字段，用 <code>invoke()</code> 方法调用与 <code>Method</code> 对象关联的方法等等。另外，还可以调用 <code>getFields()</code>、<code>getMethods()</code> 和 <code>getConstructors()</code> 等方法以返回表示字段、方法以及构造器的对象的数组（可以查看 Class 类源码了解更多资料）。</p>
+<p>重要的是，要认识到反射机制并没有什么神奇之处。当通过反射与一个未知类型的对象打交道时，JVM 只是简单地检查这个对象，看它属于哪个特定的类。在用它做其他事情之前必须先加在那个类的 Class 对象。对于反射机制来说，<code>.class</code> 文件在编译时是不可获取的，所以是在运行时打开和检查 <code>.class</code> 文件。</p>
+</blockquote>
+<p>这里简单的介绍一下我们编码时用到的与反射有关的方法：</p>
+<ul>
+<li><code>obj.getClass();</code> Java 提供了三种方式获取类的 Class 对象的引用：<code>Class.forName()</code> 通过类名获取；<code>obj.getClass();</code> 通过对象获取和 <code>Object.class</code> 通过类字面常量获取。</li>
+<li><code>getDeclaredFields();</code> 获取类中声明的所有字段，不包括父类和接口中的字段。它与 <code>getFields()</code> 的区别在于，<code>getFields()</code> 是获取所在类以及父类和接口中的所有访问修饰符为 <code>public</code> 的字段。</li>
+<li><code>getAnnotation();</code> 获取标注的注解实例对象。</li>
+</ul>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="Merge-粒度与等级"><a href="#Merge-粒度与等级" class="headerlink" title="Merge 粒度与等级"></a>Merge 粒度与等级</h3><p>回到我们的问题上来，首先考虑一个问题：Merge 的粒度应该位于什么层次？如果是类级别的，意味着整个类的所有属性将一视同仁，要么都合并要么都不，显然这样是不行的。Merge 的<strong>粒度应该在属性字段上</strong>，为此，我们专门定义了字段的 Merge 等级 <code>Level</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Level &#123;</span><br><span class="line">    <span class="comment">/* 无论新值为何值，都会覆盖旧值 */</span></span><br><span class="line">    Mandatory,</span><br><span class="line">    <span class="comment">/* 如果新值不为null，覆盖旧值，否则不覆盖 */</span></span><br><span class="line">    Required,</span><br><span class="line">    <span class="comment">/* 忽略，不做合并处理 */</span></span><br><span class="line">    Ignored;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="自定义注解-MergeOn"><a href="#自定义注解-MergeOn" class="headerlink" title="自定义注解 @MergeOn"></a>自定义注解 @MergeOn</h3><p>接下来就需要自定义我们的注解：<code>@MergeOn</code>，作用在字段上，在运行时有效：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MergeOn &#123;</span><br><span class="line">    <span class="function">Level <span class="title">level</span><span class="params">()</span> <span class="keyword">default</span> Level.Required</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>default</code> 关键字可以设置缺省等级为 <code>Required</code>。</p>
+<h3 id="通过反射将字段设值"><a href="#通过反射将字段设值" class="headerlink" title="通过反射将字段设值"></a>通过反射将字段设值</h3><p>现在，还差最后一步，就是如何通过反射将字段设值。要想让实体类实现 Merge，首先需要定义一个接口 <code>Merging</code> 让实体类去继承它，然后接口中得有一个默认方法 <code>mergeWith(T newEntity)</code>，它将做下面这几件事：</p>
+<ul>
+<li>通过反射获取 Entity 声明的所有字段</li>
+<li>通过反射获取字段上 <code>@MergeOn</code> 注解的 Level</li>
+<li>通过 Level 走不同的分支去给字段设值，是强制或是忽略亦或是只有非空情况下才设值。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Merging</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Merging</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">mergeWith</span><span class="params">(T newEntity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.getClass() != newEntity.getClass()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MergeWithDifferentClassTypeException(</span><br><span class="line">                    String.format(<span class="string">"&lt;%s&gt; can not merge with other class type &lt;%s&gt;"</span>, <span class="keyword">this</span>.getClass().getName(), newEntity.getClass().getName()));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Field[] fields = <span class="keyword">this</span>.getClass().getDeclaredFields(); <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Field field : fields) &#123;</span><br><span class="line">            MergeOn mergeOn = field.getAnnotation(MergeOn.class); <span class="comment">// 2</span></span><br><span class="line">            field.setAccessible(<span class="keyword">true</span>); <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (mergeOn == <span class="keyword">null</span> || mergeOn.level().isRequired()) &#123; <span class="comment">// 4...</span></span><br><span class="line">                    Object newFieldValue = field.get(newEntity);</span><br><span class="line">                    <span class="keyword">if</span> (newFieldValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        field.set(<span class="keyword">this</span>, newFieldValue);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (mergeOn.level().isMandatory()) &#123; <span class="comment">// 4...</span></span><br><span class="line">                    field.set(<span class="keyword">this</span>, field.get(newEntity)); <span class="comment">// 5</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IllegalAccessException ex) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> MergeOnFieldIllegalAccessException(field.getName(), ex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们看看代码具体的实现步骤（注释中标明了顺序）：</p>
+<ol>
+<li><code>this.getClass().getDeclaredFields();</code> 获取类中声明的所有字段，不包含父类和接口中的字段。<code>this</code> 指向的是实现接口的实体类。</li>
+<li><code>field.getAnnotation(MergeOn.class);</code> 获取字段上的 <code>@MergeOn</code> 注解实例。</li>
+<li><code>field.setAccessible(true);</code> 由于字段通常是 <code>private</code> 修饰的，就需要<strong>获取访问权</strong>（并不是修改实际权限），否则将抛出 <code>IllegalAccessException</code> 异常。由此可见，反射有可能破环封装性。</li>
+<li>根据 Level 做相应设值。如果无注解或 Level 为 Required，则新值非空时覆盖旧值；如果是强制（Mandatory）则始终覆盖；否则（Ignored），忽略不做处理。</li>
+<li><code>field.set(this, field.get(newEntity));</code> 字段设值的实际操作，接口设计看上去有点反人类。第一个参数为需要设置字段的对象，此处为 oldEntity，第二个参数为要设置的值，此处为新对象的字段值。</li>
+</ol>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>接下来我将演示如何使用这个接口，并编写单元测试验证其正确性。</p>
+<p>首先定义实体类 Entity。</p>
+<ul>
+<li>为了测试全面性，加入了各种类型的属性字段，包括基础类型、集合、数组和类；同时，<code>@MergeOn</code> 注解覆盖了所有 Level，还包括缺省和无注解的情况。</li>
+<li>为了简单，直接在字段声明时赋初值。即 <code>new Entity()</code> 出来的可以看成旧的模型对象（oldEntity）。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Entity</span> <span class="keyword">implements</span> <span class="title">Merging</span>&lt;<span class="title">Entity</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@MergeOn</span>(level = Level.Ignored)</span><br><span class="line">    <span class="keyword">private</span> String string = <span class="string">"string"</span>;</span><br><span class="line">    <span class="meta">@MergeOn</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> anInt = <span class="number">1</span>;</span><br><span class="line">    <span class="meta">@MergeOn</span>(level = Level.Mandatory)</span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; stringList = Arrays.asList(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>);</span><br><span class="line">    <span class="meta">@MergeOn</span>(level = Level.Required)</span><br><span class="line">    <span class="keyword">private</span> String[] strings = <span class="keyword">new</span> String[]&#123;<span class="string">"sArr1"</span>, <span class="string">"sArr2"</span>&#125;;</span><br><span class="line">    <span class="keyword">private</span> Email email = <span class="keyword">new</span> Email(<span class="string">"zz@163.com"</span>);</span><br><span class="line">    <span class="keyword">private</span> Set&lt;Email&gt; emails = Sets.newLinkedHashSet(<span class="keyword">new</span> Email(<span class="string">"zz@163.com"</span>), <span class="keyword">new</span> Email(<span class="string">"zz@gmail.com"</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Email</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String value;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Email</span><span class="params">(String value)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.value = value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>理想情况下，<code>string</code> 字段新值应当被忽略；<code>stringList</code> 在新值为 null 时也会被强制覆盖；其他缺省和无注解的应当行为与 <code>@MergeOn(level = Level.Required)</code> 一致，即非空时才会覆盖旧值。以下为测试代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_merge_new_entity_with_different_merge_level</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Entity newEntity = <span class="keyword">new</span> Entity();</span><br><span class="line">    newEntity.setString(<span class="string">"newString"</span>);  <span class="comment">// Ignored</span></span><br><span class="line">    newEntity.setAnInt(<span class="number">2</span>);</span><br><span class="line">    newEntity.setStringList(<span class="keyword">null</span>);  <span class="comment">// Mandatory</span></span><br><span class="line">    newEntity.setStrings(<span class="keyword">new</span> String[]&#123;<span class="string">"newS1"</span>, <span class="string">"newS2"</span>, <span class="string">"newS3"</span>&#125;);</span><br><span class="line">    newEntity.setEmail(<span class="keyword">new</span> Entity.Email(<span class="string">"newEmail@163.com"</span>));</span><br><span class="line">    newEntity.setEmails(<span class="keyword">null</span>); <span class="comment">// Required, wished not be overwrited</span></span><br><span class="line"></span><br><span class="line">    Entity entity = <span class="keyword">new</span> Entity(); <span class="comment">// oldEntity</span></span><br><span class="line">    entity.mergeWith(newEntity);</span><br><span class="line"></span><br><span class="line">    assertThat(entity.getString()).isEqualTo(<span class="string">"string"</span>);</span><br><span class="line">    assertThat(entity.getAnInt()).isEqualTo(<span class="number">2</span>);</span><br><span class="line">    assertThat(entity.getStringList()).isNull();</span><br><span class="line">    assertThat(entity.getStrings()).containsSequence(<span class="string">"newS1"</span>, <span class="string">"newS2"</span>, <span class="string">"newS3"</span>);</span><br><span class="line">    assertThat(entity.getEmail().getValue()).isEqualTo(<span class="string">"newEmail@163.com"</span>);</span><br><span class="line">    assertThat(entity.getEmails()).hasSize(<span class="number">2</span>);</span><br><span class="line">    assertThat(entity.getEmails()).contains(<span class="keyword">new</span> Entity.Email(<span class="string">"zz@163.com"</span>));</span><br><span class="line">    assertThat(entity.getEmails()).contains(<span class="keyword">new</span> Entity.Email(<span class="string">"zz@gmail.com"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://juejin.im/post/5b45bd715188251b3a1db54f" target="_blank" rel="noopener">JAVA 注解的基本原理 —— 掘金</a></li>
+<li>Thinking in Java 第14章：类型信息</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/11/27/Java8%20Optional%20%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2619,273 +2907,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/3/index.html">Java 异常处理</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-07-16 05:21:06" itemprop="dateCreated datePublished" datetime="2018-07-16T05:21:06+08:00">2018-07-16</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-20 19:19:39" itemprop="dateModified" datetime="2020-12-20T19:19:39+08:00">2020-12-20</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/16/Java 异常处理/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">8.3k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>一直以来，Java 的异常处理可能是每个 Java 程序员都需要面对和经历的难题之一。何时该抛出异常，该抛出何种异常，需不需要自定义异常类，何时又该捕获异常并处理，相信每一个 Java 程序员或多或少都有这样的疑问。最近也是觉得项目需要统一规范的异常处理，所以花了些时间研读 <em>Thinking in Java</em>、《阿里巴巴 Java 开发手册》以及前辈们总结的优质文章，归纳了一些自认为比较关键的部分，希望有助于大家更好的设计如何处理异常。关键还是需要大量优秀源码的阅读经验。</p>
-<blockquote>
-<p>异常的设计初衷是将<strong>运行时产生的错误信息通过某种方式传递给某个接收者 —— 该接收者将知道如何正确的处理这个问题</strong>。Java 使用异常来提供一致的错误报告模型，使得构件能够与客户端代码可靠地沟通问题。实际上，<strong>异常处理的一个重要目标就是把错误处理的代码同错误发生的地点分离</strong>，使得你在某处专注于要完成的事，而在另一处处理错误。既分离了主干代码和错误处理逻辑，又可以重用错误处理代码。—— <em>Thinking in Java</em></p>
-</blockquote>
-<p>上面所说的接受者其实分为两类，一类是开发人员，另一类是使用用户。所以，实际上异常设计出来：</p>
-<ol>
-<li>帮助开发人员定位错误，修复代码漏洞。</li>
-<li>反馈给客户端用户，比如表单的输入值非法，让他得以更正错误。</li>
-</ol>
-<h2 id="异常分类"><a href="#异常分类" class="headerlink" title="异常分类"></a>异常分类</h2><p>Java 将异常分为两个大类：<strong>非检查型异常（Unchecked Exception）</strong>，也称非受控异常。以及<strong>检查型异常（Checked Exception）</strong>，也称受控异常。这两者的区别在于：</p>
-<ol>
-<li>Check Exception 编译器会做强制检查，必须使用<code>try...catch</code>捕获或者<code>throws</code>在方法签名处申明，否则编译不通过。</li>
-<li>Unchecked Exception 发生在运行期，具有不确定性，通常是由于程序的<strong>逻辑问题</strong>所引起的，所以在程序设计中我们需要考虑周全，尽量通过<strong>提前预检</strong>避免这类异常。</li>
-</ol>
-<p>Java 中异常的继承结构如下图所示：</p>
-<p><img src="/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/0.jpg" alt="v2-2cb1558f17876f329804fcced62661ef_1200x500"></p>
-<h3 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h3><p>Error 表示<strong>系统级别的错误</strong>，应用程序本身无法克服和恢复的一种严重问题，例如 JVM 栈溢出<code>StackOverFlowError</code>、内存溢出<code>OutOfMemoryError</code>等。<strong>在编码中不应该主动抛出 Error 类型的异常</strong>。</p>
-<h3 id="运行时异常"><a href="#运行时异常" class="headerlink" title="运行时异常"></a>运行时异常</h3><p>运行时异常<code>RuntimeException</code>是<code>Exception</code>衍生子类中的非检查型异常，即编译器不会强制要求捕获或者声明抛出。<code>RuntimeException</code>发生的时候，表示程序中出现了编程错误（即 Bug），所以应该找出错误修改程序，而不是去捕获。比如空指针异常<code>NullPointerException</code>、数组下标越界<code>ArrayIndexOutOfBoundsException</code>，程序员可以通过提前预检去避免该类错误。</p>
-<h3 id="受控异常"><a href="#受控异常" class="headerlink" title="受控异常"></a>受控异常</h3><p>绝大多数受控异常（Checked Exception）位于<code>java.io</code>包内，这是合乎情理的，因为在你请求了不存在的系统资源的时候，一段健壮的程序必须能够优雅的处理这种情况，而不应该挂掉。比如<code>FileNotFoundException</code>可能是用户删除了文件，或者<code>ConnectException</code>网络中断导致的连接异常，这类问题可以通过用户恢复文件或检查网络及时矫正。</p>
-<h2 id="异常处理的最佳实践"><a href="#异常处理的最佳实践" class="headerlink" title="异常处理的最佳实践"></a>异常处理的最佳实践</h2><p>异常堆栈信息提供了导致异常出现的方法调用链的精确顺序，包括每个方法调用的类名，方法名，代码文件名以及行数，以此来精确定位异常出现的现场。在有效使用异常的情况下，异常类型回答了<strong>什么</strong>异常被抛出，异常堆栈跟踪回答了<strong>在哪</strong>抛出，异常信息回答了<strong>为什么</strong>会抛出，如果你的异常没有回答以上全部问题，那么可能你没有很好地使用它们。本文主要介绍异常使用的两大原则：<strong>提早抛出</strong>和<strong>延迟捕获</strong>。更多请参考博客最后的参考文章，推荐研读《阿里巴巴 Java 开发手册》。</p>
-<h3 id="提早抛出"><a href="#提早抛出" class="headerlink" title="提早抛出"></a>提早抛出</h3><p>来看以下代码</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readFile</span><span class="params">(String filename)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">    InputStream in = <span class="keyword">new</span> FileInputStream(filename);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// read file...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile(<span class="keyword">null</span>); <span class="comment">// throw exception</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Exception in thread "main" java.lang.NullPointerException</span></span><br><span class="line"><span class="comment">at java.io.FileInputStream.&lt;init&gt;(FileInputStream.java:130)</span></span><br><span class="line"><span class="comment">at java.io.FileInputStream.&lt;init&gt;(FileInputStream.java:93)</span></span><br><span class="line"><span class="comment">at info.s1mple.exceptiondemo.ExceptionDemo.readFile(ExceptionDemo.java:15)</span></span><br><span class="line"><span class="comment">at info.s1mple.exceptiondemo.ExceptionDemo.main(ExceptionDemo.java:10) */</span></span><br></pre></td></tr></table></figure>
-<p>以上代码展示了<code>FileInputStream</code>类的构造函数传入<code>null</code>值导致的<code>NullPointerException</code>异常。不幸的是，<code>NullPointerException</code>是 Java 中信息量最少的（却也是最常遭遇且让人崩溃的）异常。它压根不提我们最关心的事情：到底哪里是<code>null</code>。所以我们不得不回退几步去找哪里出了错。</p>
-<p>通过跟踪堆栈打印信息，我们可以确定错误原因是向<code>readFile()</code>传入了一个空文件名参数。既然<code>readFile()</code>不能处理空文件名，所以马上检查该条件，如果文件名为空则抛出非法参数异常。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readFile</span><span class="params">(String filename)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (filename == <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"filename is null"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    InputStream in = <span class="keyword">new</span> FileInputStream(filename);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// read file...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile(<span class="keyword">null</span>); <span class="comment">// throw exception</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Exception in thread "main" java.lang.IllegalArgumentException: filename is null</span></span><br><span class="line"><span class="comment">    at info.s1mple.exceptiondemo.ExceptionDemo.readFile(ExceptionDemo.java:15)</span></span><br><span class="line"><span class="comment">    at info.s1mple.exceptiondemo.ExceptionDemo.main(ExceptionDemo.java:10) */</span></span><br></pre></td></tr></table></figure>
-<p>这里使用<code>IllegalArgumentException</code>继承自<code>RuntimeException</code>的非受控异常，所以不强制要求在方法签名处声明。实际开发中根据业务要求，假如文件名是由用户输入，那可以自定义类似<code>RequestArgsIllegalException</code>的受控异常类将错误信息返回给前端并呈现给用户。在命名自定义异常类时要清晰准确。</p>
-<p>类似上述代码中的<code>if statement</code>被称为<strong>卫语句（guard clauses）</strong>，原则是将可能出错的每个分支做<strong>单独检查</strong>，要么抛出异常要么立即返回，将正常的实现代码放在卫语句之后保证运行到此处时所有条件都已通过。如此既避免了嵌套层次过多的<code>if...else</code>条件分支，又使得实现代码被剥离出来放在最后集中处理。</p>
-<p>通过提早抛出异常（又称<strong>迅速失败</strong>），异常得以清晰又准确。堆栈信息立即反映出什么出了错（提供了非法参数值），为什么出错（文件名不能为空值），以及哪里出的错。另外，其中包含的异常信息<code>&quot;filename is null&quot;</code>使得异常提供的信息更加丰富，而这是我们之前代码中抛出的<code>NullPointerException</code>所无法提供的。</p>
-<h3 id="延迟捕获"><a href="#延迟捕获" class="headerlink" title="延迟捕获"></a>延迟捕获</h3><p>编写异常的程序员最可能犯的一个错误是，在程序有能力处理异常之前就捕获它。问题在于，捕获之后该拿异常怎么办？最不该的就是什么都不做。空的<code>catch</code>块等于把整个异常丢进黑洞，能够说明何时何处为何出错的所有信息都会丢失。把异常写到日志中还稍微好点，至少有迹可循。但我们总不能指望用户去阅读或者理解日志文件和异常信息。阿里开发手册中说道：<strong>捕获异常是为了处理它，不要捕获了却什么都不处理而抛弃之，如果不想处理它，请将该异常抛给它的调用者。最外层的业务使用者，必须处理异常，将其转化为用户可以理解的内容</strong>。</p>
-<p>在有条件处理异常之前过早捕获它，通常会导致更严重的错误和其他异常。例如，如果上文的<code>readFile()</code>方法在调用<code>FileInputStream</code>构造方法时立即捕获和记录可能抛出的<code>FileNotFoundException</code>，代码会变成下面这样：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readFile</span><span class="params">(String filename)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    InputStream in = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        in = <span class="keyword">new</span> FileInputStream(filename);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">        logger.error(<span class="string">"file not found: &#123;&#125;"</span>, filename);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    in.read(); <span class="comment">// may produce NullPointerException</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile(<span class="string">"xxx"</span>); <span class="comment">// throw exception</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">13:10:27.439 [main] ERROR info.s1mple.exceptiondemo.ExceptionDemo - file not found: xxx</span></span><br><span class="line"><span class="comment">Exception in thread "main" java.lang.NullPointerException</span></span><br><span class="line"><span class="comment">    at info.s1mple.exceptiondemo.ExceptionDemo.readFile(ExceptionDemo.java:32)</span></span><br><span class="line"><span class="comment">    at info.s1mple.exceptiondemo.ExceptionDemo.main(ExceptionDemo.java:16) */</span></span><br></pre></td></tr></table></figure>
-<p>上面的代码在完全没有能力从<code>FileNotFoundException</code>中恢复过来的情况下就捕获了它。如果文件无法找到，那么<code>in.read()</code>就不应该执行。尽管我们捕获了<code>FileNotFoundException</code>异常并打印了日志，但是一个更让人头疼的<code>NullPointerException</code>将被抛出。错误信息不仅误导了我们出了什么错（真正的错误是文件找不到而不是空指针），还误导了错误的出处，不应该在<code>in.read()</code>而应该在<code>new FileInputStream(filename)</code>。</p>
-<p>所以<code>readFile()</code>真正应该做的事情不是捕获这些异常，那应该是什么？看起来有点有悖常理，通常最合适的做法其实是什么都不做，不要马上捕获异常。把责任交给<code>readFile()</code>的调用者，让它来决定文件缺失的处理方法，有可能会提示用户指定其他文件，或者使用默认值，实在不行的话警告用户并退出程序。</p>
-<p>当然，最终你的程序需要捕获异常，否则会意外终止。但这里的技巧是<strong>在合适的层面捕获异常</strong>，以便你的程序要么可以从异常中有意义地恢复并继续下去，而不导致更深入的错误；要么能够为用户提供明确的信息，引导他们修正错误。如果当前所在方法无法胜任，那么就不要处理异常，而将它抛出直至具备处理这个异常的能力的作用域来处理。</p>
-<h2 id="该抛出何种异常"><a href="#该抛出何种异常" class="headerlink" title="该抛出何种异常"></a>该抛出何种异常</h2><p>那么抛出异常时该抛出何种异常，是 Checked Exception 还是 Unchecked Exception ？我在网上查阅资料时发现不同的人对此有不同的观点，不管是开发人员还是项目的 Leader。有的认为该全部抛出 Unchecked Exception 类型的异常，并在某一层面做统一捕获处理，这样做的优点是保证了方法的纯粹性。另一种观点则不支持抛出<code>RuntimeException</code>。通过阅读《Thinking in Java》和<a href="https://www.ibm.com/developerworks/cn/java/j-jtp05254/" target="_blank" rel="noopener">关于异常的争论：要检查，还是不要检查？— IBM developerWorks</a>（这是一篇非常优质的文章）发现很多资深的专家甚至是语言的设计者对此持有不同观点。</p>
-<h3 id="传统的观点"><a href="#传统的观点" class="headerlink" title="传统的观点"></a>传统的观点</h3><blockquote>
-<p>“If a client can reasonably be expected to recover from an exception, make it a checked exception. If a client cannot do anything to recover from the exception, make it an unchecked exception.” —— <em>The Java Tutorial</em></p>
-</blockquote>
-<p>Sun 公司的 <em>The Java Tutorial</em> 摘录中，总结了关于将一个异常声明为检查型还是非检查型的传统观点。</p>
-<p>因为 Java 语言并不要求方法捕获或者指定运行时异常，因此编写只抛出运行时异常的代码或者使得他们的所有异常子类都继承自<code>RuntimeException</code>，对于程序员来说是有吸引力的。这些编程捷径允许程序员编写 Java 代码不会受到来自编译器的所有挑剔性错误的干扰。尽管对于程序员来说这似乎比较方便，但是它回避了 Java 的捕获或者指定要求的意图，并且对于那些使用您提供的类的程序员可能会导致问题。 </p>
-<p>如果您仅仅是因此而抛出一个<code>RuntimeException</code>或者它的子类，那么您换取到了什么呢？您只是获得了抛出一个异常而不用您指定这样做的能力。换句话说，这是一种用于避免文档化方法所能抛出的异常的方式。在什么时候这是有益的？也就是说，在什么时候避免注明一个方法的行为是有益的？答案是“几乎从不”。</p>
-<p><strong>换句话说，Sun 告诉我们检查型异常应该是准则。</strong> 该教程通过多种方式继续说明，通常应该抛出检查型异常，而不是<code>RuntimeException</code> —— 除非您是 JVM。</p>
-<p>在 <em>Effective Java: Programming Language Guide</em> 一书中，Josh Bloch 提供了下列关于检查型和非检查型异常的知识点，这些与 <em>The Java Tutorial</em> 中的建议相一致（但是并不完全严格一致）：</p>
-<ul>
-<li><strong>第 39 条：只为异常条件使用异常。</strong> 也就是说，不要为控制流程而使用异常，比如应当使用<code>Iterator.hasNext()</code>去判断迭代边界，而不是在调用<code>Iterator.next()</code>捕获<code>NoSuchElementException</code>。</li>
-<li><strong>第 40 条：为可恢复的条件使用检查型异常，为编程错误使用运行时异常。</strong> 这里，Bloch 回应传统的 Sun 观点 —— 运行时异常应该只是用于指示编程错误，例如违反前置条件。</li>
-<li><strong>第 41 条：避免不必要的使用检查型异常。</strong> 换句话说，对于调用者不可能从其中恢复的情形，或者惟一可以预见的响应将是程序退出，则不要使用检查型异常。</li>
-<li><strong>第 43 条：抛出与抽象相适应的异常。</strong> 换句话说，一个方法所抛出的异常应该在一个抽象层次上定义，该抽象层次与该方法做什么相一致，而不一定与方法的底层实现细节相一致。例如，一个从文件、数据库装载资源的方法在不能找到资源时，应该抛出某种<code>ResourceNotFound</code>异常（通常使用异常链来保存隐含的原因），而不是更底层的<code>IOException</code>、<code>SQLException</code>。</li>
-</ul>
-<h3 id="重新考察检查型异常"><a href="#重新考察检查型异常" class="headerlink" title="重新考察检查型异常"></a>重新考察检查型异常</h3><p>最近，几位受尊敬的专家，包括 <em>Thinking in Java</em> 作者 Bruce Eckel 和 <em>J2EE Design and Development</em> 作者 Rod Johnson，已经公开声明尽管他们最初完全同意检查型异常的正统观点，但是他们已经认定<strong>排他性</strong>使用检查型异常的想法并没有最初看起来那样好，并且<strong>对于许多大型项目，检查型异常已经成为一个重要的问题来源</strong>。Eckel 提出了一个更为极端的观点，建议所有的异常应该是非检查型的；Johnson 的观点要保守一些，但是仍然暗示传统的优先选择检查型异常是过分的。Martin Fowler 也说过：“总的来说，我觉得异常很不错，但是 Java 的‘被检查的异常’带来的麻烦比好处要多。”</p>
-<p>不恰当的使用检查型异常会导致许多问题：</p>
-<ul>
-<li><strong>检查型异常不适当地暴露实现细节</strong>。如果选择不处理而将异常逐层向上抛出，势必会导致方法与底层实现所抛异常相耦合。举个例子，一个<code>loadUserProfile()</code>方法可能会去调用加载数据库或者加载文件系统的代码，而在该方法层面抛出<code>SQLException</code>或是<code>FileNotFoundException</code>，这实际上违反了 Bloch 的 第 43 条 —— 被抛出的异常所位于的抽象层次与抛出它们的方法不一致。所以你可能需要重新包装一个<code>NoSuchUserException</code>并抛出。</li>
-<li><strong>不稳定的方法签名</strong>。你可能对因为实现的改变而修改方法签名声明的异常感到厌烦，事实上这也是由于业务方法与具体实现相耦合所导致的。本质上还是没遵循第 43 条，方法在遇到失败时应该抛出一个异常，并且该异常应该反映该方法做什么（就像<code>NoSuchUserException</code>反应出该方法是去查询用户），而不是它具体如何做（像<code>SQLException</code>反应出需要连接数据库）。</li>
-<li><strong>难以理解的代码</strong>。因为许多方法都抛出一定数目的不同异常，错误处理的代码相对于实际的功能代码的比率可能会偏高，使得难以找到一个方法中实际完成功能的代码。异常通过集中错误处理来设想减少代码的，但是一个具有三行代码和六个 catch 块（其中每个块只是记录异常或者包装并重新抛出异常）的方法看起来比较膨胀并且会使得本来简单的代码变得模糊。这与异常设计的初衷相违背。</li>
-</ul>
-<p>基于以上种种原因，Bruce Eckel 声称在使用 Java 语言多年后，他已经得出这样的结论，认为检查型异常是一个失败的发明。Eckel 提倡将所有的异常都作为非检查型的。如果查看 Eckel 的 Web 站点上的讨论，您将会发现回应者是严重分裂的。一些人认为他的提议是荒谬的；一些人认为这是一个重要的思想。</p>
-<p>Rod Johnson 采取一个不太激进的方法。他提出，<strong>一些异常本质上是次要的返回代码</strong>（它通常指示违反业务规则），该类异常的作用通常在于中断违反业务规则的操作，抛出至处理错误的层面被捕获（指示如何修正）。Johnson 提倡对于该类异常使用检查型异常。</p>
-<h3 id="该使用何种异常"><a href="#该使用何种异常" class="headerlink" title="该使用何种异常"></a>该使用何种异常</h3><p>关于是否使用检查型异常的决定是复杂的，并且很显然没有明显的答案。Sun 的建议是对于任何情况使用它们，而 C# 方法（也就是 Eckel 和其他人所赞同的）是对于任何情况都不使用它们。其他人表示可以折中考虑。个人认为并没有绝对的对与错，<strong>选择何种异常在于团队的统一规范</strong>。非检查型异常的最大风险之一就是它并没有按照检查型异常采用的方式那样自我<strong>文档化</strong>。阅读 Java 源码发现，不管是检查型异常还是非检查型异常，都在文档中标明了该方法会抛出何种异常。在决定使用非检查型异常更需如此，不管是提示自己还是使用你提供的类库的其他人员。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li>《Thinking in Java》</li>
-<li><a href="https://www.ibm.com/developerworks/cn/java/j-jtp05254/" target="_blank" rel="noopener">关于异常的争论：要检查，还是不要检查？— IBM developerWorks</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/28302269" target="_blank" rel="noopener">Java异常的深入研究与分析 — 知乎</a></li>
-<li><a href="https://www.zhihu.com/question/28254987" target="_blank" rel="noopener">如何优雅的处理异常？— 知乎</a></li>
-<li><a href="https://www.cnblogs.com/skywang12345/p/3544287.html" target="_blank" rel="noopener">《Effective Java》中关于异常处理的几条建议</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2937,7 +2958,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">71</span>
+                    <span class="site-state-item-count">72</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

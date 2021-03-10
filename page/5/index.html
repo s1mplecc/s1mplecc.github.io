@@ -372,6 +372,354 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/03/31/Sidecar%20--%20%E5%B0%86Node%E5%BA%94%E7%94%A8%E5%BC%95%E5%85%A5Spring%20Cloud/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/03/31/Sidecar%20--%20%E5%B0%86Node%E5%BA%94%E7%94%A8%E5%BC%95%E5%85%A5Spring%20Cloud/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Sidecar -- 将 Node 应用引入 Spring Cloud</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-03-31 02:05:08" itemprop="dateCreated datePublished" datetime="2018-03-31T02:05:08+08:00">2018-03-31</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-11 15:25:28" itemprop="dateModified" datetime="2020-10-11T15:25:28+08:00">2020-10-11</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/31/Sidecar%20--%20%E5%B0%86Node%E5%BA%94%E7%94%A8%E5%BC%95%E5%85%A5Spring%20Cloud/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/31/Sidecar -- 将Node应用引入Spring Cloud/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">10k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>Sidecar 起源于 <a href="https://github.com/Netflix/Prana" target="_blank" rel="noopener">Netflix Prana</a>，它的目的是将 <strong>Non-JVM</strong> 语言整合到 Netflix OSS 生态系统中，如今 Spring Cloud 将 Spring Boot 与 Netflix OSS 整合成一套微服务解决框架，大大简化了程序员的开发。而 Sidecar 就是其中的一个衍生物，用于将 Non-JVM 语言，譬如 Node.js、Python 引入至 Spring Cloud 框架中。</p>
+</blockquote>
+<ul>
+<li><p>本文的示例代码已上传至 <a href="https://github.com/s1mplecc/sidecar-example" target="_blank" rel="noopener">Github</a></p>
+</li>
+<li><p>使用 Maven 构建的多模块项目<code>sidecar-example</code>，并将 Node.js 开发的<code>book-service</code>模块拷贝至一个项目中</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 模块结构如下</span><br><span class="line">─ sidecar-example</span><br><span class="line">   ├── author-service   &#x2F;&#x2F; Java 开发的微服务，用于测试服务间通信</span><br><span class="line">   ├── eureka-server    &#x2F;&#x2F; 注册中心</span><br><span class="line">   ├── node-sidecar    &#x2F;&#x2F; Sidecar，用于将 Node 应用引入 Spring Cloud</span><br><span class="line">   └── book-service    &#x2F;&#x2F; Node.js 开发的微服务</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用的 Spring Boot 版本及 Spring Cloud 全家桶版本</p>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.5.9.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">relativePath</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>Edgware.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencyManagement</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Sidecar"><a href="#Sidecar" class="headerlink" title="Sidecar"></a>Sidecar</h2><blockquote>
+<p>先来看看引入 Sidecar 需要做些什么</p>
+</blockquote>
+<ul>
+<li><p><strong>添加 Maven 依赖</strong>，很简单，甚至于不需要<code>eureka-client</code>的依赖，因为它已经整合至 Sidecar 的依赖中</p>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-netflix-sidecar<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接下来是<strong>注解</strong>，在 Sidecar 主类上添加<code>@EnableSidecar</code>注解，我们来看看这个注解包含些什么</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableCircuitBreaker</span></span><br><span class="line"><span class="meta">@EnableZuulProxy</span></span><br><span class="line"><span class="meta">@Target</span>(ElementType.TYPE)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Import</span>(SidecarConfiguration.class)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> EnableSidecar &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  包含了<strong>网关 Zuul</strong> 以及微服务结构中不可或缺的<strong>熔断器 Hystrix</strong></p>
+</li>
+<li><p>最后是<strong>配置文件</strong>，在<code>application.yml</code>中添加如下配置</p>
+  <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">9091</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">node-sidecar</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">  instance:</span></span><br><span class="line"><span class="attr">    hostname:</span> <span class="string">localhost</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    serviceUrl:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://$&#123;eureka.instance.hostname&#125;:9090/eureka/</span></span><br><span class="line"><span class="attr">sidecar:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">3000</span></span><br><span class="line"><span class="attr">  health-uri:</span> <span class="attr">http://localhost:$&#123;sidecar.port&#125;/health</span></span><br></pre></td></tr></table></figure>
+<p>  声明服务名和注册中心地址都没什么问题，最核心的就是 sidecar 的几个配置，包括</p>
+<ul>
+<li><code>sidecar.port</code> 监听的 Node 应用的端口号，</li>
+<li><code>sidecar.health-uri</code> Node 应用的健康检查接口的 uri</li>
+</ul>
+</li>
+</ul>
+<h4 id="健康检查接口"><a href="#健康检查接口" class="headerlink" title="健康检查接口"></a>健康检查接口</h4><blockquote>
+<p>Node.js 的微服务应用<code>book-service</code>我采用的 <strong>Koa</strong> 框架，这里不多赘述，需要注意的是：该应用必须实现一个<code>/health</code>健康检查接口，Sidecar 应用会每隔几秒访问一次该接口，并将该服务的健康状态返回给 Eureka</p>
+</blockquote>
+<ul>
+<li><p>只需要返回<code>{ status: &#39;UP&#39; }</code>这样一串 Json 即可</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">const Koa &#x3D; require(&#39;koa&#39;)</span><br><span class="line">const router &#x3D; require(&#39;koa-router&#39;)()</span><br><span class="line"></span><br><span class="line">const app &#x3D; new Koa()</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; log request URL:</span><br><span class="line">app.use(async (ctx, next) &#x3D;&gt; &#123;</span><br><span class="line">  console.log(&#96;Process $&#123;ctx.request.method&#125; $&#123;ctx.request.url&#125;...&#96;)</span><br><span class="line">  await next()</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; add routes:</span><br><span class="line">router.get(&#39;&#x2F;health&#39;, async (ctx, next) &#x3D;&gt; &#123;</span><br><span class="line">  ctx.response.body &#x3D; &#123;</span><br><span class="line">    status: &#39;UP&#39;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; add router middleware:</span><br><span class="line">app.use(router.routes())</span><br><span class="line"></span><br><span class="line">app.listen(3000)</span><br><span class="line">console.log(&#39;app started at port 3000...&#39;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="服务注册"><a href="#服务注册" class="headerlink" title="服务注册"></a>服务注册</h2><blockquote>
+<p>到目前为止，Sidecar 和 Node 服务已准备就绪，我们按顺序启动 <strong>eureka-server</strong> =&gt; <strong>book-service</strong> =&gt; <strong>node-sidecar</strong></p>
+</blockquote>
+<ul>
+<li><p>访问 Eureka 的 WebUI <code>http://localhost:9090/</code>，Sidecar 已被注册到 Eureka 上，并且状态为 UP<br><img src="/2018/03/31/Sidecar%20--%20%E5%B0%86Node%E5%BA%94%E7%94%A8%E5%BC%95%E5%85%A5Spring%20Cloud/0.png" alt="B89413D5-130D-4F5D-BB76-7559B6B0A036">如果我们停掉<code>book-service</code>，则<code>node-sidecar</code>的服务状态会变为 Down，显示服务不可用</p>
+</li>
+<li><p>访问 Sidecar 的首页<code>http://localhost:9091/</code>，提供了三个接口<br><img src="/2018/03/31/Sidecar%20--%20%E5%B0%86Node%E5%BA%94%E7%94%A8%E5%BC%95%E5%85%A5Spring%20Cloud/1.png" alt="A2B5DA24-46A6-40B9-9129-54EC7FA0F329"></p>
+</li>
+<li><p>访问<code>/health</code>可以得到 Node 应用返回的健康报告</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"status"</span>: <span class="string">"UP"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  访问<code>hosts/node-sidecar</code>可以的到 Sidecar 实例的一些信息</p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"host"</span>: <span class="string">"localhost"</span>,</span><br><span class="line">        <span class="attr">"port"</span>: <span class="number">3000</span>,</span><br><span class="line">        <span class="attr">"metadata"</span>: &#123;&#125;,</span><br><span class="line">        <span class="attr">"instanceInfo"</span>: &#123;</span><br><span class="line">            <span class="attr">"instanceId"</span>: <span class="string">"192.168.1.8:node-sidecar:9091"</span>,</span><br><span class="line">            <span class="attr">"app"</span>: <span class="string">"NODE-SIDECAR"</span>,</span><br><span class="line">            <span class="attr">"appGroupName"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"ipAddr"</span>: <span class="string">"192.168.1.8"</span>,</span><br><span class="line">            <span class="attr">"sid"</span>: <span class="string">"na"</span>,</span><br><span class="line">            <span class="attr">"homePageUrl"</span>: <span class="string">"http://localhost:3000/"</span>,</span><br><span class="line">            <span class="attr">"statusPageUrl"</span>: <span class="string">"http://localhost:9091/info"</span>,</span><br><span class="line">            <span class="attr">"healthCheckUrl"</span>: <span class="string">"http://localhost:9091/health"</span>,</span><br><span class="line">            <span class="attr">"secureHealthCheckUrl"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"vipAddress"</span>: <span class="string">"node-sidecar"</span>,</span><br><span class="line">            <span class="attr">"secureVipAddress"</span>: <span class="string">"node-sidecar"</span>,</span><br><span class="line">            <span class="attr">"countryId"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"dataCenterInfo"</span>: &#123;</span><br><span class="line">                <span class="attr">"@class"</span>: <span class="string">"com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo"</span>,</span><br><span class="line">                <span class="attr">"name"</span>: <span class="string">"MyOwn"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"hostName"</span>: <span class="string">"localhost"</span>,</span><br><span class="line">            <span class="attr">"status"</span>: <span class="string">"UP"</span>,</span><br><span class="line">            <span class="attr">"leaseInfo"</span>: &#123;</span><br><span class="line">                <span class="attr">"renewalIntervalInSecs"</span>: <span class="number">30</span>,</span><br><span class="line">                <span class="attr">"durationInSecs"</span>: <span class="number">90</span>,</span><br><span class="line">                <span class="attr">"registrationTimestamp"</span>: <span class="number">1522469074848</span>,</span><br><span class="line">                <span class="attr">"lastRenewalTimestamp"</span>: <span class="number">1522469344919</span>,</span><br><span class="line">                <span class="attr">"evictionTimestamp"</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="attr">"serviceUpTimestamp"</span>: <span class="number">1522469074848</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"isCoordinatingDiscoveryServer"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"metadata"</span>: &#123;&#125;,</span><br><span class="line">            <span class="attr">"lastUpdatedTimestamp"</span>: <span class="number">1522469074849</span>,</span><br><span class="line">            <span class="attr">"lastDirtyTimestamp"</span>: <span class="number">1522469044798</span>,</span><br><span class="line">            <span class="attr">"actionType"</span>: <span class="string">"ADDED"</span>,</span><br><span class="line">            <span class="attr">"asgName"</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">"overriddenStatus"</span>: <span class="string">"UNKNOWN"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"secure"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"uri"</span>: <span class="string">"http://localhost:3000"</span>,</span><br><span class="line">        <span class="attr">"serviceId"</span>: <span class="string">"NODE-SIDECAR"</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>  可以看到，该实例维护了 Node 应用的访问地址<code>&quot;uri&quot;: &quot;http://localhost:3000&quot;</code>，这也是接下来要说的：其他微服务可以通过 Sidecar 的服务名声明式调用 Node 服务</p>
+</li>
+</ul>
+<h2 id="声明式服务调用"><a href="#声明式服务调用" class="headerlink" title="声明式服务调用"></a>声明式服务调用</h2><blockquote>
+<p>以上，我们已经验证了 Eureka 可以通过 Sidecar 间接的管理基于 Node 的微服务。而在微服务体系中，还有非常重要的一点，就是服务间的调用。Spring Cloud 允许我们使用<strong>服务名</strong>进行服务间的调用，摒弃了原先的固定写死的 IP 地址，便于服务集群的横向拓展及维护。那么，Non-JVM 的微服务与其他服务间是否可以通过服务名互相调用呢，答案是可以的。</p>
+</blockquote>
+<h3 id="被调用"><a href="#被调用" class="headerlink" title="被调用"></a>被调用</h3><blockquote>
+<p>我们假设下面一个场景，book-service 提供了根据 bookId 返回对应 book 信息的接口，其中包含 authorId，而 author-service 需要根据该 authorId 获取到对应的作者信息。也就是 author-service 需要访问 book-service 的<code>/book/:bookId</code>接口拿到 authorId</p>
+</blockquote>
+<ul>
+<li><p>先在 book-service 中实现<code>/book/:bookId</code>接口，先固定返回 authorId 为 1</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">router.get(<span class="string">'/book/:bookId'</span>, <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  ctx.response.body = &#123;</span><br><span class="line">    bookId: ctx.params.bookId,</span><br><span class="line">    authorId: <span class="string">"1"</span>,</span><br><span class="line">    description: <span class="string">"This is a book."</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>而在 author-service 中声明式服务调用使用的是 Spring Cloud 整合的 <strong>Feign</strong>，Maven 依赖如下</p>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-feign<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>author-service 作为 book-service 服务的调用者，需要声明 Client 接口，代码如下</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FeignClient</span>(<span class="string">"node-sidecar"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BookServiceClient</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/book/&#123;bookId&#125;"</span>)</span><br><span class="line">    <span class="function">Book <span class="title">getBook</span><span class="params">(@PathVariable(<span class="string">"bookId"</span>)</span> String bookId)</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  注意到<code>@FeignClient</code>注解中调用的服务名填写的是 node-sidecar (大小写不敏感)，因为自始至终 Eureka 中注册的是 Sidecar 的信息，而 Sidecar 实例维护了 book-service 的地址信息，所以它可以将请求转发至 book-service</p>
+</li>
+<li><p>在 author-service 中提供<code>/book/{bookId}/author</code>接口</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AuthorController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> BookServiceClient bookServiceClient;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/book/&#123;bookId&#125;/author"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Author <span class="title">getAuthor</span><span class="params">(@PathVariable String bookId)</span></span>&#123;</span><br><span class="line">        Book book = bookServiceClient.getBook(bookId);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Author(book.getAuthorId(),<span class="string">"Jack"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动 author-service ，访问<code>http://localhost:9092/book/1/author</code></p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"authorId"</span>: <span class="string">"1"</span>,</span><br><span class="line">    <span class="attr">"authorName"</span>: <span class="string">"Jack"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="调用其他微服务"><a href="#调用其他微服务" class="headerlink" title="调用其他微服务"></a>调用其他微服务</h3><blockquote>
+<p>其他微服务可以通过 Sidecar 实例的服务名间接调用基于 Node 的 book-service。同样的，book-service 也可以通过服务名调用其他微服务，这要归功于<code>@EnableZuulProxy</code></p>
+</blockquote>
+<ul>
+<li>访问<code>http://localhost:9091/author-service/book/1/author</code>惊讶的发现，这和我们访问<code>http://localhost:9092/book/1/author</code>结果是一样的，这是由于 Sidecar 引入了 Zuul 网关，它可以获取 Eureka 上注册的服务的地址信息，从而进行路由跳转<br><img src="/2018/03/31/Sidecar%20--%20%E5%B0%86Node%E5%BA%94%E7%94%A8%E5%BC%95%E5%85%A5Spring%20Cloud/2.png" alt="A44BC958-7050-4530-8855-7F0042A6C32F"></li>
+</ul>
+<blockquote>
+<p><strong>Tips:</strong> Spring Cloud Zuul 通过与 Eureka 的整合，将自身注册为 Eureka 服务治理下的应用，同时从 Eureka 获取其他所有微服务的示实例信息。对于路由规则的维护，Zuul 默认会将服务名作为 ContextPath 的方式创建路由映射</p>
+</blockquote>
+<ul>
+<li><p>那接下来就简单了，先在 author-service 中添加一个接口返回作者描述</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/author/&#123;authorId&#125;"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getAuthorDescription</span><span class="params">(@PathVariable String authorId)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"This is an author description of "</span> + authorId;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>再在 book-service 中添加 book 的详细信息接口，需要去调用上述的作者描述接口</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> axios = <span class="built_in">require</span>(<span class="string">'axios'</span>)</span><br><span class="line"><span class="keyword">const</span> SIDECAR_URI = <span class="string">'http://localhost:9091'</span></span><br><span class="line"><span class="keyword">const</span> AUTHOR_SERVICE = <span class="string">'author-service'</span></span><br><span class="line"></span><br><span class="line">router.get(<span class="string">'/book/:bookId/detailed'</span>, <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">await</span> axios.get(<span class="string">`<span class="subst">$&#123;SIDECAR_URI&#125;</span>/<span class="subst">$&#123;AUTHOR_SERVICE&#125;</span>/author/1`</span>).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    ctx.response.body = &#123;</span><br><span class="line">      bookId: ctx.params.bookId,</span><br><span class="line">      authorId: <span class="string">'1'</span>,</span><br><span class="line">      authorDescription: res.data,</span><br><span class="line">      description: <span class="string">'This is a book.'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).catch(<span class="function"><span class="params">error</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'error'</span>, error))</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>  这里采用的 author-service 服务名去访问的该服务，而不是固定的 IP 地址，格式为<code>${SIDECAR_URI}/${AUTHOR_SERVICE}</code></p>
+</li>
+<li><p>访问<code>http://localhost:3000/book/1/detailed</code></p>
+  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"bookId"</span>: <span class="string">"1"</span>,</span><br><span class="line">    <span class="attr">"authorId"</span>: <span class="string">"1"</span>,</span><br><span class="line">    <span class="attr">"authorDescription"</span>: <span class="string">"This is an author description of 1"</span>,</span><br><span class="line">    <span class="attr">"description"</span>: <span class="string">"This is a book."</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Api-Gateway"><a href="#Api-Gateway" class="headerlink" title="Api-Gateway"></a>Api-Gateway</h2><blockquote>
+<p>后来我又加入了<code>api-gateway</code>去验证网关能否通过<code>node-sidecar</code>的服务名去将访问 API 的请求转发到<code>book-service</code>，事实证明确实是可以的</p>
+</blockquote>
+<ul>
+<li><p><code>api-gateway</code>的 Maven 依赖</p>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-eureka<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-zuul<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>需要在主类上加上<code>@EnableZuulProxy</code> Zuul 网关和<code>@EnableDiscoveryClient</code>注解</p>
+</li>
+<li><p>配置文件</p>
+<pre><code class="lang-yml">  spring:
+    application:
+      name: api-gateway
+  server:
+    port: 5555
+    context-path: /
+  eureka:
+    instance:
+      hostname: localhost
+    client:
+      serviceUrl:
+        defaultZone: http://${eureka.instance.hostname}:9090/eureka/
+  zuul:
+    routes:
+      author-service:
+        path: /author-service/**
+        serviceId: author-service
+      book-service:
+        path: /book-service/**
+        serviceId: node-sidecar
+</code></pre>
+</li>
+<li><p>访问<code>http://localhost:5555/book-service/book/1</code>，在接口层面，<code>node-sidecar</code>其实是不可见的，访问的还是<code>book-service</code>的 API<br><img src="/2018/03/31/Sidecar%20--%20%E5%B0%86Node%E5%BA%94%E7%94%A8%E5%BC%95%E5%85%A5Spring%20Cloud/3.png" alt="WX20180403-110158">  </p>
+</li>
+<li><p>由此，如果<code>book-service</code>需要横向拓展为一个集群，无非是多创建几个对应的 Sidecar 应用，它们的服务名只要是一样的，那就可以通过网关去实现负载均衡，甚至我第二个<code>book-service</code>用 Python 写也没有问题</p>
+</li>
+</ul>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
+<p>由此，基于 Non-JVM 语言的微服务，通过 Sidecar ，实现了服务向 Eureka 的注册与健康检查，并且可以通过服务名进行服务间调用。基本上可以说 Non-JVM 应用通过 Sidecar 完美的融入了 Spring Cloud 生态圈。</p>
+</blockquote>
+<ul>
+<li>附上一张架构图<br><img src="/2018/03/31/Sidecar%20--%20%E5%B0%86Node%E5%BA%94%E7%94%A8%E5%BC%95%E5%85%A5Spring%20Cloud/4.png" alt="sidecar"></li>
+</ul>
+<h2 id="Preferences"><a href="#Preferences" class="headerlink" title="Preferences"></a>Preferences</h2><ul>
+<li><a href="https://github.com/marshalYuan/spring-cloud-example/blob/master/docs/sidecar.md" target="_blank" rel="noopener">使用 Sidecar 将 Node.js 引入 Spring Cloud</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/03/16/Redis%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2820,307 +3168,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/29/ES6%20%E6%96%B0%E7%89%B9%E6%80%A7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/12/29/ES6%20%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">ES6 新特性</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-12-29 05:51:55" itemprop="dateCreated datePublished" datetime="2017-12-29T05:51:55+08:00">2017-12-29</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-12 10:25:43" itemprop="dateModified" datetime="2020-10-12T10:25:43+08:00">2020-10-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/12/29/ES6%20%E6%96%B0%E7%89%B9%E6%80%A7/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/12/29/ES6 新特性/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">6.5k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>ES6</strong>（or <strong>ECMAScript 6</strong>）规定了新一代的 <strong>JavaScript</strong> 语法，其中含有许多必要且实用的新特性。尤其是加入了一些<strong>语法糖</strong>使我们代码更简洁明了。本文所有代码都在浏览器的 <strong>JavaScript</strong> 控制台或者 <strong>Node</strong> 环境下运行过，输出结果在<code>// result:</code>注释后。</p>
-<h2 id="Arrows"><a href="#Arrows" class="headerlink" title="Arrows"></a>Arrows</h2><blockquote>
-<p><strong>箭头函数</strong>是使用 <strong>=&gt;</strong> 语法缩写的一个函数（相当于<strong>匿名函数</strong>），左边是参数，右边可以是表达式（<strong>expression</strong>）或者声明体（<strong>statement bodies</strong>）。</p>
-</blockquote>
-<p><code>=&gt;</code>右边接表达式：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log([<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>].map(<span class="function"><span class="params">v</span> =&gt;</span> v + <span class="number">1</span>))</span><br><span class="line"><span class="comment">// result: [ 2, 3, 5 ]</span></span><br></pre></td></tr></table></figure>
-<p><code>=&gt;</code>右边接声明体：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log([<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>].forEach(<span class="function"><span class="params">v</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(v &gt; <span class="number">2</span>)&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(v)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;))</span><br><span class="line"><span class="comment">// result: 4</span></span><br></pre></td></tr></table></figure>
-<p>箭头函数可以和<strong>不定参数</strong>配合使用，下面代码定义了一个求和方法：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sum = <span class="function">(<span class="params">...nums</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> sumValue = <span class="number">0</span></span><br><span class="line">    nums.forEach(<span class="function"><span class="params">num</span> =&gt;</span> sumValue += num)</span><br><span class="line">    <span class="built_in">console</span>.log(sumValue)</span><br><span class="line">&#125;</span><br><span class="line">sum(<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>)</span><br><span class="line"><span class="comment">// result: 7</span></span><br></pre></td></tr></table></figure>
-<p>需要特别注意的是，箭头函数<strong>绑定this</strong>，这是和 <strong>function</strong> 定义是不同的：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> std = &#123;</span><br><span class="line">    birth: <span class="number">1990</span>,</span><br><span class="line">    getAge: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> _this = <span class="keyword">this</span></span><br><span class="line">        <span class="keyword">const</span> fn = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>().getFullYear() _this.birth：</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> fn()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">std.getAge()</span><br><span class="line"><span class="comment">// result: 28</span></span><br></pre></td></tr></table></figure>
-<p>传统的写法我需要特地定义个<code>_this</code>让它指向当前这个 <strong>std</strong> 对象，而箭头函数绑定了上下文的 <strong>this</strong>，即调用该 <strong>function</strong> 的对象 <strong>std</strong>：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">std = &#123;</span><br><span class="line">    birth: <span class="number">1990</span>,</span><br><span class="line">    getAge: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> fn = <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">new</span> <span class="built_in">Date</span>().getFullYear() <span class="keyword">this</span>.birth <span class="comment">// this指向std对象：</span></span><br><span class="line">        <span class="keyword">return</span> fn()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">std.getAge()</span><br><span class="line"><span class="comment">// result: 28</span></span><br></pre></td></tr></table></figure>
-<h2 id="Let-Const"><a href="#Let-Const" class="headerlink" title="Let + Const"></a>Let + Const</h2><blockquote>
-<p>ES6 新增了两个绑定了<strong>块作用域</strong>的声明变量的关键字 <strong>let</strong> 和 <strong>const</strong>。</p>
-</blockquote>
-<p><code>let</code>用法和<code>var</code>一样，但是限定了作用域。因为在 <strong>JavaScript</strong> 中，<code>var</code>定义全局变量，所以能不用<code>var</code>的地方就不用：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="keyword">let</span> a = <span class="number">10</span></span><br><span class="line">  <span class="keyword">var</span> b = <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line">print(a) <span class="comment">// ReferenceError: a is not defined.</span></span><br><span class="line">print(b) <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
-<p><code>const</code>声明一个只读的常量，并且必须<strong>初始化</strong>。一旦声明，常量的值就不能改变：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a <span class="comment">// Error: Missing initializer in const declaration</span></span><br><span class="line"><span class="keyword">const</span> a = <span class="number">1</span></span><br><span class="line">a = <span class="number">2</span> <span class="comment">// Error: Assignment to constant variable.</span></span><br></pre></td></tr></table></figure>
-<p>阮一峰老师的<strong>ES6编程风格</strong>中明确指出在<code>let</code>和<code>const</code>之间，建议优先使用<code>const</code>，尤其是在<strong>全局环境</strong>，不应该设置变量，只应设置常量。<strong>const优于let原因如下:</strong></p>
-<ul>
-<li><strong>const</strong>可以提醒阅读程序的人，这个变量不应该改变。</li>
-<li><strong>const</strong>比较符合<strong>函数式编程思想</strong>，运算不改变值，只是新建值，而且这样也有利于将来的分布式运算。</li>
-<li><strong>JavaScript</strong> 编译器会对<strong>const</strong>进行优化，所以多使用<strong>const</strong>，有利于<strong>提高程序的运行效率</strong>，也就是说<strong>let</strong>和<strong>const</strong>的本质区别，其实是编译器内部的处理不同。<strong>所有的函数都应该设置为常量</strong>。</li>
-</ul>
-<h2 id="Template-Strings"><a href="#Template-Strings" class="headerlink" title="Template Strings"></a>Template Strings</h2><blockquote>
-<p>ES6 引入了构造字符串的语法糖：<strong>模版字符串 `…`</strong>，使用<strong>反引号</strong>表示。它有两个作用，一是表示<strong>多行字符串</strong>，二是<strong>替换为绑定的变量值</strong>。</p>
-</blockquote>
-<p>多行字符串：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">`第一行</span></span><br><span class="line"><span class="string">第二行`</span>)</span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// 第一行</span></span><br><span class="line"><span class="comment">// 第二行</span></span><br></pre></td></tr></table></figure>
-<p>在模版字符串中使用<code>${property}</code>替换为属性的值：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> name = <span class="string">'Bob'</span>, time = <span class="string">'today'</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`Hello <span class="subst">$&#123;name&#125;</span>, how are you <span class="subst">$&#123;time&#125;</span>?`</span>)</span><br><span class="line"><span class="comment">// result: Hello Bob, how are you today?</span></span><br></pre></td></tr></table></figure>
-<h2 id="Default-Rest-Spread"><a href="#Default-Rest-Spread" class="headerlink" title="Default + Rest + Spread"></a>Default + Rest + Spread</h2><blockquote>
-<p>参数的默认值、不定参数以及参数数组的展开。</p>
-</blockquote>
-<p>函数的参数可以<strong>指定默认值</strong>，调用时如果未指定将使用默认值：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x, y = <span class="number">12</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x + y</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// f(3) -&gt; 15 </span></span><br><span class="line"><span class="comment">// f(3,4) -&gt; 7</span></span><br></pre></td></tr></table></figure>
-<p><strong>不定参数</strong>使用<code>...</code>表示，它取代了之前的 <strong>arguments</strong>，适用于更常见的需求。如下例中 <strong>y</strong> 是一个参数数组：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x, ...y</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x * y.length</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// f(3,'abc',10) -&gt; 6</span></span><br><span class="line"><span class="comment">// f(3,'abc',10,'xyz') -&gt; 9</span></span><br></pre></td></tr></table></figure>
-<p>同时<code>...</code>还可以在函数调用时将数组转换成连续的参数：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x, y, z</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x + y + z</span><br><span class="line">&#125;</span><br><span class="line">f(...[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line"><span class="comment">// result: 6</span></span><br></pre></td></tr></table></figure>
-<h2 id="for…of"><a href="#for…of" class="headerlink" title="for…of"></a>for…of</h2><blockquote>
-<p><strong>for…of</strong> 是 ES6 新加入的遍历循环的操作，而传统的 <strong>for…in</strong> 循环由于历史遗留问题，它遍历的实际上是对象的<strong>属性名</strong>。</p>
-</blockquote>
-<p>我们用<code>for...in</code>遍历对象的<strong>属性名</strong>，需要用<code>o[prop]</code>来获取属性的值：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> o = &#123; <span class="attr">name</span>: <span class="string">'Jack'</span>, <span class="attr">age</span>: <span class="number">11</span>&#125;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> prop <span class="keyword">in</span> o) &#123; </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;prop&#125;</span> is <span class="subst">$&#123;o[prop]&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// name is Jack</span></span><br><span class="line"><span class="comment">// age is 11</span></span><br></pre></td></tr></table></figure>
-<p>同样的，<strong>Array</strong> 实际上也是一个对象，它的每个元素的索引被视为一个属性：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>,<span class="number">4</span>,<span class="number">9</span>]</span><br><span class="line">arr.name = <span class="string">'Jack'</span></span><br><span class="line"><span class="comment">// actually arr is an object</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* (3) [1, 4, 9, name: "Jack"]</span></span><br><span class="line"><span class="comment">0: 1</span></span><br><span class="line"><span class="comment">1: 4</span></span><br><span class="line"><span class="comment">2: 9</span></span><br><span class="line"><span class="comment">name: "Jack"</span></span><br><span class="line"><span class="comment">length: 3</span></span><br><span class="line"><span class="comment">__proto__: Array(0) */</span></span><br></pre></td></tr></table></figure>
-<p>我们使用<code>for...in</code>去遍历数组，实际上<code>for...in</code>遍历的是数组的<strong>下标索引</strong>：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> index <span class="keyword">in</span> arr) &#123; </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`数组第<span class="subst">$&#123;index&#125;</span>个是<span class="subst">$&#123;arr[index]&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// 数组第0个是1</span></span><br><span class="line"><span class="comment">// 数组第1个是4</span></span><br><span class="line"><span class="comment">// 数组第2个是9</span></span><br><span class="line"><span class="comment">// 数组第name个是Jack</span></span><br></pre></td></tr></table></figure>
-<p>ES6 引入<code>for...of</code>循环，遍历的是集合本身的元素，可以用于遍历 <strong>Array、Set、Map</strong> 等：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> value <span class="keyword">of</span> arr) &#123; </span><br><span class="line">    <span class="built_in">console</span>.log(value)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// 4</span></span><br><span class="line"><span class="comment">// 9</span></span><br></pre></td></tr></table></figure>
-<p>可以看到<code>name: &quot;Jack&quot;</code>被舍弃了，实际上也不推荐这种向数组添加属性的操作。</p>
-<h2 id="forEach"><a href="#forEach" class="headerlink" title="forEach"></a>forEach</h2><p>更好的方式是直接使用<code>iterable</code>内置的<code>forEach</code>方法，它接收一个函数，每次迭代就自动回调该函数：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">arr.forEach(<span class="function">(<span class="params">value,index</span>) =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;index&#125;</span> : <span class="subst">$&#123;value&#125;</span>`</span>))</span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// 0 : 1</span></span><br><span class="line"><span class="comment">// 1 : 4</span></span><br><span class="line"><span class="comment">// 2 : 9</span></span><br></pre></td></tr></table></figure>
-<p>遍历一个 <strong>Map</strong>：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> m = <span class="keyword">new</span> <span class="built_in">Map</span>([[<span class="string">'Jack'</span>, <span class="number">11</span>], [<span class="string">'Tom'</span>, <span class="number">13</span>], [<span class="string">'John'</span>, <span class="number">10</span>]])</span><br><span class="line">m.forEach(<span class="function">(<span class="params">value, key, map</span>) =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;key&#125;</span> is <span class="subst">$&#123;value&#125;</span> years old.`</span>))</span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// Jack is 11 years old.</span></span><br><span class="line"><span class="comment">// Tom is 13 years old.</span></span><br><span class="line"><span class="comment">// John is 10 years old.</span></span><br></pre></td></tr></table></figure>
-<h2 id="Destructuring"><a href="#Destructuring" class="headerlink" title="Destructuring"></a>Destructuring</h2><blockquote>
-<p>ES6 允许按照一定模式，从数组和对象中提取值，对变量进行赋值，这被称为<strong>解构(Destructuring)</strong>。</p>
-</blockquote>
-<p>可以利用数组和解构，一次性给多个变量赋值。同时可以很方便的<strong>交换</strong>两个变量值：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [a, b] = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// a = 1</span></span><br><span class="line"><span class="comment">// b = 2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 交换a、b的值</span></span><br><span class="line">[a, b] = [b, a]</span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// a = 2</span></span><br><span class="line"><span class="comment">// b = 1</span></span><br></pre></td></tr></table></figure>
-<p>也可以使用嵌套数组进行解构，左右两边的模版应该相同，不对应则变量值为<code>undefined</code>：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [x, [[y], z]] = [<span class="number">1</span>, [[<span class="number">2</span>], <span class="number">3</span>]]</span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// x = 1</span></span><br><span class="line"><span class="comment">// y = 2</span></span><br><span class="line"><span class="comment">// z = 3</span></span><br></pre></td></tr></table></figure>
-<p>语法糖 <code>...</code> 被解构成一个数组：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [a,...rest] = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// a = 1</span></span><br><span class="line"><span class="comment">// rest = [2, 3, 4]</span></span><br></pre></td></tr></table></figure>
-<p>解构还可以用于对象，<strong>需要注意:</strong> 数组的解构是按次序排列的，而对象的属性没有次序，所以<strong>变量必须与属性同名</strong>：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123; bar, foo &#125; = &#123; <span class="attr">foo</span>: <span class="string">"aaa"</span>, <span class="attr">bar</span>: <span class="string">"bbb"</span> &#125;</span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// foo = "aaa"</span></span><br><span class="line"><span class="comment">// bar = "bbb"</span></span><br></pre></td></tr></table></figure>
-<p>当不知道参数传入顺序时，可以将一组参数与变量名对应起来：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">&#123;x, y, z&#125;</span>) </span>&#123; </span><br><span class="line">    <span class="keyword">return</span> x + y - z</span><br><span class="line">&#125;</span><br><span class="line">f(&#123;<span class="attr">z</span>: <span class="number">3</span>, <span class="attr">y</span>: <span class="number">2</span>, <span class="attr">x</span>: <span class="number">1</span>&#125;)</span><br><span class="line"><span class="comment">// result: 0</span></span><br></pre></td></tr></table></figure>
-<p>非常适合提取 <strong>JSON</strong> 对象中的属性值：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> jsonData = &#123;</span><br><span class="line">  id: <span class="number">42</span>,</span><br><span class="line">  status: <span class="string">"OK"</span>,</span><br><span class="line">  data: [<span class="number">867</span>, <span class="number">5309</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123; id, status, data &#125; = jsonData</span><br><span class="line"><span class="built_in">console</span>.log(id, status, data)</span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// 42, "OK", [867, 5309]</span></span><br></pre></td></tr></table></figure>
-<p>以及加载模块时：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; getTable, postLoginForm &#125; <span class="keyword">from</span> <span class="string">'api'</span></span><br></pre></td></tr></table></figure>
-<h2 id="Classes"><a href="#Classes" class="headerlink" title="Classes"></a>Classes</h2><blockquote>
-<p>ES6 引入 <strong>class</strong> 关键字，是的原先对象原型(<strong>prototype</strong>)的写法变得更加直观、更像<strong>面向对象编程</strong>的语法，用法类似于 <strong>Java</strong> 中的 <strong>class</strong>。</p>
-</blockquote>
-<p>定义一个 <strong>Point</strong> 类，其中有个构造函数<code>constructor</code>，需要注意类中的函数不需要<code>function</code>关键字：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(x, y) &#123;</span><br><span class="line">    <span class="keyword">this</span>.x = x;</span><br><span class="line">    <span class="keyword">this</span>.y = y;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  toString() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`(<span class="subst">$&#123;<span class="keyword">this</span>.x&#125;</span>,<span class="subst">$&#123;<span class="keyword">this</span>.y&#125;</span>)`</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> p = <span class="keyword">new</span> Point(<span class="number">1</span>,<span class="number">2</span>) <span class="comment">// 生成实例</span></span><br><span class="line">p.toString()</span><br><span class="line"><span class="comment">// result: "(1,2)"</span></span><br></pre></td></tr></table></figure>
-<h2 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h2><blockquote>
-<p><strong>模块</strong>的引入是 ES6 的一大重要特性，我们可以将一个大程序拆成几个小文件，需要的时候再导入。ES6 之前是没有模块加载的功能的，社区制定了一些方案，比如 <strong>CommonJS</strong>的 <strong>require、module.exports</strong>。而 ES6 规定了模块加载的标准语法，并且 ES6 可以在<strong>编译时就完成模块加载</strong>，效率要比 <strong>CommonJS</strong> 模块的加载方式高。</p>
-</blockquote>
-<p>下面代码我在<code>b.js</code>中导出了一个常量和一个函数，在<code>a.js</code>中导入：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// b.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    pi: <span class="number">3.14</span>,</span><br><span class="line">    plusOne: <span class="function"><span class="params">v</span> =&gt;</span> v + <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// a.js</span></span><br><span class="line"><span class="keyword">const</span> &#123; pi, plusOne &#125; = <span class="built_in">require</span>(<span class="string">'./b'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(pi)</span><br><span class="line"><span class="built_in">console</span>.log(plusOne(<span class="number">10</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行 node a.js 输出结果:</span></span><br><span class="line"><span class="comment">// 3.14</span></span><br><span class="line"><span class="comment">// 11</span></span><br></pre></td></tr></table></figure>
-<p>在 ES6 中规定了模块导入导出的关键字<code>import、export</code>，使用方法如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// b.js</span></span><br><span class="line"><span class="keyword">const</span> pi = <span class="number">3.14</span>;</span><br><span class="line"><span class="keyword">const</span> plusOne = <span class="function"><span class="params">v</span> =&gt;</span> v + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> &#123; pi, plusOne &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// a.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; pi, plusOne &#125; <span class="keyword">from</span> <span class="string">'./b'</span>;</span><br></pre></td></tr></table></figure>
-<p><code>import</code>大括号中变量名，必须与导出时声明的对外接口的<strong>名称相同</strong>。</p>
-<p><code>export default</code>命令用于指定模块的<strong>默认输出</strong>，一个模块只能有一个默认输出，因此<code>export default</code>只能出现一次，所以<code>import</code>导入时可以不加大括号，名称也可以随意取。其实就想当于导出了一个 <strong>default</strong> 变量，将开平方的箭头函数<strong>赋值</strong>给它。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// b.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> v =&gt; v * v</span><br><span class="line"></span><br><span class="line"><span class="comment">// a.js</span></span><br><span class="line"><span class="keyword">import</span> square <span class="keyword">from</span> <span class="string">'./b'</span></span><br><span class="line"><span class="built_in">console</span>.log(square(<span class="number">10</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// result: 100</span></span><br></pre></td></tr></table></figure>
-<p>因此我们才可以这样引入第三方库：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import _ from &#39;lodash&#39;</span><br></pre></td></tr></table></figure>
-<p>需要<strong>特别注意</strong>的是，目前 <strong>Node</strong> 和浏览器还未对 <strong>import、export</strong> 做支持，因为<strong>V8引擎</strong>暂不支持，但是不久的将来肯定会加入该语法。<a href="https://nodejs.org/dist/latest-v9.x/docs/api/esm.html#esm_unsupported" target="_blank" rel="noopener">Node官方文档</a> 也明确说明了不建议 <strong>require</strong> 而推荐使用标准的 <strong>import</strong> 并且等待最新的<strong>V8引擎</strong>的支持。可以使用 <strong>Babel</strong> 进行转码。</p>
-<p><img src="/2017/12/29/ES6%20%E6%96%B0%E7%89%B9%E6%80%A7/0.png" alt="512494CE-D620-4262-B2A2-CC5B351E6A3C"></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://babeljs.io/learn-es2015/" target="_blank" rel="noopener">Babel官网 —— Learn ES2015</a></li>
-<li><a href="http://es6.ruanyifeng.com/" target="_blank" rel="noopener">阮一峰 —— ES6入门</a></li>
-<li><a href="https://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000" target="_blank" rel="noopener">廖雪峰 —— JavaScript教程</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3172,7 +3219,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">71</span>
+                    <span class="site-state-item-count">72</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
