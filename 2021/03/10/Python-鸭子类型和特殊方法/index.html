@@ -120,7 +120,7 @@
 <meta property="og:description" content="Python 是动态强类型语言 Dynamic programming language: In computer science, a dynamic programming language is a class of high-level programming languages, which at runtime execute many common programming behav">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-03-10T14:19:15.000Z">
-<meta property="article:modified_time" content="2021-03-11T08:01:49.401Z">
+<meta property="article:modified_time" content="2021-03-17T03:44:02.161Z">
 <meta property="article:author" content="s1mple">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
@@ -433,7 +433,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2021-03-11 16:01:49" itemprop="dateModified" datetime="2021-03-11T16:01:49+08:00">2021-03-11</time>
+                <time title="修改时间：2021-03-17 11:44:02" itemprop="dateModified" datetime="2021-03-17T11:44:02+08:00">2021-03-17</time>
               
             
           </span>
@@ -498,7 +498,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">11k</span>
+                <span title="本文字数">9.8k</span>
               
 
               
@@ -587,191 +587,13 @@
 <p><code>__call__</code> 方法可以接收可变参数, 这意味着可以像定义任意函数一样定义类的 <code>__call__</code> 方法。当 <code>__call__</code> 方法接收一个函数作为参数时，那么这个类就可以作为一个函数装饰器。基于类的函数装饰器就是这么实现的。如下代码我在 func 函数上使用了类级别的函数装饰器 Deco，使得在执行函数前多打印了一行信息。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">Deco</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, func)</span>:</span></span><br><span class="line"><span class="meta">... </span>        self.func = func</span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line"><span class="meta">... </span>        print(<span class="string">'decorate...'</span>)</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">return</span> self.func(*args, **kwargs)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>@Deco</span><br><span class="line"><span class="meta">... </span><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(name)</span>:</span></span><br><span class="line"><span class="meta">... </span>    print(<span class="string">'execute function'</span>, name)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="string">'foo'</span>)</span><br><span class="line">decorate...</span><br><span class="line">execute function foo</span><br></pre></td></tr></table></figure>
 <p>实际上类级别的函数装饰器必须要实现 <code>__call__</code> 方法，因为本质上函数装饰器也是一个函数，只不过是一个接收被装饰函数作为参数的高阶函数。有关装饰器可以详见装饰器一章。</p>
-<h3 id="add-与重载运算符"><a href="#add-与重载运算符" class="headerlink" title="__add__ 与重载运算符"></a><code>__add__</code> 与重载运算符</h3><p>运算符重载这个语言特性一直备受争议，鉴于太多 C++ 程序员滥用这个特性，Java 之父 James Gosling 很干脆的决定不为 Java 提供运算符重载功能。但另一方面，正确的使用运算符重载确实能提高代码的可读性和灵活性。为此，Python 施加了一些限制，在灵活性、可用性和安全性之间做到了平衡。主要包括：</p>
-<ul>
-<li>不能重载内置类型的运算符</li>
-<li>不能新建运算符，只能重载现有的</li>
-<li>is、and、or 和 not 运算符不能重载（但位运算符 &amp;、| 和 ~ 可以）</li>
-</ul>
-<p>Python 中的运算符重载是通过重写特殊方法实现的。比如重载 “+” 加号运算符需要重写 <code>__add__</code>，重载比较运算符 “==” 需要重写 <code>__eq__</code> 方法。下面我将演示如何重载运算符来提高代码的可读性。</p>
+<h3 id="add"><a href="#add" class="headerlink" title="__add__"></a><code>__add__</code></h3><p>Python 中的运算符重载也是通过重写特殊方法实现的。比如重载 “+” 加号运算符需要重写 <code>__add__</code>，重载比较运算符 “==” 需要重写 <code>__eq__</code> 方法。合理的重载运算符有助于提高代码的可读性。下面我将就一个代码示例进行演示。</p>
 <p>考虑一个平面向量，由 x，y 两个坐标构成。为了实现向量的加法（按位相加），重写了加号运算符，为了比较两个向量是否相等重写了比较运算符，为了在控制台方便验证结果重写了 <code>__repr__</code> 方法。完整的向量类代码如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vector</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x, y)</span>:</span></span><br><span class="line">        self.x = x</span><br><span class="line">        self.y = y</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">f'Vector(<span class="subst">&#123;self.x&#125;</span>, <span class="subst">&#123;self.y&#125;</span>)'</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> Vector(self.x + other.x, self.y + other.y)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__eq__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.x == other.x <span class="keyword">and</span> self.y == other.y</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__ne__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">not</span> self.__eq__(other)</span><br></pre></td></tr></table></figure>
 <p>在控制台验证结果：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> vector <span class="keyword">import</span> Vector</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 = Vector(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v2 = Vector(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 + v2</span><br><span class="line">Vector(<span class="number">3</span>, <span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 == v2</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 + v1 == Vector(<span class="number">2</span>, <span class="number">4</span>)</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<p>可以看到没有为 Vector 类添加专门的 <code>add()</code> 和 <code>equals()</code> 方法，而只是重载了现有运算符，使得代码可读性显著提高了，并且直接对向量进行 “+” 相加也更符合数学逻辑。值得一提的是，在 Python 2 中，在重载 <code>==</code> 的同时也要重载 <code>!=</code> 运算符即重写 <code>__ne__</code> 方法。而在 Python 3 中，这不再是必需的，因为默认情况下，<code>__ne__</code> 会委托给 <code>__eq__</code> 执行并对结果取反。<a href="https://docs.python.org/3/reference/datamodel.html" target="_blank" rel="noopener">官方解释</a></p>
-<p>下面列出一些常见可重载运算符。</p>
-<h4 id="一元运算符"><a href="#一元运算符" class="headerlink" title="一元运算符"></a>一元运算符</h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">运算符</th>
-<th style="text-align:center">特殊方法</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">-</td>
-<td style="text-align:center"><code>__neg__</code></td>
-<td>一元取负算术运算符</td>
-</tr>
-<tr>
-<td style="text-align:center">+</td>
-<td style="text-align:center"><code>__pos__</code></td>
-<td>一元取正算术运算符</td>
-</tr>
-<tr>
-<td style="text-align:center">~</td>
-<td style="text-align:center"><code>__invert__</code></td>
-<td>对整数按位取反，定义为 ~x == -(x+1)</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h4 id="二元运算符"><a href="#二元运算符" class="headerlink" title="二元运算符"></a>二元运算符</h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">运算符</th>
-<th style="text-align:center">特殊方法</th>
-<th style="text-align:center">就地方法</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">+</td>
-<td style="text-align:center"><code>__add__</code></td>
-<td style="text-align:center"><code>__iadd__</code></td>
-<td>加法或拼接</td>
-</tr>
-<tr>
-<td style="text-align:center">-</td>
-<td style="text-align:center"><code>__sub__</code></td>
-<td style="text-align:center"><code>__isub__</code></td>
-<td>减法</td>
-</tr>
-<tr>
-<td style="text-align:center">*</td>
-<td style="text-align:center"><code>__mul__</code></td>
-<td style="text-align:center"><code>__imul__</code></td>
-<td>乘法或重复复制</td>
-</tr>
-<tr>
-<td style="text-align:center">/</td>
-<td style="text-align:center"><code>__truediv__</code></td>
-<td style="text-align:center"><code>__itruediv__</code></td>
-<td>除法</td>
-</tr>
-<tr>
-<td style="text-align:center">//</td>
-<td style="text-align:center"><code>__floordiv__</code></td>
-<td style="text-align:center"><code>__ifloordiv__</code></td>
-<td>整除</td>
-</tr>
-<tr>
-<td style="text-align:center">%</td>
-<td style="text-align:center"><code>__mod__</code></td>
-<td style="text-align:center"><code>__imod__</code></td>
-<td>取模</td>
-</tr>
-<tr>
-<td style="text-align:center">divmod()</td>
-<td style="text-align:center"><code>__divmod__</code></td>
-<td style="text-align:center"><code>__idivmod__</code></td>
-<td>返回由整除的商和模数组成的元组</td>
-</tr>
-<tr>
-<td style="text-align:center">** 或 pow()</td>
-<td style="text-align:center"><code>__pow__</code></td>
-<td style="text-align:center"><code>__ipow__</code></td>
-<td>取幂</td>
-</tr>
-<tr>
-<td style="text-align:center">@</td>
-<td style="text-align:center"><code>__matmul__</code></td>
-<td style="text-align:center"><code>__imatmul__</code></td>
-<td>矩阵乘法(Python 3.5 新引入)</td>
-</tr>
-<tr>
-<td style="text-align:center">&amp;</td>
-<td style="text-align:center"><code>__and__</code></td>
-<td style="text-align:center"><code>__iand__</code></td>
-<td>按位与</td>
-</tr>
-<tr>
-<td style="text-align:center">\</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"><code>__or__</code></td>
-<td><code>__ior__</code></td>
-<td>按位或</td>
-</tr>
-<tr>
-<td style="text-align:center">^</td>
-<td style="text-align:center"><code>__xor__</code></td>
-<td style="text-align:center"><code>__ixor__</code></td>
-<td>按位异或</td>
-</tr>
-<tr>
-<td style="text-align:center">&lt;&lt;</td>
-<td style="text-align:center"><code>__lshift__</code></td>
-<td style="text-align:center"><code>__ilshift__</code></td>
-<td>按位左移</td>
-</tr>
-<tr>
-<td style="text-align:center">&gt;&gt;</td>
-<td style="text-align:center"><code>__rshift__</code></td>
-<td style="text-align:center"><code>__irshift__</code></td>
-<td>按位右移</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>注：就地方法是指就地修改左操作数，如 “+=” 运算符。</p>
-<h4 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">运算符</th>
-<th style="text-align:center">特殊方法</th>
-<th>后备机制</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">==</td>
-<td style="text-align:center"><code>__eq__</code></td>
-<td>判断 id 是否相等</td>
-</tr>
-<tr>
-<td style="text-align:center">!=</td>
-<td style="text-align:center"><code>__ne__</code></td>
-<td>对 <code>__eq__</code> 取反</td>
-</tr>
-<tr>
-<td style="text-align:center">&gt;</td>
-<td style="text-align:center"><code>__gt__</code></td>
-<td>抛出 TypeError</td>
-</tr>
-<tr>
-<td style="text-align:center">&lt;</td>
-<td style="text-align:center"><code>__lt__</code></td>
-<td>抛出 TypeError</td>
-</tr>
-<tr>
-<td style="text-align:center">&gt;=</td>
-<td style="text-align:center"><code>__ge__</code></td>
-<td>抛出 TypeError</td>
-</tr>
-<tr>
-<td style="text-align:center">&lt;=</td>
-<td style="text-align:center"><code>__le__</code></td>
-<td>抛出 TypeError</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>注：后备机制是指特殊方法不存在或方法运行异常时采取的行为。</p>
+<p>重载了 “+” 运算符后，可以直接使用 <code>v1 + v2</code> 对 Vector 类进行向量相加，而不必要编写专门的 <code>add()</code> 方法，并且重载了 <code>==</code> 运算符取代了 <code>v1.equals(v2)</code> 的繁冗写法。从代码可读性来讲直接使用运算符可读性更高，也更符合数学逻辑。</p>
+<p>当然，运算符重载涉及的知识点不止于此，《流畅的 Python》将其作为单独的一章，可见其重要性。下一节我们将就运算符重载进行深入的讨论。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://foofish.net/dynamic_type_and_duck_type.html" target="_blank" rel="noopener">Python：动态语言与鸭子类型</a></li>
 <li><a href="https://www.tutorialsteacher.com/python/magic-methods-in-python" target="_blank" rel="noopener">Python - Magic or Dunder Methods
@@ -825,6 +647,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/03/18/Python-%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/" rel="prev" title="Python 运算符重载">
+                Python 运算符重载 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -905,7 +731,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-count">73</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1073,7 +899,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-是动态强类型语言"><span class="nav-number">1.</span> <span class="nav-text">Python 是动态强类型语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#强弱类型"><span class="nav-number">1.1.</span> <span class="nav-text">强弱类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#鸭子类型"><span class="nav-number">2.</span> <span class="nav-text">鸭子类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#序列协议"><span class="nav-number">2.1.</span> <span class="nav-text">序列协议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊方法"><span class="nav-number">3.</span> <span class="nav-text">特殊方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#new-amp-init"><span class="nav-number">3.1.</span> <span class="nav-text">__new__ &amp; __init__</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#str-amp-repr"><span class="nav-number">3.2.</span> <span class="nav-text">__str__ &amp; __repr__</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#call"><span class="nav-number">3.3.</span> <span class="nav-text">__call__</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#add-与重载运算符"><span class="nav-number">3.4.</span> <span class="nav-text">__add__ 与重载运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一元运算符"><span class="nav-number">3.4.1.</span> <span class="nav-text">一元运算符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二元运算符"><span class="nav-number">3.4.2.</span> <span class="nav-text">二元运算符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#比较运算符"><span class="nav-number">3.4.3.</span> <span class="nav-text">比较运算符</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-是动态强类型语言"><span class="nav-number">1.</span> <span class="nav-text">Python 是动态强类型语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#强弱类型"><span class="nav-number">1.1.</span> <span class="nav-text">强弱类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#鸭子类型"><span class="nav-number">2.</span> <span class="nav-text">鸭子类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#序列协议"><span class="nav-number">2.1.</span> <span class="nav-text">序列协议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊方法"><span class="nav-number">3.</span> <span class="nav-text">特殊方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#new-amp-init"><span class="nav-number">3.1.</span> <span class="nav-text">__new__ &amp; __init__</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#str-amp-repr"><span class="nav-number">3.2.</span> <span class="nav-text">__str__ &amp; __repr__</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#call"><span class="nav-number">3.3.</span> <span class="nav-text">__call__</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#add"><span class="nav-number">3.4.</span> <span class="nav-text">__add__</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>

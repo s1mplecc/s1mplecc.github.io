@@ -372,6 +372,256 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/05/Maven%20%E9%85%8D%E7%BD%AE%20&%20POM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/12/05/Maven%20%E9%85%8D%E7%BD%AE%20&%20POM/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/7/index.html">Maven 配置 & POM</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-12-05 02:00:52" itemprop="dateCreated datePublished" datetime="2017-12-05T02:00:52+08:00">2017-12-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-03-07 15:16:28" itemprop="dateModified" datetime="2021-03-07T15:16:28+08:00">2021-03-07</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/05/Maven%20%E9%85%8D%E7%BD%AE%20&%20POM/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/05/Maven 配置 & POM/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.6k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>关于<strong>Maven</strong>的<strong>settings.xml</strong>以及<strong>pom.xml</strong>的介绍</p>
+</blockquote>
+<h1 id="settings-xml"><a href="#settings-xml" class="headerlink" title="settings.xml"></a>settings.xml</h1><ul>
+<li><p><strong>settings.xml</strong>会在两个位置<br><code>${MAVEN_HOME}/conf/settings.xml</code>全局配置，该文件里有很全面的英文注释<br><code>${USER_HOME}/.m2/settings.xml</code>个人配置，建议将全局文件拷贝过来再修改。加载时会覆盖全局设置</p>
+</li>
+<li><p>修改镜像源为aliyun，这样Maven会从aliyun拉取依赖，而不是速度巨慢的官方中央仓库，<strong>id</strong>和<strong>name</strong>都是自己取的用作唯一标识</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;mirror&gt;</span><br><span class="line">    &lt;id&gt;nexus-aliyun&lt;&#x2F;id&gt;</span><br><span class="line">    &lt;mirrorOf&gt;central&lt;&#x2F;mirrorOf&gt;</span><br><span class="line">    &lt;name&gt;Nexus aliyun&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;url&gt;http:&#x2F;&#x2F;maven.aliyun.com&#x2F;nexus&#x2F;content&#x2F;groups&#x2F;public&#x2F;&lt;&#x2F;url&gt;</span><br><span class="line">&lt;&#x2F;mirror&gt;</span><br></pre></td></tr></table></figure>
+<p>这样的效果和在项目中的<strong>pom.xml</strong>中加入如下内容的作用是一样的，只不过是针对全局所有项目的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;repositories&gt;</span><br><span class="line">    &lt;repository&gt;</span><br><span class="line">        &lt;id&gt;nexus-aliyun&lt;&#x2F;id&gt;</span><br><span class="line">        &lt;name&gt;Nexus aliyun&lt;&#x2F;name&gt;</span><br><span class="line">        &lt;url&gt;http:&#x2F;&#x2F;maven.aliyun.com&#x2F;nexus&#x2F;content&#x2F;groups&#x2F;public&#x2F;&lt;&#x2F;url&gt;</span><br><span class="line">    &lt;&#x2F;repository&gt;</span><br><span class="line">&lt;&#x2F;repositories&gt;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>如果你搭建了Maven私服，你可能会在<strong>pom.xml</strong>中添加 <code>&lt;repositoriy&gt;</code>去下载和部署Jar包，需要进行认证的<strong>username</strong>和<strong>password</strong>不应该放在pom文件中而是放在<strong>settings.xml</strong>的<code>&lt;server&gt;</code>标签中</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;server&gt;</span><br><span class="line">  &lt;id&gt;xxx&lt;&#x2F;id&gt;</span><br><span class="line">  &lt;username&gt;xxx&lt;&#x2F;username&gt;</span><br><span class="line">  &lt;password&gt;xxx&lt;&#x2F;password&gt;</span><br><span class="line">&lt;&#x2F;server&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="Other-Settings"><a href="#Other-Settings" class="headerlink" title="Other Settings"></a>Other Settings</h4><ul>
+<li><code>&lt;localRepository&gt;</code>定义了Maven的本地仓库地址，默认值<code>${USER_HOME}/.m2/repository</code></li>
+<li><code>&lt;interactiveMode&gt;</code>定义Maven与用户输入的交互模式，默认为true</li>
+<li>更多参考<a href="http://maven.apache.org/settings.html" target="_blank" rel="noopener">官方文档</a></li>
+</ul>
+<hr>
+<h1 id="pom-xml"><a href="#pom-xml" class="headerlink" title="pom.xml"></a>pom.xml</h1><blockquote>
+<p>POM全称<strong>Project Object Model</strong>， 它是一个名为<strong>pom.xml</strong>的Maven项目的XML表示形式。Maven用它来管理项目的配置、依赖等等。<a href="http://maven.apache.org/pom.html" target="_blank" rel="noopener">官方文档</a></p>
+</blockquote>
+<h3 id="Maven-Coordinates"><a href="#Maven-Coordinates" class="headerlink" title="Maven Coordinates"></a>Maven Coordinates</h3><ul>
+<li><p>Maven项目需要<code>groupId:artifactId:version</code>定义项目的坐标（Coordinates），除非继承自一个<strong>parent</strong>时可以省略<strong>groupId</strong>和<strong>version</strong></p>
+</li>
+<li><p>可以看到在执行<code>mvn install</code>后，项目会被打包安装到本地Maven仓库中去，比如<code>/Users/s1mple/.m2/repository/com/caacetc/spark-dao/1.0-SNAPSHOT/spark-dao-1.0-SNAPSHOT.jar</code>，其中<code>com.caacetc</code>是我的<strong>groupId</strong>、<code>spark-dao</code>是我的<strong>artifactId</strong>、<code>1.0-SNAPSHOT</code>是版本号</p>
+</li>
+<li><p><code>&lt;packaging&gt;</code>打包的方式，默认为jar、还可以打包war和pom等。打包成pom不会生成目标文件，通常用于<strong>parent</strong>模块中。</p>
+</li>
+</ul>
+<h3 id="Dependencies"><a href="#Dependencies" class="headerlink" title="Dependencies"></a>Dependencies</h3><ul>
+<li>Maven最强力的地方之一就是对于依赖的管理，Maven会自动下载依赖的Jar包并在编译时链接</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependencies&gt;</span><br><span class="line">  &lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;junit&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;junit&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;4.0&lt;&#x2F;version&gt;</span><br><span class="line">  &lt;&#x2F;dependency&gt;</span><br><span class="line">  ...</span><br><span class="line">&lt;&#x2F;dependencies&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Inheritance"><a href="#Inheritance" class="headerlink" title="Inheritance"></a>Inheritance</h3><ul>
+<li><p>如果是多模块的Maven项目，<strong>parent POM</strong>文件中应该加入<code>&lt;packaging&gt;pom&lt;/packaging&gt;</code>，子模块会继承父模块的POM</p>
+</li>
+<li><p>类似与Java中的所有类继承自<code>java.lang.Object</code>类，Maven中所有POM文件也继承自<strong>Super POM</strong>，其中定义了Maven中央仓库的url、build的各种属性值等等</p>
+</li>
+<li><p>Maven提供了<code>&lt;dependencyManagement&gt;</code>标签来管理依赖版本号，通常存在与<strong>parent POM</strong>中，子模块在引用时可以不指定版本号</p>
+</li>
+<li><p><code>&lt;dependencyManagement&gt;</code>里只是声明依赖，并不实现引入，而所有声明在<code>&lt;dependencies&gt;</code>里的依赖都会自动引入，并默认被所有的子项目继承</p>
+</li>
+</ul>
+<h3 id="Properties"><a href="#Properties" class="headerlink" title="Properties"></a>Properties</h3><ul>
+<li>定义属性值，使用时<code>${mysql.version}</code>这样引用</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties&gt;</span><br><span class="line">  &lt;mysql.version&gt;5.1.40&lt;&#x2F;mysql.version&gt;</span><br><span class="line">  ...</span><br><span class="line">&lt;&#x2F;properties&gt;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/02/Vim%20%E9%85%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2708,264 +2958,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/02/%E5%AE%89%E8%A3%85%20JDK&Tomcat/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/11/02/%E5%AE%89%E8%A3%85%20JDK&Tomcat/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/7/index.html">安装 JDK & Tomcat</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-11-02 14:17:06" itemprop="dateCreated datePublished" datetime="2017-11-02T14:17:06+08:00">2017-11-02</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/02/%E5%AE%89%E8%A3%85%20JDK&Tomcat/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/02/安装 JDK&Tomcat/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">3.1k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>Tomcat是现在主流的应用服务器。可以直接将基于Spring框架的Java Web应用部署到Tomcat上。本文将介绍如何安装JDK和Tomcat</p>
-</blockquote>
-<h2 id="Prerequisite"><a href="#Prerequisite" class="headerlink" title="Prerequisite"></a>Prerequisite</h2><ul>
-<li>服务器：Ubuntu 16.04</li>
-<li>良好的网络环境</li>
-</ul>
-<h2 id="Install-JDK"><a href="#Install-JDK" class="headerlink" title="Install JDK"></a>Install JDK</h2><blockquote>
-<p>官网安装jdk，相对较麻烦，但是官网毕竟权威</p>
-</blockquote>
-<ul>
-<li><p><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="noopener">oracle官网</a>复制jdk下载链接，执行<code>wget</code>命令即可</p>
-</li>
-<li><p>解压<code>.tar.gz</code>压缩包，并改名</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mv jdk-8u151-linux-x64.tar.gz &#x2F;usr&#x2F;local&#x2F;lib&#x2F;</span><br><span class="line">tar -xzvf jdk-8u151-linux-x64.tar.gz</span><br><span class="line">mv jdk-8u151-linux-x64 jdk8</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>vim ~/.bashrc</code>配置环境变量，<a href="http://www.cnblogs.com/wangchenyang/archive/2011/08/17/2143620.html" target="_blank" rel="noopener">为什么要设置Java环境变量</a></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME&#x3D;&#x2F;usr&#x2F;local&#x2F;lib&#x2F;jdk8</span><br><span class="line">export JRE_HOME&#x3D;$&#123;JAVA_HOME&#125;&#x2F;jre</span><br><span class="line">export CLASSPATH&#x3D;.:$&#123;JAVA_HOME&#125;&#x2F;lib:$&#123;JRE_HOME&#125;&#x2F;lib  </span><br><span class="line">export PATH&#x3D;$&#123;JAVA_HOME&#125;&#x2F;bin:$PATH</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<blockquote>
-<p><strong>bashrc</strong>与<strong>profile</strong>都用于保存用户的环境信息，<strong>/etc/profile</strong> 中设定的变量(全局)的可以作用于任何用户。<strong>~/.bashrc</strong> 该文件包含专用于某个用户的bash shell的bash信息,当该用户登录时以及每次打开新的shell时,该文件被读取。需要注意的是我在docker容器中的 <strong>/etc/profile</strong> 配置java环境变量时，重启容器发现配置没生效，应该是操作系统在重启时加载 <strong>/etc/profile</strong> 文件，但是docker容器就没有这种操作了。</p>
-</blockquote>
-<ul>
-<li><code>source ~/.bashrc</code>使文件生效</li>
-</ul>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a><strong>Tips</strong></h4><ol>
-<li>当你执行一条命令，系统会去PATH路径下查找该命令，比如你现在可以执行<code>java -version</code>命令。<code>echo $PATH</code>查看PATH设置。   </li>
-<li>全局环境变量，可以<script type="math/tex">{}`或者`</script>引用，你现在可以<code>echo ${JAVA_HOME}</code>打印该值。<code>env</code>查看环境变量设置。</li>
-</ol>
-<blockquote>
-<p>如果你觉得官网太麻烦，可以安装openjdk，虽说是阉割版，但足够满足你的需求了</p>
-</blockquote>
-<ul>
-<li>安装<strong>openjdk</strong>只需要下面一行命令  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install openjdk-8-jdk</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="Tips-1"><a href="#Tips-1" class="headerlink" title="Tips"></a><strong>Tips</strong></h4><ol>
-<li>你可以通过如下命令查看有关jdk版本和信息。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-cache search jdk</span><br><span class="line">apt-cache show openjdk-8-jdk</span><br></pre></td></tr></table></figure></li>
-<li>java有关的可执行文件被安装在<code>/usr/bin</code>目录下，但是环境变量并没有设置。</li>
-</ol>
-<h2 id="Install-Tomcat"><a href="#Install-Tomcat" class="headerlink" title="Install Tomcat"></a>Install Tomcat</h2><ul>
-<li><p>照例，<a href="https://tomcat.apache.org/download-90.cgi" target="_blank" rel="noopener">官网</a>下载、解压。这里不再赘述</p>
-</li>
-<li><p>配置Tomcat为服务，<code>cd /usr/local/lib/tomcat9</code>目录下</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp .&#x2F;bin&#x2F;catalina.sh &#x2F;etc&#x2F;init.d&#x2F;tomcat</span><br></pre></td></tr></table></figure></li>
-<li><code>vim /etc/init.d/tomcat</code>加入如下内容  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">JAVA_HOME&#x3D;&#x2F;usr&#x2F;local&#x2F;lib&#x2F;jdk8</span><br><span class="line">JRE_HOME&#x3D;$&#123;JAVA_HOME&#125;&#x2F;jre</span><br><span class="line">CATALINA_HOME&#x3D;&#x2F;usr&#x2F;local&#x2F;lib&#x2F;tomcat9</span><br><span class="line">CLASSPATH&#x3D;.:$&#123;JAVA_HOME&#125;&#x2F;lib:$&#123;CATALINA_HOME&#125;&#x2F;lib</span><br></pre></td></tr></table></figure></li>
-<li>添加<strong>restart</strong>命令，<code>&quot;$1&quot;</code>指输入的第一个参数  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    elif [ &quot;$1&quot; &#x3D; &quot;restart&quot; ] ; then</span><br><span class="line">        service tomcat stop</span><br><span class="line">        sleep 1</span><br><span class="line">        service tomcat start</span><br><span class="line">    &#96;&#96;&#96;    </span><br><span class="line">- 保存退出，现在可以通过&#96;service tomcat [start|stop|restart]&#96;来启动、停止Tomcat。查看是否正常启动</span><br></pre></td></tr></table></figure>
-  curl localhost:8080  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### **Tips**</span><br><span class="line"></span><br><span class="line">1. 你的应用程序安装路径在**webapps**下。在部署你自己的应用前执行&#96;rm -r webapps&#x2F;*&#96;清空文件夹    </span><br><span class="line">2. Tomcat的配置文件在&#96;conf&#x2F;server.xml&#96;中</span><br><span class="line"></span><br><span class="line">### **About server.xml**</span><br><span class="line"></span><br><span class="line">- [server.xml详解](http:&#x2F;&#x2F;www.cnblogs.com&#x2F;gugnv&#x2F;archive&#x2F;2012&#x2F;02&#x2F;01&#x2F;2334187.html)</span><br><span class="line"></span><br><span class="line">- 默认开启8080端口，可以修改端口号</span><br></pre></td></tr></table></figure>
-  &lt;Connector port=”8080” protocol=”HTTP/1.1”<pre><code>         connectionTimeout=&quot;20000&quot;
-         redirectPort=&quot;8443&quot; /&gt;
-</code></pre>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- &#96;&lt;Host&gt;&#96;标签中，**appBase**解释了为什么将Java Web程序打包放在此目录下。**unpackWARs**为true自动解压war包，**autoDeploy**自动部署。所以在Tomcat启动后识别webapps目录下&#96;.war&#96;结尾的war包自动解压、部署。</span><br></pre></td></tr></table></figure>
-  &lt;Host name=”localhost”  appBase=”webapps”<pre><code>    unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;
-</code></pre>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 在&#96;&lt;Host&gt;&#96;标签中可设置&#96;&lt;Context&gt;&#96;上下文标签。**docBase**是应用程序包名，**path**是url前缀，**reloadable**为true时自动检测应用程序的&#96;&#x2F;WEB-INF&#x2F;lib&#96;和&#96;&#x2F;WEB-INF&#x2F;classes&#96;目录的变化，自动装载新的应用程序</span><br></pre></td></tr></table></figure>
-  <Context docbase="app" path="/app" reloadable="true">  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 如果不配置&#96;&lt;Context&gt;&#96;标签，将默认以应用程序文件夹名字作为url前缀，如**webapps**目录下应用程序文件夹名为**jpress**，则url为</span><br></pre></td></tr></table></figure>
-  <a href="http://{IP}:{port}/jpress/">http://{IP}:{port}/jpress/</a><br>  ```</Context></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3017,7 +3009,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-count">73</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

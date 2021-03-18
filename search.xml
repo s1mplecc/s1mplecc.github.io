@@ -6305,43 +6305,109 @@
 <p><code>__call__</code> 方法可以接收可变参数, 这意味着可以像定义任意函数一样定义类的 <code>__call__</code> 方法。当 <code>__call__</code> 方法接收一个函数作为参数时，那么这个类就可以作为一个函数装饰器。基于类的函数装饰器就是这么实现的。如下代码我在 func 函数上使用了类级别的函数装饰器 Deco，使得在执行函数前多打印了一行信息。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">Deco</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, func)</span>:</span></span><br><span class="line"><span class="meta">... </span>        self.func = func</span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line"><span class="meta">... </span>        print(<span class="string">'decorate...'</span>)</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">return</span> self.func(*args, **kwargs)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>@Deco</span><br><span class="line"><span class="meta">... </span><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(name)</span>:</span></span><br><span class="line"><span class="meta">... </span>    print(<span class="string">'execute function'</span>, name)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="string">'foo'</span>)</span><br><span class="line">decorate...</span><br><span class="line">execute function foo</span><br></pre></td></tr></table></figure>
 <p>实际上类级别的函数装饰器必须要实现 <code>__call__</code> 方法，因为本质上函数装饰器也是一个函数，只不过是一个接收被装饰函数作为参数的高阶函数。有关装饰器可以详见装饰器一章。</p>
-<h3 id="add-与重载运算符"><a href="#add-与重载运算符" class="headerlink" title="__add__ 与重载运算符"></a><code>__add__</code> 与重载运算符</h3><p>运算符重载这个语言特性一直备受争议，鉴于太多 C++ 程序员滥用这个特性，Java 之父 James Gosling 很干脆的决定不为 Java 提供运算符重载功能。但另一方面，正确的使用运算符重载确实能提高代码的可读性和灵活性。为此，Python 施加了一些限制，在灵活性、可用性和安全性之间做到了平衡。主要包括：</p>
+<h3 id="add"><a href="#add" class="headerlink" title="__add__"></a><code>__add__</code></h3><p>Python 中的运算符重载也是通过重写特殊方法实现的。比如重载 “+” 加号运算符需要重写 <code>__add__</code>，重载比较运算符 “==” 需要重写 <code>__eq__</code> 方法。合理的重载运算符有助于提高代码的可读性。下面我将就一个代码示例进行演示。</p>
+<p>考虑一个平面向量，由 x，y 两个坐标构成。为了实现向量的加法（按位相加），重写了加号运算符，为了比较两个向量是否相等重写了比较运算符，为了在控制台方便验证结果重写了 <code>__repr__</code> 方法。完整的向量类代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vector</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x, y)</span>:</span></span><br><span class="line">        self.x = x</span><br><span class="line">        self.y = y</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">f'Vector(<span class="subst">&#123;self.x&#125;</span>, <span class="subst">&#123;self.y&#125;</span>)'</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> Vector(self.x + other.x, self.y + other.y)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__eq__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.x == other.x <span class="keyword">and</span> self.y == other.y</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__ne__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">not</span> self.__eq__(other)</span><br></pre></td></tr></table></figure>
+<p>在控制台验证结果：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> vector <span class="keyword">import</span> Vector</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 = Vector(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v2 = Vector(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 + v2</span><br><span class="line">Vector(<span class="number">3</span>, <span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 == v2</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 + v1 == Vector(<span class="number">2</span>, <span class="number">4</span>)</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<p>重载了 “+” 运算符后，可以直接使用 <code>v1 + v2</code> 对 Vector 类进行向量相加，而不必要编写专门的 <code>add()</code> 方法，并且重载了 <code>==</code> 运算符取代了 <code>v1.equals(v2)</code> 的繁冗写法。从代码可读性来讲直接使用运算符可读性更高，也更符合数学逻辑。</p>
+<p>当然，运算符重载涉及的知识点不止于此，《流畅的 Python》将其作为单独的一章，可见其重要性。下一节我们将就运算符重载进行深入的讨论。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://foofish.net/dynamic_type_and_duck_type.html" target="_blank" rel="noopener">Python：动态语言与鸭子类型</a></li>
+<li><a href="https://www.tutorialsteacher.com/python/magic-methods-in-python" target="_blank" rel="noopener">Python - Magic or Dunder Methods
+</a></li>
+<li><a href="https://www.pythonlikeyoumeanit.com/Module4_OOP/Special_Methods.html" target="_blank" rel="noopener">Python Like You Mean It - Special Methods</a></li>
+<li><a href="https://sikasjc.github.io/2018/09/02/magicmethods2/" target="_blank" rel="noopener">全面学习Python魔法方法(magic methods)</a></li>
+<li><a href="https://hellowac.github.io/programing%20teach/2017/06/06/fluentpython13.html" target="_blank" rel="noopener">流畅的python - 重载运算符</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Languages</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python 运算符重载</title>
+    <url>/2021/03/18/Python-%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>运算符重载这个语言特性其实一直备受争议，鉴于太多 C++ 程序员滥用这个特性，Java 之父 James Gosling 很干脆的决定不为 Java 提供运算符重载功能。但另一方面，正确的使用运算符重载确实能提高代码的可读性和灵活性。为此，Python 施加了一些限制，在灵活性、可用性和安全性之间做到了平衡。主要包括：</p>
 <ul>
 <li>不能重载内置类型的运算符</li>
 <li>不能新建运算符，只能重载现有的</li>
 <li>is、and、or 和 not 运算符不能重载（但位运算符 &amp;、| 和 ~ 可以）</li>
 </ul>
-<p>Python 中的运算符重载是通过重写特殊方法实现的。比如重载 “+” 加号运算符需要重写 <code>__add__</code>，重载比较运算符 “==” 需要重写 <code>__eq__</code> 方法。下面我将演示如何重载运算符来提高代码的可读性。</p>
-<p>考虑一个平面向量，由 x，y 两个坐标构成。为了实现向量的加法（按位相加），重写了加号运算符，为了比较两个向量是否相等重写了比较运算符，为了在控制台方便验证结果重写了 <code>__repr__</code> 方法。完整的向量类代码如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vector</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x, y)</span>:</span></span><br><span class="line">        self.x = x</span><br><span class="line">        self.y = y</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">f'Vector(<span class="subst">&#123;self.x&#125;</span>, <span class="subst">&#123;self.y&#125;</span>)'</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> Vector(self.x + other.x, self.y + other.y)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__eq__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.x == other.x <span class="keyword">and</span> self.y == other.y</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__ne__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">not</span> self.__eq__(other)</span><br></pre></td></tr></table></figure>
-<p>在控制台验证结果：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> vector <span class="keyword">import</span> Vector</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 = Vector(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v2 = Vector(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 + v2</span><br><span class="line">Vector(<span class="number">3</span>, <span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 == v2</span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 + v1 == Vector(<span class="number">2</span>, <span class="number">4</span>)</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<p>可以看到没有为 Vector 类添加专门的 <code>add()</code> 和 <code>equals()</code> 方法，而只是重载了现有运算符，使得代码可读性显著提高了，并且直接对向量进行 “+” 相加也更符合数学逻辑。值得一提的是，在 Python 2 中，在重载 <code>==</code> 的同时也要重载 <code>!=</code> 运算符即重写 <code>__ne__</code> 方法。而在 Python 3 中，这不再是必需的，因为默认情况下，<code>__ne__</code> 会委托给 <code>__eq__</code> 执行并对结果取反。<a href="https://docs.python.org/3/reference/datamodel.html" target="_blank" rel="noopener">官方解释</a></p>
-<p>下面列出一些常见可重载运算符。</p>
-<h4 id="一元运算符"><a href="#一元运算符" class="headerlink" title="一元运算符"></a>一元运算符</h4><div class="table-container">
+<p>Python 的运算符重载非常方便，只需要<strong>重写对应的特殊方法</strong>。在上面一节我们已经介绍了如何重载一个向量类的 “+” 和 “==” 运算符，实现还算简单，接下来我们考虑一个更复杂的情形：不只限于二维向量相加的 Vector 类，以引入 Python 运算符重载更全面的知识点。</p>
+<h3 id="改进版的-Vector"><a href="#改进版的-Vector" class="headerlink" title="改进版的 Vector"></a>改进版的 Vector</h3><p>考虑到高维向量的应用场景，我们应当支持不同维度向量的相加操作，并且为低维向量的缺失值做默认添 0 处理，这也是一些统计分析应用的常用缺失值处理方式。基于此，首先要确定的便是，Vector 类的构造函数不再只接收固定数量和位置的参数，而应当接收可变参数。</p>
+<p>通常情况下，Python 函数接收可变参数有两种处理方式。一种是接收不定长参数，即 <code>*args</code>，这样我们就可以用类似 <code>Vector(1, 2)</code> 或 <code>Vector(1, 2, 3)</code> 的方式来初始化不同维数的向量类。在这种情况下，函数会将不定长参数打包成名为 <code>args</code> 的元组进行处理，当然能满足迭代的需求。虽然这种方式看上去很直观，但考虑到向量类从功能上讲也是一个序列类，而 Python 中的内置序列类型的构造方法基本上都是接收<strong>可迭代对象</strong>（Iterable）作为参数，考虑到一致性我们也采取这种形式，并且通过重写 <code>__repr__</code> 输出更直观的向量类的数学表示形式。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vector</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, components: Iterable)</span>:</span></span><br><span class="line">        self._components = array(<span class="string">'i'</span>, components)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> str(tuple(self._components))</span><br></pre></td></tr></table></figure>
+<p>为了方便之后对向量分量的处理，将其保存在一个数组中，第一个参数 ‘i’ 标明这是一个整型数组。这样做还有一个好处就是，保证了向量序列的不可变性，这一点同 Python 内置类型不可变列表 tuple 类似。如此定义后，我们可以这样实例化 Vector 类：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> vector <span class="keyword">import</span> Vector</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Vector([<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Vector((<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>))</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Vector(range(<span class="number">4</span>))</span><br><span class="line">(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p>由于 Vector 类接收 Iterable 对象作为构造参数，而任何实现了 <code>__iter__</code> 方法的类都会被绑定为 Iterable 的子类，所以可以传入 list、tuple 和 range 等可迭代对象。</p>
+<p>接下来，重载 Vector 类的加号运算符，为了满足之前所说的低维向量默认添 0 处理，我们引入迭代工具包下的 <code>zip_longest</code> 方法，它可以接收多个可迭代对象，将其打包成一个个的元组，如 <code>zip_longest(p, q, ...) --&gt; (p[0], q[0]), (p[1], q[1]), ...</code>。同时关键字参数 fillvalue 可以指定填充的默认值。但在这之前，由于 <code>zip_longest</code> 参数必须是可迭代对象，我们还需要为 Vector 类实现 <code>__iter__</code> 方法。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vector</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> iter(self._components)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        pairs = itertools.zip_longest(self, other, fillvalue=<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> Vector(a + b <span class="keyword">for</span> a, b <span class="keyword">in</span> pairs)</span><br></pre></td></tr></table></figure>
+<p><code>__add__</code> 的实现逻辑很简单，按位相加返回一个新的 Vector 对象，在构造 Vector 对象时使用到了生成器表达式，而生成器 Generator 是 Iterable 的子类，所以也符合构造参数的要求。</p>
+<p>为了验证效果，还需要重载 <code>==</code> 运算符，考虑到两个向量维度可能不同，首先要对维度，也就是向量分量的个数进行比较，为此需要重写 <code>__len__</code> 方法。其次是进行按位比较，内置的 zip 函数可以将两个迭代对象打包从而同时进行遍历。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vector</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__len__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> len(self._components)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__eq__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> len(self) == len(other) <span class="keyword">and</span> all(a == b <span class="keyword">for</span> a, b <span class="keyword">in</span> zip(self, other))</span><br></pre></td></tr></table></figure>
+<p><strong>最佳实践：用 zip 函数同时遍历两个迭代器</strong>。《Effective Python》的第 11 条提到了这一点。在 Python 中经常会遇到需要平行地迭代两个序列的情况。一般的做法是，写一个 for 循环对一个序列进行迭代，然后想办法获得其索引，通过索引访问第二个序列的对应元素。常见的做法是借助 enumerate 函数，通过 <code>for index, item in enumerate(items)</code> 的方式获取索引。现在有一种更优雅的写法，使用内置的 zip 函数，它可以将两个及以上的迭代器封装成生成器，这个生成器能在每次迭代时从每个迭代器中取出下一个值构成元组，再结合元组拆包就能达到平行取值的目的，如上述代码中的 <code>for a, b in zip(self, other)</code>。显然，这种方式可读性更高。但如果待遍历序列不等长，zip 函数会提前终止，这可能导致意外的结果。所以在<strong>不确定序列是否等长</strong>的条件下，可以考虑使用 itertools 模块中过的 <code>zip_longest</code> 函数。</p>
+<p>至此，重载的 “+” 和 “==” 运算符初步完成了，可以编写测试用例进行验证了，作为本系列第一个比较全面的测试类，我将在文末贴出完整的测试代码，这里先在控制台演示重载之后的效果。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 = Vector([<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 == (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 + Vector((<span class="number">1</span>, <span class="number">1</span>))</span><br><span class="line">(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 + [<span class="number">1</span>, <span class="number">1</span>]</span><br><span class="line">(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 + (<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">(<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>由于 <code>__add__</code> 方法中的 other 只要求是可迭代对象而没有类型限制，所以重载的加号运算符不止可以对两个 Vector 实例进行相加，也支持 Vector 实例与一个可迭代对象相加，不管是 list、tuple 还是其他 Iterable 类型。但需要注意的是，可迭代对象必须作为第二个操作数，也就是 “+” 右侧的操作数。理解这一点并不难，因为我们只实现了 Vector 的 <code>__add__</code> 方法，而 Python 的内置类型类可不明白怎么对加上一个向量进行处理，比如下面报错提示的 tuple 类。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>(<span class="number">1</span>, <span class="number">1</span>) + v1</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: can only concatenate tuple (<span class="keyword">not</span> <span class="string">"Vector"</span>) to tuple</span><br></pre></td></tr></table></figure>
+<h4 id="反向运算符"><a href="#反向运算符" class="headerlink" title="反向运算符"></a>反向运算符</h4><p>那么有什么方法，不需要重写 tuple 类中的 <code>__add__</code> 方法（显然这种方式也不合理），也能使重载的加号运算符支持 <code>(1, 1) + v1</code> 呢？答案是有的，在此之前，不得不提到 Python 的<strong>运算符分派机制</strong>。</p>
+<p>对于中缀运算符，Python 提供了特殊的分派机制。对于表达式 <code>a + b</code>，解释器会执行以下几步操作：</p>
+<ol>
+<li>如果 a 有 <code>__add__</code> 方法且不返回 NotImplemented，调用 <code>a.__add__(b)</code>；</li>
+<li>如果 a 没有 <code>__add__</code> 方法或调用返回 NotImplemented，检查 b 有没有 <code>__radd__</code> 方法，如果有且不返回 NotImplemented，调用 <code>b.__radd__(a)</code>；</li>
+<li>如果 b 没有 <code>__radd__</code> 方法或调用返回 NotImplemented，抛出 TypeError。</li>
+</ol>
+<p>注：NotImplemented 是 Python 内置的特殊单例值，如果运算符特殊方法不能处理给定的操作数，那么要把它返回给解释器。</p>
+<p>如果将 <code>__add__</code> 称为正向方法，那么 <code>__radd__</code> 就可以称为 <code>__add__</code> 方法的<strong>反向方法</strong>，或者右向方法，这个方法的作用是支持操作数从右至左进行计算。因此，为了支持 <code>(1, 1) + v1</code>，我们需要定义 Vector 类的反向方法。而反向方法只需要委托给已经定义好的 <code>__add__</code> 方法。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vector</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            pairs = itertools.zip_longest(self, other, fillvalue=<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> Vector(a + b <span class="keyword">for</span> a, b <span class="keyword">in</span> pairs)</span><br><span class="line">        <span class="keyword">except</span> TypeError:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">NotImplemented</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__radd__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self + other</span><br></pre></td></tr></table></figure>
+<p><code>__radd__</code> 通常就是这么简单，由于解释器调用的是 <code>b.__radd__(a)</code>，而这里的 b 即 v1 是一个 Vector 实例，能够与一个元组相加，所以这时 <code>(1, 1) + v1</code> 不会再报错。同时，还对 <code>__add__</code> 方法做了些修改：<strong>捕获 TypeError 异常并返回 NotImplemented</strong>。这也是一种重载中缀运算符时的最佳实践，抛出异常将导致算符分派机制终止，而抛出 NotImplemented 则会让解释器再尝试调用反向运算符方法。当运算符左右操作数是不同类型时，反向方法也许能够正常运算。</p>
+<p>现在，验证重载的反向运算符：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 = Vector([<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>(<span class="number">1</span>, <span class="number">1</span>) + v1</span><br><span class="line">(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>] + v1</span><br><span class="line">(<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h4><p>对于比较运算符，正向和反向调用使用的是同一系列方法，只不过对调了参数。注意是同一系列而不是同一方法。例如，对 “==” 来说，正向调用是 <code>a.__eq__(b)</code>，那么反向调用就是 <code>b.__eq__(a)</code>；而对 “&gt;” 来说，正向 <code>a.__gt__(b)</code> 的反向调用是 <code>b.__lt__(a)</code>。</p>
+<p>如果正向调用左操作数的 <code>__eq__</code> 方法返回 NotImplemented，Python 解释器会去尝试反向调用右操作数的 <code>__eq__</code> 方法，若右操作数也返回 NotImplemented，解释器不会抛出 TypeError 异常，而是会比较对象的 ID 作最后一搏。</p>
+<p>对元组和 Vector 实例比较的具体步骤如下：</p>
+<ol>
+<li>尝试调用 tuple 的 <code>__eq__</code> 方法，由于 tuple 不认识 Vector 类，返回 NotImplemented；</li>
+<li>尝试调用 Vector 的 <code>__eq__</code> 方法，返回 True。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>(<span class="number">1</span>, <span class="number">2</span>) == Vector([<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<p>另外，对于 “!=” 运算符，Python 3 的最佳实践是只实现 <code>__eq__</code> 方法而不实现它，因为从 object 继承来的 <code>__ne__</code> 方法会对 <code>__eq__</code> 返回的结果取反。而 Python 2 则不同，重载 “==” 的同时也应重载 “!=” 运算符。Python 之父 Guido 曾提到这是 Python 2 的一个设计缺陷且已在 Python 3 中修复了。</p>
+<h4 id="就地运算符"><a href="#就地运算符" class="headerlink" title="就地运算符"></a>就地运算符</h4><p>增量赋值运算符，也称就地运算符，如 “+=”，有两种运算方式。对于不可变类型来说，<code>a += b</code> 的作用与 <code>a = a + b</code> 完全一致，增量赋值不会修改不可变目标，而是<strong>新建实例</strong>，然后重新绑定，也就是说运算前后的 a 不是同一对象。对于不可变类型，这是预期的行为。</p>
+<p>而对于实现了就地运算符方法，如 <code>__iadd__</code>，的可变类型来说，<code>a += b</code> 会调用该方法就地修改左操作数，而不是创建一个新的对象。这一点，Python 的内置类型，不可变的 tuple 和可变的 list 就可以很好的说明。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(t)</span><br><span class="line"><span class="number">4359598592</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t += (<span class="number">3</span>,)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(t)</span><br><span class="line"><span class="number">4359584960</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(l)</span><br><span class="line"><span class="number">4360054336</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l += [<span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(l)</span><br><span class="line"><span class="number">4360054336</span></span><br></pre></td></tr></table></figure>
+<p>阅读源码你会发现，list 类 实现了 <code>__iadd__</code> 方法而 tuple 类没有实现。对 list 而言，”+=” 就地运算符的逻辑与其 <code>extend()</code> 方法相同，将一个可迭代对象的元素依次追加到当前列表的末尾。而对 tuple 而言，即使没有定义 <code>__iadd__</code> 方法，使用 “+=” 也会委托给 <code>__add__</code> 方法进行运算返回一个新的 tuple 对象。</p>
+<p>从设计层面考虑，Vector 应当与元组一致，被设计成不可变类型，即每次对向量进行运算后生成一个新的向量。站在函数式编程的角度，这种设计无副作用（不在函数内部修改传入参数状态），从而避免一些难以预料的问题。因此<strong>对于不可变类型，一定不能实现就地特殊方法</strong>。对 Vector 使用 “+=” 运算符会调用现有的 <code>__add__</code> 方法生成一个新的 Vector 实例。<code>v1 += (1, 1)</code> 与 <code>v1 = v1 + (1, 1)</code> 行为一致。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 = Vector([<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(v1)</span><br><span class="line"><span class="number">4360163280</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1 += (<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v1</span><br><span class="line">(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(v1)</span><br><span class="line"><span class="number">4359691376</span></span><br></pre></td></tr></table></figure>
+<h3 id="附录：代码"><a href="#附录：代码" class="headerlink" title="附录：代码"></a>附录：代码</h3><h4 id="vector-py"><a href="#vector-py" class="headerlink" title="vector.py"></a>vector.py</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">from</span> array <span class="keyword">import</span> array</span><br><span class="line"><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterable</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vector</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, components: Iterable)</span>:</span></span><br><span class="line">        self._components = array(<span class="string">'i'</span>, components)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> iter(self._components)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__len__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> len(self._components)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> str(tuple(self._components))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__eq__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> len(self) == len(other) <span class="keyword">and</span> all(a == b <span class="keyword">for</span> a, b <span class="keyword">in</span> zip(self, other))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            pairs = itertools.zip_longest(self, other, fillvalue=<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> Vector(a + b <span class="keyword">for</span> a, b <span class="keyword">in</span> pairs)</span><br><span class="line">        <span class="keyword">except</span> TypeError:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">NotImplemented</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__radd__</span><span class="params">(self, other)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self + other</span><br></pre></td></tr></table></figure>
+<h4 id="vector-test-py"><a href="#vector-test-py" class="headerlink" title="vector_test.py"></a>vector_test.py</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> vector <span class="keyword">import</span> Vector</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestVector</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_should_compare_two_vectors_with_override_compare_operators</span><span class="params">(self)</span>:</span></span><br><span class="line">        v1 = Vector([<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line">        v2 = Vector((<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line">        v3 = Vector([<span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line">        v4 = Vector([<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">assert</span> v1 == v2</span><br><span class="line">        <span class="keyword">assert</span> v3 != v2</span><br><span class="line">        <span class="keyword">assert</span> v4 != v3</span><br><span class="line">        <span class="keyword">assert</span> (<span class="number">1</span>, <span class="number">2</span>) == v2</span><br><span class="line">        <span class="keyword">assert</span> v2 == [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_should_add_two_same_dimension_vectors_with_override_add_operator</span><span class="params">(self)</span>:</span></span><br><span class="line">        v1 = Vector([<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line">        v2 = Vector((<span class="number">1</span>, <span class="number">3</span>))</span><br><span class="line">        result = Vector([<span class="number">2</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">assert</span> result == v1 + v2</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_should_add_two_different_dimension_vectors_with_override_add_operator</span><span class="params">(self)</span>:</span></span><br><span class="line">        v1 = Vector([<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line">        v2 = Vector((<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>))</span><br><span class="line">        result = Vector([<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">assert</span> result == v1 + v2</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_should_add_vector_and_iterable_with_override_add_operator</span><span class="params">(self)</span>:</span></span><br><span class="line">        v1 = Vector([<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">assert</span> v1 + (<span class="number">1</span>, <span class="number">1</span>) == (<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">        <span class="keyword">assert</span> v1 + [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>] == (<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_should_add_iterable_and_vector_with_override_radd_method</span><span class="params">(self)</span>:</span></span><br><span class="line">        v1 = Vector([<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">assert</span> (<span class="number">1</span>, <span class="number">1</span>) + v1 == (<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">        <span class="keyword">assert</span> [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>] + v1 == (<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_should_create_new_vector_when_use_incremental_add_operator</span><span class="params">(self)</span>:</span></span><br><span class="line">        v1 = Vector([<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line">        id1 = id(v1)</span><br><span class="line">        v1 += (<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">assert</span> id(v1) != id1</span><br></pre></td></tr></table></figure>
+<h3 id="附录：常见可重载运算符"><a href="#附录：常见可重载运算符" class="headerlink" title="附录：常见可重载运算符"></a>附录：常见可重载运算符</h3><h4 id="一元运算符"><a href="#一元运算符" class="headerlink" title="一元运算符"></a>一元运算符</h4><div class="table-container">
 <table>
 <thead>
 <tr>
 <th style="text-align:center">运算符</th>
 <th style="text-align:center">特殊方法</th>
-<th>备注</th>
+<th style="text-align:left">备注</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:center">-</td>
 <td style="text-align:center"><code>__neg__</code></td>
-<td>一元取负算术运算符</td>
+<td style="text-align:left">一元取负算术运算符</td>
 </tr>
 <tr>
 <td style="text-align:center">+</td>
 <td style="text-align:center"><code>__pos__</code></td>
-<td>一元取正算术运算符</td>
+<td style="text-align:left">一元取正算术运算符</td>
 </tr>
 <tr>
 <td style="text-align:center">~</td>
 <td style="text-align:center"><code>__invert__</code></td>
-<td>对整数按位取反，定义为 ~x == -(x+1)</td>
+<td style="text-align:left">对整数按位取反，定义为 ~x == -(x+1)</td>
 </tr>
 </tbody>
 </table>
@@ -6351,153 +6417,172 @@
 <thead>
 <tr>
 <th style="text-align:center">运算符</th>
-<th style="text-align:center">特殊方法</th>
+<th style="text-align:center">正向方法</th>
+<th style="text-align:center">反向方法</th>
 <th style="text-align:center">就地方法</th>
-<th>备注</th>
+<th style="text-align:center">说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:center">+</td>
 <td style="text-align:center"><code>__add__</code></td>
+<td style="text-align:center"><code>__radd__</code></td>
 <td style="text-align:center"><code>__iadd__</code></td>
-<td>加法或拼接</td>
+<td style="text-align:center">加法或拼接</td>
 </tr>
 <tr>
 <td style="text-align:center">-</td>
 <td style="text-align:center"><code>__sub__</code></td>
+<td style="text-align:center"><code>__rsub__</code></td>
 <td style="text-align:center"><code>__isub__</code></td>
-<td>减法</td>
+<td style="text-align:center">减法</td>
 </tr>
 <tr>
 <td style="text-align:center">*</td>
 <td style="text-align:center"><code>__mul__</code></td>
+<td style="text-align:center"><code>__rmul__</code></td>
 <td style="text-align:center"><code>__imul__</code></td>
-<td>乘法或重复复制</td>
+<td style="text-align:center">乘法或重复复制</td>
 </tr>
 <tr>
 <td style="text-align:center">/</td>
 <td style="text-align:center"><code>__truediv__</code></td>
+<td style="text-align:center"><code>__rtruediv__</code></td>
 <td style="text-align:center"><code>__itruediv__</code></td>
-<td>除法</td>
+<td style="text-align:center">除法</td>
 </tr>
 <tr>
 <td style="text-align:center">//</td>
 <td style="text-align:center"><code>__floordiv__</code></td>
+<td style="text-align:center"><code>__rfloordiv__</code></td>
 <td style="text-align:center"><code>__ifloordiv__</code></td>
-<td>整除</td>
+<td style="text-align:center">整除</td>
 </tr>
 <tr>
 <td style="text-align:center">%</td>
 <td style="text-align:center"><code>__mod__</code></td>
+<td style="text-align:center"><code>__rmod__</code></td>
 <td style="text-align:center"><code>__imod__</code></td>
-<td>取模</td>
+<td style="text-align:center">取模</td>
 </tr>
 <tr>
-<td style="text-align:center">divmod()</td>
+<td style="text-align:center"><code>divmod()</code></td>
 <td style="text-align:center"><code>__divmod__</code></td>
+<td style="text-align:center"><code>__rdivmod__</code></td>
 <td style="text-align:center"><code>__idivmod__</code></td>
-<td>返回由整除的商和模数组成的元组</td>
+<td style="text-align:center">返回由整除的商和模数组成的元组</td>
 </tr>
 <tr>
-<td style="text-align:center">** 或 pow()</td>
+<td style="text-align:center">**，<code>pow()</code></td>
 <td style="text-align:center"><code>__pow__</code></td>
+<td style="text-align:center"><code>__rpow__</code></td>
 <td style="text-align:center"><code>__ipow__</code></td>
-<td>取幂</td>
+<td style="text-align:center">取幂</td>
 </tr>
 <tr>
 <td style="text-align:center">@</td>
 <td style="text-align:center"><code>__matmul__</code></td>
+<td style="text-align:center"><code>__rmatmul__</code></td>
 <td style="text-align:center"><code>__imatmul__</code></td>
-<td>矩阵乘法(Python 3.5 新引入)</td>
+<td style="text-align:center">矩阵乘法</td>
 </tr>
 <tr>
 <td style="text-align:center">&amp;</td>
 <td style="text-align:center"><code>__and__</code></td>
+<td style="text-align:center"><code>__rand__</code></td>
 <td style="text-align:center"><code>__iand__</code></td>
-<td>按位与</td>
+<td style="text-align:center">按位与</td>
 </tr>
 <tr>
 <td style="text-align:center">\</td>
 <td style="text-align:center"></td>
 <td style="text-align:center"><code>__or__</code></td>
-<td><code>__ior__</code></td>
+<td style="text-align:center"><code>__ror__</code></td>
+<td style="text-align:center"><code>__ior__</code></td>
 <td>按位或</td>
 </tr>
 <tr>
 <td style="text-align:center">^</td>
 <td style="text-align:center"><code>__xor__</code></td>
+<td style="text-align:center"><code>__rxor__</code></td>
 <td style="text-align:center"><code>__ixor__</code></td>
-<td>按位异或</td>
+<td style="text-align:center">按位异或</td>
 </tr>
 <tr>
 <td style="text-align:center">&lt;&lt;</td>
 <td style="text-align:center"><code>__lshift__</code></td>
+<td style="text-align:center"><code>__rlshift__</code></td>
 <td style="text-align:center"><code>__ilshift__</code></td>
-<td>按位左移</td>
+<td style="text-align:center">按位左移</td>
 </tr>
 <tr>
 <td style="text-align:center">&gt;&gt;</td>
 <td style="text-align:center"><code>__rshift__</code></td>
+<td style="text-align:center"><code>__rrshift__</code></td>
 <td style="text-align:center"><code>__irshift__</code></td>
-<td>按位右移</td>
+<td style="text-align:center">按位右移</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>注：就地方法是指就地修改左操作数，如 “+=” 运算符。</p>
-<h4 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h4><div class="table-container">
+<h4 id="比较运算符-1"><a href="#比较运算符-1" class="headerlink" title="比较运算符"></a>比较运算符</h4><div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:center">运算符</th>
-<th style="text-align:center">特殊方法</th>
-<th>后备机制</th>
+<th style="text-align:center">分组</th>
+<th style="text-align:center">中缀运算符</th>
+<th style="text-align:center">正向方法调用</th>
+<th style="text-align:center">反向方法调用</th>
+<th style="text-align:center">后备机制</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">==</td>
-<td style="text-align:center"><code>__eq__</code></td>
-<td>判断 id 是否相等</td>
+<td style="text-align:center">相等性</td>
+<td style="text-align:center">a == b</td>
+<td style="text-align:center"><code>a.__eq__(b)</code></td>
+<td style="text-align:center"><code>b.__eq__(a)</code></td>
+<td style="text-align:center">返回 <code>id(a) == id(b)</code></td>
 </tr>
 <tr>
-<td style="text-align:center">!=</td>
-<td style="text-align:center"><code>__ne__</code></td>
-<td>对 <code>__eq__</code> 取反</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">a != b</td>
+<td style="text-align:center"><code>a.__ne__(b)</code></td>
+<td style="text-align:center"><code>b.__ne__(a)</code></td>
+<td style="text-align:center">返回 <code>not (a == b)</code></td>
 </tr>
 <tr>
-<td style="text-align:center">&gt;</td>
-<td style="text-align:center"><code>__gt__</code></td>
-<td>抛出 TypeError</td>
+<td style="text-align:center">排序</td>
+<td style="text-align:center">a &gt; b</td>
+<td style="text-align:center"><code>a.__gt__(b)</code></td>
+<td style="text-align:center"><code>b.__lt__(a)</code></td>
+<td style="text-align:center">抛出 TypeError</td>
 </tr>
 <tr>
-<td style="text-align:center">&lt;</td>
-<td style="text-align:center"><code>__lt__</code></td>
-<td>抛出 TypeError</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">a &lt; b</td>
+<td style="text-align:center"><code>a.__lt__(b)</code></td>
+<td style="text-align:center"><code>b.__gt__(a)</code></td>
+<td style="text-align:center">抛出 TypeError</td>
 </tr>
 <tr>
-<td style="text-align:center">&gt;=</td>
-<td style="text-align:center"><code>__ge__</code></td>
-<td>抛出 TypeError</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">a &gt;= b</td>
+<td style="text-align:center"><code>a.__ge__(b)</code></td>
+<td style="text-align:center"><code>b.__le__(a)</code></td>
+<td style="text-align:center">抛出 TypeError</td>
 </tr>
 <tr>
-<td style="text-align:center">&lt;=</td>
-<td style="text-align:center"><code>__le__</code></td>
-<td>抛出 TypeError</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">a &lt;= b</td>
+<td style="text-align:center"><code>a.__le__(b)</code></td>
+<td style="text-align:center"><code>b.__ge__(a)</code></td>
+<td style="text-align:center">抛出 TypeError</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>注：后备机制是指特殊方法不存在或方法运行异常时采取的行为。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://foofish.net/dynamic_type_and_duck_type.html" target="_blank" rel="noopener">Python：动态语言与鸭子类型</a></li>
-<li><a href="https://www.tutorialsteacher.com/python/magic-methods-in-python" target="_blank" rel="noopener">Python - Magic or Dunder Methods
-</a></li>
-<li><a href="https://www.pythonlikeyoumeanit.com/Module4_OOP/Special_Methods.html" target="_blank" rel="noopener">Python Like You Mean It - Special Methods</a></li>
-<li><a href="https://sikasjc.github.io/2018/09/02/magicmethods2/" target="_blank" rel="noopener">全面学习Python魔法方法(magic methods)</a></li>
-<li><a href="https://hellowac.github.io/programing%20teach/2017/06/06/fluentpython13.html" target="_blank" rel="noopener">流畅的python - 重载运算符</a></li>
-</ul>
 ]]></content>
       <categories>
         <category>Languages</category>
