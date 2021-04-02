@@ -6618,8 +6618,8 @@
       </tags>
   </entry>
   <entry>
-    <title>Python 可迭代对象、迭代器和生成器</title>
-    <url>/2021/04/01/Python-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1%E3%80%81%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8/</url>
+    <title>Python 中的可迭代类型</title>
+    <url>/2021/04/01/Python-%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<h2 id="序列"><a href="#序列" class="headerlink" title="序列"></a>序列</h2><p>之前我们已经讨论过，Python 的“序列协议”是指：任何类，只要使用标准的签名和语义实现了 <code>__getitem__</code> 和 <code>__len__</code> 方法，就能用在任何期待序列的地方，解释器会为这些类做特殊的支持，比如支持迭代和 in 运算符。序列协议的接口定义可以查阅官方的 CPython API 接口文档：<a href="https://docs.python.org/3.8/c-api/sequence.html" target="_blank" rel="noopener">Python/C API Reference Manual — Sequence Protocol</a>，其中有这样一个函数：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">PySequence_Check</span><span class="params">(PyObject *o)</span></span></span><br><span class="line"><span class="function"><span class="comment">/* Return 1 if the object provides sequence protocol, and 0 otherwise. Note that it returns 1 for Python classes with a __getitem__() method unless they are dict subclasses since in general case it is impossible to determine what the type of keys it supports. This function always succeeds. */</span></span></span><br></pre></td></tr></table></figure>
 <p>这个函数的作用是检查并返回对象是否支持序列协议 —— 只在实现了 <code>__getitem__</code> 方法且不是字典子类时才返回 1。这也符合我们之前所说的，协议是非正式的，没有强制力，只要你知道类的具体使用场景，可以只实现协议的一部分。比如，仅为了支持迭代，甚至不需要提供 <code>__len__</code> 方法。</p>

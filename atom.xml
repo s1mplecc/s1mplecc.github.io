@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://s1mplecc.github.io/"/>
-  <updated>2021-04-02T07:32:31.861Z</updated>
+  <updated>2021-04-02T07:55:54.203Z</updated>
   <id>https://s1mplecc.github.io/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Python 可迭代对象、迭代器和生成器</title>
-    <link href="https://s1mplecc.github.io/2021/04/01/Python-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1%E3%80%81%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8/"/>
-    <id>https://s1mplecc.github.io/2021/04/01/Python-可迭代对象、迭代器和生成器/</id>
+    <title>Python 中的可迭代类型</title>
+    <link href="https://s1mplecc.github.io/2021/04/01/Python-%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%B1%BB%E5%9E%8B/"/>
+    <id>https://s1mplecc.github.io/2021/04/01/Python-中的可迭代类型/</id>
     <published>2021-04-01T09:11:20.000Z</published>
-    <updated>2021-04-02T07:32:31.861Z</updated>
+    <updated>2021-04-02T07:55:54.203Z</updated>
     
     <summary type="html">
     
