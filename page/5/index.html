@@ -372,6 +372,315 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Spring Cloud 集成 GitHub 第三方认证</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-04-13 07:23:14" itemprop="dateCreated datePublished" datetime="2018-04-13T07:23:14+08:00">2018-04-13</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-20 19:13:59" itemprop="dateModified" datetime="2020-12-20T19:13:59+08:00">2020-12-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/04/13/Spring Cloud集成GitHub第三方认证/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">5k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>最近遇到需要在 Spring Cloud 框架中加入<strong>用户认证</strong>的功能，发现 GitHub 有第三方认证功能，遂先写了个 demo 实现通过 GitHub 三方认证完成用户认证，虽然不是最终解决方案，但是有助于理解用户认证的流程</p>
+</blockquote>
+<ul>
+<li><p>代码沿用之前的 <a href="https://s2mple.xyz/sidecar/" target="_blank" rel="noopener">Sidecar — 将Node应用引入Spring Cloud</a> 博客中的代码，用到以下模块</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">─ sidecar-example</span><br><span class="line">   ├── author-service    &#x2F;&#x2F; 需要认证才能访问的微服务</span><br><span class="line">   ├── eureka-server    &#x2F;&#x2F; 注册中心</span><br><span class="line">   └── api-gateway    &#x2F;&#x2F; 网关，一切访问的入口</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>主要修改的是<code>api-gateway</code>，实现效果就是：<strong>用户通过<code>api-gateway</code>访问任何一个微服务，需要先跳转到 GitHub 进行认证，认证通过后才获取访问权限</strong></p>
+</blockquote>
+<h2 id="Concepts"><a href="#Concepts" class="headerlink" title="Concepts"></a>Concepts</h2><p>在这之前，有一些概念需要先了解</p>
+<h3 id="SSO"><a href="#SSO" class="headerlink" title="SSO"></a>SSO</h3><blockquote>
+<p><strong>SSO</strong>(or <strong>Single Sign On</strong>) <strong>单点登录</strong>，是目前比较流行的企业业务整合的解决方案之一。SSO 的定义是在多个应用系统中，用户只需要登录一次就可以访问所有相互信任的应用系统。非常适用于微服务架构，可以实现<strong>在一个微服务应用登录后（通常有专门的认证服务器），即可访问该微服务集群中的所有其他微服务</strong>。</p>
+</blockquote>
+<h3 id="OAuth-2-0"><a href="#OAuth-2-0" class="headerlink" title="OAuth 2.0"></a>OAuth 2.0</h3><blockquote>
+<p>大家平时肯定遇到过第三方登录的情况，不知道有没有仔细想过它的流程。假设现在我们用微博账号登录简书</p>
+</blockquote>
+<ul>
+<li><p>最传统的办法是让用户直接在简书的登录页面输微博的账号和密码，简书通过用户的账号和密码去微博那里获取用户数据，但这样做有很多严重的缺点：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">简书需要保存用户的微博账号和密码，这样很不安全。</span><br><span class="line">简书拥有了获取用户在微博所有的权限，包括删除好友、给好友发私信、更改密码、注销账号等危险操作。</span><br><span class="line">用户只有修改微博密码，才能收回赋予简书的权限。但是这样做会使得其他所有通过微博登录的第三方应用程序全部失效。</span><br><span class="line">只要有一个第三方应用程序被破解，就会导致用户密码泄漏，以及所有使用微博登录的网站的数据泄漏。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为了解决以上的问题，OAuth 协议应运而生。我们来看一下它的流程</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">简书问新浪微博：我想要获取用户 A 的头像和昵称，请你提供</span><br><span class="line">微博说：我需要经过用户Ａ 本人的许可 &#x3D;&gt; 然后微博询问用户 A 是否要授权简书访问自己的头像和昵称</span><br><span class="line">用户授权后，微博对简书说：我给你一个临时钥匙（Token），你访问我带了这把钥匙，我就把用户的资料给你</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>以上流程可由下图表示<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/0.jpg" alt="291523855245_.pic"></p>
+</li>
+<li><p>其中最关键的两个部分如下</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">② 用户同意授权给客户端，则认证服务器返回 Code，即授权码</span><br><span class="line">③ 客户端带着 Code，去认证服务器申领 Token</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h4 id="授权码模式"><a href="#授权码模式" class="headerlink" title="授权码模式"></a>授权码模式</h4><blockquote>
+<p>以上模式称为授权码模式 (<strong>authorization code</strong>) ，是目前功能最完整、流程最严密的客户端授权模式。它的特点就是通过客户端服务器，与”服务提供商”的认证服务器进行互动</p>
+</blockquote>
+<ul>
+<li><p>步骤如下</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">用户访问客户端，后者将前者导向认证服务器。</span><br><span class="line">认证服务器询问用户是否给予客户端授权。</span><br><span class="line">若用户给予授权，认证服务器将用户导向客户端事先指定的&quot;重定向URI&quot;（redirection URI），同时附上一个授权码。</span><br><span class="line">客户端收到授权码，附上早先的&quot;重定向URI&quot;，向认证服务器申请令牌。这一步是在客户端的后台的服务器上完成的，对用户不可见。</span><br><span class="line">认证服务器核对了授权码和重定向URI，确认无误后，向客户端发送访问令牌（access token）和更新令牌（refresh token）。</span><br></pre></td></tr></table></figure>
+<p>  <img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/1.png" alt="bg2014051204"></p>
+</li>
+</ul>
+<h2 id="Register"><a href="#Register" class="headerlink" title="Register"></a>Register</h2><blockquote>
+<p>接下来进入正题，如何基于 GitHub 进行第三方认证。首先，我们需要先前往 GitHub 注册一个新的 OAuth App</p>
+</blockquote>
+<ul>
+<li><p>前往<code>https://github.com/settings/developers</code>点击<code>Register a new application</code>，出现如下界面，填写相应信息。注意，主页和回调的 URL 填写的都是<code>api-gateway</code>的地址<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/2.png" alt="B2241479-07A7-4E03-BB62-BCA4CDA5A4A3"></p>
+</li>
+<li><p>注册成功后生成的<code>Client ID</code>和<code>Client Secret</code>是后续需要填写到配置文件中<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/3.png" alt="C65DDEFD-F282-4F12-A211-938767ECD7DA"></p>
+</li>
+</ul>
+<h2 id="Coding"><a href="#Coding" class="headerlink" title="Coding"></a>Coding</h2><blockquote>
+<p>接下来就是编码<code>api-gateway</code>实现重定位到刚注册的 OAuth App 进行认证</p>
+</blockquote>
+<ul>
+<li><p>添加 Maven 依赖</p>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-oauth2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在主类上添加<code>@EnableOAuth2Sso</code>注解</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableDiscoveryClient</span></span><br><span class="line"><span class="meta">@EnableZuulProxy</span></span><br><span class="line"><span class="meta">@EnableOAuth</span>2Sso</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ApiGatewayApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(ApiGatewayApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为了测试过滤情况，我加入了<code>/</code>和<code>/test</code>接口，除此之外，还有<code>/user</code>接口返回 GitHub 个人信息的接口</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Controller</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">welcome</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"welcome"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/test"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"test"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/user"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Principal <span class="title">user</span><span class="params">(Principal user)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改<code>application.yml</code></p>
+  <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">api-gateway</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">5555</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line"><span class="attr">  instance:</span></span><br><span class="line"><span class="attr">    hostname:</span> <span class="string">localhost</span></span><br><span class="line"><span class="attr">  client:</span></span><br><span class="line"><span class="attr">    serviceUrl:</span></span><br><span class="line"><span class="attr">      defaultZone:</span> <span class="attr">http://$&#123;eureka.instance.hostname&#125;:9090/eureka/</span></span><br><span class="line"><span class="attr">zuul:</span></span><br><span class="line"><span class="attr">  routes:</span></span><br><span class="line"><span class="attr">    author-service:</span></span><br><span class="line"><span class="attr">      path:</span> <span class="string">/author-service/**</span></span><br><span class="line"><span class="attr">      serviceId:</span> <span class="string">author-service</span></span><br><span class="line"><span class="attr">    book-service:</span></span><br><span class="line"><span class="attr">      path:</span> <span class="string">/book-service/**</span></span><br><span class="line"><span class="attr">      serviceId:</span> <span class="string">node-sidecar</span></span><br><span class="line"></span><br><span class="line"><span class="attr">security:</span></span><br><span class="line"><span class="attr">  ignored:</span> <span class="string">/,/test</span>  <span class="comment"># 认证忽略的接口</span></span><br><span class="line"><span class="attr">  sessions:</span> <span class="string">never</span>   <span class="comment"># session 策略</span></span><br><span class="line"><span class="attr">  oauth2:</span></span><br><span class="line"><span class="attr">    sso:</span></span><br><span class="line"><span class="attr">      loginPath:</span> <span class="string">/login</span>   <span class="comment"># 登录路径</span></span><br><span class="line"><span class="attr">    client:</span></span><br><span class="line"><span class="attr">      clientId:</span> <span class="number">554906e366</span><span class="string">f7861eab21</span></span><br><span class="line"><span class="attr">      clientSecret:</span> <span class="string">e1286e1ac17599c7a8638bb24649e79f5aabddfd</span></span><br><span class="line"><span class="attr">      userAuthorizationUri:</span> <span class="attr">https://github.com/login/oauth/authorize</span>   <span class="comment"># 进行用户授权的路径</span></span><br><span class="line"><span class="attr">      accessTokenUri:</span> <span class="attr">https://github.com/login/oauth/access_token</span>   <span class="comment"># 获取 token 的路径</span></span><br><span class="line"><span class="attr">    resource:</span></span><br><span class="line"><span class="attr">      userInfoUri:</span> <span class="attr">https://api.github.com/user</span></span><br><span class="line"><span class="attr">      preferTokenInfo:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><blockquote>
+<p>现在就可以进行测试了。陆续启动<code>eureka-server</code>、<code>api-gateway</code>、<code>author-service</code>三个微服务</p>
+</blockquote>
+<ul>
+<li><p>访问<code>localhost:5555/</code>和<code>localhost:5555/test</code>接口，发现均不需要认证，即<code>security.ignored: /,/test</code>配置生效<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/4.png" alt="1C21C2B8-E689-4BBC-94EE-4ED74796994C"></p>
+</li>
+<li><p>接下来通过网关访问<code>author-service</code>的接口，正常需要通过 GitHub 认证，事实证明确实如此。访问<code>http://localhost:5555/author-service/author/1</code>接口，跳转到<strong>用户授权</strong>界面<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/5.png" alt="D2FCA844-1A95-4907-A350-68A21ACCE38C"></p>
+</li>
+<li><p>确认授权后重定位到<code>/author-service/author/1</code>接口返回数据<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/6.png" alt="ED7EE656-F376-408D-9DB8-2C6908799A07-1"></p>
+</li>
+<li><p>还可以访问<code>http://localhost:5555/user</code>来获取 GitHub 账号的信息，这个就不贴图了，自己测试即可</p>
+</li>
+<li><p>再回到 GitHub 的 OAuth 界面，发现<code>0 user</code>变成<code>1 user</code>了，在此你可以弃用所有的用户 Token 以及重置 Client Secret 密钥<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/7.png" alt="7E65EF94-3B65-4FE3-B814-29C6B8A54ECF"> </p>
+</li>
+</ul>
+<h2 id="Analyze"><a href="#Analyze" class="headerlink" title="Analyze"></a>Analyze</h2><blockquote>
+<p>以下分析主要是为了看清重定位、URL 的参数和<code>application.yml</code>中的配置有何关联</p>
+</blockquote>
+<ul>
+<li><p>访问<code>http://localhost:5555/author-service/author/1</code>后，重定位到<code>http://localhost:5555/login</code><br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/8.png" alt="D33AA927-F963-41C7-BE5F-6AA7C4FF09AF"></p>
+</li>
+<li><p>访问<code>http://localhost:5555/login</code>重定位<code>https://github.com/login/oauth/authorize</code>即 GitHub 的用户授权路径<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/9.png" alt="E652C938-12A3-4A56-9367-0D07D76B1B66"></p>
+</li>
+<li><p><code>/login/oauth/authorize</code>这个界面才是用户看到的需要点击授权的页面，我们来看下 URL 携带的参数：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">client_id: 554906e366f7861eab21</span><br><span class="line">redirect_uri: http:&#x2F;&#x2F;localhost:5555&#x2F;login</span><br><span class="line">response_type: code</span><br><span class="line">state: z2MaR7</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用户点击确认授权后，注意此 Token 非彼 Token<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/10.png" alt="71F69537-2DE4-49BD-AC22-774211576934"></p>
+</li>
+<li><p>接下来带着 code 和 state 访问<code>http://localhost:5555/login</code>再重定位到<code>http://localhost:5555/author-service/author/1</code>真正想访问的接口<br><img src="/2018/04/13/Spring%20Cloud%E9%9B%86%E6%88%90GitHub%E7%AC%AC%E4%B8%89%E6%96%B9%E8%AE%A4%E8%AF%81/11.png" alt="05DAA887-01B1-42F4-9C20-0820777E7D92"></p>
+</li>
+</ul>
+<blockquote>
+<p>事实上，由于申领 Token 这一步是在客户端的后台服务器上完成的，所以对用户不可见。其实客户端在用户点击授权后向<code>https://github.com/login/oauth/access_token</code>发送了一个 POST 请求，并带上<code>client_id</code>、<code>client_secret</code>、上一步获取的<code>code</code>以及<code>redirect_uri</code>等参数，由此来获取<code>access_token</code></p>
+</blockquote>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://cloud.spring.io/spring-cloud-security/" target="_blank" rel="noopener">Spring Cloud Security - 官网</a></li>
+<li><a href="https://developer.github.com/apps/building-oauth-apps/authorization-options-for-oauth-apps/" target="_blank" rel="noopener">Authorization options for OAuth Apps</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html" target="_blank" rel="noopener">理解 OAuth 2.0 - 阮一峰</a></li>
+<li><a href="https://www.jianshu.com/p/0db71eb445c8" target="_blank" rel="noopener">OAuth 认证流程详解</a></li>
+<li><a href="https://segmentfault.com/a/1190000011098539" target="_blank" rel="noopener">Spring Cloud Security 集成 CAS 对微服务认证</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/04/04/ESLint%20--%20%E4%BB%A3%E7%A0%81%E8%A7%84%E7%BA%A6%E6%8F%92%E4%BB%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2774,265 +3083,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/22/%E5%89%8D%E7%AB%AF%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/01/22/%E5%89%8D%E7%AB%AF%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">前端编码规范</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-01-22 01:59:32" itemprop="dateCreated datePublished" datetime="2018-01-22T01:59:32+08:00">2018-01-22</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-13 15:44:16" itemprop="dateModified" datetime="2020-10-13T15:44:16+08:00">2020-10-13</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/01/22/%E5%89%8D%E7%AB%AF%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/22/前端编码规范/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">2.4k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>关于平时工作时前端的编码规范，多采用官方或者推荐的编码规范。包括 <strong>JavaScript</strong> 和 <strong>Vue.js</strong> 规范</p>
-</blockquote>
-<hr>
-<h2 id="JavaScript规范"><a href="#JavaScript规范" class="headerlink" title="JavaScript规范"></a>JavaScript规范</h2><blockquote>
-<p><strong>JavaScript</strong> 的规范采用 <strong>Airbnb</strong> 的 <strong>ESLint</strong> 规范。原则上能使用 <strong>ES6</strong>  语法的地方均使用 <strong>ES6</strong> 语法</p>
-</blockquote>
-<ul>
-<li><p>因为我是用的 <strong>vue-cli</strong> 搭建的 <strong>Vue</strong> 项目的脚手架，所以可以很方便的应用 <strong>ESLint</strong> 来规范代码。生成的两个文件，<code>.eslintrc.js</code>中包含了 <strong>ESLint</strong> 配置和规则，<code>.eslintignore</code>包含忽略检测的文件，类似<code>.gitignore</code></p>
-</li>
-<li><p>在<code>.eslintrc.js</code>中自定义的规则，详细的规则请参考 <a href="https://eslint.org/docs/rules/" target="_blank" rel="noopener">ESLint官网</a></p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// allow debugger during development</span></span><br><span class="line">   <span class="string">'no-debugger'</span>: process.env.NODE_ENV === <span class="string">'production'</span> ? <span class="string">'error'</span> : <span class="string">'off'</span>,</span><br><span class="line">   <span class="comment">// allow console during development</span></span><br><span class="line">   <span class="string">'no-console'</span>: process.env.NODE_ENV === <span class="string">'production'</span> ? <span class="string">'error'</span> : <span class="string">'off'</span>,</span><br><span class="line">   <span class="comment">// allow unused variables during development</span></span><br><span class="line">   <span class="string">'no-unused-vars'</span>: process.env.NODE_ENV === <span class="string">'production'</span> ? <span class="string">'error'</span> : <span class="string">'warn'</span>,</span><br><span class="line">   <span class="comment">// disallow trailing commas</span></span><br><span class="line">   <span class="string">'comma-dangle'</span>: [<span class="string">'error'</span>, <span class="string">'never'</span>],</span><br><span class="line">   <span class="comment">// disallow trailing semi</span></span><br><span class="line">   <span class="string">'semi'</span>: [<span class="string">'error'</span>, <span class="string">'never'</span>],</span><br><span class="line">   <span class="comment">// allow the unary operators ++ and --</span></span><br><span class="line">   <span class="string">'no-plusplus'</span>: <span class="string">'off'</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ul>
-<li><p>关于句尾是否该加<strong>分号</strong>，应该看个人习惯，我倒觉得两种风格都应该能适应，只要保证一个项目中<strong>统一风格</strong>即可。作为前端项目，个人为了简洁清爽所以没加分号</p>
-</li>
-<li><p><strong>ASI</strong>( or <strong>Automatic Semicolon Insertion</strong>，<strong>自动分号插入机制</strong>)，现在的 <strong>ECMAScript</strong> 实现，无论是浏览器还是 <strong>Node.js</strong> 都包含了 <strong>ASI</strong> 功能，可以动态识别 JS 语句并判断是否在句尾插入分号</p>
-</li>
-</ul>
-<hr>
-<h2 id="Vue-js规范"><a href="#Vue-js规范" class="headerlink" title="Vue.js规范"></a>Vue.js规范</h2><blockquote>
-<p><strong>Vue.js</strong> 的官网上有非常详细的<a href="https://cn.vuejs.org/v2/style-guide/" target="_blank" rel="noopener">风格指南</a>，所以说详细的官方文档真的很关键！</p>
-</blockquote>
-<h4 id="组件命名"><a href="#组件命名" class="headerlink" title="组件命名"></a>组件命名</h4><ul>
-<li><p>组件名始终为多个单词组成（为避免与 HTML 元素冲突），单词首字母大写拼接，组件的 name 属性不可省略（方便 <strong>DevTools</strong> 调试）</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TodoItem.vue</span><br><span class="line"></span><br><span class="line"><span class="comment">// JS</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  name: <span class="string">'TodoItem'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>组件名应该倾向于完整单词而不是缩写</p>
-</li>
-<li><p>HTML 中对应组件单词均小写，以<code>-</code>中划线连接多个单词</p>
-  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// HTML</span><br><span class="line"><span class="tag">&lt;<span class="name">todo-item</span>&gt;</span><span class="tag">&lt;/<span class="name">todo-item</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用组件名作为样式作用域空间，同时给<code>&lt;style&gt;</code>标签加上<code>scoped</code>属性</p>
-  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"app-button"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- ... --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">  <span class="selector-class">.app-button</span> &#123; <span class="comment">/* ... */</span> &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>通用组件</strong>或<strong>基础组件</strong>使用<code>App、Base、V</code>作为前缀</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AppHeader.vue</span><br><span class="line">AppTable.vue</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h4><ul>
-<li><p>组件的属性在 HTML 标签中一行一个，对齐显示</p>
-  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">range-slider</span></span></span><br><span class="line"><span class="tag">  <span class="attr">:values</span>=<span class="string">"[10, 20]"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">min</span>=<span class="string">"0"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">max</span>=<span class="string">"100"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">step</span>=<span class="string">"5"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">:on-slide</span>=<span class="string">"updateInputs"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">:on-end</span>=<span class="string">"updateResults"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">range-slider</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="v-for"><a href="#v-for" class="headerlink" title="v-for"></a>v-for</h4><ul>
-<li><p>总是用<code>key</code>配合<code>v-for</code></p>
-  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-for</span>=<span class="string">"todo in todos"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:key</span>=<span class="string">"todo.id"</span></span></span><br><span class="line"><span class="tag">  &gt;</span></span><br><span class="line">    &#123;&#123; todo.text &#125;&#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>永远不要把<code>v-if</code>和<code>v-for</code>同时用在同一个元素上，可以将<code>v-if</code>移至上一层</p>
-  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-for</span>=<span class="string">"user in users"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-if</span>=<span class="string">"shouldShowUsers"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:key</span>=<span class="string">"user.id"</span></span></span><br><span class="line"><span class="tag">  &gt;</span></span><br><span class="line">    &#123;&#123; user.name &#125;&#125;</span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"></span><br><span class="line">//good</span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">v-if</span>=<span class="string">"shouldShowUsers"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-for</span>=<span class="string">"user in users"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:key</span>=<span class="string">"user.id"</span></span></span><br><span class="line"><span class="tag">  &gt;</span></span><br><span class="line">    &#123;&#123; user.name &#125;&#125;</span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://cn.vuejs.org/v2/style-guide/" target="_blank" rel="noopener">Vue.js 官网风格指南</a></li>
-<li><a href="https://github.com/pablohpsilva/vuejs-component-style-guide/blob/master/README-CN.md" target="_blank" rel="noopener">Vue.js 组件编码规范 - Github</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3084,7 +3134,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">73</span>
+                    <span class="site-state-item-count">74</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

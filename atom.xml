@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://s1mplecc.github.io/"/>
-  <updated>2021-03-18T04:47:43.519Z</updated>
+  <updated>2021-04-02T07:32:31.861Z</updated>
   <id>https://s1mplecc.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Python 可迭代对象、迭代器和生成器</title>
+    <link href="https://s1mplecc.github.io/2021/04/01/Python-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1%E3%80%81%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8/"/>
+    <id>https://s1mplecc.github.io/2021/04/01/Python-可迭代对象、迭代器和生成器/</id>
+    <published>2021-04-01T09:11:20.000Z</published>
+    <updated>2021-04-02T07:32:31.861Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+      <category term="Languages" scheme="https://s1mplecc.github.io/categories/Languages/"/>
+    
+    
+      <category term="Python" scheme="https://s1mplecc.github.io/tags/Python/"/>
+    
+  </entry>
   
   <entry>
     <title>Python 运算符重载</title>
@@ -47,7 +73,7 @@
     <link href="https://s1mplecc.github.io/2021/03/10/Python-%E9%B8%AD%E5%AD%90%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%89%B9%E6%AE%8A%E6%96%B9%E6%B3%95/"/>
     <id>https://s1mplecc.github.io/2021/03/10/Python-鸭子类型和特殊方法/</id>
     <published>2021-03-10T14:19:15.000Z</published>
-    <updated>2021-03-17T03:44:02.161Z</updated>
+    <updated>2021-03-25T03:13:39.498Z</updated>
     
     <summary type="html">
     
@@ -509,32 +535,6 @@
     
     
       <category term="Java" scheme="https://s1mplecc.github.io/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>迁移 Ghost 博客至 Hexo 并使用 GitHub Pages 部署</title>
-    <link href="https://s1mplecc.github.io/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/"/>
-    <id>https://s1mplecc.github.io/2018/12/27/迁移-Ghost-博客至-Hexo-并使用-GitHub-Pages-部署/</id>
-    <published>2018-12-27T05:45:37.000Z</published>
-    <updated>2020-12-20T11:13:59.991Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-      <category term="Ops" scheme="https://s1mplecc.github.io/categories/Ops/"/>
-    
-    
-      <category term="Blog Engine" scheme="https://s1mplecc.github.io/tags/Blog-Engine/"/>
     
   </entry>
   

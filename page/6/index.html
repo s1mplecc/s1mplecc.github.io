@@ -372,6 +372,265 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/22/%E5%89%8D%E7%AB%AF%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/01/22/%E5%89%8D%E7%AB%AF%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/6/index.html">前端编码规范</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-01-22 01:59:32" itemprop="dateCreated datePublished" datetime="2018-01-22T01:59:32+08:00">2018-01-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-13 15:44:16" itemprop="dateModified" datetime="2020-10-13T15:44:16+08:00">2020-10-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/22/%E5%89%8D%E7%AB%AF%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/22/前端编码规范/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.4k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>关于平时工作时前端的编码规范，多采用官方或者推荐的编码规范。包括 <strong>JavaScript</strong> 和 <strong>Vue.js</strong> 规范</p>
+</blockquote>
+<hr>
+<h2 id="JavaScript规范"><a href="#JavaScript规范" class="headerlink" title="JavaScript规范"></a>JavaScript规范</h2><blockquote>
+<p><strong>JavaScript</strong> 的规范采用 <strong>Airbnb</strong> 的 <strong>ESLint</strong> 规范。原则上能使用 <strong>ES6</strong>  语法的地方均使用 <strong>ES6</strong> 语法</p>
+</blockquote>
+<ul>
+<li><p>因为我是用的 <strong>vue-cli</strong> 搭建的 <strong>Vue</strong> 项目的脚手架，所以可以很方便的应用 <strong>ESLint</strong> 来规范代码。生成的两个文件，<code>.eslintrc.js</code>中包含了 <strong>ESLint</strong> 配置和规则，<code>.eslintignore</code>包含忽略检测的文件，类似<code>.gitignore</code></p>
+</li>
+<li><p>在<code>.eslintrc.js</code>中自定义的规则，详细的规则请参考 <a href="https://eslint.org/docs/rules/" target="_blank" rel="noopener">ESLint官网</a></p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// allow debugger during development</span></span><br><span class="line">   <span class="string">'no-debugger'</span>: process.env.NODE_ENV === <span class="string">'production'</span> ? <span class="string">'error'</span> : <span class="string">'off'</span>,</span><br><span class="line">   <span class="comment">// allow console during development</span></span><br><span class="line">   <span class="string">'no-console'</span>: process.env.NODE_ENV === <span class="string">'production'</span> ? <span class="string">'error'</span> : <span class="string">'off'</span>,</span><br><span class="line">   <span class="comment">// allow unused variables during development</span></span><br><span class="line">   <span class="string">'no-unused-vars'</span>: process.env.NODE_ENV === <span class="string">'production'</span> ? <span class="string">'error'</span> : <span class="string">'warn'</span>,</span><br><span class="line">   <span class="comment">// disallow trailing commas</span></span><br><span class="line">   <span class="string">'comma-dangle'</span>: [<span class="string">'error'</span>, <span class="string">'never'</span>],</span><br><span class="line">   <span class="comment">// disallow trailing semi</span></span><br><span class="line">   <span class="string">'semi'</span>: [<span class="string">'error'</span>, <span class="string">'never'</span>],</span><br><span class="line">   <span class="comment">// allow the unary operators ++ and --</span></span><br><span class="line">   <span class="string">'no-plusplus'</span>: <span class="string">'off'</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ul>
+<li><p>关于句尾是否该加<strong>分号</strong>，应该看个人习惯，我倒觉得两种风格都应该能适应，只要保证一个项目中<strong>统一风格</strong>即可。作为前端项目，个人为了简洁清爽所以没加分号</p>
+</li>
+<li><p><strong>ASI</strong>( or <strong>Automatic Semicolon Insertion</strong>，<strong>自动分号插入机制</strong>)，现在的 <strong>ECMAScript</strong> 实现，无论是浏览器还是 <strong>Node.js</strong> 都包含了 <strong>ASI</strong> 功能，可以动态识别 JS 语句并判断是否在句尾插入分号</p>
+</li>
+</ul>
+<hr>
+<h2 id="Vue-js规范"><a href="#Vue-js规范" class="headerlink" title="Vue.js规范"></a>Vue.js规范</h2><blockquote>
+<p><strong>Vue.js</strong> 的官网上有非常详细的<a href="https://cn.vuejs.org/v2/style-guide/" target="_blank" rel="noopener">风格指南</a>，所以说详细的官方文档真的很关键！</p>
+</blockquote>
+<h4 id="组件命名"><a href="#组件命名" class="headerlink" title="组件命名"></a>组件命名</h4><ul>
+<li><p>组件名始终为多个单词组成（为避免与 HTML 元素冲突），单词首字母大写拼接，组件的 name 属性不可省略（方便 <strong>DevTools</strong> 调试）</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TodoItem.vue</span><br><span class="line"></span><br><span class="line"><span class="comment">// JS</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  name: <span class="string">'TodoItem'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>组件名应该倾向于完整单词而不是缩写</p>
+</li>
+<li><p>HTML 中对应组件单词均小写，以<code>-</code>中划线连接多个单词</p>
+  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// HTML</span><br><span class="line"><span class="tag">&lt;<span class="name">todo-item</span>&gt;</span><span class="tag">&lt;/<span class="name">todo-item</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用组件名作为样式作用域空间，同时给<code>&lt;style&gt;</code>标签加上<code>scoped</code>属性</p>
+  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"app-button"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- ... --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">  <span class="selector-class">.app-button</span> &#123; <span class="comment">/* ... */</span> &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>通用组件</strong>或<strong>基础组件</strong>使用<code>App、Base、V</code>作为前缀</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AppHeader.vue</span><br><span class="line">AppTable.vue</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h4><ul>
+<li><p>组件的属性在 HTML 标签中一行一个，对齐显示</p>
+  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">range-slider</span></span></span><br><span class="line"><span class="tag">  <span class="attr">:values</span>=<span class="string">"[10, 20]"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">min</span>=<span class="string">"0"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">max</span>=<span class="string">"100"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">step</span>=<span class="string">"5"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">:on-slide</span>=<span class="string">"updateInputs"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">:on-end</span>=<span class="string">"updateResults"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">range-slider</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="v-for"><a href="#v-for" class="headerlink" title="v-for"></a>v-for</h4><ul>
+<li><p>总是用<code>key</code>配合<code>v-for</code></p>
+  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-for</span>=<span class="string">"todo in todos"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:key</span>=<span class="string">"todo.id"</span></span></span><br><span class="line"><span class="tag">  &gt;</span></span><br><span class="line">    &#123;&#123; todo.text &#125;&#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>永远不要把<code>v-if</code>和<code>v-for</code>同时用在同一个元素上，可以将<code>v-if</code>移至上一层</p>
+  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-for</span>=<span class="string">"user in users"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-if</span>=<span class="string">"shouldShowUsers"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:key</span>=<span class="string">"user.id"</span></span></span><br><span class="line"><span class="tag">  &gt;</span></span><br><span class="line">    &#123;&#123; user.name &#125;&#125;</span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"></span><br><span class="line">//good</span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">v-if</span>=<span class="string">"shouldShowUsers"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-for</span>=<span class="string">"user in users"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:key</span>=<span class="string">"user.id"</span></span></span><br><span class="line"><span class="tag">  &gt;</span></span><br><span class="line">    &#123;&#123; user.name &#125;&#125;</span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://cn.vuejs.org/v2/style-guide/" target="_blank" rel="noopener">Vue.js 官网风格指南</a></li>
+<li><a href="https://github.com/pablohpsilva/vuejs-component-style-guide/blob/master/README-CN.md" target="_blank" rel="noopener">Vue.js 组件编码规范 - Github</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2838,252 +3097,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/05/%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%94%9F%E6%88%90%E4%B8%8E%E7%86%B5%E6%B1%A0%E7%AD%96%E7%95%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/12/05/%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%94%9F%E6%88%90%E4%B8%8E%E7%86%B5%E6%B1%A0%E7%AD%96%E7%95%A5/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/6/index.html">随机数生成与熵池策略</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-12-05 11:56:36" itemprop="dateCreated datePublished" datetime="2017-12-05T11:56:36+08:00">2017-12-05</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-16 09:48:42" itemprop="dateModified" datetime="2020-09-16T09:48:42+08:00">2020-09-16</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/12/05/%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%94%9F%E6%88%90%E4%B8%8E%E7%86%B5%E6%B1%A0%E7%AD%96%E7%95%A5/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/12/05/随机数生成与熵池策略/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">1.5k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>最近同事在将jar包上传到服务器执行<strong>spark-submit</strong>时，运行的时间总是不确定的，有时甚至等待数十分钟。遂想到当初自己在服务器上运行<strong>Tomcat</strong>时也遇到这种问题，往往第一次运行很快，后面要等很长时间。最近查阅相关资料，终于发现问题所在。</p>
-</blockquote>
-<h2 id="Concepts"><a href="#Concepts" class="headerlink" title="Concepts"></a>Concepts</h2><blockquote>
-<p>首先要明白操作系统如何产生随机数以及内核熵池的一些概念</p>
-</blockquote>
-<ul>
-<li><p>随机数在许多领域都有重要应用，如密码学、网络安全等。Linux内核从1.3.30版本开始实现了一个<strong>高强度的随机数产生器</strong></p>
-</li>
-<li><p>Linux 内核采用<strong>熵</strong>来描述<strong>数据的随机性</strong>。熵是描述<strong>系统混乱无序程度</strong>的物理量，一个系统的熵越大则说明该系统的有序性越差，即不确定性越大。在信息学中，熵被用来表征一个符号或系统的不确定性，熵越大，表明系统所含有用信息量越少，不确定度越大</p>
-</li>
-<li><p>计算机本身是可预测的系统，因此，用计算机算法不可能产生真正的随机数。要生成高强度的随机数需要许多<strong>不确定的外界参数</strong>。你比如说编程中的随机数种子就是一个外界参数，如果你的种子数确定，那么生成的随机序列是可以预测的</p>
-</li>
-<li><p>恰好机器的环境中充满了各种各样的噪声，如硬件设备发生中断的时间，用户点击鼠标的时间间隔等是完全随机的，事先无法预测。Linux内核实现的随机数产生器正是利用系统中的这些随机噪声来产生高质量随机数序列</p>
-</li>
-<li><p>内核维护了一个<strong>熵池</strong>用来收集来自设备驱动程序和其它来源的环境噪音。为跟踪熵池中数据的随机性，内核在将数据加入池的时候将估算数据的随机性，这个过程称作熵估算。<strong>熵估算值</strong>描述池中包含的随机数位数，其值越大表示池中数据的随机性越好</p>
-</li>
-<li><p>内核提供了两个字符设备<code>/dev/random</code>和<code>/dev/urandom</code>以让用户调用获得随机数序列，<code>/dev/random</code>输出的随机数序列质量更高，适合于<strong>高强度的加密算法</strong>，但它只返回熵估算值所允许的最长的随机数序列，否则请求将被<strong>阻塞</strong>直到熵估算值增大到一定域值。<code>/dev/urandom</code>总是立即返回所请求的随机数序列，”u”代表<strong>unlocked</strong>非阻塞</p>
-</li>
-<li><p>当熵池为空时，来自<code>/dev/random</code>的读操作将被<strong>阻塞</strong>，直到熵池收集到足够的环境噪声数据。这么做的目的是生成尽可能随机的数据。对于生成高质量的加密密钥或者是需要长期保护的场景，一定要这么做。</p>
-</li>
-</ul>
-<blockquote>
-<p>Ok，其实到这里，原因就已经明了了，在启动<strong>Tomcat</strong>生成<strong>SessionID</strong>时和<strong>spark-submit</strong>连接数据库时，用到了 <strong>/dev/random</strong>生成的随机数，却因为熵池用空而进入阻塞，这也解释了为什么第一次的执行很快，后面却很慢。</p>
-</blockquote>
-<h2 id="Solving"><a href="#Solving" class="headerlink" title="Solving"></a>Solving</h2><blockquote>
-<p>Apache官网上也有描述如何优化Tomcat的运行效率，有两种方法解决这个问题</p>
-</blockquote>
-<ul>
-<li><p>修改<code>${java_home}/jre/lib/security/java.security</code>中的这一行</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">securerandom.source&#x3D;file:&#x2F;dev&#x2F;random</span><br></pre></td></tr></table></figure>
-<p>  替换为</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">securerandom.source&#x3D;file:&#x2F;dev&#x2F;.&#x2F;urandom</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>或者在Tomcat的<code>catalina.sh</code>中加入如下行</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Djava.security.egd&#x3D;file:&#x2F;dev&#x2F;.&#x2F;urandom</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ul>
-<li>关于为什么加<code>/./</code>有人说是Bug，也有人说是故意这么设计的，oracle的官方文档 <a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=6521844" target="_blank" rel="noopener">Java Bug Database</a></li>
-</ul>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><a href="http://hongjiang.info/jvm-random-and-entropy-source/" target="_blank" rel="noopener">JVM上的随机数与熵池策略</a></li>
-<li><a href="https://wiki.apache.org/tomcat/HowTo/FasterStartUp" target="_blank" rel="noopener">How do I make Tomcat startup faster?</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3135,7 +3148,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">73</span>
+                    <span class="site-state-item-count">74</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
