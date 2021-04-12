@@ -372,6 +372,260 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">Git 进阶教程</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-18 02:02:04" itemprop="dateCreated datePublished" datetime="2018-09-18T02:02:04+08:00">2018-09-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-13 14:13:50" itemprop="dateModified" datetime="2020-10-13T14:13:50+08:00">2020-10-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/18/Git 进阶教程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">3k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>你的本地仓库由 Git 维护的三棵「树」组成。第一个是你的<strong>工作目录（Working dir）</strong>，它持有实际文件，即你所见的；第二个是<strong>缓存区（Stage or Index）</strong>，它像个缓存区域，临时保存你的改动；第三个是<strong>提交历史（Commit history）</strong>，包含的 HEAD 指针指向你最近一次 commit 的引用。关于工作区和缓存区概念可参考<a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000" target="_blank" rel="noopener">廖雪峰的Git教程</a>。</p>
+<p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/0.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f62617369632d75736167652e737667-1"></p>
+<p>上面的四条命令在工作目录、stage 缓存（也叫做索引）和 commit 历史之间复制文件。</p>
+<ul>
+<li><code>git add files</code> 把工作目录中的文件加入 stage 缓存。</li>
+<li><code>git commit</code> 把 stage 缓存生成一次 commit，并加入 commit 历史。</li>
+<li><code>git reset -- files</code> 撤销最后一次 git add files，你也可以用 git reset 撤销所有 stage 缓存文件。</li>
+<li><code>git checkout -- files</code> 把文件从 stage 缓存复制到工作目录，用来丢弃本地修改。</li>
+</ul>
+<h2 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h2><p><code>git merge</code> 命令把不同分支合并起来。合并前，索引必须和当前提交相同。<strong><code>git merge other</code> 用于将 other 分支上的提交合并到当前分支</strong>。</p>
+<p>如果另一个分支是当前提交的祖父节点，那么合并命令将什么也不做。另一种情况是如果当前提交是另一个分支的祖父节点，就导致 <strong>fast-forward</strong> 合并，HEAD 指针只是简单的移动。</p>
+<p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/1.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652d66662e737667"></p>
+<p>否则就是一次真正的合并。默认把当前提交（_ed489_ 如下所示）和另一个提交（_33104_）以及他们的共同祖父节点（_b325c_）进行一次<strong>三方合并</strong>。结果是先保存当前目录和索引，然后和父节点 _33104_ 一起做一次<strong>新提交</strong>。</p>
+<p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/2.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652e737667"></p>
+<h2 id="cherry-pick"><a href="#cherry-pick" class="headerlink" title="cherry-pick"></a>cherry-pick</h2><p><code>git cherry-pick</code> 命令「复制」一个提交节点并在当前分支做一次完全一样的新提交。</p>
+<p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/3.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6368657272792d7069636b2e737667"></p>
+<h2 id="rebase"><a href="#rebase" class="headerlink" title="rebase"></a>rebase</h2><p><code>git rebase</code> 是合并命令的另一种选择。merge 把两个分支合并进行一次新提交，提交历史不是线性的。rebase 在当前分支上重演另一个分支的历史，<strong>提交历史是线性的</strong>。</p>
+<p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/4.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f7265626173652e737667"></p>
+<p>上面的命令都在 _topic_ 分支中进行，执行 <code>git rebase master</code> 意味着将 _topic_ 分支基于  _master_ 分支进行重演，在 _da985_ 后附加对应于 _169a6_ 和 _2c33a_ 的两次新提交，所以提交历史是线性的。</p>
+<h3 id="rebase-和-merge-的区别"><a href="#rebase-和-merge-的区别" class="headerlink" title="rebase 和 merge 的区别"></a>rebase 和 merge 的区别</h3><p>在 _topic_ 分支中执行 <code>git rebase master</code> 后的分支树：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">      A---B topic</span><br><span class="line">     &#x2F;</span><br><span class="line">D---E---F---G master</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">              A&#39;--B&#39; topic</span><br><span class="line">             &#x2F;</span><br><span class="line">D---E---F---G master</span><br></pre></td></tr></table></figure>
+<p>在 _topic_ 分支中执行 <code>git merge master</code> 后的分支树：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">      A---B topic</span><br><span class="line">     &#x2F;</span><br><span class="line">D---E---F---G master</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      A---B---H topic</span><br><span class="line">     &#x2F;       &#x2F; </span><br><span class="line">D---E---F---G master</span><br></pre></td></tr></table></figure>
+<p>rebase 最大的好处是你的项目历史会是非常整洁的线性，不像 merge 那样引入多余的合并提交。但同时，rebase 也会带来两个后果：安全性和可跟踪性。使用时要遵守 <strong>rebase 的黄金法则：绝不要在公共的分支上使用它</strong>。可跟踪性是指 rebase 不会有合并提交中附带的信息，你看不到 _topic_ 分支中并入了 _master_ 的哪些更改。</p>
+<h2 id="reset"><a href="#reset" class="headerlink" title="reset"></a>reset</h2><p><code>git reset</code> 命令把当前分支指向另一个位置，并且有选择的变动工作目录和索引。如果<strong>你的更改还没有共享给别人</strong>，reset 是撤销这些更改的简单方法。当你开发一个功能的时候发现「糟糕，我做了什么？我应该重新来过！」时，reset 就像是 <code>go-to</code> 命令一样。</p>
+<p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/5.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f72657365742d636f6d6d69742e737667"></p>
+<p>还可以通过传入参数来修改你的缓存区或工作目录：</p>
+<ul>
+<li><code>--soft</code> 缓存区和工作目录都不会被改变。</li>
+<li><code>--mixed</code> 默认选项。缓存区同步到你指定的提交，但工作目录不受影响。</li>
+<li><code>--hard</code> 缓存区和工作目录都同步到你指定的提交。</li>
+</ul>
+<p>把这些参数想成定义 <code>git reset</code> 操作的<strong>作用域</strong>就容易理解多了。拿上图举例来说，如果执行 <code>git reset --soft HEAD~3</code>，那么文件不会被修改，后三次提交被 <code>git add</code> 添加到暂存区，相当于只撤销了 <code>git commit</code>；<code>git reset --mixed HEAD~3</code> 则文件不会被修改，但后三次提交没有添加到暂存区；<code>git reset --hard HEAD~3</code> 则文件会被回退到 <em>b325c</em> 时的状态。</p>
+<h2 id="revert"><a href="#revert" class="headerlink" title="revert"></a>revert</h2><p><strong>revert 撤销一个提交的同时会创建一个新的提交</strong>。这是一个安全的方法，因为它不会重写提交历史。比如，下图执行 <code>git revert HEAD~2</code> 会创建一个新的提交来撤销前两个提交的更改，然后把新的提交加入提交历史。</p>
+<p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/6.svg" alt="06"></p>
+<p>相比 <code>git reset</code>，它不会改变现在的提交历史。因此，<strong><code>git revert</code> 可以用在公共分支上，<code>git reset</code> 应该用在私有分支上</strong>。你也可以把 <code>git revert</code> 用作撤销已经 push 的更改，而 <code>git reset</code> 用来撤销已经 commit 但没有 push 的更改，或者 <code>git reset HEAD</code> 撤销没有 commit 的更改。</p>
+<h2 id="checkout"><a href="#checkout" class="headerlink" title="checkout"></a>checkout</h2><p><strong>checkout 命令用于从历史提交（或者暂存区域）中拷贝文件到工作目录，也可用于切换分支</strong>。</p>
+<p>当给出一个（本地）分支时，那么 _HEAD_ 指针将指向那个分支，也就是说，我们「切换」到那个分支了。<strong>stage 缓存和工作目录中的内容会和 _HEAD_ 对应的提交节点一致</strong>。</p>
+<p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/7.svg" alt="a"></p>
+<p>当指定的是一个标签、远程分支、SHA-1 值或者是像 master~3 类似的东西，就会得到一个<strong>匿名分支</strong>，又称作 <strong>detached HEAD（被分离的 HEAD 标识）</strong>。这样可以很方便地在历史版本之间互相切换。比如说你想要编译 1.2.1 版本，你可以运行 <code>git checkout v1.2.1</code>（这是一个标签 tag，而非分支名），编译，安装，然后切换回原先分支。</p>
+<p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/8.svg" alt="b"></p>
+<p>当提交操作涉及到 detached HEAD 时，其行为会略有不同。_HEAD_ 处于分离状态（不依附于任一分支）时，提交操作可以正常进行，但是不会更新任何已命名的分支。你可以认为这是在更新一个匿名分支。</p>
+<p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/9.svg" alt="c"></p>
+<p>一旦此后你切换到别的分支，比如说 _master_，那么这个提交节点（可能）再也不会被引用到，将会被丢弃掉。</p>
+<p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/10.svg" alt="d"></p>
+<p>但是，如果你想保存这个状态，可以用命令 <code>git checkout -b name</code> 来创建一个新的分支。</p>
+<p><img src="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/11.svg" alt="e"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://github.com/geeeeeeeeek/git-recipes" target="_blank" rel="noopener">git-recipes —— GitHub 8k star 的高质量教程</a></li>
+<li><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing" target="_blank" rel="noopener">Merging vs. Rebasing</a></li>
+<li><a href="https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting" target="_blank" rel="noopener">Resetting, Checking Out &amp; Reverting</a></li>
+<li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000" target="_blank" rel="noopener">Git教程 —— 廖雪峰</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2716,248 +2970,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/04/27/JavaScript%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E7%9A%84%E5%8F%91%E5%B1%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/04/27/JavaScript%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E7%9A%84%E5%8F%91%E5%B1%95/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">JavaScript 异步编程</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-04-27 02:47:39" itemprop="dateCreated datePublished" datetime="2018-04-27T02:47:39+08:00">2018-04-27</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-25 20:03:24" itemprop="dateModified" datetime="2020-11-25T20:03:24+08:00">2020-11-25</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/04/27/JavaScript%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E7%9A%84%E5%8F%91%E5%B1%95/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/04/27/JavaScript异步编程的发展/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">4.3k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>你可能知道，JavaScript 语言的执行环境是<strong>单线程（single thread）</strong>。这种模式的好处是实现起来比较简单，执行环境相对单纯；坏处是只要有一个任务耗时很长，后面的任务都必须排队等着，会拖延整个程序的执行。常见的浏览器无响应（假死），往往就是因为某一段 JavaScript 代码长时间运行（比如死循环），导致整个页面卡在这个地方，其他任务无法执行。为了解决这个问题，JavaScript 语言将任务的执行模式分成两种：同步（Synchronous）和 异步（Asynchronous）。</p>
-<ul>
-<li><strong>同步模式</strong>：后一个任务等待前一个任务结束，然后再执行，程序的执行顺序与任务的排列顺序是一致的、同步的；</li>
-<li><strong>异步模式</strong>则完全不同，每一个任务有一个或多个回调函数（callback），前一个任务结束后，不是执行后一个任务，而是执行回调函数，后一个任务则是不等前一个任务结束就执行，所以程序的执行顺序与任务的排列顺序是不一致的、异步的。</li>
-</ul>
-<p>异步模式非常重要。在浏览器端，耗时很长的操作都应该异步执行，避免浏览器失去响应，最好的例子就是 Ajax 操作。在服务器端，Node.js 的异步 I/O 则保证了同一时间可以响应大量的 Http 请求。</p>
-<p>本文主要介绍 JavaScript 的异步编程发展：从回调函数到 ES6 的 Promise 对象，再到 ES7 的 async/await 关键字。示例代码已上传至<a href="https://github.com/s1mplecc/js-asynchronous-programming" target="_blank" rel="noopener">GitHub</a>。</p>
-<h2 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h2><p>回调（Callback）函数是异步编程最基本的方法。回调就好比你送女朋友到车站，并让她回家了给你回条短信。回调函数在完成任务后就会被调用，Node.js 就使用了大量的回调函数</p>
-<ul>
-<li>看看下面的示例代码，你要求女朋友回到家后发一条短信告诉你，然后她在回家的路上愉快的耍起了手机，哈哈哈</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">goHome</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    callback()</span><br><span class="line">  &#125;, <span class="number">2000</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'I am playing a mobile phone'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sendMessage</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'I have just arrived home.'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">goHome(sendMessage)</span><br><span class="line"></span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// I am playing a mobile phone.</span></span><br><span class="line"><span class="comment">// I have just arrived home.    // after 2000ms</span></span><br></pre></td></tr></table></figure>
-<p>注意打印结果的顺序。先打印的是<code>I am playing a mobile phone</code>，而后过了 2s 打印<code>I have just arrived home</code>。这是因为使用了<code>setTimeout()</code>这个函数，表示延时 2000ms 后执行回调函数。</p>
-<p>在这个示例中，回调函数即是<code>sendMessage()</code>，回家这个动作是比较耗时的，所以我们使用了<strong>异步</strong>的方式，使得<strong>玩手机的行为不受到阻塞</strong>。是吧，玩手机不一定要回家才能完，路上也能玩嘛。回调使得同步操作变成了异步操作，相当于先执行程序的主要逻辑，将耗时的操作推迟执行。</p>
-<p>回调函数的优点是简单、容易理解，缺点是不利于代码的阅读和维护，各个部分之间<strong>高度耦合</strong>，流程会很混乱，而且每个任务只能指定一个回调函数。在 Node.js 的开发中，由于逻辑分层所致，会出现多层回调，易于引发异常处理混乱、闭包过于复杂、代码难以维护等问题。</p>
-<h2 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h2><p>Promise 是异步编程的一种解决方案，比传统的解决方案——回调函数和事件，更合理和更强大。它由社区最早提出和实现，ES6 将其写进了语言标准，统一了用法，原生提供了 Promise 对象。所谓 Promise，简单说就是一个<strong>容器</strong>，里面<strong>保存着某个未来才会结束的事件（通常是一个异步操作）的结果</strong>。从语法上说，Promise 是一个对象，从它可以获取异步操作的消息。Promise 提供统一的 API，各种异步操作都可以用同样的方法进行处理。</p>
-<p>Promise 对象有以下两个特点：</p>
-<ul>
-<li><p>对象的状态不受外界影响。Promise 对象代表一个异步操作，有三种状态：<strong>Pending</strong>（进行中）、<strong>Resolved</strong>（已成功，又称 Fulfilled）和 <strong>Rejected</strong>（已失败）。只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态。这也是 Promise 这个名字的由来，它的英语意思就是「承诺」，表示其他手段无法改变。</p>
-</li>
-<li><p><strong>一旦状态改变，就不会再变</strong>，任何时候都可以得到这个结果。Promise 对象的状态改变，只有两种可能：从 Pending 变为 Resolved 和从 Pending 变为 Rejected。只要这两种情况发生，状态就<strong>凝固</strong>了，不会再变了，会一直保持这个结果。如果改变已经发生了，你再对 Promise 对象添加回调函数，也会立即得到这个结果。这与事件（Event）完全不同，事件的特点是，如果你错过了它，再去监听，是得不到结果的。</p>
-</li>
-</ul>
-<p>来看下面这段代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> goHome = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">    resolve(<span class="string">'I have just arrived home.'</span>)</span><br><span class="line">  &#125;,<span class="number">2000</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'I am playing a mobile phone.'</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sendMessage</span>(<span class="params">message</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(message)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">goHome.then(sendMessage)</span><br></pre></td></tr></table></figure>
-<p>这样写的优点在于，回调函数变成了链式写法，程序的流程可以看得很清楚，<code>goHome.then(sendMessage)</code>显然更符合人的思维方式。</p>
-<p>我们可以在<code>Promise</code>中<code>reject</code>错误，在用<code>catch</code>去捕捉，你可能在 axios 发送异步请求的时候见过这种写法。<code>catch</code>方法是<code>.then(null, rejection)</code>的别名，用于指定发生错误时的回调函数。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isEven = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> num = <span class="built_in">Math</span>.round(<span class="built_in">Math</span>.random() * <span class="number">10</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'num'</span>, num)</span><br><span class="line">  num % <span class="number">2</span> === <span class="number">0</span> ? resolve(<span class="string">`<span class="subst">$&#123;num&#125;</span> is an even number`</span>) : reject(<span class="string">`<span class="subst">$&#123;num&#125;</span> is not an even number`</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">isEven</span><br><span class="line">  .then(<span class="function"><span class="params">result</span> =&gt;</span> <span class="built_in">console</span>.log(result))</span><br><span class="line">  .catch(<span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.log(err))</span><br><span class="line"></span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// num 6</span></span><br><span class="line"><span class="comment">// 6 is an even number</span></span><br><span class="line"><span class="comment">// num 7</span></span><br><span class="line"><span class="comment">// 7 is not an even number</span></span><br></pre></td></tr></table></figure>
-<p>有了 Promise 对象，就可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。此外，Promise 对象提供统一的接口，使得控制异步操作更加容易。更多请参考<a href="http://es6.ruanyifeng.com/#docs/promise" target="_blank" rel="noopener">阮老师的教程</a>。</p>
-<h2 id="async-await"><a href="#async-await" class="headerlink" title="async/await"></a>async/await</h2><p>最后来看一下异步编程的<strong>终极解决方案</strong>:<code>async/await</code>。<code>async</code>作为 ES7 的一大特性，已经在 Node.js 的框架——<a href="https://koa.bootcss.com/" target="_blank" rel="noopener">Koa2</a> 中被广泛使用。<code>async</code>函数是什么？一句话，<strong>async 函数就是 Generator 函数的语法糖</strong>。<code>async</code>用于申明一个<code>function</code>是异步的，而 <code>await</code>用于等待一个异步函数执行完成。</p>
-<p>使用时需要注意：<strong>async 函数返回一个 Promise 对象</strong>；<code>await</code>只能在<code>async</code>内部使用，类似于<code>async function</code>内部的<code>then</code>命令的语法糖。</p>
-<p><code>await</code>是个运算符，用于组成表达式，<code>await</code>如果在等待一个 Promise 对象，就会阻塞后面的代码，等着 Promise 对象<code>resolve</code>，然后将得到<code>resolve</code>的值作为 <code>await</code> 表达式的运算结果。</p>
-<p>用<code>async/await</code>改写后的代码如下，看起来就像同步代码那样直观：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> goHome = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    resolve(<span class="string">'I have just arrived home.'</span>)</span><br><span class="line">  &#125;, <span class="number">2000</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'I am playing a mobile phone.'</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">sendMessage</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> msg = <span class="keyword">await</span> goHome</span><br><span class="line">  <span class="built_in">console</span>.log(msg)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sendMessage().then(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'Play together.'</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// result:</span></span><br><span class="line"><span class="comment">// I am playing a mobile phone.</span></span><br><span class="line"><span class="comment">// I have just arrived home.    // after 2000ms</span></span><br><span class="line"><span class="comment">// Play together.</span></span><br></pre></td></tr></table></figure>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从最早的回调函数，到 Promise 对象，再到 Generator 函数，每次都有所改进，但又让人觉得不彻底。<strong>异步编程的语法目标，就是怎样让它更像同步编程</strong>， async 函数就是隧道尽头的亮光，很多人认为它是异步操作的终极解决方案。实际使用起来也更顺手、更容易理解，它必然会被普及，我们应该习惯这种用法。事实上 Koa2 也正是由于此而比拥有复杂的回调嵌套的 Express 更脱颖而出。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://www.ruanyifeng.com/blog/2012/12/asynchronous%EF%BC%BFjavascript.html" target="_blank" rel="noopener">Javascript异步编程的4种方法 - 阮一峰</a></li>
-<li><a href="http://es6.ruanyifeng.com/#docs/promise" target="_blank" rel="noopener">Promise 对象 - 阮一峰ES6教程</a></li>
-<li><a href="http://es6.ruanyifeng.com/#docs/async" target="_blank" rel="noopener">async 函数 - 阮一峰ES6教程</a></li>
-<li><a href="https://segmentfault.com/a/1190000007535316" target="_blank" rel="noopener">理解 JavaScript 的 async/await</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3009,7 +3021,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">74</span>
+                    <span class="site-state-item-count">75</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

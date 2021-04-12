@@ -372,6 +372,342 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2021/04/12/Python-%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/04/12/Python-%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">Python 函数详解</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-04-12 22:48:57 / 修改时间：22:49:26" itemprop="dateCreated datePublished" datetime="2021-04-12T22:48:57+08:00">2021-04-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/04/12/Python-%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2021/04/12/Python-函数详解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">13k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="可调用对象"><a href="#可调用对象" class="headerlink" title="可调用对象"></a>可调用对象</h2><p>除了用户定义的函数，调用运算符，即 “()” 括号对，还能应用到其他对象上。我们将能应用调用运算符的对象称为<strong>可调用对象</strong>，通过内置的 <code>callable()</code> 方法可以判断对象是否是可调用对象。在 Python 3 的<a href="https://docs.python.org/3/reference/datamodel.html" target="_blank" rel="noopener">数据模型文档</a>中，一共列出了 7 种可调用对象：</p>
+<ul>
+<li><strong>内置函数和内置方法</strong>：使用 C 语言（CPython）实现的函数和方法，如 <code>len()</code> 和 <code>alist.append()</code>；</li>
+<li><strong>用户定义的函数</strong>：包括使用 def 创建的普通函数和 lambda 创建的匿名函数；</li>
+<li><strong>实例方法与类方法</strong>：定义在类中的方法，实例方法是指第一个参数为 <code>self</code> 的方法，类方法是指第一个参数为 <code>cls</code> 的方法；</li>
+<li><strong>类</strong>：对类使用调用运算符，如 <code>C()</code>，会执行类的 <code>__new__</code> 方法创建类的实例，然后执行 <code>__init__</code> 初始化；</li>
+<li><strong>类的实例</strong>：如果类定义了 <code>__call__</code> 方法，那它的实例可以作为函数调用；</li>
+<li><strong>生成器函数</strong>：内部使用了 yield 关键字的函数，调用生成器函数会返回生成器对象；</li>
+<li><strong>协程函数和异步生成器函数</strong>：从 Python 3.5 开始支持使用 <code>async def</code> 关键字来定义协程函数，如果内部包含 yield 关键字则被称为异步生成器函数。该函数被调用时会返回一个异步迭代器对象。</li>
+</ul>
+<h3 id="自定义的可调用类型"><a href="#自定义的可调用类型" class="headerlink" title="自定义的可调用类型"></a>自定义的可调用类型</h3><p>在装饰器一节，我们已经认识到了，装饰器不仅可以是函数，也可以是类。任何类只要实现了 <code>__call__</code> 方法，那它就是可调用对象，就可以表现的如同函数。因此，我们可以编写用户自定义的可调用类型，将其用在任何期待函数的地方。下面我将通过 Java 和 Python 两种语言，展现它们在可调用类型上的异同。</p>
+<p>假设现有一副扑克，要求按照 <code>A, 2 ~ 10, J, Q, K</code> 的顺序进行排序。在 Java 中，可以通过 <code>Collections.sort()</code> 集合类的接口对一个集合进行排序。Python 也提供了内置的 <code>sorted()</code> 方法，对可迭代对象进行排序。但两种语言都不支持直接对字符串和数字类型进行比较，所以还需要实现特定的排序逻辑。</p>
+<p>Java 中要实现排序逻辑通常有两种方法。一种是让类实现 Comparable 接口，重写其中的 <code>compareTo()</code> 抽象方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Poker</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Poker</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Poker otherPoker)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// return ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里重点想展示第二种方法：新建一个实现了 Comparator 接口的比较器类，重写其 <code>compare()</code> 抽象方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PokerComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Poker</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Poker firstPoker, Poker secondPoker)</span> </span>&#123;</span><br><span class="line">       <span class="comment">// return ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PokerComparator pokerComparator = <span class="keyword">new</span> PokerComparator();</span><br><span class="line">Collections.sort(pokers, pokerComparator);</span><br></pre></td></tr></table></figure>
+<p>对于这种方法，需要将比较器对象作为第二个参数传入 <code>Collections.sort()</code> 接口中。由于 Java 对象不能将函数作为参数的限制，我们定义了一个辅助类，实际上这个类对我们而言只有一个方法有用，那就是 <code>compare()</code> 方法，<code>Collections.sort()</code> 接口会去调用该方法，所以它就是对应的排序逻辑，只不过是用类实现的。</p>
+<p>Python 的函数可以直接作为参数传递，但我们接下来要讲的是如何定义一个类似 Comparator 的类，让它能实现排序逻辑。</p>
+<p>Python 内置的排序方法 <code>sorted()</code>，<strong>允许接收一个关键字参数 key 作为排序的键</strong>，比如 <code>key=len</code> 时依照元素的长度进行排序。对于扑克牌 A ~ K，可以维护一个映射数字类型的字典，比如将 ‘K’ 映射到 13，排序时直接通过映射的数值大小排序。维护一个字典，函数当然可以做到，但将其作为类的属性更加合适。可以定义一个扑克序列类，在初始化这个类时就构建好字典。为了让类可被调用，还需要实现 <code>__call__</code> 方法，直接返回字典中扑克牌对应的数值作为排序的键。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PokerOrder</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._seq = &#123;str(i): i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>, <span class="number">11</span>)&#125;</span><br><span class="line">        self._seq.setdefault(<span class="string">'J'</span>, <span class="number">11</span>)</span><br><span class="line">        self._seq.setdefault(<span class="string">'Q'</span>, <span class="number">12</span>)</span><br><span class="line">        self._seq.setdefault(<span class="string">'K'</span>, <span class="number">13</span>)</span><br><span class="line">        self._seq.setdefault(<span class="string">'A'</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, item)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._seq.get(item)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(self._seq)</span><br></pre></td></tr></table></figure>
+<p>由于 PokerOrder 类实现了 <code>__call__</code> 方法，它的实例会被 <code>callable()</code> 方法判定为可调用对象，可以直接应用调用运算符，传入扑克牌值返回对应数值。在排序时，将 PokerOrder 类的实例作为关键字传入，相当于将序列中的每项元素执行 <code>__call__</code> 方法返回的值作为键进行排序。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>pokerorder = PokerOrder()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pokerorder.show()</span><br><span class="line">&#123;<span class="string">'2'</span>: <span class="number">2</span>, <span class="string">'3'</span>: <span class="number">3</span>, <span class="string">'4'</span>: <span class="number">4</span>, <span class="string">'5'</span>: <span class="number">5</span>, <span class="string">'6'</span>: <span class="number">6</span>, <span class="string">'7'</span>: <span class="number">7</span>, <span class="string">'8'</span>: <span class="number">8</span>, <span class="string">'9'</span>: <span class="number">9</span>, <span class="string">'10'</span>: <span class="number">10</span>, <span class="string">'J'</span>: <span class="number">11</span>, <span class="string">'Q'</span>: <span class="number">12</span>, <span class="string">'K'</span>: <span class="number">13</span>, <span class="string">'A'</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>callable(pokerorder)</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pokerorder(<span class="string">'K'</span>)</span><br><span class="line"><span class="number">13</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sorted([<span class="string">'K'</span>, <span class="string">'3'</span>, <span class="string">'A'</span>, <span class="string">'7'</span>, <span class="string">'J'</span>, <span class="string">'Q'</span>, <span class="string">'2'</span>], key=pokerorder)</span><br><span class="line">[<span class="string">'A'</span>, <span class="string">'2'</span>, <span class="string">'3'</span>, <span class="string">'7'</span>, <span class="string">'J'</span>, <span class="string">'Q'</span>, <span class="string">'K'</span>]</span><br></pre></td></tr></table></figure>
+<p>将类定义为可调用类型，不仅能维护内部属性，还能自定义方法，比如如上代码中的 <code>show()</code> 方法。除此之外，在实现更复杂的排序逻辑时，比如按照花色排序等，使用类要比使用函数更合适。甚至如果你觉的 PokerOrder 类应该被实现为单例模式，还可以添加 <code>__new__</code> 方法保证创建类中的字典只会被创建一次。</p>
+<h2 id="函数对象与方法对象"><a href="#函数对象与方法对象" class="headerlink" title="函数对象与方法对象"></a>函数对象与方法对象</h2><p>Python 中一切皆对象，不管是函数还是类中定义的方法都是对象。对于类中的实例方法来说，通过类访问该实例方法，如 <code>C.foo</code>，会返回一个<strong>函数对象</strong>，即 <code>function</code> 类型；通过实例访问实例方法，如 <code>c.foo</code>，会返回一个<strong>绑定方法对象</strong>，即 <code>method</code> 类型，该方法对象绑定在实例上。对于类方法而言，无论是通过类还是实例访问，都返回绑定方法对象，该方法对象绑定在类上。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">C</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(self, x)</span>:</span> print(x)</span><br><span class="line"><span class="meta">... </span>    @classmethod</span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">(cls, x)</span>:</span> print(x)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>C.foo</span><br><span class="line">&lt;function C.foo at <span class="number">0x10d613f70</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(C.foo)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">function</span>'&gt;</span></span><br><span class="line">&gt;&gt;&gt; c = C()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c</span><br><span class="line">&lt;__main__.C object at <span class="number">0x10b0a5820</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c.foo</span><br><span class="line">&lt;bound method C.foo of &lt;__main__.C object at <span class="number">0x10b0a5820</span>&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(c.foo)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">method</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">C</span>.<span class="title">bar</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">bound</span> <span class="title">method</span> <span class="title">C</span>.<span class="title">bar</span> <span class="title">of</span> &lt;<span class="title">class</span> '<span class="title">__main__</span>.<span class="title">C</span>'&gt;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">c</span>.<span class="title">bar</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">bound</span> <span class="title">method</span> <span class="title">C</span>.<span class="title">bar</span> <span class="title">of</span> &lt;<span class="title">class</span> '<span class="title">__main__</span>.<span class="title">C</span>'&gt;&gt;</span></span><br></pre></td></tr></table></figure>
+<p>方法对象中包含一些特殊的只读属性：</p>
+<ul>
+<li><code>__self__</code> 为类实例对象本身；</li>
+<li><code>__func__</code> 为函数对象；</li>
+<li><code>__doc__</code> 为方法的文档，与 <code>__func__.__doc__</code> 作用相同；</li>
+<li><code>__name__</code> 为方法名称，与 <code>__func__.__name__</code> 作用相同；</li>
+<li><code>__module__</code> 为方法所属模块的名称，没有则为 None。</li>
+</ul>
+<p><strong>访问方法对象的 <code>__func__</code> 属性会获得函数对象</strong>。虽然两者都能通过调用运算符 “()” 调用，但函数对象还需要手动传入第一个位置的参数，即 <code>self</code> 和 <code>cls</code> 参数，方法对象则不需要。原因在于，<strong>调用方法对象会调用对应的下层函数对象 <code>__func__</code>，并将 <code>__self__</code> 参数插入到参数列表的开头</strong>，如果是实例方法则插入类实例，如果是类方法则插入类本身。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">C</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(self, x)</span>:</span> print(x)</span><br><span class="line"><span class="meta">... </span>    @classmethod</span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">(cls, x)</span>:</span> print(x)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = C()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c.foo(<span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c.foo.__func__(c, <span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>C.bar(<span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>C.bar.__func__(C, <span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>就如同上述代码所展示的，对于实例方法 <code>foo()</code> 来说，调用 <code>c.foo(1)</code> 相当于调用 <code>c.foo.__func__(c, 1)</code>。对于类方法 <code>bar()</code> 来说，无论是调用 <code>c.bar(1)</code> 还是 <code>C.bar(1)</code> 都相当于调用 <code>C.bar.__func__(C, 1)</code>。</p>
+<h3 id="函数内省"><a href="#函数内省" class="headerlink" title="函数内省"></a>函数内省</h3><p>将函数作为对象处理，可以用于运行时内省，类似于 Java 中的反射，可以在运行时获取函数的信息，比如注解、闭包、参数默认值等。下面列出了一些函数对象特有的属性和方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span> ...</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sorted(set(dir(func)) - set(dir(object)))</span><br><span class="line">[<span class="string">'__annotations__'</span>, <span class="string">'__call__'</span>, <span class="string">'__closure__'</span>, <span class="string">'__code__'</span>, <span class="string">'__defaults__'</span>, <span class="string">'__dict__'</span>, <span class="string">'__get__'</span>, <span class="string">'__globals__'</span>, <span class="string">'__kwdefaults__'</span>, <span class="string">'__module__'</span>, <span class="string">'__name__'</span>, <span class="string">'__qualname__'</span>]</span><br></pre></td></tr></table></figure>
+<p><code>dir()</code> 函数可以查看一个模块或一个类中的所有属性，当然方法也算方法属性。上述代码将 func 函数对象与常规对象 object 的属性集合做了一个差集，只打印函数对象特有的属性。下表对这些特有属性做了简要说明。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>__annotations__</code></td>
+<td>dict</td>
+<td>参数和返回值的注解</td>
+</tr>
+<tr>
+<td><code>__call__</code></td>
+<td>method-wrapper</td>
+<td>实现 () 运算符，即可调用对象协议</td>
+</tr>
+<tr>
+<td><code>__closure__</code></td>
+<td>tuple</td>
+<td>函数闭包，即自由变量的绑定（没有则是None）</td>
+</tr>
+<tr>
+<td><code>__code__</code></td>
+<td>code</td>
+<td>编译成字节码的函数元数据和函数定义体</td>
+</tr>
+<tr>
+<td><code>__defaults__</code></td>
+<td>tuple</td>
+<td>形式参数的默认值</td>
+</tr>
+<tr>
+<td><code>__get__</code></td>
+<td>method-wrapper</td>
+<td>实现只读描述符协议</td>
+</tr>
+<tr>
+<td><code>__globals__</code></td>
+<td>dict</td>
+<td>函数所在模块中的全局变量</td>
+</tr>
+<tr>
+<td><code>__kwdefaults__</code></td>
+<td>dict</td>
+<td>仅限关键字形式参数的默认值</td>
+</tr>
+<tr>
+<td><code>__name__</code></td>
+<td>str</td>
+<td>函数名称</td>
+</tr>
+<tr>
+<td><code>__qualname__</code></td>
+<td>str</td>
+<td>函数的限定名称，如 Random.choice</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>函数内省经常被一些框架使用发挥出强大效果。比如 <code>__defaults__</code>、<code>__code__</code> 和 <code>__annotations__</code> 属性，经常被 IDE 用来提取关于函数签名的信息，我们之前也提到过 IDE 和 lint 工具使用函数注解做静态类型检查。还比如一些 Python Web 后端框架，可以自动解析 HTTP 请求中的参数将其注入到接口函数中执行，而不用程序员手动处理。</p>
+<h2 id="函数的参数"><a href="#函数的参数" class="headerlink" title="函数的参数"></a>函数的参数</h2><p>Python 最好的特性之一就是提供了极为灵活的参数处理机制。除了基础的定位参数（positional argument）之外，Python 还支持传入关键字参数（keyword argument），如我们之前所使用的内置方法 <code>sorted()</code>，就支持关键字参数 key 与 reverse。关键字参数允许提供默认值，如果无默认值一般为 None。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">Return a new list containing all items from the iterable in ascending order.</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">A custom key function can be supplied to customize the sort order, and the</span></span><br><span class="line"><span class="string">reverse flag can be set to request the result in descending order.</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line">sorted(iterable, /, *, key=<span class="keyword">None</span>, reverse=<span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
+<p>Java 5 中引入了不定长参数，允许在形参后添加 <code>...</code> 表示该形参可以接收多个参数值，多个参数将被当做数组传入，如 <code>void foo(String... args)</code>。Python 也支持<strong>不定长参数</strong>，它的形式是在参数名称前添加星号运算符，如 <code>*args</code>，不定长参数将被打包成<strong>元组</strong>传入。除此之外，Python 还支持传入<strong>非具名关键字参数</strong>，即没有明确指定名称的关键字参数，如 <code>**kwargs</code>，参数将会被打包成一个<strong>字典</strong>传入。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line"><span class="meta">... </span>    print(<span class="string">'args: '</span>, args)</span><br><span class="line"><span class="meta">... </span>    print(<span class="string">'kwargs: '</span>, kwargs)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">0</span>, <span class="string">'a'</span>, key1=<span class="number">1</span>, key2=<span class="string">'b'</span>) </span><br><span class="line">args: (<span class="number">0</span>, <span class="string">'a'</span>)</span><br><span class="line">kwargs: &#123;<span class="string">'key1'</span>: <span class="number">1</span>, <span class="string">'key2'</span>: <span class="string">'b'</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>如果同时使用 <code>*args</code> 和 <code>**kwargs</code>，<code>*args</code> 参数必须要在 <code>**kwargs</code> 之前。它们可以与其他类型的参数混合使用，但<strong>参数的顺序必须是：定位参数，默认参数，不定长参数，具名关键字参数和非具名关键字参数</strong>。即如下形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">record</span><span class="params">(name, age=<span class="number">18</span>, *phones, email=None, **other)</span>:</span></span><br><span class="line"><span class="meta">... </span>    print(<span class="string">'name: '</span>, name)</span><br><span class="line"><span class="meta">... </span>    print(<span class="string">'age: '</span>, age)</span><br><span class="line"><span class="meta">... </span>    print(<span class="string">'phones: '</span>, phones)</span><br><span class="line"><span class="meta">... </span>    print(<span class="string">'email: '</span>, email)</span><br><span class="line"><span class="meta">... </span>    print(<span class="string">'other: '</span>, other)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>record(<span class="string">'Jack'</span>, <span class="number">20</span>, <span class="number">123456</span>, <span class="number">654321</span>, email=<span class="string">'abc@email.com'</span>, height=<span class="number">180</span>, weight=<span class="number">90</span>)</span><br><span class="line">name: Jack</span><br><span class="line">age: <span class="number">20</span></span><br><span class="line">phones: (<span class="number">123456</span>, <span class="number">654321</span>)</span><br><span class="line">email: abc@email.com</span><br><span class="line">other: &#123;<span class="string">'height'</span>: <span class="number">180</span>, <span class="string">'weight'</span>: <span class="number">90</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，默认参数与具名关键字参数形式上一样，默认参数通常是用来简化函数调用者的传参的。这两者可以通过位置进行区分，在不定长参数之前的是默认参数，之后的是关键字参数。如果要传入不定长参数，默认参数就不能省略，此时默认参数被视为定位参数（默认值失去了意义），其后的非关键字参数会被不定长参数 <code>*phones</code> 捕获。如果省略了默认参数，那么不定长参数的第一个元素会被赋值给默认参数。具名关键字参数则没有这一限制。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>record(<span class="string">'Jack'</span>, <span class="number">123456</span>, <span class="number">654321</span>, height=<span class="number">180</span>)</span><br><span class="line">name:  Jack</span><br><span class="line">age:  <span class="number">123456</span></span><br><span class="line">phones:  (<span class="number">654321</span>,)</span><br><span class="line">email:  <span class="keyword">None</span></span><br><span class="line">other:  &#123;<span class="string">'height'</span>: <span class="number">180</span>&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>仅限关键字参数</strong>（keyword-only argument）是 Python 3 新增的特性。如果定义函数时想指定仅限关键字参数，需要将它们放在带有 <code>*</code> 的不定长参数之后。如果不想支持不定长参数，可以在签名中放一个 <code>*</code>，标志着定位参数到此终结，之后的参数只能以关键字形式提供，即仅限关键字参数。如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(a, *, b, c=<span class="number">3</span>)</span>:</span> </span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> a, b, c</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">1</span>, b=<span class="number">2</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">1</span>, b=<span class="number">2</span>, c=<span class="number">4</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+<p>可以看到，仅限关键字参数不一定要有默认值，但如果没有默认值，调用函数时必须传入该参数。内置方法 <code>sorted()</code> 的参数就包含一个 <code>*</code>，其后的 key 和 reverse 参数就是带有默认值的仅限关键字参数。</p>
+<h3 id="函数参数的最佳实践"><a href="#函数参数的最佳实践" class="headerlink" title="函数参数的最佳实践"></a>函数参数的最佳实践</h3><p>对于函数参数如何正确的使用，《Effective Python》给出了一些建议。我结合自己的一些看法，给出如下几点建议。</p>
+<p>第一点，<strong>使用不定长参数减少视觉杂讯</strong>。这是一种比喻，目的是使函数签名内容不要过于过多，而应凸显重要部分。如果一个函数支持传入多个相同类型的对象，或对不同类型的对象做相同处理，可以考虑不定长参数（或者组合成一个可迭代对象传入）。拿 Python 的内置方法来举例，<code>map()</code> 的最后一个参数就是不定长参数 <code>*iterables</code>，支持传入多个可迭代对象；<code>print()</code> 方法的第一个参数 <code>*values</code> 也是不定长参数，对于传入多个参数，不管它们是什么类型都能将其打印。</p>
+<p>第二点，<strong>使用关键字参数来表达可选的行为</strong>。关键字参数的名称可以辅助调用者明确参数的用途，比如 <code>sorted()</code> 方法中的 reverse 参数用来反向排序。关键字参数还能提供默认值，就如同一个开关，如果使用函数默认功能，就不需要操心这些参数，还可以避免传参时的重复代码。如果想开启附加功能，可以传入指定的关键字参数。带有默认值的关键字参数还能在不改变调用代码的基础上为函数添加新功能，保证了代码的兼容性。从另一种角度看，带有默认值的关键字参数提供了类似多态重载的动态语言特性，虽然 Python 并不支持函数重载。</p>
+<p>第三点，<strong>使用仅限关键字参数来确保代码清晰</strong>。关键字参数可以提高可读性，但不能保证调用者一定使用关键字来明确指出参数的含义，关键字参数可以通过位置来赋值，比如定义的函数 <code>def func(a, b=1)</code> 可以通过 <code>func(1, 2)</code> 来为关键字参数 b 赋值。如果有必要，可以使用仅限关键字参数来强制调用者使用关键字。比如 <code>sorted()</code> 方法签名 <code>*</code> 后指定的仅限关键字参数 key 和 reverse。</p>
+<p>第四点，<strong>使用 None 而不是可变序列为参数默认值赋空</strong>。绝对不要将参数默认值指定为空的可变序列 <code>[]</code> 和 <code>{}</code>。参数的默认值会在模块被加载时执行一次并绑定，如果默认值定义为了可变序列，那么以默认形式调用函数的代码都会共享同一份序列，从而导致难以预料的结果。比如如下解析 JSON 的函数，默认值为空字典，在解析出错时将其返回，导致两个对象共用一个字典。解决的方法是使用 None 作为参数默认值，在函数内重新赋值为空字典，并添加文档说明参数默认值的实际行为。如果参数默认值是动态变化的，如当前时间，也应如此做。总之，要避免参数默认值是可变的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">decode</span><span class="params">(data, default=&#123;&#125;)</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">try</span>:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">return</span> json.loads(data)</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">except</span> ValueError:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">return</span> default</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo = decode(<span class="string">'bad data'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bar = decode(<span class="string">'also bad'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo[<span class="string">'a'</span>] = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bar</span><br><span class="line">&#123;<span class="string">'a'</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo <span class="keyword">is</span> bar</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<p>第五点，<strong>避免修改传入参数的值</strong>。函数式编程中非常强调的一点是，函数要无副作用。无副作用指的是函数内部不与外部互动（最典型的情况是，修改全局变量的值），产生除函数本身运算以外的其他效果。函数无副作用，意味着函数要保持独立，不依赖于上下文环境，不得修改外部变量包括传入参数的值。即使函数要在传入参数本身上做运算，也应该新建一个副本将其返回。就拿 <code>sorted()</code> 来说，即使排序前后元素位置没有变化，也返回一个全新的列表。除此之外，<code>map()</code>、<code>filter()</code> 等其他内置方法也都遵循这一点，不对参数本身做修改。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sorted(l)</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sorted(l) <span class="keyword">is</span> l</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h3 id="自定义的-sorted-函数"><a href="#自定义的-sorted-函数" class="headerlink" title="自定义的 sorted() 函数"></a>自定义的 <code>sorted()</code> 函数</h3><p>在本章中我一直拿内置的 <code>sorted()</code> 函数来举例，不妨自己来实现一个。借此案例我想演示：如何使用仅限关键字参数，如何编写高阶函数，以及如何使用卫语句对异常参数进行处理。</p>
+<p>这里的排序算法不是关键，使用的是最简单的冒泡排序算法。函数签名上尽可能与 <code>sorted()</code> 保持一致，为了保证函数无副作用，函数内部新建了一个列表副本保存传入可迭代序列的值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sort</span><span class="params">(iterable, *, key=None, reverse=False)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> key <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span> <span class="keyword">and</span> <span class="keyword">not</span> callable(key):</span><br><span class="line">        <span class="keyword">raise</span> TypeError(<span class="string">f'<span class="subst">&#123;type(key)&#125;</span> object is not callable'</span>)</span><br><span class="line"></span><br><span class="line">    _l = list(iterable)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(_l)):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(i):</span><br><span class="line">            <span class="keyword">if</span> key <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">                <span class="keyword">if</span> _l[j] &gt; _l[i]:</span><br><span class="line">                    _l[j], _l[i] = _l[i], _l[j]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> key(_l[j]) &gt; key(_l[i]):</span><br><span class="line">                    _l[j], _l[i] = _l[i], _l[j]</span><br><span class="line">    <span class="keyword">if</span> reverse:</span><br><span class="line">        _l.reverse()</span><br><span class="line">    <span class="keyword">return</span> _l</span><br></pre></td></tr></table></figure>
+<p>仅限关键字参数是指在 <code>*</code> 运算符之后定义的关键字参数，在调用时必须指定关键字名称，如上述函数中的 key 和 reverse 关键字。</p>
+<p>在函数的开头，首先判断传入的 key 参数在非 None 情况下是否是可调用的，若不可调用则抛出 TypeError 异常。这种 if 条件分支语句叫做<strong>卫语句</strong>（guard clause），目的是将可能出错的每个分支做单独检查，要么抛出异常要么立即返回。通过在函数头部的集中处理及早抛出各种可能的异常（又称迅速失败），避免无效的运算。函数真正的实现代码放在卫语句之后，保证运行到此处时所有条件都已通过。</p>
+<p>通过了卫语句检测的 key 参数是可调用的，在函数内部直接使用 <code>key()</code> 调用。对于接收函数作为参数的 <code>sort()</code> 函数，我们将其称之为<strong>高阶函数</strong>，这也是 Python 函数式编程特性之一。</p>
+<p>下面是测试方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_sort_number_sequence</span><span class="params">(self)</span>:</span></span><br><span class="line">    _l = [<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>]</span><br><span class="line">    result = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">7</span>]</span><br><span class="line">    <span class="keyword">assert</span> sort(_l) == result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_sort_sequence_with_key_function</span><span class="params">(self)</span>:</span></span><br><span class="line">    _l = [<span class="string">'a'</span>, <span class="string">'aab'</span>, <span class="string">'ab'</span>, <span class="string">'aabb'</span>]</span><br><span class="line">    result = [<span class="string">'a'</span>, <span class="string">'ab'</span>, <span class="string">'aab'</span>, <span class="string">'aabb'</span>]</span><br><span class="line">    <span class="keyword">assert</span> sort(_l, key=len) == result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_sort_sequence_with_key_function_and_reverse</span><span class="params">(self)</span>:</span></span><br><span class="line">    _l = [<span class="string">'a'</span>, <span class="string">'aab'</span>, <span class="string">'ab'</span>, <span class="string">'aabb'</span>]</span><br><span class="line">    result = [<span class="string">'aabb'</span>, <span class="string">'aab'</span>, <span class="string">'ab'</span>, <span class="string">'a'</span>]</span><br><span class="line">    <span class="keyword">assert</span> sort(_l, key=len, reverse=<span class="keyword">True</span>) == result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_raise_error_when_key_function_is_not_callable</span><span class="params">(self)</span>:</span></span><br><span class="line">    _l = [<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>]</span><br><span class="line">    <span class="keyword">with</span> pytest.raises(TypeError) <span class="keyword">as</span> e:</span><br><span class="line">        sort(_l, key=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>pytest 框架支持对抛出异常的测试，使用 with 语句加 <code>pytest.raises()</code> 方法可以断言定义体内调用的方法是否会抛出对应的异常。</p>
+<h3 id="与-运算符"><a href="#与-运算符" class="headerlink" title="* 与 ** 运算符"></a><code>*</code> 与 <code>**</code> 运算符</h3><p>在 Python 中，<code>*</code> 与 <code>**</code> 运算符除了能用作数学运算符中的乘法和乘方之外，还有一些其他的巧妙用法。之前讨论的函数中的不定长参数 <code>*args</code> 和不具名关键字参数 <code>**kwargs</code> 是它们的经典用法之一。此外，这两个运算符还可以用来对参数列表进行<strong>拆包</strong>。</p>
+<p>运用 <code>*</code> 运算符可以把一个可迭代对象拆开作为函数的参数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(a, b)</span>:</span></span><br><span class="line"><span class="meta">... </span>    print(<span class="string">f'a=<span class="subst">&#123;a&#125;</span>, b=<span class="subst">&#123;b&#125;</span>'</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">a=<span class="number">1</span>, b=<span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(*t)</span><br><span class="line">a=<span class="number">1</span>, b=<span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>类似的，运用 <code>**</code> 运算符可以把一个字典拆开作为函数的参数，同名键会绑定到对应的具名参数上，如果函数还定义了非具名关键字参数 <code>**kwargs</code>，除了绑定的同名键外余下参数会被 <code>**kwargs</code> 捕获。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(a=None, b=None, **kwargs)</span>:</span></span><br><span class="line"><span class="meta">... </span>    print(<span class="string">f'a=<span class="subst">&#123;a&#125;</span>, b=<span class="subst">&#123;b&#125;</span>, kwargs=<span class="subst">&#123;kwargs&#125;</span>'</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123;<span class="string">'a'</span>: <span class="number">1</span>, <span class="string">'b'</span>: <span class="number">2</span>, <span class="string">'c'</span>: <span class="number">3</span>, <span class="string">'d'</span>: <span class="number">4</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(**d)</span><br><span class="line">a=<span class="number">1</span>, b=<span class="number">2</span>, kwargs=&#123;<span class="string">'c'</span>: <span class="number">3</span>, <span class="string">'d'</span>: <span class="number">4</span>&#125;</span><br></pre></td></tr></table></figure>
+<p><code>*</code> 运算符对于函数参数中的可迭代对象拆包概念，在 Python 3 被扩展到了<strong>平行赋值</strong>。在平行赋值中，<code>*</code> 前缀只能被用在一个变量名前，但这个变量可以出现在赋值表达式的任何位置，用来处理剩下的元素。拆包所赋值的元素是列表类型，即使其中只有一个元素。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, b, *rest = range(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, b, rest</span><br><span class="line">(<span class="number">0</span>, <span class="number">1</span>, [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, *rest, d, e = range(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, rest, d, e</span><br><span class="line">(<span class="number">0</span>, [<span class="number">1</span>, <span class="number">2</span>], <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, *rest, c, d, e = range(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, rest, c, d, e</span><br><span class="line">(<span class="number">0</span>, [<span class="number">1</span>], <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="lambda-表达式"><a href="#lambda-表达式" class="headerlink" title="lambda 表达式"></a>lambda 表达式</h2><p>Python 中的 lambda 关键字用于创建<strong>匿名函数</strong>。lambda 表达式的格式如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">lambda</span> arguments : statement</span><br></pre></td></tr></table></figure>
+<p>表达式以 lambda 关键字开头，冒号 “:” 左侧是函数的<strong>传入参数</strong>，当有多个入参时使用逗号划分开，冒号右侧是<strong>返回值</strong>的表达式语句，函数会根据表达式计算结果并将其返回。lambda 表达式会创建一个函数对象，可以对其赋值并如同普通函数一样使用。下面定义了一个求平方的 lambda 表达式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>square = <span class="keyword">lambda</span> x : x * x</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>square</span><br><span class="line">&lt;function &lt;<span class="keyword">lambda</span>&gt; at <span class="number">0x101631e50</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>square(<span class="number">3</span>)</span><br><span class="line"><span class="number">9</span></span><br></pre></td></tr></table></figure>
+<p>lambda 句法只是语法糖，上述定义的 lambda 表达式与如下使用 def 关键字定义的普通函数没有本质区别，甚至 lambda 表达式的功能要更加受限。由于 Python 简单的句法限制了 lambda 定义体只能使用纯表达式，不能进行赋值，也不能使用 while 和 try 等 Python 语句。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">square</span><span class="params">(x)</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> x * x</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>square</span><br><span class="line">&lt;function square at <span class="number">0x101631dc0</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>在 Python 中，<strong>lambda 表达式的通常作用是作为参数传入给高阶函数</strong>。比如在列表推导一节介绍的 map、filter 和 reduce 函数，这些函数接收一个函数作为参数，如果不想额外定义函数，那么使用 lambda 表达式创建匿名函数就是最佳的应用场景。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>list(map(<span class="keyword">lambda</span> x : x * x, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))</span><br><span class="line">[<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list(filter(<span class="keyword">lambda</span> x : x &lt; <span class="number">2</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))</span><br><span class="line">[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+<p>除了上述这种应用场景之外，Python 很少使用匿名函数。受到句法的限制，lambda 表达式无法实现复杂的函数功能。同时，在使用 lambda 表达式时要尽可能保证表达式的清晰简短，否则冗长的 lambda 表达式将会导致代码难以阅读。此时，应该使用 def 关键字创建普通函数，即《Effective Python》所提倡的：<strong>使用辅助函数来取代复杂的表达式</strong>，并赋予函数清晰的名称以提高代码可读性。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2021/04/01/Python-%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%B1%BB%E5%9E%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3584,326 +3920,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">机器学习在网络安全中的应用 —— Chapter 1: Basics of Machine Learning in Cybersecurity</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2020-10-07 13:17:42" itemprop="dateCreated datePublished" datetime="2020-10-07T13:17:42+08:00">2020-10-07</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-11 15:24:25" itemprop="dateModified" datetime="2020-10-11T15:24:25+08:00">2020-10-11</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Translations/" itemprop="url" rel="index"><span itemprop="name">Translations</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/10/07/机器学习在网络安全中的应用-——-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">10k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文翻译并总结归纳自 <strong><em>Hands-On Machine Learning for Cybersecurity</em></strong> 书中的 Chapter 1: Basics of Machine Learning in Cybersecurity。该书主要着眼于机器学习在网络安全领域中的应用，介绍了多个方向的原理和解决方案，比如：包时间序列分析、垃圾邮件检测、使用 k-means 算法的网络异常检测等。总的来说，该书的动手操作很多，实战性很强。接下来我会用一个系列，整理归纳书中的各个章节。当然，除了第一章是介绍机器学习的概览之外，其他几个章节内容比较离散，所以顺序可能打乱。</p>
-<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>自诞生以来，机器学习（Machine Learning）一直是一个非常热门的话题，它的出现实实在在地解决了很多问题，比如人脸识别、自动驾驶、购物推荐系统、聊天机器人等。</p>
-<p>而在安全领域方面，老式的威胁检测系统通过使用启发式的和静态的签名（signature）来检测威胁和异常。例如：杀毒软件会根据病毒程序的特征，生成并维持一个病毒的签名库（保持持续更新），在查杀时通过与库中的签名比对来识别病毒程序。基于签名的威胁检测技术虽然容易理解，但并不健壮，它的最大的问题之一是：在数据规模、数据流速显著增大时，如何保证签名比对过程与数据流入速度匹配。每个包需要与数据库中的每个签名比对，如果不能保持同步，那意味着只能抛弃部分数据包，由此就会产生“漏网之鱼”。</p>
-<p>如今，基于签名的系统逐渐被智能网络安全代理（Intelligent cybersecurity agent）所取代。机器学习在识别新型恶意软件、零日漏洞攻击（zero-day attack）、高级可持续威胁（advanced persistent threats，简称 APT）方面取得积极进展。</p>
-<p>一般来说，由于攻击的复杂特性，要做到完全预防是很难的，机器学习能做到在攻击的初期识别攻击并防止其扩散到整个系统。许多网络安全公司使用诸如用户行为分析（user behavior analytics）和预测分析（predictive analytics）的高级分析方法，在威胁生命周期的早期阶段识别 APT 攻击，这种方式能够有效预防身份数据泄漏和内部威胁。规范分析（prescriptive analytics）则更具有响应性，能够在网络攻击发生以后分析该采取什么响应措施能将损失降到最小。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/1.png" alt="48e9cf0bd45e3630c4346d142839c8a1.png"></p>
-<h2 id="机器学习中的数据"><a href="#机器学习中的数据" class="headerlink" title="机器学习中的数据"></a>机器学习中的数据</h2><p>数据是机器学习的核心。数据分为结构化数据和非结构化数据，<strong>结构化数据（structured data）</strong>可以被映射为二维表结构，包含表头（Header）和表内元素，传统的关系型数据库（RDBMS）如 MySQL、Oracle 等都是以这种方式存放结构化数据；而<strong>非结构化数据（unstructured data）</strong>数据结构不规则或不完整，没有预定义的数据模型，例如图片、音频/视频等；融合了结构化和非结构化的数据称为<strong>半结构化数据（semi-structured data）</strong>。</p>
-<p>根据数据是否被打上标记，数据又被分为<strong>有标注数据（labelled data）</strong>和<strong>无标注数据（unlabelled data）</strong>。例如网络安全中的恶意流量检测，可以将样本中的善意流量（white）和恶意流量（black）手动打标（恶意流量可能是自己模拟生成的），构成训练集训练机器学习模型。</p>
-<h3 id="机器学习阶段"><a href="#机器学习阶段" class="headerlink" title="机器学习阶段"></a>机器学习阶段</h3><p>机器学习分为以下四个阶段：</p>
-<ul>
-<li><strong>分析阶段（The analysis phase）</strong>：在这个阶段，采集到的数据需要被提取明确的<strong>特征（features）</strong>或者参数（parameters），来被用于训练模型。</li>
-<li><strong>训练阶段（The training phase）</strong>： 前一阶段的数据将被用来在这个阶段训练机器学习模型（machine learning model），训练阶段是一个<strong>多次迭代</strong>的阶段，目的是为了训练一个更加可信的模型。</li>
-<li><strong>测试阶段（The testing phase）</strong>： 在这一阶段，训练阶段产生的机器学习模型将结合更多的数据进行测试并<strong>评估模型</strong>的性能。测试的数据是前面阶段从未被使用的数据。模型的<strong>演化</strong>可能会需要参数训练（调参）。</li>
-<li><strong>应用阶段（The application phase）</strong> ：模型被部署到<strong>生产环境</strong>，应用于真实数据。</li>
-</ul>
-<h3 id="过拟合和欠拟合"><a href="#过拟合和欠拟合" class="headerlink" title="过拟合和欠拟合"></a>过拟合和欠拟合</h3><p>在训练阶段，由于样本数据的不完备，训练出的机器学习模型可能并不理想（模型的泛化能力不佳），会产生两种现象：过拟合和欠拟合。</p>
-<p><strong>过拟合（Overfitting）</strong>，是指系统太过适应于（fit）或者说太过依赖于训练集数据，导致新来的数据都视为不匹配，通常表现为：模型对于训练集表现很好，对于测试集表现很差（容纳度很低）。产生这种现象的常见原因之一是只使用了有标注的数据来训练模型。</p>
-<blockquote>
-<p>Overfitting: The production of an analysis that corresponds too closely or exactly to a particular set of data, and may therefore fail to fit additional data or predict future observations reliably. — Oxford Dictionary</p>
-</blockquote>
-<p><strong>欠拟合（Underfitting）</strong>，是模型表现差的另一种场景，通常是由于样本数量较少，模型训练依赖特征过少，学习能力低下造成的。</p>
-<p>对于这两种情形，可以通过一些机器学习的常见步骤来消除，比如：数据的交叉验证（cross validation of the data），数据修剪（data pruning）和数据正则化（regularization of the data）。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/2.png" alt="0574cd5346226da66890df7956671e62.png"></p>
-<p>由上图可以看到，当模型层级较低时（模型过于简单），表现为欠拟合，训练集和测试集效果都不好；当模型层级较高时（模型过于复杂），表现为过拟合，训练集效果很好，但由于学习能力过于强大，以至于把训练样本所包含的不太一般的特性都学到了，导致测试集中表现很差。所以我们需要摸索出合适的模型，既不能太简单也不能太复杂，使得在测试集上能有最优表现。</p>
-<h2 id="机器学习分类"><a href="#机器学习分类" class="headerlink" title="机器学习分类"></a>机器学习分类</h2><p>传统上，基于所提供的学习类型，机器学习系统大体上可以分为两类：有监督学习和无监督学习。强化学习和深度学习是后面引入的新的研究分支。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/3.png" alt="49c0d215820883fdc0aa834405891742.png"></p>
-<h3 id="有监督学习"><a href="#有监督学习" class="headerlink" title="有监督学习"></a>有监督学习</h3><p>有监督学习（Supervised learning）是指使用已标注的数据集推导出预测函数，对测试集进行分类和预测。有监督学习包含一些子分支，比如：</p>
-<ul>
-<li><strong>半监督学习（Semi-supervised learning）</strong>：训练阶段的数据集即含有有标注的，也含有未标注的。</li>
-<li><strong>主动学习（Active learning）</strong>：主动学习是指，通过查询函数，从未标注数据集中查询出信息熵最大（可以简单理解为最复杂）的数据，交给督导者进行标注，循环迭代这个过程直至模型达到最佳。主动学习的“主动”，指的是<strong>主动提出标注请求</strong>，为此需要一个外在的能够对其请求进行标注的实体（通常是相关领域人员）。<br><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/4.png" alt="e834d2167c02ba1908f13760cec58005.png"></li>
-</ul>
-<p>有监督学习的常见应用包括：人脸识别，需要人为标注新面孔；垃圾邮件检测，需要对邮件内容文本进行分词处理，所以需要提前对一些敏感词汇做人为标注。</p>
-<h3 id="无监督学习"><a href="#无监督学习" class="headerlink" title="无监督学习"></a>无监督学习</h3><p>无监督学习算法（Unsupervised learning）是指初始数据集是未标注的，数据视图是在处理过程中由系统自学习构建出来的，没有任何外部干涉。如果说有监督学习是：老师提供对错指示，要求学生能够“对于输入数据X能判断对错”，那么无监督学习就是：在没有老师的情况下，学生自学，要求学生能够“<strong>从数据X中归纳总结出知识点</strong>”。无监督学习算法的具体应用案例包括：用户行为分析（User behavior analysis）、购物篮分析（Market basket analysis）等。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/5.png" alt="942767e754efb165eb261f9f9692bbc4.png"></p>
-<h3 id="强化学习"><a href="#强化学习" class="headerlink" title="强化学习"></a>强化学习</h3><p>强化学习（Reinforcement learning）是机器学习的又一分支，它强调如何基于<strong>环境</strong>而行动，以取得最大化的<strong>预期利益</strong>。</p>
-<p>具有强化学习能力的程序或机器人被称为<strong>代理（Agent）</strong>。代理所解决的问题被抽象为<strong>环境（Environment）</strong>，比如迷宫或者棋盘。代理需要有一个基本的<strong>策略（Policy）</strong>，每次迭代根据这个策略选择一个<strong>动作（Action）</strong>作用于环境，环境接受该动作后<strong>状态（State）</strong>发生变化，同时产生一个<strong>信号（Reward）</strong>，正代表奖励，负代表惩罚。代理会根据这个信号评估之前的策略是否适合。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/6.png" alt="25df06c2835f3b3d1e7e198431865384.png"></p>
-<p>强化学习有一些实际的用例，比如自动驾驶汽车，需要对周围复杂环境作出实施迅速的应对；又比如家喻户晓的 AlphaGo，只需要训练4个小时就可以击败世界知名的象棋AI Stockfish。</p>
-<h3 id="深度学习"><a href="#深度学习" class="headerlink" title="深度学习"></a>深度学习</h3><p>深度学习（Deep learning）是机器学习领域的一个新的研究分支，是一种以人工神经网络为架构，对资料进行表征学习的算法。深度学习并不简单的囊括于传统的有监督/无监督分类中，它本身也会用到有监督和无监督的学习方法来训练深度神经网络。</p>
-<p>深度学习的出现，引领了机器学习的又一波热潮，它摧枯拉朽地解决了之前未解决的诸多问题，使得似乎所有的机器辅助功能都变为可能。但它作为目前最热的机器学习方法之一，并不意味着是机器学习的终点，它也具有诸多问题，比如：深度学习需要巨大的数据集做支撑；复杂度较高；深度学习的构想来源于人脑的神经元结构，但人脑的复杂程度要远远超出它所能模拟的范畴。</p>
-<h2 id="机器学习解决的问题"><a href="#机器学习解决的问题" class="headerlink" title="机器学习解决的问题"></a>机器学习解决的问题</h2><p>机器学习可以用于解决以下几类问题：分类问题，集群问题，回归问题，降维问题，密度估算问题等等。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/7.png" alt="53aaf02095bd399d6b16dec0b2332dd7.png"></p>
-<h3 id="分类问题"><a href="#分类问题" class="headerlink" title="分类问题"></a>分类问题</h3><p>分类问题（Classification problems）是指基于特征将数据划分到多个类（class）中的问题。因为训练数据是有标注的，所以分类问题属于有监督学习。网络数据分类是一个经典的分类问题，互联网的内容可以根据它们的文本内容比如新闻、社交媒体、广告等划分到它们对应的类别。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/8.png" alt="d50de17881f0da10019d30b5e4266bef.png"></p>
-<h3 id="聚类问题"><a href="#聚类问题" class="headerlink" title="聚类问题"></a>聚类问题</h3><p>聚类问题（Clustering problems）是指将数据分成若干组并将相似数据归为一组。聚类技术常用语信息检索、模式识别、人口统计分析领域。相比于分类问题，聚类问题并不关心某一类是什么，只需要将相似的数据归为一类。因此，一个聚类算法通常只需要知道如何计算相似度就可以开始工作了，也就是说训练集无需作出预先标注。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/9.png" alt="c118f41b872bc162fd0f3858d25ec368.png"></p>
-<h3 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h3><p>回归问题（Regression problems）指的是确定两种或两种以上变量间相互依赖的定量关系的一种统计分析方法。例如对于图中的二元组数据（x，y），我们可以求出能表示 x，y 关系的线性回归方程，再对接下来的测试数据集进行预测或分类。</p>
-<p>回归包括多种类型，比如：线性回归（linear regression），逻辑回归（logistic regression），多项式回归（polynomial regression）等。回归可以用于欺诈检测系统，股票市场分析和预测。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/10.png" alt="985428a8e920d31726d314abe4af73d0.png"></p>
-<h3 id="降维问题"><a href="#降维问题" class="headerlink" title="降维问题"></a>降维问题</h3><p>现实应用中属性维数经常成千上万，且许多学习方法都涉及距离计算，而高维空间会给距离计算带来很大的麻烦，当维数很高时甚至连计算内积都不再容易。事实上，在高维情形下出现的数据样本稀疏、距离计算困难等问题，是所有机器学习方法共同面临的严重障碍，被称为“维数灾难”（curse of dimensionality）。</p>
-<p>缓解维数灾难的一个重要途径是<strong>降维（Dimension reduction）</strong>，亦称“维数约简”，即通过某种数学变换将原始高维属性空间转变为一个低维“子空间”（subspace），在这个子空间中样本密度大幅提高，距离计算也变得更为容易。降维将含有多个属性的高维数据，用它的主要属性去表示，并且不丢失重要特征。  降维技术经常用于<strong>特征提取</strong>，比如网络包流数据的处理，为了减少数据规模，通常只提取具有代表性的有用特征进行分析。</p>
-<p>下图给出了一个直观的例子，将原始三维空间中的样本点，映射到二维嵌入子空间中。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/11.jpg" alt="d127776fa637378ffec32cc993ce3c49.png"></p>
-<h3 id="密度估算问题"><a href="#密度估算问题" class="headerlink" title="密度估算问题"></a>密度估算问题</h3><p>密度估算问题（Density estimation problems）是用于对密集数据进行机器学习估算的统计学习方法。从技术上讲，它是一种<strong>计算概率密度函数</strong>的技术。在医学分析领域，通常使用这种技术来在庞大的人口中识别疾病相关症状。</p>
-<h2 id="机器学习算法"><a href="#机器学习算法" class="headerlink" title="机器学习算法"></a>机器学习算法</h2><h3 id="SVM"><a href="#SVM" class="headerlink" title="SVM"></a>SVM</h3><p>支持向量机（Support Vector Machines，SVM）属于有监督的算法，被用于解决线性或非线性的分类问题（linear/non linear classification）。由于优秀的性能，SVM 得到了广泛的应用。</p>
-<p>若输入数据所在的特征空间存在作为决策边界（decision boundary）的超平面将样本按正类和负类分开，实际上构造了2个平行的超平面作为间隔边界以判别样本的分类，所有在上间隔边界上方的样本属于正类，在下间隔边界下方的样本属于负类。两个间隔边界的距离被定义为边距（margin），位于间隔边界上的正类和负类样本为支持向量（support vector）。SVM 旨在求解能够划分样本的<strong>最大边距超平面（maximum-margin hyperplane）</strong>。</p>
-<p>对于二维平面，超平面可以理解为可以划分样本的一条「直线」，对于高维特征空间，SVM 可以通过<strong>核方法（kernel method）</strong>进行非线性分类。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/12.png" alt="e44a093db94c73420e3f30d4455b09f1.png"></p>
-<h3 id="贝叶斯网络"><a href="#贝叶斯网络" class="headerlink" title="贝叶斯网络"></a>贝叶斯网络</h3><p>贝叶斯网（Bayesian network，简称 BN）亦称“信念网”（belief network），它借助有向无环图（Direct Acyclic Graph，简称 DAG）来刻画属性之间的依赖关系，并使条件概率表（Conditional Probability Table，简称 CPT）来描述属性的联合概率分布。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/13.jpg" alt="fe9d8ceefb48edd4636364d7b7e00a2a.png"></p>
-<p>上图给出了西瓜问题的一种贝叶斯网结构和属性“根蒂”的条件概率表。从图中网络结构可看出，“色泽”直接依赖于“好瓜”和“甜度”，而“根蒂”则直接依赖于“甜度”；进一步从条件概率表能得到“根蒂”对“甜度”量化依赖关系，如 $P(根蒂=硬挺|甜度=高)=0.1$ 等。</p>
-<h3 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h3><p>决策树（decision tree）是一类常见的机器学习方法。以二分类任务为例，我们希望从给定训练数据集学得一个模型用以对新示例进行分类，这个把样本分类的任务，可看作对“当前样本属于正类吗？“这个问题的“决策”或“判定”过程。</p>
-<p>顾名思义，决策树是基于树结构来进行决策的，这恰是人类在面临决策问题时一种很自然的处理机制。树中非叶子节点表示需要作出分类判断的属性，每个分支代表可能的属性值。下图给出了西瓜问题的一颗决策树。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/14.jpg" alt="babb7185999143d2f546dc0d7fc76680.png"></p>
-<h3 id="随机森林"><a href="#随机森林" class="headerlink" title="随机森林"></a>随机森林</h3><p>首先我们介绍一下 <strong>Bagging</strong>。给定包含 m 个样本的数据集，我们先随机取出一个样本放入采样集中，再把该样本放回初始数据集，使得下次采样时该样本仍有可能被选中，这样，经过m次随机采样操作，我们得到含 m 个样本的采样集，初始训练集中有的样本在采样集里多次出现，有的则从未出现。</p>
-<p>照这样，我们可采样出 T 个含 m 个训练样本的采样集，然后基于每个采样集训练出一个基学习器，再将这些基学习器进行结合。这就是 Bagging 的基本流程。在对预测输出进行结合时，Bagging 通常对分类任务使用简单投票法，对回归任务使用简单平均法。若分类预测时出现两个类收到同样票数的情形，则最简单的做法是随机选择一个，也可进一步考察学习器投票的置信度来确定最终胜者。</p>
-<p>随机森林（Random Forest，简称 RF）是 Bagging 的一个扩展变体。RF 在以决策树为基学习器构建 Bagging 集成的基础上，进一步在决策树的训练过程中引入了随机属性选择。具体来说，传统决策树在选择划分属性时是在当前结点的属性集合（假定有 d 个属性）中选择一个最优属性；而在 RF 中，对基决策树的每个结点，先从该结点的属性集合中随机选择一个包含 k 个属性的子集，然后再从这个子集中选择一个最优属性用于划分。这样使得随机森林中的决策树都能够彼此不同，提升系统的多样性，从而提升分类性能。</p>
-<p>随机森林简单、容易实现、计算开销小，令人惊奇的是，它在很多现实任务中展现出强大的性能，被誉为“代表集成学习技术水平的方法”。</p>
-<h3 id="kNN"><a href="#kNN" class="headerlink" title="kNN"></a>kNN</h3><p>k近邻（k-Nearest Neighbor，简称 kNN）学习是一种常用的监督学习方法，其工作机制非常简单：给定测试样本，基于某种距离度量找出训练集中与其最靠近的 k 个训练样本，然后基于这 k 个“邻居”的信息来进行预测。通常，在分类任务中可使用“投票法”，即选择这 k 个样本中出现最多的类别标记作为预测结果；在回归任务中可使用“平均法，即将这 k 个样本的实值输出标记的平均值作为预测结果；还可基于距离远近进行加权平均或加权投票，距离越近的样本权重越大。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/15.jpg" alt="a5e05733ac1f4912ecc1bd1828535f57.png"></p>
-<p>上图是一个k近邻分类器示意图。虚线为等距线，测试样本在 k=1 或 k=5 时被判别为正例，k=3 时被判别为反例。显然，k 是一个重要参数，当 k 取不同值时，分类结果会有显著不同。</p>
-<h3 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h3><p>神经网络是由具有适应性的简单单元组成的广泛并行互连的网络，它的组织能够模拟生物神经系统对真实世界物体所作出的交互反应。</p>
-<p>神经网络中最基本的成分是神经元（neuron）模型，即上述定义中的“简单单元”。在生物神经网络中，每个神经元与其他神经元相连，当它“兴奋”时，就会向相连的神经元发送化学物质，从而改变这些神经元内的电位；如果某神经元的电位超过一个“阈值”（threshold），那么它就会被激活，即“兴奋”起来，向其他神经元发送化学物质。</p>
-<p>1943年，McMulloch 和 Pitts 将上述情形抽象为下图所示的简单模型，这就是一直沿用至今的“<strong>M-P神经元模型</strong>”。把许多个这样的神经元按一定的层次结构连接起来，就得到了神经网络。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/16.jpg" alt="5ba11eb4ebb4f8dddb0b8806dace6347.png"></p>
-<p>在这个模型中，神经元接收到来自 n 个其他神经元传递过来的输入信号，这些输入信号通过带权重的连接（connection）进行传递，神经元接收到总输入将与神经元的阈值进行比较，然后通过“激活函数”（activation function）处理以产生神经元的输出。</p>
-<h2 id="机器学习架构"><a href="#机器学习架构" class="headerlink" title="机器学习架构"></a>机器学习架构</h2><p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/17.png" alt="8b49f81f455bb0bb519c3659accc8f7d.png"></p>
-<p>注入机器学习系统的数据可能来自不同的源，可以是实时的流数据，也可以是批处理数据或者无交互的定时任务数据。常见的数据源有 Amazon Kinesis、Apache Flume、Apache Kafka 等。注入的数据经过清洗和预处理后被存入数据储存库中，例如 SQL/NoSQL 数据库、数据仓库（data warehouse）、HDFS 分布式系统等等。</p>
-<h3 id="模型引擎"><a href="#模型引擎" class="headerlink" title="模型引擎"></a>模型引擎</h3><ul>
-<li><strong>数据准备（Data preparation）</strong>：数据准备阶段需要进行数据清洗（data cleansing），检查数据一致性和完整性，对数据进行规范化，对拆分的或是聚合的数据进行转换和重组。</li>
-<li><strong>特征生成（Feature generation）</strong>：找到待分析数据的关键特征。特征可以来自原始数据或者聚合后的数据，不同特征通常都是相互独立的。特征提取的首要目标是降低数据维度和提高模型性能。</li>
-<li><strong>模型训练（Model training）</strong>：机器学习模型分析数据间的关联，将数据分类到不同的组。为了获得最佳性能，需要对数据特征进行合适的采样。通常 70～80% 的数据会被用于训练阶段。</li>
-<li><strong>模型测试（Model testing）</strong>：在测试阶段我们验证模型，模型的性能能够被测试并做出调节。交叉验证能够确定模型的性能。通常 20% 的数据会被用于测试阶段。</li>
-</ul>
-<h3 id="性能评估"><a href="#性能评估" class="headerlink" title="性能评估"></a>性能评估</h3><p>性能调节（Performance tuning）和错误检测（error detection）是机器学习系统最重要的迭代过程，能够帮助提升系统的性能。如果系统的泛化功能能够以较高的概率给出较低的<strong>泛化误差（generalization error）</strong>，我们称这个系统拥有最优性能。事实上这属于 PAC 理论的范畴。</p>
-<p>泛化误差与分类的准确度，回归模型预测的精确度直接相关。为了计算泛化误差，我们给出一些评估指标：</p>
-<h4 id="均方误差"><a href="#均方误差" class="headerlink" title="均方误差"></a>均方误差</h4><p>假设现在有一条回归曲线，我们想测量每个点到回归线的距离，而均方误差（Mean squared error，MSE）就能够统计这些偏移量。$P_i$ 为预测值，$A_i$ 为真实值，MSE 对每个点偏移量的平方和求平均：</p>
-<script type="math/tex; mode=display">MSE = \frac{1}{n}\sum_{i=1}^n{(P_i - A_i)^2}</script><p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/18.png" alt="d8c5be836a6aff5b4e312f9b7a4a7a8a.png"></p>
-<h4 id="平均绝对误差"><a href="#平均绝对误差" class="headerlink" title="平均绝对误差"></a>平均绝对误差</h4><p>平均绝对误差（Mean absolute error，MAE) 计算每个点绝对误差的均值。MAE 是时间序列分析中的预测误差的一个常见指标。相比于 MSE，由于 MSE 使用了平方会放大误差，所以 MSE 对于异常数据更加敏感，而 MAE 对异常点有更好的鲁棒性（抗干扰能力更强），更适合用来做预测分析。但对于学习效率来说，误差较大时 MSE 收敛更快精度更高。</p>
-<script type="math/tex; mode=display">MAE = \frac{1}{n}\sum_{i=1}^n{|P_i - A_i|}</script><h4 id="精确率、召回率、准确率"><a href="#精确率、召回率、准确率" class="headerlink" title="精确率、召回率、准确率"></a>精确率、召回率、准确率</h4><p>精确率、召回率和准确率是机器学习分类问题（classification problem）模型评估中常见的性能度量指标：</p>
-<ul>
-<li><strong>精确率（Precision）</strong>，又叫查准率，定义为：$Precision \triangleq \frac{TP}{TP+FP}$</li>
-<li><strong>召回率（Recall）</strong>，又叫查全率，定义为：$Recall \triangleq \frac{TP}{TP+FN}$</li>
-<li><strong>准确率（Accuracy）</strong>，定义为：$Accuracy \triangleq \frac{TP+TN}{TP+TN+FP+FN}$</li>
-</ul>
-<p>上述定义式中 T 代表 True，F 代表 False，T/F 表示预测是否正确；P 代表 Positive，N 代表 Negative，P/N 代表本身是正例还是反例。例如：恶意流量检测系统中，P 代表是恶意流量，那么 TP 就代表正确检测出恶意流量，FN 代表本身不是恶意流量却被错误地识别为恶意流量。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/19.png" alt="385e4f3b305ced036ed00c0098a74855.png"></p>
-<p>Precision 从预测结果角度出发，描述了<strong>预测出来的正例结果中有多少是真实正例</strong>，关心的是查出来的准不准；Recall 从真实结果角度出发，描述了<strong>测试集中的真实正例有多少被检测出来</strong>，关心的是查的全不全。Accuracy 则代表所有预测中正确预测所占的比例。</p>
-<p>当正负样本分布严重不均匀时，仅仅靠准确率 Accuracy 去评估模型性能是不合适的。就拿恶意流量检测来说，假设恶意流量占总流量的 0.1%，那么考虑一个全部流量都 pass 的检测系统，它的准确率依然能达到 99.9%，但是一条恶意流量都没有检测出来，这显然是不合要求的。所以通常需要结合这三个指标对模型进行整体评估。</p>
-<h3 id="性能改善"><a href="#性能改善" class="headerlink" title="性能改善"></a>性能改善</h3><p>那么如何提高模型的性能呢？通常可以通过：</p>
-<ul>
-<li><strong>改善数据质量</strong>：数据需要清洗、重采样以及规范化，特征提取步骤也可能需要重新审视，缺乏独立性的特征也会导致性能不佳。</li>
-<li><strong>更换算法</strong>：模型的性能不佳也可能是因为没有选对合适的算法，在这种情况下，不同算法的基准测试可以帮助我们做出合适的选择。基准测试包括但不限于：K倍交叉验证。</li>
-<li><strong>使用集成学习（Ensemble Learning)</strong>：同时使用多种学习算法来获得比单独使用任何学习算法具有更好的性能。一些最复杂的人工智能系统就是这类集成的副产物。</li>
-</ul>
-<h2 id="机器学习扩展库"><a href="#机器学习扩展库" class="headerlink" title="机器学习扩展库"></a>机器学习扩展库</h2><p>Python 作为机器学习最常用语言，虽然不是最快的，但因为它的灵活性而被数据科学家们广泛接受。Python 为机器学习专家提供了一系列的工具和扩展库，常用到的有：</p>
-<ul>
-<li><strong>NumPy</strong>：是统计分析和机器学习方面的重要扩展库，提供了支持线性代数、傅立叶变换和其他数值分析的复杂函数库。</li>
-<li><strong>SciPy</strong>：基于 NumPy 的科学计算库，可以处理插值、积分、优化、图像处理、常微分方程数值解的求解、信号处理等问题。</li>
-<li><strong>Scikit-learn</strong>：简单高效的机器学习库，提供了解决分类、集群、回归等问题的机器学习算法模型，Scikit-learn 依赖于 NumPy 和 SciPy。</li>
-<li><strong>pandas</strong>：非常强力的数据统计分析工具。Pandas 纳入了大量库和一些标准的数据模型，提供了高效地操作大型数据集所需的工具。能够很好的读写和呈现表格数据。</li>
-<li><strong>Matplotlib</strong>：绘图工具，常常与 NumPy、SciPy 配合使用。</li>
-</ul>
-<p>下图是 Scikit-learn 在解决不同规模，不同类型问题时推荐使用的算法模型：</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/20.png" alt="92b3401d754315d494e32f9bab97e755.png"></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li>Halder, S. &amp; Ozdemir, S. <em>Hands-On Machine Learning for Cybersecurity: Safeguard your system by making your machines intelligent using the Python ecosystem[M].</em> Packt Publishing Ltd, 2018.</li>
-<li>周志华. 机器学习[M]. 清华大学出版社, 2016.</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3955,7 +3971,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">74</span>
+                    <span class="site-state-item-count">75</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -4656,9 +4672,9 @@
       
     
       
-        
-      
     
+      
+        
       
     
   
