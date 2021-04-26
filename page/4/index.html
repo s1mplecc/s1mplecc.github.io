@@ -372,6 +372,257 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">Trunk Based Development 主干开发模型</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-27 02:35:29" itemprop="dateCreated datePublished" datetime="2018-09-27T02:35:29+08:00">2018-09-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/27/Trunk Based Development 主干开发模型/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.4k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>在之前的博文中我们介绍了 Git Flow 分支模型，正如文中所说，Git Flow 偏向于控制管理，使用了较多的分支，流程颇为复杂。大量的团队在实践过程中也遇到了颇多问题，其中大部分来自长期存在的分支。随着软件开发模型的演进，GitHub Flow、Trunk Based Development 等模型也应运而生，也已被 Google、Facebook、TW 等企业实践。本文主要介绍 TBD 模型。</p>
+</blockquote>
+<h2 id="Git-Flow的问题"><a href="#Git-Flow的问题" class="headerlink" title="Git Flow的问题"></a>Git Flow的问题</h2><ul>
+<li><p><strong>合并冲突</strong>，合并冲突在使用 Git Flow 是非常常见的。原因很简单：如果你有多个并行功能分支，他们长时间存在，那么很可能代码库的相同部分在两个功能分支中被分别更改。合并冲突不仅对于需要手动解决的开发人员来说是令人沮丧的，也增加了在代码中破坏某些功能的风险，因为当你不得不决定使用哪个版本代码时，很容易犯错。</p>
+</li>
+<li><p><strong>功能分离</strong>，在合并到同一个分支之前，你不能测试两个功能的组合。当你在单独的分支中开发几天甚至几周的功能时，当合并回主分支后，可能也会发生两个功能的相互作用影响了你的代码。</p>
+</li>
+<li><p><strong>并没有做到持续交付</strong>，在 Git Flow 分支模型下，发布是非常有计划的，一个 feature 必须要经过一系列步骤才能到达生产环境，在时间上平均一个 feature 都要等待 两周时间才能长线，这样的等待并非是需求上的“按计划发布”，而是从技术上就造成了发布瓶颈，显然难以达到持续交付的要求。</p>
+</li>
+<li><p><strong>与持续集成相悖</strong>，你会发现，在坚持持续集成实践的情况下，feature 分支是一件非常矛盾的事情。持续集成鼓励更加频繁的代码集成和交互，让冲突越早解决越好。feature 分支的代码隔离策略却在尽可能推迟代码的集成。</p>
+</li>
+</ul>
+<h2 id="GitHub-Flow"><a href="#GitHub-Flow" class="headerlink" title="GitHub Flow"></a>GitHub Flow</h2><blockquote>
+<p><a href="https://guides.github.com/introduction/flow/" target="_blank" rel="noopener">GitHub Flow</a> 是一个更轻量级的软件开发模型，示意图如下。它摒弃了 Git Flow 中繁杂的分支，<strong>只保留一个主分支 master</strong>。开发新功能时从 master 分支上拉取 feature 分支，开发完成后发起 <strong>Pull-Request</strong>，小组内进行评审和反馈，此时也进行 <strong>Code Review</strong>。测试通过后合并回主分支。</p>
+</blockquote>
+<p><img src="/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/0.png" alt="GitHub-Flow2-1"></p>
+<p>相比于 Git Flow，这种方式因为省去了一些分支而降低了复杂度，同时也更符合持续集成的思想，以一张故事卡为集成的最小单位，相对来说集成的周期短，反馈的速度也快，能够及早的遇到问题并及早解决。</p>
+<p>顺着持续集成的思想，如果我们把 GitHub Flow 分支模型做得再极致一点，我们不要 feature 分支，或者把 feature 分支只留在本地；不需要使用 Pull-Request 而是直接 Push 到远程 master 分支，我们就做到了 Trunk based Development。</p>
+<h2 id="TBD"><a href="#TBD" class="headerlink" title="TBD"></a>TBD</h2><blockquote>
+<p><strong>Trunk based Development</strong>，又叫<strong>主干开发</strong>，是一套代码分支管理策略，开发人员之间通过约定向被指定为<strong>主干</strong>的分支提交代码，以此抵抗因为长期存在的多分支导致的开发压力。此举可<strong>避免分支合并的困扰，保证随时拥有可发布的版本</strong>。“主干”这个词隐喻了树木生长的场景，树木最粗最长的部位是主干，分支从主干分离出来但是长度有限。</p>
+</blockquote>
+<p><img src="/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/1.jpg" alt="what_is_trunk"></p>
+<p>使用主干开发后，我们的代码库原则上就只能有一个 Trunk 分支即 master 分支了，所有新功能的提交也都提交到 master 分支上，保证每次提交后 master 分支都是可随时发布的状态。没有了分支的代码隔离，测试和解决冲突都变得简单，持续集成也变得稳定了许多，但也有如下几个问题：</p>
+<ul>
+<li><p><strong>如何避免发布引入未完成 Feature</strong>，答案是使用 <strong>Feature Toggle</strong>。在代码库里加一个特性开关来随时打开和关闭新特性是最容易想到的也是最容易被质疑的解决方案。Feature Toggle 是有成本的，不管是在加 Toggle 时的代码设计，还是在移除 Toggle 时的人力成本和风险，都是需要和它带来的价值进行衡量的。</p>
+</li>
+<li><p><strong>如何进行线上 Bug Fix</strong>，答案是在发布时打上 Release Tag，一旦发现这个版本有问题，如果此时 master 分支还没有其他提交，那可以直接在 master 分支上 Hot Fix 然后合并至 release 分支；如果 master 分支已经有了提交就需要做以下三件事：</p>
+<ul>
+<li>从 Release Tag 创建发布分支。</li>
+<li>在 master 上做 Fix Bug 提交。</li>
+<li>将 Fix Bug 提交 <strong>Cherry Pick</strong> 到 release 分支。</li>
+<li>为 release 分支打上新的 Tag 并做一次发布。</li>
+</ul>
+</li>
+</ul>
+<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><ul>
+<li><p>主干开发是助力实现<strong>持续集成</strong>和<strong>持续交付</strong>的关键因素。开发团队的成员一天多次地将代码提交到主干分支，满足了持续交付的必要条件。团队的工作在 24 小时内就可以被整合，这保证了代码版本随时处于可发布状态，使得持续交付成为可能。</p>
+</li>
+<li><p>你可以选择直接向主干分支提交代码的方式（适用于小团队）或者采用 Pull-Request 的方式，只要保证特性分支不能长期存在，并且产品是独立存在的。</p>
+</li>
+<li><p>根据团队规模和提交频率，<strong>特性分支可用于合并到主干分支前的代码审查和持续集成</strong>。这些特性分支可以让开发人员在代码合并到主干分支之前进行持续审查，而对于较小规模的团队，则可以直接向主干分支提交。</p>
+</li>
+<li><p>根据预期的发布频率，你的团队或许需要实时从主干分支创建<strong>发布分支</strong>以确保发布版本不会有新的提交，这些分支应该在发布完成后一段时间内删除。另一方面，你的团队也可以选择从主干分支发布而不需要发布分支，并采用“<strong>修复前进（fix forward）</strong>”的策略进行 bug fix，这种发布策略适用于高吞吐量的团队（high-throughput teams）。</p>
+</li>
+</ul>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://cn.trunkbaseddevelopment.com/" target="_blank" rel="noopener">TBD中文官网</a></li>
+<li><a href="https://www.duyidong.com/2017/10/29/trunk-base-development/#Github-Flow" target="_blank" rel="noopener">分支模型与主干开发</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2694,282 +2945,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/4/index.html">Clean Code -- 第一节：迪米特法则与 Paperboy 案例</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-05-04 05:36:05" itemprop="dateCreated datePublished" datetime="2018-05-04T05:36:05+08:00">2018-05-04</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-30 20:14:21" itemprop="dateModified" datetime="2020-12-30T20:14:21+08:00">2020-12-30</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/04/Clean Code -- 第一节：迪米特法则与 Paperboy 案例/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">4.6k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍<strong>迪米特法则</strong>和<strong>信息专家模式</strong>，并结合案例实操在 IntelliJ IDEA 中如何重构代码。本文大部分内容转载自张总博客: <a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构</a>。</p>
-<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
-<li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目。</li>
-<li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 <code>Cmd + D</code> 查看<strong>代码差异</strong>。</li>
-<li><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 <code>Cmd</code> 替换成 <code>Ctrl</code>，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键。</li>
-</ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>快捷键</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Ctrl + T</td>
-<td>重构菜单</td>
-</tr>
-<tr>
-<td>Shift + F6</td>
-<td>重命名方法、属性、文件</td>
-</tr>
-<tr>
-<td>Cmd + Alt + M</td>
-<td>提取方法（extract method）</td>
-</tr>
-<tr>
-<td>Cmd + Alt + N</td>
-<td>内联（Inline），与 extract 相反</td>
-</tr>
-<tr>
-<td>Cmd + Shift + 上下箭头</td>
-<td>上下移动声明体（statement）</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="迪米特法则"><a href="#迪米特法则" class="headerlink" title="迪米特法则"></a>迪米特法则</h2><p>在面向对象设计的世界里，有一个寻常却又常常为人所忽略的原则——<strong>迪米特法则（Law of Demeter）</strong>。这个原则认为，任何一个对象或者方法，它应该只能调用下列对象：    </p>
-<ul>
-<li>该对象本身</li>
-<li>作为参数传进来的对象（也可以是该对象的字段）</li>
-<li>在方法内创建的对象</li>
-</ul>
-<p>这个原则用以指导正确的<strong>对象协作</strong>，分清楚哪些对象应该产生协作，哪些对象则对于该对象而言，又应该是无知的。</p>
-<h2 id="代码案例及分析"><a href="#代码案例及分析" class="headerlink" title="代码案例及分析"></a>代码案例及分析</h2><p>如何理解这个原则？我们可以看看 David Bock 就该原则给出的一个<a href="https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/paper-boy/demeter.pdf" target="_blank" rel="noopener">绝佳案例</a>。假设一个超市购物的场景，顾客（Customer）到收银台结账，收银员（Paperboy）负责收钱。我们来看看代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String firstName;</span><br><span class="line">    <span class="keyword">private</span> String lastName;</span><br><span class="line">    <span class="keyword">private</span> Wallet myWallet;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> firstName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getLastName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> lastName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Wallet <span class="title">getWallet</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> myWallet;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Wallet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> value;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">getTotalMoney</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTotalMoney</span><span class="params">(<span class="keyword">float</span> newValue)</span> </span>&#123;</span><br><span class="line">        value = newValue;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addMoney</span><span class="params">(<span class="keyword">float</span> deposit)</span> </span>&#123;</span><br><span class="line">        value += deposit;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">subtractMoney</span><span class="params">(<span class="keyword">float</span> debit)</span> </span>&#123;</span><br><span class="line">        value -= debit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Paperboy</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">(Customer myCustomer, <span class="keyword">float</span> payment)</span> </span>&#123;</span><br><span class="line">        Wallet theWallet = myCustomer.getWallet();</span><br><span class="line">        <span class="keyword">if</span> (theWallet.getTotalMoney() &gt; payment) &#123;</span><br><span class="line">            theWallet.subtractMoney(payment);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//money not enough</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>让我们将 Paperboy 中<code>charge()</code>方法的代码翻译成这幕小话剧的对白。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">“把钱包交出来!”收银员算出顾客要买的商品总价后，“温柔”地对顾客说道。</span><br><span class="line">顾客言听计从，赶紧将钱包掏出来，恭恭敬敬地递给收银员。</span><br><span class="line">接过钱包，收银员毫不客气地打开，检查里面的钱够不够。噢，不错，钱够了。收银员从钱包取出钱，心满意足地笑了。</span><br></pre></td></tr></table></figure>
-<p>如果你是顾客，你敢去这样的超市 shopping 吗？</p>
-<p>对于 Paperboy 而言，Wallet 不满足迪米特法则三个条件中的任何一个，因此，<strong>不应该让 Paperboy 与 Wallet 对象进行直接交互</strong>。若从<strong>拟人化</strong>的角度思考，则 Wallet 其实属于 Customer 的<strong>隐私</strong>。如此重要的隐私，怎么能直接交给收银员这个陌生人呢？这里所谓的“隐私”，可以视为是“数据”，是“信息”，是“知识”，因此我们往往又将迪米特法则称之为“<strong>最小知识法则</strong>”。</p>
-<p>当我们理解“最小知识法则”时，又可以从<strong>职责</strong>的角度去思考以上代码。对于收银员角色，他的职责应该是负责收钱，而不用去管钱包里的钱够不够，如果够了怎么办，如果不够又该怎么办，这些统统都不属于他的职责。设想一下，当超市里人流如织，大家都在购买商品时，如果每一个收银员都要承担这般的职责时，会出现什么样的景象？所以“最小知识法则”乃善法，在对象社区中，我们就应该刻意减少对象之间彼此深入的了解。了解最小的知识，就意味着依赖最小，彼此产生的影响就会最小。这实际上是 <strong>KISS（keep it simple and stupid）</strong> 原则的体现。</p>
-<p><strong>信息专家模式</strong>告诉我们：“信息的持有者即为操作该信息的专家”。对于对象，所谓<strong>信息就是该对象内部的字段</strong>。在上述的例子中，Wallet 是 Customer 的字段，那么操作 Wallet 的行为自然就应该分配给 Customer 了。这是题中应有之义。“信息专家模式”其实是面向对象最重要原则“<strong>数据与行为应该封装在一起</strong>”的别名。若在领域建模时能遵循该原则，则可以规避我们设计出贫血模型。</p>
-<h2 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h2><p>如何修改以上代码？注意，<code>charge()</code>行为仍然属于 Paperboy 的职责，因此我们不应该将该方法整体搬迁到 Customer 中，而应该先进行<strong>方法的提取</strong>，选中代码块，使用 <strong>Cmd + Alt + M</strong> 快捷键提取方法。这块代码执行的是支付的步骤，所以命名为<code>pay()</code>。</p>
-<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/0.png" alt="781D2706-3961-4C77-ACF8-8BDDCE21B17E"></p>
-<p>提取后的<code>charge()</code>在接收方法请求后，转而将请求<strong>委派</strong>给了<code>pay()</code>方法。我们可以这样理解：在抽象层面，收款是收银员的职责；在实现层面，是<code>pay()</code>方法支持了收款行为，该实现归属于顾客。</p>
-<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/1.png" alt="1AF2B42F-7B13-4284-AF03-9C1D5C5FE0A1"></p>
-<p>观察<code>pay()</code>方法，我们发现该方法操作的数据皆来自 Customer。我们嗅到了一种坏味道，即 Martin Fowler 所谓的“<strong>特性依恋（Feature Envy）</strong>”。对于该坏味道，老马是这样阐释的：“函数对某个类的兴趣高过对自己所处类的兴趣”。不要再嫉妒了，桥归桥，路归路，让方法回到自己最喜欢的地方吧。运用“<strong>Move Method</strong>”重构手法，将<code>pay()</code>方法移动到 Customer 中。</p>
-<p>光标在方法签名或方法体中都可，按下 <strong>F6</strong>，IDEA 会根据方法的入参，智能的提示将方法移动到哪个类中，这里只能是 Customer。还要注意方法的访问权限，默认是 Escalate 往上提升一级，这里选择 Public。</p>
-<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/2.png" alt="2C6EA6D7-A330-4E90-8B2A-54223072A47A"></p>
-<p>操作之后，<code>pay()</code>方法移动到 Customer 中。</p>
-<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/3.png" alt="F92C14F0-6693-4154-8A6D-F71AB14BF0E2"></p>
-<p>在将方法移到正确的位置后，我们发现暴露的<code>getWallet()</code>方法根本就没有意义。更何况，将钱包裸露出去，难道是想要炫富吗？还是低调一点为好，隐藏自己的“隐私”，总好过被人觊觎而招来飞来横祸之险。于是，<strong>内联（inline）</strong> 之。将光标放在<code>getWallet()</code>上，按下 <strong>Cmd + Alt + N</strong>。</p>
-<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/4.png" alt="563C9626-A71E-4DC7-A8DC-BA4DA530EF64"></p>
-<p><code>getWallet()</code>方法被删除，并被替换为 Customer 的字段<code>myWallet</code>。那现在声明的<code>theWallet</code>就是多余的，继续内联。<br><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/5.png" alt="28E463A5-F36A-4250-8611-36BDACF80FCE"></p>
-<p>最后，重构过的代码应该是这样的。阅读代码一目了然，Paperboy 进行收银，并委派给顾客进行实际的支付，即掏钱包，数钱，付钱。<br><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/6.png" alt="3CA41F80-0556-42F3-8E16-5AEEC39332A3"><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/7.png" alt="E66E7919-9391-4046-8CB4-C46555E561A8"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>判断一段代码是否违背了迪米特法则，有一个小窍门，就是看调用代码是否出现形如<code>a.m1().m2().m3().m4()</code>之类的代码。这种代码在 Martin Fowler《重构》一书中，被名为“<strong>消息链条(Message Chain)</strong>”，有人更加夸张地名其为“火车残骸”。车祸现场啊，真是惨不忍睹。</p>
-<p>实际上未重构前的代码即是一种消息链条，在<code>charge()</code>方法中实际执行的是<code>myCustomer.getWallet().subtractMoney(payment)</code>，先获取 Customer 的 Wallet，再执行 Wallet 的扣钱方法。</p>
-<p>那么，如下代码是否这样的残骸呢？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">str.split(<span class="string">"&amp;"</span>)</span><br><span class="line">    .stream()</span><br><span class="line">    .map(str -&gt; str.contains(elementName) ? str.replace(elementName + <span class="string">"="</span>, <span class="string">""</span>) : <span class="string">""</span>)</span><br><span class="line">    .filter(str -&gt; !str.isEmpty())</span><br><span class="line">    .reduce(<span class="string">""</span>, (a, b) -&gt; a + <span class="string">","</span> + b);</span><br></pre></td></tr></table></figure>
-<p>答案是：不是。这样的代码我们一般称之为“流畅接口或连贯接口（Fluent Interface）”。二者的区别在于<strong>观察形成链条的每个方法返回的是别的对象，还是对象自身。如果返回的是别的对象，就是消息链条</strong>。所谓<code>m1().m2().m3().m4()</code>的调用，其实是调用者不需要也不想知道的“知识”，把这些中间过程的细节暴露出来没有意义，调用者关心的是最终结果；而上述代码中的<code>map()</code>与<code>filter()</code>等方法其实返回的还是 Stream 类。这一调用方式其初衷并非告知中间过程的细节，而是一种声明式的 DSL 表达，调用者可以自由地组合它们。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构 — 张逸</a></li>
-<li><a href="https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/paper-boy/demeter.pdf" target="_blank" rel="noopener">The Paperboy, The Wallet, and The Law Of Demeter —  David Bock</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3021,7 +2996,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-count">76</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

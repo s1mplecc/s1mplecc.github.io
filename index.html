@@ -372,6 +372,289 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2021/04/26/Python-%E5%B1%9E%E6%80%A7%E3%80%81%E7%89%B9%E6%80%A7%E5%92%8C%E6%8F%8F%E8%BF%B0%E7%AC%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2021/04/26/Python-%E5%B1%9E%E6%80%A7%E3%80%81%E7%89%B9%E6%80%A7%E5%92%8C%E6%8F%8F%E8%BF%B0%E7%AC%A6/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">Python 属性、特性和描述符</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-04-26 11:18:39 / 修改时间：11:19:14" itemprop="dateCreated datePublished" datetime="2021-04-26T11:18:39+08:00">2021-04-26</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/04/26/Python-%E5%B1%9E%E6%80%A7%E3%80%81%E7%89%B9%E6%80%A7%E5%92%8C%E6%8F%8F%E8%BF%B0%E7%AC%A6/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2021/04/26/Python-属性、特性和描述符/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">17k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="类的属性"><a href="#类的属性" class="headerlink" title="类的属性"></a>类的属性</h2><p>在 Python 中，数据属性和处理数据的方法统称为属性（attribute），方法也可称为方法属性，本质上是可调用的（callable）属性。Python 提供了丰富的 API 用于控制访问属性，以及实现动态属性。即使访问不存在的属性，也可以通过特殊方法实现“虚拟属性”，从而即时计算属性的值。</p>
+<h3 id="处理属性的特殊属性"><a href="#处理属性的特殊属性" class="headerlink" title="处理属性的特殊属性"></a>处理属性的特殊属性</h3><p>为了方便处理属性，Python 定义了一些特殊属性，包括：</p>
+<ul>
+<li><code>__class__</code>：对象所属类的引用。<code>obj.__class__</code> 与 <code>type(obj)</code> 效果一致。类和类的实例都具有属性，有些属性只能在类中查询，比如特殊方法；</li>
+<li><code>__dict__</code>：存储类或实例的可写属性的字典。如果设置了 <code>__slots__</code> 属性，实例可能没有 <code>__dict__</code> 属性；</li>
+<li><code>__slots__</code>：类可以定义这个属性，限制实例能拥有哪些属性。该属性的值可以是个可迭代对象，但通常会使用元组。如果类设置了 <code>__slots__</code> 属性且 <code>__slots__</code> 中不包含 <code>&#39;__dict__&#39;</code>，那么该类的实例没有 <code>__dict__</code> 属性。</li>
+</ul>
+<h4 id="dict"><a href="#dict" class="headerlink" title="__dict__"></a><code>__dict__</code></h4><p>默认情况下，Python 会使用名为 <code>__dict__</code> 的字典存储类和实例中的可写属性。其中，<strong>类属性字典</strong>由名为 <code>mappingproxy</code> 的代理对象包装，<code>mappingproxy</code> 定义在 <code>collections.abc</code> 模块中，特别指代类属性字典的类型：<code>mappingproxy = type(type.__dict__)</code>。类属性字典包含显式定义在类中的字段和方法，以及一些可写的特殊属性，包括模块、字典、弱引用和文档字符串。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">Foo</span>:</span></span><br><span class="line"><span class="meta">... </span>    a = <span class="number">1</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line"><span class="meta">... </span>        self.b = <span class="number">2</span></span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Foo.__dict__</span><br><span class="line">mappingproxy(&#123;<span class="string">'__module__'</span>: <span class="string">'__main__'</span>, </span><br><span class="line">              <span class="string">'a'</span>: <span class="number">1</span>, </span><br><span class="line">              <span class="string">'__init__'</span>: &lt;function Foo.__init__ at <span class="number">0x1051fe8b0</span>&gt;, </span><br><span class="line">              <span class="string">'__dict__'</span>: &lt;attribute <span class="string">'__dict__'</span> of <span class="string">'Foo'</span> objects&gt;, </span><br><span class="line">              <span class="string">'__weakref__'</span>: &lt;attribute <span class="string">'__weakref__'</span> of <span class="string">'Foo'</span> objects&gt;, </span><br><span class="line">              <span class="string">'__doc__'</span>: <span class="keyword">None</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>类属性不仅限于类字典中所展示的，还包含一些不可变的类属性，比如所属类的引用 <code>__class__</code>，直接父类组成的元组 <code>__bases__</code> 等。</p>
+<p><strong>实例属性字典</strong>则是普通的字典类型，为实例属性赋值，会动态的修改实例字典。如果属性不存在，则将其添加到字典中，包括在初始化方法 <code>__init__</code> 中赋值的实例属性。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo = Foo()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo.__dict__</span><br><span class="line">&#123;<span class="string">'b'</span>: <span class="number">2</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo.c = <span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo.__dict__</span><br><span class="line">&#123;<span class="string">'b'</span>: <span class="number">2</span>, <span class="string">'c'</span>: <span class="number">3</span>&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="slots"><a href="#slots" class="headerlink" title="__slots__"></a><code>__slots__</code></h4><p>Python 解释器会默认在类的构造方法 <code>__new__</code> 中创建 <code>__dict__</code> 存放实例属性，在访问时通过访问实例字典读取属性值。由于字典底层使用了散列表结构，对属性的存取会相当迅速。但同时，为了减少散列冲突，散列表的大小通常要远大于键的数量，这种基于空间换时间的考量会导致字典会消耗大量内存。为此，Python 提供了 <code>__slots__</code> 属性，该属性会覆盖 <code>__dict__</code> 属性，<strong>使用类似元组的结构存储实例变量</strong>，从而达到节省内存的目的。</p>
+<p>我沿用之前定义的 Person 类做了测试，它包含 name 和 age 两个实例属性。使用列表推导生成一百万个 Person 对象，分别对默认使用 <code>__dict__</code> 和添加了 <code>__slots__</code> 属性的内存占用情况进行测试。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">➜ time python3 slots.py --use-dict </span><br><span class="line">Initial RAM Usage:    5,472,256</span><br><span class="line">  Final RAM Usage:  186,380,288</span><br><span class="line">python3 slots.py --use-dict  1.11s user 0.07s system 99% cpu 1.187 total</span><br><span class="line">➜ time python3 slots.py --use-slots</span><br><span class="line">Initial RAM Usage:    5,476,352</span><br><span class="line">  Final RAM Usage:   76,369,920</span><br><span class="line">python3 slots.py --use-slots  0.74s user 0.04s system 99% cpu 0.788 total</span><br></pre></td></tr></table></figure>
+<p>可以看到使用 <code>__slots__</code> 后内存占用得到显著优化，只占了使用 <code>__dict__</code> 的一半不到，运行速度也更快。</p>
+<p><strong>定义 <code>__slots__</code> 的方式</strong>是，创建一个名为 <code>__slots__</code> 的类属性，把它的值设为一个字符串构成的可迭代对象（通常使用元组），其中的元素名称代表实例属性，比如<code>__slots__ = (&#39;name&#39;, &#39;age&#39;)</code>。定义 <code>__slots__</code> 属性相当于告诉解释器：这个类的所有实例属性都在这儿了。<strong>实例不能再有 <code>__slots__</code> 所列之外的其他属性</strong>。但应该明白，<code>__slots__</code> 并不是用来禁止类的用户新增实例属性的手段，而只是一种内存优化方案。</p>
+<p>如果你阅读 <code>collections.abc</code> 模块的源码，会发现其中的类都存在一行 <code>__slots__ = ()</code> 代码。即使这些类没有实例属性，使用空元组定义的 <code>__slots__</code> 属性可以避免类的构造方法创建 <code>__dict__</code> 空字典，空字典也会在堆上分配内存空间。对于集合这种基本数据类型，有必要为其声明空元组形式的 <code>__slots__</code> 属性。此外，对于模式固定的数据库记录，以及特大型数据集，也有必要声明 <code>__slots__</code> 属性。</p>
+<p>上面介绍的这些特殊属性，在一些访问和处理属性的内置函数和特殊方法中会被使用。下面列出这些函数和方法。</p>
+<h3 id="处理属性的内置函数"><a href="#处理属性的内置函数" class="headerlink" title="处理属性的内置函数"></a>处理属性的内置函数</h3><p><code>dir([object])</code>：列出对象的大多数属性。object 参数是可选的，缺省时会列出当前模块的属性。dir 函数能够审查对象有没有 <code>__dict__</code> 和 <code>__slots__</code> 属性，并列出其中的键。</p>
+<p><code>getattr(object, name[, default])</code>：从对象中读取属性值。获取的属性可能来自对象所属的类或超类。如果没有找到指定属性，则抛出 AttributeError 异常，或返回预设默认值。</p>
+<p><code>hasattr(object, name)</code>：会调用 getattr 函数查看能否获取指定的属性，当抛出 AttributeError 异常时返回 False。</p>
+<p><code>setattr(object, name, value)</code>：为对象指定的属性设值。这个函数可能会创建一个新属性，或者覆盖现有的属性。前提是对象能够接受这个值，比如设定了 <code>__slots__</code> 的对象不能添加新属性。</p>
+<p><code>vars([object])</code>：返回对象的 <code>__dict__</code> 属性，参数缺省时返回当前模块的 <code>__dict__</code> 属性。vars 函数不能处理设定了 <code>__slots__</code> 属性的对象。</p>
+<h3 id="处理属性的特殊方法"><a href="#处理属性的特殊方法" class="headerlink" title="处理属性的特殊方法"></a>处理属性的特殊方法</h3><p><code>__getattribute__(self, name)</code>：除了访问特殊属性和特殊方法，尝试获取指定的属性时总会调用这个方法。dot 运算符、<code>getattr</code> 和 <code>hasattr</code> 会调用这个方法。该方法内部定义了属性访问规则，当未找到指定属性时抛出 AttributeError 异常，<code>__getattr__</code> 方法会被调用。</p>
+<p><code>__getattr__(self, name)</code>：仅当获取指定属性失败时，即处理不存在的属性时被调用。用户自定义的类可以实现 <code>__getattr__</code> 方法从而动态计算属性的值。</p>
+<p><code>__setattr__(self, name, value)</code>：尝试为指定属性设值时总会调用该方法。dot 运算符和 <code>setattr</code> 会调用这个方法。该方法内部定义了属性设值规则。</p>
+<p><code>__delattr__(self, name)</code>：使用 del 关键字删除属性时会调用这个方法。</p>
+<p><code>__dir__(self)</code>：内置函数 <code>dir()</code> 会调用这个方法。</p>
+<h3 id="属性访问规则"><a href="#属性访问规则" class="headerlink" title="属性访问规则"></a>属性访问规则</h3><p>Python 解释器在访问属性时会按照一定的规则，从入口方法 <code>__getattribute__</code> 开始，按照顺序依次查找，如果找到则返回，未找到则抛出异常，调用 <code>__getattr__</code> 动态计算虚拟属性。属性访问规则如下：</p>
+<ol>
+<li><code>__getattribute__</code> 方法</li>
+<li>数据描述符</li>
+<li>实例对象的字典</li>
+<li>类的字典</li>
+<li>非数据描述符</li>
+<li>父类的字典</li>
+<li><code>__getattr__</code> 方法</li>
+</ol>
+<p>注：其中，数据描述符是实现了 <code>__get__</code> 和 <code>__set__</code> 描述符协议的类。描述符的内容，会在后面做详细介绍。</p>
+<p>查询属性的入口方法 <code>__getattribute__</code> 实现逻辑的伪代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__getattribute__</span><span class="params">(name)</span>：</span></span><br><span class="line"><span class="function">    # 先在类<span class="params">(包括父类、祖先类)</span>字典中查找数据描述符</span></span><br><span class="line"><span class="function">    <span class="title">if</span> <span class="title">find</span> <span class="title">data</span> <span class="title">descriptor</span> <span class="title">in</span> <span class="title">class</span> <span class="title">and</span> <span class="title">base</span> <span class="title">class</span> <span class="title">__dict__</span>:</span></span><br><span class="line">        <span class="comment"># 如果是数据描述符，则调用该数据描述符的 __get__ 方法并将结果返回</span></span><br><span class="line">        <span class="keyword">return</span> descriptor.__get__(instance, instance.__class__)</span><br><span class="line">    <span class="comment"># 如果不是数据描述符，继续查询实例字典</span></span><br><span class="line">    <span class="keyword">if</span> name <span class="keyword">in</span> instance.__dict__:</span><br><span class="line">        <span class="keyword">return</span> instance.__dict__[name]</span><br><span class="line">    <span class="comment"># 实例字典中没有，则继续查询类字典</span></span><br><span class="line">    <span class="keyword">if</span> name <span class="keyword">in</span> instance.__class__.__dict__:</span><br><span class="line">        <span class="keyword">return</span> instance.__class__.__dict__[name]</span><br><span class="line">    <span class="comment"># 在类和父类字典中查询非数据描述符</span></span><br><span class="line">    <span class="keyword">if</span> find non-data descriptor <span class="keyword">in</span> <span class="class"><span class="keyword">class</span> <span class="title">and</span> <span class="title">base</span> <span class="title">class</span> <span class="title">__dict__</span>:</span></span><br><span class="line">        <span class="comment"># 如果找到，返回描述符实例</span></span><br><span class="line">        <span class="keyword">return</span> descriptor.instance</span><br><span class="line">    <span class="comment"># 如果不是描述符，继续在父类字典中查找</span></span><br><span class="line">    <span class="keyword">if</span> name <span class="keyword">in</span> baseclass __dict__:</span><br><span class="line">        <span class="keyword">return</span> baseclass.__dict__[name]</span><br><span class="line">    <span class="comment"># 如果依然没有找到，抛出异常，__getattr__ 函数会被调用</span></span><br><span class="line">    <span class="keyword">raise</span> AttributeError</span><br></pre></td></tr></table></figure>
+<p>为实例属性赋值则没有这么麻烦，<code>__setattr__</code> 作为入口方法，只需要判断属性是否是数据描述符，如果是则调用其 <code>__set__</code> 方法，如果不是则为实例字典添加新的属性。<code>__setattr__</code> 实现逻辑的伪代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">__setattr__(name, value):</span><br><span class="line">    <span class="comment"># 先在类(包括父类、祖先类)字典中查找描述符</span></span><br><span class="line">    <span class="keyword">if</span> find data descriptor <span class="keyword">in</span> <span class="class"><span class="keyword">class</span> <span class="title">and</span> <span class="title">base</span> <span class="title">class</span> <span class="title">__dict__</span>:</span></span><br><span class="line">        <span class="comment"># 如果是数据描述符，则调用描述符的 __set__ 方法进行设值</span></span><br><span class="line">        descriptor.__set__(instance, value)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 否则，为实例属性字典添加新值</span></span><br><span class="line">        instance.__dict__[name] = value</span><br></pre></td></tr></table></figure>
+<p>由此也可以发现，Python 存取属性的方式特别不对等。通过实例访问属性时，如果实例中没有指定属性，那么会尝试获取类属性。而为实例中的属性赋值时，如果属性不存在会在实例中创建该属性，根本不影响类。</p>
+<p>下面介绍如何使用 <code>__getattr__</code> 方法动态计算虚拟属性。</p>
+<h3 id="自定义-getattr-即时计算属性"><a href="#自定义-getattr-即时计算属性" class="headerlink" title="自定义 __getattr__ 即时计算属性"></a>自定义 <code>__getattr__</code> 即时计算属性</h3><p>处理 JSON 是非常常见的需求，JavaScript 对 JSON 具有天生的支持，可以使用 dot 运算符链式获取属性的值，如 <code>res.cities[0].ext.province</code>。而 Python 原生的字典不支持使用 dot 运算符直接获取属性，只能使用 <code>res[&#39;cities&#39;][0][&#39;ext&#39;][&#39;province&#39;]</code> 的形式，会显得格外冗长。但可以通过实现一个近似字典的类，达到同样的效果。如下是 Python 中的效果演示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> json_parser <span class="keyword">import</span> JsonParser</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>json = &#123;</span><br><span class="line"><span class="meta">... </span>  <span class="string">"code"</span>: <span class="string">"200"</span>,</span><br><span class="line"><span class="meta">... </span>  <span class="string">"cities"</span>: [</span><br><span class="line"><span class="meta">... </span>    &#123;</span><br><span class="line"><span class="meta">... </span>      <span class="string">"lat"</span>: <span class="string">"41.2334465"</span>,</span><br><span class="line"><span class="meta">... </span>      <span class="string">"lng"</span>: <span class="string">"116.9772857"</span>,</span><br><span class="line"><span class="meta">... </span>      <span class="string">"citycode"</span>: <span class="number">207</span>,</span><br><span class="line"><span class="meta">... </span>      <span class="string">"ext"</span>: &#123;</span><br><span class="line"><span class="meta">... </span>        <span class="string">"province"</span>: <span class="string">"河北省"</span>,</span><br><span class="line"><span class="meta">... </span>        <span class="string">"city"</span>: <span class="string">"承德市"</span></span><br><span class="line"><span class="meta">... </span>      &#125;</span><br><span class="line"><span class="meta">... </span>    &#125; </span><br><span class="line"><span class="meta">... </span>  ]</span><br><span class="line"><span class="meta">... </span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>res = JsonParser(json)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>res.code</span><br><span class="line"><span class="string">'200'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>res.cities[<span class="number">0</span>].citycode</span><br><span class="line"><span class="number">207</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>res.cities[<span class="number">0</span>].ext.province</span><br><span class="line"><span class="string">'河北省'</span></span><br></pre></td></tr></table></figure>
+<p>能够使用 dot 运算符链式获取属性的关键在于定义在 JsonParser 中的 <code>__getattr__</code> 方法。前面已经说过，Python 解释器在查询对象属性失败时会调用 <code>__getattr__</code> 方法动态计算属性。下面代码定义了动态计算的逻辑：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JsonParser</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(cls, arg)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> isinstance(arg, Mapping):</span><br><span class="line">            <span class="keyword">return</span> super().__new__(cls)</span><br><span class="line">        <span class="keyword">elif</span> isinstance(arg, MutableSequence):</span><br><span class="line">            <span class="keyword">return</span> [cls(i) <span class="keyword">for</span> i <span class="keyword">in</span> arg]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> arg</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        self._data = data</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getattr__</span><span class="params">(self, name)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> JsonParser(self._data[name])</span><br></pre></td></tr></table></figure>
+<p>通过 <code>__getattr__</code> 方法递归地创建 JsonParser 类，并将下级的 JSON 结构  <code>_data[name]</code> 作为构造参数传入。构造方法 <code>__new__</code> 会判断传入参数的类型，如果是映射类型直接创建 JsonParser 对象，如果是可变序列，则通过列表推导式返回 JsonParser 列表。之所以要这么处理是因为 JSON 结构可能是数组，除了映射结构还需要对数组类型进行解析，以支持 <code>cities[0]</code> 式的访问。</p>
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><p>在 Java 中，为了控制属性的访问权限，一般会将属性设置为私有属性，并为可以公开的属性设置公有的 getter 和 setter 方法。这样做还有一个好处，可以在方法内添加对属性的验证，比如保证商品的数量不会是负数。如果想更进一步，可以按照领域驱动设计的理念，可以将属性设置为实体类 Entity，在类中对属性进行校验。这两种思想在 Python 中也都有对应的实现，前一种对应于特性，后一种对应于描述符。</p>
+<p>特性经常用于把公开的属性变成使用读值方法和设置方法管理的属性，且在不影响客户端代码的前提下实施业务规则。使用 <code>get/set + 属性名</code> 的命名方式不符合 Python 一贯的简约作风，为此 Python 提供了特性，即 property。property 是一个类形式的函数装饰器，本质上它是一个<strong>描述符类</strong>（实现了描述符协议）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">property</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        self,</span></span></span><br><span class="line"><span class="function"><span class="params">        fget: Optional[Callable[[Any], Any]] = ...,</span></span></span><br><span class="line"><span class="function"><span class="params">        fset: Optional[Callable[[Any, Any], None]] = ...,</span></span></span><br><span class="line"><span class="function"><span class="params">        fdel: Optional[Callable[[Any], None]] = ...,</span></span></span><br><span class="line"><span class="function"><span class="params">        doc: Optional[str] = ...,</span></span></span><br><span class="line"><span class="function"><span class="params">    )</span> -&gt; <span class="keyword">None</span>:</span> ...</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getter</span><span class="params">(self, fget: Callable[[Any], Any])</span> -&gt; property:</span> ...</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setter</span><span class="params">(self, fset: Callable[[Any, Any], None])</span> -&gt; property:</span> ...</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">deleter</span><span class="params">(self, fdel: Callable[[Any], None])</span> -&gt; property:</span> ...</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self, obj: Any, type: Optional[type] = ...)</span> -&gt; Any:</span> ...</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__set__</span><span class="params">(self, obj: Any, value: Any)</span> -&gt; <span class="keyword">None</span>:</span> ...</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__delete__</span><span class="params">(self, obj: Any)</span> -&gt; <span class="keyword">None</span>:</span> ...</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fget</span><span class="params">(self)</span> -&gt; Any:</span> ...</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fset</span><span class="params">(self, value: Any)</span> -&gt; <span class="keyword">None</span>:</span> ...</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fdel</span><span class="params">(self)</span> -&gt; <span class="keyword">None</span>:</span> ...</span><br></pre></td></tr></table></figure>
+<p>使用函数形式的装饰器会返回一个嵌套的高阶函数，类形式的装饰器也类似，使用 <code>@property</code> 装饰的方法会被包装成特性类。特性类具有了 getter、setter 和 deleter 等方法属性，这三个属性也都返回 property 对象。</p>
+<p>因此，用 <code>@property</code> 装饰的读值方法，如下的 <code>amount(self)</code> 方法，相当于返回一个 <code>property(amount)</code> 特性对象，将读值方法作为 fget 初始化参数传入。而后可以使用 <code>@amount.setter</code> 装饰设值方法，相当于 <code>property(amount).setter(amount)</code>，将设值方法作为 fset 参数传入 setter 方法返回一个特性对象。也因此，<code>@amount.setter</code> 必须要定义在被 <code>@property</code> 装饰的设置方法之后。如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LineItem</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, price, amount)</span>:</span></span><br><span class="line">        self.price = price</span><br><span class="line">        self.amount = amount</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">total_price</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.price * self.amount</span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">amount</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._amount</span><br><span class="line"></span><br><span class="line"><span class="meta">    @amount.setter</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">amount</span><span class="params">(self, value)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> value &gt;= <span class="number">0</span>:</span><br><span class="line">            self._amount = value</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'item amount must &gt;= 0'</span>)</span><br></pre></td></tr></table></figure>
+<p>读值方法可以不与实例属性名一致，但要保证，读值方法名、设值方法名和 <code>@amount.setter</code> 装饰器的特性名三者保持一致，即都为 amount。这样，在访问属性时可以通过 <code>item.amount</code> 的形式对实例属性 <code>self._amount</code> 进行读值和赋值。其实，初始化函数中的 <code>self.amount = amount</code> 语句就已经在使用特性的设置方法了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>item = LineItem(<span class="number">1.0</span>, <span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>item.__dict__</span><br><span class="line">&#123;<span class="string">'price'</span>: <span class="number">1.0</span>, <span class="string">'_amount'</span>: <span class="number">5</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>item.total_price()</span><br><span class="line"><span class="number">5.0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>item.amount = <span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>item.total_price()</span><br><span class="line"><span class="number">3.0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>item.amount = <span class="number">-1</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  ...</span><br><span class="line">ValueError: item amount must &gt;= <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，真正被操作的实例属性是名为 <code>_amount</code> 的私有属性，保存在实例字典中。任何对 <code>item.amount</code> 的读值和设值操作，都会经过由特性包装的读值和设值方法进行处理。由于在设值方法中对属性值做了非负验证，所以将其设置为负值会抛出 ValueError 异常。</p>
+<p>需要注意的是，特性是类属性，被保存于类的 <code>__dict__</code> 字典中。在使用 <code>obj.attr</code> 这样的表达式时，不会从 obj 开始查询 attr 属性，而是从实例所属的类，即 <code>obj.__class__</code> 开始，仅当类中没有名为 attr 的特性时，才会去查询实例字典。也就是说，<strong>特性的读值和设值方法要优先于实例字典</strong>，只有直接存取 <code>__dict__</code> 属性才能跳过特性的处理逻辑。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>LineItem.__dict__</span><br><span class="line">mappingproxy(&#123;<span class="string">'__module__'</span>: <span class="string">'attribute'</span>, </span><br><span class="line">              <span class="string">'__init__'</span>: &lt;function LineItem.__init__ at <span class="number">0x105459a60</span>&gt;, </span><br><span class="line">              <span class="string">'total_price'</span>: &lt;function LineItem.total_price at <span class="number">0x105459af0</span>&gt;, </span><br><span class="line">              <span class="string">'amount'</span>: &lt;property object at <span class="number">0x105487680</span>&gt;, </span><br><span class="line">              <span class="string">'__dict__'</span>: &lt;attribute <span class="string">'__dict__'</span> of <span class="string">'LineItem'</span> objects&gt;, </span><br><span class="line">              <span class="string">'__weakref__'</span>: &lt;attribute <span class="string">'__weakref__'</span> of <span class="string">'LineItem'</span> objects&gt;, </span><br><span class="line">              <span class="string">'__doc__'</span>: <span class="keyword">None</span>&#125;)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>item = LineItem(<span class="number">1.0</span>, <span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>item.__dict__</span><br><span class="line">&#123;<span class="string">'price'</span>: <span class="number">1.0</span>, <span class="string">'_amount'</span>: <span class="number">5</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>item.__dict__[<span class="string">'_amount'</span>] = <span class="number">-1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>item.amount</span><br><span class="line"><span class="number">-1</span></span><br></pre></td></tr></table></figure>
+<p>这条规则不仅适用于特性，还适用于数据描述符，其实，特性也是数据描述符。或者换句话说，正是由于数据描述符的访问优先级要高于实例字典，特性的读值和设值方法访问才优先于实例字典。下面我们介绍描述符。</p>
+<h2 id="描述符"><a href="#描述符" class="headerlink" title="描述符"></a>描述符</h2><p>描述符是 Python 的独有特征，不仅在应用层，内置库和标准库中也有使用。除了特性之外，使用描述符的还有方法及 classmethod 和 staticmethod 装饰器，以及 functools 模块中的诸多类。理解描述符是精通 Python 的关键，本章的话题就是描述符。</p>
+<p><strong>描述符是实现了特定协议的类</strong>，这个协议包括 <code>__get__</code>、<code>__set__</code> 和 <code>__delete__</code> 方法。特性类 property 实现了完整的描述符协议。通常，可以只实现部分协议。其实，我们在真实代码中见到的大多数描述符只实现了 <code>__get__</code> 和 <code>__set__</code> 方法，还有很多只实现了其中的一个。</p>
+<h3 id="定制描述符实现属性验证"><a href="#定制描述符实现属性验证" class="headerlink" title="定制描述符实现属性验证"></a>定制描述符实现属性验证</h3><p><strong>描述符是对多个属性运用相同存取逻辑的一种方式</strong>。假设我们想为之前定义的 LineItem 类中的 price 和 amount 属性都设置非负验证，一种方式是为它们都编写读值和设值方法，但这会造成代码重复。为了避免重复编写读值方法和设值方法，Python 提出了一种面向对象的解决方式，那就是描述符类。</p>
+<p>在下面的代码中，定义了一个名为 Quantity 的描述符类，用于管理 LineItem 的属性。Quantity 类的 attribute 属性指代托管属性的名称，由初始化方法传入。通过在托管类中声明类属性，如 <code>price = Quantity(&#39;price&#39;)</code> 将描述符实例绑定给 price 属性。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Quantity</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, attribute)</span>:</span></span><br><span class="line">        self.attribute = attribute</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__set__</span><span class="params">(self, instance, value)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> value &gt;= <span class="number">0</span>:</span><br><span class="line">            instance.__dict__[self.attribute] = value</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">f'<span class="subst">&#123;self.attribute&#125;</span> must &gt;= 0'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LineItem</span>:</span></span><br><span class="line">    price = Quantity(<span class="string">'price'</span>)</span><br><span class="line">    amount = Quantity(<span class="string">'amount'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, price, amount)</span>:</span></span><br><span class="line">        self.price = price</span><br><span class="line">        self.amount = amount</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">total_price</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.price * self.amount</span><br></pre></td></tr></table></figure>
+<p>由于读值方法不需要特殊的逻辑，所以这个描述符类不需要定义 <code>__get__</code> 方法，只实现了 <code>__set__</code> 方法，当尝试为托管属性赋值时，会调用这个方法。方法的第一个参数 self 是<strong>描述符实例</strong>，即 <code>LineItem.price</code> 或 <code>LineItem.amount</code>；第二个参数 instance 才是<strong>托管实例</strong>，即 LineItem 实例；第三个参数 value 是要设置的值。在为属性赋值时，必须直接操作托管实例的 <code>__dict__</code>，如果使用内置的 setattr 函数，将会重复调用 <code>__set__</code> 导致无限递归。</p>
+<p>由于没有定义 <code>__get__</code> 方法，读值时会去实例字典和类字典中查询，与以下定义的 <code>__get__</code> 方法逻辑一致。为了给用户提供内省和其他元编程技术支持，通过类访问托管属性时最后返回描述符实例，也就是 instance 为 None 时的行为。如果不为空，则去实例字典中查询对应属性。<code>__get__</code> 方法的第三个参数 owner 是托管类的引用，通过托管类访问属性时会用到，可以理解为 <code>LineItem.__class__</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self, instance, owner)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> instance <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> instance.__dict__[self.attribute]</span><br></pre></td></tr></table></figure>
+<p>此时通过托管类访问属性会得到描述符实例，通过实例访问属性会得到托管属性的值。在为实例属性赋值时，也会如预期一般运作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>item = LineItem(<span class="number">1.0</span>, <span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>LineItem.amount</span><br><span class="line">&lt;lineitem_with_descriptor.Quantity object at <span class="number">0x108c52760</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>item.__dict__</span><br><span class="line">&#123;<span class="string">'price'</span>: <span class="number">1.0</span>, <span class="string">'amount'</span>: <span class="number">5</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>item.amount</span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>item.amount = <span class="number">-1</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  ...</span><br><span class="line">ValueError: amount must &gt;= <span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>item.price = <span class="number">-1</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  ...</span><br><span class="line">ValueError: price must &gt;= <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>同一时刻，内存中可能存在几千个 LineItem 的实例，但只会有两个描述符实例：<code>LineItem.price</code> 和 <code>LineItem.amount</code>，因为描述符实例被定义为 LineItem 的类属性，会出现在 LineItem 的类字典中，由全部实例共享。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>LineItem.__dict__</span><br><span class="line">mappingproxy(&#123;<span class="string">'__module__'</span>: <span class="string">'lineitem_with_descriptor'</span>, </span><br><span class="line">              <span class="string">'price'</span>: &lt;lineitem_with_descriptor.Quantity object at <span class="number">0x10abd1910</span>&gt;, </span><br><span class="line">              <span class="string">'amount'</span>: &lt;lineitem_with_descriptor.Quantity object at <span class="number">0x10ac037f0</span>&gt;, </span><br><span class="line">              <span class="string">'__init__'</span>: &lt;function LineItem.__init__ at <span class="number">0x10abd8af0</span>&gt;, </span><br><span class="line">              <span class="string">'total_price'</span>: &lt;function LineItem.total_price at <span class="number">0x10abd8b80</span>&gt;, </span><br><span class="line">              <span class="string">'__dict__'</span>: &lt;attribute <span class="string">'__dict__'</span> of <span class="string">'LineItem'</span> objects&gt;, </span><br><span class="line">              <span class="string">'__weakref__'</span>: &lt;attribute <span class="string">'__weakref__'</span> of <span class="string">'LineItem'</span> objects&gt;, </span><br><span class="line">              <span class="string">'__doc__'</span>: <span class="keyword">None</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>当将描述符逻辑抽象到单独的代码单元（Quantity 类）中，可以在整个应用中进行重用。所以经常将描述符定义在单独的工具模块中，比如 Django 框架中与数据库交互的模型类，就是描述符类。更确切地说，它使用了定制化的描述符的元类。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Author</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">50</span>)</span><br><span class="line">    books = models.ManyToManyField(Book)</span><br><span class="line">    person = models.OneToOneField(<span class="string">'Person'</span>, models.CASCADE, null=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="描述符分类"><a href="#描述符分类" class="headerlink" title="描述符分类"></a>描述符分类</h3><p>我们将同时实现了 <code>__get__</code> 和 <code>__set__</code> 方法的描述符类称为<strong>数据描述符</strong>，将只实现了 <code>__get__</code> 的描述符类称为<strong>非数据描述符</strong>。在 CPython 的描述符对象 <a href="https://github.com/python/cpython/blob/master/Objects/descrobject.c" target="_blank" rel="noopener">descrobject</a> 的源码中，会检查描述符是否有 <code>__set__</code> 方法来返回描述符是否是数据描述符：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">PyDescr_IsData</span><span class="params">(PyObject *ob)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Py_TYPE(ob)-&gt;tp_descr_set != <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>之前我们在属性访问规则一节中提到了 Python 中存取属性方式的不对等。这种不对等的处理方式也对描述符产生影响。根据是否定义 <code>__set__</code> 方法，描述符可以分为<strong>覆盖型描述符</strong>和<strong>非覆盖型描述符</strong>。</p>
+<p>实现了 <code>__set__</code> 方法的描述符称为覆盖型描述符，因为描述符虽然是类属性，但实现了 <code>__set__</code> 方法后会覆盖对实例属性的赋值操作，比如对 LineItem 实例属性赋值时的非负验证。特性也是覆盖型描述符：如果没提供设置方法，property 类中的 <code>__set__</code> 方法默认会抛出 AttributeError 异常，指明这个属性是只读的。</p>
+<p>通常，覆盖型描述符既会实现 <code>__set__</code> 方法，也会实现 <code>__get__</code> 方法，此时它就是一个数据描述符。不过也可以只实现 <code>__set__</code> 方法，就如同我们定义的 Quantity 描述符。因为没有读值方法 <code>__get__</code>，通过实例访问属性会返回描述符对象本身。然而 LineItem 的表现并不是这样，访问 <code>item.amount</code> 会得到相应属性值。这是因为在它的初始化方法 <code>__init__</code> 中已经调用了描述符的 <code>__set__</code> 方法，该方法为实例字典 <code>__dict__</code> 创建了同名实例属性，读取属性会返回实例字典中的值而不是描述符对象。也就是说，<strong>在使用只定义了 <code>__set__</code> 的描述符读取属性时，同名的实例属性会遮盖描述符</strong>。这与属性访问规则表现一致，即非数据描述符访问在实例字典之后。</p>
+<p>没有实现 <code>__set__</code> 方法的描述符称为非覆盖型描述符。Python 中的方法就是以非覆盖型描述符实现的，只包含 <code>__get__</code> 方法。Python 社区在讨论这些概念时会用不同的术语，覆盖型描述符也叫数据描述符或强制描述符，非覆盖型描述符也叫非数据描述符或遮盖型描述符。非数据体现在该描述符不是数据类型可以重复赋值，遮盖则体现在，实例属性会遮盖掉同名描述符属性，但类中的描述符属性依然存在。比如，使用类中同名的方法名为实例属性赋值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">Foo</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">()</span>:</span> ...</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo = Foo()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo.bar = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo.__dict__</span><br><span class="line">&#123;<span class="string">'bar'</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Foo.bar</span><br><span class="line">&lt;function Foo.bar at <span class="number">0x1051f4af0</span>&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="方法是描述符"><a href="#方法是描述符" class="headerlink" title="方法是描述符"></a>方法是描述符</h3><p>定义在类中的方法会变成绑定方法（bound method），这是 Python 语言底层使用描述符的最好例证。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">Foo</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">()</span>:</span> ...</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo = Foo()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo.bar</span><br><span class="line">&lt;bound method Foo.bar of &lt;__main__.Foo object at <span class="number">0x10505dac0</span>&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Foo.bar</span><br><span class="line">&lt;function Foo.bar at <span class="number">0x1051f4af0</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>通过类和实例访问的 bar 函数返回的是不同的对象。CPython 中定义的函数对象 <a href="https://github.com/python/cpython/blob/master/Objects/funcobject.c" target="_blank" rel="noopener">funcobject</a> 实现了描述符的 <code>__get__</code> 方法。与描述符一样，通过托管类访问时，函数的 <code>__get__</code> 方法会返回自身的引用，因为此时传入的 obj 参数为空。但通过实例访问时，函数的 <code>__get__</code> 方法返回的是绑定方法对象，并把托管实例绑定给函数的第一个参数（即 self），这与 functool.partial 函数的行为一致。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Bind a function to an object */</span></span><br><span class="line"><span class="keyword">static</span> PyObject *</span><br><span class="line">func_descr_get(PyObject *func, PyObject *obj, PyObject *type)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (obj == Py_None || obj == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        Py_INCREF(func);</span><br><span class="line">        <span class="keyword">return</span> func;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> PyMethod_New(func, obj);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Method objects are used for bound instance methods returned by instancename.methodname.</span></span><br><span class="line"><span class="comment">   ClassName.methodname returns an ordinary function. */</span></span><br><span class="line"><span class="function">PyObject * <span class="title">PyMethod_New</span><span class="params">(PyObject *func, PyObject *self)</span></span></span><br></pre></td></tr></table></figure>
+<p>绑定方法对象还有个 <code>__call__</code> 方法，用于处理真正的调用过程。这个方法会调用 <code>__func__</code> 属性引用的原始函数，把函数的第一个参数设为绑定方法的 <code>__self__</code> 属性。<strong>这就是形参 self 的隐式绑定过程</strong>。</p>
+<h3 id="使用描述符的最佳实践"><a href="#使用描述符的最佳实践" class="headerlink" title="使用描述符的最佳实践"></a>使用描述符的最佳实践</h3><p><strong>使用特性以保持简单</strong>：内置的 property 类创建的是覆盖型描述符，<code>__get__</code> 和 <code>__set__</code> 方法都实现了。特性的 <code>__set__</code> 方法默认抛出 AttributeError: can’t set attribute，因此创建只读属性最简单的方式是使用特性。且特性是数据描述符，不会被实例属性覆盖。</p>
+<p><strong>只读描述符必须实现 <code>__set__</code> 方法</strong>：如果使用描述符类实现只读属性，要记住，<code>__get__</code> 和 <code>__set__</code> 方法必须都定义。否则，实例的同名属性会遮盖描述符。只读属性的 <code>__set__</code> 方法只需抛出 AttributeError 异常，并提供合适的错误消息。</p>
+<p><strong>非特殊的方法可以被实例属性遮盖</strong>：Python 的方法只实现了 <code>__get__</code> 方法，所以对与方法名同名的属性将会遮盖描述符，也就是说 <code>obj.method = 1</code> 负值后通过实例访问 method 将会得到数字 1，但不影响类或其他实例。然而，特殊方法不受这个问题影响。因为解释器只会在类中查询特殊方法。也就是说 <code>repr(x)</code> 执行的其实是 <code>x.__class__.__repr__(x)</code>，因此 x 的 <code>__repr__</code> 属性对 <code>repr(x)</code> 方法调用没有影响。出于同样的原因，实例的 <code>__getattr__</code> 属性不会破坏常规的属性访问规则。</p>
+<p><strong>用于验证的描述符可以只实现 <code>__set__</code> 方法</strong>：对仅用于验证的描述符来说，<code>__set__</code> 方法应该检查 value 参数是否有效，如果有效，使用与描述符实例同名的名称作为键，直接在实例字典中设值，如 Quantity 中的 <code>instance.__dict__[self.attribute] = value</code> 语句。这样，从实例字典中读取同名属性就不需要经过 <code>__get__</code> 方法处理。</p>
+<p><strong>仅有 <code>__get__</code> 方法的描述符可以实现高效缓存</strong>：如果仅实现了 <code>__get__</code> 方法，那么创建的是非数据描述符。这种描述符可用于执行某些耗费资源的计算，然后为实例设置同名属性，缓存结果。同名实例属性会遮盖描述符，因此后续访问会直接从实例字典中获取值，而不会再出发描述符的 <code>__get__</code> 方法。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2021/04/12/Python-%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3059,867 +3342,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/10/11/Latex%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/10/11/Latex%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/" class="post-title-link" itemprop="https://s1mplecc.github.io/index.html">LaTeX 数学公式语法</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2020-10-11 10:05:13 / 修改时间：15:23:01" itemprop="dateCreated datePublished" datetime="2020-10-11T10:05:13+08:00">2020-10-11</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/10/11/Latex%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/10/11/Latex数学公式语法/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">4k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="特殊格式"><a href="#特殊格式" class="headerlink" title="特殊格式"></a>特殊格式</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">符号</th>
-<th style="text-align:center">代码</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">$x^n$</td>
-<td style="text-align:center"><code>x^n</code></td>
-<td style="text-align:center">上标符号</td>
-</tr>
-<tr>
-<td style="text-align:center">$x_1$</td>
-<td style="text-align:center"><code>x_1</code></td>
-<td style="text-align:center">下标符号</td>
-</tr>
-<tr>
-<td style="text-align:center">$v_{\mbox{初始}}$</td>
-<td style="text-align:center"><code>V_{\mbox{初始}}</code></td>
-<td style="text-align:center">汉字形式</td>
-</tr>
-<tr>
-<td style="text-align:center">$\displaystyle \frac{x+y}{y+z}$</td>
-<td style="text-align:center"><code>\displaystyle \frac{x+y}{y+z}</code></td>
-<td style="text-align:center">字体控制</td>
-</tr>
-<tr>
-<td style="text-align:center">$\underline{x+y}$</td>
-<td style="text-align:center"><code>\underline{x+y}</code></td>
-<td style="text-align:center">下划线符号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\overbrace{a+b+c+d}^{2.0}$</td>
-<td style="text-align:center"><code>\overbrace{a+b+c+d}^{2.0}</code></td>
-<td style="text-align:center">上大括号</td>
-</tr>
-<tr>
-<td style="text-align:center">$a+\underbrace{b+c}_{1.0}+d$</td>
-<td style="text-align:center"><code>a+\underbrace{b+c}_{1.0}+d</code></td>
-<td style="text-align:center">下大括号</td>
-</tr>
-<tr>
-<td style="text-align:center">$x \stackrel{f} \rightarrow y$</td>
-<td style="text-align:center"><code>x \stackrel{f} \rightarrow y</code></td>
-<td style="text-align:center">上位符号</td>
-</tr>
-<tr>
-<td style="text-align:center">${n+1 \choose k}={n \choose k}+{n \choose k-1}$</td>
-<td style="text-align:center"><code>{n+1 \choose k}={n \choose k}+{n \choose k-1}</code></td>
-<td style="text-align:center">组合公式</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="算数运算"><a href="#算数运算" class="headerlink" title="算数运算"></a>算数运算</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">符号</th>
-<th style="text-align:center">代码</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">$\pm$</td>
-<td style="text-align:center"><code>\pm</code></td>
-<td style="text-align:center">加减运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\mp$</td>
-<td style="text-align:center"><code>\mp</code></td>
-<td style="text-align:center">减甲运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\times$</td>
-<td style="text-align:center"><code>\times</code></td>
-<td style="text-align:center">乘法运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\cdot$</td>
-<td style="text-align:center"><code>\cdot</code></td>
-<td style="text-align:center">点乘运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\ast$</td>
-<td style="text-align:center"><code>\ast</code></td>
-<td style="text-align:center">星乘运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\div$</td>
-<td style="text-align:center"><code>\div</code></td>
-<td style="text-align:center">除法运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\frac{x+y}{y+z}$</td>
-<td style="text-align:center"><code>\frac{x+y}{y+z}</code> 或 <code>{x+y} \over {y+z}</code></td>
-<td style="text-align:center">分式运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\overline{x}$</td>
-<td style="text-align:center"><code>\overline{x}</code></td>
-<td style="text-align:center">平均数运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\sqrt x$</td>
-<td style="text-align:center"><code>\sqrt x</code></td>
-<td style="text-align:center">开根号运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\sqrt[n]{x+y}$</td>
-<td style="text-align:center"><code>\sqrt[n]{x+y}</code></td>
-<td style="text-align:center">开方运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\log_2 x$</td>
-<td style="text-align:center"><code>\log_2 x</code></td>
-<td style="text-align:center">对数运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\lim \limits_{n \to \infty}x_n$</td>
-<td style="text-align:center"><code>\lim \limits_{n \to \infty}x_n</code></td>
-<td style="text-align:center">极限运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\sum \limits_{i=1}^n{x_i}$</td>
-<td style="text-align:center"><code>\sum \limits_{i=1}^n{x_i}</code></td>
-<td style="text-align:center">求和运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\prod \limits_{i=1}^n{x_i}$</td>
-<td style="text-align:center"><code>\prod \limits_{i=1}^n{x_i}</code></td>
-<td style="text-align:center">连乘运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\int_{a}^{b} e^x\, dx$</td>
-<td style="text-align:center"><code>\int_{a}^{b} e^x\, dx</code></td>
-<td style="text-align:center">积分运算</td>
-</tr>
-<tr>
-<td style="text-align:center">$\iint \limits_D\, dx\,dy$</td>
-<td style="text-align:center"><code>\iint \limits_D\, dx\,dy</code></td>
-<td style="text-align:center">双重积分</td>
-</tr>
-<tr>
-<td style="text-align:center">$\oint_{L} x+y\, dx\,dy$</td>
-<td style="text-align:center"><code>\oint_{L} x+y\, dx\,dy</code></td>
-<td style="text-align:center">闭合曲线积分</td>
-</tr>
-<tr>
-<td style="text-align:center">$\partial x$</td>
-<td style="text-align:center"><code>\partial x</code></td>
-<td style="text-align:center">微分运算</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="逻辑运算"><a href="#逻辑运算" class="headerlink" title="逻辑运算"></a>逻辑运算</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">符号</th>
-<th style="text-align:center">代码</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">$\geq$</td>
-<td style="text-align:center"><code>\geq</code></td>
-<td style="text-align:center">大于等于</td>
-</tr>
-<tr>
-<td style="text-align:center">$\leq$</td>
-<td style="text-align:center"><code>\leq</code></td>
-<td style="text-align:center">小于等于</td>
-</tr>
-<tr>
-<td style="text-align:center">$\neq$</td>
-<td style="text-align:center"><code>\neq</code></td>
-<td style="text-align:center">不等于</td>
-</tr>
-<tr>
-<td style="text-align:center">$\ngeq$</td>
-<td style="text-align:center"><code>\ngeq</code></td>
-<td style="text-align:center">不大于等于</td>
-</tr>
-<tr>
-<td style="text-align:center">$\not\geq$</td>
-<td style="text-align:center"><code>\not\geq</code></td>
-<td style="text-align:center">不大于等于</td>
-</tr>
-<tr>
-<td style="text-align:center">$\nleq$</td>
-<td style="text-align:center"><code>\nleq</code></td>
-<td style="text-align:center">不小于等于</td>
-</tr>
-<tr>
-<td style="text-align:center">$\not\leq$</td>
-<td style="text-align:center"><code>\not\leq</code></td>
-<td style="text-align:center">不小于等于</td>
-</tr>
-<tr>
-<td style="text-align:center">$\approx$</td>
-<td style="text-align:center"><code>\approx</code></td>
-<td style="text-align:center">约等于</td>
-</tr>
-<tr>
-<td style="text-align:center">$\equiv$</td>
-<td style="text-align:center"><code>\equiv</code></td>
-<td style="text-align:center">恒定等于</td>
-</tr>
-<tr>
-<td style="text-align:center">$\bigodot$</td>
-<td style="text-align:center"><code>\bigodot</code></td>
-<td style="text-align:center">同或</td>
-</tr>
-<tr>
-<td style="text-align:center">$\bigotimes$</td>
-<td style="text-align:center"><code>\bigotimes</code></td>
-<td style="text-align:center">同与</td>
-</tr>
-<tr>
-<td style="text-align:center">$\bigoplus$</td>
-<td style="text-align:center"><code>\bigoplus</code></td>
-<td style="text-align:center">异或</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="集合运算"><a href="#集合运算" class="headerlink" title="集合运算"></a>集合运算</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">符号</th>
-<th style="text-align:center">代码</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">$\in$</td>
-<td style="text-align:center"><code>\in</code></td>
-<td style="text-align:center">属于</td>
-</tr>
-<tr>
-<td style="text-align:center">$\notin$</td>
-<td style="text-align:center"><code>\notin</code></td>
-<td style="text-align:center">不属于</td>
-</tr>
-<tr>
-<td style="text-align:center">$\subset$</td>
-<td style="text-align:center"><code>\subset</code></td>
-<td style="text-align:center">子集</td>
-</tr>
-<tr>
-<td style="text-align:center">$\supset$</td>
-<td style="text-align:center"><code>\supset</code></td>
-<td style="text-align:center">子集</td>
-</tr>
-<tr>
-<td style="text-align:center">$\subseteq$</td>
-<td style="text-align:center"><code>\subseteq</code></td>
-<td style="text-align:center">真子集</td>
-</tr>
-<tr>
-<td style="text-align:center">$\subsetneq$</td>
-<td style="text-align:center"><code>\subsetneq</code></td>
-<td style="text-align:center">非真子集</td>
-</tr>
-<tr>
-<td style="text-align:center">$\supseteq$</td>
-<td style="text-align:center"><code>\supseteq</code></td>
-<td style="text-align:center">真子集</td>
-</tr>
-<tr>
-<td style="text-align:center">$\supsetneq$</td>
-<td style="text-align:center"><code>\supsetneq</code></td>
-<td style="text-align:center">非真子集</td>
-</tr>
-<tr>
-<td style="text-align:center">$\not\subset$</td>
-<td style="text-align:center"><code>\not\subset</code></td>
-<td style="text-align:center">非子集</td>
-</tr>
-<tr>
-<td style="text-align:center">$\not\supset$</td>
-<td style="text-align:center"><code>\not\supset</code></td>
-<td style="text-align:center">非子集</td>
-</tr>
-<tr>
-<td style="text-align:center">$\cup$</td>
-<td style="text-align:center"><code>\cup</code></td>
-<td style="text-align:center">并集</td>
-</tr>
-<tr>
-<td style="text-align:center">$\cap$</td>
-<td style="text-align:center"><code>\cap</code></td>
-<td style="text-align:center">交集</td>
-</tr>
-<tr>
-<td style="text-align:center">$\setminus$</td>
-<td style="text-align:center"><code>\setminus</code></td>
-<td style="text-align:center">差集</td>
-</tr>
-<tr>
-<td style="text-align:center">$\mathbb{R}$</td>
-<td style="text-align:center"><code>\mathbb{R}</code></td>
-<td style="text-align:center">实数集合</td>
-</tr>
-<tr>
-<td style="text-align:center">$\mathbb{Z}$</td>
-<td style="text-align:center"><code>\mathbb{Z}</code></td>
-<td style="text-align:center">自然数集合</td>
-</tr>
-<tr>
-<td style="text-align:center">$\emptyset$</td>
-<td style="text-align:center"><code>\emptyset</code></td>
-<td style="text-align:center">空集</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="数学符号"><a href="#数学符号" class="headerlink" title="数学符号"></a>数学符号</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">符号</th>
-<th style="text-align:center">代码</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">$\infty$</td>
-<td style="text-align:center"><code>\infty</code></td>
-<td style="text-align:center">无穷</td>
-</tr>
-<tr>
-<td style="text-align:center">$\imath$</td>
-<td style="text-align:center"><code>\imath</code></td>
-<td style="text-align:center">虚数</td>
-</tr>
-<tr>
-<td style="text-align:center">$\jmath$</td>
-<td style="text-align:center"><code>\jmath</code></td>
-<td style="text-align:center">虚数</td>
-</tr>
-<tr>
-<td style="text-align:center">$\hat{a}$</td>
-<td style="text-align:center"><code>\hat{a}</code></td>
-<td style="text-align:center">数学符号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\check{a}$</td>
-<td style="text-align:center"><code>\check{a}</code></td>
-<td style="text-align:center">数学符号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\breve{a}$</td>
-<td style="text-align:center"><code>\breve{a}</code></td>
-<td style="text-align:center">数学符号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\tilde{a}$</td>
-<td style="text-align:center"><code>\tilde{a}</code></td>
-<td style="text-align:center">数学符号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\bar{a}$</td>
-<td style="text-align:center"><code>\bar{a}</code></td>
-<td style="text-align:center">数学符号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\vec{a}$</td>
-<td style="text-align:center"><code>\vec{a}</code></td>
-<td style="text-align:center">矢量符号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\acute{a}$</td>
-<td style="text-align:center"><code>\acute{a}</code></td>
-<td style="text-align:center">数学符号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\grave{a}$</td>
-<td style="text-align:center"><code>\grave{a}</code></td>
-<td style="text-align:center">数学符号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\mathring{a}$</td>
-<td style="text-align:center"><code>\mathring{a}</code></td>
-<td style="text-align:center">数学符号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\dot{a}$</td>
-<td style="text-align:center"><code>\dot{a}</code></td>
-<td style="text-align:center">一阶导数符号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\ddot{a}$</td>
-<td style="text-align:center"><code>\ddot{a}</code></td>
-<td style="text-align:center">二阶导数符号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\uparrow$</td>
-<td style="text-align:center"><code>\uparrow</code></td>
-<td style="text-align:center">上箭头</td>
-</tr>
-<tr>
-<td style="text-align:center">$\Uparrow$</td>
-<td style="text-align:center"><code>\Uparrow</code></td>
-<td style="text-align:center">上箭头</td>
-</tr>
-<tr>
-<td style="text-align:center">$\downarrow$</td>
-<td style="text-align:center"><code>\downarrow</code></td>
-<td style="text-align:center">下箭头</td>
-</tr>
-<tr>
-<td style="text-align:center">$\Downarrow$</td>
-<td style="text-align:center"><code>\Downarrow</code></td>
-<td style="text-align:center">下箭头</td>
-</tr>
-<tr>
-<td style="text-align:center">$\leftarrow$</td>
-<td style="text-align:center"><code>\leftarrow</code></td>
-<td style="text-align:center">左箭头</td>
-</tr>
-<tr>
-<td style="text-align:center">$\Leftarrow$</td>
-<td style="text-align:center"><code>\Leftarrow</code></td>
-<td style="text-align:center">左箭头</td>
-</tr>
-<tr>
-<td style="text-align:center">$\rightarrow$</td>
-<td style="text-align:center"><code>\rightarrow</code></td>
-<td style="text-align:center">右箭头</td>
-</tr>
-<tr>
-<td style="text-align:center">$\Rightarrow$</td>
-<td style="text-align:center"><code>\Rightarrow</code></td>
-<td style="text-align:center">右箭头</td>
-</tr>
-<tr>
-<td style="text-align:center">$\longrightarrow$</td>
-<td style="text-align:center"><code>\longrightarrow</code></td>
-<td style="text-align:center">向右长箭头</td>
-</tr>
-<tr>
-<td style="text-align:center">$\Longrightarrow$</td>
-<td style="text-align:center"><code>\Longrightarrow</code></td>
-<td style="text-align:center">向右长箭头</td>
-</tr>
-<tr>
-<td style="text-align:center">$A \xleftarrow{n=0} B \xrightarrow[T]{n&gt;0} C$</td>
-<td style="text-align:center"><code>A \xleftarrow{n=0} B \xrightarrow[T]{n&gt;0} C</code></td>
-<td style="text-align:center">上下方可输入公式的箭头</td>
-</tr>
-<tr>
-<td style="text-align:center">$\triangleq$</td>
-<td style="text-align:center"><code>\triangleq</code></td>
-<td style="text-align:center">定义为</td>
-</tr>
-<tr>
-<td style="text-align:center">$\because$</td>
-<td style="text-align:center"><code>\because</code></td>
-<td style="text-align:center">因为</td>
-</tr>
-<tr>
-<td style="text-align:center">$\therefore$</td>
-<td style="text-align:center"><code>\therefore</code></td>
-<td style="text-align:center">所以</td>
-</tr>
-<tr>
-<td style="text-align:center">$\forall$</td>
-<td style="text-align:center"><code>\forall</code></td>
-<td style="text-align:center">任意</td>
-</tr>
-<tr>
-<td style="text-align:center">$\exists$</td>
-<td style="text-align:center"><code>\exists</code></td>
-<td style="text-align:center">存在</td>
-</tr>
-<tr>
-<td style="text-align:center">$\ldots$</td>
-<td style="text-align:center"><code>\ldots</code></td>
-<td style="text-align:center">底端对齐的省略号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\cdots$</td>
-<td style="text-align:center"><code>\cdots</code></td>
-<td style="text-align:center">中线对齐的省略号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\vdots$</td>
-<td style="text-align:center"><code>\vdots</code></td>
-<td style="text-align:center">竖直对齐的省略号</td>
-</tr>
-<tr>
-<td style="text-align:center">$\ddots$</td>
-<td style="text-align:center"><code>\ddots</code></td>
-<td style="text-align:center">斜对齐的省略号</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p><strong>矩阵表示</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\left[ \begin&#123;matrix&#125; 1 &amp;2 &amp;\cdots &amp;4\\5 &amp;6 &amp;\cdots &amp;8 \\ \vdots &amp;\vdots &amp;\ddots &amp;\vdots \\ 13 &amp;14 &amp;\cdots &amp;16\end&#123;matrix&#125; \right]</span><br></pre></td></tr></table></figure>
-<script type="math/tex; mode=display">\left[ \begin{matrix} 1 &2 &\cdots &4\\5 &6 &\cdots &8 \\ \vdots &\vdots &\ddots &\vdots \\ 13 &14 &\cdots &16\end{matrix} \right]</script><p><strong>大括号公式</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">F(n)&#x3D; \begin&#123;cases&#125; 1 &amp; \text&#123;n &#x3D; 0 或 1&#125;\\ F(n-1)+F(n-2) &amp; \text&#123;n &gt; 1&#125; \end&#123;cases&#125;</span><br></pre></td></tr></table></figure>
-<script type="math/tex; mode=display">F(n)= \begin{cases} 1 & \text{n = 0 或 1}\\ F(n-1)+F(n-2) & \text{n > 1} \end{cases}</script><h2 id="希腊字母"><a href="#希腊字母" class="headerlink" title="希腊字母"></a>希腊字母</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">大写</th>
-<th style="text-align:center">代码</th>
-<th style="text-align:center">小写</th>
-<th style="text-align:center">代码</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">A</td>
-<td style="text-align:center"><code>A</code></td>
-<td style="text-align:center">α</td>
-<td style="text-align:center"><code>\alhpa</code></td>
-</tr>
-<tr>
-<td style="text-align:center">B</td>
-<td style="text-align:center"><code>B</code></td>
-<td style="text-align:center">β</td>
-<td style="text-align:center"><code>\beta</code></td>
-</tr>
-<tr>
-<td style="text-align:center">Γ</td>
-<td style="text-align:center"><code>\Gamma</code></td>
-<td style="text-align:center">γ</td>
-<td style="text-align:center"><code>\gamma</code></td>
-</tr>
-<tr>
-<td style="text-align:center">Δ</td>
-<td style="text-align:center"><code>\Delta</code></td>
-<td style="text-align:center">δ</td>
-<td style="text-align:center"><code>\delta</code></td>
-</tr>
-<tr>
-<td style="text-align:center">E</td>
-<td style="text-align:center"><code>E</code></td>
-<td style="text-align:center">ϵ</td>
-<td style="text-align:center"><code>\epsilon</code></td>
-</tr>
-<tr>
-<td style="text-align:center">Z</td>
-<td style="text-align:center"><code>Z</code></td>
-<td style="text-align:center">ζ</td>
-<td style="text-align:center"><code>\zeta</code></td>
-</tr>
-<tr>
-<td style="text-align:center">H</td>
-<td style="text-align:center"><code>H</code></td>
-<td style="text-align:center">η</td>
-<td style="text-align:center"><code>\eta</code></td>
-</tr>
-<tr>
-<td style="text-align:center">Θ</td>
-<td style="text-align:center"><code>\Theta</code></td>
-<td style="text-align:center">θ</td>
-<td style="text-align:center"><code>\theta</code></td>
-</tr>
-<tr>
-<td style="text-align:center">I</td>
-<td style="text-align:center"><code>I</code></td>
-<td style="text-align:center">ι</td>
-<td style="text-align:center"><code>\iota</code></td>
-</tr>
-<tr>
-<td style="text-align:center">K</td>
-<td style="text-align:center"><code>K</code></td>
-<td style="text-align:center">κ</td>
-<td style="text-align:center"><code>\kappa</code></td>
-</tr>
-<tr>
-<td style="text-align:center">Λ</td>
-<td style="text-align:center"><code>\Lambda</code></td>
-<td style="text-align:center">λ</td>
-<td style="text-align:center"><code>\lambda</code></td>
-</tr>
-<tr>
-<td style="text-align:center">M</td>
-<td style="text-align:center"><code>M</code></td>
-<td style="text-align:center">μ</td>
-<td style="text-align:center"><code>\mu</code></td>
-</tr>
-<tr>
-<td style="text-align:center">N</td>
-<td style="text-align:center"><code>N</code></td>
-<td style="text-align:center">ν</td>
-<td style="text-align:center"><code>\nu</code></td>
-</tr>
-<tr>
-<td style="text-align:center">Ξ</td>
-<td style="text-align:center"><code>\Xi</code></td>
-<td style="text-align:center">ξ</td>
-<td style="text-align:center"><code>\xi</code></td>
-</tr>
-<tr>
-<td style="text-align:center">O</td>
-<td style="text-align:center"><code>O</code></td>
-<td style="text-align:center">ο</td>
-<td style="text-align:center"><code>\omicron</code></td>
-</tr>
-<tr>
-<td style="text-align:center">Π</td>
-<td style="text-align:center"><code>\Pi</code></td>
-<td style="text-align:center">π</td>
-<td style="text-align:center"><code>\pi</code></td>
-</tr>
-<tr>
-<td style="text-align:center">P</td>
-<td style="text-align:center"><code>P</code></td>
-<td style="text-align:center">ρ</td>
-<td style="text-align:center"><code>\rho</code></td>
-</tr>
-<tr>
-<td style="text-align:center">Σ</td>
-<td style="text-align:center"><code>\Sigma</code></td>
-<td style="text-align:center">σ</td>
-<td style="text-align:center"><code>\sigma</code></td>
-</tr>
-<tr>
-<td style="text-align:center">T</td>
-<td style="text-align:center"><code>T</code></td>
-<td style="text-align:center">τ</td>
-<td style="text-align:center"><code>\tau</code></td>
-</tr>
-<tr>
-<td style="text-align:center">Υ</td>
-<td style="text-align:center"><code>\Upsilon</code></td>
-<td style="text-align:center">υ</td>
-<td style="text-align:center"><code>\upsilon</code></td>
-</tr>
-<tr>
-<td style="text-align:center">Φ</td>
-<td style="text-align:center"><code>\Phi</code></td>
-<td style="text-align:center">ϕ</td>
-<td style="text-align:center"><code>\phi</code></td>
-</tr>
-<tr>
-<td style="text-align:center">X</td>
-<td style="text-align:center"><code>X</code></td>
-<td style="text-align:center">χ</td>
-<td style="text-align:center"><code>\chi</code></td>
-</tr>
-<tr>
-<td style="text-align:center">Ψ</td>
-<td style="text-align:center"><code>\Psi</code></td>
-<td style="text-align:center">ψ</td>
-<td style="text-align:center"><code>\psi</code></td>
-</tr>
-<tr>
-<td style="text-align:center">Ω</td>
-<td style="text-align:center"><code>\v</code></td>
-<td style="text-align:center">ω</td>
-<td style="text-align:center"><code>\omega</code></td>
-</tr>
-</tbody>
-</table>
-</div>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3971,7 +3393,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-count">76</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -4674,41 +4096,9 @@
       
     
       
-        
-      
     
   
 
-  
-    
-      <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      },
-      TeX: {equationNumbers: { autoNumber: "AMS" }}
-    });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-      var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-<style>
-.MathJax_Display {
-    overflow: auto hidden;
-}
-</style>
-
-    
   
 
 

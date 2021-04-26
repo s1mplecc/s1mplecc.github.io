@@ -372,6 +372,232 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2019/01/23/Fluent%20Interface%20--%20Martin%20Fowler%20%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/01/23/Fluent%20Interface%20--%20Martin%20Fowler%20%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/3/index.html">Fluent Interface —— Martin Fowler 博客译文</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-23 14:15:45" itemprop="dateCreated datePublished" datetime="2019-01-23T14:15:45+08:00">2019-01-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-10-13 15:15:22" itemprop="dateModified" datetime="2020-10-13T15:15:22+08:00">2020-10-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Translations/" itemprop="url" rel="index"><span itemprop="name">Translations</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/23/Fluent%20Interface%20--%20Martin%20Fowler%20%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/23/Fluent Interface -- Martin Fowler 博客译文/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">3.4k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="原文链接"><a href="#原文链接" class="headerlink" title="原文链接"></a>原文链接</h2><p><a href="https://www.martinfowler.com/bliki/FluentInterface.html" target="_blank" rel="noopener">Fluent Interface</a>，Matrin Fowler 博客，发表于 2005 年 12 月 20 日。</p>
+<h2 id="译文"><a href="#译文" class="headerlink" title="译文"></a>译文</h2><p>几个月前我和 Eric Evans 进行了一次讨论会，他谈到一种接口的设计风格，我们称之为流畅接口（Fluent Interface）。它不是一种常见的风格，但我们觉得应该广为人知。描述它的最直观的方式就是例子。</p>
+<p>最简单的例子可能就来自 Eric 编写的 <a href="http://timeandmoney.sourceforge.net/" target="_blank" rel="noopener">TimeAndMoney Library</a>。为了指定一段时间间隔，我们通常这么做：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TimePoint fiveOClock, sixOClock;</span><br><span class="line">...</span><br><span class="line">TimeInterval meetingTime = <span class="keyword">new</span> TimeInterval(fiveOClock, sixOClock);</span><br></pre></td></tr></table></figure>
+<p>但是 TimeAndMoney 库的使用者会这样做：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TimeInterval meetingTime = fiveOClock.until(sixOClock);</span><br></pre></td></tr></table></figure>
+<p>下面我继续演示“客户下订单”这个例子。一个订单包含多个订单项，每个订单项包含商品项和购买的数量。在提交订单时一个订单项应当是可跳过的，这意味着我更希望在没有此订单项（缺货）的情况下提交订单，而不是推迟提交整个订单。所以这里可以给整个订单一个“急促（rush）”的状态标识。</p>
+<p>要实现上述功能，最常见的编码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeNormal</span><span class="params">(Customer customer)</span> </span>&#123;</span><br><span class="line">    Order o1 = <span class="keyword">new</span> Order();</span><br><span class="line">    customer.addOrder(o1);</span><br><span class="line">    OrderLine line1 = <span class="keyword">new</span> OrderLine(<span class="number">6</span>, Product.find(<span class="string">"TAL"</span>));</span><br><span class="line">    o1.addLine(line1);</span><br><span class="line">    OrderLine line2 = <span class="keyword">new</span> OrderLine(<span class="number">5</span>, Product.find(<span class="string">"HPK"</span>));</span><br><span class="line">    o1.addLine(line2);</span><br><span class="line">    OrderLine line3 = <span class="keyword">new</span> OrderLine(<span class="number">3</span>, Product.find(<span class="string">"LGV"</span>));</span><br><span class="line">    o1.addLine(line3);</span><br><span class="line">    line2.setSkippable(<span class="keyword">true</span>);</span><br><span class="line">    o1.setRush(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本质上我们创建了多个对象然后将它们组装在一起。如果无法在构造函数中设置所有内容，那么就需要创建临时变量来帮助我们完成组装 —— 尤其是将集合项添加到集合中。</p>
+<p>下面是使用流畅接口实现相同的组装：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeFluent</span><span class="params">(Customer customer)</span> </span>&#123;</span><br><span class="line">    customer.newOrder()</span><br><span class="line">            .with(<span class="number">6</span>, <span class="string">"TAL"</span>)</span><br><span class="line">            .with(<span class="number">5</span>, <span class="string">"HPK"</span>).skippable()</span><br><span class="line">            .with(<span class="number">3</span>, <span class="string">"LGV"</span>)</span><br><span class="line">            .priorityRush();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关于这种风格最重要的一点就是，基于 Internal DomainSpecificLanguage 将要做的事沿着一条线进行编码（译者注：Domain Specific Language，DSL，领域专用语言）。实际上这也是为什么我们选择用 “Fluent” 一词来描述它，在很多方面这两个术语是同义词。<strong>这种 API 被设计为可读的和流式的，这种流畅性的代价是在设计和构建 API 时需要花更多的功夫</strong>。构造函数、setter 和 add 方法的 API 简单且容易编写，但要想提供一个漂亮的流畅接口则需要更多的思考。</p>
+<p>事实上，刚才我想用在 Calgary 咖啡店吃早餐的时间完成这个小例子的编码，但是我搞砸了，看来好的流畅接口需要花费一些时间去实现。如果你想找一个比较成熟的例子，可以看看 <a href="http://jmock.org/" target="_blank" rel="noopener">JMock</a>。与任何 mocking 库一样，JMock 需要创建复杂的行为规范。在过去几年中已经构建了许多 mocking 库，而 JMock 的这个则包含了非常漂亮的流畅接口，使用体验非常好。这是它的一个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mock.expects(once())</span><br><span class="line">    .method(<span class="string">"m"</span>)</span><br><span class="line">    .with(or(stringContains(<span class="string">"hello"</span>), stringContains(<span class="string">"howdy"</span>)));</span><br></pre></td></tr></table></figure>
+<p>我看到 Steve Freeman 和 Nat Price 在 <a href="https://www.martinfowler.com/bliki/JAOO2005.html" target="_blank" rel="noopener">JAOO2005</a> 上就 JMock API 的演变发表了精彩的演讲，演讲相关的内容他们已经发表到一篇 <a href="http://www.mockobjects.com/files/evolving_an_edsl.ooplsa2006.pdf" target="_blank" rel="noopener">OOPSLA论文</a> 上。</p>
+<p>到目前为止，我们看到用于创建对象配置的流畅接口通常会涉及到 <a href="https://en.wikipedia.org/wiki/Value_object" target="_blank" rel="noopener">值对象</a>。我不确定这是否属于流畅接口的一个定义特征，虽然我怀疑它们出现在声明性上下文中有某种关联。对我们而言，<strong>流畅性的关键考验在于领域特定语言的质量</strong>。API 使用起来越像流式的语言，它就越流畅。</p>
+<p>像这样构建一个流畅接口会导致一些不符合使用习惯的 API。其中最明显的一个就是 setter 会有返回值（在订单示例中，<code>with</code> 方法为订单添加一个订单项并返回整个订单），而惯例是修改性质的方法返回 <code>void</code>，因为这样遵循 <a href="https://martinfowler.com/bliki/CommandQuerySeparation.html" target="_blank" rel="noopener">CommandQuerySeparation</a> 原则（译者注：CQS，命令查询分离原则）。这个约定确实妨碍了流畅接口，所以我倾向于暂不遵循这个惯例。</p>
+<p>你应该<strong>根据流畅接口的下一个行为（fluent action）去选择返回类型</strong>。JMock 提出了一个重点：根据接下来的需要改变其返回类型。<strong>这种风格的一个很好的优点是方法补完后（intellisense）有助于告诉你接下来要键入什么 —— 有点像 IDE 中的智能提示</strong>。总的来说，我发现动态语言对于 DSL 来说效果更好，因为它们的语法往往更简洁。但是，使用方法补完是静态语言的一个优点。</p>
+<p>流畅接口定义的方法的一个问题是它们可能名不符实。举个例子，你去查看 <code>with</code> 方法的文档可能并没有什么意义，因为这个方法的实现和 <code>with</code> 并没有什么关联。我承认光就方法的命名来说这不是一个好的命名，因为它根本不能表达该方法实际做了什么。只有在流畅行为的上下文中这种命名才能显示出它的优势（译者注：这点我在编码时也深有体会，流畅接口的方法实现与方法命名常常做的是两回事，比如说把值对象传递下去）。解决此问题的一种可能的方法是只在此上下文中使用 builder 对象（译者注：可以参考 Builder Pattern，比如 <code>new BankAccount.Builder(4567L).withOwner(&quot;Homer&quot;).atBranch(&quot;Springfield&quot;).build();</code>，只在最后一步 <code>build()</code> 中进行构建）。</p>
+<p>Eric 提到的一点是，到目前为止，他使用并看到了流畅的接口大多是关于值对象的配置。值对象不具有领域意义的标识（Identity），因此你可以轻松创建并丢弃它们。所以接口的流畅度取决于使用旧值构造新值。从这个意义上讲，订单案例并不典型，因为它属于 <a href="https://www.martinfowler.com/bliki/EvansClassification.html" target="_blank" rel="noopener">EvansClassification</a> 中的实体对象（Entity）。（译者注：Evans Classification，Evans 关于领域对象的分类 Entity、Value Object 和 Service）</p>
+<p>目前为止我还没有看到很多的流畅接口，可以得出结论，我们对它们的优缺点了解还不够。所以任何使用它们的劝告都只能是初步的 —— 但我认为它们已经成熟，可以进行更多的尝试。</p>
+<p><a href="https://bofh.org.uk/2005/12/21/fluent-interfaces/" target="_blank" rel="noopener">Piers Cawley</a> 对本文有一个很好的跟进。</p>
+<p><strong>更新</strong>（2008年6月23日）。自从我写这篇文章以来，这个术语被广泛使用，这给了我一种令人愉快的满足感。在我一直在研究的书中，我已经提炼了关于流畅接口和内部 DSLs 的想法。我也注意到了一个常见的误解 —— 很多人似乎将流畅接口与方法链（Method Chaining）等同起来。当然链式接口是使用了流畅接口的一种常用的技术，但真正的流畅接口远不止于此。</p>
+<p>我上面展示的 JMock 示例使用了方法链，但同时也使用嵌套函数和对象作用域。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2840,257 +3066,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/3/index.html">Trunk Based Development 主干开发模型</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-09-27 02:35:29" itemprop="dateCreated datePublished" datetime="2018-09-27T02:35:29+08:00">2018-09-27</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-09-16 09:48:41" itemprop="dateModified" datetime="2020-09-16T09:48:41+08:00">2020-09-16</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/09/27/Trunk Based Development 主干开发模型/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">2.4k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>在之前的博文中我们介绍了 Git Flow 分支模型，正如文中所说，Git Flow 偏向于控制管理，使用了较多的分支，流程颇为复杂。大量的团队在实践过程中也遇到了颇多问题，其中大部分来自长期存在的分支。随着软件开发模型的演进，GitHub Flow、Trunk Based Development 等模型也应运而生，也已被 Google、Facebook、TW 等企业实践。本文主要介绍 TBD 模型。</p>
-</blockquote>
-<h2 id="Git-Flow的问题"><a href="#Git-Flow的问题" class="headerlink" title="Git Flow的问题"></a>Git Flow的问题</h2><ul>
-<li><p><strong>合并冲突</strong>，合并冲突在使用 Git Flow 是非常常见的。原因很简单：如果你有多个并行功能分支，他们长时间存在，那么很可能代码库的相同部分在两个功能分支中被分别更改。合并冲突不仅对于需要手动解决的开发人员来说是令人沮丧的，也增加了在代码中破坏某些功能的风险，因为当你不得不决定使用哪个版本代码时，很容易犯错。</p>
-</li>
-<li><p><strong>功能分离</strong>，在合并到同一个分支之前，你不能测试两个功能的组合。当你在单独的分支中开发几天甚至几周的功能时，当合并回主分支后，可能也会发生两个功能的相互作用影响了你的代码。</p>
-</li>
-<li><p><strong>并没有做到持续交付</strong>，在 Git Flow 分支模型下，发布是非常有计划的，一个 feature 必须要经过一系列步骤才能到达生产环境，在时间上平均一个 feature 都要等待 两周时间才能长线，这样的等待并非是需求上的“按计划发布”，而是从技术上就造成了发布瓶颈，显然难以达到持续交付的要求。</p>
-</li>
-<li><p><strong>与持续集成相悖</strong>，你会发现，在坚持持续集成实践的情况下，feature 分支是一件非常矛盾的事情。持续集成鼓励更加频繁的代码集成和交互，让冲突越早解决越好。feature 分支的代码隔离策略却在尽可能推迟代码的集成。</p>
-</li>
-</ul>
-<h2 id="GitHub-Flow"><a href="#GitHub-Flow" class="headerlink" title="GitHub Flow"></a>GitHub Flow</h2><blockquote>
-<p><a href="https://guides.github.com/introduction/flow/" target="_blank" rel="noopener">GitHub Flow</a> 是一个更轻量级的软件开发模型，示意图如下。它摒弃了 Git Flow 中繁杂的分支，<strong>只保留一个主分支 master</strong>。开发新功能时从 master 分支上拉取 feature 分支，开发完成后发起 <strong>Pull-Request</strong>，小组内进行评审和反馈，此时也进行 <strong>Code Review</strong>。测试通过后合并回主分支。</p>
-</blockquote>
-<p><img src="/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/0.png" alt="GitHub-Flow2-1"></p>
-<p>相比于 Git Flow，这种方式因为省去了一些分支而降低了复杂度，同时也更符合持续集成的思想，以一张故事卡为集成的最小单位，相对来说集成的周期短，反馈的速度也快，能够及早的遇到问题并及早解决。</p>
-<p>顺着持续集成的思想，如果我们把 GitHub Flow 分支模型做得再极致一点，我们不要 feature 分支，或者把 feature 分支只留在本地；不需要使用 Pull-Request 而是直接 Push 到远程 master 分支，我们就做到了 Trunk based Development。</p>
-<h2 id="TBD"><a href="#TBD" class="headerlink" title="TBD"></a>TBD</h2><blockquote>
-<p><strong>Trunk based Development</strong>，又叫<strong>主干开发</strong>，是一套代码分支管理策略，开发人员之间通过约定向被指定为<strong>主干</strong>的分支提交代码，以此抵抗因为长期存在的多分支导致的开发压力。此举可<strong>避免分支合并的困扰，保证随时拥有可发布的版本</strong>。“主干”这个词隐喻了树木生长的场景，树木最粗最长的部位是主干，分支从主干分离出来但是长度有限。</p>
-</blockquote>
-<p><img src="/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/1.jpg" alt="what_is_trunk"></p>
-<p>使用主干开发后，我们的代码库原则上就只能有一个 Trunk 分支即 master 分支了，所有新功能的提交也都提交到 master 分支上，保证每次提交后 master 分支都是可随时发布的状态。没有了分支的代码隔离，测试和解决冲突都变得简单，持续集成也变得稳定了许多，但也有如下几个问题：</p>
-<ul>
-<li><p><strong>如何避免发布引入未完成 Feature</strong>，答案是使用 <strong>Feature Toggle</strong>。在代码库里加一个特性开关来随时打开和关闭新特性是最容易想到的也是最容易被质疑的解决方案。Feature Toggle 是有成本的，不管是在加 Toggle 时的代码设计，还是在移除 Toggle 时的人力成本和风险，都是需要和它带来的价值进行衡量的。</p>
-</li>
-<li><p><strong>如何进行线上 Bug Fix</strong>，答案是在发布时打上 Release Tag，一旦发现这个版本有问题，如果此时 master 分支还没有其他提交，那可以直接在 master 分支上 Hot Fix 然后合并至 release 分支；如果 master 分支已经有了提交就需要做以下三件事：</p>
-<ul>
-<li>从 Release Tag 创建发布分支。</li>
-<li>在 master 上做 Fix Bug 提交。</li>
-<li>将 Fix Bug 提交 <strong>Cherry Pick</strong> 到 release 分支。</li>
-<li>为 release 分支打上新的 Tag 并做一次发布。</li>
-</ul>
-</li>
-</ul>
-<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><ul>
-<li><p>主干开发是助力实现<strong>持续集成</strong>和<strong>持续交付</strong>的关键因素。开发团队的成员一天多次地将代码提交到主干分支，满足了持续交付的必要条件。团队的工作在 24 小时内就可以被整合，这保证了代码版本随时处于可发布状态，使得持续交付成为可能。</p>
-</li>
-<li><p>你可以选择直接向主干分支提交代码的方式（适用于小团队）或者采用 Pull-Request 的方式，只要保证特性分支不能长期存在，并且产品是独立存在的。</p>
-</li>
-<li><p>根据团队规模和提交频率，<strong>特性分支可用于合并到主干分支前的代码审查和持续集成</strong>。这些特性分支可以让开发人员在代码合并到主干分支之前进行持续审查，而对于较小规模的团队，则可以直接向主干分支提交。</p>
-</li>
-<li><p>根据预期的发布频率，你的团队或许需要实时从主干分支创建<strong>发布分支</strong>以确保发布版本不会有新的提交，这些分支应该在发布完成后一段时间内删除。另一方面，你的团队也可以选择从主干分支发布而不需要发布分支，并采用“<strong>修复前进（fix forward）</strong>”的策略进行 bug fix，这种发布策略适用于高吞吐量的团队（high-throughput teams）。</p>
-</li>
-</ul>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="https://cn.trunkbaseddevelopment.com/" target="_blank" rel="noopener">TBD中文官网</a></li>
-<li><a href="https://www.duyidong.com/2017/10/29/trunk-base-development/#Github-Flow" target="_blank" rel="noopener">分支模型与主干开发</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3142,7 +3117,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-count">76</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

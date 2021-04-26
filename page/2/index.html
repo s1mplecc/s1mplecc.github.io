@@ -372,6 +372,867 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/10/11/Latex%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/10/11/Latex%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/2/index.html">LaTeX 数学公式语法</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-10-11 10:05:13 / 修改时间：15:23:01" itemprop="dateCreated datePublished" datetime="2020-10-11T10:05:13+08:00">2020-10-11</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/10/11/Latex%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/10/11/Latex数学公式语法/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="特殊格式"><a href="#特殊格式" class="headerlink" title="特殊格式"></a>特殊格式</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">符号</th>
+<th style="text-align:center">代码</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">$x^n$</td>
+<td style="text-align:center"><code>x^n</code></td>
+<td style="text-align:center">上标符号</td>
+</tr>
+<tr>
+<td style="text-align:center">$x_1$</td>
+<td style="text-align:center"><code>x_1</code></td>
+<td style="text-align:center">下标符号</td>
+</tr>
+<tr>
+<td style="text-align:center">$v_{\mbox{初始}}$</td>
+<td style="text-align:center"><code>V_{\mbox{初始}}</code></td>
+<td style="text-align:center">汉字形式</td>
+</tr>
+<tr>
+<td style="text-align:center">$\displaystyle \frac{x+y}{y+z}$</td>
+<td style="text-align:center"><code>\displaystyle \frac{x+y}{y+z}</code></td>
+<td style="text-align:center">字体控制</td>
+</tr>
+<tr>
+<td style="text-align:center">$\underline{x+y}$</td>
+<td style="text-align:center"><code>\underline{x+y}</code></td>
+<td style="text-align:center">下划线符号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\overbrace{a+b+c+d}^{2.0}$</td>
+<td style="text-align:center"><code>\overbrace{a+b+c+d}^{2.0}</code></td>
+<td style="text-align:center">上大括号</td>
+</tr>
+<tr>
+<td style="text-align:center">$a+\underbrace{b+c}_{1.0}+d$</td>
+<td style="text-align:center"><code>a+\underbrace{b+c}_{1.0}+d</code></td>
+<td style="text-align:center">下大括号</td>
+</tr>
+<tr>
+<td style="text-align:center">$x \stackrel{f} \rightarrow y$</td>
+<td style="text-align:center"><code>x \stackrel{f} \rightarrow y</code></td>
+<td style="text-align:center">上位符号</td>
+</tr>
+<tr>
+<td style="text-align:center">${n+1 \choose k}={n \choose k}+{n \choose k-1}$</td>
+<td style="text-align:center"><code>{n+1 \choose k}={n \choose k}+{n \choose k-1}</code></td>
+<td style="text-align:center">组合公式</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="算数运算"><a href="#算数运算" class="headerlink" title="算数运算"></a>算数运算</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">符号</th>
+<th style="text-align:center">代码</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">$\pm$</td>
+<td style="text-align:center"><code>\pm</code></td>
+<td style="text-align:center">加减运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\mp$</td>
+<td style="text-align:center"><code>\mp</code></td>
+<td style="text-align:center">减甲运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\times$</td>
+<td style="text-align:center"><code>\times</code></td>
+<td style="text-align:center">乘法运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\cdot$</td>
+<td style="text-align:center"><code>\cdot</code></td>
+<td style="text-align:center">点乘运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\ast$</td>
+<td style="text-align:center"><code>\ast</code></td>
+<td style="text-align:center">星乘运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\div$</td>
+<td style="text-align:center"><code>\div</code></td>
+<td style="text-align:center">除法运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\frac{x+y}{y+z}$</td>
+<td style="text-align:center"><code>\frac{x+y}{y+z}</code> 或 <code>{x+y} \over {y+z}</code></td>
+<td style="text-align:center">分式运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\overline{x}$</td>
+<td style="text-align:center"><code>\overline{x}</code></td>
+<td style="text-align:center">平均数运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\sqrt x$</td>
+<td style="text-align:center"><code>\sqrt x</code></td>
+<td style="text-align:center">开根号运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\sqrt[n]{x+y}$</td>
+<td style="text-align:center"><code>\sqrt[n]{x+y}</code></td>
+<td style="text-align:center">开方运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\log_2 x$</td>
+<td style="text-align:center"><code>\log_2 x</code></td>
+<td style="text-align:center">对数运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\lim \limits_{n \to \infty}x_n$</td>
+<td style="text-align:center"><code>\lim \limits_{n \to \infty}x_n</code></td>
+<td style="text-align:center">极限运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\sum \limits_{i=1}^n{x_i}$</td>
+<td style="text-align:center"><code>\sum \limits_{i=1}^n{x_i}</code></td>
+<td style="text-align:center">求和运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\prod \limits_{i=1}^n{x_i}$</td>
+<td style="text-align:center"><code>\prod \limits_{i=1}^n{x_i}</code></td>
+<td style="text-align:center">连乘运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\int_{a}^{b} e^x\, dx$</td>
+<td style="text-align:center"><code>\int_{a}^{b} e^x\, dx</code></td>
+<td style="text-align:center">积分运算</td>
+</tr>
+<tr>
+<td style="text-align:center">$\iint \limits_D\, dx\,dy$</td>
+<td style="text-align:center"><code>\iint \limits_D\, dx\,dy</code></td>
+<td style="text-align:center">双重积分</td>
+</tr>
+<tr>
+<td style="text-align:center">$\oint_{L} x+y\, dx\,dy$</td>
+<td style="text-align:center"><code>\oint_{L} x+y\, dx\,dy</code></td>
+<td style="text-align:center">闭合曲线积分</td>
+</tr>
+<tr>
+<td style="text-align:center">$\partial x$</td>
+<td style="text-align:center"><code>\partial x</code></td>
+<td style="text-align:center">微分运算</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="逻辑运算"><a href="#逻辑运算" class="headerlink" title="逻辑运算"></a>逻辑运算</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">符号</th>
+<th style="text-align:center">代码</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">$\geq$</td>
+<td style="text-align:center"><code>\geq</code></td>
+<td style="text-align:center">大于等于</td>
+</tr>
+<tr>
+<td style="text-align:center">$\leq$</td>
+<td style="text-align:center"><code>\leq</code></td>
+<td style="text-align:center">小于等于</td>
+</tr>
+<tr>
+<td style="text-align:center">$\neq$</td>
+<td style="text-align:center"><code>\neq</code></td>
+<td style="text-align:center">不等于</td>
+</tr>
+<tr>
+<td style="text-align:center">$\ngeq$</td>
+<td style="text-align:center"><code>\ngeq</code></td>
+<td style="text-align:center">不大于等于</td>
+</tr>
+<tr>
+<td style="text-align:center">$\not\geq$</td>
+<td style="text-align:center"><code>\not\geq</code></td>
+<td style="text-align:center">不大于等于</td>
+</tr>
+<tr>
+<td style="text-align:center">$\nleq$</td>
+<td style="text-align:center"><code>\nleq</code></td>
+<td style="text-align:center">不小于等于</td>
+</tr>
+<tr>
+<td style="text-align:center">$\not\leq$</td>
+<td style="text-align:center"><code>\not\leq</code></td>
+<td style="text-align:center">不小于等于</td>
+</tr>
+<tr>
+<td style="text-align:center">$\approx$</td>
+<td style="text-align:center"><code>\approx</code></td>
+<td style="text-align:center">约等于</td>
+</tr>
+<tr>
+<td style="text-align:center">$\equiv$</td>
+<td style="text-align:center"><code>\equiv</code></td>
+<td style="text-align:center">恒定等于</td>
+</tr>
+<tr>
+<td style="text-align:center">$\bigodot$</td>
+<td style="text-align:center"><code>\bigodot</code></td>
+<td style="text-align:center">同或</td>
+</tr>
+<tr>
+<td style="text-align:center">$\bigotimes$</td>
+<td style="text-align:center"><code>\bigotimes</code></td>
+<td style="text-align:center">同与</td>
+</tr>
+<tr>
+<td style="text-align:center">$\bigoplus$</td>
+<td style="text-align:center"><code>\bigoplus</code></td>
+<td style="text-align:center">异或</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="集合运算"><a href="#集合运算" class="headerlink" title="集合运算"></a>集合运算</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">符号</th>
+<th style="text-align:center">代码</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">$\in$</td>
+<td style="text-align:center"><code>\in</code></td>
+<td style="text-align:center">属于</td>
+</tr>
+<tr>
+<td style="text-align:center">$\notin$</td>
+<td style="text-align:center"><code>\notin</code></td>
+<td style="text-align:center">不属于</td>
+</tr>
+<tr>
+<td style="text-align:center">$\subset$</td>
+<td style="text-align:center"><code>\subset</code></td>
+<td style="text-align:center">子集</td>
+</tr>
+<tr>
+<td style="text-align:center">$\supset$</td>
+<td style="text-align:center"><code>\supset</code></td>
+<td style="text-align:center">子集</td>
+</tr>
+<tr>
+<td style="text-align:center">$\subseteq$</td>
+<td style="text-align:center"><code>\subseteq</code></td>
+<td style="text-align:center">真子集</td>
+</tr>
+<tr>
+<td style="text-align:center">$\subsetneq$</td>
+<td style="text-align:center"><code>\subsetneq</code></td>
+<td style="text-align:center">非真子集</td>
+</tr>
+<tr>
+<td style="text-align:center">$\supseteq$</td>
+<td style="text-align:center"><code>\supseteq</code></td>
+<td style="text-align:center">真子集</td>
+</tr>
+<tr>
+<td style="text-align:center">$\supsetneq$</td>
+<td style="text-align:center"><code>\supsetneq</code></td>
+<td style="text-align:center">非真子集</td>
+</tr>
+<tr>
+<td style="text-align:center">$\not\subset$</td>
+<td style="text-align:center"><code>\not\subset</code></td>
+<td style="text-align:center">非子集</td>
+</tr>
+<tr>
+<td style="text-align:center">$\not\supset$</td>
+<td style="text-align:center"><code>\not\supset</code></td>
+<td style="text-align:center">非子集</td>
+</tr>
+<tr>
+<td style="text-align:center">$\cup$</td>
+<td style="text-align:center"><code>\cup</code></td>
+<td style="text-align:center">并集</td>
+</tr>
+<tr>
+<td style="text-align:center">$\cap$</td>
+<td style="text-align:center"><code>\cap</code></td>
+<td style="text-align:center">交集</td>
+</tr>
+<tr>
+<td style="text-align:center">$\setminus$</td>
+<td style="text-align:center"><code>\setminus</code></td>
+<td style="text-align:center">差集</td>
+</tr>
+<tr>
+<td style="text-align:center">$\mathbb{R}$</td>
+<td style="text-align:center"><code>\mathbb{R}</code></td>
+<td style="text-align:center">实数集合</td>
+</tr>
+<tr>
+<td style="text-align:center">$\mathbb{Z}$</td>
+<td style="text-align:center"><code>\mathbb{Z}</code></td>
+<td style="text-align:center">自然数集合</td>
+</tr>
+<tr>
+<td style="text-align:center">$\emptyset$</td>
+<td style="text-align:center"><code>\emptyset</code></td>
+<td style="text-align:center">空集</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="数学符号"><a href="#数学符号" class="headerlink" title="数学符号"></a>数学符号</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">符号</th>
+<th style="text-align:center">代码</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">$\infty$</td>
+<td style="text-align:center"><code>\infty</code></td>
+<td style="text-align:center">无穷</td>
+</tr>
+<tr>
+<td style="text-align:center">$\imath$</td>
+<td style="text-align:center"><code>\imath</code></td>
+<td style="text-align:center">虚数</td>
+</tr>
+<tr>
+<td style="text-align:center">$\jmath$</td>
+<td style="text-align:center"><code>\jmath</code></td>
+<td style="text-align:center">虚数</td>
+</tr>
+<tr>
+<td style="text-align:center">$\hat{a}$</td>
+<td style="text-align:center"><code>\hat{a}</code></td>
+<td style="text-align:center">数学符号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\check{a}$</td>
+<td style="text-align:center"><code>\check{a}</code></td>
+<td style="text-align:center">数学符号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\breve{a}$</td>
+<td style="text-align:center"><code>\breve{a}</code></td>
+<td style="text-align:center">数学符号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\tilde{a}$</td>
+<td style="text-align:center"><code>\tilde{a}</code></td>
+<td style="text-align:center">数学符号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\bar{a}$</td>
+<td style="text-align:center"><code>\bar{a}</code></td>
+<td style="text-align:center">数学符号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\vec{a}$</td>
+<td style="text-align:center"><code>\vec{a}</code></td>
+<td style="text-align:center">矢量符号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\acute{a}$</td>
+<td style="text-align:center"><code>\acute{a}</code></td>
+<td style="text-align:center">数学符号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\grave{a}$</td>
+<td style="text-align:center"><code>\grave{a}</code></td>
+<td style="text-align:center">数学符号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\mathring{a}$</td>
+<td style="text-align:center"><code>\mathring{a}</code></td>
+<td style="text-align:center">数学符号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\dot{a}$</td>
+<td style="text-align:center"><code>\dot{a}</code></td>
+<td style="text-align:center">一阶导数符号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\ddot{a}$</td>
+<td style="text-align:center"><code>\ddot{a}</code></td>
+<td style="text-align:center">二阶导数符号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\uparrow$</td>
+<td style="text-align:center"><code>\uparrow</code></td>
+<td style="text-align:center">上箭头</td>
+</tr>
+<tr>
+<td style="text-align:center">$\Uparrow$</td>
+<td style="text-align:center"><code>\Uparrow</code></td>
+<td style="text-align:center">上箭头</td>
+</tr>
+<tr>
+<td style="text-align:center">$\downarrow$</td>
+<td style="text-align:center"><code>\downarrow</code></td>
+<td style="text-align:center">下箭头</td>
+</tr>
+<tr>
+<td style="text-align:center">$\Downarrow$</td>
+<td style="text-align:center"><code>\Downarrow</code></td>
+<td style="text-align:center">下箭头</td>
+</tr>
+<tr>
+<td style="text-align:center">$\leftarrow$</td>
+<td style="text-align:center"><code>\leftarrow</code></td>
+<td style="text-align:center">左箭头</td>
+</tr>
+<tr>
+<td style="text-align:center">$\Leftarrow$</td>
+<td style="text-align:center"><code>\Leftarrow</code></td>
+<td style="text-align:center">左箭头</td>
+</tr>
+<tr>
+<td style="text-align:center">$\rightarrow$</td>
+<td style="text-align:center"><code>\rightarrow</code></td>
+<td style="text-align:center">右箭头</td>
+</tr>
+<tr>
+<td style="text-align:center">$\Rightarrow$</td>
+<td style="text-align:center"><code>\Rightarrow</code></td>
+<td style="text-align:center">右箭头</td>
+</tr>
+<tr>
+<td style="text-align:center">$\longrightarrow$</td>
+<td style="text-align:center"><code>\longrightarrow</code></td>
+<td style="text-align:center">向右长箭头</td>
+</tr>
+<tr>
+<td style="text-align:center">$\Longrightarrow$</td>
+<td style="text-align:center"><code>\Longrightarrow</code></td>
+<td style="text-align:center">向右长箭头</td>
+</tr>
+<tr>
+<td style="text-align:center">$A \xleftarrow{n=0} B \xrightarrow[T]{n&gt;0} C$</td>
+<td style="text-align:center"><code>A \xleftarrow{n=0} B \xrightarrow[T]{n&gt;0} C</code></td>
+<td style="text-align:center">上下方可输入公式的箭头</td>
+</tr>
+<tr>
+<td style="text-align:center">$\triangleq$</td>
+<td style="text-align:center"><code>\triangleq</code></td>
+<td style="text-align:center">定义为</td>
+</tr>
+<tr>
+<td style="text-align:center">$\because$</td>
+<td style="text-align:center"><code>\because</code></td>
+<td style="text-align:center">因为</td>
+</tr>
+<tr>
+<td style="text-align:center">$\therefore$</td>
+<td style="text-align:center"><code>\therefore</code></td>
+<td style="text-align:center">所以</td>
+</tr>
+<tr>
+<td style="text-align:center">$\forall$</td>
+<td style="text-align:center"><code>\forall</code></td>
+<td style="text-align:center">任意</td>
+</tr>
+<tr>
+<td style="text-align:center">$\exists$</td>
+<td style="text-align:center"><code>\exists</code></td>
+<td style="text-align:center">存在</td>
+</tr>
+<tr>
+<td style="text-align:center">$\ldots$</td>
+<td style="text-align:center"><code>\ldots</code></td>
+<td style="text-align:center">底端对齐的省略号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\cdots$</td>
+<td style="text-align:center"><code>\cdots</code></td>
+<td style="text-align:center">中线对齐的省略号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\vdots$</td>
+<td style="text-align:center"><code>\vdots</code></td>
+<td style="text-align:center">竖直对齐的省略号</td>
+</tr>
+<tr>
+<td style="text-align:center">$\ddots$</td>
+<td style="text-align:center"><code>\ddots</code></td>
+<td style="text-align:center">斜对齐的省略号</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p><strong>矩阵表示</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\left[ \begin&#123;matrix&#125; 1 &amp;2 &amp;\cdots &amp;4\\5 &amp;6 &amp;\cdots &amp;8 \\ \vdots &amp;\vdots &amp;\ddots &amp;\vdots \\ 13 &amp;14 &amp;\cdots &amp;16\end&#123;matrix&#125; \right]</span><br></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">\left[ \begin{matrix} 1 &2 &\cdots &4\\5 &6 &\cdots &8 \\ \vdots &\vdots &\ddots &\vdots \\ 13 &14 &\cdots &16\end{matrix} \right]</script><p><strong>大括号公式</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">F(n)&#x3D; \begin&#123;cases&#125; 1 &amp; \text&#123;n &#x3D; 0 或 1&#125;\\ F(n-1)+F(n-2) &amp; \text&#123;n &gt; 1&#125; \end&#123;cases&#125;</span><br></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">F(n)= \begin{cases} 1 & \text{n = 0 或 1}\\ F(n-1)+F(n-2) & \text{n > 1} \end{cases}</script><h2 id="希腊字母"><a href="#希腊字母" class="headerlink" title="希腊字母"></a>希腊字母</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">大写</th>
+<th style="text-align:center">代码</th>
+<th style="text-align:center">小写</th>
+<th style="text-align:center">代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">A</td>
+<td style="text-align:center"><code>A</code></td>
+<td style="text-align:center">α</td>
+<td style="text-align:center"><code>\alhpa</code></td>
+</tr>
+<tr>
+<td style="text-align:center">B</td>
+<td style="text-align:center"><code>B</code></td>
+<td style="text-align:center">β</td>
+<td style="text-align:center"><code>\beta</code></td>
+</tr>
+<tr>
+<td style="text-align:center">Γ</td>
+<td style="text-align:center"><code>\Gamma</code></td>
+<td style="text-align:center">γ</td>
+<td style="text-align:center"><code>\gamma</code></td>
+</tr>
+<tr>
+<td style="text-align:center">Δ</td>
+<td style="text-align:center"><code>\Delta</code></td>
+<td style="text-align:center">δ</td>
+<td style="text-align:center"><code>\delta</code></td>
+</tr>
+<tr>
+<td style="text-align:center">E</td>
+<td style="text-align:center"><code>E</code></td>
+<td style="text-align:center">ϵ</td>
+<td style="text-align:center"><code>\epsilon</code></td>
+</tr>
+<tr>
+<td style="text-align:center">Z</td>
+<td style="text-align:center"><code>Z</code></td>
+<td style="text-align:center">ζ</td>
+<td style="text-align:center"><code>\zeta</code></td>
+</tr>
+<tr>
+<td style="text-align:center">H</td>
+<td style="text-align:center"><code>H</code></td>
+<td style="text-align:center">η</td>
+<td style="text-align:center"><code>\eta</code></td>
+</tr>
+<tr>
+<td style="text-align:center">Θ</td>
+<td style="text-align:center"><code>\Theta</code></td>
+<td style="text-align:center">θ</td>
+<td style="text-align:center"><code>\theta</code></td>
+</tr>
+<tr>
+<td style="text-align:center">I</td>
+<td style="text-align:center"><code>I</code></td>
+<td style="text-align:center">ι</td>
+<td style="text-align:center"><code>\iota</code></td>
+</tr>
+<tr>
+<td style="text-align:center">K</td>
+<td style="text-align:center"><code>K</code></td>
+<td style="text-align:center">κ</td>
+<td style="text-align:center"><code>\kappa</code></td>
+</tr>
+<tr>
+<td style="text-align:center">Λ</td>
+<td style="text-align:center"><code>\Lambda</code></td>
+<td style="text-align:center">λ</td>
+<td style="text-align:center"><code>\lambda</code></td>
+</tr>
+<tr>
+<td style="text-align:center">M</td>
+<td style="text-align:center"><code>M</code></td>
+<td style="text-align:center">μ</td>
+<td style="text-align:center"><code>\mu</code></td>
+</tr>
+<tr>
+<td style="text-align:center">N</td>
+<td style="text-align:center"><code>N</code></td>
+<td style="text-align:center">ν</td>
+<td style="text-align:center"><code>\nu</code></td>
+</tr>
+<tr>
+<td style="text-align:center">Ξ</td>
+<td style="text-align:center"><code>\Xi</code></td>
+<td style="text-align:center">ξ</td>
+<td style="text-align:center"><code>\xi</code></td>
+</tr>
+<tr>
+<td style="text-align:center">O</td>
+<td style="text-align:center"><code>O</code></td>
+<td style="text-align:center">ο</td>
+<td style="text-align:center"><code>\omicron</code></td>
+</tr>
+<tr>
+<td style="text-align:center">Π</td>
+<td style="text-align:center"><code>\Pi</code></td>
+<td style="text-align:center">π</td>
+<td style="text-align:center"><code>\pi</code></td>
+</tr>
+<tr>
+<td style="text-align:center">P</td>
+<td style="text-align:center"><code>P</code></td>
+<td style="text-align:center">ρ</td>
+<td style="text-align:center"><code>\rho</code></td>
+</tr>
+<tr>
+<td style="text-align:center">Σ</td>
+<td style="text-align:center"><code>\Sigma</code></td>
+<td style="text-align:center">σ</td>
+<td style="text-align:center"><code>\sigma</code></td>
+</tr>
+<tr>
+<td style="text-align:center">T</td>
+<td style="text-align:center"><code>T</code></td>
+<td style="text-align:center">τ</td>
+<td style="text-align:center"><code>\tau</code></td>
+</tr>
+<tr>
+<td style="text-align:center">Υ</td>
+<td style="text-align:center"><code>\Upsilon</code></td>
+<td style="text-align:center">υ</td>
+<td style="text-align:center"><code>\upsilon</code></td>
+</tr>
+<tr>
+<td style="text-align:center">Φ</td>
+<td style="text-align:center"><code>\Phi</code></td>
+<td style="text-align:center">ϕ</td>
+<td style="text-align:center"><code>\phi</code></td>
+</tr>
+<tr>
+<td style="text-align:center">X</td>
+<td style="text-align:center"><code>X</code></td>
+<td style="text-align:center">χ</td>
+<td style="text-align:center"><code>\chi</code></td>
+</tr>
+<tr>
+<td style="text-align:center">Ψ</td>
+<td style="text-align:center"><code>\Psi</code></td>
+<td style="text-align:center">ψ</td>
+<td style="text-align:center"><code>\psi</code></td>
+</tr>
+<tr>
+<td style="text-align:center">Ω</td>
+<td style="text-align:center"><code>\v</code></td>
+<td style="text-align:center">ω</td>
+<td style="text-align:center"><code>\omega</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2946,232 +3807,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2019/01/23/Fluent%20Interface%20--%20Martin%20Fowler%20%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/01/23/Fluent%20Interface%20--%20Martin%20Fowler%20%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/2/index.html">Fluent Interface —— Martin Fowler 博客译文</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-01-23 14:15:45" itemprop="dateCreated datePublished" datetime="2019-01-23T14:15:45+08:00">2019-01-23</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-10-13 15:15:22" itemprop="dateModified" datetime="2020-10-13T15:15:22+08:00">2020-10-13</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Translations/" itemprop="url" rel="index"><span itemprop="name">Translations</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/23/Fluent%20Interface%20--%20Martin%20Fowler%20%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/23/Fluent Interface -- Martin Fowler 博客译文/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">3.4k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="原文链接"><a href="#原文链接" class="headerlink" title="原文链接"></a>原文链接</h2><p><a href="https://www.martinfowler.com/bliki/FluentInterface.html" target="_blank" rel="noopener">Fluent Interface</a>，Matrin Fowler 博客，发表于 2005 年 12 月 20 日。</p>
-<h2 id="译文"><a href="#译文" class="headerlink" title="译文"></a>译文</h2><p>几个月前我和 Eric Evans 进行了一次讨论会，他谈到一种接口的设计风格，我们称之为流畅接口（Fluent Interface）。它不是一种常见的风格，但我们觉得应该广为人知。描述它的最直观的方式就是例子。</p>
-<p>最简单的例子可能就来自 Eric 编写的 <a href="http://timeandmoney.sourceforge.net/" target="_blank" rel="noopener">TimeAndMoney Library</a>。为了指定一段时间间隔，我们通常这么做：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TimePoint fiveOClock, sixOClock;</span><br><span class="line">...</span><br><span class="line">TimeInterval meetingTime = <span class="keyword">new</span> TimeInterval(fiveOClock, sixOClock);</span><br></pre></td></tr></table></figure>
-<p>但是 TimeAndMoney 库的使用者会这样做：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TimeInterval meetingTime = fiveOClock.until(sixOClock);</span><br></pre></td></tr></table></figure>
-<p>下面我继续演示“客户下订单”这个例子。一个订单包含多个订单项，每个订单项包含商品项和购买的数量。在提交订单时一个订单项应当是可跳过的，这意味着我更希望在没有此订单项（缺货）的情况下提交订单，而不是推迟提交整个订单。所以这里可以给整个订单一个“急促（rush）”的状态标识。</p>
-<p>要实现上述功能，最常见的编码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeNormal</span><span class="params">(Customer customer)</span> </span>&#123;</span><br><span class="line">    Order o1 = <span class="keyword">new</span> Order();</span><br><span class="line">    customer.addOrder(o1);</span><br><span class="line">    OrderLine line1 = <span class="keyword">new</span> OrderLine(<span class="number">6</span>, Product.find(<span class="string">"TAL"</span>));</span><br><span class="line">    o1.addLine(line1);</span><br><span class="line">    OrderLine line2 = <span class="keyword">new</span> OrderLine(<span class="number">5</span>, Product.find(<span class="string">"HPK"</span>));</span><br><span class="line">    o1.addLine(line2);</span><br><span class="line">    OrderLine line3 = <span class="keyword">new</span> OrderLine(<span class="number">3</span>, Product.find(<span class="string">"LGV"</span>));</span><br><span class="line">    o1.addLine(line3);</span><br><span class="line">    line2.setSkippable(<span class="keyword">true</span>);</span><br><span class="line">    o1.setRush(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>本质上我们创建了多个对象然后将它们组装在一起。如果无法在构造函数中设置所有内容，那么就需要创建临时变量来帮助我们完成组装 —— 尤其是将集合项添加到集合中。</p>
-<p>下面是使用流畅接口实现相同的组装：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeFluent</span><span class="params">(Customer customer)</span> </span>&#123;</span><br><span class="line">    customer.newOrder()</span><br><span class="line">            .with(<span class="number">6</span>, <span class="string">"TAL"</span>)</span><br><span class="line">            .with(<span class="number">5</span>, <span class="string">"HPK"</span>).skippable()</span><br><span class="line">            .with(<span class="number">3</span>, <span class="string">"LGV"</span>)</span><br><span class="line">            .priorityRush();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>关于这种风格最重要的一点就是，基于 Internal DomainSpecificLanguage 将要做的事沿着一条线进行编码（译者注：Domain Specific Language，DSL，领域专用语言）。实际上这也是为什么我们选择用 “Fluent” 一词来描述它，在很多方面这两个术语是同义词。<strong>这种 API 被设计为可读的和流式的，这种流畅性的代价是在设计和构建 API 时需要花更多的功夫</strong>。构造函数、setter 和 add 方法的 API 简单且容易编写，但要想提供一个漂亮的流畅接口则需要更多的思考。</p>
-<p>事实上，刚才我想用在 Calgary 咖啡店吃早餐的时间完成这个小例子的编码，但是我搞砸了，看来好的流畅接口需要花费一些时间去实现。如果你想找一个比较成熟的例子，可以看看 <a href="http://jmock.org/" target="_blank" rel="noopener">JMock</a>。与任何 mocking 库一样，JMock 需要创建复杂的行为规范。在过去几年中已经构建了许多 mocking 库，而 JMock 的这个则包含了非常漂亮的流畅接口，使用体验非常好。这是它的一个例子：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mock.expects(once())</span><br><span class="line">    .method(<span class="string">"m"</span>)</span><br><span class="line">    .with(or(stringContains(<span class="string">"hello"</span>), stringContains(<span class="string">"howdy"</span>)));</span><br></pre></td></tr></table></figure>
-<p>我看到 Steve Freeman 和 Nat Price 在 <a href="https://www.martinfowler.com/bliki/JAOO2005.html" target="_blank" rel="noopener">JAOO2005</a> 上就 JMock API 的演变发表了精彩的演讲，演讲相关的内容他们已经发表到一篇 <a href="http://www.mockobjects.com/files/evolving_an_edsl.ooplsa2006.pdf" target="_blank" rel="noopener">OOPSLA论文</a> 上。</p>
-<p>到目前为止，我们看到用于创建对象配置的流畅接口通常会涉及到 <a href="https://en.wikipedia.org/wiki/Value_object" target="_blank" rel="noopener">值对象</a>。我不确定这是否属于流畅接口的一个定义特征，虽然我怀疑它们出现在声明性上下文中有某种关联。对我们而言，<strong>流畅性的关键考验在于领域特定语言的质量</strong>。API 使用起来越像流式的语言，它就越流畅。</p>
-<p>像这样构建一个流畅接口会导致一些不符合使用习惯的 API。其中最明显的一个就是 setter 会有返回值（在订单示例中，<code>with</code> 方法为订单添加一个订单项并返回整个订单），而惯例是修改性质的方法返回 <code>void</code>，因为这样遵循 <a href="https://martinfowler.com/bliki/CommandQuerySeparation.html" target="_blank" rel="noopener">CommandQuerySeparation</a> 原则（译者注：CQS，命令查询分离原则）。这个约定确实妨碍了流畅接口，所以我倾向于暂不遵循这个惯例。</p>
-<p>你应该<strong>根据流畅接口的下一个行为（fluent action）去选择返回类型</strong>。JMock 提出了一个重点：根据接下来的需要改变其返回类型。<strong>这种风格的一个很好的优点是方法补完后（intellisense）有助于告诉你接下来要键入什么 —— 有点像 IDE 中的智能提示</strong>。总的来说，我发现动态语言对于 DSL 来说效果更好，因为它们的语法往往更简洁。但是，使用方法补完是静态语言的一个优点。</p>
-<p>流畅接口定义的方法的一个问题是它们可能名不符实。举个例子，你去查看 <code>with</code> 方法的文档可能并没有什么意义，因为这个方法的实现和 <code>with</code> 并没有什么关联。我承认光就方法的命名来说这不是一个好的命名，因为它根本不能表达该方法实际做了什么。只有在流畅行为的上下文中这种命名才能显示出它的优势（译者注：这点我在编码时也深有体会，流畅接口的方法实现与方法命名常常做的是两回事，比如说把值对象传递下去）。解决此问题的一种可能的方法是只在此上下文中使用 builder 对象（译者注：可以参考 Builder Pattern，比如 <code>new BankAccount.Builder(4567L).withOwner(&quot;Homer&quot;).atBranch(&quot;Springfield&quot;).build();</code>，只在最后一步 <code>build()</code> 中进行构建）。</p>
-<p>Eric 提到的一点是，到目前为止，他使用并看到了流畅的接口大多是关于值对象的配置。值对象不具有领域意义的标识（Identity），因此你可以轻松创建并丢弃它们。所以接口的流畅度取决于使用旧值构造新值。从这个意义上讲，订单案例并不典型，因为它属于 <a href="https://www.martinfowler.com/bliki/EvansClassification.html" target="_blank" rel="noopener">EvansClassification</a> 中的实体对象（Entity）。（译者注：Evans Classification，Evans 关于领域对象的分类 Entity、Value Object 和 Service）</p>
-<p>目前为止我还没有看到很多的流畅接口，可以得出结论，我们对它们的优缺点了解还不够。所以任何使用它们的劝告都只能是初步的 —— 但我认为它们已经成熟，可以进行更多的尝试。</p>
-<p><a href="https://bofh.org.uk/2005/12/21/fluent-interfaces/" target="_blank" rel="noopener">Piers Cawley</a> 对本文有一个很好的跟进。</p>
-<p><strong>更新</strong>（2008年6月23日）。自从我写这篇文章以来，这个术语被广泛使用，这给了我一种令人愉快的满足感。在我一直在研究的书中，我已经提炼了关于流畅接口和内部 DSLs 的想法。我也注意到了一个常见的误解 —— 很多人似乎将流畅接口与方法链（Method Chaining）等同起来。当然链式接口是使用了流畅接口的一种常用的技术，但真正的流畅接口远不止于此。</p>
-<p>我上面展示的 JMock 示例使用了方法链，但同时也使用嵌套函数和对象作用域。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3223,7 +3858,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-count">76</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

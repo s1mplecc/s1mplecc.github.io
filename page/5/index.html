@@ -372,6 +372,282 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Clean Code -- 第一节：迪米特法则与 Paperboy 案例</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-04 05:36:05" itemprop="dateCreated datePublished" datetime="2018-05-04T05:36:05+08:00">2018-05-04</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-30 20:14:21" itemprop="dateModified" datetime="2020-12-30T20:14:21+08:00">2020-12-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/04/Clean Code -- 第一节：迪米特法则与 Paperboy 案例/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.6k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该系列源于<a href="http://zhangyi.xyz/" target="_blank" rel="noopener">张逸总监</a>的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍<strong>迪米特法则</strong>和<strong>信息专家模式</strong>，并结合案例实操在 IntelliJ IDEA 中如何重构代码。本文大部分内容转载自张总博客: <a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构</a>。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
+<li><strong>IntelliJ IDEA</strong>，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让人赏心悦目。</li>
+<li><strong>示例代码</strong>地址 <a href="https://github.com/agiledon/cleancode.git" target="_blank" rel="noopener">https://github.com/agiledon/cleancode.git</a> ，进行实际操作有助于加深理解和记住快捷键。代码有两个分支，master 分支为重构前的代码，<strong>after-refactoring</strong> 分支为重构后代码，可以使用快捷键 <code>Cmd + D</code> 查看<strong>代码差异</strong>。</li>
+<li><strong>活用快捷键</strong>，本人使用的 IDEA 快捷键为 Mac OS X 10.5+ 。Windows 用户将 <code>Cmd</code> 替换成 <code>Ctrl</code>，或者在 IDEA 的 <strong>Refactor</strong> 菜单中查看快捷键。</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl + T</td>
+<td>重构菜单</td>
+</tr>
+<tr>
+<td>Shift + F6</td>
+<td>重命名方法、属性、文件</td>
+</tr>
+<tr>
+<td>Cmd + Alt + M</td>
+<td>提取方法（extract method）</td>
+</tr>
+<tr>
+<td>Cmd + Alt + N</td>
+<td>内联（Inline），与 extract 相反</td>
+</tr>
+<tr>
+<td>Cmd + Shift + 上下箭头</td>
+<td>上下移动声明体（statement）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="迪米特法则"><a href="#迪米特法则" class="headerlink" title="迪米特法则"></a>迪米特法则</h2><p>在面向对象设计的世界里，有一个寻常却又常常为人所忽略的原则——<strong>迪米特法则（Law of Demeter）</strong>。这个原则认为，任何一个对象或者方法，它应该只能调用下列对象：    </p>
+<ul>
+<li>该对象本身</li>
+<li>作为参数传进来的对象（也可以是该对象的字段）</li>
+<li>在方法内创建的对象</li>
+</ul>
+<p>这个原则用以指导正确的<strong>对象协作</strong>，分清楚哪些对象应该产生协作，哪些对象则对于该对象而言，又应该是无知的。</p>
+<h2 id="代码案例及分析"><a href="#代码案例及分析" class="headerlink" title="代码案例及分析"></a>代码案例及分析</h2><p>如何理解这个原则？我们可以看看 David Bock 就该原则给出的一个<a href="https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/paper-boy/demeter.pdf" target="_blank" rel="noopener">绝佳案例</a>。假设一个超市购物的场景，顾客（Customer）到收银台结账，收银员（Paperboy）负责收钱。我们来看看代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String firstName;</span><br><span class="line">    <span class="keyword">private</span> String lastName;</span><br><span class="line">    <span class="keyword">private</span> Wallet myWallet;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> firstName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getLastName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> lastName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Wallet <span class="title">getWallet</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> myWallet;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Wallet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> value;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">getTotalMoney</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTotalMoney</span><span class="params">(<span class="keyword">float</span> newValue)</span> </span>&#123;</span><br><span class="line">        value = newValue;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addMoney</span><span class="params">(<span class="keyword">float</span> deposit)</span> </span>&#123;</span><br><span class="line">        value += deposit;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">subtractMoney</span><span class="params">(<span class="keyword">float</span> debit)</span> </span>&#123;</span><br><span class="line">        value -= debit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Paperboy</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">(Customer myCustomer, <span class="keyword">float</span> payment)</span> </span>&#123;</span><br><span class="line">        Wallet theWallet = myCustomer.getWallet();</span><br><span class="line">        <span class="keyword">if</span> (theWallet.getTotalMoney() &gt; payment) &#123;</span><br><span class="line">            theWallet.subtractMoney(payment);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//money not enough</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>让我们将 Paperboy 中<code>charge()</code>方法的代码翻译成这幕小话剧的对白。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">“把钱包交出来!”收银员算出顾客要买的商品总价后，“温柔”地对顾客说道。</span><br><span class="line">顾客言听计从，赶紧将钱包掏出来，恭恭敬敬地递给收银员。</span><br><span class="line">接过钱包，收银员毫不客气地打开，检查里面的钱够不够。噢，不错，钱够了。收银员从钱包取出钱，心满意足地笑了。</span><br></pre></td></tr></table></figure>
+<p>如果你是顾客，你敢去这样的超市 shopping 吗？</p>
+<p>对于 Paperboy 而言，Wallet 不满足迪米特法则三个条件中的任何一个，因此，<strong>不应该让 Paperboy 与 Wallet 对象进行直接交互</strong>。若从<strong>拟人化</strong>的角度思考，则 Wallet 其实属于 Customer 的<strong>隐私</strong>。如此重要的隐私，怎么能直接交给收银员这个陌生人呢？这里所谓的“隐私”，可以视为是“数据”，是“信息”，是“知识”，因此我们往往又将迪米特法则称之为“<strong>最小知识法则</strong>”。</p>
+<p>当我们理解“最小知识法则”时，又可以从<strong>职责</strong>的角度去思考以上代码。对于收银员角色，他的职责应该是负责收钱，而不用去管钱包里的钱够不够，如果够了怎么办，如果不够又该怎么办，这些统统都不属于他的职责。设想一下，当超市里人流如织，大家都在购买商品时，如果每一个收银员都要承担这般的职责时，会出现什么样的景象？所以“最小知识法则”乃善法，在对象社区中，我们就应该刻意减少对象之间彼此深入的了解。了解最小的知识，就意味着依赖最小，彼此产生的影响就会最小。这实际上是 <strong>KISS（keep it simple and stupid）</strong> 原则的体现。</p>
+<p><strong>信息专家模式</strong>告诉我们：“信息的持有者即为操作该信息的专家”。对于对象，所谓<strong>信息就是该对象内部的字段</strong>。在上述的例子中，Wallet 是 Customer 的字段，那么操作 Wallet 的行为自然就应该分配给 Customer 了。这是题中应有之义。“信息专家模式”其实是面向对象最重要原则“<strong>数据与行为应该封装在一起</strong>”的别名。若在领域建模时能遵循该原则，则可以规避我们设计出贫血模型。</p>
+<h2 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h2><p>如何修改以上代码？注意，<code>charge()</code>行为仍然属于 Paperboy 的职责，因此我们不应该将该方法整体搬迁到 Customer 中，而应该先进行<strong>方法的提取</strong>，选中代码块，使用 <strong>Cmd + Alt + M</strong> 快捷键提取方法。这块代码执行的是支付的步骤，所以命名为<code>pay()</code>。</p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/0.png" alt="781D2706-3961-4C77-ACF8-8BDDCE21B17E"></p>
+<p>提取后的<code>charge()</code>在接收方法请求后，转而将请求<strong>委派</strong>给了<code>pay()</code>方法。我们可以这样理解：在抽象层面，收款是收银员的职责；在实现层面，是<code>pay()</code>方法支持了收款行为，该实现归属于顾客。</p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/1.png" alt="1AF2B42F-7B13-4284-AF03-9C1D5C5FE0A1"></p>
+<p>观察<code>pay()</code>方法，我们发现该方法操作的数据皆来自 Customer。我们嗅到了一种坏味道，即 Martin Fowler 所谓的“<strong>特性依恋（Feature Envy）</strong>”。对于该坏味道，老马是这样阐释的：“函数对某个类的兴趣高过对自己所处类的兴趣”。不要再嫉妒了，桥归桥，路归路，让方法回到自己最喜欢的地方吧。运用“<strong>Move Method</strong>”重构手法，将<code>pay()</code>方法移动到 Customer 中。</p>
+<p>光标在方法签名或方法体中都可，按下 <strong>F6</strong>，IDEA 会根据方法的入参，智能的提示将方法移动到哪个类中，这里只能是 Customer。还要注意方法的访问权限，默认是 Escalate 往上提升一级，这里选择 Public。</p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/2.png" alt="2C6EA6D7-A330-4E90-8B2A-54223072A47A"></p>
+<p>操作之后，<code>pay()</code>方法移动到 Customer 中。</p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/3.png" alt="F92C14F0-6693-4154-8A6D-F71AB14BF0E2"></p>
+<p>在将方法移到正确的位置后，我们发现暴露的<code>getWallet()</code>方法根本就没有意义。更何况，将钱包裸露出去，难道是想要炫富吗？还是低调一点为好，隐藏自己的“隐私”，总好过被人觊觎而招来飞来横祸之险。于是，<strong>内联（inline）</strong> 之。将光标放在<code>getWallet()</code>上，按下 <strong>Cmd + Alt + N</strong>。</p>
+<p><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/4.png" alt="563C9626-A71E-4DC7-A8DC-BA4DA530EF64"></p>
+<p><code>getWallet()</code>方法被删除，并被替换为 Customer 的字段<code>myWallet</code>。那现在声明的<code>theWallet</code>就是多余的，继续内联。<br><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/5.png" alt="28E463A5-F36A-4250-8611-36BDACF80FCE"></p>
+<p>最后，重构过的代码应该是这样的。阅读代码一目了然，Paperboy 进行收银，并委派给顾客进行实际的支付，即掏钱包，数钱，付钱。<br><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/6.png" alt="3CA41F80-0556-42F3-8E16-5AEEC39332A3"><img src="/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/7.png" alt="E66E7919-9391-4046-8CB4-C46555E561A8"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>判断一段代码是否违背了迪米特法则，有一个小窍门，就是看调用代码是否出现形如<code>a.m1().m2().m3().m4()</code>之类的代码。这种代码在 Martin Fowler《重构》一书中，被名为“<strong>消息链条(Message Chain)</strong>”，有人更加夸张地名其为“火车残骸”。车祸现场啊，真是惨不忍睹。</p>
+<p>实际上未重构前的代码即是一种消息链条，在<code>charge()</code>方法中实际执行的是<code>myCustomer.getWallet().subtractMoney(payment)</code>，先获取 Customer 的 Wallet，再执行 Wallet 的扣钱方法。</p>
+<p>那么，如下代码是否这样的残骸呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">str.split(<span class="string">"&amp;"</span>)</span><br><span class="line">    .stream()</span><br><span class="line">    .map(str -&gt; str.contains(elementName) ? str.replace(elementName + <span class="string">"="</span>, <span class="string">""</span>) : <span class="string">""</span>)</span><br><span class="line">    .filter(str -&gt; !str.isEmpty())</span><br><span class="line">    .reduce(<span class="string">""</span>, (a, b) -&gt; a + <span class="string">","</span> + b);</span><br></pre></td></tr></table></figure>
+<p>答案是：不是。这样的代码我们一般称之为“流畅接口或连贯接口（Fluent Interface）”。二者的区别在于<strong>观察形成链条的每个方法返回的是别的对象，还是对象自身。如果返回的是别的对象，就是消息链条</strong>。所谓<code>m1().m2().m3().m4()</code>的调用，其实是调用者不需要也不想知道的“知识”，把这些中间过程的细节暴露出来没有意义，调用者关心的是最终结果；而上述代码中的<code>map()</code>与<code>filter()</code>等方法其实返回的还是 Stream 类。这一调用方式其初衷并非告知中间过程的细节，而是一种声明式的 DSL 表达，调用者可以自由地组合它们。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://zhangyi.xyz/demeter-law-and-refactoring/#more" target="_blank" rel="noopener">迪米特法则与重构 — 张逸</a></li>
+<li><a href="https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/paper-boy/demeter.pdf" target="_blank" rel="noopener">The Paperboy, The Wallet, and The Law Of Demeter —  David Bock</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/04/27/JavaScript%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E7%9A%84%E5%8F%91%E5%B1%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2826,244 +3102,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/5/index.html">Linux 文件结构</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-01-30 02:28:54" itemprop="dateCreated datePublished" datetime="2018-01-30T02:28:54+08:00">2018-01-30</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-12-20 21:14:32" itemprop="dateModified" datetime="2020-12-20T21:14:32+08:00">2020-12-20</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/30/Linux文件结构/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">3.2k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>初学 <strong>Linux</strong> 总是好奇 <strong>Linux</strong> 系统下各个文件夹为什么这么命名，它们的用途是什么。本文主要介绍 <strong>Linux</strong> 下各文件夹的结构和用途说明</p>
-<p>使用的环境为 <strong>Aliyun</strong> 的服务器，系统为 <strong>Ubuntu 16.04</strong> 版本</p>
-<p>不同的系统文件结构必然有所不同，但是只要是 <strong>Linux</strong> 发行版，就应该遵循 <strong>Linux</strong> 文件系统</p>
-<h2 id="Color"><a href="#Color" class="headerlink" title="Color"></a>Color</h2><p>一般人性化点的 <strong>Shell</strong> 都会有文件的不同颜色显示。下图为 <strong>Linux</strong> 下不同颜色的文件代表的含义。比如可执行文件显示绿色，目录显示蓝色，链接文件显示浅蓝色等<br><img src="/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/0.png" alt="linuxfilecolor"></p>
-<h2 id="FHS"><a href="#FHS" class="headerlink" title="FHS"></a>FHS</h2><p><strong>Linux</strong> 有专门的指导文件系统的标准，叫做 <strong>FHS</strong>(or <strong>Filesystem Hierarchy Standard</strong>)</p>
-<p><strong>Linux</strong> 所依赖的文件系统，有两个基本的概念：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shareable &#x2F; unshareable （共享性）</span><br><span class="line">static &#x2F; variable （稳定性）</span><br></pre></td></tr></table></figure>
-<p>对于可分享（<strong>shareable</strong>）的文件系统，<strong>FHS</strong> 规定<br>可分享文件能够被存放在一台将被多个用户同时访问的主机上，通常情况下，当一个系统所需的所有文件都存放在一台外部主机上时，可以方便的挂载一个或很少几个目录来使这些文件可用。但是，并不是在文件系统架构中的所有文件都是可分享的，所以<strong>每个系统都至少需要一处能够存放不可共享文件</strong>的本地空间</p>
-<p>对于静态（<strong>static</strong>）文件系统，<strong>FHS</strong> 规定<br><strong>静态文件需要与动态文件隔离</strong>，因为，不同于动态文件，静态文件可以存放在<strong>只读介质</strong>上（而动态文件不可以），并且不需要和动态文件一起备份</p>
-<p><strong>FHS</strong> 中关于特定文件夹用途和所需包含内容的规定</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;bin: Essential user command binaries (for use by all users)</span><br><span class="line">&#x2F;sbin: System binaries</span><br><span class="line">&#x2F;usr: shareable static</span><br><span class="line">    &#x2F;usr&#x2F;bin: Most user commands</span><br><span class="line">    &#x2F;usr&#x2F;sbin: Non-essential standard system binaries</span><br><span class="line">    &#x2F;usr&#x2F;local: Local hierarchy</span><br></pre></td></tr></table></figure>
-<h3 id="bin"><a href="#bin" class="headerlink" title="/bin"></a>/bin</h3><p><code>/bin</code>，<strong>binary</strong> 的简称。该目录下为<strong>二进制</strong>的<strong>可执行文件</strong>，显示为<strong>绿色</strong>。包含了引导启动所需的命令或普通用户可使用的命令。多是系统中重要的<strong>系统文件</strong></p>
-<p>比如说根目录<code>/bin</code>下都是些常用命令的执行文件，再比如说 <strong>Tomcat</strong> 的<code>bin</code>目录下有一些运行脚本，有 <strong>Linux Shell</strong> 执行的<code>.sh</code>结尾的文件，也有 <strong>Windows</strong> 执行的<code>.bat</code>结尾的文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;bin&#x2F;</span><br><span class="line">cat    tar    cp      ls     rm   ...</span><br><span class="line"></span><br><span class="line">$ ls &#x2F;usr&#x2F;local&#x2F;tomcat9&#x2F;bin&#x2F;</span><br><span class="line">shutdown.bat    catalina.bat     shutdown.sh</span><br><span class="line">catalina.sh     startup.bat      startup.sh    ...</span><br></pre></td></tr></table></figure>
-<h3 id="sbin"><a href="#sbin" class="headerlink" title="/sbin"></a>/sbin</h3><p><code>/sbin</code>，<strong>System binaries</strong> 的简称。存放<strong>系统管理员</strong>以及其他需要<strong>root权限</strong>来运行的工具</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;sbin&#x2F;</span><br><span class="line">reboot    shutdown    poweroff    route    sysctl     ...</span><br></pre></td></tr></table></figure>
-<h3 id="usr"><a href="#usr" class="headerlink" title="/usr"></a>/usr</h3><p><code>/usr</code>是文件系统中第二大主要部分，其中存放了<strong>可分享的</strong>、<strong>只读的</strong>数据（即<strong>可分享性</strong>，<strong>静态性数据</strong>）。这说明<code>/usr</code>文件系统需要能够在各种不同的兼容 <strong>FHS</strong> 系统的之间可共享，并且不可被修改。任何依赖于平台或者需要改写的数据，都应该存放在其它位置</p>
-<p><code>/usr/bin</code>集中了几乎所有用户命令，比如<code>man、info</code>系统自带或者<code>git、docker</code>这种后来安装的三方软件的命令</p>
-<p><code>/usr/sbin</code>包括了多数服务程序需要管理员权限的命令，比如<code>mysqld、sshd</code></p>
-<p><code>/usr/local</code>，本地安装的软件和其他文件都可以放在这里</p>
-<h3 id="lib"><a href="#lib" class="headerlink" title="/lib"></a>/lib</h3><p><code>/lib</code>，<strong>Libraries</strong> 的简称。库文件，存储文件运行需要的依赖库。不如 <strong>Tomcat</strong> 是基于 <strong>Java</strong> 的，它的<code>lib</code>目录下包含了一些依赖 <strong>Jar</strong> 包</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;usr&#x2F;local&#x2F;tomcat9&#x2F;lib</span><br><span class="line">annotations-api.jar       el-api.jar       tomcat-coyote.jar   tomcat-util-scan.jar</span><br><span class="line">catalina-ant.jar          jasper-el.jar</span><br></pre></td></tr></table></figure>
-<h3 id="etc"><a href="#etc" class="headerlink" title="/etc"></a>/etc</h3><p><code>/etc</code>这个文件夹很有意思，也是最开始困扰我很久的，因为它里头什么都有…其实它取名就是取自”<strong>等等</strong>“的缩写词 <strong>etc.</strong> 存放着系统以及各种程序的配置文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls -F &#x2F;etc</span><br><span class="line">hosts    hostname    passwd    nginx&#x2F;    ssh&#x2F;    ...</span><br></pre></td></tr></table></figure>
-<p>早期 <strong>UNIX</strong> 系统中，对于<code>/etc</code>，贝尔实验室的解释是：<strong>etcetra directory</strong>(or <strong>etc.</strong>) 。表示其他、等等什么的，其实就是用来放不能归类到其他目录中的内容，所以比较杂乱。后来 <strong>FHS</strong> 规定用来放配置文件，就解释为：<strong>Editable Text Configuration</strong> 或者 <strong>Extended Tool Chest</strong></p>
-<h3 id="var"><a href="#var" class="headerlink" title="/var"></a>/var</h3><p><code>/var</code>，<strong>Variable</strong> 的简称，多用于存放动态变化的文件。也用于某些大文件的<strong>溢出区</strong>，比如各种服务的日志文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ ls &#x2F;var&#x2F;backups</span><br><span class="line">group.bak    passwd.bak    ....</span><br><span class="line"></span><br><span class="line">$ ls &#x2F;var&#x2F;log</span><br><span class="line">syslog    dpkg.log    auth.log     ...</span><br><span class="line"></span><br><span class="line">$ ls -F &#x2F;var&#x2F;run</span><br><span class="line">nginx.pid    docker.pid    sshd.pid     resolvconf&#x2F;    ...</span><br></pre></td></tr></table></figure>
-<p><code>/var/run</code>中包含了进程的ID以及动态生成的配置文件等，比如连接网络时自动生成的<code>/var/run/resolvconf/resolv.conf</code>域名解析服务器的配置信息，其实<code>/etc/resolv.conf</code>文件就是链接到此文件</p>
-<h3 id="root"><a href="#root" class="headerlink" title="/root"></a>/root</h3><p><code>/root</code>目录是<code>root</code>用户的<strong>用户目录</strong>，<code>~</code>代表当前用户的用户目录，普通用户的目录在<code>/home</code>下，比如我通过<code>su s1mple</code>切换到 s1mple 用户，用户目录为<code>/home/s1mple</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu-server:~# pwd</span><br><span class="line">&#x2F;root</span><br><span class="line"></span><br><span class="line">s1mple@ubuntu-server:~$ pwd</span><br><span class="line">&#x2F;home&#x2F;s1mple</span><br></pre></td></tr></table></figure>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p><code>/opt</code>，<strong>Optional application software packages</strong> 代表你可以在该目录下安装第三方软件，和<code>/usr/local</code>的作用相似</p>
-<p><code>/dev</code>，<strong>device</strong> 的简称，该目录存放设备文件，即设备驱动程序，用户通过这些文件访问外部设备。比如，用户可 以通过访问<code>/dev/mouse</code>来访问鼠标的输入，就像访问其他文件一样</p>
-<p><code>/tmp</code>，<strong>temporary</strong> 的简称，目录存放程序在运行时产生的临时数据，<strong>注意：</strong><code>/var/tmp</code>比<code>/tmp</code>允许更大的或需要存在较长时间的临时文件</p>
-<p><code>/proc</code>，虚拟的目录，是系统<strong>内存</strong>的映射。可直接访问这个目录来获取系统信息，比如<code>/proc/cpuinfo</code></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://mp.weixin.qq.com/s/yUwUawPlIjPThe3v1Ppcug" target="_blank" rel="noopener">Linux 下各文件夹的结构说明及用途介绍</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3115,7 +3153,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-count">76</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
