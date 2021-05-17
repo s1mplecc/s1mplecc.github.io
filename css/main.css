@@ -1853,7 +1853,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff6691;
+  background: #ff20b9;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3160,6 +3160,6 @@ ul.breadcrumb li+li:last-child {
     margin: 8px 0 0;
   }
 }
-.post-toc .nav .nav-level-1>.nav-child {
+.post-toc .nav .nav-level-2>.nav-child {
   display: block;
 }
