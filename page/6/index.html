@@ -181,7 +181,7 @@
   </style>
 </noscript>
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
@@ -356,6 +356,259 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/6/index.html">Java 泛型之类型擦除</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-02-27 01:47:58" itemprop="dateCreated datePublished" datetime="2018-02-27T01:47:58+08:00">2018-02-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-20 20:44:03" itemprop="dateModified" datetime="2020-12-20T20:44:03+08:00">2020-12-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/02/27/Java泛型之类型擦除/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.6k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Java SE5 的重大变化之一就是加入了<strong>泛型</strong>，实现了参数化类型，使得代码可以适用于多种类型。但由于兼容旧版本的考虑，不得不作出了一些牺牲，比如<strong>擦除</strong>，使得泛型使用受到一定局限。本文简要介绍了 Java 泛型以及类型擦除的概念和使用</p>
+<h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><p><strong>Java泛型</strong> (<strong>Generics</strong>) 是 JDK5 引入的新特性，允许在定义类和接口的时候使用<strong>类型参数</strong> (<strong>Type Parameter</strong>)。声明的类型参数在使用时用具体的类型来替换。泛型最主要的应用是在 JDK5 中的新<strong>集合类</strong>框架中。</p>
+<p>通过泛型，大大提升了集合类的<strong>可复用性</strong>，你可以定义一个装字符串的 ArrayList，也可以定义一个装整型的 ArrayList</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;Stringals = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">als.add(<span class="string">"aaa"</span>);</span><br><span class="line"></span><br><span class="line">ArrayList&lt;Integerali = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">ali.add(<span class="number">1</span>); </span><br><span class="line">ali.add(<span class="string">"aaa"</span>);  <span class="comment">// error</span></span><br></pre></td></tr></table></figure>
+<p>自定义泛型类可以参考我的上一篇博客，<a href="https://s2mple.xyz/java-generics-linkedstack/" target="_blank" rel="noopener">Java泛型之LinkedStack</a></p>
+<h3 id="使用泛型需要注意"><a href="#使用泛型需要注意" class="headerlink" title="使用泛型需要注意"></a>使用泛型需要注意</h3><p>泛型的引入可以解决之前的集合类框架在使用过程中经常出现的运行时类型错误，因为编译器可以在编译时就发现很多明显的错误。但无奈的是，为了保证与旧版本的<strong>兼容性</strong>，Java 泛型的实现上存在着一些不够优雅的地方。</p>
+<p>开发人员在使用泛型的时候，很容易根据自己的直觉而犯一些错误</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testGenerics</span><span class="params">(ArrayList&lt;Objectlist)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法接收<code>ArrayList&lt;Object&gt;</code>作为形参，但是如果尝试传入一个<code>ArrayList&lt;String&gt;</code>对象，却发现无法通过编译</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    testGenerics(<span class="keyword">new</span> ArrayList&lt;String&gt;()); <span class="comment">// 编译错误!!!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然从直觉上来说，Object 是 String 的父类，这种类型转换应该是合理的。但是实际上这会产生<strong>隐含的类型转换</strong>问题，因此编译器直接就禁止这样的行为</p>
+<h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h2><p>使用泛型的时候加上的类型参数，会被编译器在<strong>编译时</strong>去掉(擦除)。这个过程就称为<strong>类型擦除</strong> (<strong>Type Erasure</strong>) 。如在代码中定义的<code>List&lt;Object&gt;</code>和<code>List&lt;String&gt;</code>等类型，在编译之后都会变成 List 。</p>
+<p>可以说，类型擦除这个令人困惑的 Java 特性，完全是历史遗留问题导致的。因为 JDK5 之前没有泛型，为了旧代码能够正常运行，Java 泛型必须要在编译器层次将类型擦除，所导致的严酷事实就是：<strong>在泛型代码内部，无法获得任何有关泛型参数类型的信息。</strong></p>
+<p>很多泛型的特性都与类型擦除的存在有关，包括：</p>
+<p><strong>泛型类并没有自己独有的 Class 类对象。</strong> 比如并不存在<code>List&lt;String&gt;.class</code>或是<code>List&lt;Integer&gt;.class</code>，而只有<code>List.class</code></p>
+<p><strong>静态变量是被泛型类的所有实例所共享的。</strong> 对于声明为<code>MyClass&lt;T&gt;</code>的类，访问其中的静态变量的方法仍然是<code>MyClass.myStaticVar</code>。不管是通过<code>new MyClass&lt;String&gt;</code>还是<code>new MyClass&lt;Integer&gt;</code>创建的对象，都是共享一个静态变量</p>
+<p><strong>泛型的参数类型不能用于 Java异常处理的<code>catch</code>语句中。</strong> 因为异常处理是由 JVM 在运行时刻来进行的。由于类型信息被擦除，JVM 是无法区分两个异常类型<code>MyException&lt;String&gt;</code>和<code>MyException&lt;Integer&gt;</code>的。对于 JVM 来说，它们都是<code>MyException</code>类型的。也就无法执行与异常对应的<code>catch</code>语句</p>
+<p>简单来说就是：<strong>泛型的类型信息在编译阶段被擦除，运行时刻任何获取泛型参数类型信息的行为都是非法的。</strong> </p>
+<h3 id="编译器的类型检查"><a href="#编译器的类型检查" class="headerlink" title="编译器的类型检查"></a>编译器的类型检查</h3><p>了解了类型擦除机制之后，就会明白<strong>编译器承担了全部的类型检查工作</strong>。编译器禁止某些泛型的使用方式，正是为了确保类型的安全性。</p>
+<p>继续用上例代码来做演示</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testGenerics</span><span class="params">(ArrayList&lt;Objectlist)</span> </span>&#123;</span><br><span class="line">    list.add(<span class="number">1</span>); <span class="comment">// 合法</span></span><br><span class="line">    list.add(<span class="string">"aaa"</span>); <span class="comment">// 合法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    testGenerics(<span class="keyword">new</span> ArrayList&lt;String&gt;()); <span class="comment">// 编译错误!!!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不难理解，为了避免<code>ArrayList&lt;String&gt;</code>中添加一个 Integer 类型的对象，编译器干脆禁止了这样的行为。编译器会尽可能的检查可能存在的类型安全问题。对于确定是违反相关原则的地方，会给出编译错误。当编译器无法判断类型的使用是否正确的时候，会给出警告信息。</p>
+<h3 id="通配符与上下界"><a href="#通配符与上下界" class="headerlink" title="通配符与上下界"></a>通配符与上下界</h3><p>在使用泛型类的时候，既可以指定一个具体的类型，如<code>List&lt;String&gt;</code>就声明了具体的类型是 String，也可以用 <strong>通配符<code>?</code></strong> 来表示未知类型，比如<code>List&lt;?&gt;</code>。通配符所代表的其实是<strong>一组类型</strong>，但具体的类型<strong>暂时未知</strong>，而是在<strong>使用时再确定</strong>。</p>
+<p><code>List&lt;?&gt;</code>不同于<code>List&lt;Object&gt;</code>的地方是，<code>List&lt;Object&gt;</code>实际上确定了参数类型是 Object 及其子类。而<code>List&lt;?&gt;</code>则其中所包含的元素类型是不确定。使用时可以用<code>List&lt;String&gt;</code>或<code>List&lt;Integer&gt;</code>替换。如果它包含了 String 的话，往里面添加 Integer 类型的元素就是错误的</p>
+<p>请看如下代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testGenerics</span><span class="params">(ArrayList&lt;?list)</span> </span>&#123;</span><br><span class="line">    list.add(<span class="string">"aaa"</span>); <span class="comment">// 编译错误!!!</span></span><br><span class="line">    </span><br><span class="line">    Object obj = list.get(<span class="number">0</span>); <span class="comment">// 合法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ArrayList&lt;Stringlist = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    list.add(<span class="string">"aaa"</span>);</span><br><span class="line">    testGenerics(list); <span class="comment">// 合法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码有如下几点要注意：</p>
+<ol>
+<li>因为通配符<code>?</code>类型未知，所以为了避免运行时类型错误，<code>list.add(&quot;aaa&quot;)</code>编译不会通过</li>
+<li>虽然类型未知，但肯定是 Object 及其子类，所以<strong>通配符代表的元素可以用 Object 来引用。</strong></li>
+<li>向<code>testGenerics()</code>方法传入的是<code>ArrayList&lt;String&gt;</code>类型的，并且编译通过。即使用时声明具体类型</li>
+</ol>
+<p>由于<code>List&lt;?&gt;</code>中的元素只能用 Object 来引用，显然在需要更精细的类型时并不适用。在这些情况下，可以使用<strong>上下界</strong>来限制未知类型的范围。</p>
+<p><code>List&lt;? extends Number&gt;</code>说明 List 中可能包含的元素类型是 Number 及其<strong>子类</strong>。</p>
+<p><code>List&lt;? super Number&gt;</code>则说明 List 中包含的是 Number 及其<strong>父类</strong>。</p>
+<p>当使用<code>extends</code>引入了上界之后，在使用类型的时候就可以<strong>使用上界类中定义的方法</strong>。查看如下的例子</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testGenerics</span><span class="params">(ArrayList&lt;? extends Numberlist)</span> </span>&#123;</span><br><span class="line">    Number number = list.get(<span class="number">0</span>);</span><br><span class="line">    System.out.println(number.intValue());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    ArrayList&lt;Doubledoubles = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    doubles.add(<span class="number">2.33333</span>);</span><br><span class="line">    testGenerics(doubles); <span class="comment">// 运行输出结果：2 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>形参改为<code>&lt;? extends Number&gt;</code>后，可以看到如下两个性质：</p>
+<ul>
+<li>可以使用 Number 引用</li>
+<li>在<code>testGenerics()</code>方法中可以调用 Number 类的<code>intValue()</code>方法</li>
+</ul>
+<p>上述代码中，我们为了调用<code>intValue()</code>方法，必须给定泛型类的边界，以告诉编译器只能接受遵循这个边界的类型。这里重用了 <strong>extends</strong> 关键字。这样在编译时， <strong>泛型类型参数将擦除到它的第一个边界</strong>，即 Number，这样就可以调用<code>intValue()</code>方法了。</p>
+<h3 id="类型系统"><a href="#类型系统" class="headerlink" title="类型系统"></a>类型系统</h3><p>引入泛型之后的类型系统增加了<strong>两个维度</strong>：一个是<strong>类型参数自身</strong>的继承体系结构，另外一个是<strong>泛型类或接口自身</strong>的继承体系结构。第一个指的是对于<code>List&lt;String&gt;</code>和<code>List&lt;Object&gt;</code>这样的情况，类型参数 String 继承自 Object 。而第二种指的是<code>List&lt;String&gt;</code>和<code>Collection&lt;String&gt;</code>这种情况。对于这个类型系统，有如下的一些规则：</p>
+<p>相同类型参数的泛型类的关系取决于泛型类自身的继承体系结构。即<code>List&lt;String&gt;</code>是<code>Collection&lt;String&gt;</code>的子类型，<code>List&lt;String&gt;</code>可以替换<code>Collection&lt;String&gt;</code>。这种情况也适用于带有上下界的类型声明。</p>
+<p>当泛型类的类型声明中使用了通配符的时候， 其子类型可以在两个维度上分别展开。如对<code>Collection&lt;? extends Number&gt;</code>来说，其子类型可以在 Collection 这个维度上展开，即<code>List&lt;? extends Number&gt;</code>和<code>Set&lt;? extends Number&gt;</code>等；也可以在 Number 这个层次上展开，即<code>Collection&lt;Double&gt;</code>和<code>Collection&lt;Integer&gt;</code>等。如此循环下去，<code>ArrayList&lt;Long&gt;</code>和<code>HashSet&lt;Double&gt;</code>等也都算是<code>Collection&lt;? extends Number&gt;</code>的子类型。</p>
+<p>如果泛型类中包含多个类型参数，则对于每个类型参数分别应用上面的规则。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Java泛型确实有些让人困惑的特性，这也是任何有历史的编程语言所需要承担的历史包袱，后续的版本更新会被早期的设计缺陷所拖累。正是这样，如果一门语言长久的停留在过去，必然会被新的语言取代。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>《Java 编程思想》</li>
+<li><a href="http://www.infoq.com/cn/articles/cf-java-generics" target="_blank" rel="noopener">Java深度历险——Java泛型</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -2789,295 +3042,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/14/Vue%E5%88%9D%E8%AF%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/12/14/Vue%E5%88%9D%E8%AF%86/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/6/index.html">Vue 初识</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-12-14 11:40:31" itemprop="dateCreated datePublished" datetime="2017-12-14T11:40:31+08:00">2017-12-14</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-17 20:01:07" itemprop="dateModified" datetime="2020-11-17T20:01:07+08:00">2020-11-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/12/14/Vue%E5%88%9D%E8%AF%86/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/12/14/Vue初识/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">3.3k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="What-is-Vue-js"><a href="#What-is-Vue-js" class="headerlink" title="What is Vue.js"></a>What is Vue.js</h2><ul>
-<li><p>先来看一下<a href="https://cn.vuejs.org/v2/guide/index.html" target="_blank" rel="noopener">官网的解释</a></p>
-<blockquote>
-<p>Vue (读音 /vjuː/，类似于 view) 是一套用于构建用户界面的<strong>渐进式框架</strong>。与其它大型框架不同的是，Vue 被设计为可以自底向上逐层应用。Vue 的核心库<strong>只关注视图层</strong>，不仅易于上手，还便于与第三方库或既有项目整合。另一方面，当与现代化的工具链以及各种支持类库结合使用时，Vue 也完全能够为复杂的单页应用提供驱动。</p>
-</blockquote>
-</li>
-<li><p>相比之下，我更喜欢下面这段介绍</p>
-<blockquote>
-<p>Vue.js 是一个用于构建交互式 Web 界面的 JavaScript 开发库，通过简洁的 API 提供高效的<strong>数据绑定</strong>机制和灵活的<strong>组件系统</strong>。类似于 AngularJS 等优秀前端框架，Vue.js 提供了 MVVM 数据绑定以及一个可组合的组件系统。从技术上讲，Vue.js 着眼于在 MVVM 模式中的<strong>视图模型层</strong>（VM），通过双向数据绑定连接视图和模型，实际的 DOM 操作和输出格式被抽象为<strong>指令</strong>和<strong>过滤器</strong>。</p>
-</blockquote>
-</li>
-<li><p>上面提到了Vue的几个特性</p>
-<ul>
-<li><strong>数据驱动视图</strong></li>
-<li><strong>指令(Directives)</strong></li>
-<li><strong>过滤器(Filter)</strong></li>
-<li><strong>组件化</strong></li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="Hellovue-html"><a href="#Hellovue-html" class="headerlink" title="Hellovue.html"></a>Hellovue.html</h2><ul>
-<li><p>我们先来看一个最简单的<strong>Vue</strong>的<strong>Helloworld</strong>程序，这只是个HTML文件，只不过导入了<strong>Vue</strong>的包。页面显示的内容是 <strong>“Hello Vue!”</strong></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;script src&#x3D;&quot;https:&#x2F;&#x2F;unpkg.com&#x2F;vue&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id&#x3D;&quot;app&quot;&gt;</span><br><span class="line">        &#123;&#123; msg &#125;&#125;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        var app &#x3D; new Vue(&#123;</span><br><span class="line">          el: &#39;#app&#39;,</span><br><span class="line">          data: &#123;</span><br><span class="line">            msg: &#39;Hello Vue!&#39;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>el</strong>全称<strong>element</strong>，提供一个在页面上已存在的<strong>DOM</strong>元素作为<strong>Vue实例</strong>的<strong>挂载</strong>目标。可以是<strong>CSS选择器</strong>，也可以是一个<strong>HTMLElement实例</strong></p>
-</li>
-<li><p><code>el: &#39;#app&#39;</code>的意思是: 将new出来的Vue实例挂载到<code>id=&quot;app&quot;</code>的DOM元素上</p>
-</li>
-<li><p>正是因为挂载，<code></code>才会被data中的msg替换</p>
-</li>
-</ul>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ul>
-<li><p><a href="http://www.w3school.com.cn/cssref/css_selectors.asp" target="_blank" rel="noopener">CSS选择器参考手册</a></p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">el : ‘body’ &#x3D;&#x3D;&gt; Html element</span><br><span class="line">el : ‘#app’ &#x3D;&#x3D;&gt; id&#x3D;‘app’</span><br><span class="line">el : ‘.app’ &#x3D;&#x3D;&gt; class&#x3D;‘app’</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在浏览器的控制台中可以这样访问</p>
-<p>  <img src="/2017/12/14/Vue%E5%88%9D%E8%AF%86/0.png" alt="Screen-Shot-2017-12-17-at-5.57.26-PM"></p>
-</li>
-</ul>
-<hr>
-<h2 id="Directives"><a href="#Directives" class="headerlink" title="Directives"></a>Directives</h2><blockquote>
-<p>带有前缀 <strong>“v-“</strong> 的是Vue提供的特有的<strong>指令(Directives)</strong>。它们会在渲染的 DOM 上应用特殊的响应式行为。Vue中有许多这样的指令，提供了更简单的编程实现</p>
-</blockquote>
-<ul>
-<li><p>先来看个例子，修改下面输入框的内容，查看效果<br>  &lt;!DOCTYPE html&gt;</p>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <script src="https://unpkg.com/vue"></script>
-  <meta name="generator" content="Hexo 4.2.1"></head>
-  <body>
-      <div id="app">
-          <input type="text" placeholder="在这里输入文字，下面会跟着变化" v-model="msg">
-          <p></p>
-      </div>
-      <script type="text/javascript">
-          var app = new Vue({
-            el: '#app',
-            data: {
-              msg: 'Hello Vue!'
-            }
-          })
-      </script>
-  </body>
-  </html>
-</li>
-<li><p>要实现上面的功能，传统的写法是<code>&lt;input&gt;</code>标签中加一个事件监听，比如说<code>onkeyup=&quot;change()&quot;</code>，然后在<code>&lt;script&gt;</code>写这个change方法</p>
-</li>
-<li><p>然而Vue中实现只需要加个指令<code>v-model=&quot;msg&quot;</code>，它的意思是将数据和视图<strong>双向绑定</strong>，只要其中一个改变必定引起另一个的改变，达到了<strong>数据驱动视图</strong>的效果</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id&#x3D;&quot;app&quot;&gt;</span><br><span class="line">        &lt;input type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;在这里输入文字，下面会跟着变化&quot; v-model&#x3D;&quot;msg&quot;&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; msg &#125;&#125;&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        var app &#x3D; new Vue(&#123;</span><br><span class="line">          el: &#39;#app&#39;,</span><br><span class="line">          data: &#123;</span><br><span class="line">            msg: &#39;Hello Vue!&#39;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h2><blockquote>
-<p><strong>过滤器(Filter)</strong> 可被用于一些常见的文本格式化。过滤器可以用在两个地方：<strong>双花括号插值</strong>和<strong>v-bind表达式</strong>中，由管道 “<strong>|</strong>“ 符号指示</p>
-</blockquote>
-<ul>
-<li><p>下面的代码是我基于上一个实例加了转化为大写的过滤器</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id&#x3D;&quot;app&quot;&gt;</span><br><span class="line">        &lt;input type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;在这里输入文字，下面会跟着变化&quot; v-model&#x3D;&quot;msg&quot;&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; msg | uppercase &#125;&#125;&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        Vue.filter(&#39;uppercase&#39;,function(value)&#123;</span><br><span class="line">            return value.toUpperCase()</span><br><span class="line">        &#125;)</span><br><span class="line"></span><br><span class="line">        var app &#x3D; new Vue(&#123;</span><br><span class="line">          el: &#39;#app&#39;,</span><br><span class="line">          data: &#123;</span><br><span class="line">            msg: &#39;Hello Vue!&#39;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="https://cn.vuejs.org/v2/guide/index.html" target="_blank" rel="noopener">官方中文文档</a></li>
-<li><a href="https://www.devbean.net/2016/05/brief-vue-js-1/" target="_blank" rel="noopener">简明Vue.js教程</a></li>
-<li><a href="http://www.jianshu.com/p/2d5f99076c17" target="_blank" rel="noopener">Vue的特性精华</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3129,7 +3093,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

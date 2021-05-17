@@ -181,7 +181,7 @@
   </style>
 </noscript>
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+</head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
@@ -356,6 +356,295 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/12/14/Vue%E5%88%9D%E8%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2017/12/14/Vue%E5%88%9D%E8%AF%86/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/7/index.html">Vue 初识</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-12-14 11:40:31" itemprop="dateCreated datePublished" datetime="2017-12-14T11:40:31+08:00">2017-12-14</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-11-17 20:01:07" itemprop="dateModified" datetime="2020-11-17T20:01:07+08:00">2020-11-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/14/Vue%E5%88%9D%E8%AF%86/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/14/Vue初识/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">3.3k</span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="What-is-Vue-js"><a href="#What-is-Vue-js" class="headerlink" title="What is Vue.js"></a>What is Vue.js</h2><ul>
+<li><p>先来看一下<a href="https://cn.vuejs.org/v2/guide/index.html" target="_blank" rel="noopener">官网的解释</a></p>
+<blockquote>
+<p>Vue (读音 /vjuː/，类似于 view) 是一套用于构建用户界面的<strong>渐进式框架</strong>。与其它大型框架不同的是，Vue 被设计为可以自底向上逐层应用。Vue 的核心库<strong>只关注视图层</strong>，不仅易于上手，还便于与第三方库或既有项目整合。另一方面，当与现代化的工具链以及各种支持类库结合使用时，Vue 也完全能够为复杂的单页应用提供驱动。</p>
+</blockquote>
+</li>
+<li><p>相比之下，我更喜欢下面这段介绍</p>
+<blockquote>
+<p>Vue.js 是一个用于构建交互式 Web 界面的 JavaScript 开发库，通过简洁的 API 提供高效的<strong>数据绑定</strong>机制和灵活的<strong>组件系统</strong>。类似于 AngularJS 等优秀前端框架，Vue.js 提供了 MVVM 数据绑定以及一个可组合的组件系统。从技术上讲，Vue.js 着眼于在 MVVM 模式中的<strong>视图模型层</strong>（VM），通过双向数据绑定连接视图和模型，实际的 DOM 操作和输出格式被抽象为<strong>指令</strong>和<strong>过滤器</strong>。</p>
+</blockquote>
+</li>
+<li><p>上面提到了Vue的几个特性</p>
+<ul>
+<li><strong>数据驱动视图</strong></li>
+<li><strong>指令(Directives)</strong></li>
+<li><strong>过滤器(Filter)</strong></li>
+<li><strong>组件化</strong></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="Hellovue-html"><a href="#Hellovue-html" class="headerlink" title="Hellovue.html"></a>Hellovue.html</h2><ul>
+<li><p>我们先来看一个最简单的<strong>Vue</strong>的<strong>Helloworld</strong>程序，这只是个HTML文件，只不过导入了<strong>Vue</strong>的包。页面显示的内容是 <strong>“Hello Vue!”</strong></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;script src&#x3D;&quot;https:&#x2F;&#x2F;unpkg.com&#x2F;vue&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id&#x3D;&quot;app&quot;&gt;</span><br><span class="line">        &#123;&#123; msg &#125;&#125;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        var app &#x3D; new Vue(&#123;</span><br><span class="line">          el: &#39;#app&#39;,</span><br><span class="line">          data: &#123;</span><br><span class="line">            msg: &#39;Hello Vue!&#39;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>el</strong>全称<strong>element</strong>，提供一个在页面上已存在的<strong>DOM</strong>元素作为<strong>Vue实例</strong>的<strong>挂载</strong>目标。可以是<strong>CSS选择器</strong>，也可以是一个<strong>HTMLElement实例</strong></p>
+</li>
+<li><p><code>el: &#39;#app&#39;</code>的意思是: 将new出来的Vue实例挂载到<code>id=&quot;app&quot;</code>的DOM元素上</p>
+</li>
+<li><p>正是因为挂载，<code></code>才会被data中的msg替换</p>
+</li>
+</ul>
+<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ul>
+<li><p><a href="http://www.w3school.com.cn/cssref/css_selectors.asp" target="_blank" rel="noopener">CSS选择器参考手册</a></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">el : ‘body’ &#x3D;&#x3D;&gt; Html element</span><br><span class="line">el : ‘#app’ &#x3D;&#x3D;&gt; id&#x3D;‘app’</span><br><span class="line">el : ‘.app’ &#x3D;&#x3D;&gt; class&#x3D;‘app’</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在浏览器的控制台中可以这样访问</p>
+<p>  <img src="/2017/12/14/Vue%E5%88%9D%E8%AF%86/0.png" alt="Screen-Shot-2017-12-17-at-5.57.26-PM"></p>
+</li>
+</ul>
+<hr>
+<h2 id="Directives"><a href="#Directives" class="headerlink" title="Directives"></a>Directives</h2><blockquote>
+<p>带有前缀 <strong>“v-“</strong> 的是Vue提供的特有的<strong>指令(Directives)</strong>。它们会在渲染的 DOM 上应用特殊的响应式行为。Vue中有许多这样的指令，提供了更简单的编程实现</p>
+</blockquote>
+<ul>
+<li><p>先来看个例子，修改下面输入框的内容，查看效果<br>  &lt;!DOCTYPE html&gt;</p>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <script src="https://unpkg.com/vue"></script>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+  <body>
+      <div id="app">
+          <input type="text" placeholder="在这里输入文字，下面会跟着变化" v-model="msg">
+          <p></p>
+      </div>
+      <script type="text/javascript">
+          var app = new Vue({
+            el: '#app',
+            data: {
+              msg: 'Hello Vue!'
+            }
+          })
+      </script>
+  </body>
+  </html>
+</li>
+<li><p>要实现上面的功能，传统的写法是<code>&lt;input&gt;</code>标签中加一个事件监听，比如说<code>onkeyup=&quot;change()&quot;</code>，然后在<code>&lt;script&gt;</code>写这个change方法</p>
+</li>
+<li><p>然而Vue中实现只需要加个指令<code>v-model=&quot;msg&quot;</code>，它的意思是将数据和视图<strong>双向绑定</strong>，只要其中一个改变必定引起另一个的改变，达到了<strong>数据驱动视图</strong>的效果</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id&#x3D;&quot;app&quot;&gt;</span><br><span class="line">        &lt;input type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;在这里输入文字，下面会跟着变化&quot; v-model&#x3D;&quot;msg&quot;&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; msg &#125;&#125;&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        var app &#x3D; new Vue(&#123;</span><br><span class="line">          el: &#39;#app&#39;,</span><br><span class="line">          data: &#123;</span><br><span class="line">            msg: &#39;Hello Vue!&#39;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h2><blockquote>
+<p><strong>过滤器(Filter)</strong> 可被用于一些常见的文本格式化。过滤器可以用在两个地方：<strong>双花括号插值</strong>和<strong>v-bind表达式</strong>中，由管道 “<strong>|</strong>“ 符号指示</p>
+</blockquote>
+<ul>
+<li><p>下面的代码是我基于上一个实例加了转化为大写的过滤器</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id&#x3D;&quot;app&quot;&gt;</span><br><span class="line">        &lt;input type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;在这里输入文字，下面会跟着变化&quot; v-model&#x3D;&quot;msg&quot;&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; msg | uppercase &#125;&#125;&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        Vue.filter(&#39;uppercase&#39;,function(value)&#123;</span><br><span class="line">            return value.toUpperCase()</span><br><span class="line">        &#125;)</span><br><span class="line"></span><br><span class="line">        var app &#x3D; new Vue(&#123;</span><br><span class="line">          el: &#39;#app&#39;,</span><br><span class="line">          data: &#123;</span><br><span class="line">            msg: &#39;Hello Vue!&#39;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://cn.vuejs.org/v2/guide/index.html" target="_blank" rel="noopener">官方中文文档</a></li>
+<li><a href="https://www.devbean.net/2016/05/brief-vue-js-1/" target="_blank" rel="noopener">简明Vue.js教程</a></li>
+<li><a href="http://www.jianshu.com/p/2d5f99076c17" target="_blank" rel="noopener">Vue的特性精华</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -2718,259 +3007,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/11/MyBatis%20Generator/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/11/11/MyBatis%20Generator/" class="post-title-link" itemprop="https://s1mplecc.github.io/page/7/index.html">MyBatis Generator</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-11-11 06:20:43" itemprop="dateCreated datePublished" datetime="2017-11-11T06:20:43+08:00">2017-11-11</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-17 20:07:46" itemprop="dateModified" datetime="2020-11-17T20:07:46+08:00">2020-11-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/11/MyBatis%20Generator/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/11/MyBatis Generator/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">5.2k</span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>MyBatis Generator(MBG)是适用于MyBatis和iBatis的代码生成器，它可以根据数据库自动生成Model层的JavaBean，DAO层的Mapper接口，映射SQL的XML文件。<a href="http://www.mybatis.org/generator/index.html" target="_blank" rel="noopener">官方文档</a></p>
-</blockquote>
-<ul>
-<li>我们先看一下项目结构，我们的目的是生成dao、model以及mapping目录下的代码<br><img src="/2017/11/11/MyBatis%20Generator/0.png" alt="-----2017-11-26---7.26.01"></li>
-</ul>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li>Intellj IDEA</li>
-<li>Maven Project</li>
-<li>Spring Boot</li>
-<li>MySQL</li>
-</ul>
-<h2 id="Maven-Plugin"><a href="#Maven-Plugin" class="headerlink" title="Maven Plugin"></a>Maven Plugin</h2><ul>
-<li>使用Maven我们可以简单快捷的导入MBG插件，并且通过Maven管理、启动插件。将下面内容加入到<strong>pom.xml</strong>中的<code>&lt;build&gt;</code>下的<code>&lt;plugins&gt;</code>标签中  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;plugin&gt;</span><br><span class="line">    &lt;groupId&gt;org.mybatis.generator&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;mybatis-generator-maven-plugin&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.3.5&lt;&#x2F;version&gt;</span><br><span class="line">    &lt;configuration&gt;</span><br><span class="line">        &lt;configurationFile&gt;$&#123;basedir&#125;&#x2F;src&#x2F;main&#x2F;resources&#x2F;mybatis&#x2F;generatorConfig.xml&lt;&#x2F;configurationFile&gt;</span><br><span class="line">        &lt;overwrite&gt;true&lt;&#x2F;overwrite&gt;</span><br><span class="line">        &lt;verbose&gt;true&lt;&#x2F;verbose&gt;</span><br><span class="line">    &lt;&#x2F;configuration&gt;</span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;mysql&lt;&#x2F;groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;mysql-connector-java&lt;&#x2F;artifactId&gt;</span><br><span class="line">            &lt;version&gt;$&#123;mysql.version&#125;&lt;&#x2F;version&gt;</span><br><span class="line">        &lt;&#x2F;dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;tk.mybatis&lt;&#x2F;groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;mapper&lt;&#x2F;artifactId&gt;</span><br><span class="line">            &lt;version&gt;$&#123;mapper.version&#125;&lt;&#x2F;version&gt;</span><br><span class="line">        &lt;&#x2F;dependency&gt;</span><br><span class="line">    &lt;&#x2F;dependencies&gt;</span><br><span class="line">&lt;&#x2F;plugin&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ol>
-<li><strong>configurationFile</strong>是xml配置文件的路径，<strong>${basedir}</strong> 是Maven内置变量项目根目录</li>
-<li><strong>overwrite</strong>表示覆盖原有文件，<strong>verbose</strong>表示MBG会将进度信息写入<strong>build log</strong>中，更多参数官网文档都有</li>
-<li>使用了两个依赖，<strong>mysql-connector</strong>用于连接数据库，<strong>tk.mybatis.mapper</strong>是比较好用的通用Mapper插件</li>
-</ol>
-<h2 id="generatorConfig-xml"><a href="#generatorConfig-xml" class="headerlink" title="generatorConfig.xml"></a>generatorConfig.xml</h2><p><a href="http://blog.csdn.net/isea533/article/details/42102297" target="_blank" rel="noopener">详解MBG配置文件</a></p>
-<ul>
-<li><p>最关键的应该就算MBG的配置文件了。这个文件告诉MBG怎么去连接数据库、用到哪些表、生成哪些对象等等</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE generatorConfiguration</span><br><span class="line">        PUBLIC &quot;-&#x2F;&#x2F;mybatis.org&#x2F;&#x2F;DTD MyBatis Generator Configuration 1.0&#x2F;&#x2F;EN&quot; &quot;http:&#x2F;&#x2F;mybatis.org&#x2F;dtd&#x2F;mybatis-generator-config_1_0.dtd&quot;&gt;</span><br><span class="line">&lt;generatorConfiguration&gt;</span><br><span class="line">    &lt;properties resource&#x3D;&quot;mybatis&#x2F;config.properties&quot;&#x2F;&gt;</span><br><span class="line">    &lt;context id&#x3D;&quot;Mysql&quot; targetRuntime&#x3D;&quot;MyBatis3Simple&quot; defaultModelType&#x3D;&quot;flat&quot;&gt;</span><br><span class="line">        &lt;property name&#x3D;&quot;beginningDelimiter&quot; value&#x3D;&quot;&#96;&quot;&#x2F;&gt;</span><br><span class="line">        &lt;property name&#x3D;&quot;endingDelimiter&quot; value&#x3D;&quot;&#96;&quot;&#x2F;&gt;</span><br><span class="line"></span><br><span class="line">        &lt;property name&#x3D;&quot;javaFormatter&quot; value&#x3D;&quot;org.mybatis.generator.api.dom.DefaultJavaFormatter&quot;&#x2F;&gt;</span><br><span class="line">        &lt;property name&#x3D;&quot;xmlFormatter&quot; value&#x3D;&quot;org.mybatis.generator.api.dom.DefaultXmlFormatter&quot;&#x2F;&gt;</span><br><span class="line"></span><br><span class="line">        &lt;plugin type&#x3D;&quot;$&#123;mapper.plugin&#125;&quot;&gt;</span><br><span class="line">            &lt;property name&#x3D;&quot;mappers&quot; value&#x3D;&quot;$&#123;mapper.Mapper&#125;&quot;&#x2F;&gt;</span><br><span class="line">        &lt;&#x2F;plugin&gt;</span><br><span class="line">        &lt;plugin type&#x3D;&quot;org.mybatis.generator.plugins.SerializablePlugin&quot;&#x2F;&gt;</span><br><span class="line"></span><br><span class="line">        &lt;jdbcConnection driverClass&#x3D;&quot;$&#123;jdbc.driverClass&#125;&quot;</span><br><span class="line">                        connectionURL&#x3D;&quot;$&#123;jdbc.url&#125;&quot;</span><br><span class="line">                        userId&#x3D;&quot;$&#123;jdbc.user&#125;&quot;</span><br><span class="line">                        password&#x3D;&quot;$&#123;jdbc.password&#125;&quot;&gt;</span><br><span class="line">        &lt;&#x2F;jdbcConnection&gt;</span><br><span class="line"></span><br><span class="line">        &lt;javaModelGenerator targetPackage&#x3D;&quot;info.s1mple.webscraping.model&quot; targetProject&#x3D;&quot;src&#x2F;test&#x2F;java&quot;&#x2F;&gt;</span><br><span class="line"></span><br><span class="line">        &lt;sqlMapGenerator targetPackage&#x3D;&quot;mybatis.mapping&quot; targetProject&#x3D;&quot;src&#x2F;test&#x2F;java&quot;&#x2F;&gt;</span><br><span class="line"></span><br><span class="line">        &lt;javaClientGenerator targetPackage&#x3D;&quot;info.s1mple.webscraping.dao&quot; targetProject&#x3D;&quot;src&#x2F;test&#x2F;java&quot; type&#x3D;&quot;XMLMAPPER&quot;&#x2F;&gt;</span><br><span class="line"></span><br><span class="line">        &lt;table tableName&#x3D;&quot;ws_record&quot; domainObjectName&#x3D;&quot;Record&quot;&gt;</span><br><span class="line">            &lt;generatedKey column&#x3D;&quot;record_id&quot; sqlStatement&#x3D;&quot;Mysql&quot; identity&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">        &lt;&#x2F;table&gt;</span><br><span class="line">    &lt;&#x2F;context&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;generatorConfiguration&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="Tips-1"><a href="#Tips-1" class="headerlink" title="Tips"></a>Tips</h4><ol>
-<li><code>&lt;properties&gt;</code>用于指定外部配置文件，使用相对路径，可以使用<code>${}</code>进行引用</li>
-<li>至少含有一个<code>&lt;context&gt;</code>标签。其中<code>targetRuntime</code>默认为<strong>MyBatis3</strong>，<strong>MyBatis3Simple</strong>可以不生成Example查询有关内容，<strong>flat</strong>为每一张表生成一个实体类</li>
-<li><code>&lt;property&gt;</code>配置一些属性，<code>beginningDelimiter</code>和<code>endingDelimiter</code>将表的字段用单引号扩起来，<code>javaFormatter</code>和<code>xmlFormatter</code>格式化生成的代码</li>
-<li><code>&lt;plugin&gt;</code>定义插件用于扩展或修改MBG生成的代码。我使用了Mapper插件，用于修改生成的Mapper接口，以及序列化插件，用于修改Model类继承<strong>Serializable</strong>接口</li>
-<li><code>&lt;jdbcConnection&gt;</code>连接数据库，配置我都写在了<strong>config.properties</strong>中方便管理</li>
-<li><code>&lt;javaModelGenerator</code>生成Model类，<code>targetPackage</code>是生成的类package，<code>targetProject</code>生成到哪个路径下，建议都放在test文件夹而不是直接覆盖源代码。</li>
-<li><code>&lt;sqlMapGenerator&gt;</code>生成Mapper.xml文件</li>
-<li><code>&lt;javaClientGenerator&gt;</code>生成Mapper接口</li>
-<li><code>&lt;table&gt;</code>使用到的表，可以设置对象名，自增主键等</li>
-</ol>
-<h2 id="Run-It"><a href="#Run-It" class="headerlink" title="Run It"></a>Run It</h2><ul>
-<li>可以命令行执行<code>mvn mybatis-generator:generate</code>运行MBG，或者直接在Maven Plugins中双击运行<br><img src="/2017/11/11/MyBatis%20Generator/1.png" alt="-----2017-11-27---10.37.48"></li>
-</ul>
-<h2 id="Results-Show"><a href="#Results-Show" class="headerlink" title="Results Show"></a>Results Show</h2><ul>
-<li><p><strong>生成的Model类</strong>，可以看到package就是我们在<code>targetPackage</code>中的写的内容，有各种注解及注释信息，以及自增主键的注解。<br><img src="/2017/11/11/MyBatis%20Generator/2.png" alt="-----2017-11-27---1.15.04"></p>
-</li>
-<li><p><strong>生成的Mapper.xml</strong>，一般还要自己根据需求添加SQL语句<br><img src="/2017/11/11/MyBatis%20Generator/3.png" alt="-----2017-11-27---1.24.34"></p>
-</li>
-<li><p><strong>生成的Dao层的Mapper接口</strong>，BaseMapper是自己写的继承了tk mapper的接口类。还需要根据需求添加方法<br><img src="/2017/11/11/MyBatis%20Generator/4.png" alt="-----2017-11-27---1.33.29"></p>
-</li>
-</ul>
-<h2 id="Postscripts"><a href="#Postscripts" class="headerlink" title="Postscripts"></a>Postscripts</h2><blockquote>
-<p>一次配置，多次受益，大大减少了重复性、无脑的代码的编写，何乐而不为呢？</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-       
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3022,7 +3058,7 @@
                 
                   <a href="/archives/%20%7C%7C%20archive">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
