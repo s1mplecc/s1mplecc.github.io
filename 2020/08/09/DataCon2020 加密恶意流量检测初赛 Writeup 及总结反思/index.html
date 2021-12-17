@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="初赛题目主办方提供了 black&#x2F;white&#x2F;test 三个 pcap 文件夹，其中 black 和 white 分别是检测出有&#x2F;无恶意软件感染的客户端 IP 组，要求选手对 test 数据集进行判定。  解题思路该题的解题过程应分为以下三个大步骤：  特征选择（Feature Selection），选取对于区分正常&#x2F;恶意流量有明显作用的 Features。 特征提取（Feature Extrac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思">
+<meta property="og:url" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/index.html">
+<meta property="og:site_name" content="s1mple 的博客">
+<meta property="og:description" content="初赛题目主办方提供了 black&#x2F;white&#x2F;test 三个 pcap 文件夹，其中 black 和 white 分别是检测出有&#x2F;无恶意软件感染的客户端 IP 组，要求选手对 test 数据集进行判定。  解题思路该题的解题过程应分为以下三个大步骤：  特征选择（Feature Selection），选取对于区分正常&#x2F;恶意流量有明显作用的 Features。 特征提取（Feature Extrac">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/0.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/1.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/2.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/3.jpeg">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/4.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/5.png">
+<meta property="article:published_time" content="2020-08-09T15:20:52.000Z">
+<meta property="article:modified_time" content="2021-12-17T05:47:55.494Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Security">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/0.png">
+
+<link rel="canonical" href="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思 | s1mple 的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">s1mple 的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple 的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-09 23:20:52" itemprop="dateCreated datePublished" datetime="2020-08-09T23:20:52+08:00">2020-08-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-17 13:47:55" itemprop="dateModified" datetime="2021-12-17T13:47:55+08:00">2021-12-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Projects/" itemprop="url" rel="index"><span itemprop="name">Projects</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="初赛题目"><a href="#初赛题目" class="headerlink" title="初赛题目"></a>初赛题目</h2><p>主办方提供了 black/white/test 三个 pcap 文件夹，其中 black 和 white 分别是检测出有/无恶意软件感染的客户端 IP 组，要求选手对 test 数据集进行判定。</p>
+<p><img data-src="0.png" alt="09bda35ff290f2e34d88d50e71d98f1a.png"></p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>该题的解题过程应分为以下三个大步骤：</p>
+<ol>
+<li><strong>特征选择（Feature Selection）</strong>，选取对于区分正常/恶意流量有明显作用的 Features。</li>
+<li><strong>特征提取（Feature Extraction）</strong>，从 pcap 文件中提取上述 Features，并转换为模型训练所需要的格式。我们选择的特征提取工具为 <strong>Zeek</strong>。</li>
+<li><strong>模型训练（Model Training）</strong>，选择合适的机器学习模型对三类 pcap 文件进行训练和预测。我们选择的 Python 机器学习库为 <strong>scikit-learn</strong>。</li>
+</ol>
+<h2 id="解题步骤"><a href="#解题步骤" class="headerlink" title="解题步骤"></a>解题步骤</h2><h3 id="合并pcap文件"><a href="#合并pcap文件" class="headerlink" title="合并pcap文件"></a>合并pcap文件</h3><p>主办方提供的 pcap 文件，其中 white/black 各有 1500 个 pcap，test 2000 个 pcap</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">➜  tree eta_1 </span><br><span class="line">eta_1</span><br><span class="line">├── black</span><br><span class="line">│   ├── 192.168.10.91.pcap</span><br><span class="line">│   ├── 192.168.44.25.pcap</span><br><span class="line">│   ├── ...</span><br><span class="line">│   └── 192.168.80.115.pcap</span><br><span class="line">├── test</span><br><span class="line">│   ├── 192.168.150.71.pcap</span><br><span class="line">│   ├── 192.168.150.99.pcap</span><br><span class="line">│   ├── ...</span><br><span class="line">│   └── 192.168.210.239.pcap</span><br><span class="line">└── white</span><br><span class="line">    ├── 192.168.119.23.pcap</span><br><span class="line">    ├── 192.168.122.37.pcap</span><br><span class="line">		├── ...</span><br><span class="line">    └── 192.168.96.180.pcap</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>mergecap</code> 命令将 pcap 文件合并为三个大的 pcap 文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  mergecap -w black.pcap ./eta_1/black/*.pcap</span><br><span class="line">➜  tree -s -h .     </span><br><span class="line">.</span><br><span class="line">├── [418M]  black.pcap</span><br><span class="line">├── [1.0G]  test.pcap</span><br><span class="line">└── [1.7G]  white.pcap</span><br></pre></td></tr></table></figure>
+
+<h3 id="特征选择"><a href="#特征选择" class="headerlink" title="特征选择"></a>特征选择</h3><p>参考了多篇加密恶意流量检测的研究论文，我们初步确定了以下四类需要提取的 Features，包括<strong>TLS客户端指纹信息</strong>、<strong>数据包元数据</strong>、<strong>HTTP头部信息</strong>和<strong>DNS响应信息</strong>。</p>
+<h4 id="TLS-client-fingerprinting："><a href="#TLS-client-fingerprinting：" class="headerlink" title="TLS client fingerprinting："></a>TLS client fingerprinting：</h4><p>在进行TLS握手时，会进行如下几个步骤：</p>
+<ol>
+<li><strong>Client Hello</strong>，客户端提供支持的加密套件数组（cipher suites）；</li>
+<li><strong>Server Hello</strong>，由服务器端选择一个加密套件，传回服务器端公钥，并进行认证和签名授权（<strong>Certificate</strong> + Signature）；</li>
+<li>客户端传回客户端公钥（<strong>Client Key Exchange</strong>），客户端确立连接；</li>
+<li>服务器端确立连接，开始 HTTP 通信。</li>
+</ol>
+<p><img data-src="1.png" alt="5b01483a65bdc17c68873508796bb85e.png"></p>
+<p>以上加粗的四种消息类型可以通过 TLS 握手协议的 <strong>Handshake Type</strong> 做区分：</p>
+<p><img data-src="2.png" alt="bff6a460bcaa7c442014c3eb89deb26f.png"></p>
+<p>基于此，我们选取了以下特征：</p>
+<ul>
+<li><strong>客户端支持的加密套件数组</strong>（Cipher suites），<strong>服务器端选择的加密套件</strong>。</li>
+<li><strong>支持的扩展</strong>（TLS extensions），若分别用向量表示客户端提供的密码套件列表和 TLS 扩展列表，可以从服务器发送的确认包中的信息确定两组向量的值。</li>
+<li><strong>客户端公钥长度</strong>（Client public key length），从密钥交换的数据包中，得到密钥的长度。</li>
+<li><strong>Client version</strong>，the preferred TLS version for the client</li>
+<li><strong>是否非CA自签名</strong>，统计数据表示，恶意流量约70%出现非CA认证服务器且自签名的情况，非恶意流量约占0.1%。此项判断的依据是：未出现 <code>CA: True</code> 字段（默认非 CA 机构）且 <code>signedCertificate</code> 中的 <code>issuer</code> 字段等于 <code>subject</code> 字段。</li>
+</ul>
+<h4 id="数据包元数据："><a href="#数据包元数据：" class="headerlink" title="数据包元数据："></a>数据包元数据：</h4><ul>
+<li><strong>数据包的大小</strong>，数据包的长度受 UDP、TCP 或者 ICMP 协议中数据包的有效载荷大小影响，如果数据包不属于以上协议，则被设置为 IP 数据包的大小。</li>
+<li><strong>到达时间序列</strong></li>
+<li><strong>字节分布</strong></li>
+</ul>
+<h4 id="HTTP头部信息："><a href="#HTTP头部信息：" class="headerlink" title="HTTP头部信息："></a>HTTP头部信息：</h4><ul>
+<li><strong>Content-Type</strong>，正常流量 HTTP 头部信息汇总值多为 <code>image/*</code>，而恶意流量为 <code>text/*、text/html、charset=UTF-8</code> 或者 <code>text/html;charset=UTF-8</code>。</li>
+<li><strong>User-Agent</strong></li>
+<li><strong>Accept-Language</strong></li>
+<li><strong>Server</strong></li>
+<li><strong>HTTP响应码</strong></li>
+</ul>
+<h4 id="DNS响应信息："><a href="#DNS响应信息：" class="headerlink" title="DNS响应信息："></a>DNS响应信息：</h4><ul>
+<li><strong>域名的长度</strong>：正常流量的域名长度分布为均值为6或7的高斯分布（正态分布）；而恶意流量的域名（FQDN全称域名）长度多为6（10）。</li>
+<li><strong>数字字符及非字母数字(non-alphanumeric character)的字符占比</strong>：正常流量的DNS响应中全称域名的数字字符的占比和非字母数字字符的占比要大。</li>
+<li><strong>DNS解析出的IP数量</strong>：大多数恶意流量和正常流量只返回一个IP地址；其它情况，大部分正常流量返回2-8个IP地址，恶意流量返回4或者11个IP地址。</li>
+<li><strong>TTL值</strong>：正常流量的TTL值一般为60、300、20、30；而恶意流量多为300，大约22%的DNS响应汇总TTL为100，而这在正常流量中很罕见。</li>
+<li><strong>域名是否收录在Alexa网站</strong>：恶意流量域名信息很少收录在Alexa top-1,000,000中，而正常流量域名多收录在其中。</li>
+</ul>
+<h3 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h3><p>特征提取我们采用的工具是 <strong>Zeek</strong>，它的前身是 Bro，一款网络安全监视（Network Security Monitoring）工具，它定义了自己的 DSL 语言，支持直接处理 pcap 文件生成各类日志文件，包括 dns、http、smtp 等：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜  ls</span><br><span class="line">conn.log	dhcp.log		 files.log	infected.pcap	  packet_filter.log	  smb_files.log	</span><br><span class="line">smtp.log	lce_rpc.log	 dns.log	  http.log	 kerberos.log	   pe.log		smb_mapping.log	</span><br><span class="line">ssl.log		weird.log		 x5Q9.log</span><br></pre></td></tr></table></figure>
+
+
+
+<p>Zeek 网上有一些现成的脚本，我们采用的是 <strong>Zeek FlowMeter</strong>，它基于 OSI 七层协议的网络层和传输层，可以分析并生成一些 Packets 到达时间序列、Packet 字节大小和元数据等新特征。</p>
+<p>在使用时，我们需要在 <code>local.zeek</code> 配置文件中加入 <code>@load flowmeter</code>，这样 Zeek 在执行时会加载 <code>flowmeter.zeek</code> 并生成对应的 <code>flowmeter.log</code>，下面列出了 FlowMeter 提取出的一些特征，包括上下行包总数、包负载均值方差等。其他详细的特征请见 <a target="_blank" rel="noopener" href="https://github.com/zeek-flowmeter/zeek-flowmeter">zeek-flowmeter GitHub官方文档</a>。</p>
+<table>
+<thead>
+<tr>
+<th>Feature Name</th>
+<th>Description</th>
+<th>exists in FlowMeter</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>uid</td>
+<td>The ID of the flow as given by Zeek</td>
+<td>No</td>
+</tr>
+<tr>
+<td>flow_duration</td>
+<td>The length of the flow in seconds (maximal precision ms). If only on packet was seen the duration is 0.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fwd_pkts_tot</td>
+<td>The number of packets travelling in the forward direction.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>bwd_pkts_tot</td>
+<td>The number of packets travelling in the backwards direction.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fwd_pkts_per_sec</td>
+<td>The average number of forward packets transmitted per second during the flow. If the duration is 0 then this feature is also set to 0.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fwd_pkts_payload.avg</td>
+<td>The average payload size, in bytes, seen in the forward direction.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fwd_pkts_payload.std</td>
+<td>The standard deviation of the payload size, in bytes, seen in the forward direction.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<p>除 <code>flowmeter.log</code> 之外我们还需要关注 <code>conn.log</code>、<code>ssl.log</code> 和 <code>X509.log</code>。这几个日志共同字段 <code>uid</code> 是 Zeek 根据一次连接的源/目的 IP、源/目的端口四元组生成的唯一 ID。为了方便后续的处理，我们将这几个日志文件统一读入，使用 <code>uid</code> 字段连接后转成 csv 格式输出到文件。<strong>最终我们提取的特征如下：</strong></p>
+<p><img data-src="3.jpeg" alt="7d1475ca9c4d88e2c3e078a126fdfd52.jpeg"></p>
+<h3 id="特征向量化"><a href="#特征向量化" class="headerlink" title="特征向量化"></a>特征向量化</h3><p>因为模型训练不支持 <code>str</code> 类型的特征，所以需要对 <code>version</code> 和 <code>server_cipher</code> 等字段进行特征向量化。</p>
+<table>
+<thead>
+<tr>
+<th>version</th>
+<th>cipher</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>TLSv10</td>
+<td>TLS_RSA_WITH_3DES_EDE_CBC_SHA</td>
+</tr>
+<tr>
+<td>TLSv10</td>
+<td>TLS_RSA_WITH_3DES_EDE_CBC_SHA</td>
+</tr>
+<tr>
+<td>TLSv12</td>
+<td>TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</td>
+</tr>
+<tr>
+<td>TLSv10</td>
+<td>TLS_RSA_WITH_RC4_128_MD5</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<p><code>DictVectorizer</code> 是 scikit-learn 库中用于将 Python <code>dict</code> 对象表示的特征数组转换为 scikit-learn Estimator 使用的 NumPy/SciPy 表示形式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convert_by_dict</span>(<span class="params">src_file, dest_file</span>):</span></span><br><span class="line">    <span class="keyword">from</span> sklearn.feature_extraction <span class="keyword">import</span> DictVectorizer</span><br><span class="line">    vec = DictVectorizer()</span><br><span class="line"></span><br><span class="line">    df = pd.read_csv(src_file)</span><br><span class="line">    vs1 = <span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x: &#123;<span class="string">&#x27;version&#x27;</span>: x&#125;, df[<span class="string">&#x27;version&#x27;</span>]))</span><br><span class="line">    vs2 = vec.fit_transform(vs1).toarray()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> index, name <span class="keyword">in</span> <span class="built_in">enumerate</span>(vec.get_feature_names()):</span><br><span class="line">        df[name] = <span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x: <span class="built_in">int</span>(x[index]), vs2))</span><br><span class="line"></span><br><span class="line">    df.to_csv(dest_file, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+
+<p>向量化后的效果：</p>
+<table>
+<thead>
+<tr>
+<th>version=SSLv3</th>
+<th>version=TLSv10</th>
+<th>version=TLSv12</th>
+<th>version=TLSv11</th>
+<th>cipher=TLS_RSA_WITH_3DES_EDE_CBC_SHA</th>
+<th>…</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>…</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>…</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>…</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>…</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<p>另外需要注意的是，<strong>需要对特征列进行补全</strong>，否则在进行模型训练时会出现特征个数不匹配的问题。例如：white.pcap 文件中 TLS versions 包含 <code>[&#39;TLSv1.0&#39;, &#39;TLSv1.2&#39;, &#39;SSLv3&#39;]</code> 三个版本，而 black 和 test 的 pcap 文件中除这三个版本外还包含 <code>&#39;TLSv1.1&#39;</code> 版本，所以需要在 white 中加入 <code>version=TLSv1.1</code> 全为 0 的列。</p>
+<h3 id="模型选取及参数"><a href="#模型选取及参数" class="headerlink" title="模型选取及参数"></a>模型选取及参数</h3><p>需要注意的是：white 已明确没有被恶意软件感染，所以产生的流量可以全部标注为正常流量，而 black 明确的只是客户端感染了恶意软件，但产生的流量不一定全为恶意流量。所以实际上是<strong>对不平衡样本数据进行训练和预测</strong>。遵循这个思路，可以采用 <strong>Anomaly Detector</strong> + <strong>Misuse Detector</strong> 的联合分类器进行训练。</p>
+<p><img data-src="4.png" alt="fe7a1c020a03492fd8b465e8541a410e.png"></p>
+<p>基于全正常流量的 white.pcap 文件进行 <strong>one-class classification</strong> 训练异常检测器 Anomaly Detector；再用该分类器对 black.pcap 文件进行推理预测恶意流量；结合 black 中检测的恶意流量和 white 正常流量训练二分类器；最终采用二分类器对 test 中的流量进行检测。</p>
+<h4 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h4><p>数据集是我们之前经过 Zeek 特征提取、特征向量化后产生的 <code>white.csv</code>、<code>black.csv</code> 和 <code>test.csv</code> 三个 csv 文件，使用 pandas 读入后定义一个列名数组 <code>data_f</code> 来获取相应特征：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">white_df = pd.read_csv(<span class="string">&quot;white.csv&quot;</span>,index_col=<span class="number">0</span>)</span><br><span class="line">black_df = pd.read_csv(<span class="string">&quot;black.csv&quot;</span>,index_col=<span class="number">0</span>)</span><br><span class="line">test_df = pd.read_csv(<span class="string">&quot;test.csv&quot;</span>,index_col=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">white_flow = white_df[data_f]</span><br><span class="line">black_flow = black_df[data_f]</span><br><span class="line">test_flow = test_df[data_f]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 源 IP 用于生成结果 result.txt 文件时使用</span></span><br><span class="line">test_ip = test_df[<span class="string">&#x27;id.oirg_h&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>将 white_flow 和 black_flow 两个数据集合并做归一化处理，得到total_data：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">merge_flow = white_flow.append(black_flow, ignore_index=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">min_max_scaler = preprocessing.MinMaxScaler()</span><br><span class="line">total_data = min_max_scaler.fit_transform(merge_flow.values)</span><br></pre></td></tr></table></figure>
+
+<p>然后我们从 total_data 中提取 white 的训练集和测试集，同时需要提取 black 的测试集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># white 训练集和测试集(标签1表示正常流量)</span></span><br><span class="line">x_train,x_valid,y_train,y_valid=train_test_split(total_data[<span class="number">0</span>:<span class="number">4834</span>],np.ones(<span class="number">4834</span>,np.<span class="built_in">int</span>),random_state=<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># black 测试集</span></span><br><span class="line">black_data = total_data[<span class="number">4834</span>:]</span><br></pre></td></tr></table></figure>
+
+<h4 id="Anomaly-Detector"><a href="#Anomaly-Detector" class="headerlink" title="Anomaly Detector"></a>Anomaly Detector</h4><p>在 black 数据集中同时存在恶意流量和正常流量，没有明确的标注，无法直接用于训练分类器。而 white 数据集中都是正常流量，可以先用 white 数据集来训练一个 Anomaly Detector 分类器。然后用这个分类器在 black 数据集中推理得到哪些是恶意流量。我们的模型选取的隔离森林 <code>IsolationForest</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">clf = IsolationForest(max_samples=<span class="built_in">len</span>(x_train), contamination=<span class="number">0.3</span>)</span><br><span class="line">clf.fit(x_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证集正确率</span></span><br><span class="line">y_pred_valid = clf.predict(x_valid)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;valid_accuracy：&quot;</span> + <span class="built_in">str</span>(np.mean(y_valid == y_pred_valid)))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 由 black 测试集得到的恶意流量占比</span></span><br><span class="line">y_black_test = clf.predict(black_data)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;black_anomaly_ratio：&quot;</span> + <span class="built_in">str</span>(<span class="number">1</span> - np.mean(y_black_test==np.ones(<span class="number">3980</span>, np.<span class="built_in">int</span>))))</span><br></pre></td></tr></table></figure>
+
+<h4 id="训练误用检测器-Misuse-Detector"><a href="#训练误用检测器-Misuse-Detector" class="headerlink" title="训练误用检测器 Misuse Detector"></a>训练误用检测器 Misuse Detector</h4><p>假设这些由异常检测器识别的可疑流量是恶意流量，我们就有了恶意流量的标注。接下来我们用这些恶意流量 labels，结合 white 数据集中的正常流量 labels，来训练一个 Misuse Detector。我们选取了 XGBoost 基于树的模型，目标选取为多分类问题（分类数为2）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># XGbooster Model     gbtree    multi:softmax   2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># label标签  1:white  0:black</span></span><br><span class="line">white_flow[<span class="string">&#x27;label&#x27;</span>] = <span class="number">1</span></span><br><span class="line">black_flow[<span class="string">&#x27;label&#x27;</span>] = y_black_test</span><br><span class="line">black_flow[<span class="string">&#x27;label&#x27;</span>] = black_flow[<span class="string">&#x27;label&#x27;</span>].<span class="built_in">map</span>(<span class="keyword">lambda</span> x: <span class="number">1</span> <span class="keyword">if</span> x &gt; <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保留 black 中的恶意流量数据</span></span><br><span class="line">balack_anomaly_flow = black_flow[black_flow[<span class="string">&#x27;label&#x27;</span>] == <span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 得到模型训练数据集</span></span><br><span class="line">model_data = white_flow.append(balack_anomaly_flow, ignore_index=<span class="literal">True</span>) </span><br></pre></td></tr></table></figure>
+
+<p>下一步对于数据做 Max/Min 归一化，然后分割出训练集、验证集、测试集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Max/Min 归一化</span></span><br><span class="line">X_flow = model_data[data_f]</span><br><span class="line">label_flow = model_data[<span class="string">&#x27;label&#x27;</span>].values</span><br><span class="line">model_total_flow = X_flow.append(test_flow, ignore_index=<span class="literal">True</span>)</span><br><span class="line">data_normal = preprocessing.scale(model_total_flow.values)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分出训练集和测试集</span></span><br><span class="line">model_train = data_normal[:model_data.shape[<span class="number">0</span>]]</span><br><span class="line">model_test = data_normal[model_data.shape[<span class="number">0</span>]:]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练集中分割出验证集(根据 label_flow 来层次化分割)</span></span><br><span class="line">X_train, X_valid, Y_train, Y_valid = train_test_split(model_train, label_flow, random_state=<span class="number">50</span>,stratify = label_flow)</span><br><span class="line"></span><br><span class="line">xgboost_train = xgb.DMatrix(X_train, label=Y_train)</span><br><span class="line">xgboost_valid = xgb.DMatrix(X_valid, label=Y_valid)</span><br></pre></td></tr></table></figure>
+
+<p>进行 XGBoost 模型训练：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">evalerror</span>(<span class="params">preds, dtrain</span>):</span>    </span><br><span class="line">    labels = dtrain.get_label()</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;error&#x27;</span>, math.sqrt(metrics.mean_squared_error(preds,labels))</span><br><span class="line"></span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&#x27;booster&#x27;</span>: <span class="string">&#x27;gbtree&#x27;</span>,  <span class="comment"># 树模型</span></span><br><span class="line">    <span class="string">&#x27;objective&#x27;</span>: <span class="string">&#x27;multi:softmax&#x27;</span>,  <span class="comment"># 多分类</span></span><br><span class="line">    <span class="string">&#x27;num_class&#x27;</span>: <span class="number">2</span>,  <span class="comment"># 类别数</span></span><br><span class="line">    </span><br><span class="line">    <span class="string">&#x27;gamma&#x27;</span>: <span class="number">0.1</span>,  <span class="comment"># 指定了节点分裂所需的最小损失函数下降值，越大越不易分裂</span></span><br><span class="line">    <span class="string">&#x27;max_depth&#x27;</span>: <span class="number">7</span>,  <span class="comment"># 树的深度</span></span><br><span class="line">    <span class="string">&#x27;subsample&#x27;</span>: <span class="number">0.75</span>,  <span class="comment"># 每棵树随机采样的占比（训练集中）</span></span><br><span class="line">    <span class="string">&#x27;colsample_bytree&#x27;</span>: <span class="number">0.75</span>,  <span class="comment"># 每棵树随机采样的列数的占比（每一列是一个特征）</span></span><br><span class="line">    <span class="string">&#x27;min_child_weight&#x27;</span>: <span class="number">0.06</span>, <span class="comment"># 决定最小叶子节点样本权重和</span></span><br><span class="line">    </span><br><span class="line">    <span class="string">&#x27;eta&#x27;</span>: <span class="number">0.05</span>,  <span class="comment"># 学习率</span></span><br><span class="line">    <span class="string">&#x27;seed&#x27;</span>: <span class="number">100</span>, <span class="comment"># 随机种子</span></span><br><span class="line">    <span class="string">&#x27;nthread&#x27;</span>: <span class="number">6</span>  <span class="comment"># cpu 线程数</span></span><br><span class="line">&#125;</span><br><span class="line">rounds = <span class="number">200</span> <span class="comment"># 迭代次数</span></span><br><span class="line">watchlist = [(xgboost_train, <span class="string">&#x27;train&#x27;</span>), (xgboost_valid, <span class="string">&#x27;valid&#x27;</span>)]</span><br><span class="line">bst = xgb.train(params, xgboost_train, rounds, watchlist,feval=evalerror)</span><br></pre></td></tr></table></figure>
+
+<p>用模型去预测结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test 数据集上使用模型进行预测</span></span><br><span class="line">xgboost_test = xgb.DMatrix(model_test)</span><br><span class="line">y_predicted = bst.predict(xgboost_test)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># test_ip.txt 是 test 文件夹中的所有文件名</span></span><br><span class="line">ip = pd.read_table(<span class="string">&#x27;test_ip.txt&#x27;</span>, header=<span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文件名去掉对应的 .pcap 就是要预测的 IP</span></span><br><span class="line">ip[<span class="number">0</span>] = ip[<span class="number">0</span>].<span class="built_in">map</span>(<span class="keyword">lambda</span> x: x.replace(<span class="string">&#x27;.pcap&#x27;</span>, <span class="string">&#x27;&#x27;</span>))</span><br><span class="line">ip_list = <span class="built_in">list</span>(ip[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 先将所有客户端 IP 对应的类型标记为 white</span></span><br><span class="line">ip[<span class="number">1</span>] = [<span class="string">&#x27;white&#x27;</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(ip.shape[<span class="number">0</span>])]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历预测结果</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(y_predicted)):</span><br><span class="line">    <span class="comment"># 如果第 i 条流量为 black</span></span><br><span class="line">    <span class="keyword">if</span> y_predicted[i] == <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># 读取第 i 条流量的源 IP</span></span><br><span class="line">        tmp_ip = <span class="built_in">list</span>(test_ip[i:i+<span class="number">1</span>])[<span class="number">0</span>]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 遍历所有要预测的客户端 IP</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(ip_list)):</span><br><span class="line">            <span class="comment"># 如果是第 i 条流量（恶意）的源 IP</span></span><br><span class="line">            <span class="keyword">if</span> tmp_ip == ip_list[j]:</span><br><span class="line">            <span class="comment"># 将该客户端 IP 标记为 black</span></span><br><span class="line">                ip.loc[j,<span class="number">1</span>] = <span class="string">&#x27;black&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># test 数据集恶意 IP 计数</span></span><br><span class="line">malware_ip_count = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(ip.shape[<span class="number">0</span>]):</span><br><span class="line">    <span class="keyword">if</span> ip.loc[i,<span class="number">1</span>] == <span class="string">&#x27;black&#x27;</span>:</span><br><span class="line">        malware_ip_count += <span class="number">1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;test数据集恶意ip个数&quot;</span> + <span class="built_in">str</span>(malware_ip_count) )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将最终结果写入 result.txt</span></span><br><span class="line">ip.to_csv(<span class="string">&#x27;result.txt&#x27;</span>,sep=<span class="string">&#x27;,&#x27;</span>,index=<span class="literal">False</span>,header=<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结与反思"><a href="#总结与反思" class="headerlink" title="总结与反思"></a>总结与反思</h2><p>这次比赛几次提交点的最好成绩是 72.5 分，距离复赛要求的名次差几名，很遗憾无缘复赛。总结了失利的几点原因：</p>
+<ol>
+<li>对恶意流量的特征不熟悉，导致花了很多时间去确定需要提取哪些 Features，浪费了前面的检查点。其实我们最后提取的 Features 还有很大的提升空间，比如数据包的时间序列特征，我们只提取了均值、方差等特征，还有字节分布等重要特征未进行有效提取。<br><img data-src="5.png" alt="e67c9834b783a0c2b314e2dd35719671.png"></li>
+<li>对模型的选择和参数认识不够，只是盲目的更换模型和调参，一开始发现模型和参数对结果的影响很大，实际上还是特征提取的不够好。当提取了能有效区分正常/恶意流量的特征后，模型的选择和参数对结果影响就较小了，所以最重要的依然是有效特征的提取。</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>Shekhawat, A. S. (2018). <em>Analysis of Encrypted Malicious Traffic.</em></li>
+<li>Jenseg, O. (2019). <em>A machine learning approach to detecting malware in TLS traffic using resilient network features (Master’s thesis, NTNU).</em></li>
+<li>Shekhawat, A. S., Di Troia, F., &amp; Stamp, M. (2019). <em>Feature analysis of encrypted malicious traffic. Expert Systems with Applications, 125, 130-141.</em></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@melanijan93/https-medium-com-melanijan93-analysing-pcaps-with-bro-zeek-33340e710012">Analysing PCAPs with Bro/Zeek</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.intechopen.com/online-first/machine-learning-applications-in-misuse-and-anomaly-detection">Machine Learning Applications in Misuse and Anomaly Detection</a></li>
+<li><a target="_blank" rel="noopener" href="https://machinelearningmastery.com/imbalanced-classification-with-python/">imbalanced-classification-with-python</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/scikit-learn/scikit-learn/blob/master/doc/modules/feature_extraction.rst">scikit-learn GitHub doc: Feature extraction</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.secrss.com/articles/18679">基于机器学习的TLS恶意加密流量检测方案</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/bonelee/p/9604530.html">利用背景流量数据（contexual flow data）识别TLS加密恶意流量</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpeg" alt="s1mple 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Security/" rel="tag"># Security</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/" rel="prev" title="图流算法之 Bipartiteness Check">
+      <i class="fa fa-chevron-left"></i> 图流算法之 Bipartiteness Check
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/" rel="next" title="基于 DPDK 的模拟 (D)Dos 攻击实验">
+      基于 DPDK 的模拟 (D)Dos 攻击实验 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E8%B5%9B%E9%A2%98%E7%9B%AE"><span class="nav-number">1.</span> <span class="nav-text">初赛题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4"><span class="nav-number">3.</span> <span class="nav-text">解题步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E5%B9%B6pcap%E6%96%87%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">合并pcap文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9"><span class="nav-number">3.2.</span> <span class="nav-text">特征选择</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TLS-client-fingerprinting%EF%BC%9A"><span class="nav-number">3.2.1.</span> <span class="nav-text">TLS client fingerprinting：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%8C%85%E5%85%83%E6%95%B0%E6%8D%AE%EF%BC%9A"><span class="nav-number">3.2.2.</span> <span class="nav-text">数据包元数据：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP%E5%A4%B4%E9%83%A8%E4%BF%A1%E6%81%AF%EF%BC%9A"><span class="nav-number">3.2.3.</span> <span class="nav-text">HTTP头部信息：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS%E5%93%8D%E5%BA%94%E4%BF%A1%E6%81%AF%EF%BC%9A"><span class="nav-number">3.2.4.</span> <span class="nav-text">DNS响应信息：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96"><span class="nav-number">3.3.</span> <span class="nav-text">特征提取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F%E5%8C%96"><span class="nav-number">3.4.</span> <span class="nav-text">特征向量化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E9%80%89%E5%8F%96%E5%8F%8A%E5%8F%82%E6%95%B0"><span class="nav-number">3.5.</span> <span class="nav-text">模型选取及参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="nav-number">3.5.1.</span> <span class="nav-text">数据处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Anomaly-Detector"><span class="nav-number">3.5.2.</span> <span class="nav-text">Anomaly Detector</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E8%AF%AF%E7%94%A8%E6%A3%80%E6%B5%8B%E5%99%A8-Misuse-Detector"><span class="nav-number">3.5.3.</span> <span class="nav-text">训练误用检测器 Misuse Detector</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E5%8F%8D%E6%80%9D"><span class="nav-number">4.</span> <span class="nav-text">总结与反思</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="s1mple"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">s1mple</p>
+  <div class="site-description" itemprop="description">春光恰与少年同，十里清风慕天青</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">s1mple</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id    : 33231,
+      el    : 'wpac-rating',
+      color : 'fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/',]
+      });
+      });
+  </script>
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/";
+    this.page.identifier = "2020/08/09/DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思/";
+    this.page.title = "DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://true.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

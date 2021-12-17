@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="函数是一等公民虽然《流畅的Python》作者一再强调 Python 不是一门函数式编程语言，但它的的确确具备了一些函数式编程的特性。其中的一个重要特性是：Python 将函数作为一等公民。这与 JavaScript、Scala 等语言一样，意味着在这类语言中：函数与其他数据类型处于同等地位，函数可以定义在函数内部，也可以作为函数的参数和返回值。基于这个特性，我们可以很容易的定义高阶函数。来看一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 装饰器与闭包">
+<meta property="og:url" content="https://s1mplecc.github.io/2020/12/20/Python-%E8%A3%85%E9%A5%B0%E5%99%A8%E4%B8%8E%E9%97%AD%E5%8C%85/index.html">
+<meta property="og:site_name" content="s1mple 的博客">
+<meta property="og:description" content="函数是一等公民虽然《流畅的Python》作者一再强调 Python 不是一门函数式编程语言，但它的的确确具备了一些函数式编程的特性。其中的一个重要特性是：Python 将函数作为一等公民。这与 JavaScript、Scala 等语言一样，意味着在这类语言中：函数与其他数据类型处于同等地位，函数可以定义在函数内部，也可以作为函数的参数和返回值。基于这个特性，我们可以很容易的定义高阶函数。来看一个">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-20T09:06:51.000Z">
+<meta property="article:modified_time" content="2021-12-17T05:47:55.538Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="函数式编程">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://s1mplecc.github.io/2020/12/20/Python-%E8%A3%85%E9%A5%B0%E5%99%A8%E4%B8%8E%E9%97%AD%E5%8C%85/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Python 装饰器与闭包 | s1mple 的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">s1mple 的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/12/20/Python-%E8%A3%85%E9%A5%B0%E5%99%A8%E4%B8%8E%E9%97%AD%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple 的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python 装饰器与闭包
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-20 17:06:51" itemprop="dateCreated datePublished" datetime="2020-12-20T17:06:51+08:00">2020-12-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-17 13:47:55" itemprop="dateModified" datetime="2021-12-17T13:47:55+08:00">2021-12-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="函数是一等公民"><a href="#函数是一等公民" class="headerlink" title="函数是一等公民"></a>函数是一等公民</h2><p>虽然《流畅的Python》作者一再强调 Python 不是一门函数式编程语言，但它的的确确具备了一些函数式编程的特性。其中的一个重要特性是：Python 将<strong>函数作为一等公民</strong>。这与 JavaScript、Scala 等语言一样，意味着在这类语言中：<strong>函数与其他数据类型处于同等地位，函数可以定义在函数内部，也可以作为函数的参数和返回值</strong>。基于这个特性，我们可以很容易的定义高阶函数。来看一个 JavaScript 的例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> add = <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数将一个函数作为了返回值，很明显它是一个高阶函数，那么问题来了：这样定义有什么作用或者是好处呢？事实上，这段代码是 JavaScript 中的一个优雅的函数式编程库 <a target="_blank" rel="noopener" href="https://ramdajs.com/">Ramda</a> 对于加法实现的基本思路（还需要可变参数以及参数个数判断）。最终我们可以这样去使用它：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> R = <span class="built_in">require</span>(<span class="string">&#x27;ramda&#x27;</span>)</span><br><span class="line">R.add(<span class="number">1</span>, <span class="number">2</span>) <span class="comment">// -&gt; 3</span></span><br><span class="line"><span class="keyword">const</span> increment = R.add(<span class="number">1</span>) <span class="comment">// 返回一个函数</span></span><br><span class="line">increment(<span class="number">2</span>) <span class="comment">// -&gt; 3</span></span><br><span class="line">R.add(<span class="number">1</span>)(<span class="number">2</span>) <span class="comment">// -&gt; 3</span></span><br></pre></td></tr></table></figure>
+
+<p>既可以像代码第二行一次性传入两个参数，也可以像代码第三、四行分两个阶段传入，这与代码第五行效果一致。我们将这种特性称为<strong>函数柯里化（Currying）</strong>，这样做的好处一是可以<strong>代码重用</strong>，就像特意将 <code>R.add(1)</code> 取名为 increment 一样，它可以单独地作为一个递增函数；二是可以实现<strong>惰性求值</strong>，只有当函数收集到了所有所需参数，才进行真正的计算并返回结果，这一点在许多流处理框架中有广泛使用。</p>
+<p>Python 中的函数之所以可以作为一等公民，究其原因，是因为 Python 中的<strong>一切皆是对象</strong>，即 <em>Everything in Python is an object</em>。使用 <code>def</code> 关键字定义的任何函数，都是 <code>function</code> 类的一个实例。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">pass</span></span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(func)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">function</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>既然函数是对象，那就可以持有属性，这也是为什么 Python 中函数可以持有外部定义的变量（也就是闭包问题）的根本原因。这一点与 Java 和 C++ 这类语言是有本质区别的。以 Java8 为例，虽然 Java8 提供了一些语法糖让我们得以编写所谓的“高阶函数”，但 Java 中的函数（方法）依然不能脱离类或者对象而存在：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Arrays.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)</span><br><span class="line">        .stream()</span><br><span class="line">        .filter(i -&gt; i &gt;= <span class="number">3</span>)</span><br><span class="line">        .forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+
+<p>上述代码第三行接收一个 Lambda 表达式作为参数，第四行接收一个方法引用，看上去函数可以作为参数传入。但实际上，Java 编译器会将它们转换为<strong>函数接口（Functional Interfaces）</strong>的具体实现，函数接口是 Java8 函数式编程引入的核心概念。例如上述代码中的 <code>System.out::println</code> 方法引用会被实例化为 Consumer 函数接口的具体实现，Consumer 是 Java8 提供的四类函数接口中的一类，称为消费者接口，它有一个 accept 抽象方法接受一个输入且返回值为空，编译器将会用 <code>System.out.println(t)</code> 重写这个方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Consumer</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">accept</span><span class="params">(T t)</span></span>;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;    </span><br><span class="line"></span><br><span class="line"><span class="comment">// Consumer consumer = System.out::println;</span></span><br><span class="line"><span class="comment">// consumer.accept(&quot;hello&quot;);</span></span><br></pre></td></tr></table></figure>
+
+<p>所以在 Java8 中，看似函数可以作为参数传入，但实际上传入的依旧是类的实例。如果对 Java8 的函数式编程感兴趣可以参考这篇：<a target="_blank" rel="noopener" href="https://s2mple.xyz/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/">Java8 函数接口</a>。</p>
+<p>言归正传，既然已经清楚了 Python 中可以定义高阶函数，那么接下来就可以探讨一下 Python 怎么使用高阶函数实现装饰器的。但在这之前，不得不提及一下什么是闭包。</p>
+<h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><p>首先注意，只有涉及到<strong>嵌套函数</strong>才会存在闭包问题。而不要将闭包与匿名函数搞混，是不是匿名函数不是必要条件，只是人们通常将闭包与匿名函数搭配使用罢了（尤其是在 JavaScript 中）。</p>
+<p>实际上，闭包是指<strong>延伸了作用域的函数</strong>，关键在于它<strong>能够访问定义体之外定义的非全局变量</strong>。听上去有些绕，不过看看下面这段代码就很好理解了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_average</span>():</span></span><br><span class="line">    series = []</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">average</span>(<span class="params">new_value</span>):</span></span><br><span class="line">        series.append(new_value)</span><br><span class="line">        total = <span class="built_in">sum</span>(series)</span><br><span class="line">        <span class="keyword">return</span> total / <span class="built_in">len</span>(series)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> average</span><br></pre></td></tr></table></figure>
+
+<p>关注点放在 series 这个变量。它定义在内层函数 average 之外并在内层函数中做了修改（末尾追加了一个值）。并且，内层函数被当作外层函数的返回值返回。显然，内层函数 average 设计出来是为了多次调用的，然而 series 是在内层函数之外定义的，当多次调用 average 时 series 作用域是否已经消亡了呢？答案是否。看看下面的输出：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>avg = make_average()  <span class="comment"># 返回 average 函数</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>avg(<span class="number">1</span>)  <span class="comment"># (1) / 1</span></span><br><span class="line"><span class="number">1.0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>avg(<span class="number">2</span>)  <span class="comment"># (1 + 2) / 2</span></span><br><span class="line"><span class="number">1.5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>avg(<span class="number">3</span>)  <span class="comment"># (1 + 2 + 3) / 3</span></span><br><span class="line"><span class="number">2.0</span></span><br></pre></td></tr></table></figure>
+
+<p>原因在于，上述代码中的 series 变量声明语句与 average 函数定义体构成了一个闭包，average 函数的作用域延伸到函数外部，换句话说，series 已经绑定到 average 函数对象上了。我们将 series 这种变量称为<strong>自由变量</strong>（free variable）。可以通过 Python 提供的内省属性访问：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>avg.__code__.co_freevars</span><br><span class="line">(<span class="string">&#x27;series&#x27;</span>,)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>avg.__closure__</span><br><span class="line">(&lt;cell at <span class="number">0x104301400</span>: <span class="built_in">list</span> <span class="built_in">object</span> at <span class="number">0x1041a9580</span>&gt;,)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>avg.__closure__[<span class="number">0</span>].cell_contents</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+
+<p><code>__code__.co_freevars</code> 以元组形式存放了自由变量的<strong>名称</strong>。要想访问自由变量的值，需要通过 <code>__closure__</code> 属性，也就是说，实际上 series 是绑定到 <code>avg.__closure__</code> 中的。Python 在自由变量之上包装了一个 cell 对象，用 <code>cell_contents</code> 存放其真正的值。</p>
+<h2 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h2><p>装饰器，又称函数装饰器，本质上是一个<strong>可调用对象</strong>（实现了 <code>__call__</code> 方法），可以是一个函数或者一个类。它的作用是可以让其他函数或类在不需要做任何代码修改的前提下增加额外功能。装饰器接受一个函数作为参数，即被装饰的函数，可能会对这个函数进行处理然后将它返回，或者替换为另一个函数或可调用对象。</p>
+<p>先来看一个最简单的装饰器示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">decorate</span>(<span class="params">func</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;running decorator...&#x27;</span>)</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> func</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>@decorate</span><br><span class="line"><span class="meta">... </span><span class="function"><span class="keyword">def</span> <span class="title">target</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;running target...&#x27;</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line">running decorator...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>target()</span><br><span class="line">running target...</span><br></pre></td></tr></table></figure>
+
+<p>上述代码定义了一个名为 decorate 的装饰器，然后通过 <code>@decorate</code> 标注在 target 函数上表明用它来装饰 target 函数。乍一看，这与 Java 中的注解语法是一样的，但其实两者作用是完全不同的。Java 中的注解只是元数据，不会对被修饰的对象做任何修改，必须通过运行时的反射（<code>getAnnotation</code> 方法）才能发挥它的作用。而在 Python 中，<strong>装饰器的作用就是定义一个嵌套函数</strong>。你可以理解为，通过装饰器装饰后，target 函数被重新定义为了如下形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">target = decorate(target)</span><br></pre></td></tr></table></figure>
+
+<p>但装饰器与这样直接定义还是有几点区别的。第一点，<strong>装饰器是在被装饰的函数定义之后立即执行的</strong>，这通常是在<strong>导入时</strong>（import），也就是 Python 加载模块时发生的。如果你足够细心，就会发现上述代码中的 <code>&#39;running decorator...&#39;</code> 是在 target 函数定义后就被立即打印了，并且调用 target 函数时也没有重复打印。也就是说，<strong>函数装饰器在导入模块时立即执行，而被装饰的函数只在明确调用时运行</strong>。这突出了 Python 的导入时和运行时的区别。</p>
+<p>第二点，函数装饰器既然要体现它的“装饰”语义，就需要接收一个函数作为参数然后返回一个函数，无论返回的函数是原封不动的原函数还是“装饰”后的函数。也就是说，<strong>装饰器对于函数调用者是透明的</strong>。那么，装饰器返回一个其他类型就没有意义。事实证明，如果返回了其他类型，代码运行将会报出 TypeError 错误（没有找到 <code>__call__</code> 方法）。而如果只是嵌套函数 <code>decorate(target)</code> 的写法是没有返回类型的限制的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decorate</span>(<span class="params">func</span>):</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;running decorator...&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># TypeError: &#x27;int&#x27; object is not callable</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="函数装饰器"><a href="#函数装饰器" class="headerlink" title="函数装饰器"></a>函数装饰器</h3><p>事实上，<strong>大多数装饰器会在内部定义一个函数然后将其返回</strong>，原封不动地返回被装饰的函数是没有多大用处的。像这样的双层嵌套函数足以应对绝大多数的装饰器需求了，其最大的好处是：可以<strong>支持带有参数的被装饰函数</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">logger</span>(<span class="params">func</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">target</span>(<span class="params">*args, **kwargs</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;[INFO]: the function <span class="subst">&#123;func.__name__&#125;</span>() is running...&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> target</span><br></pre></td></tr></table></figure>
+
+<p>不管原函数（被装饰函数）func 接收什么类型的参数，在使用 logger 装饰器时都将被打包成定位参数 <code>*args</code> 和仅限关键字参数 <code>**kwargs</code>，原封不动的传入到装饰器的内部函数 target 中，执行完装饰逻辑后通过 <code>func(*args, **kwargs)</code> 执行原函数。从而能够实现“不修改原有函数接口、不影响原有函数执行”的前提下添加额外功能。如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>@logger</span><br><span class="line"><span class="meta">... </span><span class="function"><span class="keyword">def</span> <span class="title">person</span>(<span class="params">name, age=<span class="number">18</span></span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(name, age)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>person(<span class="string">&#x27;Jack&#x27;</span>)</span><br><span class="line">[INFO]: the function person() <span class="keyword">is</span> running...</span><br><span class="line">Jack <span class="number">18</span></span><br></pre></td></tr></table></figure>
+
+<p>除了被装饰函数可以带有参数外，装饰器本身也可以带有参数，如 <code>@logger(Level.INFO)</code> 在装饰器中指定日志等级，根据业务逻辑标注在不同的函数上，从而最大程度的发挥装饰器的灵活性。</p>
+<p>接下来，我会结合一个更实用的例子 —— 记录被装饰函数运行时间的计时器，展示如何定义并使用一个带参装饰器。同时，你还将看到闭包问题是如何在装饰器中体现的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">clock</span>(<span class="params">unit=TimeUnit.SECONDS</span>):</span>  <span class="comment"># ①</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorate</span>(<span class="params">func</span>):</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span>(<span class="params">*args, **kwargs</span>):</span>  <span class="comment"># ②</span></span><br><span class="line">            start = time.perf_counter()</span><br><span class="line">            result = func(*args, **kwargs)  <span class="comment"># ③</span></span><br><span class="line">            end = time.perf_counter()</span><br><span class="line">            arg_str = <span class="string">&#x27;, &#x27;</span>.join(<span class="built_in">repr</span>(arg) <span class="keyword">for</span> arg <span class="keyword">in</span> args)</span><br><span class="line">            <span class="keyword">if</span> unit == TimeUnit.SECONDS:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&#x27;running <span class="subst">&#123;func.__name__&#125;</span>(<span class="subst">&#123;arg_str&#125;</span>): <span class="subst">&#123;end - start&#125;</span>s&#x27;</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&#x27;running <span class="subst">&#123;func.__name__&#125;</span>(<span class="subst">&#123;arg_str&#125;</span>): <span class="subst">&#123;(end - start) * <span class="number">1000</span>&#125;</span>ms&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorate</span><br></pre></td></tr></table></figure>
+
+<p>带参装饰器比无参装饰器多了一层嵌套，这是一种妥协，原因是<strong>装饰器只能且必须接收一个函数作为参数</strong>，所以为了使装饰器接收其他参数，不得不在之上再包装一层函数。在上述代码的三层函数中，最外层定义的 clock 函数是参数化装饰器<strong>工厂函数</strong>，第二层 decorate 函数才是真正的装饰器，wrapper 函数则是执行装饰逻辑的包裹函数（被装饰函数在其中执行）。</p>
+<p>此外代码中用带圈数字标注的几个需要注意的点是：</p>
+<ul>
+<li>① 最外层的 clock 工厂函数接收一个名为 unit 的时间单位的参数，默认值为秒（这里采用枚举类型）；</li>
+<li>② <strong>如果被装饰的函数带参数，只需要把装饰器最内层函数跟被装饰函数的参数列表保持一致即可</strong>。这里 wrapper 函数接收任意个定位参数 <code>*args</code> 和仅限关键字参数 <code>**kwargs</code>，写成这样的目的是想体现 clock 计时器的泛用性，你可以在 ③ 处原封不动地将这些参数传给被装饰函数 func 调用；</li>
+<li>③ func 实际上是定义在 wrapper 外层的自由变量（作为 decorate 的参数传入），所以它已经被绑定到 wrapper 的闭包中。</li>
+</ul>
+<p>③ 处是被装饰函数真正执行的地方，上下两行使用计时器记录并统计了 func 函数运行前后的时间差值，在打印时根据传入 clock 的参数决定打印时间单位采用秒还是毫秒。我们来看看如何使用这个装饰器：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>@clock()</span><br><span class="line"><span class="meta">... </span><span class="function"><span class="keyword">def</span> <span class="title">sleep</span>(<span class="params">secs</span>):</span></span><br><span class="line"><span class="meta">... </span>    time.sleep(secs)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>@clock(unit=TimeUnit.SECONDS)</span><br><span class="line"><span class="meta">... </span><span class="function"><span class="keyword">def</span> <span class="title">sleep_secs</span>(<span class="params">secs</span>):</span></span><br><span class="line"><span class="meta">... </span>    time.sleep(secs)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>@clock(unit=TimeUnit.MILL_SECONDS)</span><br><span class="line"><span class="meta">... </span><span class="function"><span class="keyword">def</span> <span class="title">sleep_ms</span>(<span class="params">ms</span>):</span></span><br><span class="line"><span class="meta">... </span>    time.sleep(ms / <span class="number">1000</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sleep(<span class="number">0.1</span>)</span><br><span class="line">running sleep(<span class="number">0.1</span>): <span class="number">0.10221230299998751</span>s</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sleep_secs(<span class="number">1</span>)</span><br><span class="line">running sleep_secs(<span class="number">1</span>): <span class="number">1.000441283999976</span>s</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sleep_ms(<span class="number">100</span>)</span><br><span class="line">running sleep_ms(<span class="number">100</span>): <span class="number">103.84234799994374</span>ms</span><br></pre></td></tr></table></figure>
+
+<p>需要注意，第一个空参装饰器 <code>@clock()</code>，其中的 <code>()</code> 是不能省略的，它使用了 <code>TimeUnit.SECONDS</code> 作为默认参数，这是在 clock 定义处声明的。此外，clock 装饰器中的参数并不是和函数名绑定的，打印的时间单位完全取决于传入 clock 装饰器的参数。比如，也可以让 sleep_ms 按照秒的格式打印时间：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>@clock(unit=TimeUnit.SECONDS)</span><br><span class="line"><span class="meta">... </span><span class="function"><span class="keyword">def</span> <span class="title">sleep_ms</span>(<span class="params">ms</span>):</span></span><br><span class="line"><span class="meta">... </span>    time.sleep(ms / <span class="number">1000</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sleep_ms(<span class="number">100</span>)</span><br><span class="line">running sleep_ms(<span class="number">100</span>): <span class="number">0.10072612899966771</span>s</span><br></pre></td></tr></table></figure>
+
+<h3 id="类装饰器"><a href="#类装饰器" class="headerlink" title="类装饰器"></a>类装饰器</h3><p>前面提到，装饰器本质上是一个可调用对象。到目前为止，给出的示例都是函数类型的装饰器，函数当然是可调用对象。但如果阅读 Python 源码，会发现许多装饰器是用类定义的，比如内置模块中的 property、classmethod 和 staticmethod 类。这些类都可调用对象（callable），对于用户来说，自定义一个类装饰器需要让这个类实现 <code>__call__</code> 方法，这样解释器在运行时会将这个类绑定为 Callable 类的子类。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">callable</span>(<span class="built_in">property</span>)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">callable</span>(<span class="built_in">staticmethod</span>)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">Foo</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self</span>):</span> ...</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">callable</span>(Foo())</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> <span class="type">Callable</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">issubclass</span>(Foo, <span class="type">Callable</span>)</span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<p>对于不含参数的类装饰器来说，除了需要实现 <code>__call__</code> 方法之外，唯一要做的就是在构造函数 <code>__init__</code> 中初始化被装饰函数。下面定义了一个基于类的无参装饰器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Logger</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, func</span>):</span></span><br><span class="line">        self._func = func</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;[INFO]: the function <span class="subst">&#123;self._func.__name__&#125;</span>() is running...&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> self._func(*args, **kwargs)</span><br></pre></td></tr></table></figure>
+
+<p>函数类型的装饰器是将装饰逻辑定义在嵌套函数的内部函数中，而无参类装饰器则是将装饰逻辑定义在类中的 <code>__call__</code> 方法内，类装饰器同样可以装饰带有参数的函数。两者的区别只不过是，定义函数装饰器时被装饰函数 func 作为参数传入，定义类装饰器时 func 作为属性传入。类装饰器同样是以 <code>@ + 类名</code> 的形式标注在被装饰函数上：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> class_decorator <span class="keyword">import</span> Logger</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>@Logger</span><br><span class="line"><span class="meta">... </span><span class="function"><span class="keyword">def</span> <span class="title">person</span>(<span class="params">name, age=<span class="number">18</span></span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(name, age)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>person(<span class="string">&#x27;Jack&#x27;</span>)</span><br><span class="line">[INFO]: the function person() <span class="keyword">is</span> running...</span><br><span class="line">Jack <span class="number">18</span></span><br></pre></td></tr></table></figure>
+
+<p>定义类形式的装饰器与函数形式的装饰器并无太大差别，本质上 Python 解释器都将它们作为可调用对象进行处理。只不过现在最外层的装饰器工厂函数变成了类，传入的装饰器的参数变成了类的属性；而第二层对应的是 <code>__call__</code> 方法，接收被装饰函数作为参数；<code>__call__</code> 方法内还需定义执行装饰逻辑的包裹函数。用类改写的日志装饰器的代码如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Logger</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, level=<span class="string">&#x27;INFO&#x27;</span></span>):</span></span><br><span class="line">        self._level = level</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self, func</span>):</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span>(<span class="params">*args, **kwargs</span>):</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&#x27;[<span class="subst">&#123;self._level&#125;</span>]: the function <span class="subst">&#123;func.__name__&#125;</span>() is running...&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
+
+<p>使用时可以指定日志的输出级别：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>@Logger(<span class="string">&#x27;Debug&#x27;</span>)</span><br><span class="line"><span class="meta">... </span><span class="function"><span class="keyword">def</span> <span class="title">person</span>(<span class="params">name, age=<span class="number">18</span></span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(name, age)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>person(<span class="string">&#x27;Jack&#x27;</span>)</span><br><span class="line">[Debug]: the function person() <span class="keyword">is</span> running...</span><br><span class="line">Jack <span class="number">18</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="面向切面的程序设计"><a href="#面向切面的程序设计" class="headerlink" title="面向切面的程序设计"></a>面向切面的程序设计</h3><p>面向切面的程序设计是一种程序设计思想，旨在将横切关注点与业务主体进行分离。<strong>横切关注点</strong>指的是一些具有横越多个模块的行为，使用传统的软件开发方法不能够达到有效的模块化的一类特殊关注点。通俗点说，面向切面编程就是<strong>使得解决特定领域问题的代码从业务逻辑中独立出来</strong>。业务逻辑的代码中不再含有针对特定领域问题代码的调用，业务逻辑同特定领域问题的关系通过切面来封装、维护。</p>
+<p>联系到本文所编写的几个装饰器，日志记录 logger、性能测试 clock 计时器，这些都是较为常见的<strong>横切关注点</strong>。试想一下，如果需要记录多个函数的运行时间，在这些函数内部硬编码计时代码是否合适？显然，这不仅会造成代码重复，更关键的是破坏了函数的存粹性（将不该属于它的计时功能强加于它），造成了代码的紧耦合。现在有了装饰器，只需要在需要计时的函数之上添加 <code>@clock</code> 标注即可，计时器的逻辑统一在装饰器中定义和维护，实现了与业务代码的解耦。</p>
+<p>因此，装饰器非常适用于有切面需求的场景，诸如：插入日志、性能测试、事务处理、缓存、权限校验等。装饰器是解决这类问题的绝佳设计。通过装饰器，我们可以抽离出与函数功能本身无关的代码到装饰器中，从而实现面向切面编程。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>《流畅的 Python》</li>
+<li><a target="_blank" rel="noopener" href="https://s2mple.xyz/2018/05/24/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/">函数式编程</a></li>
+<li><a target="_blank" rel="noopener" href="http://blog.jenkster.com/2015/12/which-programming-languages-are-functional.html">Which Programming Languages Are Functional?</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpeg" alt="s1mple 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" rel="tag"># 函数式编程</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/" rel="prev" title="流处理框架介绍: Storm、Spark & Flink">
+      <i class="fa fa-chevron-left"></i> 流处理框架介绍: Storm、Spark & Flink
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/02/Python-%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" rel="next" title="Python 编码规范">
+      Python 编码规范 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%98%AF%E4%B8%80%E7%AD%89%E5%85%AC%E6%B0%91"><span class="nav-number">1.</span> <span class="nav-text">函数是一等公民</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AD%E5%8C%85"><span class="nav-number">2.</span> <span class="nav-text">闭包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text">装饰器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">3.1.</span> <span class="nav-text">函数装饰器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">3.2.</span> <span class="nav-text">类装饰器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%9A%84%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.3.</span> <span class="nav-text">面向切面的程序设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="s1mple"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">s1mple</p>
+  <div class="site-description" itemprop="description">春光恰与少年同，十里清风慕天青</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">s1mple</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id    : 33231,
+      el    : 'wpac-rating',
+      color : 'fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://s1mplecc.github.io/2020/12/20/Python-%E8%A3%85%E9%A5%B0%E5%99%A8%E4%B8%8E%E9%97%AD%E5%8C%85/',]
+      });
+      });
+  </script>
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://s1mplecc.github.io/2020/12/20/Python-%E8%A3%85%E9%A5%B0%E5%99%A8%E4%B8%8E%E9%97%AD%E5%8C%85/";
+    this.page.identifier = "2020/12/20/Python-装饰器与闭包/";
+    this.page.title = "Python 装饰器与闭包";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://true.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

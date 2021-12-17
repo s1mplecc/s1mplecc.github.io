@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="序列之前我们已经讨论过，Python 的“序列协议”是指：任何类，只要使用标准的签名和语义实现了 __getitem__ 和 __len__ 方法，就能用在任何期待序列的地方，解释器会为这些类做特殊的支持，比如支持迭代和 in 运算符。序列协议的接口定义可以查阅官方的 CPython API 接口文档：Python&#x2F;C API Reference Manual – Sequence Protoco">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 中的可迭代类型">
+<meta property="og:url" content="https://s1mplecc.github.io/2021/04/01/Python-%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:site_name" content="s1mple 的博客">
+<meta property="og:description" content="序列之前我们已经讨论过，Python 的“序列协议”是指：任何类，只要使用标准的签名和语义实现了 __getitem__ 和 __len__ 方法，就能用在任何期待序列的地方，解释器会为这些类做特殊的支持，比如支持迭代和 in 运算符。序列协议的接口定义可以查阅官方的 CPython API 接口文档：Python&#x2F;C API Reference Manual – Sequence Protoco">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-01T09:11:20.000Z">
+<meta property="article:modified_time" content="2021-12-17T05:47:55.537Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://s1mplecc.github.io/2021/04/01/Python-%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%B1%BB%E5%9E%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Python 中的可迭代类型 | s1mple 的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">s1mple 的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2021/04/01/Python-%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%B1%BB%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple 的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python 中的可迭代类型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-01 17:11:20" itemprop="dateCreated datePublished" datetime="2021-04-01T17:11:20+08:00">2021-04-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-17 13:47:55" itemprop="dateModified" datetime="2021-12-17T13:47:55+08:00">2021-12-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="序列"><a href="#序列" class="headerlink" title="序列"></a>序列</h2><p>之前我们已经讨论过，Python 的“序列协议”是指：任何类，只要使用标准的签名和语义实现了 <code>__getitem__</code> 和 <code>__len__</code> 方法，就能用在任何期待序列的地方，解释器会为这些类做特殊的支持，比如支持迭代和 in 运算符。序列协议的接口定义可以查阅官方的 CPython API 接口文档：<a target="_blank" rel="noopener" href="https://docs.python.org/3.8/c-api/sequence.html">Python/C API Reference Manual – Sequence Protocol</a>，其中有这样一个函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">PySequence_Check</span><span class="params">(PyObject *o)</span></span></span><br><span class="line"><span class="function"><span class="comment">/* Return 1 if the object provides sequence protocol, and 0 otherwise. Note that it returns 1 for Python classes with a __getitem__() method unless they are dict subclasses since in general case it is impossible to determine what the type of keys it supports. This function always succeeds. */</span></span></span><br></pre></td></tr></table></figure>
+
+<p>这个函数的作用是检查并返回对象是否支持序列协议 —— 只在实现了 <code>__getitem__</code> 方法且不是字典子类时才返回 1。这也符合我们之前所说的，协议是非正式的，没有强制力，只要你知道类的具体使用场景，可以只实现协议的一部分。比如，仅为了支持迭代，甚至不需要提供 <code>__len__</code> 方法。</p>
+<p>Python 常用的内置序列类型包括：字符串 str、列表 list、元组 tuple 和范围 range。尽管字典 dict 和集合 set 实现了序列协议中的 <code>__getitem__</code> 和 <code>__len__</code> 方法，但它们并不算序列类型，因为它们的特征与序列有本质差异，比如这两个类型不支持通过整数下标索引访问元素，不支持切片，并且字典和集合内的元素是无序的。</p>
+<p>序列类 Sequence，定义在标准库 <code>collections.abc</code> 模块中，继承自 Reversible 和 Collection 类，而 Collection 又继承自 Sized、Iterable 和 Container，体现了序列类可反转、具有规模、可迭代和是一个容器的语义。</p>
+<p>从 <code>collections.abc</code> 模块的源码中，我们还能了解到序列类包含哪些子类。除了显示继承了 Sequence 的子类，如 ByteString 和 MutableSequence，还有通过 register 关键字绑定为 Sequence 虚拟子类的一些内置类型，在绑定虚拟子类一节中也提到过这一点。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> <span class="type">Sequence</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">all</span>([<span class="built_in">issubclass</span>(i, <span class="type">Sequence</span>) <span class="keyword">for</span> i <span class="keyword">in</span> (<span class="built_in">str</span>, <span class="built_in">list</span>, <span class="built_in">tuple</span>, <span class="built_in">range</span>, <span class="built_in">bytes</span>, <span class="built_in">bytearray</span>, <span class="built_in">memoryview</span>)])</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">any</span>([<span class="built_in">issubclass</span>(i, <span class="type">Sequence</span>) <span class="keyword">for</span> i <span class="keyword">in</span> (<span class="built_in">dict</span>, <span class="built_in">set</span>)])</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<p>上面列表推导表达式中的所有类型都是定义在 builtsin 模块中的内置类型，可以看到，除了 dict 和 set 之外，第二行的所有内置类型都是序列类型。除此之外，标准库中还定义了其他序列类型，比如 array 模块的 array 数组类型，collections 模块中的 deque 双端队列类型。</p>
+<p>对于这些序列类型，按照序列内可容纳的类型，可以划分为以下两组：</p>
+<ul>
+<li><strong>容器序列</strong>：list、tuple 和 collections.deque 这些序列类能存放不同类型的数据；</li>
+<li><strong>扁平序列</strong>：str、bytes、bytearray、memoryview、array.array 和 range 这类序列类只能容纳一种或某种特定类型的数据。</li>
+</ul>
+<p>容器序列存放的是它们所包含的任意类型的对象的引用，而扁平序列存放的是值而不是引用。扁平序列存储在一段连续的内存空间之上，只能存放诸如字符、字节和数值这种基础类型。</p>
+<p>序列类型还能按照能否被修改来分类：</p>
+<ul>
+<li><strong>可变序列</strong>：list、bytearray、memoryview、array.array 和 collections.deque；</li>
+<li><strong>不可变序列</strong>：tuple、str、bytes 和 range。</li>
+</ul>
+<p>可变序列 MutableSequence 也定义在 <code>collections.abc</code> 模块中，并在继承 Sequence 的基础上还添加了一些支持序列修改的默认方法，如 <code>append()</code>、<code>pop()</code> 方法等。除了 Sequence 基类中要实现的 <code>__getitem__</code> 和 <code>__len__</code> 方法外，可变序列还要求具体子类必须实现 <code>__setitem__</code>、<code>__delitem__</code> 和 <code>insert()</code> 方法。</p>
+<p>序列不可变意味着序列一旦被声明赋值，序列的大小就固定下来，其内的元素也不能被修改。这里用来说明序列可变不可变的典型案例是列表和元组。在 Python 中，列表是可变的，元组是不可变的。列表可变体现在它支持对元素的增加删除和直接赋值，且列表支持<strong>就地运算</strong>，比如使用 “+=” 运算符可以直接将一个可迭代对象中的元素添加到当前列表的末尾。而元组是不可变的，元组一经定义大小就已固定，不能增加删除元素，也不对其内元素重新赋值。即使元组也支持就地运算符，但会生成一个新的元组对象重新绑定。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l = [<span class="number">1</span>, <span class="number">2</span>]  <span class="comment"># list</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(l)</span><br><span class="line"><span class="number">4411278528</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l[<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l += [<span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(l)</span><br><span class="line"><span class="number">4411278528</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = (<span class="number">1</span>, <span class="number">2</span>)  <span class="comment"># tuple</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(t)</span><br><span class="line"><span class="number">4410964416</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t += (<span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(t)</span><br><span class="line"><span class="number">4411277824</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t[<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: <span class="string">&#x27;tuple&#x27;</span> <span class="built_in">object</span> does <span class="keyword">not</span> support item assignment</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+
+<p>此外，Python 中的可散列对象一定是不可变类型，散列方法 <code>__hash__</code> 通常和 <code>__eq__</code> 方法一起用来判断两个对象是否相等，如集合 set 和字典的键要求元素是可散列的，这被用来判断元素是否重复。所以，元组可以作为集合的元素和字典的键，而列表却不可以。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>t1 = (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t2 = (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(t1) == <span class="built_in">id</span>(t2)</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">hash</span>(t1) == <span class="built_in">hash</span>(t2)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">set</span>([(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>,)])</span><br><span class="line">&#123;(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>,)&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dict</span>(&#123;(<span class="number">1</span>, <span class="number">2</span>): <span class="number">1</span>&#125;)</span><br><span class="line">&#123;(<span class="number">1</span>, <span class="number">2</span>): <span class="number">1</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注：在散列时，元组内的每一项元素会被散列然后进行 XOR 异或运算，因此只有当元组中的每个元素都是不可变类型时，该元组才能被散列。</p>
+<h2 id="map、filter-与列表推导"><a href="#map、filter-与列表推导" class="headerlink" title="map、filter 与列表推导"></a>map、filter 与列表推导</h2><p>列表是 Python 中非常重要且常用的内置类型，列表被注册为可变序列的虚拟子类，<code>MutableSequence.register(list)</code>，所以列表的性质与可变序列性质相符，可以阅读 <code>collections.abc</code> 模块中 MutableSequence 类的源码进行了解。列表的性质不做过多介绍，这一节我想介绍一下列表推导。在上一节中就曾经使用 <code>all()</code>、<code>any()</code> 方法结合列表推导，巧妙地展示了哪些内置类型是序列类的子类。</p>
+<p>在介绍列表推导之前，有必要先介绍以下几个函数：<code>map()</code>、<code>filter()</code> 和 <code>reduce()</code> 函数。这几个函数是函数式编程的范例函数。它们都是用于处理可迭代序列的基本函数，所以被视为可迭代数据集函数式编程的基石，包含了数据集的映射、过滤和规约三个思想。所有支持函数式编程的语言都提供了这些函数的接口。Java 8 新增的 Stream API 配合箭头函数可以写出很优雅的链式函数，同样，JavaScript 中也支持链式写法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt; l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">[ <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span> ]</span><br><span class="line">&gt; l.map(<span class="function"><span class="params">x</span> =&gt;</span> x * x)</span><br><span class="line">[ <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span> ]</span><br><span class="line">&gt; l.map(<span class="function"><span class="params">x</span> =&gt;</span> x * x).filter(<span class="function"><span class="params">x</span> =&gt;</span> x &gt; <span class="number">10</span>)</span><br><span class="line">[ <span class="number">16</span>, <span class="number">25</span> ]</span><br><span class="line">&gt; l.map(<span class="function"><span class="params">x</span> =&gt;</span> x * x).filter(<span class="function"><span class="params">x</span> =&gt;</span> x &gt; <span class="number">10</span>).reduce(<span class="function">(<span class="params">x, y</span>) =&gt;</span> x + y)</span><br><span class="line"><span class="number">41</span></span><br></pre></td></tr></table></figure>
+
+<p>相比之下，Python 中的写法就不那么优雅了，map、filter 和 reduce 函数作为内置库或者标准库中的函数提供，序列本身并没有实现这些方法，所以不能通过 dot 运算符直接调用，而需要将序列作为这些函数的参数传入。</p>
+<h3 id="map"><a href="#map" class="headerlink" title="map()"></a><code>map()</code></h3><blockquote>
+<p><code>map(func, *iterables) --&gt; map object</code></p>
+<p>Make an iterator that computes the function using arguments from each of the iterables.  Stops when the shortest iterable is exhausted.</p>
+</blockquote>
+<p>map 函数，又称映射函数，定义在内置模块 builtins 模块中。map 函数将可迭代对象的每个元素依次应用于 func 函数进行映射，返回的 map object 是一个可以依次产出映射后元素的生成器对象，可以使用 <code>list()</code> 包装一次性输出。传入的函数 func 可以是预先定义好的函数，也可以是 lambda 表达式定义的匿名函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">square</span>(<span class="params">x</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> x * x</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">map</span>(square, <span class="built_in">range</span>(<span class="number">10</span>))</span><br><span class="line">&lt;<span class="built_in">map</span> <span class="built_in">object</span> at <span class="number">0x106ebb910</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(square, <span class="built_in">range</span>(<span class="number">10</span>)))</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x: x * x, <span class="built_in">range</span>(<span class="number">10</span>)))</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br></pre></td></tr></table></figure>
+
+<p>从函数签名来看，map 函数能够接受多个可迭代对象，映射时将依次从每个可迭代对象中各取出一个元素应用于 func 函数，因此 func 也须接受同样数量的参数。如果这些可迭代对象的元素个数不一致，以个数最少的为标杆，即个数最少的可迭代对象遍历完毕时终止迭代。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x, y: x * y, <span class="built_in">range</span>(<span class="number">5</span>), <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">6</span>)))</span><br><span class="line">[<span class="number">0</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">12</span>, <span class="number">20</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x, y: x * y, <span class="built_in">range</span>(<span class="number">10</span>), <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">6</span>)))</span><br><span class="line">[<span class="number">0</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">12</span>, <span class="number">20</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="filter"><a href="#filter" class="headerlink" title="filter()"></a><code>filter()</code></h3><blockquote>
+<p><code>filter(function or None, iterable) --&gt; filter object</code></p>
+<p>Return an iterator yielding those items of iterable for which function(item) is true. If function is None, return the items that are true.</p>
+</blockquote>
+<p>filter 函数，又称过滤函数，定义在内置模块 builtins 模块中。过滤函数将可迭代对象中的每个元素应用于谓词函数 function 后为 True 的保留下来。返回的 filter object 也是一个生成器对象，可以依次产出过滤后为真的元素。如果 function 为 None，直接判断元素是否为真值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">filter</span>(<span class="keyword">lambda</span> x: x &gt; <span class="number">5</span>, <span class="built_in">range</span>(<span class="number">10</span>)))</span><br><span class="line">[<span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">filter</span>(<span class="literal">None</span>, [<span class="number">0</span>, <span class="number">1</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="number">0.0</span>, -<span class="number">1</span>, [], (<span class="number">1</span>, <span class="number">2</span>)]))</span><br><span class="line">[<span class="number">1</span>, <span class="literal">True</span>, -<span class="number">1</span>, (<span class="number">1</span>, <span class="number">2</span>)]</span><br></pre></td></tr></table></figure>
+
+<h3 id="reduce"><a href="#reduce" class="headerlink" title="reduce()"></a><code>reduce()</code></h3><blockquote>
+<p><code>reduce(function, sequence[, initial]) -&gt; value</code></p>
+<p>Apply a function of two arguments cumulatively to the items of a sequence, from left to right, so as to reduce the sequence to a single value. For example, reduce(lambda x, y: x + y, [1, 2, 3, 4, 5]) calculates ((((1 + 2) + 3) + 4) + 5).  If initial is present, it is placed before the items of the sequence in the calculation, and serves as a default when the sequence is empty.</p>
+</blockquote>
+<p>reduce 函数，又称规约函数，定义在 functools 模块中。规约函数的参数除了函数和序列之外，还接收一个可选的初始值。规约函数会将一个序列从左至右逐步规约为一个值。参数 function 接收两个参数，第一个参数代表每步规约后的累积值（首次规约为初始值），第二个参数代表每次迭代的序列中的元素，返回值为规约的结果，作为下一步规约的第一个参数传入。也就是说，function 函数的第一个参数、每步规约的返回值和 reduce 函数的返回值应为同一类型，function 的第二个参数为迭代序列的元素类型，两者可以是相同类型也可以是不同类型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>reduce(<span class="keyword">lambda</span> x, y: x + y, <span class="built_in">range</span>(<span class="number">10</span>))</span><br><span class="line"><span class="number">45</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">concat_string</span>(<span class="params">s, ch</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> s + <span class="built_in">str</span>(ch)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>reduce(concat_string, [<span class="string">&#x27;a&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;b&#x27;</span>], <span class="string">&#x27;0&#x27;</span>)</span><br><span class="line"><span class="string">&#x27;0a1b&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="列表推导"><a href="#列表推导" class="headerlink" title="列表推导"></a>列表推导</h3><p>如果想像 JavaScript 代码演示的那样，依次对一个序列数据流进行映射、过滤和规约操作，Python 的写法会显得不那么优雅。由于序列必须作为参数传入，无法放在左侧使用 dot 运算符进行链式书写，我们不得不编写多层嵌套的表达式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> operator</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">filter</span>(<span class="keyword">lambda</span> x: x &lt; <span class="number">50</span>, <span class="built_in">map</span>(<span class="keyword">lambda</span> x: x * x, <span class="built_in">range</span>(<span class="number">10</span>))))</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>reduce(operator.add, (<span class="built_in">filter</span>(<span class="keyword">lambda</span> x: x &lt; <span class="number">50</span>, <span class="built_in">map</span>(<span class="keyword">lambda</span> x: x**<span class="number">2</span>, <span class="built_in">range</span>(<span class="number">10</span>)))))</span><br><span class="line"><span class="number">140</span></span><br></pre></td></tr></table></figure>
+
+<p>且不说冗余的 lambda 关键字，即使预先定义了函数使用函数名代替，整个表达式从右至左的执行循序也会不利于理解。所幸的是，Python 提供了一种精炼的表达式，来代替多层嵌套下纠缠不清的 map 和 filter 方法，那就是<strong>列表推导</strong>（list comprehension）。</p>
+<p>列表推导是一个语法糖，可以根据可迭代对象构建出一个新的列表。列表推导使用一对中括号 “[]”，内部至少包含一个 for 循环表达式，对应 map 方法；以及可选的 if 条件表达式，对应 filter 方法。列表推导返回的是列表类型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x * x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>)]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x * x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>) <span class="keyword">if</span> x &lt; <span class="number">5</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[_ * _ <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>) <span class="keyword">if</span> _ &lt; <span class="number">5</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x * y <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">3</span>) <span class="keyword">for</span> y <span class="keyword">in</span> (<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>)]</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;aa&#x27;</span>, <span class="string">&#x27;bb&#x27;</span>, <span class="string">&#x27;cc&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x <span class="keyword">for</span> y <span class="keyword">in</span> [(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">5</span>,)] <span class="keyword">for</span> x <span class="keyword">in</span> y]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br></pre></td></tr></table></figure>
+
+<p>表达式内的变量是一个局部变量，作用域仅限于该列表推导表达式。但 Python2 中的列表推导存在变量泄漏问题，表达式内的变量会影响到上下文中的同名变量，在 Python 3 中这个缺陷已被修复。</p>
+<p>列表推导也支持<strong>多重循环</strong>，即多个 for 循环表达式，这些 for 表达式会按照从左至右的顺序来嵌套。与多层嵌套的 for 循环函数一致，先定义（左侧）的 for 循环在外层，后定义（右侧）的 for 循环在内层。外层定义的变量可用作内层的 for 循环，如上述代码中的最后一个列表推导式。如果用函数形式书写，那么代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x <span class="keyword">for</span> y <span class="keyword">in</span> [(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">5</span>,)] <span class="keyword">for</span> x <span class="keyword">in</span> y]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">flat</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">for</span> y <span class="keyword">in</span> [(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">5</span>,)]:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">for</span> x <span class="keyword">in</span> y:</span><br><span class="line"><span class="meta">... </span>            <span class="keyword">yield</span> x</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(flat())</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br></pre></td></tr></table></figure>
+
+<p>字典和集合也有类似的推导机制，可以通过这些推导机制创建衍生的数据结构。字典推导可以从任何以键值对为元素的可迭代对象中构建出字典。集合推导可以从可迭代对象中去除重复元素，构建集合。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;c&#x27;</span>: <span class="number">3</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>&#123;i: j <span class="keyword">for</span> j, i <span class="keyword">in</span> d.items()&#125;  <span class="comment"># 字典推导</span></span><br><span class="line">&#123;<span class="number">1</span>: <span class="string">&#x27;a&#x27;</span>, <span class="number">2</span>: <span class="string">&#x27;b&#x27;</span>, <span class="number">3</span>: <span class="string">&#x27;c&#x27;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>&#123;i <span class="keyword">for</span> i <span class="keyword">in</span> d.keys()&#125;  <span class="comment"># 集合推导</span></span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;b&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="列表推导的最佳实践"><a href="#列表推导的最佳实践" class="headerlink" title="列表推导的最佳实践"></a>列表推导的最佳实践</h4><p>使用列表推导的原则是：<strong>只用于创建新的列表，并且尽量保持简短，不建议使用含有两个以上表达式的列表推导</strong>。依照函数式编程中的纯函数定义，函数不应该对传入的参数进行修改，否则会产生副作用。所以列表推导不该对传入序列做修改，而应该只用于创建新的列表。尽量保持简短则是出于可读性的考量。如果包含两个较长的表达式，可以考虑拆分为两行。Python 会忽略 []、{} 和 () 中换行，所以可以省略不太好看的续行符 \。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[(i, j) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>)</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>)]</span><br><span class="line">[(<span class="number">0</span>, <span class="number">0</span>), (<span class="number">0</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>)]</span><br></pre></td></tr></table></figure>
+
+<p>如果列表推导式过长，就要考虑是否需要使用函数形式改写，有时命名清晰且带有缩进的函数可读性要更高。</p>
+<p>列表推导也不是银弹，相较于生成器表达式的惰性求值，它会<strong>及早求值</strong>（eager evaluation）。在声明了一个列表推导式时，序列中的所有数据都会被即时处理，并将处理后的完整列表存放在内存中。并且在推导过程中，对于输入序列的每个值都可能创建一个仅含一项元素的全新列表。所以当序列的数据量很大时，如读文件或读数据库，将会消耗大量内存并导致程序崩溃。所以，列表推导另一个最佳实践是：<strong>使用生成器表达式代替数据量较大的列表推导</strong>。生成式表达式将在后续章节进行介绍。</p>
+<h2 id="可迭代对象、迭代器和生成器源码分析"><a href="#可迭代对象、迭代器和生成器源码分析" class="headerlink" title="可迭代对象、迭代器和生成器源码分析"></a>可迭代对象、迭代器和生成器源码分析</h2><p>迭代，或称循环，是数据处理的基石。Python 中的可迭代类型的抽象基类定义在 <code>collections.abc</code> 模块中，从抽象层次来说，可以分为以下三类：</p>
+<ul>
+<li><strong>可迭代对象</strong>，<code>class Iterable(metaclass=ABCMeta)</code>，抽象类；</li>
+<li><strong>迭代器</strong>，<code>class Iterator(Iterable)</code>，继承自 Iterable 的抽象类；</li>
+<li><strong>生成器</strong>，<code>class Generator(Iterator)</code>，继承自 Iterator 的抽象类。</li>
+</ul>
+<p>在这三个抽象基类的实现中，都有一个名为 <code>__subclasshook__</code> 的钩子方法，用于将实现了特定方法的类绑定为这些抽象基类的虚拟子类。如下是可迭代对象 Iterable 的部分代码，钩子方法检查了类中有无实现 <code>__iter__</code> 方法，对于实现了的类，会被绑定为 Iterable 的虚拟子类。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Iterable</span>(<span class="params">metaclass=ABCMeta</span>):</span></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__subclasshook__</span>(<span class="params">cls, C</span>):</span></span><br><span class="line">        <span class="keyword">if</span> cls <span class="keyword">is</span> Iterable:</span><br><span class="line">            <span class="keyword">return</span> _check_methods(C, <span class="string">&quot;__iter__&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NotImplemented</span></span><br></pre></td></tr></table></figure>
+
+<p>联系到鸭子类型一节中所说的“协议”的概念，可以得出结论：可迭代对象的协议需要实现 <code>__iter__</code> 方法；类似的，迭代器协议需要同时实现 <code>__iter__</code> 和 <code>__next__</code> 方法；生成器协议要更复杂一些，除了这两个方法外还需要实现  <code>send()</code>、<code>throw()</code> 和 <code>close()</code> 方法，这三个方法体现了生成器除了迭代之外的功能：可以用作<strong>协程</strong>。</p>
+<p>除了钩子方法之外，<code>collections.abc</code> 模块中还使用 register 关键字手动绑定了 Iterator 和 Generator 的虚拟子类。这里截取了部分源码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">dict_keyiterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(&#123;&#125;.keys()))</span><br><span class="line">dict_valueiterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(&#123;&#125;.values()))</span><br><span class="line">dict_itemiterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(&#123;&#125;.items()))</span><br><span class="line">list_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>([]))</span><br><span class="line">range_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(<span class="built_in">range</span>(<span class="number">0</span>)))</span><br><span class="line">set_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(<span class="built_in">set</span>()))</span><br><span class="line">str_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(<span class="string">&quot;&quot;</span>))</span><br><span class="line">tuple_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(()))</span><br><span class="line"></span><br><span class="line">Iterator.register(dict_keyiterator)</span><br><span class="line">Iterator.register(dict_valueiterator)</span><br><span class="line">Iterator.register(dict_itemiterator)</span><br><span class="line">Iterator.register(list_iterator)</span><br><span class="line">Iterator.register(range_iterator)</span><br><span class="line">Iterator.register(set_iterator)</span><br><span class="line">Iterator.register(str_iterator)</span><br><span class="line">Iterator.register(tuple_iterator)</span><br><span class="line"></span><br><span class="line">generator = <span class="built_in">type</span>((<span class="keyword">lambda</span>: (<span class="keyword">yield</span>))())</span><br><span class="line">Generator.register(generator)</span><br></pre></td></tr></table></figure>
+
+<p>上述代码出现的所有内置类型，包括 list、range、set、str 和 tuple，都实现了 <code>__iter__</code> 方法，所以都是可迭代对象。特殊一点的是字典的键、值和键值对，也都分别被定义为可迭代的视图类型 KeysView、ValuesView 和 ItemsView。这些类型都是 Python 的集合类型，集合由于继承了 Iterable 类，所以 <strong>Python 中的所有集合都是可迭代对象</strong>。此处说的集合不是内置类型 set 而是 Collection，定义在 <code>collections.abc</code> 模块中。也有人将 Collection 称之为“容器”的，这里将其称之为集合而不是容器是为了与 <code>collections.abc</code> 模块中的另一个类 Container 做区分。集合类的钩子方法会去检测是否实现了 <code>__len__</code>、<code>__iter__</code> 和 <code>__contains__</code> 这三个方法。</p>
+<p>尽管上述所说的这些内置类型都是可迭代对象，但要注意它们并不是迭代器，被注册的是经过 <code>iter()</code> 方法包装后的类型。也就是说，访问这些内置类型的 <code>__iter__</code> 方法将会返回一个迭代器，即 <code>iter(iterable) -&gt; iterator</code>。迭代器除了能被 for 循环遍历外，还能使用 <code>next()</code> 方法产出下一个值。编码时如果要使用 <code>next()</code> 方法，首先要注意对象是不是一个迭代器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">isinstance</span>(l, Iterator)</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">iter</span>(l)</span><br><span class="line">&lt;list_iterator <span class="built_in">object</span> at <span class="number">0x106e2f640</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(<span class="built_in">iter</span>(l))</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>除了可迭代对象和迭代器之外，<code>collections.abc</code> 模块中还定义了生成器类 Generator，并将形如 <code>type((lambda: (yield))())</code> 的类型注册为了生成器的虚拟子类。其中，yield 是一个关键字，意为产出一个值。<strong>只要 Python 函数的定义中含有 yield 关键字，该函数就是生成器函数，调用生成器函数时会返回一个生成器对象</strong>。<code>lambda: (yield)</code> 语句其实是定义了一个返回生成器函数的匿名函数，再调用这个生成器函数得到生成器对象，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">gen</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> (<span class="keyword">yield</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>gen()</span><br><span class="line">&lt;generator <span class="built_in">object</span> gen at <span class="number">0x104b36660</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(gen())</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">generator</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">type</span>(<span class="params">(<span class="params"><span class="keyword">lambda</span>: (<span class="params"><span class="keyword">yield</span></span>)</span>)(<span class="params"></span>)</span>)</span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">generator</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>生成器尤为重要，有必要将其作为单独的一节进行介绍。下一节我们将介绍生成器函数的执行过程，以及如何使用生成器表达式返回一个生成器对象。</p>
+<h2 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h2><p>所有生成器都是迭代器，因为生成器完全实现了迭代器接口。不过，根据《设计模式：可复用面向对象软件的基础》一书的定义，迭代器用于从集合中取出元素，而生成器用于“凭空”生成元素。通过斐波那契数列能很好地说明二者之间的区别：斐波纳契数列中的数有无穷多个，无法将它们都装在一个集合里，但是生成器可以在每次需要时生成一项元素。因此，尽管 Python 社区中经常将迭代器和生成器视为同一概念，你也要明白生成器所具有的特殊语义。</p>
+<h3 id="生成器函数"><a href="#生成器函数" class="headerlink" title="生成器函数"></a>生成器函数</h3><p>前面我们说到，生成器函数是包含了 yield 关键字的函数，调用生成器函数时会返回一个生成器对象。也就是说，生成器函数是生成器的工厂函数。因此，生成器函数和普通的函数有着显著的行为差异：即使没有 return 语句，生成器函数依然会返回一个生成器对象。就算有，定义在 yield 语句后的 return 返回值也会被忽略。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">gen</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">yield</span> <span class="number">1</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> <span class="string">&#x27;a&#x27;</span></span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>gen()</span><br><span class="line">&lt;generator <span class="built_in">object</span> gen at <span class="number">0x10ddd9820</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(gen())</span><br><span class="line">[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<p>“yield” 这个单词，除了产出还有<strong>让步</strong>的含义，对于生成器函数中的 yield 来说，这两个含义都成立。让步体现在，生成器函数在执行到 yield 语句产出值后，会作出让步，暂停执行生成器，让调用方继续工作，直到需要下一个值时再调用 <code>next()</code>。下面使用 for 循环来更清楚地说明生成器函数定义体的执行过程。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">gen_AB</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;start&#x27;</span>)</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">yield</span> <span class="string">&#x27;A&#x27;</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;continue&#x27;</span>)</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">yield</span> <span class="string">&#x27;B&#x27;</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;end&#x27;</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> c <span class="keyword">in</span> gen_AB():</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;--&gt;&#x27;</span>, c)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line">start</span><br><span class="line">--&gt; A</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line">--&gt; B</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>迭代时，for 机制的作用与 <code>g = iter(gen_AB())</code> 一样，生成器的 <code>__iter__</code> 方法会返回生成器对象本身，然后每次迭代时调用 <code>next(g)</code>。</p>
+<ul>
+<li>在 for 循环中第一次隐式调用 next 函数时，会打印 ‘start’，然后停留在第一个 yield 语句，产出值 ‘A’；</li>
+<li>第二次隐式调用 next 函数时，会打印 ‘continue’，然后停留在第一个 yield 语句，产出值 ‘B’；</li>
+<li>第三次隐式调用 next 函数时，打印 ‘end’，到达函数定义体的末尾，导致生成器对象抛出 StopIteration 异常。for 机制会捕获异常，因此循环终止时不会报错。</li>
+</ul>
+<p>如果显式调用 <code>next()</code> 方法，那么生成器函数定义体被执行的过程如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>g = <span class="built_in">iter</span>(gen_AB())</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(g)</span><br><span class="line">start</span><br><span class="line"><span class="string">&#x27;A&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(g)</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line"><span class="string">&#x27;B&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(g)</span><br><span class="line">end</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中你可以看到，定义在生成器函数体内的 print 语句并没有在生成器函数被调用时就立即打印，而被延迟到调用 <code>next(g)</code> 时才打印。同样，如果在生成器函数中加入复杂的处理逻辑，该逻辑只在被 <code>next()</code> 调用时才进行处理，从而达到延迟处理的目的。我们将生成器的这一特性归纳为<strong>惰性求值</strong>（lazy evaluation），即尽可能地延后求值，只在需要时才进行求值。这样做的优点是可以节省内存，还可能避免无用的处理。</p>
+<p>与惰性求值相对的是<strong>及早求值</strong>（eager evaluation），比如之前介绍的列表推导，列表这种数据结构一定要求内部的元素是已明确其值的，并且会将完整的列表保存在内存中。因此，《Effective Python》中提出这么一条：<strong>考虑用生成器来改写直接返回列表的函数</strong>。实际上，Python 3 已经对一些原本原本返回列表的函数使用生成器进行了改写。比如 Python 2 中返回完整列表的 <code>range()</code> 函数，现在也返回一个类似生成器的对象。如果一定要让 <code>range()</code> 函数返回列表，必须明确指明，如 <code>list(range(100))</code>。</p>
+<p>定义生成器函数时，唯一需要留意的就是：<strong>函数返回的那个迭代器是有状态的</strong>，调用者不应该反复使用它。</p>
+<h3 id="生成器表达式"><a href="#生成器表达式" class="headerlink" title="生成器表达式"></a>生成器表达式</h3><p>除了定义包含 yield 关键字的生成器函数可以返回生成器外，生成器表达式也可以返回生成器对象。相比于列表推导的及早求值，生成器表达式能够进行惰性求值：不会迫切地构建列表，而是返回一个生成器，按需产出元素。也就是说，如果说列表推导时构建列表的工厂，那么生成器表达式就是构建生成器的工厂。</p>
+<p>生成器表达式与列表推导的唯一区别是使用了一对圆括号 “()” 代替列表推导中的中括号 “[]”。我们使用之前定义的生成器函数 <code>gen_AB()</code> 来演示生成器表达式与列表推导之间的区别。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>res1 = [x <span class="keyword">for</span> x <span class="keyword">in</span> gen_AB()]  <span class="comment"># list comprehension</span></span><br><span class="line">start</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line">end</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>res1</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> x <span class="keyword">in</span> res1:</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;--&gt;&#x27;</span>, x)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line">--&gt; A</span><br><span class="line">--&gt; B</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>res2 = (x <span class="keyword">for</span> x <span class="keyword">in</span> gen_AB())  <span class="comment"># generator expression</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>res2</span><br><span class="line">&lt;generator <span class="built_in">object</span> &lt;genexpr&gt; at <span class="number">0x10dea8f20</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> x <span class="keyword">in</span> res2:</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;--&gt;&#x27;</span>, x)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line">start</span><br><span class="line">--&gt; A</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line">--&gt; B</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>归因于列表的及早求值，在声明列表推导表达式时，<code>gen_AB()</code> 函数中的 print 语句被立即执行了，函数产出的两个值 ‘A’、’B’ 也被存放在构建出的列表中。而生成器表达式则将这个过程推迟到值真正需要之时，即 for 循环隐式调用 <code>next()</code> 之时。</p>
+<p>前面提到，生成器对象是有状态的，这里体现在，一个生成器对象产出的值只能被消费一次，除非定义一个新的个生成器对象重新绑定。你可以想象成，生成器对象中存在不能回头的“指针”，每次调用 <code>next()</code> 方法时指向下一个元素，这个过程不可逆。所以对于同一个生成器对象重复调用时可能会产生意想不到的结果。比如下面代码中第二次调用 <code>list(res2)</code> 返回一个空列表，因为第一次调用时“指针”就已经到头了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>res2 = (x <span class="keyword">for</span> x <span class="keyword">in</span> gen_AB())</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(res2)</span><br><span class="line">start</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line">end</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(res2)</span><br><span class="line">[]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(res2)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure>
+
+<p>所以如果要对生成器对象进行多次迭代，一种方法是使用列表将生成器中的所有元素备份下来，另一种是定义一个新的生成器对象重新绑定。由此可见，尽管生成器对象相比列表能够通过惰性求值节省内存，但如果每次迭代时定义新的生成器对象，求值过程也会被重复多次。而列表推导只会在声明时进行一次求值，并将结果保存在列表中可供多次迭代调用，这其实是一种空间消耗和时间消耗的权衡。</p>
+<h3 id="yield-from"><a href="#yield-from" class="headerlink" title="yield from"></a>yield from</h3><p>刚才所提到的生成器产出值被消费的概念，也侧面体现了生成器可以作为“协程”的语义。“协程”从字面意思理解就是协作的进程，协作的进程之间需要进行通信，就需要消费者和生产者之间建立通道。从 Python 3.3 开始引入了一个新的句法：<code>yield from</code>，类似于其他语言中的 await 关键字。它可以在两个生成器之间建立通道，将产出的值从一个生成器传输到另一个生成器。</p>
+<p>如果生成器函数需要产出其他生成器的值，传统的做法是使用 for 循环遍历生成器的元素并产出。以下定义了一个能够产出多个生成器产出值的生成器函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">chain</span>(<span class="params">*iterables</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">for</span> it <span class="keyword">in</span> iterables:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">for</span> i <span class="keyword">in</span> it:</span><br><span class="line"><span class="meta">... </span>            <span class="keyword">yield</span> i</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g1 = (x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="string">&#x27;ABC&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g2 = (x <span class="keyword">for</span> x <span class="keyword">in</span> (<span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(chain(g1, g2))</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<p>引入的 <code>yield from</code> 句法可以直接将一个生成器的所有产出值产出，而不用遍历生成器对象。因此我们可以编写只有一层的 for 循环：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">chain</span>(<span class="params">*iterables</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">for</span> it <span class="keyword">in</span> iterables:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">yield</span> <span class="keyword">from</span> it</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g1 = (x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="string">&#x27;ABC&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g2 = (x <span class="keyword">for</span> x <span class="keyword">in</span> (<span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>chain(g1, g2)</span><br><span class="line">&lt;generator <span class="built_in">object</span> chain at <span class="number">0x10dea8e40</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(chain(g1, g2))</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<p>chain 函数依然返回一个生成器对象，其中的 <code>yield from it</code> 语句对 it 对象所做的第一件事是调用 <code>iter(it)</code> 获得一个迭代器，所以 it 对象可以是任何可迭代对象。我们将 <code>yield from &lt;iterable&gt;</code> 表达式中用于获取值的 <code>&lt;iterable&gt;</code> 称为<strong>子生成器</strong>（subgenerator），即上面代码中的 g1、g2；将包含了 <code>yield from</code> 语句的生成器函数，即 chain 函数，称为委派生成器。<code>yield from</code> 的主要功能是打开双向通道，把最外层的调用层与最内层的子生成器连接起来，这样二者可以直接发送和产出值。</p>
+<p>上述的例子只能勉强算一个协程的案例，其中的“协作”部分体现的不够明显，只是简单的将一个生成器的值传输给另一个生成器产出。真正的协作应该是通过生成器对象的 <code>send()</code> 方法将值从客户端传输给生成器。在后面章节我们会专门介绍协程，里面会提及生成器的 <code>send()</code>、<code>throw()</code> 和 <code>close()</code> 方法，以及 <code>yield from</code> 句法的其他作用。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpeg" alt="s1mple 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/18/Python-%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/" rel="prev" title="Python 运算符重载">
+      <i class="fa fa-chevron-left"></i> Python 运算符重载
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/12/Python-%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/" rel="next" title="Python 函数详解">
+      Python 函数详解 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%8F%E5%88%97"><span class="nav-number">1.</span> <span class="nav-text">序列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#map%E3%80%81filter-%E4%B8%8E%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC"><span class="nav-number">2.</span> <span class="nav-text">map、filter 与列表推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#map"><span class="nav-number">2.1.</span> <span class="nav-text">map()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filter"><span class="nav-number">2.2.</span> <span class="nav-text">filter()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reduce"><span class="nav-number">2.3.</span> <span class="nav-text">reduce()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC"><span class="nav-number">2.4.</span> <span class="nav-text">列表推导</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">2.4.1.</span> <span class="nav-text">列表推导的最佳实践</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1%E3%80%81%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">可迭代对象、迭代器和生成器源码分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">生成器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%99%A8%E5%87%BD%E6%95%B0"><span class="nav-number">4.1.</span> <span class="nav-text">生成器函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%99%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">4.2.</span> <span class="nav-text">生成器表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yield-from"><span class="nav-number">4.3.</span> <span class="nav-text">yield from</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="s1mple"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">s1mple</p>
+  <div class="site-description" itemprop="description">春光恰与少年同，十里清风慕天青</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">s1mple</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id    : 33231,
+      el    : 'wpac-rating',
+      color : 'fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://s1mplecc.github.io/2021/04/01/Python-%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%B1%BB%E5%9E%8B/',]
+      });
+      });
+  </script>
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://s1mplecc.github.io/2021/04/01/Python-%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%B1%BB%E5%9E%8B/";
+    this.page.identifier = "2021/04/01/Python-中的可迭代类型/";
+    this.page.title = "Python 中的可迭代类型";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://true.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

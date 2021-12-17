@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Preface 最近在看 《鸟哥的Linux私房菜–服务器架设》 这本书，感觉受益匪浅，特别是关于网络、各种协议、安全等方面的知识讲得比较透彻。所以整理了一篇博客，也算顺便温习一遍上学时计算机网络学的知识    本片博客主要介绍 TCP&#x2F;IP 协议及各层之间的职责 图片使用微软的 Office Lens 拍取鸟哥书中图片截取而来   Overview 最初，网络的数据传递被划分为如下七个层次，亦即">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP&#x2F;IP 协议">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/index.html">
+<meta property="og:site_name" content="s1mple 的博客">
+<meta property="og:description" content="Preface 最近在看 《鸟哥的Linux私房菜–服务器架设》 这本书，感觉受益匪浅，特别是关于网络、各种协议、安全等方面的知识讲得比较透彻。所以整理了一篇博客，也算顺便温习一遍上学时计算机网络学的知识    本片博客主要介绍 TCP&#x2F;IP 协议及各层之间的职责 图片使用微软的 Office Lens 拍取鸟哥书中图片截取而来   Overview 最初，网络的数据传递被划分为如下七个层次，亦即">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/0.JPG">
+<meta property="og:image" content="https://s1mplecc.github.io/1.JPG">
+<meta property="og:image" content="https://s1mplecc.github.io/2.png">
+<meta property="og:image" content="https://s1mplecc.github.io/3.png">
+<meta property="og:image" content="https://s1mplecc.github.io/4.JPG">
+<meta property="og:image" content="https://s1mplecc.github.io/5.jpg">
+<meta property="og:image" content="https://s1mplecc.github.io/6.png">
+<meta property="og:image" content="https://s1mplecc.github.io/7.JPG">
+<meta property="og:image" content="https://s1mplecc.github.io/8.JPG">
+<meta property="og:image" content="https://s1mplecc.github.io/9.JPG">
+<meta property="og:image" content="https://s1mplecc.github.io/10.JPG">
+<meta property="article:published_time" content="2018-01-01T17:19:29.000Z">
+<meta property="article:modified_time" content="2021-12-17T05:47:55.557Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1mplecc.github.io/0.JPG">
+
+<link rel="canonical" href="https://s1mplecc.github.io/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>TCP/IP 协议 | s1mple 的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">s1mple 的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple 的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TCP/IP 协议
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-02 01:19:29" itemprop="dateCreated datePublished" datetime="2018-01-02T01:19:29+08:00">2018-01-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-17 13:47:55" itemprop="dateModified" datetime="2021-12-17T13:47:55+08:00">2021-12-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>最近在看 <strong>《鸟哥的Linux私房菜–服务器架设》</strong> 这本书，感觉受益匪浅，特别是关于网络、各种协议、安全等方面的知识讲得比较透彻。所以整理了一篇博客，也算顺便温习一遍上学时计算机网络学的知识 </p>
+</blockquote>
+<ul>
+<li>本片博客主要介绍 <strong>TCP/IP</strong> 协议及各层之间的职责</li>
+<li>图片使用微软的 <strong>Office Lens</strong> 拍取鸟哥书中图片截取而来</li>
+</ul>
+<hr>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><ul>
+<li><p>最初，网络的数据传递被划分为如下七个层次，亦即 <strong>OSI七层协议</strong> (or <strong>Open System Interconnection</strong>)<br><img data-src="/0.JPG" alt="IMG_0058-3"></p>
+</li>
+<li><p>可以看到，数据包从一个应用程序传递到网络上的另一个应用程序，是一层一层传递的过程，<strong>每一层只认识对方相同层级的数据</strong>，而<strong>数据头</strong>(<strong>Header</strong>)就包含了互相认识的信息，所以<strong>数据自顶向下被层层Header包裹起来</strong>，最后在物理介质上传输</p>
+</li>
+</ul>
+<blockquote>
+<p>通俗理解，网络协议干的事就是让数据能<strong>精确投递</strong>到另一个人手中，你比如说网络层的<strong>IP数据包</strong>的 <strong>Header</strong> 就包含了源IP地址、目的IP地址等信息，再比如传输层的源端口号、目的端口号</p>
+</blockquote>
+<ul>
+<li><p>而如今的 <strong>TCP/IP协议</strong> 是由 <strong>OSI七层协议</strong> 简化而来的<br><img data-src="/1.JPG" alt="IMG_0059"></p>
+</li>
+<li><p>实际上就是简化合并了一些没那么重要的层，相反，从 <strong>TCP/IP</strong> 的命名就可以看出<strong>传输层</strong>和<strong>网络层</strong>的重要性</p>
+</li>
+</ul>
+<hr>
+<h2 id="Link-Layer"><a href="#Link-Layer" class="headerlink" title="Link Layer"></a>Link Layer</h2><blockquote>
+<p>网络接口层需要知道的就是<strong>MAC数据帧</strong>，能被网络接口设备（即网卡）处理的数据包裹，也是最终物理层编码成比特流的数据</p>
+</blockquote>
+<ul>
+<li><p>以太网（<strong>Ethernet</strong>）是现有局域网采用的最通用的通信协议标准，主要定义了局域网内的传输协议（比如<strong>CSMA/CD</strong>），还有数据帧的格式、大小等。以太网的传输主要就是网卡对网卡的传输</p>
+</li>
+<li><p>数据从一个网卡出，以<strong>数据帧(frame)</strong> 在链路上传递，再从另一个网卡进，所以<strong>MAC数据帧</strong>必须包含了来源和目标的网卡卡号<br><img data-src="/2.png" alt="C7A05D1BF522B158CE16E65E6BED7209"></p>
+</li>
+<li><p><strong>MAC地址</strong>(or <strong>Media Access Control</strong>)，其实指的就是网卡卡号(<strong>Hardware Address</strong>，硬件地址)，每张以太网卡出厂就会有个独一无二的卡号</p>
+</li>
+<li><p>可以看到我的 <strong>MAC地址</strong>，以及 <strong>MTU</strong>(or <strong>Maximum Transmission Unit</strong>)为1500，也就是说一个数据帧最大传输 <strong>1500bytes</strong></p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">en0: flags=8863&lt;UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST&gt; mtu 1500</span><br><span class="line">    ether 8c:85:90:85:e3:c7 </span><br></pre></td></tr></table></figure>
+<p>  <img data-src="/3.png" alt="Screen-Shot-2018-01-02-at-9.58.18-PM"></p>
+</li>
+</ul>
+<hr>
+<h2 id="Internet-Layer"><a href="#Internet-Layer" class="headerlink" title="Internet Layer"></a>Internet Layer</h2><blockquote>
+<p>在网络层传输的是<strong>IP数据包</strong>，<strong>IP</strong> 的全称是 <strong>Internet Protocol</strong> ，目前有<strong>IPv4</strong>和<strong>IPv6</strong>两个版本，本文涉及的为<strong>IPv4</strong></p>
+</blockquote>
+<ul>
+<li><p>IP数据包的 <strong>Header</strong>，<strong>Version</strong> 版本（如IPv4），<strong>Total Length</strong> 该IP数据包总长度，最长 <strong>2^16-1</strong> 即 <strong>65535 bytes</strong>（字节为单位）<br><img data-src="/4.JPG" alt="IMG_0061-1"></p>
+</li>
+<li><p><strong>Identification</strong>辨识码，IP数据包会被封装成数据帧在网络上传输，那就一定不能大于数据帧的 <strong>MTU</strong> ，如果IP数据包超过数据帧的最大长度，则需要分片，辨识码用于<strong>辨识、重组</strong>属于同一数据包的IP数据包</p>
+</li>
+<li><p><strong>Time To Live</strong>( or <strong>TTL</strong>)存活时间，最大255，每经过一个路由器<strong>减一</strong>，为0时该IP数据包将会被直接抛弃</p>
+</li>
+<li><p><strong>Protocol Number</strong>协议代码，用于记录数据包使用的协议，常见的有 <strong>TCP、UDP、ICMP</strong><br><img data-src="/5.jpg" alt="498ADD4210B624434245C9BFF2F58F6A"></p>
+</li>
+</ul>
+<h3 id="IP-Address"><a href="#IP-Address" class="headerlink" title="IP Address"></a>IP Address</h3><blockquote>
+<p>我们经常说的<strong>IP地址</strong>相当于主机在网络中的<strong>身份号码</strong>。因为是IPv4，所以是32位地址，我们平时用 <strong>“ . “</strong> 分隔每8位，再用十进制表示，所以才有了类似 <strong>192.168.0.1</strong> 这种IP地址，IPv4 可表示 <strong>0.0.0.0 ~ 255.255.255.255</strong> 共 <strong>2^32</strong> 个IP地址</p>
+</blockquote>
+<ul>
+<li>IP由<strong>网段号(Net_ID)</strong> 和<strong>主机号(Host_ID)</strong> 组成，<strong>Net_Id</strong> 相同意味着处于同一物理网络中，<strong>Host_ID</strong> 区分该网络中的不同主机</li>
+</ul>
+<h4 id="IP-分组"><a href="#IP-分组" class="headerlink" title="IP 分组"></a>IP 分组</h4><ul>
+<li><p>IP被分组用于不同范围的网络，通常我们会接触到的是<strong>A、B、C</strong>三组，以 <strong>Net_ID</strong> 前几位区别</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Class A : 0xxxxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx  ==&gt; Net_ID 的开头是 <span class="number">0</span></span><br><span class="line">          |--net--|---------host------------|</span><br><span class="line">Class B : 10xxxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx  ==&gt; Net_ID 的开头是 <span class="number">10</span></span><br><span class="line">          |------net-------|------host------|</span><br><span class="line">Class C : 110xxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx  ==&gt; Net_ID 的开头是 <span class="number">110</span></span><br><span class="line">          |-----------net-----------|-host--|</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从A到C随着 <strong>Net_ID</strong> 位数减少和 <strong>Host_ID</strong> 位数增加，意味着该组网络上的可用子网（主机）数减少，网络的作用范围变小，比如 <strong>Class B</strong> 常用于企业网络，<strong>Class C</strong> 常用于家庭网络</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Class A :   0.xx.xx.xx ~ 127.xx.xx.xx</span><br><span class="line">Class B : 128.xx.xx.xx ~ 191.xx.xx.xx</span><br><span class="line">Class C : 192.xx.xx.xx ~ 223.xx.xx.xx</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>私有 IP 也分别在 A, B, C 三个 Class 当中各保留一段作为私有 IP 网段</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Class A：10.0.0.0    ~ 10.255.255.255</span><br><span class="line">Class B：172.16.0.0  ~ 172.31.255.255</span><br><span class="line">Class C：192.168.0.0 ~ 192.168.255.255</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="Network、Broadcast、Netmask"><a href="#Network、Broadcast、Netmask" class="headerlink" title="Network、Broadcast、Netmask"></a>Network、Broadcast、Netmask</h4><ul>
+<li><p>通常 <strong>Host_ID</strong> 全为 0 用来表示整个网段的地址 **(Network IP)**，比如 <strong>192.168.0.0</strong></p>
+</li>
+<li><p><strong>Host_ID</strong> 全为 1 则表示为广播的地址 <strong>(Broadcast IP)</strong> ，广播可用于对局域网中所有主机传递数据，比如 <strong>192.168.0.255</strong></p>
+</li>
+<li><p><strong>Netmask(子网掩码)</strong> 标识了<strong>Net_ID</strong> 占用位数和可使用的 <strong>Host_ID</strong> 位数，比如 <strong>192.168.0.0 ~ 192.168.0.255</strong> 这个 <strong>Class C</strong> 网络，它的子网掩码就是 <strong>255.255.255.0</strong>，这个网络也可以 <strong>192.168.0.0/24</strong> 这样表示，格式为<code>网段地址/Net_ID位数</code>，比如 <strong>0.0.0.0/0</strong> 代表全网段</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">11000000.10101000</span><span class="number">.00000000</span><span class="number">.00000000</span>      Network:   <span class="number">192.168</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="number">11000000.10101000</span><span class="number">.00000000</span><span class="number">.11111111</span>      Broadcast: <span class="number">192.168</span><span class="number">.0</span><span class="number">.255</span></span><br><span class="line">|----------Net_ID---------|-host--|</span><br></pre></td></tr></table></figure></li>
+<li><p>还可以继续进行子域的切分，比如 <strong>192.168.0.0 ~ 192.168.0.255</strong> 中拿出一位 <strong>Host_ID</strong> 作为 <strong>Net_ID</strong></p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">11000000.10101000.00000000.0 0000000</span><br><span class="line">11000000.10101000.00000000.1 0000000</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这样就划分出了两个子网，表示方式为 <strong>192.168.0.0/25</strong> 和 <strong>192.168.0.128/25</strong>，每个子网下可分配<code>2^7</code>个 Host</p>
+</li>
+</ul>
+<h4 id="Loopback-IP"><a href="#Loopback-IP" class="headerlink" title="Loopback IP"></a>Loopback IP</h4><blockquote>
+<p>除了预留的私有 IP 网段外，还预留了内部回环网段 <strong>127.0.0.0/8</strong>，默认的主机 <strong>(localhost)</strong> 的IP是 <strong>127.0.0.1</strong>，不需要网卡即可访问</p>
+</blockquote>
+<ul>
+<li><p>这个在查看<code>/etc/hosts</code>时可以看到这一行，IPv6 用<code>::1</code>表示</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1	localhost</span><br><span class="line">255.255.255.255	broadcasthost</span><br><span class="line">::1             localhost</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行<code>ifconfig</code>看到的<code>lo0</code>也是回环地址的相关信息</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜ ifconfig </span><br><span class="line">lo0: flags=8049&lt;UP,LOOPBACK,RUNNING,MULTICAST&gt; mtu 16384</span><br><span class="line">    options=1203&lt;RXCSUM,TXCSUM,TXSTATUS,SW_TIMESTAMP&gt;</span><br><span class="line">    inet 127.0.0.1 netmask 0xff000000 </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Gateway-Router"><a href="#Gateway-Router" class="headerlink" title="Gateway/Router"></a>Gateway/Router</h3><blockquote>
+<p>网关/路由器的功能就是负责<strong>不同网络间</strong>的数据包传递 **(IP Forwarding)**，也就是不同 <strong>Net_ID</strong> 的网络间进行数据包的转发</p>
+</blockquote>
+<ul>
+<li>每台主机或者路由器内部都会维护一个<strong>路由表(Route table)</strong> ，发送 IP 数据包时查询该表。若目标 IP 与本机 IP 的 <strong>Net_ID</strong> 相同时（同一网络），则会直接通过局域网将数据包传送给目标主机。若不属于同一网络，则查询是否有相符合的设置，如果还没有，则将数据包发往<strong>默认网关(Default Gateway)</strong></li>
+</ul>
+<h4 id="Route-Table"><a href="#Route-Table" class="headerlink" title="Route Table"></a>Route Table</h4><ul>
+<li><p>在 Ubuntu 下执行<code>route</code>，或者 Mac 中执行<code>netstat -nr</code>可以查看路由表</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># route</span><br><span class="line">Kernel IP routing table</span><br><span class="line">Destination     Gateway         Genmask         Flags Metric Ref    Use Iface</span><br><span class="line">default         192.168.1.253   0.0.0.0         UG    0      0        0 eth0</span><br><span class="line">172.17.0.0      *               255.255.0.0     U     0      0        0 docker0</span><br><span class="line">127.0.0.1       *               255.0.0.0       U     0      0        0 lo0</span><br><span class="line">192.168.1.0     *               255.255.255.0   U     0      0        0 eth0</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>➤ <strong>Destination</strong> 就是目标网络的 <strong>Net_ID</strong><br>➤ <strong>Gateway</strong> 是对应的网关，可以看到我的默认网关为 <strong>192.168.1.253</strong> ，由于 <strong>Host_ID</strong> 全为 0 或 1 被 <strong>Network</strong> 和 <strong>Broadcast</strong> 占用，一般网关设置为最后几个可用 IP，<strong>Gateway</strong> 为 <strong>*</strong> 或者 <strong>0.0.0.0</strong> 表示数据包传输到该网络不需要通过网关，比如内网、回环<br>➤ <strong>Genmask</strong> 就是子网掩码，与 <strong>Destination</strong> 一起标识目的主机或者路由器所在的网段的地址<br>➤ <strong>Iface</strong>(or <strong>Interface</strong>)，IP数据包将从哪个网卡接口转发<br>➤ <strong>Flags</strong>，标识位，<strong>U</strong> 表示该路由可用、<strong>G</strong> 表示需要经由 <strong>Gateway</strong></p>
+</blockquote>
+</li>
+</ul>
+<h4 id="DHCP"><a href="#DHCP" class="headerlink" title="DHCP"></a>DHCP</h4><blockquote>
+<p><strong>DHCP</strong>( or <strong>Dynamic Host Configuration Protocol</strong>，<strong>动态主机配置协议</strong>)是一个局域网的网络协议，使用UDP协议工作，可以给内部网络自动分配IP地址</p>
+</blockquote>
+<ul>
+<li>现在再看电脑上网络设置相关字段应该都明白其意思了<br><img data-src="/6.png" alt="861DECFB-DB0E-4863-A958-4448C560B145"></li>
+</ul>
+<hr>
+<h2 id="Transport-Layer"><a href="#Transport-Layer" class="headerlink" title="Transport Layer"></a>Transport Layer</h2><blockquote>
+<p>网络层的 IP 数据包只负责将数据送到正确的目标主机去，但这个数据包有没有被正确接收就是传输层的任务了，传输层常见协议有两个，一个是<strong>可靠的、面向连接</strong>的 <strong>TCP</strong> 协议，一个是<strong>不可靠的、无连接</strong>的 <strong>UDP</strong> 协议</p>
+</blockquote>
+<h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h3><ul>
+<li>TCP 数据包的报头<br><img data-src="/7.JPG" alt="IMG_0091"></li>
+</ul>
+<blockquote>
+<p>➤ <strong>Source Port、Destination Port</strong>，源端口号、目的端口号，用于区分数据包到底发往哪个应用程序。端口号 16 位，也就是说最大 65535<br>➤ <strong>Sequence Number</strong>(数据包序号)，TCP数据包要被装入IP数据包中，如果过大也需要分段，该字段记录每个数据包的序号用于<strong>重组</strong><br>➤ <strong>Acknowledge Number</strong>(响应序号)，用于确认之前传递的数据包已被正确接收下<br>➤ <strong>Code</strong>(or <strong>Control Flag</strong>，<strong>状态控制码</strong>)有 6 位，表示 6 个不同的属性，为 1 则为真。主要关心的有下面两个：<strong>ACK</strong>(or <strong>Acknowledge</strong>)若为 1，代表该数据包为<strong>响应数据包</strong>；<strong>SYN</strong>(or <strong>Synchronous</strong>)若为 1，表示发送端希望双方建立同步处理，即<strong>建立连接</strong> </p>
+</blockquote>
+<ul>
+<li>常见端口号<br><img data-src="/8.JPG" alt="IMG_0095"></li>
+</ul>
+<h4 id="TCP-的三次握手"><a href="#TCP-的三次握手" class="headerlink" title="TCP 的三次握手"></a>TCP 的三次握手</h4><blockquote>
+<p>TCP 协议正是通过<strong>三次握手协议</strong>了来确认两个主机的连接</p>
+</blockquote>
+<p><img data-src="/9.JPG" alt="IMG_0096"></p>
+<blockquote>
+<p>如图，假设左边是客户端，右边是服务器端。<br>➠ 客户端向服务端发送一个 TCP 数据包，并请求连接 <strong>(SYN = 1)<strong>，数据包序号为 10001<br>➠ 当服务器接到客户端的数据包后回传一个同时带有 <strong>(SYN=1, ACK=1)</strong> 的封包，表示</strong>确认收到，也请求客户端连接</strong>。其中 <strong>Acknowledge</strong> 是要给客户端确认用的，所以该数字比 <strong>Sequence Number</strong> 多一号 <strong>(ack = 10001 + 1 = 10002)</strong> 。而服务器也必须要确认客户端接收到服务器的数据包才行，所以也会随机产生一个 <strong>(seq = 20001)</strong> 发送给客户端<br>➠ 当客户端收到来自服务器端的 <strong>(ack = 10002)</strong> 就能够确认之前的数据包被正确接受了，同时发送一个数据包 <strong>(ACK = 1, ack = 20002)</strong> 给服务器表示确认收到服务端的数据包<br>➠ 服务器收到数据包后确认无误即可与客户端建立连接</p>
+</blockquote>
+<h3 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h3><blockquote>
+<p>TCP 面向连接，需要三次握手，传输的成本较高，并且还会有严密的检测机制，不符合要求的数据包会请求重传，所以是<strong>可靠传输</strong>。而与 TCP 不同，UDP 不提供可靠的传输模式，没有 TCP 的三次握手，传输的消耗自然较低，所以 UDP 适用与视频、音频等<strong>实时性</strong>要求较高，但数据<strong>准确性</strong>要求较低的场合</p>
+</blockquote>
+<ul>
+<li><p>UDP数据包的报头就很简单了<br><img data-src="/10.JPG" alt="IMG_0098-1"></p>
+</li>
+<li><p>另外，很多的软件其实是同时提供 TCP 与 UDP 的传输协议的，举例来说，查询主机名的 DNS 服务就同时提供了 UDP/TCP 协议。由于 UDP 较为快速，会先使用 UDP 进行传输，当使用 UDP 无法取得正确的数据时，便转换为较为可靠的 TCP 传输。这样可以同时兼顾快速与可靠的传输</p>
+</li>
+</ul>
+<hr>
+<h2 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h2><blockquote>
+<p><strong>DNS</strong>(or <strong>Domain Name System，域名解析系统</strong>)，需要有专门的 <strong>DNS</strong> 主机用于保存<strong>域名</strong>与 <strong>IP</strong> 的对应关系，一般我们连接上网络后，运营商会提供他们的<strong>DNS服务器</strong>，这样我们输入的<code>www.baidu.com</code>才会转换成对应的IP地址</p>
+</blockquote>
+<ul>
+<li><p>查看主机的 <strong>DNS</strong> 设置，一般保存在<code>/etc/resolv.conf</code>中</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nameserver 192.168.0.1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>该文件在你连接网络时会自动生成，不同的网络会有不同的 <strong>DNS</strong> 设置，比如我的阿里云服务器的配置如下，这就是阿里内部的DNS服务器的IP了</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Dynamic resolv.conf(5) file for glibc resolver(3) generated by resolvconf(8)            </span><br><span class="line">#     DO NOT EDIT THIS FILE BY HAND -- YOUR CHANGES WILL BE OVERWRITTEN</span><br><span class="line">nameserver 100.100.2.136</span><br><span class="line">nameserver 100.100.2.138</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpeg" alt="s1mple 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Network/" rel="tag"># Network</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/12/29/ES6%20%E6%96%B0%E7%89%B9%E6%80%A7/" rel="prev" title="ES6 新特性">
+      <i class="fa fa-chevron-left"></i> ES6 新特性
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/01/22/%E5%89%8D%E7%AB%AF%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" rel="next" title="前端编码规范">
+      前端编码规范 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview"><span class="nav-number">2.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Link-Layer"><span class="nav-number">3.</span> <span class="nav-text">Link Layer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Internet-Layer"><span class="nav-number">4.</span> <span class="nav-text">Internet Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IP-Address"><span class="nav-number">4.1.</span> <span class="nav-text">IP Address</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IP-%E5%88%86%E7%BB%84"><span class="nav-number">4.1.1.</span> <span class="nav-text">IP 分组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Network%E3%80%81Broadcast%E3%80%81Netmask"><span class="nav-number">4.1.2.</span> <span class="nav-text">Network、Broadcast、Netmask</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Loopback-IP"><span class="nav-number">4.1.3.</span> <span class="nav-text">Loopback IP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gateway-Router"><span class="nav-number">4.2.</span> <span class="nav-text">Gateway&#x2F;Router</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Route-Table"><span class="nav-number">4.2.1.</span> <span class="nav-text">Route Table</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DHCP"><span class="nav-number">4.2.2.</span> <span class="nav-text">DHCP</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transport-Layer"><span class="nav-number">5.</span> <span class="nav-text">Transport Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP"><span class="nav-number">5.1.</span> <span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP-%E7%9A%84%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="nav-number">5.1.1.</span> <span class="nav-text">TCP 的三次握手</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP"><span class="nav-number">5.2.</span> <span class="nav-text">UDP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS"><span class="nav-number">6.</span> <span class="nav-text">DNS</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="s1mple"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">s1mple</p>
+  <div class="site-description" itemprop="description">春光恰与少年同，十里清风慕天青</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">s1mple</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id    : 33231,
+      el    : 'wpac-rating',
+      color : 'fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://s1mplecc.github.io/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/',]
+      });
+      });
+  </script>
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://s1mplecc.github.io/2018/01/02/TCP%EF%BC%8FIP%E5%8D%8F%E8%AE%AE/";
+    this.page.identifier = "2018/01/02/TCP／IP协议/";
+    this.page.title = "TCP/IP 协议";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://true.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言代理模式（Proxy Pattern）是一种常见的设计模式，也是 GoF 提出的 23 种设计模式中的一种，属于结构型设计模式。它使用代理对象完成用户请求，屏蔽用户对真实对象的访问。代理模式用处很多，本文主要介绍如何使用代理模式实现延迟加载和面向切面编程，并着重介绍动态代理的几种实现方式。本文涉及到的示例代码以上传到 GitHub 上。 角色及职责代理模式中的几个角色：  Subject，接口">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代理模式">
+<meta property="og:url" content="https://s1mplecc.github.io/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="s1mple 的博客">
+<meta property="og:description" content="前言代理模式（Proxy Pattern）是一种常见的设计模式，也是 GoF 提出的 23 种设计模式中的一种，属于结构型设计模式。它使用代理对象完成用户请求，屏蔽用户对真实对象的访问。代理模式用处很多，本文主要介绍如何使用代理模式实现延迟加载和面向切面编程，并着重介绍动态代理的几种实现方式。本文涉及到的示例代码以上传到 GitHub 上。 角色及职责代理模式中的几个角色：  Subject，接口">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/0.png">
+<meta property="article:published_time" content="2019-02-25T13:35:58.000Z">
+<meta property="article:modified_time" content="2021-12-17T05:47:55.582Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/0.png">
+
+<link rel="canonical" href="https://s1mplecc.github.io/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>代理模式 | s1mple 的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">s1mple 的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple 的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          代理模式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-02-25 21:35:58" itemprop="dateCreated datePublished" datetime="2019-02-25T21:35:58+08:00">2019-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-17 13:47:55" itemprop="dateModified" datetime="2021-12-17T13:47:55+08:00">2021-12-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Design/" itemprop="url" rel="index"><span itemprop="name">Design</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>代理模式（Proxy Pattern）是一种常见的设计模式，也是 GoF 提出的 23 种设计模式中的一种，属于结构型设计模式。<strong>它使用代理对象完成用户请求，屏蔽用户对真实对象的访问</strong>。代理模式用处很多，本文主要介绍如何使用代理模式实现<strong>延迟加载</strong>和<strong>面向切面编程</strong>，并着重介绍动态代理的几种实现方式。本文涉及到的示例代码以上传到 <a target="_blank" rel="noopener" href="https://github.com/s1mplecc/proxy-pattern-demo">GitHub</a> 上。</p>
+<h2 id="角色及职责"><a href="#角色及职责" class="headerlink" title="角色及职责"></a>角色及职责</h2><p>代理模式中的几个角色：</p>
+<ul>
+<li><strong>Subject</strong>，接口，定义了代理类和被代理类对外暴露的方法。代理类和被代理类都需要实现该接口。</li>
+<li><strong>RealSubject</strong>，真实对象（被代理类），真正实现功能的对象。</li>
+<li><strong>Proxy</strong>，代理类，用来<strong>封装</strong>真实对象。</li>
+</ul>
+<p><img data-src="0.png" alt="0d73af744af2fd7ecfd3326888c3d69b.png"></p>
+<h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><p>代理模式通常用于解决以下几类问题：</p>
+<ul>
+<li><strong>需要控制对象的访问权限</strong></li>
+<li><strong>需要扩展一个对象的功能</strong></li>
+</ul>
+<p>对此，代理模式使用 Proxy 封装真实对象，以达到控制真实对象的访问权限，并在此基础上提供额外功能。代理模式有以下几个典型的应用场景：</p>
+<ul>
+<li>远程代理，在分布式对象通信中，使用一个本地对象代表远程对象（分属不同地址空间）。本地对象是远程对象的代理，本地对象上的方法调用将导致远程对象上的方法调用。一个例子是 ATM 实现，其中 ATM 可以保存位于远程服务器上的银行信息的代理对象。</li>
+<li>虚拟代理，如果一个对象很复杂或很重，可以使用虚拟代理。比如当图像很大时，可以按需的去加载用到的部分（亦即<strong>延迟加载</strong>）。</li>
+<li>保护代理，可以控制资源的访问权限。</li>
+</ul>
+<h2 id="延迟加载"><a href="#延迟加载" class="headerlink" title="延迟加载"></a>延迟加载</h2><p>我们先来看看如何使用代理模式进行延迟加载。假设现在有一个数据库查询类 DBQuery，它执行查询返回一个字符串。由于数据查询需要连接数据库，所以在构造时会比较耗时。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBQuery</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DBQuery</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Thread.sleep(<span class="number">1000</span>); <span class="comment">// create datebase connection</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">query</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;query result&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>正常情况下，如果在程序启动的时候我们就去 new 这个对象，一旦存在大量类似的操作，系统的启动速度必定会受影响。而采用代理类替代 DBQuery，可以做到轻量级启动。</p>
+<p>首先需要创建一个接口，对应着代理模式角色中的 Subject：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IDBQuery</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">query</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>真实对象 DBQuery 和代理类 DBQueryProxy 都需要实现这个接口。<strong>在代理类内部封装了真实对象，实际调用时使用委派（Delegation）调用被代理类的方法</strong>。这也是代理模式的核心所在。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBQueryProxy</span> <span class="keyword">implements</span> <span class="title">IDBQuery</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> DBQuery dbQuery;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">query</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (dbQuery == <span class="keyword">null</span>) &#123;</span><br><span class="line">            dbQuery = <span class="keyword">new</span> DBQuery();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dbQuery.query();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样在启动时初始化代理类，由于代理类 DBQueryProxy 的构造函数什么也没做，所以启动是相当迅速的（下述代码第 1 步）。而真正查询数据库（第 2 步）时才创建 DBQuery 对象执行耗时操作，从而实现了<strong>需要的时候才加载</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    IDBQuery query = <span class="keyword">new</span> DBQueryProxy(); <span class="comment">// 1</span></span><br><span class="line">    query.query(); <span class="comment">// 2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><p>现在来考虑一件事，如果需要在查询语句的前后添加日志该怎么做？在没有代理类之前，我们可能只能在真实对象中添加两行日志。但严格来说，日志记录不属于 DBQuery 的职责，它破坏了类的纯粹性（违背了迪米特法则）。所以现在有了代理类 DBQueryProxy，我们理所因当的应该将日志记录放在代理类中。即如下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBQueryProxy</span> <span class="keyword">implements</span> <span class="title">IDBQuery</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">query</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (dbQuery == <span class="keyword">null</span>) &#123;</span><br><span class="line">            dbQuery = <span class="keyword">new</span> DBQuery();</span><br><span class="line">            log.info(<span class="string">&quot;Create database connection.&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        String result = dbQuery.query();</span><br><span class="line">        log.info(<span class="string">&quot;Query response is &#123;&#125;.&quot;</span>, result);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以将日志功能与 DBQuery 解耦，我们做到了将业务功能与系统级功能解耦，但这还不够。我们实现解耦的方式是采用的<strong>静态代理</strong>，即代码在编译前就得写死了。虽然静态代理可以做到在不修改目标对象的功能前提下，对目标功能扩展，但它的缺点也显而易见，就是代码的冗余。一个 DBQuery，就需要一个代理类，那如果有一千个 DBQuery 难道要写一千个代理类吗？</p>
+<p><strong>AOP（Aspect Oriented Programming）</strong>，面向切面编程的出现就是为了解决这类问题。它通过<strong>预编译</strong>方式和运行期<strong>动态代理</strong>实现程序功能的统一维护。最为人熟知的应该就是 Spring AOP 了。在 Spring 中提供了面向切面编程的丰富支持，允许<strong>通过分离应用的业务逻辑与系统级服务进行内聚性的开发</strong>。业务对象只做它应该做的 —— 完成业务逻辑 —— 仅此而已。它们并不负责其它的系统级关注点，诸如日志记录，性能统计，安全控制，事务处理，异常处理等。通过这种分离我们可以做到改变系统级服务代码时不影响业务代码的逻辑。</p>
+<p>关于预编译的方式就不多说了，它的典型代表是 AspectJ，它需要专门的 Java 编译器将系统级代码织入业务代码中。除此之外，还可以通过运行时织入，也就是动态代理。<strong>Spring AOP 就构建在动态代理基础之上</strong>。</p>
+<h2 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h2><p><strong>动态代理使用字节码动态生成加载技术，在运行时生成并加载类</strong>。与静态代理相比，动态代理有诸多好处。首先，不需要为真实主题创建一个形式上完全一样的封装类，假如主题接口中方法很多，为每个方法重写一个代理方法也是非常麻烦的事，一旦接口发生变更，意味着真实主题与代理类都要修改，不利于系统维护；其次，使用动态代理的生成方法可以指定代理类的执行逻辑，从而提升系统的灵活性。</p>
+<p>生成动态代理的方式很多，包括 JDK 自带的动态代理、<strong>CGLIB</strong>、<strong>Javassist</strong> 等，本文只介绍前两种的使用方式。</p>
+<h3 id="JDK-动态代理"><a href="#JDK-动态代理" class="headerlink" title="JDK 动态代理"></a>JDK 动态代理</h3><p>JDK 从 1.3 开始提供了对动态代理的支持，它可以动态的创建代理类并动态的处理对所代理方法的调用。在动态代理上所做的所有调用都会被重定向到单一的<strong>调用处理器</strong>上，它的工作是揭示调用的类型并确定相应的对策。</p>
+<p>调用处理器需要实现 InvocationHandler 接口，重写 invoke 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicProxyHandler</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(DynamicProxyHandler.class);</span><br><span class="line">    <span class="keyword">private</span> Object proxied;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DynamicProxyHandler</span><span class="params">(Object proxied)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.proxied = proxied;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;Dynamic proxy &#123;&#125; class &#123;&#125;() method.&quot;</span>, proxied.getClass().getSimpleName(), method.getName());</span><br><span class="line">        Object invoke = method.invoke(proxied, args);</span><br><span class="line">        log.info(<span class="string">&quot;result is &#123;&#125;.&quot;</span>,invoke);</span><br><span class="line">        <span class="keyword">return</span> invoke;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面代码在 main 方法中生成了一个实现了 IDBQuery 接口的代理类，代理类的内部逻辑由 DynamicProxyHandler 决定。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    IDBQuery proxy = (IDBQuery) Proxy.newProxyInstance(</span><br><span class="line">            IDBQuery.class.getClassLoader(),</span><br><span class="line">            <span class="keyword">new</span> Class[]&#123;IDBQuery.class&#125;,</span><br><span class="line">            <span class="keyword">new</span> DynamicProxyHandler(<span class="keyword">new</span> DBQuery()));</span><br><span class="line">    proxy.query();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// [main] INFO DynamicProxyHandler - Dynamic proxy DBQuery class query() method.</span></span><br><span class="line"><span class="comment">// [main] INFO DynamicProxyHandler - result is query result.</span></span><br></pre></td></tr></table></figure>
+
+<p>通过调用静态方法 <code>Proxy.newProxyInstance()</code> 可以创建动态代理，该方法需要得到一个类加载器（通常可以从已经被加载的对象中获取其类加载器，然后传递给它），一个你希望该代理实现的接口列表（不是类或抽象类），以及 InvocationHandler 接口的一个实现。动态代理可以将所有调用重定向到调用处理器，因此通常会向调用处理器的构造器传入一个“实际”对象的引用，从而使得调用处理器在执行其中介任务时，可以将请求转发。</p>
+<p>invoke 方法中传入了代理对象（即参数 proxy）以备你需要区分请求的来源，但在多数情况下你并不关心这一点。然而，在 invoke 内部，在代理上调用方法需要格外当心，因为对接口的调用将被重定向为对代理的调用。通常，你会执行被代理的操作，然后使用 <code>method.invoke()</code> 将请求转发给被代理对象，并传入必需的参数。</p>
+<h3 id="CGLIB-动态代理"><a href="#CGLIB-动态代理" class="headerlink" title="CGLIB 动态代理"></a>CGLIB 动态代理</h3><p>Java 提供的动态代理使用简单，它内置在 JDK 中，因此不需要引入第三方 Jar 包，但相对功能较弱。除此之外，CGLIB 动态代理库为 JDK 的动态代理提供了很好的补充，并且性能更好。</p>
+<p><strong>CGLIB 为没有实现接口的类提供代理</strong>，它针对代理的类，动态生成一个子类，然后子类覆盖代理类中的方法。如果是 private 或是 final 类修饰的方法，则不会被重写。通常可以使用 Java 的动态代理创建代理，但当要代理的类没有实现接口或者为了更好的性能，CGLIB 是一个好的选择。</p>
+<p>CGLIB 作为一个开源项目，其代码托管在 <a target="_blank" rel="noopener" href="https://github.com/cglib/cglib">GitHub</a> 上。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CglibProxy</span> <span class="keyword">implements</span> <span class="title">MethodInterceptor</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object target;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CglibProxy</span><span class="params">(Object target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object o, Method method, Object[] objects, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;cglib proxy begin&quot;</span>);</span><br><span class="line">        Object result = method.invoke(target, objects);</span><br><span class="line">        System.out.println(result + <span class="string">&quot;\ncglib proxy end&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">getProxy</span><span class="params">(Object target)</span> </span>&#123;</span><br><span class="line">        Enhancer enhancer = <span class="keyword">new</span> Enhancer();</span><br><span class="line">        enhancer.setSuperclass(target.getClass());</span><br><span class="line">        enhancer.setCallback(<span class="keyword">new</span> CglibProxy(target));</span><br><span class="line">        <span class="keyword">return</span> enhancer.create();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        DBQuery proxy = (DBQuery) CglibProxy.getProxy(<span class="keyword">new</span> DBQuery());</span><br><span class="line">        proxy.query();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// cglib proxy begin</span></span><br><span class="line"><span class="comment">// query result</span></span><br><span class="line"><span class="comment">// cglib proxy end</span></span><br></pre></td></tr></table></figure>
+
+<p>与 JDK 自带的代理类似，基于 CGLIB 的代理类需要实现 MethodInterceptor 接口，重写 intercept 方法。使用 Enhancer 生成需要被代理的类的子类的实例。</p>
+<p>在 Spring 的 AOP 编程中，如果加入容器的目标对象有实现接口，使用 JDK 代理。如果目标对象没有实现接口，则使用 CGLIB 代理。</p>
+<h3 id="Hibernate-对动态代理的应用"><a href="#Hibernate-对动态代理的应用" class="headerlink" title="Hibernate 对动态代理的应用"></a>Hibernate 对动态代理的应用</h3><p>动态代理的一个经典应用就是 Hibernate 框架。当 Hibernate 加载实体 Bean 时，并不会一次性将数据库所有的数据都装载，而是采用延迟加载的机制，以提高系统的性能。这里以属性的延迟加载为例，展示 Hibernate 是如何使用动态代理的。</p>
+<p>从数据库载入 ID 为 1 的 User 用户，并且打印它的类名、父类名、实现的接口名。最后调用 getName 方法取得数据库数据。演示代码采用的 Hibernate 版本为 3.2.6，不同的 Hibernate 版本实现会有差异。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">User user = (User)sessionFactory.getSession().load(User.class, <span class="number">1</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;Class name: &quot;</span> + user.getClass().getName());</span><br><span class="line">System.out.println(<span class="string">&quot;Superclass name: &quot;</span> + user.getClass().getSuperclass().getName());</span><br><span class="line"><span class="keyword">for</span> (Class&lt;?&gt; anInterface : user.getClass().getInterfaces()) &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Interface name: &quot;</span> + anInterface.getName());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;\n&quot;</span> + user.getName());</span><br></pre></td></tr></table></figure>
+
+<p>程序输出如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Class name: com.github.s1mplecc.gof.proxy.User$EnhancerByCGLIB$N8wfgVhe</span><br><span class="line">Superclass name: com.github.s1mplecc.gof.proxy.User</span><br><span class="line">Interface name: org.hibernate.proxy.HibernateProxy</span><br><span class="line"></span><br><span class="line">Hibernate: select user0_.id as id1_0_0_, user0_.name as name2_0_0_ from t_user user0_ where user0_.id=?</span><br><span class="line">Geym</span><br></pre></td></tr></table></figure>
+
+<p>从输出来看，load 方法加载出的 User 类并不是我们定义的 User 类，而是名为 <code>com.github.s1mplecc.gof.proxy.User$EnhancerByCGLIB$N8wfgVhe</code> 的类。从名称上可以推测它是使用 CGLIB 的 Enhancer 生成的动态类。该类的父类才是我们自定义的 User 类，此外，它还实现了 HibernateProxy 接口。由此可见，<strong>Hibernate 使用一个动态代理生成的子类替代用户定义的类</strong>。只有在真正使用对象数据时，才去数据库加载实际的数据。从输出结果来看，在调用 getName 方法之前从未输出过一条 SQL 语句，这说明 User 对象被加载时根本没有访问数据库。Hibernate 正是用这种方式实现了延迟加载。</p>
+<p>另外，由于 CGLIB 停止维护很长一段时间了，Hibernate 从 3.5.5 版本开始弃用 CGLIB 而使用 Javassist。感兴趣的同学可以自行下去研究。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Proxy_pattern">Proxy pattern —— Wiki</a></li>
+<li>《Java 编程思想》</li>
+<li>《Java 程序性能优化 —— 让你的 Java 程序更快、更稳定》</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpeg" alt="s1mple 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag"># 设计模式</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/02/15/%E4%B8%80%E9%81%93%E6%9C%89%E8%B6%A3%E7%9A%84%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95%E9%A2%98%EF%BC%88Java-%E7%89%88%EF%BC%89/" rel="prev" title="一道有趣的路径规划算法题（Java 版）">
+      <i class="fa fa-chevron-left"></i> 一道有趣的路径规划算法题（Java 版）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/04/10/%E6%90%AD%E5%BB%BA-SSR-%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/" rel="next" title="搭建 SSR 科学上网">
+      搭建 SSR 科学上网 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%92%E8%89%B2%E5%8F%8A%E8%81%8C%E8%B4%A3"><span class="nav-number">2.</span> <span class="nav-text">角色及职责</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">3.</span> <span class="nav-text">适用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD"><span class="nav-number">4.</span> <span class="nav-text">延迟加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP"><span class="nav-number">5.</span> <span class="nav-text">AOP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86"><span class="nav-number">6.</span> <span class="nav-text">动态代理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86"><span class="nav-number">6.1.</span> <span class="nav-text">JDK 动态代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CGLIB-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86"><span class="nav-number">6.2.</span> <span class="nav-text">CGLIB 动态代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hibernate-%E5%AF%B9%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">6.3.</span> <span class="nav-text">Hibernate 对动态代理的应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="s1mple"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">s1mple</p>
+  <div class="site-description" itemprop="description">春光恰与少年同，十里清风慕天青</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">s1mple</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id    : 33231,
+      el    : 'wpac-rating',
+      color : 'fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://s1mplecc.github.io/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/',]
+      });
+      });
+  </script>
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://s1mplecc.github.io/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/";
+    this.page.identifier = "2019/02/25/代理模式/";
+    this.page.title = "代理模式";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://true.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

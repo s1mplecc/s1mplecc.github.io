@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言初学 Linux 总是好奇 Linux 系统下各个文件夹为什么这么命名，它们的用途是什么。本文主要介绍 Linux 下各文件夹的结构和用途说明。 文件颜色一般人性化点的 Shell 都会有文件的不同颜色显示。下图为 Linux 下不同颜色的文件代表的含义。比如可执行文件显示绿色，目录显示蓝色，链接文件显示浅蓝色等 FHSLinux 有专门的指导文件系统的标准，叫做 FHS(全称 Filesys">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 文件结构">
+<meta property="og:url" content="https://s1mplecc.github.io/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="s1mple 的博客">
+<meta property="og:description" content="前言初学 Linux 总是好奇 Linux 系统下各个文件夹为什么这么命名，它们的用途是什么。本文主要介绍 Linux 下各文件夹的结构和用途说明。 文件颜色一般人性化点的 Shell 都会有文件的不同颜色显示。下图为 Linux 下不同颜色的文件代表的含义。比如可执行文件显示绿色，目录显示蓝色，链接文件显示浅蓝色等 FHSLinux 有专门的指导文件系统的标准，叫做 FHS(全称 Filesys">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/0.png">
+<meta property="article:published_time" content="2018-01-29T18:28:54.000Z">
+<meta property="article:modified_time" content="2021-12-17T05:47:55.533Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1mplecc.github.io/0.png">
+
+<link rel="canonical" href="https://s1mplecc.github.io/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Linux 文件结构 | s1mple 的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">s1mple 的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple 的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux 文件结构
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-30 02:28:54" itemprop="dateCreated datePublished" datetime="2018-01-30T02:28:54+08:00">2018-01-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-17 13:47:55" itemprop="dateModified" datetime="2021-12-17T13:47:55+08:00">2021-12-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>初学 Linux 总是好奇 Linux 系统下各个文件夹为什么这么命名，它们的用途是什么。本文主要介绍 Linux 下各文件夹的结构和用途说明。</p>
+<h2 id="文件颜色"><a href="#文件颜色" class="headerlink" title="文件颜色"></a>文件颜色</h2><p>一般人性化点的 Shell 都会有文件的不同颜色显示。下图为 Linux 下不同颜色的文件代表的含义。比如可执行文件显示绿色，目录显示蓝色，链接文件显示浅蓝色等<br><img data-src="/0.png" alt="linuxfilecolor"></p>
+<h2 id="FHS"><a href="#FHS" class="headerlink" title="FHS"></a>FHS</h2><p>Linux 有专门的指导文件系统的标准，叫做 FHS(全称 Filesystem Hierarchy Standard)。Linux 所依赖的文件系统，有两个基本的概念：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shareable / unshareable （共享性）</span><br><span class="line">static / variable （稳定性）</span><br></pre></td></tr></table></figure>
+
+<p>对于可分享（shareable）的文件系统，FHS 规定：可分享文件能够被存放在一台将被多个用户同时访问的主机上，通常情况下，当一个系统所需的所有文件都存放在一台外部主机上时，可以方便的挂载一个或很少几个目录来使这些文件可用。但是，并不是在文件系统架构中的所有文件都是可分享的，所以每个系统都至少需要一处能够存放不可共享文件的本地空间。</p>
+<p>对于静态（static）文件系统，FHS 规定：静态文件需要与动态文件隔离，因为，不同于动态文件，静态文件可以存放在只读介质上（而动态文件不可以），并且不需要和动态文件一起备份。</p>
+<p>FHS 中关于特定文件夹用途和所需包含内容的规定：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/bin: Essential user command binaries (for use by all users)</span><br><span class="line">/sbin: System binaries</span><br><span class="line">/usr: shareable static</span><br><span class="line">    /usr/bin: Most user commands</span><br><span class="line">    /usr/sbin: Non-essential standard system binaries</span><br><span class="line">    /usr/local: Local hierarchy</span><br></pre></td></tr></table></figure>
+
+<h3 id="bin"><a href="#bin" class="headerlink" title="/bin"></a>/bin</h3><p><code>/bin</code>，binary 的简称。该目录下为二进制的可执行文件，显示为绿色。包含了引导启动所需的命令或普通用户可使用的命令。多是系统中重要的系统文件</p>
+<p>比如说根目录<code>/bin</code>下都是些常用命令的执行文件，再比如说 Tomcat 的<code>bin</code>目录下有一些运行脚本，有 Linux Shell 执行的<code>.sh</code>结尾的文件，也有 Windows 执行的<code>.bat</code>结尾的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ ls /bin/</span><br><span class="line">cat    tar    cp      ls     rm   ...</span><br><span class="line"></span><br><span class="line">$ ls /usr/local/tomcat9/bin/</span><br><span class="line">shutdown.bat    catalina.bat     shutdown.sh</span><br><span class="line">catalina.sh     startup.bat      startup.sh    ...</span><br></pre></td></tr></table></figure>
+
+<h3 id="sbin"><a href="#sbin" class="headerlink" title="/sbin"></a>/sbin</h3><p><code>/sbin</code>，System binaries 的简称。存放系统管理员以及其他需要root权限来运行的工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls /sbin/</span><br><span class="line">reboot    shutdown    poweroff    route    sysctl     ...  </span><br></pre></td></tr></table></figure>
+
+<h3 id="usr"><a href="#usr" class="headerlink" title="/usr"></a>/usr</h3><p><code>/usr</code>是文件系统中第二大主要部分，其中存放了可分享的、只读的数据（即可分享性，静态性数据）。这说明<code>/usr</code>文件系统需要能够在各种不同的兼容 FHS 系统的之间可共享，并且不可被修改。任何依赖于平台或者需要改写的数据，都应该存放在其它位置</p>
+<p><code>/usr/bin</code>集中了几乎所有用户命令，比如<code>man、info</code>系统自带或者<code>git、docker</code>这种后来安装的三方软件的命令</p>
+<p><code>/usr/sbin</code>包括了多数服务程序需要管理员权限的命令，比如<code>mysqld、sshd</code></p>
+<p><code>/usr/local</code>，本地安装的软件和其他文件都可以放在这里</p>
+<h3 id="lib"><a href="#lib" class="headerlink" title="/lib"></a>/lib</h3><p><code>/lib</code>，Libraries 的简称。库文件，存储文件运行需要的依赖库。不如 Tomcat 是基于 Java 的，它的<code>lib</code>目录下包含了一些依赖 Jar 包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ls /usr/local/tomcat9/lib</span><br><span class="line">annotations-api.jar       el-api.jar       tomcat-coyote.jar   tomcat-util-scan.jar</span><br><span class="line">catalina-ant.jar          jasper-el.jar </span><br></pre></td></tr></table></figure>
+
+<h3 id="etc"><a href="#etc" class="headerlink" title="/etc"></a>/etc</h3><p><code>/etc</code>这个文件夹很有意思，也是最开始困扰我很久的，因为它里头什么都有…其实它取名就是取自”等等”的缩写词 etc. 存放着系统以及各种程序的配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls -F /etc</span><br><span class="line">hosts    hostname    passwd    nginx/    ssh/    ...</span><br></pre></td></tr></table></figure>
+
+<p>早期 UNIX 系统中，对于<code>/etc</code>，贝尔实验室的解释是：etcetra directory(or etc.) 。表示其他、等等什么的，其实就是用来放不能归类到其他目录中的内容，所以比较杂乱。后来 FHS 规定用来放配置文件，就解释为：Editable Text Configuration 或者 Extended Tool Chest</p>
+<h3 id="var"><a href="#var" class="headerlink" title="/var"></a>/var</h3><p><code>/var</code>，Variable 的简称，多用于存放动态变化的文件。也用于某些大文件的溢出区，比如各种服务的日志文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ ls /var/backups</span><br><span class="line">group.bak    passwd.bak    ....</span><br><span class="line"></span><br><span class="line">$ ls /var/log</span><br><span class="line">syslog    dpkg.log    auth.log     ...</span><br><span class="line"></span><br><span class="line">$ ls -F /var/run</span><br><span class="line">nginx.pid    docker.pid    sshd.pid     resolvconf/    ...</span><br></pre></td></tr></table></figure>
+
+<p><code>/var/run</code>中包含了进程的ID以及动态生成的配置文件等，比如连接网络时自动生成的<code>/var/run/resolvconf/resolv.conf</code>域名解析服务器的配置信息，其实<code>/etc/resolv.conf</code>文件就是链接到此文件</p>
+<h3 id="root"><a href="#root" class="headerlink" title="/root"></a>/root</h3><p><code>/root</code>目录是<code>root</code>用户的用户目录，<code>~</code>代表当前用户的用户目录，普通用户的目录在<code>/home</code>下，比如我通过<code>su s1mple</code>切换到 s1mple 用户，用户目录为<code>/home/s1mple</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu-server:~# pwd</span><br><span class="line">/root</span><br><span class="line"></span><br><span class="line">s1mple@ubuntu-server:~$ pwd</span><br><span class="line">/home/s1mple</span><br></pre></td></tr></table></figure>
+
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p><code>/opt</code>，Optional application software packages 代表你可以在该目录下安装第三方软件，和<code>/usr/local</code>的作用相似</p>
+<p><code>/dev</code>，device 的简称，该目录存放设备文件，即设备驱动程序，用户通过这些文件访问外部设备。比如，用户可 以通过访问<code>/dev/mouse</code>来访问鼠标的输入，就像访问其他文件一样</p>
+<p><code>/tmp</code>，temporary 的简称，目录存放程序在运行时产生的临时数据，注意：<code>/var/tmp</code>比<code>/tmp</code>允许更大的或需要存在较长时间的临时文件</p>
+<p><code>/proc</code>，虚拟的目录，是系统内存的映射。可直接访问这个目录来获取系统信息，比如<code>/proc/cpuinfo</code></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/s/yUwUawPlIjPThe3v1Ppcug">Linux 下各文件夹的结构说明及用途介绍</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpeg" alt="s1mple 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/01/22/%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85Nginx/" rel="prev" title="离线安装 Nginx">
+      <i class="fa fa-chevron-left"></i> 离线安装 Nginx
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/" rel="next" title="Java 泛型之类型擦除">
+      Java 泛型之类型擦除 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E9%A2%9C%E8%89%B2"><span class="nav-number">2.</span> <span class="nav-text">文件颜色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FHS"><span class="nav-number">3.</span> <span class="nav-text">FHS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bin"><span class="nav-number">3.1.</span> <span class="nav-text">&#x2F;bin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sbin"><span class="nav-number">3.2.</span> <span class="nav-text">&#x2F;sbin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#usr"><span class="nav-number">3.3.</span> <span class="nav-text">&#x2F;usr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lib"><span class="nav-number">3.4.</span> <span class="nav-text">&#x2F;lib</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#etc"><span class="nav-number">3.5.</span> <span class="nav-text">&#x2F;etc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#var"><span class="nav-number">3.6.</span> <span class="nav-text">&#x2F;var</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#root"><span class="nav-number">3.7.</span> <span class="nav-text">&#x2F;root</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">3.8.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="s1mple"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">s1mple</p>
+  <div class="site-description" itemprop="description">春光恰与少年同，十里清风慕天青</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">s1mple</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id    : 33231,
+      el    : 'wpac-rating',
+      color : 'fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://s1mplecc.github.io/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/',]
+      });
+      });
+  </script>
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://s1mplecc.github.io/2018/01/30/Linux%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/";
+    this.page.identifier = "2018/01/30/Linux文件结构/";
+    this.page.title = "Linux 文件结构";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://true.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="可调用对象除了用户定义的函数，调用运算符，即 “()” 括号对，还能应用到其他对象上。我们将能应用调用运算符的对象称为可调用对象，通过内置的 callable() 方法可以判断对象是否是可调用对象。在 Python 3 的数据模型文档中，一共列出了 7 种可调用对象：  内置函数和内置方法：使用 C 语言（CPython）实现的函数和方法，如 len() 和 alist.append()； 用户定">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 函数详解">
+<meta property="og:url" content="https://s1mplecc.github.io/2021/04/12/Python-%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="s1mple 的博客">
+<meta property="og:description" content="可调用对象除了用户定义的函数，调用运算符，即 “()” 括号对，还能应用到其他对象上。我们将能应用调用运算符的对象称为可调用对象，通过内置的 callable() 方法可以判断对象是否是可调用对象。在 Python 3 的数据模型文档中，一共列出了 7 种可调用对象：  内置函数和内置方法：使用 C 语言（CPython）实现的函数和方法，如 len() 和 alist.append()； 用户定">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-12T14:48:57.000Z">
+<meta property="article:modified_time" content="2021-12-17T05:47:55.537Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://s1mplecc.github.io/2021/04/12/Python-%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Python 函数详解 | s1mple 的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">s1mple 的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2021/04/12/Python-%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple 的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python 函数详解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-12 22:48:57" itemprop="dateCreated datePublished" datetime="2021-04-12T22:48:57+08:00">2021-04-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-17 13:47:55" itemprop="dateModified" datetime="2021-12-17T13:47:55+08:00">2021-12-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="可调用对象"><a href="#可调用对象" class="headerlink" title="可调用对象"></a>可调用对象</h2><p>除了用户定义的函数，调用运算符，即 “()” 括号对，还能应用到其他对象上。我们将能应用调用运算符的对象称为<strong>可调用对象</strong>，通过内置的 <code>callable()</code> 方法可以判断对象是否是可调用对象。在 Python 3 的<a target="_blank" rel="noopener" href="https://docs.python.org/3/reference/datamodel.html">数据模型文档</a>中，一共列出了 7 种可调用对象：</p>
+<ul>
+<li><strong>内置函数和内置方法</strong>：使用 C 语言（CPython）实现的函数和方法，如 <code>len()</code> 和 <code>alist.append()</code>；</li>
+<li><strong>用户定义的函数</strong>：包括使用 def 创建的普通函数和 lambda 创建的匿名函数；</li>
+<li><strong>实例方法与类方法</strong>：定义在类中的方法，实例方法是指第一个参数为 <code>self</code> 的方法，类方法是指第一个参数为 <code>cls</code> 的方法；</li>
+<li><strong>类</strong>：对类使用调用运算符，如 <code>C()</code>，会执行类的 <code>__new__</code> 方法创建类的实例，然后执行 <code>__init__</code> 初始化；</li>
+<li><strong>类的实例</strong>：如果类定义了 <code>__call__</code> 方法，那它的实例可以作为函数调用；</li>
+<li><strong>生成器函数</strong>：内部使用了 yield 关键字的函数，调用生成器函数会返回生成器对象；</li>
+<li><strong>协程函数和异步生成器函数</strong>：从 Python 3.5 开始支持使用 <code>async def</code> 关键字来定义协程函数，如果内部包含 yield 关键字则被称为异步生成器函数。该函数被调用时会返回一个异步迭代器对象。</li>
+</ul>
+<h3 id="自定义的可调用类型"><a href="#自定义的可调用类型" class="headerlink" title="自定义的可调用类型"></a>自定义的可调用类型</h3><p>在装饰器一节，我们已经认识到了，装饰器不仅可以是函数，也可以是类。任何类只要实现了 <code>__call__</code> 方法，那它就是可调用对象，就可以表现的如同函数。因此，我们可以编写用户自定义的可调用类型，将其用在任何期待函数的地方。下面我将通过 Java 和 Python 两种语言，展现它们在可调用类型上的异同。</p>
+<p>假设现有一副扑克，要求按照 <code>A, 2 ~ 10, J, Q, K</code> 的顺序进行排序。在 Java 中，可以通过 <code>Collections.sort()</code> 集合类的接口对一个集合进行排序。Python 也提供了内置的 <code>sorted()</code> 方法，对可迭代对象进行排序。但两种语言都不支持直接对字符串和数字类型进行比较，所以还需要实现特定的排序逻辑。</p>
+<p>Java 中要实现排序逻辑通常有两种方法。一种是让类实现 Comparable 接口，重写其中的 <code>compareTo()</code> 抽象方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Poker</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Poker</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Poker otherPoker)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// return ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里重点想展示第二种方法：新建一个实现了 Comparator 接口的比较器类，重写其 <code>compare()</code> 抽象方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PokerComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Poker</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Poker firstPoker, Poker secondPoker)</span> </span>&#123;</span><br><span class="line">       <span class="comment">// return ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PokerComparator pokerComparator = <span class="keyword">new</span> PokerComparator();</span><br><span class="line">Collections.sort(pokers, pokerComparator);</span><br></pre></td></tr></table></figure>
+
+<p>对于这种方法，需要将比较器对象作为第二个参数传入 <code>Collections.sort()</code> 接口中。由于 Java 对象不能将函数作为参数的限制，我们定义了一个辅助类，实际上这个类对我们而言只有一个方法有用，那就是 <code>compare()</code> 方法，<code>Collections.sort()</code> 接口会去调用该方法，所以它就是对应的排序逻辑，只不过是用类实现的。</p>
+<p>Python 的函数可以直接作为参数传递，但我们接下来要讲的是如何定义一个类似 Comparator 的类，让它能实现排序逻辑。</p>
+<p>Python 内置的排序方法 <code>sorted()</code>，<strong>允许接收一个关键字参数 key 作为排序的键</strong>，比如 <code>key=len</code> 时依照元素的长度进行排序。对于扑克牌 A ~ K，可以维护一个映射数字类型的字典，比如将 ‘K’ 映射到 13，排序时直接通过映射的数值大小排序。维护一个字典，函数当然可以做到，但将其作为类的属性更加合适。可以定义一个扑克序列类，在初始化这个类时就构建好字典。为了让类可被调用，还需要实现 <code>__call__</code> 方法，直接返回字典中扑克牌对应的数值作为排序的键。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PokerOrder</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self._seq = &#123;<span class="built_in">str</span>(i): i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, <span class="number">11</span>)&#125;</span><br><span class="line">        self._seq.setdefault(<span class="string">&#x27;J&#x27;</span>, <span class="number">11</span>)</span><br><span class="line">        self._seq.setdefault(<span class="string">&#x27;Q&#x27;</span>, <span class="number">12</span>)</span><br><span class="line">        self._seq.setdefault(<span class="string">&#x27;K&#x27;</span>, <span class="number">13</span>)</span><br><span class="line">        self._seq.setdefault(<span class="string">&#x27;A&#x27;</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self, item</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self._seq.get(item)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(self._seq)</span><br></pre></td></tr></table></figure>
+
+<p>由于 PokerOrder 类实现了 <code>__call__</code> 方法，它的实例会被 <code>callable()</code> 方法判定为可调用对象，可以直接应用调用运算符，传入扑克牌值返回对应数值。在排序时，将 PokerOrder 类的实例作为关键字传入，相当于将序列中的每项元素执行 <code>__call__</code> 方法返回的值作为键进行排序。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>pokerorder = PokerOrder()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pokerorder.show()</span><br><span class="line">&#123;<span class="string">&#x27;2&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;3&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;4&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;5&#x27;</span>: <span class="number">5</span>, <span class="string">&#x27;6&#x27;</span>: <span class="number">6</span>, <span class="string">&#x27;7&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;8&#x27;</span>: <span class="number">8</span>, <span class="string">&#x27;9&#x27;</span>: <span class="number">9</span>, <span class="string">&#x27;10&#x27;</span>: <span class="number">10</span>, <span class="string">&#x27;J&#x27;</span>: <span class="number">11</span>, <span class="string">&#x27;Q&#x27;</span>: <span class="number">12</span>, <span class="string">&#x27;K&#x27;</span>: <span class="number">13</span>, <span class="string">&#x27;A&#x27;</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">callable</span>(pokerorder)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pokerorder(<span class="string">&#x27;K&#x27;</span>)</span><br><span class="line"><span class="number">13</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">sorted</span>([<span class="string">&#x27;K&#x27;</span>, <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;7&#x27;</span>, <span class="string">&#x27;J&#x27;</span>, <span class="string">&#x27;Q&#x27;</span>, <span class="string">&#x27;2&#x27;</span>], key=pokerorder)</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;7&#x27;</span>, <span class="string">&#x27;J&#x27;</span>, <span class="string">&#x27;Q&#x27;</span>, <span class="string">&#x27;K&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>将类定义为可调用类型，不仅能维护内部属性，还能自定义方法，比如如上代码中的 <code>show()</code> 方法。除此之外，在实现更复杂的排序逻辑时，比如按照花色排序等，使用类要比使用函数更合适。甚至如果你觉的 PokerOrder 类应该被实现为单例模式，还可以添加 <code>__new__</code> 方法保证创建类中的字典只会被创建一次。</p>
+<h2 id="函数对象与方法对象"><a href="#函数对象与方法对象" class="headerlink" title="函数对象与方法对象"></a>函数对象与方法对象</h2><p>Python 中一切皆对象，不管是函数还是类中定义的方法都是对象。对于类中的实例方法来说，通过类访问该实例方法，如 <code>C.foo</code>，会返回一个<strong>函数对象</strong>，即 <code>function</code> 类型；通过实例访问实例方法，如 <code>c.foo</code>，会返回一个<strong>绑定方法对象</strong>，即 <code>method</code> 类型，该方法对象绑定在实例上。对于类方法而言，无论是通过类还是实例访问，都返回绑定方法对象，该方法对象绑定在类上。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">C</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">foo</span>(<span class="params">self, x</span>):</span> <span class="built_in">print</span>(x)</span><br><span class="line"><span class="meta">... </span>    @<span class="built_in">classmethod</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">bar</span>(<span class="params">cls, x</span>):</span> <span class="built_in">print</span>(x)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>C.foo</span><br><span class="line">&lt;function C.foo at <span class="number">0x10d613f70</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(C.foo)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">function</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">c</span> = <span class="title">C</span>()</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">c</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">__main__</span>.<span class="title">C</span> <span class="title">object</span> <span class="title">at</span> 0<span class="title">x10b0a5820</span>&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">c</span>.<span class="title">foo</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">bound</span> <span class="title">method</span> <span class="title">C</span>.<span class="title">foo</span> <span class="title">of</span> &lt;<span class="title">__main__</span>.<span class="title">C</span> <span class="title">object</span> <span class="title">at</span> 0<span class="title">x10b0a5820</span>&gt;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">type</span>(<span class="params">c.foo</span>)</span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">method</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">C</span>.<span class="title">bar</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">bound</span> <span class="title">method</span> <span class="title">C</span>.<span class="title">bar</span> <span class="title">of</span> &lt;<span class="title">class</span> &#x27;<span class="title">__main__</span>.<span class="title">C</span>&#x27;&gt;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">c</span>.<span class="title">bar</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">bound</span> <span class="title">method</span> <span class="title">C</span>.<span class="title">bar</span> <span class="title">of</span> &lt;<span class="title">class</span> &#x27;<span class="title">__main__</span>.<span class="title">C</span>&#x27;&gt;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>方法对象中包含一些特殊的只读属性：</p>
+<ul>
+<li><code>__self__</code> 为类实例对象本身；</li>
+<li><code>__func__</code> 为函数对象；</li>
+<li><code>__doc__</code> 为方法的文档，与 <code>__func__.__doc__</code> 作用相同；</li>
+<li><code>__name__</code> 为方法名称，与 <code>__func__.__name__</code> 作用相同；</li>
+<li><code>__module__</code> 为方法所属模块的名称，没有则为 None。</li>
+</ul>
+<p><strong>访问方法对象的 <code>__func__</code> 属性会获得函数对象</strong>。虽然两者都能通过调用运算符 “()” 调用，但函数对象还需要手动传入第一个位置的参数，即 <code>self</code> 和 <code>cls</code> 参数，方法对象则不需要。原因在于，<strong>调用方法对象会调用对应的下层函数对象 <code>__func__</code>，并将 <code>__self__</code> 参数插入到参数列表的开头</strong>，如果是实例方法则插入类实例，如果是类方法则插入类本身。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">C</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">foo</span>(<span class="params">self, x</span>):</span> <span class="built_in">print</span>(x)</span><br><span class="line"><span class="meta">... </span>    @<span class="built_in">classmethod</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">bar</span>(<span class="params">cls, x</span>):</span> <span class="built_in">print</span>(x)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = C()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c.foo(<span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c.foo.__func__(c, <span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>C.bar(<span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>C.bar.__func__(C, <span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>就如同上述代码所展示的，对于实例方法 <code>foo()</code> 来说，调用 <code>c.foo(1)</code> 相当于调用 <code>c.foo.__func__(c, 1)</code>。对于类方法 <code>bar()</code> 来说，无论是调用 <code>c.bar(1)</code> 还是 <code>C.bar(1)</code> 都相当于调用 <code>C.bar.__func__(C, 1)</code>。</p>
+<h3 id="函数内省"><a href="#函数内省" class="headerlink" title="函数内省"></a>函数内省</h3><p>将函数作为对象处理，可以用于运行时内省，类似于 Java 中的反射，可以在运行时获取函数的信息，比如注解、闭包、参数默认值等。下面列出了一些函数对象特有的属性和方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>():</span> ...</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">sorted</span>(<span class="built_in">set</span>(<span class="built_in">dir</span>(func)) - <span class="built_in">set</span>(<span class="built_in">dir</span>(<span class="built_in">object</span>)))</span><br><span class="line">[<span class="string">&#x27;__annotations__&#x27;</span>, <span class="string">&#x27;__call__&#x27;</span>, <span class="string">&#x27;__closure__&#x27;</span>, <span class="string">&#x27;__code__&#x27;</span>, <span class="string">&#x27;__defaults__&#x27;</span>, <span class="string">&#x27;__dict__&#x27;</span>, <span class="string">&#x27;__get__&#x27;</span>, <span class="string">&#x27;__globals__&#x27;</span>, <span class="string">&#x27;__kwdefaults__&#x27;</span>, <span class="string">&#x27;__module__&#x27;</span>, <span class="string">&#x27;__name__&#x27;</span>, <span class="string">&#x27;__qualname__&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p><code>dir()</code> 函数可以查看一个模块或一个类中的所有属性，当然方法也算方法属性。上述代码将 func 函数对象与常规对象 object 的属性集合做了一个差集，只打印函数对象特有的属性。下表对这些特有属性做了简要说明。</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>__annotations__</code></td>
+<td>dict</td>
+<td>参数和返回值的注解</td>
+</tr>
+<tr>
+<td><code>__call__</code></td>
+<td>method-wrapper</td>
+<td>实现 () 运算符，即可调用对象协议</td>
+</tr>
+<tr>
+<td><code>__closure__</code></td>
+<td>tuple</td>
+<td>函数闭包，即自由变量的绑定（没有则是None）</td>
+</tr>
+<tr>
+<td><code>__code__</code></td>
+<td>code</td>
+<td>编译成字节码的函数元数据和函数定义体</td>
+</tr>
+<tr>
+<td><code>__defaults__</code></td>
+<td>tuple</td>
+<td>形式参数的默认值</td>
+</tr>
+<tr>
+<td><code>__get__</code></td>
+<td>method-wrapper</td>
+<td>实现只读描述符协议</td>
+</tr>
+<tr>
+<td><code>__globals__</code></td>
+<td>dict</td>
+<td>函数所在模块中的全局变量</td>
+</tr>
+<tr>
+<td><code>__kwdefaults__</code></td>
+<td>dict</td>
+<td>仅限关键字形式参数的默认值</td>
+</tr>
+<tr>
+<td><code>__name__</code></td>
+<td>str</td>
+<td>函数名称</td>
+</tr>
+<tr>
+<td><code>__qualname__</code></td>
+<td>str</td>
+<td>函数的限定名称，如 Random.choice</td>
+</tr>
+</tbody></table>
+<p>函数内省经常被一些框架使用发挥出强大效果。比如 <code>__defaults__</code>、<code>__code__</code> 和 <code>__annotations__</code> 属性，经常被 IDE 用来提取关于函数签名的信息，我们之前也提到过 IDE 和 lint 工具使用函数注解做静态类型检查。还比如一些 Python Web 后端框架，可以自动解析 HTTP 请求中的参数将其注入到接口函数中执行，而不用程序员手动处理。</p>
+<h2 id="函数的参数"><a href="#函数的参数" class="headerlink" title="函数的参数"></a>函数的参数</h2><p>Python 最好的特性之一就是提供了极为灵活的参数处理机制。除了基础的定位参数（positional argument）之外，Python 还支持传入关键字参数（keyword argument），如我们之前所使用的内置方法 <code>sorted()</code>，就支持关键字参数 key 与 reverse。关键字参数允许提供默认值，如果无默认值一般为 None。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Return a new list containing all items from the iterable in ascending order.</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">A custom key function can be supplied to customize the sort order, and the</span></span><br><span class="line"><span class="string">reverse flag can be set to request the result in descending order.</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="built_in">sorted</span>(iterable, /, *, key=<span class="literal">None</span>, reverse=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+
+<p>Java 5 中引入了不定长参数，允许在形参后添加 <code>...</code> 表示该形参可以接收多个参数值，多个参数将被当做数组传入，如 <code>void foo(String... args)</code>。Python 也支持<strong>不定长参数</strong>，它的形式是在参数名称前添加星号运算符，如 <code>*args</code>，不定长参数将被打包成<strong>元组</strong>传入。除此之外，Python 还支持传入<strong>非具名关键字参数</strong>，即没有明确指定名称的关键字参数，如 <code>**kwargs</code>，参数将会被打包成一个<strong>字典</strong>传入。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">*args, **kwargs</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;args: &#x27;</span>, args)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;kwargs: &#x27;</span>, kwargs)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">0</span>, <span class="string">&#x27;a&#x27;</span>, key1=<span class="number">1</span>, key2=<span class="string">&#x27;b&#x27;</span>) </span><br><span class="line">args: (<span class="number">0</span>, <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">kwargs: &#123;<span class="string">&#x27;key1&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;key2&#x27;</span>: <span class="string">&#x27;b&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果同时使用 <code>*args</code> 和 <code>**kwargs</code>，<code>*args</code> 参数必须要在 <code>**kwargs</code> 之前。它们可以与其他类型的参数混合使用，但<strong>参数的顺序必须是：定位参数，默认参数，不定长参数，具名关键字参数和非具名关键字参数</strong>。即如下形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">record</span>(<span class="params">name, age=<span class="number">18</span>, *phones, email=<span class="literal">None</span>, **other</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;name: &#x27;</span>, name)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;age: &#x27;</span>, age)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;phones: &#x27;</span>, phones)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;email: &#x27;</span>, email)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;other: &#x27;</span>, other)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>record(<span class="string">&#x27;Jack&#x27;</span>, <span class="number">20</span>, <span class="number">123456</span>, <span class="number">654321</span>, email=<span class="string">&#x27;abc@email.com&#x27;</span>, height=<span class="number">180</span>, weight=<span class="number">90</span>)</span><br><span class="line">name: Jack</span><br><span class="line">age: <span class="number">20</span></span><br><span class="line">phones: (<span class="number">123456</span>, <span class="number">654321</span>)</span><br><span class="line">email: abc@email.com</span><br><span class="line">other: &#123;<span class="string">&#x27;height&#x27;</span>: <span class="number">180</span>, <span class="string">&#x27;weight&#x27;</span>: <span class="number">90</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，默认参数与具名关键字参数形式上一样，默认参数通常是用来简化函数调用者的传参的。这两者可以通过位置进行区分，在不定长参数之前的是默认参数，之后的是关键字参数。如果要传入不定长参数，默认参数就不能省略，此时默认参数被视为定位参数（默认值失去了意义），其后的非关键字参数会被不定长参数 <code>*phones</code> 捕获。如果省略了默认参数，那么不定长参数的第一个元素会被赋值给默认参数。具名关键字参数则没有这一限制。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>record(<span class="string">&#x27;Jack&#x27;</span>, <span class="number">123456</span>, <span class="number">654321</span>, height=<span class="number">180</span>)</span><br><span class="line">name:  Jack</span><br><span class="line">age:  <span class="number">123456</span></span><br><span class="line">phones:  (<span class="number">654321</span>,)</span><br><span class="line">email:  <span class="literal">None</span></span><br><span class="line">other:  &#123;<span class="string">&#x27;height&#x27;</span>: <span class="number">180</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>仅限关键字参数</strong>（keyword-only argument）是 Python 3 新增的特性。如果定义函数时想指定仅限关键字参数，需要将它们放在带有 <code>*</code> 的不定长参数之后。如果不想支持不定长参数，可以在签名中放一个 <code>*</code>，标志着定位参数到此终结，之后的参数只能以关键字形式提供，即仅限关键字参数。如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, *, b, c=<span class="number">3</span></span>):</span> </span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> a, b, c</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">1</span>, b=<span class="number">2</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">1</span>, b=<span class="number">2</span>, c=<span class="number">4</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，仅限关键字参数不一定要有默认值，但如果没有默认值，调用函数时必须传入该参数。内置方法 <code>sorted()</code> 的参数就包含一个 <code>*</code>，其后的 key 和 reverse 参数就是带有默认值的仅限关键字参数。</p>
+<h3 id="函数参数的最佳实践"><a href="#函数参数的最佳实践" class="headerlink" title="函数参数的最佳实践"></a>函数参数的最佳实践</h3><p>对于函数参数如何正确的使用，《Effective Python》给出了一些建议。我结合自己的一些看法，给出如下几点建议。</p>
+<p>第一点，<strong>使用不定长参数减少视觉杂讯</strong>。这是一种比喻，目的是使函数签名内容不要过于过多，而应凸显重要部分。如果一个函数支持传入多个相同类型的对象，或对不同类型的对象做相同处理，可以考虑不定长参数（或者组合成一个可迭代对象传入）。拿 Python 的内置方法来举例，<code>map()</code> 的最后一个参数就是不定长参数 <code>*iterables</code>，支持传入多个可迭代对象；<code>print()</code> 方法的第一个参数 <code>*values</code> 也是不定长参数，对于传入多个参数，不管它们是什么类型都能将其打印。</p>
+<p>第二点，<strong>使用关键字参数来表达可选的行为</strong>。关键字参数的名称可以辅助调用者明确参数的用途，比如 <code>sorted()</code> 方法中的 reverse 参数用来反向排序。关键字参数还能提供默认值，就如同一个开关，如果使用函数默认功能，就不需要操心这些参数，还可以避免传参时的重复代码。如果想开启附加功能，可以传入指定的关键字参数。带有默认值的关键字参数还能在不改变调用代码的基础上为函数添加新功能，保证了代码的兼容性。从另一种角度看，带有默认值的关键字参数提供了类似多态重载的动态语言特性，虽然 Python 并不支持函数重载。</p>
+<p>第三点，<strong>使用仅限关键字参数来确保代码清晰</strong>。关键字参数可以提高可读性，但不能保证调用者一定使用关键字来明确指出参数的含义，关键字参数可以通过位置来赋值，比如定义的函数 <code>def func(a, b=1)</code> 可以通过 <code>func(1, 2)</code> 来为关键字参数 b 赋值。如果有必要，可以使用仅限关键字参数来强制调用者使用关键字。比如 <code>sorted()</code> 方法签名 <code>*</code> 后指定的仅限关键字参数 key 和 reverse。</p>
+<p>第四点，<strong>使用 None 而不是可变序列为参数默认值赋空</strong>。绝对不要将参数默认值指定为空的可变序列 <code>[]</code> 和 <code>&#123;&#125;</code>。参数的默认值会在模块被加载时执行一次并绑定，如果默认值定义为了可变序列，那么以默认形式调用函数的代码都会共享同一份序列，从而导致难以预料的结果。比如如下解析 JSON 的函数，默认值为空字典，在解析出错时将其返回，导致两个对象共用一个字典。解决的方法是使用 None 作为参数默认值，在函数内重新赋值为空字典，并添加文档说明参数默认值的实际行为。如果参数默认值是动态变化的，如当前时间，也应如此做。总之，要避免参数默认值是可变的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">decode</span>(<span class="params">data, default=&#123;&#125;</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">try</span>:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">return</span> json.loads(data)</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">except</span> ValueError:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">return</span> default</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo = decode(<span class="string">&#x27;bad data&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bar = decode(<span class="string">&#x27;also bad&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo[<span class="string">&#x27;a&#x27;</span>] = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bar</span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo <span class="keyword">is</span> bar</span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<p>第五点，<strong>避免修改传入参数的值</strong>。函数式编程中非常强调的一点是，函数要无副作用。无副作用指的是函数内部不与外部互动（最典型的情况是，修改全局变量的值），产生除函数本身运算以外的其他效果。函数无副作用，意味着函数要保持独立，不依赖于上下文环境，不得修改外部变量包括传入参数的值。即使函数要在传入参数本身上做运算，也应该新建一个副本将其返回。就拿 <code>sorted()</code> 来说，即使排序前后元素位置没有变化，也返回一个全新的列表。除此之外，<code>map()</code>、<code>filter()</code> 等其他内置方法也都遵循这一点，不对参数本身做修改。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">sorted</span>(l)</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">sorted</span>(l) <span class="keyword">is</span> l</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义的-sorted-函数"><a href="#自定义的-sorted-函数" class="headerlink" title="自定义的 sorted() 函数"></a>自定义的 <code>sorted()</code> 函数</h3><p>在本章中我一直拿内置的 <code>sorted()</code> 函数来举例，不妨自己来实现一个。借此案例我想演示：如何使用仅限关键字参数，如何编写高阶函数，以及如何使用卫语句对异常参数进行处理。</p>
+<p>这里的排序算法不是关键，使用的是最简单的冒泡排序算法。函数签名上尽可能与 <code>sorted()</code> 保持一致，为了保证函数无副作用，函数内部新建了一个列表副本保存传入可迭代序列的值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sort</span>(<span class="params">iterable, *, key=<span class="literal">None</span>, reverse=<span class="literal">False</span></span>):</span></span><br><span class="line">    <span class="keyword">if</span> key <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> <span class="keyword">not</span> <span class="built_in">callable</span>(key):</span><br><span class="line">        <span class="keyword">raise</span> TypeError(<span class="string">f&#x27;<span class="subst">&#123;<span class="built_in">type</span>(key)&#125;</span> object is not callable&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    _l = <span class="built_in">list</span>(iterable)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(_l)):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i):</span><br><span class="line">            <span class="keyword">if</span> key <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="keyword">if</span> _l[j] &gt; _l[i]:</span><br><span class="line">                    _l[j], _l[i] = _l[i], _l[j]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> key(_l[j]) &gt; key(_l[i]):</span><br><span class="line">                    _l[j], _l[i] = _l[i], _l[j]</span><br><span class="line">    <span class="keyword">if</span> reverse:</span><br><span class="line">        _l.reverse()</span><br><span class="line">    <span class="keyword">return</span> _l</span><br></pre></td></tr></table></figure>
+
+<p>仅限关键字参数是指在 <code>*</code> 运算符之后定义的关键字参数，在调用时必须指定关键字名称，如上述函数中的 key 和 reverse 关键字。</p>
+<p>在函数的开头，首先判断传入的 key 参数在非 None 情况下是否是可调用的，若不可调用则抛出 TypeError 异常。这种 if 条件分支语句叫做<strong>卫语句</strong>（guard clause），目的是将可能出错的每个分支做单独检查，要么抛出异常要么立即返回。通过在函数头部的集中处理及早抛出各种可能的异常（又称迅速失败），避免无效的运算。函数真正的实现代码放在卫语句之后，保证运行到此处时所有条件都已通过。</p>
+<p>通过了卫语句检测的 key 参数是可调用的，在函数内部直接使用 <code>key()</code> 调用。对于接收函数作为参数的 <code>sort()</code> 函数，我们将其称之为<strong>高阶函数</strong>，这也是 Python 函数式编程特性之一。</p>
+<p>下面是测试方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_sort_number_sequence</span>(<span class="params">self</span>):</span></span><br><span class="line">    _l = [<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>]</span><br><span class="line">    result = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">7</span>]</span><br><span class="line">    <span class="keyword">assert</span> sort(_l) == result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_sort_sequence_with_key_function</span>(<span class="params">self</span>):</span></span><br><span class="line">    _l = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;aab&#x27;</span>, <span class="string">&#x27;ab&#x27;</span>, <span class="string">&#x27;aabb&#x27;</span>]</span><br><span class="line">    result = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;ab&#x27;</span>, <span class="string">&#x27;aab&#x27;</span>, <span class="string">&#x27;aabb&#x27;</span>]</span><br><span class="line">    <span class="keyword">assert</span> sort(_l, key=<span class="built_in">len</span>) == result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_sort_sequence_with_key_function_and_reverse</span>(<span class="params">self</span>):</span></span><br><span class="line">    _l = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;aab&#x27;</span>, <span class="string">&#x27;ab&#x27;</span>, <span class="string">&#x27;aabb&#x27;</span>]</span><br><span class="line">    result = [<span class="string">&#x27;aabb&#x27;</span>, <span class="string">&#x27;aab&#x27;</span>, <span class="string">&#x27;ab&#x27;</span>, <span class="string">&#x27;a&#x27;</span>]</span><br><span class="line">    <span class="keyword">assert</span> sort(_l, key=<span class="built_in">len</span>, reverse=<span class="literal">True</span>) == result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_raise_error_when_key_function_is_not_callable</span>(<span class="params">self</span>):</span></span><br><span class="line">    _l = [<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>]</span><br><span class="line">    <span class="keyword">with</span> pytest.raises(TypeError) <span class="keyword">as</span> e:</span><br><span class="line">        sort(_l, key=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>pytest 框架支持对抛出异常的测试，使用 with 语句加 <code>pytest.raises()</code> 方法可以断言定义体内调用的方法是否会抛出对应的异常。</p>
+<h3 id="与-运算符"><a href="#与-运算符" class="headerlink" title="* 与 ** 运算符"></a><code>*</code> 与 <code>**</code> 运算符</h3><p>在 Python 中，<code>*</code> 与 <code>**</code> 运算符除了能用作数学运算符中的乘法和乘方之外，还有一些其他的巧妙用法。之前讨论的函数中的不定长参数 <code>*args</code> 和不具名关键字参数 <code>**kwargs</code> 是它们的经典用法之一。此外，这两个运算符还可以用来对参数列表进行<strong>拆包</strong>。</p>
+<p>运用 <code>*</code> 运算符可以把一个可迭代对象拆开作为函数的参数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">f&#x27;a=<span class="subst">&#123;a&#125;</span>, b=<span class="subst">&#123;b&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">a=<span class="number">1</span>, b=<span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(*t)</span><br><span class="line">a=<span class="number">1</span>, b=<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>类似的，运用 <code>**</code> 运算符可以把一个字典拆开作为函数的参数，同名键会绑定到对应的具名参数上，如果函数还定义了非具名关键字参数 <code>**kwargs</code>，除了绑定的同名键外余下参数会被 <code>**kwargs</code> 捕获。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a=<span class="literal">None</span>, b=<span class="literal">None</span>, **kwargs</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">f&#x27;a=<span class="subst">&#123;a&#125;</span>, b=<span class="subst">&#123;b&#125;</span>, kwargs=<span class="subst">&#123;kwargs&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;c&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;d&#x27;</span>: <span class="number">4</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(**d)</span><br><span class="line">a=<span class="number">1</span>, b=<span class="number">2</span>, kwargs=&#123;<span class="string">&#x27;c&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;d&#x27;</span>: <span class="number">4</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>*</code> 运算符对于函数参数中的可迭代对象拆包概念，在 Python 3 被扩展到了<strong>平行赋值</strong>。在平行赋值中，<code>*</code> 前缀只能被用在一个变量名前，但这个变量可以出现在赋值表达式的任何位置，用来处理剩下的元素。拆包所赋值的元素是列表类型，即使其中只有一个元素。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, b, *rest = <span class="built_in">range</span>(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, b, rest</span><br><span class="line">(<span class="number">0</span>, <span class="number">1</span>, [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, *rest, d, e = <span class="built_in">range</span>(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, rest, d, e</span><br><span class="line">(<span class="number">0</span>, [<span class="number">1</span>, <span class="number">2</span>], <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, *rest, c, d, e = <span class="built_in">range</span>(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, rest, c, d, e</span><br><span class="line">(<span class="number">0</span>, [<span class="number">1</span>], <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="lambda-表达式"><a href="#lambda-表达式" class="headerlink" title="lambda 表达式"></a>lambda 表达式</h2><p>Python 中的 lambda 关键字用于创建<strong>匿名函数</strong>。lambda 表达式的格式如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">lambda</span> arguments : statement</span><br></pre></td></tr></table></figure>
+
+<p>表达式以 lambda 关键字开头，冒号 “:” 左侧是函数的<strong>传入参数</strong>，当有多个入参时使用逗号划分开，冒号右侧是<strong>返回值</strong>的表达式语句，函数会根据表达式计算结果并将其返回。lambda 表达式会创建一个函数对象，可以对其赋值并如同普通函数一样使用。下面定义了一个求平方的 lambda 表达式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>square = <span class="keyword">lambda</span> x : x * x</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>square</span><br><span class="line">&lt;function &lt;<span class="keyword">lambda</span>&gt; at <span class="number">0x101631e50</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>square(<span class="number">3</span>)</span><br><span class="line"><span class="number">9</span></span><br></pre></td></tr></table></figure>
+
+<p>lambda 句法只是语法糖，上述定义的 lambda 表达式与如下使用 def 关键字定义的普通函数没有本质区别，甚至 lambda 表达式的功能要更加受限。由于 Python 简单的句法限制了 lambda 定义体只能使用纯表达式，不能进行赋值，也不能使用 while 和 try 等 Python 语句。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">square</span>(<span class="params">x</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> x * x</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>square</span><br><span class="line">&lt;function square at <span class="number">0x101631dc0</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在 Python 中，<strong>lambda 表达式的通常作用是作为参数传入给高阶函数</strong>。比如在列表推导一节介绍的 map、filter 和 reduce 函数，这些函数接收一个函数作为参数，如果不想额外定义函数，那么使用 lambda 表达式创建匿名函数就是最佳的应用场景。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x : x * x, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))</span><br><span class="line">[<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">filter</span>(<span class="keyword">lambda</span> x : x &lt; <span class="number">2</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))</span><br><span class="line">[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<p>除了上述这种应用场景之外，Python 很少使用匿名函数。受到句法的限制，lambda 表达式无法实现复杂的函数功能。同时，在使用 lambda 表达式时要尽可能保证表达式的清晰简短，否则冗长的 lambda 表达式将会导致代码难以阅读。此时，应该使用 def 关键字创建普通函数，即《Effective Python》所提倡的：<strong>使用辅助函数来取代复杂的表达式</strong>，并赋予函数清晰的名称以提高代码可读性。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpeg" alt="s1mple 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/01/Python-%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%B1%BB%E5%9E%8B/" rel="prev" title="Python 中的可迭代类型">
+      <i class="fa fa-chevron-left"></i> Python 中的可迭代类型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/26/Python-%E5%B1%9E%E6%80%A7%E3%80%81%E7%89%B9%E6%80%A7%E5%92%8C%E6%8F%8F%E8%BF%B0%E7%AC%A6/" rel="next" title="Python 属性、特性和描述符">
+      Python 属性、特性和描述符 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%B0%83%E7%94%A8%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.</span> <span class="nav-text">可调用对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E5%8F%AF%E8%B0%83%E7%94%A8%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">自定义的可调用类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1%E4%B8%8E%E6%96%B9%E6%B3%95%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.</span> <span class="nav-text">函数对象与方法对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%86%85%E7%9C%81"><span class="nav-number">2.1.</span> <span class="nav-text">函数内省</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">函数的参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">3.1.</span> <span class="nav-text">函数参数的最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84-sorted-%E5%87%BD%E6%95%B0"><span class="nav-number">3.2.</span> <span class="nav-text">自定义的 sorted() 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E-%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.3.</span> <span class="nav-text">* 与 ** 运算符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lambda-%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">lambda 表达式</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="s1mple"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">s1mple</p>
+  <div class="site-description" itemprop="description">春光恰与少年同，十里清风慕天青</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">s1mple</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id    : 33231,
+      el    : 'wpac-rating',
+      color : 'fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://s1mplecc.github.io/2021/04/12/Python-%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/',]
+      });
+      });
+  </script>
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://s1mplecc.github.io/2021/04/12/Python-%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/";
+    this.page.identifier = "2021/04/12/Python-函数详解/";
+    this.page.title = "Python 函数详解";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://true.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

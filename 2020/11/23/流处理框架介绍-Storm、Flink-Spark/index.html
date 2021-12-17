@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言与传统的批处理（Batch processing）相比，流处理（Streaming processing）处理的是实时的持续数据流，也被称为无界数据集（unbounded datasets），亦即能够持续增长的、不可预测的无限数据集。而批处理处理的是有界数据集（bounded datasets），有界数据集是有限的不变的，存在开始和结束，也被称之为历史数据集（historic datasets">
+<meta property="og:type" content="article">
+<meta property="og:title" content="流处理框架介绍: Storm、Spark &amp; Flink">
+<meta property="og:url" content="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/index.html">
+<meta property="og:site_name" content="s1mple 的博客">
+<meta property="og:description" content="前言与传统的批处理（Batch processing）相比，流处理（Streaming processing）处理的是实时的持续数据流，也被称为无界数据集（unbounded datasets），亦即能够持续增长的、不可预测的无限数据集。而批处理处理的是有界数据集（bounded datasets），有界数据集是有限的不变的，存在开始和结束，也被称之为历史数据集（historic datasets">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/1.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/2.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/3.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/4.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/5.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/6.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/7.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/8.jpg">
+<meta property="og:image" content="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/9.png">
+<meta property="article:published_time" content="2020-11-23T09:03:00.000Z">
+<meta property="article:modified_time" content="2021-12-17T05:47:55.729Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="BigData">
+<meta property="article:tag" content="流处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/1.png">
+
+<link rel="canonical" href="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>流处理框架介绍: Storm、Spark & Flink | s1mple 的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">s1mple 的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple 的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          流处理框架介绍: Storm、Spark & Flink
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-11-23 17:03:00" itemprop="dateCreated datePublished" datetime="2020-11-23T17:03:00+08:00">2020-11-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-17 13:47:55" itemprop="dateModified" datetime="2021-12-17T13:47:55+08:00">2021-12-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>与传统的批处理（Batch processing）相比，流处理（Streaming processing）处理的是实时的持续数据流，也被称为无界数据集（unbounded datasets），亦即能够持续增长的、不可预测的无限数据集。而批处理处理的是有界数据集（bounded datasets），有界数据集是有限的不变的，存在开始和结束，也被称之为历史数据集（historic datasets）。</p>
+<p>通常，为了应对高速流动的无界数据流，流处理对于处理效率要求更高，内存占用要求更低，与之相对的，相较批处理对于错误的容忍度要更高。</p>
+<p>本文介绍了 Apache Storm、Apache Flink 和 Spark Streaming 三种常用流处理框架，主要包含它们各自的拓扑结构和运行时架构，最后还对流处理框架的演进和流批一体化的趋势做了简要介绍。</p>
+<h2 id="Apache-Storm"><a href="#Apache-Storm" class="headerlink" title="Apache Storm"></a>Apache Storm</h2><p><a target="_blank" rel="noopener" href="https://storm.apache.org/index.html">Apache Storm</a> 是一个分布式实时计算框架，主要使用 Clojure 和 Java 语言编写，目前最新版本 2.2.0。在 Storm 中，数据流被抽象为 tuples，由数据和 ID 标识符组成。Storm 的拓扑结构（Topology）是一个有向无环图，由<strong>输入节点Spouts</strong>、<strong>处理节点Bolts</strong>和<strong>代表数据流的边</strong>三部分组成，如下图所示：</p>
+<p><img data-src="1.png" alt="7f120eb6c1e92b4775e84d196100e3f5.png"></p>
+<p>Spouts 是整个拓扑结构的入口点，负责将输入数据流转换为 tuples，送至 Bolts 进行处理；Bolts 负责处理输入流并转换为输出流，它维护了处理逻辑，能够对 tuples 执行过滤、映射、聚合等函数式操作，还能与数据库进行交互。</p>
+<p>Storm 的运行时架构与 Hadoop 类似，也是经典的主从模式（master-slave）。Storm 中的主节点（master node）运行一个叫做 <strong>Nimbus</strong> 的程序，由其负责资源分配和任务调度，用户定义的 Topology 会被提交到 Nimbus 上；从节点（worker node）运行 <strong>Supervisor</strong> 程序，负责执行 Nimbus 分配的任务，其上可以运行一个或多个工作进程（worker process），每个工作进程执行 Topology 的一个子集。Nimbus 不能直接与 Supervisor 进行交互，两者需要通过 <strong>ZooKeeper</strong> 进行协作，ZooKeeper 保存调度信息、心跳信息、集群状态和配置信息。</p>
+<p><img data-src="2.png" alt="aa1882c89b70544081866ade75563064.png"></p>
+<p>类似于 Hadoop 中的 MapReduce 架构，每个 Spouts 和 Bolts 也可以设置<strong>并行度</strong>（parallelism）。通过设置并行度可指定一个 Worker 运行多个 Executor，所以实际上 Executor 才是运行 Spouts 或者 Bolts 组件的最小单元。</p>
+<p><strong>数据一致性</strong>方面，Storm 基于 ACK 确认机制，可以确保每个 Tuple 至少被执行一次（<strong>at-least-once</strong>）。但现如今 Storm 官方提供了一个在 Storm 之上的更高层级的抽象：<a target="_blank" rel="noopener" href="http://storm.apache.org/releases/current/Trident-tutorial.html">Trident</a>，可以确保每个 Tuple 有且只有一次被执行（exactly-once），代价是增大了数据处理的延迟。Trident 的示例 API 如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">TridentTopology topology = <span class="keyword">new</span> TridentTopology();        </span><br><span class="line">TridentState wordCounts =</span><br><span class="line">     topology.newStream(<span class="string">&quot;spout1&quot;</span>, spout)</span><br><span class="line">       .each(<span class="keyword">new</span> Fields(<span class="string">&quot;sentence&quot;</span>), <span class="keyword">new</span> Split(), <span class="keyword">new</span> Fields(<span class="string">&quot;word&quot;</span>))</span><br><span class="line">       .groupBy(<span class="keyword">new</span> Fields(<span class="string">&quot;word&quot;</span>))</span><br><span class="line">       .persistentAggregate(<span class="keyword">new</span> MemoryMapState.Factory(), <span class="keyword">new</span> Count(), <span class="keyword">new</span> Fields(<span class="string">&quot;count&quot;</span>))                </span><br><span class="line">       .parallelismHint(<span class="number">6</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Spark-Streaming"><a href="#Spark-Streaming" class="headerlink" title="Spark Streaming"></a>Spark Streaming</h2><p><a target="_blank" rel="noopener" href="https://spark.apache.org/">Apache Spark</a> 于 2009 年诞生于加州大学伯克利分校，2013 年被捐献给 Apache 基金会。Spark 的初衷是改良 Hadoop 的 MapReduce 编程模型和执行速度，它提供了更加方便易用的接口，提供 Java、Scala、Python 和 R 四种语言的 API，支持 SQL、机器学习和图计算，覆盖了绝大多数大数据计算的场景。Spark 由 Java 和 Scala 编写，目前最新版本 3.0.1。</p>
+<p>Spark Streaming 是 Spark 框架中的核心组件之一，提供流处理功能。但 Spark Streaming 并不支持严格意义的实时流处理，它按照预设的时间间隔将流数据累积，对这个时间间隔上的数据做批处理。所以实际上 Spark Streaming 是一种<strong>微批处理（micro-batch）</strong>框架。</p>
+<p>Spark 提出了弹性分布式数据集 <strong>RDD</strong>（resilient distributed dataset）的概念，它是 Spark 中最基本的数据抽象，它代表一个不可变、只读的，被分区的数据集，你可以像操作本地集合一样操作 RDD。而在 RDD 之上，Spark Streaming 包装了称为离散流 <strong>DStream</strong>（discretized stream）的高级抽象，底层由一系列连续的 RDD 组成。</p>
+<p><img data-src="3.png" alt="557ca0d5fa2c990b57e8d1a8a625df02.png"></p>
+<p>Spark 架构也是经典的 master-slave 架构。主节点上运行着 Driver，用户从客户端提交应用 Jar 包，首先会构建一个 Spark Application，并初始化程序入口 <strong>SparkContext</strong>（要运行 Spark Streaming 程序则是 StreamingContext），由 SparkContext 负责和资源管理器 Cluster Manager（可以是 Standalone，Mesos，YARN）进行通信以及资源的申请、任务的分配和监控等。</p>
+<p>SparkContext 根据 RDD 之间的依赖关系构建 DAG 图，提交给 DAG 调度器 DAGScheduler 进行解析，DAGScheduler 将 DAG 图分解成多个阶段（stage），也就是任务子集（Taskset），再提交给底层的任务调度器 TaskScheduler ，最后由 Task Scheduler 将 Task 发送给 Executor 运行。</p>
+<p><img data-src="4.png" alt="f987224f95342713f69ee1a0bd428474.png"></p>
+<p>数据一致性方面，Spark 采用了 Checkpoint 机制保证了数据处理的 <strong>exactly-once</strong> 语义。</p>
+<p>另外值得一提的是，Spark 提供了 MLlib 机器学习库，并且支持<strong>流式机器学习算法</strong>（streaming machine learning algorithms），包括 Streaming Linear Regression，Streaming KMeans 等等。这意味着可以一边使用流数据训练模型，一边将模型应用于流数据。此外，你也可以通过历史数据离线训练模型，再将模型在线地应用于实时流数据。</p>
+<h2 id="Apache-Flink"><a href="#Apache-Flink" class="headerlink" title="Apache Flink"></a>Apache Flink</h2><p><a target="_blank" rel="noopener" href="https://flink.apache.org/">Apache Flink</a> 是由德国几所大学发起的的学术项目，后来不断发展壮大，并于 2014 年末成为 Apache 顶级项目。Flink 主要面向流处理，如果说 Spark 是批处理界的王者，那么 Flink 就是流处理领域的冉冉升起的新星。Flink 由 Java 和 Scala 编写，目前最新版本 1.11。</p>
+<p>Flink 提供了负责流处理的  <strong>DataStream API</strong> 和负责批处理的 <strong>DataSet API</strong>，在其之上，又封装了 <strong>Table API</strong> 和 <strong>SQL</strong> 两种关系型 API。这两个 API 都是批处理和流处理统一的 API，这意味着在无边界的实时数据流和有边界的历史记录数据集上，关系型 API 会以相同的语义执行查询，并产生相同的结果。它们可以与 DataStream 和 DataSet API 无缝集成，并支持用户自定义的标量函数，聚合函数以及表值函数。</p>
+<p>在 DataStream API 设计中，一个 Streaming Dataflow 被定义为由一系列 <strong>Operator</strong>（算子）组成，Operator 分为三类：Source Operator 定义入口；Sink Operator 定义出口；Transformation Operator 定义数据的中间转换操作。下图是一个使用 DataStream API 的示例：</p>
+<p><img data-src="5.png" alt="7489b8c785545f3d80c397cfc32bdca3.png"></p>
+<p>在一个完整的 Dataflow DAG 中，可能包含多个 Source 和 Sink，一个 Transformation 也可以包含多个算子。在执行过程中，一个流会有一个或多个流分片（stream partitions），一个算子包含一个或多个算子子任务（operator subtasks），算子子任务的个数就是该算子的并行度（parallelism）。</p>
+<p>Flink 运行时架构如下图所示，主要由一个 JobManager 进程和若干个 TaskManager 进程组成。其中，客户端 Client 并不是程序运行的组成部分，而是负责将用户的 Jar 包构建成 Dataflow Graph，提交到 JobManager 上。JobManager 和 TaskManager 既可以直接以 standalone 模式启动，也可以通过 YARN 或者 Mesos 等资源管理框架进行协调工作。</p>
+<p><img data-src="6.png" alt="e870b01bdb5da98f44fbc6729f928b14.png"></p>
+<p><strong>JobManager</strong> 类似于 Storm 中的 Nimbus，是协调 Flink 应用分布式执行的主进程。一个 Flink 应用中至少有一个 JobManager，在高可用（High Availability）模式下可能会存在多个 JobManager，它们中的一个作为 leader，其余作为 standby。JobManager 由三个组件组成：</p>
+<ul>
+<li><strong>ResourceManager</strong>，负责 Flink 集群资源的分配。它管理着资源调度的最小单元 Task Slots，同时支持 YARN，Mesos，Kubernetes 等多种部署管理方式；</li>
+<li><strong>Dispatcher</strong>，为用户提供了一个可以提交 Flink 应用的 REST 接口。同时  Dispatcher 也会启动一个Web UI，方便展示和监控作业执行的信息；</li>
+<li><strong>JobMaster</strong>，负责管理作业图（JobGraph）的执行。多个 Job 可以同时在 Flink 集群上运行，每个 Job 会有自己独立的 JobMaster。</li>
+</ul>
+<p><strong>TaskManager</strong>，又称作 Worker，负责执行 Task，以及数据流的缓存和交换。Flink 很形象的将任务执行资源称为 Task Slot（插槽），每个插槽是 TaskManager 资源的一个固定子集，比如拥有 3 个插槽的 TaskManager 每个插槽能够使用 1/3 的内存。TaskManager 携有资源，而调度则是通过 JobManager。</p>
+<p>数据一致性方面，Flink 通过 Checkpoint（检查点）机制，保证了数据处理的“精确一次”（<strong>exactly-once</strong>）语义。在应用程序运行期间，Flink 会定期检查状态的一致检查点。如果发生故障，Flink 会将程序状态置为最近的检查点时的状态，并重新启动处理流程，消费并处理检查点和发生故障之间的所有数据。尽管这意味着 Flink 会对一些数据处理两次（在故障之前和之后），我们仍然可以说这个机制实现了精确一次的一致性语义，因为所有算子的状态都已被重置，而重置后的状态下还不曾看到这些数据。</p>
+<h2 id="流处理框架演进"><a href="#流处理框架演进" class="headerlink" title="流处理框架演进"></a>流处理框架演进</h2><p>流处理框架的演进，要从 MapReduce 编程模型开始讲起。为了解决分布式计算学习和使用成本高的问题，Google 在 2004 年提出一种编程范式，它要求程序员将分布式数据操作拆分为两大步：<code>map</code> 和 <code>reduce</code>，也就是所谓的 MapReduce 编程模型。</p>
+<p>在同一年，Hadoop 的创始人受 MapReduce 编程模型等一系列论文的启发，对论文中提出的模型进行了编程实现。时至今日，Hadoop 不仅仅是整个大数据领域的先行者和领导者，更形成了一套围绕 Hadoop 的生态系统，成为企业首选的大数据解决方案。不论是 Storm、Spark 还是 Flink 都是敞开怀抱拥抱 Hadoop 生态并融入成为了生态圈的一部分。</p>
+<p><img data-src="7.png" alt="e2dc809939ef9af086d3197d3e648b0e.png"></p>
+<p>Hadoop 虽然已被公认为大数据分析领域无可争辩的王者，但它更加专注于批处理，并不适合做实时计算。随着 Hadoop 生态的繁荣发展，诞生了一批流处理框架，本质上它们的核心处理流程也不偏离 MapReduce 思想：</p>
+<ul>
+<li><strong>第一代</strong>被广泛采用的流处理框架是 Storm，但由于 Storm 只支持 “at least once” 语义，对于很多对数据准确性要求较高的应用，Storm 有一定劣势。</li>
+<li><strong>第二代</strong>非常流行的流处理框架是 Spark Streaming。Spark Streaming 使用微批处理的思想，每次处理一小批数据，以接近实时处理的效果。也正是由于时间间隔的存在，导致 Spark Streaming 的“实时处理”延迟较大，一般适用于延迟是秒级别的实时计算应用。但 Spark Streaming 的优势是拥有 Spark 这个靠山，用户从 Spark 迁移到 Spark Streaming 的成本较低，因此能给用户提供一个批量和流式于一体的计算框架。</li>
+<li><strong>第三代</strong>流处理框架 Flink 是一个支持在有界和无界数据流上做有状态计算的大数据引擎。它以事件为单位，并且支持 SQL、State、WaterMark 等特性。比起 Storm，它的吞吐量更高，延迟更低，准确性能得到保障；比起 Spark Streaming，它以事件为单位，达到真正意义上的实时计算，且所需计算资源相对更少。</li>
+</ul>
+<p><img data-src="8.jpg" alt="67fc13f9d829042f7b800522e416d280.jpeg"></p>
+<p>Spark 和 Flink 各有所长，也在相互竞争、相互借鉴。可以说 Spark 是以批处理起家的，通过使用内存计算比传统 Hadoop MapReduce 具有显著性能优势，Spark 已经成为行业内大数据批处理的首选处理引擎。但在处理稍微复杂点的实时流处理场景 (比如各种窗口、状态等) ，Flink 要比 Spark Streaming 更具有显著优势。事实证明，阿里最终在流处理框架选型中选择了 Flink，并在其之上开发了自己的流处理框架 Blink，并对 Flink 社区提供了贡献，包括促进 Flink 流处理、批处理一体化等。</p>
+<h2 id="流批一体"><a href="#流批一体" class="headerlink" title="流批一体"></a>流批一体</h2><p>现如今，流批一体已经越来越成为一种趋势，它旨在将流处理和批处理通过一套相同的处理逻辑来实现。流批一体意味着计算引擎同时具备流计算的低延迟和批计算的高吞吐高稳定性，提供统一编程接口开发两种场景的应用并保证它们的底层执行逻辑是一致的。</p>
+<p>2015 年，Google 提出了 <a target="_blank" rel="noopener" href="https://www.vldb.org/pvldb/vol8/p1792-Akidau.pdf">Dataflow</a> 模型，旨在提供一种统一批处理和流处理的解决方案。作为 Dataflow 模型的最早采用者之一，Apache Flink 在流批一体特性的完成度上在开源项目中是十分领先的。Flink 遵循 Dataflow 模型的理念: <strong>批处理是流处理的特例</strong>，亦即批处理处理的是无界数据流上的一小段有界数据流。Flink 设计之初流处理应用和批处理应用底层都是流处理，但在编程 API 上是分开的。</p>
+<p><img data-src="9.png" alt="dbcd10468cea3d61ff1f88d9c640643a.png"></p>
+<p>在 Flink 架构上，负责物理执行环境的 Runtime 层是统一的流处理，上面分别有独立的 DataStream 和 DataSet 两个 API，两者基于不同的任务类型（Stream Task/Batch Task）和 UDF 接口（Transformation/Operator）。而更上层基于关系代数的 Table API 和 SQL API 表面上是统一的，但实际上编程入口（Environment）是分开的，且内部将流批作业分别翻译到 DataStream API 和 DataSet API 的逻辑也是不一致的。</p>
+<p>基于批处理是流处理的特例的理念，用流处理表达批处理在语义上是完全可行的，而流批一体的难点在于批处理场景作为特殊场景的优化。对 Flink 而言，难点主要体现批处理作业在 Task 线程模型、调度策略和计算模型及算法的差异性上。因此，要实现真正的流批一体，Flink 需完成 Table/SQL API 的和 DataStream/DataSet API 两层的改造，将批处理完全移植到流处理之上，并且需要兼顾作为批处理立身之本的效率和稳定性。目前流批一体也是 Flink 长期目标中很重要一点，流批一体的完成将标志着 Flink 进入 2.0 新版本的时代。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.tutorialandexample.com/apache-storm-tutorial/">Apache Storm Tutorial</a></li>
+<li><a target="_blank" rel="noopener" href="https://spark.apache.org/docs/latest/streaming-programming-guide.html">Spark Streaming Programming Guide 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://ci.apache.org/projects/flink/flink-docs-release-1.11/learn-flink/">Apache Flink 1.11 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://confucianzuoyuan.github.io/flink-tutorial/book/chapter03-05-02-%E4%BB%8E%E4%B8%80%E8%87%B4%E6%A3%80%E6%9F%A5%E7%82%B9%E4%B8%AD%E6%81%A2%E5%A4%8D%E7%8A%B6%E6%80%81.html">尚硅谷Flink教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/94302767">从Hadoop到Spark、Flink，大数据处理框架十年激荡发展史</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/754468">Flink 流批一体的实践与探索 —— 阿里云开发者社区</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.vldb.org/pvldb/vol8/p1792-Akidau.pdf">The Dataflow Model: A Practical Approach to Balancing Correctness, Latency, and Cost in Massive-Scale, Unbounded, Out-of-Order Data Processing</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpeg" alt="s1mple 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/BigData/" rel="tag"># BigData</a>
+              <a href="/tags/%E6%B5%81%E5%A4%84%E7%90%86/" rel="tag"># 流处理</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/11/Latex%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/" rel="prev" title="LaTeX 数学公式语法">
+      <i class="fa fa-chevron-left"></i> LaTeX 数学公式语法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/20/Python-%E8%A3%85%E9%A5%B0%E5%99%A8%E4%B8%8E%E9%97%AD%E5%8C%85/" rel="next" title="Python 装饰器与闭包">
+      Python 装饰器与闭包 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Apache-Storm"><span class="nav-number">2.</span> <span class="nav-text">Apache Storm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-Streaming"><span class="nav-number">3.</span> <span class="nav-text">Spark Streaming</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Apache-Flink"><span class="nav-number">4.</span> <span class="nav-text">Apache Flink</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E6%BC%94%E8%BF%9B"><span class="nav-number">5.</span> <span class="nav-text">流处理框架演进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93"><span class="nav-number">6.</span> <span class="nav-text">流批一体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="s1mple"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">s1mple</p>
+  <div class="site-description" itemprop="description">春光恰与少年同，十里清风慕天青</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">s1mple</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id    : 33231,
+      el    : 'wpac-rating',
+      color : 'fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/',]
+      });
+      });
+  </script>
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/";
+    this.page.identifier = "2020/11/23/流处理框架介绍-Storm、Flink-Spark/";
+    this.page.title = "流处理框架介绍: Storm、Spark & Flink";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://true.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言阅读源码是每个程序员都应当具备的技能，阅读源码不仅能帮助你理解一个模块实现的细节，也能让你从优秀的源码中汲取经验，遵循更好的编码规范，编写出更 Pythonic 的代码。但不可否认的是，阅读源码需要一定的编码功底，盲目的阅读并不能取得应有的效果。在阅读源码之前我们要明白阅读的目的，如果是想了解一个模块的实现细节自不必多说，但如果是想提高自己的 Python 编码水平，那么就应该从 Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何阅读 Python 源码">
+<meta property="og:url" content="https://s1mplecc.github.io/2021/01/09/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB-Python-%E6%BA%90%E7%A0%81/index.html">
+<meta property="og:site_name" content="s1mple 的博客">
+<meta property="og:description" content="前言阅读源码是每个程序员都应当具备的技能，阅读源码不仅能帮助你理解一个模块实现的细节，也能让你从优秀的源码中汲取经验，遵循更好的编码规范，编写出更 Pythonic 的代码。但不可否认的是，阅读源码需要一定的编码功底，盲目的阅读并不能取得应有的效果。在阅读源码之前我们要明白阅读的目的，如果是想了解一个模块的实现细节自不必多说，但如果是想提高自己的 Python 编码水平，那么就应该从 Python">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-09T14:34:23.000Z">
+<meta property="article:modified_time" content="2021-12-17T05:47:55.674Z">
+<meta property="article:author" content="s1mple">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://s1mplecc.github.io/2021/01/09/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB-Python-%E6%BA%90%E7%A0%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>如何阅读 Python 源码 | s1mple 的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">s1mple 的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/s1mplecc" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2021/01/09/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB-Python-%E6%BA%90%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="s1mple 的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何阅读 Python 源码
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-09 22:34:23" itemprop="dateCreated datePublished" datetime="2021-01-09T22:34:23+08:00">2021-01-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-17 13:47:55" itemprop="dateModified" datetime="2021-12-17T13:47:55+08:00">2021-12-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>阅读源码是每个程序员都应当具备的技能，阅读源码不仅能帮助你理解一个模块实现的细节，也能让你从优秀的源码中汲取经验，遵循更好的编码规范，编写出更 Pythonic 的代码。但不可否认的是，阅读源码需要一定的编码功底，盲目的阅读并不能取得应有的效果。在阅读源码之前我们要明白阅读的目的，如果是想了解一个模块的实现细节自不必多说，但如果是想提高自己的 Python 编码水平，那么就应该从 Python 标准库以及一些优秀的第三方开源代码下手。</p>
+<p>在《Python编程之美：最佳实践指南》这本书中，作者 Kenneth Reitz 从简单的 HowDoI 项目，到大一点的 requests 库（他本身也是这个库的开发者），再到后面的 Web 框架 Flask，逐步递进地展示如何阅读高质量的代码。如果想阅读优秀的第三方库源码，可以从他在书中罗列出的经典项目开始。除此之外，GitHub 上也有人整理了比较详尽的目录：<a target="_blank" rel="noopener" href="https://github.com/programthink/opensource/blob/master/libs/python.wiki">Python 开源库及示例代码</a>。项目很多，但不是每个都必读。还是强调的那一点：不要盲目的阅读源码，确定有必要的时候再去阅读。</p>
+<p>抛开这些问题不谈，本篇我想结合我自己在阅读标准库源码（主要是 typing 模块和 re 模块）时的一点理解，介绍一些阅读源码前需要掌握的先验知识，以及如何结合开发工具在 PyCharm IDE 中高效地阅读源码。让我们先从 Python 代码的类型提示开始。</p>
+<h2 id="函数注解"><a href="#函数注解" class="headerlink" title="函数注解"></a>函数注解</h2><blockquote>
+<p><strong>PEP 3107 – Function Annotations</strong> : Python Version 3.0, Created Time 2-Dec-2006. This PEP introduces a syntax for adding arbitrary metadata annotations to Python functions.</p>
+</blockquote>
+<p>Python 3 添加了对类型提示（Type Hints）的支持，在此之前 Python 2.x 一直缺乏一种统一的方式去对函数参数和返回值进行标注，一些工具或三方库通过 docstring、注释或者函数装饰器等其他方法尝试去弥补这种缺陷。而自从 Python 3.0 开始，Python 通过 PEP 3107 提案引入了<strong>函数注解</strong>，也就是 Function Annotations，提供了一种标准的解决方案，用于<strong>为函数声明中的参数和返回值附加元数据</strong>。</p>
+<p>函数注解的语法如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span>(<span class="params">a: expression, b: expression = <span class="number">5</span></span>) -&gt; expression:</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>函数声明中的各个参数可以在 <code>:</code> 之后添加注解表达式。如果参数有默认值，表达式后可以跟 <code>=</code> 指定默认值，且与常规函数声明一样，指定默认值参数要出现在无默认值参数之后。注解表达式最常使用的是类型（如 str 或 int），也可以是一个字符串（如 ‘int &gt; 0’）。如果想注解返回值，在 <code>)</code> 与 <code>:</code> 之间添加 <code>-&gt;</code> 和一个表达式，表达式可以是任意类型，如果函数无返回值则为 None。</p>
+<p>本质上来说，PEP 3107 只是一种前导的语法规范，不对注解任何实质处理，你可以将其理解为官方规定的函数声明的注释。换句话说，<strong>注解只是元数据</strong>，Python 解释器对其不做检查、不做强制、不做验证。Python 对注解所做的唯一的事情，就是将它们存储在函数的 <code>__annotations__</code> 属性中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">foo</span>(<span class="params">a: <span class="string">&#x27;x&#x27;</span>, b: <span class="number">5</span> + <span class="number">6</span>, c: <span class="built_in">list</span></span>) -&gt; <span class="built_in">max</span>(2, 9):</span> ...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo.__annotations__</span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>: <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">11</span>, <span class="string">&#x27;c&#x27;</span>: &lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">list</span>&#x27;&gt;, &#x27;<span class="title">return</span>&#x27;:</span> <span class="number">9</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中 return 键保存的是返回值的注解，即函数声明里以 <code>-&gt;</code> 标记的部分。从这个例子我们可以看出，注解表达式的约束非常的宽泛，不管你是类型，还是字符串，或是个表达式。</p>
+<p>注解可以供 IDE、框架和装饰器等工具使用，举个例子，框架可以对 <code>price: &#39;int &gt; 0&#39;</code> 这样的字符串注解转换为对参数的验证。注解最大的作用是为 IDE 和 lint 程序中的<strong>静态类型检查</strong>功能提供额外的类型信息，也就是我们接下来要讨论的类型提示。</p>
+<p><strong>延伸</strong>：Java 中的注解也称为 Annotation，使用 <code>@</code> 符号标注，本质上也是元数据，本身 Java 解释器不会对其做任何处理，只有结合 Java 运行时的反射（getAnnotation 方法）才能获取注解内容从而针对性地制定处理逻辑，这在一些框架例如 Spring 中使用颇多。这与 Python 中的注解是否存在异曲同工之处呢？我们有理由相信，Python 中的静态类型检查工具也是获取了函数的 <code>__annotations__</code> 属性从而进行处理。</p>
+<h2 id="类型提示"><a href="#类型提示" class="headerlink" title="类型提示"></a>类型提示</h2><blockquote>
+<p><strong>PEP 484 – Type Hints</strong> : Python Version 3.5, Created Time 29-Sep-2014. This PEP aims to provide a standard syntax for type annotations, opening up Python code to easier static analysis and refactoring, potential runtime type checking, and (perhaps, in some contexts) code generation utilizing type information.</p>
+</blockquote>
+<p>在 PEP 3107 提案提出后，已经有一些第三方工具结合函数注解做了静态类型检查方面的工作，其中被采用较多的就是 Jukka Lehtosalo 开发的 mypy 项目。PEP 484 提案受 mypy 的强烈启发（Jukka 也参与了提案的制订），规定了如何给 Python 代码添加<strong>类型提示（Type Hints）</strong>，主要方式就是使用注解，以及引入了一个新模块：<strong>typing 模块</strong>。</p>
+<h3 id="typing-模块"><a href="#typing-模块" class="headerlink" title="typing 模块"></a>typing 模块</h3><p>为了给 Python 静态类型检查提供统一的命名空间，标准库以渐进定型（gradual typing）的方式引入名为 <a target="_blank" rel="noopener" href="https://docs.python.org/3/library/typing.html">typing</a> 的新模块，新模块不会影响现有程序的正常运行，只会对不规范的类型作出提示。</p>
+<p>在 typing 模块中，定义了一些<strong>特殊类型</strong>（_SpecialForm），包括 Any, NoReturn, ClassVar, Union, Optional 等，从名称可以大概猜出这些类型的作用，比如：Any 代表任意类型；联合类型 <code>Union[X, Y]</code> 表示类型非 X 即 Y；Optional 作用则与 Java8 中的 Optional 类似，允许传入参数为空，可以避免空值引用的问题。</p>
+<p>除此之外，还有一些常见的数据类型，比如 List、Tuple、Dict、Sequence，它们只是作为标准库类型的别名存在，如：<code>List = _alias(list, T, inst=False)</code>。typing 模块也提供了对于<strong>泛型</strong>（Generics）的支持，让我们得以像 <code>List[int]</code> 这样去定义特定类型集合。想了解更多 typing 模块的功能，建议阅读 PEP 484文档或者直接阅读源码，源码的文档注释介绍了该模块的结构，通过 <code>__all__</code> 属性也可以查明 typing 模块都提供了哪些功能。</p>
+<p>PEP 484 旨在为类型注解提供一种标准语法，让 Python 代码更易于静态分析和重构，尽管 typing 模块也提供了一些潜在的用于运行时类型检查的功能模块，尤其是 <code>get_type_hints()</code> 函数，但它本身不对其做直接支持，仍然需要开发第三方库才能实现特定的运行时类型检查功能，比如使用装饰器或元类。<code>get_type_hints</code> 函数用于获取对象的类型提示，它的源码中包含这么一行：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hints = <span class="built_in">getattr</span>(obj, <span class="string">&#x27;__annotations__&#x27;</span>, <span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这验证了我们之前猜想的类型提示会去查询对象的 <code>__annotations__</code> 属性，此外该方法还会对注解字符串进行验证，我们将这个方法再应用到之前随意注解的 foo 函数时就会报错：找不到 “x” 类型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> typing <span class="keyword">import</span> get_type_hints</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">foo</span>(<span class="params">a: <span class="string">&#x27;x&#x27;</span>, b: <span class="number">5</span> + <span class="number">6</span>, c: <span class="built_in">list</span></span>) -&gt; <span class="built_in">max</span>(2, 9):</span> ...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo.__annotations__  <span class="comment"># No error</span></span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>: <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">11</span>, <span class="string">&#x27;c&#x27;</span>: &lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">list</span>&#x27;&gt;, &#x27;<span class="title">return</span>&#x27;:</span> <span class="number">9</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>get_type_hints(foo)  <span class="comment"># Error</span></span><br><span class="line">NameError: name <span class="string">&#x27;x&#x27;</span> <span class="keyword">is</span> <span class="keyword">not</span> defined</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">bar</span>(<span class="params">a: <span class="built_in">int</span></span>) -&gt; <span class="built_in">str</span>:</span> ...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>get_type_hints(bar)</span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>: &lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">int</span>&#x27;&gt;, &#x27;<span class="title">return</span>&#x27;:</span> &lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">str</span>&#x27;&gt;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="变量注解"><a href="#变量注解" class="headerlink" title="变量注解"></a>变量注解</h3><blockquote>
+<p><strong>PEP 526 – Syntax for Variable Annotations</strong> : Python Version 3.6, Created Time 09-Aug-2016. This PEP aims at adding syntax to Python for annotating the types of variables (including class variables and instance variables), instead of expressing them through comments.</p>
+</blockquote>
+<p>为了丰富类型提示的功能，Python 随即在 3.6 版本中引入了<strong>变量注解（Variable Annotations）</strong>，用于规定变量的类型。与函数注解相同，变量注解也只是元数据，Python 解释器不对其做任何处理，仅供框架和工具做类型检查。语法上变量注解与函数注解类似，使用 <code>:</code> 后接参数类型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">primes: <span class="type">List</span>[<span class="built_in">int</span>] = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">signal</span>(<span class="params">flag: <span class="built_in">bool</span></span>):</span></span><br><span class="line">    color: <span class="built_in">str</span>  <span class="comment"># Note: no initial value!</span></span><br><span class="line">    <span class="keyword">if</span> flag: color = <span class="string">&#x27;green&#x27;</span></span><br><span class="line">    <span class="keyword">else</span>: color = <span class="string">&#x27;red&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> color</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Starship</span>:</span></span><br><span class="line">    captain: <span class="built_in">str</span> = <span class="string">&#x27;Picard&#x27;</span>  <span class="comment"># instance variable with initial value</span></span><br><span class="line">    stats: ClassVar[<span class="type">Dict</span>[<span class="built_in">str</span>, <span class="built_in">int</span>]] = &#123;&#125;  <span class="comment"># class variable</span></span><br></pre></td></tr></table></figure>
+
+<p>变量注解适用于全局变量、局部变量、类属性以及实例属性。上述代码中的 ClassVar 是由 typing 模块定义的特殊类型，向静态类型检查程序标示在类实例中不允许对该变量进行赋值。注解的同时可以对变量进行初始化，如果省略初始化，也能很方面的在后续的条件分支中进行初始化。</p>
+<p>全局变量的注解存储在当前模块的 <code>__annotations__</code> 字典中，如果在 Python 交互式命令行中就是 <code>__main__</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a: <span class="built_in">int</span> = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b: <span class="built_in">str</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>__annotations__</span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>: &lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">int</span>&#x27;&gt;, &#x27;<span class="title">b</span>&#x27;:</span> &lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">str</span>&#x27;&gt;&#125;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; </span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">import</span> <span class="title">__main__</span></span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">get_type_hints</span>(<span class="params">__main__</span>)</span></span><br><span class="line"><span class="class">&#123;&#x27;<span class="title">a</span>&#x27;:</span> &lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">int</span>&#x27;&gt;, &#x27;<span class="title">b</span>&#x27;:</span> &lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">str</span>&#x27;&gt;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="何时使用类型提示"><a href="#何时使用类型提示" class="headerlink" title="何时使用类型提示"></a>何时使用类型提示</h3><p>PEP 484 中强调了 Python 将继续维持作为动态语言的特性，从来没有将类型提示强制化或是惯例化的想法。那么何时采用类型提示呢？一般而言，如果你开发的是供他人使用的第三方库（尤其是在  PyPI 上发布的库中），或是在一个多人协作的稍大项目中，推荐使用类型提示。一方面，这会帮助使用库的用户正确地调用接口。另一方面，类型提示也可以帮助理解类型是如何在代码中传播的。</p>
+<p>Bernat Gabor 认为类型提示与单元测试重要性一致，本质上都是为了验证你的代码库的输入输出类型，只是表现形式不同。在他的文章 <a target="_blank" rel="noopener" href="https://www.bernat.tech/the-state-of-type-hints-in-python/">the state of type hints in Python</a> 的最后总结中提到：<strong>只要值得编写单元测试，就应该添加类型提示</strong>，哪怕代码只有十行，只要你日后需要维护它。所以他给出的建议是，在编写单元测试的同时添加类型提示。虽然这会添加额外的代码量，但为了代码平稳工作值得付出这个代价，尤其是发生代码变更时。</p>
+<p>我们可以在存根文件中使用类型注解来启用类型提示。并且如果参数声明带有默认值，则可以不指定实际的默认值而使用省略号 <code>...</code> 代替，这与冒号后的函数体使用省略号一样，将省略号用作占位符。对于变量，一般只声明类型不给出初值。例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span>(<span class="params">x: AnyStr, y: AnyStr = ...</span>) -&gt; AnyStr:</span> ...</span><br><span class="line"></span><br><span class="line">stream: IO[<span class="built_in">str</span>]</span><br></pre></td></tr></table></figure>
+
+<h2 id="pyi-存根文件"><a href="#pyi-存根文件" class="headerlink" title=".pyi 存根文件"></a>.pyi 存根文件</h2><p>由于 Python 是动态语言，不对类型做强制约束，所以 IDE 在类型检查、类型推断、代码补全以及重构等方面必然不如 Java 等静态语言来的方便。<strong>存根文件是包含类型提示信息的文件</strong>，运行时不会用到，而是<strong>提供给第三方工具做静态类型检查和类型推断</strong>，这方面 PyCharm 做的很好。</p>
+<p>在 PyCharm 中，如果某一行的左边有 * 号标识，则说明这一行（可以是类、属性或函数）在存根文件中有定义，你可以点击 * 号跳转到该文件对应的存根文件，通常是存放在 Python 库文件的 Typeshed Stubs 目录中，文件名以 <code>.pyi</code> 后缀结尾。同时，存根文件也是 GitHub 上一个单独的项目，项目地址：<a target="_blank" rel="noopener" href="https://github.com/python/typeshed">https://github.com/python/typeshed</a> ，Python 的标准库以及内置 builtins 存根可以在该项目的 stdlib 目录下找到。</p>
+<p>我们来看看 Python 正则库 re 的存根文件和源文件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># re.pyi</span></span><br><span class="line"><span class="meta">@overload</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compile</span>(<span class="params">pattern: AnyStr, flags: _FlagsType = ...</span>) -&gt; Pattern[AnyStr]:</span> ...</span><br><span class="line"><span class="meta">@overload</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compile</span>(<span class="params">pattern: Pattern[AnyStr], flags: _FlagsType = ...</span>) -&gt; Pattern[AnyStr]:</span> ...</span><br><span class="line">  </span><br><span class="line"><span class="comment"># re.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compile</span>(<span class="params">pattern, flags=<span class="number">0</span></span>):</span></span><br><span class="line">    <span class="string">&quot;Compile a regular expression pattern, returning a Pattern object.&quot;</span></span><br><span class="line">    <span class="keyword">return</span> _<span class="built_in">compile</span>(pattern, flags)</span><br></pre></td></tr></table></figure>
+
+<p>这里只截取了源码中的一段 compile 函数。从形式上看，存根文件与 C 语言中的头文件有相似之处，将函数声明与函数定义分文件存放，但与其将存根文件理解为函数声明文件，不如理解为函数接口（Interface）文件，接口的意义就是让用户在调用时可以清晰地查看函数的参数和返回值类型。这也是为什么 PEP 484 的作者之一 Jukka Lehtosalo 说可以将 <code>.pyi</code> 中的 i 理解为 Interface。</p>
+<p>上述源文件中的 compile 函数，调用了私有的 _compile 函数并返回一个 Pattern 对象，作用是将字符串处理（编译）成正则表达式模版。进一步 _compile 的源码会发现，如果传入的 pattern 参数本来就是 Pattern 类型的，为了避免重复处理，方法会直接返回 pattern，如下面的代码所示。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_compile</span>(<span class="params">pattern, flags</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(pattern, Pattern):</span><br><span class="line">        <span class="keyword">if</span> flags:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(</span><br><span class="line">                <span class="string">&quot;cannot process flags argument with a compiled pattern&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> pattern</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>这也解释了为什么存根文件中会存在两个 compile 函数声明，其中的第二个就是接收 Pattern 类型作为参数的。除了 compile 函数之外，re 存根文件中的大多数函数都有两个重载函数，原因就是它们实现时都调用了 _compile 函数。事实上，为了防止用户多次调用 _compile 引起不必要的开销，_compile 也设置了缓存优化，这点留给读者自行阅读源码分析。</p>
+<p>在最新的 PyCharm 2020.3 版本中，支持直接创建 Python stub 类型的 Python File，只需要存根文件与源文件同名，PyCharm 就会自动按照存根文件中指定的类型进行静态类型检查。并且，你也可以像 Typeshed 项目为存根文件分配单独的文件夹，具体操作详见 JetBrains 官网的 PyCharm 手册：<a target="_blank" rel="noopener" href="https://www.jetbrains.com/help/pycharm/stubs.html">Python Stubs</a>。</p>
+<h2 id="PyCharm-高效阅读源码"><a href="#PyCharm-高效阅读源码" class="headerlink" title="PyCharm 高效阅读源码"></a>PyCharm 高效阅读源码</h2><p>除了标注存根文件，PyCharm 还对子类父类方法重载进行了标注，分别用 <code>O↑</code> 表示这一行重载了父类方法，点击可以跳转到父类实现；<code>O↓</code> 表示这一行有子类重载，点击可以跳转到子类实现。其中 O 代表的是 Override 的含义。</p>
+<p>比如我们阅读 Python 内置的列表 list 的源码，append 方法这一行既是重载自父类也有子类重载（存根文件中标注的）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">list</span>(<span class="params">MutableSequence[_T], <span class="type">Generic</span>[_T]</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">append</span>(<span class="params">self, __object: _T</span>) -&gt; <span class="literal">None</span>:</span> ...</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 list 多重继承自 MutableSequence 和 Generic，如果点击 append 左侧 <code>O↑</code>，就会跳转到父类 MutableSequence 的 append 实现处。如果点击 <code>O↓</code>，可以选择某个子类并进行跳转（list 存在多个子类）。这在阅读一个具有继承结构的源码时会有所帮助。</p>
+<p>当然，如果想在 PyCharm 中高效阅读源码，需要结合快捷键来使用。这里列出一些 Mac OS 下的快捷键，Windows 下一般是将 Cmd 替换为 Ctrl，你也可以打开 PyCharm 设置自行查阅 Keymap 快捷键：</p>
+<table>
+<thead>
+<tr>
+<th align="left">快捷键</th>
+<th align="left">作用</th>
+<th align="left">PyCharm Keymap</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Cmd + U</td>
+<td align="left">跳转到父类实现</td>
+<td align="left">Go to Super Method</td>
+</tr>
+<tr>
+<td align="left">Cmd + Alt + B/Left Click</td>
+<td align="left">跳转到子类实现</td>
+<td align="left">Go to Implementations</td>
+</tr>
+<tr>
+<td align="left">Cmd + B/Left Click</td>
+<td align="left">跳转到定义处或调用处</td>
+<td align="left">Go to Declaration or Usages</td>
+</tr>
+<tr>
+<td align="left">Cmd + [</td>
+<td align="left">跳转到鼠标停留的上一个位置</td>
+<td align="left">Back</td>
+</tr>
+<tr>
+<td align="left">Cmd + ]</td>
+<td align="left">跳转到鼠标停留的下一个位置</td>
+<td align="left">Forward</td>
+</tr>
+<tr>
+<td align="left">Cmd + E</td>
+<td align="left">跳转到最近浏览的文件</td>
+<td align="left">Iterate Recent Files</td>
+</tr>
+<tr>
+<td align="left">Cmd + Shift + O</td>
+<td align="left">以文件名查询并跳转</td>
+<td align="left">Go to File</td>
+</tr>
+<tr>
+<td align="left">Cmd + O</td>
+<td align="left">以类名查询并跳转</td>
+<td align="left">Go to Class</td>
+</tr>
+<tr>
+<td align="left">Cmd + Alt + O</td>
+<td align="left">以符号查询并跳转，可以查询函数和全局变量</td>
+<td align="left">Go to Symbol</td>
+</tr>
+<tr>
+<td align="left">双击 Shift</td>
+<td align="left">整合了所有查询</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Cmd + F</td>
+<td align="left">搜索当前文件下内容</td>
+<td align="left">Find</td>
+</tr>
+<tr>
+<td align="left">Cmd + Shift + F</td>
+<td align="left">搜索项目文件中的内容</td>
+<td align="left">Find in Files</td>
+</tr>
+</tbody></table>
+<p>这些都是 PyCharm 中非常实用的快捷键，不管是阅读源码还是自己编码，熟悉这些快捷键有助于快速定位到某个文件，某个函数或是某个变量，从而提高我们的效率。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.python-guide.org/writing/reading/">Reading Great Code – Kenneth Reitz</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-3107/">PEP 3107 – Function Annotations</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-0484/">PEP 484 – Type Hints</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-0526/#abstract">PEP 526 – Syntax for Variable Annotations</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/typing.html">Python 官方文档：typing — Support for type hints</a></li>
+<li><a target="_blank" rel="noopener" href="https://realpython.com/python-type-checking/#function-annotations">Python Type Checking (Guide)</a></li>
+<li><a target="_blank" rel="noopener" href="https://sikasjc.github.io/2018/07/14/type-hint-in-python/#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E7%B1%BB%E5%9E%8B%E6%8F%90%E7%A4%BA">译文：全面理解 Python 中的类型提示（Type Hints）</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpeg" alt="s1mple 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/02/Python-%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" rel="prev" title="Python 编码规范">
+      <i class="fa fa-chevron-left"></i> Python 编码规范
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/18/Python-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87/" rel="next" title="Python 环境准备">
+      Python 环境准备 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%B3%A8%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">函数注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E6%8F%90%E7%A4%BA"><span class="nav-number">3.</span> <span class="nav-text">类型提示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#typing-%E6%A8%A1%E5%9D%97"><span class="nav-number">3.1.</span> <span class="nav-text">typing 模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E6%B3%A8%E8%A7%A3"><span class="nav-number">3.2.</span> <span class="nav-text">变量注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%95%E6%97%B6%E4%BD%BF%E7%94%A8%E7%B1%BB%E5%9E%8B%E6%8F%90%E7%A4%BA"><span class="nav-number">3.3.</span> <span class="nav-text">何时使用类型提示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pyi-%E5%AD%98%E6%A0%B9%E6%96%87%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">.pyi 存根文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PyCharm-%E9%AB%98%E6%95%88%E9%98%85%E8%AF%BB%E6%BA%90%E7%A0%81"><span class="nav-number">5.</span> <span class="nav-text">PyCharm 高效阅读源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="s1mple"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">s1mple</p>
+  <div class="site-description" itemprop="description">春光恰与少年同，十里清风慕天青</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">s1mple</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id    : 33231,
+      el    : 'wpac-rating',
+      color : 'fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://s1mplecc.github.io/2021/01/09/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB-Python-%E6%BA%90%E7%A0%81/',]
+      });
+      });
+  </script>
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://s1mplecc.github.io/2021/01/09/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB-Python-%E6%BA%90%E7%A0%81/";
+    this.page.identifier = "2021/01/09/如何阅读-Python-源码/";
+    this.page.title = "如何阅读 Python 源码";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://true.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>
