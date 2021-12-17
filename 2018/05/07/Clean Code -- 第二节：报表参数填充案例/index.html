@@ -17,14 +17,14 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。上一篇我们介绍了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过报表参数填充案例来加深理解，并见识 IDEA 中更为强大的重构功能。 准备工作 IntelliJ I">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Clean Code -- 第二节：报表参数填充案例">
 <meta property="og:url" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/index.html">
-<meta property="og:site_name" content="s1mple 的博客">
+<meta property="og:site_name" content="芥子屋">
 <meta property="og:description" content="前言该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。上一篇我们介绍了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过报表参数填充案例来加深理解，并见识 IDEA 中更为强大的重构功能。 准备工作 IntelliJ I">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s1mplecc.github.io/0.png">
@@ -57,7 +57,7 @@
   };
 </script>
 
-  <title>Clean Code -- 第二节：报表参数填充案例 | s1mple 的博客</title>
+  <title>Clean Code -- 第二节：报表参数填充案例 | 芥子屋</title>
   
 
 
@@ -108,7 +108,7 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">s1mple 的博客</h1>
+      <h1 class="site-title">芥子屋</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -213,7 +213,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple 的博客">
+      <meta itemprop="name" content="芥子屋">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -450,12 +450,16 @@
         </a>
       </div>
       <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
         <span class="site-state-item-count">8</span>
-        <span class="site-state-item-name">分类</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
         <span class="site-state-item-count">22</span>
-        <span class="site-state-item-name">标签</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>

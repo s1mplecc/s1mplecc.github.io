@@ -17,14 +17,14 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍迪米特法则和信息专家模式，并结合案例实操在 IntelliJ IDEA 中如何重构代码。本文大部分内容转载自张总博客: 迪米特法则与重构。 准备工作 IntelliJ IDEA，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Clean Code -- 第一节：迪米特法则与 Paperboy 案例">
 <meta property="og:url" content="https://s1mplecc.github.io/2018/05/04/Clean%20Code%20--%20%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%E4%B8%8E%20Paperboy%20%E6%A1%88%E4%BE%8B/index.html">
-<meta property="og:site_name" content="s1mple 的博客">
+<meta property="og:site_name" content="芥子屋">
 <meta property="og:description" content="前言该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍迪米特法则和信息专家模式，并结合案例实操在 IntelliJ IDEA 中如何重构代码。本文大部分内容转载自张总博客: 迪米特法则与重构。 准备工作 IntelliJ IDEA，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s1mplecc.github.io/0.png">
@@ -55,7 +55,7 @@
   };
 </script>
 
-  <title>Clean Code -- 第一节：迪米特法则与 Paperboy 案例 | s1mple 的博客</title>
+  <title>Clean Code -- 第一节：迪米特法则与 Paperboy 案例 | 芥子屋</title>
   
 
 
@@ -106,7 +106,7 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">s1mple 的博客</h1>
+      <h1 class="site-title">芥子屋</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -211,7 +211,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple 的博客">
+      <meta itemprop="name" content="芥子屋">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -458,12 +458,16 @@
         </a>
       </div>
       <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
         <span class="site-state-item-count">8</span>
-        <span class="site-state-item-name">分类</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
         <span class="site-state-item-count">22</span>
-        <span class="site-state-item-name">标签</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>

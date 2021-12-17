@@ -17,14 +17,14 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言与传统的批处理（Batch processing）相比，流处理（Streaming processing）处理的是实时的持续数据流，也被称为无界数据集（unbounded datasets），亦即能够持续增长的、不可预测的无限数据集。而批处理处理的是有界数据集（bounded datasets），有界数据集是有限的不变的，存在开始和结束，也被称之为历史数据集（historic datasets">
 <meta property="og:type" content="article">
 <meta property="og:title" content="流处理框架介绍: Storm、Spark &amp; Flink">
 <meta property="og:url" content="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/index.html">
-<meta property="og:site_name" content="s1mple 的博客">
+<meta property="og:site_name" content="芥子屋">
 <meta property="og:description" content="前言与传统的批处理（Batch processing）相比，流处理（Streaming processing）处理的是实时的持续数据流，也被称为无界数据集（unbounded datasets），亦即能够持续增长的、不可预测的无限数据集。而批处理处理的是有界数据集（bounded datasets），有界数据集是有限的不变的，存在开始和结束，也被称之为历史数据集（historic datasets">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s1mplecc.github.io/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/1.png">
@@ -57,7 +57,7 @@
   };
 </script>
 
-  <title>流处理框架介绍: Storm、Spark & Flink | s1mple 的博客</title>
+  <title>流处理框架介绍: Storm、Spark & Flink | 芥子屋</title>
   
 
 
@@ -108,7 +108,7 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">s1mple 的博客</h1>
+      <h1 class="site-title">芥子屋</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -213,7 +213,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple 的博客">
+      <meta itemprop="name" content="芥子屋">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -450,12 +450,16 @@
         </a>
       </div>
       <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
         <span class="site-state-item-count">8</span>
-        <span class="site-state-item-name">分类</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
         <span class="site-state-item-count">22</span>
-        <span class="site-state-item-name">标签</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>

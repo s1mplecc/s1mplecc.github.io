@@ -17,14 +17,14 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="Preface 因为阿里云服务器在七月初即将过期，以及生活上的一些琐事，博客已经近一个月没有更新了。考虑到十月份域名也将过期，以及阿里云非学生用户太贵，遂考虑国外的云服务器 Vultr，优点是绑定域名不需要备案，以及按时计费也很方便，缺点是国内访问网速确实比不上阿里云，但同时也跟同学了解到可以使用锐速进行优化，这个以后再研究。此外，为将来迁移方便，使用 Docker 重新部署 Ghost 博客并制">
 <meta property="og:type" content="article">
 <meta property="og:title" content="迁移 Ghost 博客并使用 Docker  部署">
 <meta property="og:url" content="https://s1mplecc.github.io/2018/06/24/%E8%BF%81%E7%A7%BB%20Ghost%20%E5%8D%9A%E5%AE%A2%E5%B9%B6%E4%BD%BF%E7%94%A8%20Docker%20%20%E9%83%A8%E7%BD%B2/index.html">
-<meta property="og:site_name" content="s1mple 的博客">
+<meta property="og:site_name" content="芥子屋">
 <meta property="og:description" content="Preface 因为阿里云服务器在七月初即将过期，以及生活上的一些琐事，博客已经近一个月没有更新了。考虑到十月份域名也将过期，以及阿里云非学生用户太贵，遂考虑国外的云服务器 Vultr，优点是绑定域名不需要备案，以及按时计费也很方便，缺点是国内访问网速确实比不上阿里云，但同时也跟同学了解到可以使用锐速进行优化，这个以后再研究。此外，为将来迁移方便，使用 Docker 重新部署 Ghost 博客并制">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s1mplecc.github.io/0.png">
@@ -49,7 +49,7 @@
   };
 </script>
 
-  <title>迁移 Ghost 博客并使用 Docker  部署 | s1mple 的博客</title>
+  <title>迁移 Ghost 博客并使用 Docker  部署 | 芥子屋</title>
   
 
 
@@ -100,7 +100,7 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">s1mple 的博客</h1>
+      <h1 class="site-title">芥子屋</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -205,7 +205,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple 的博客">
+      <meta itemprop="name" content="芥子屋">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -465,12 +465,16 @@
         </a>
       </div>
       <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
         <span class="site-state-item-count">8</span>
-        <span class="site-state-item-name">分类</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
         <span class="site-state-item-count">22</span>
-        <span class="site-state-item-name">标签</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>

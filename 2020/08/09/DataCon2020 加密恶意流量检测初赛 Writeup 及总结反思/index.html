@@ -17,14 +17,14 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="初赛题目主办方提供了 black&#x2F;white&#x2F;test 三个 pcap 文件夹，其中 black 和 white 分别是检测出有&#x2F;无恶意软件感染的客户端 IP 组，要求选手对 test 数据集进行判定。  解题思路该题的解题过程应分为以下三个大步骤：  特征选择（Feature Selection），选取对于区分正常&#x2F;恶意流量有明显作用的 Features。 特征提取（Feature Extrac">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思">
 <meta property="og:url" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/index.html">
-<meta property="og:site_name" content="s1mple 的博客">
+<meta property="og:site_name" content="芥子屋">
 <meta property="og:description" content="初赛题目主办方提供了 black&#x2F;white&#x2F;test 三个 pcap 文件夹，其中 black 和 white 分别是检测出有&#x2F;无恶意软件感染的客户端 IP 组，要求选手对 test 数据集进行判定。  解题思路该题的解题过程应分为以下三个大步骤：  特征选择（Feature Selection），选取对于区分正常&#x2F;恶意流量有明显作用的 Features。 特征提取（Feature Extrac">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s1mplecc.github.io/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/0.png">
@@ -53,7 +53,7 @@
   };
 </script>
 
-  <title>DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思 | s1mple 的博客</title>
+  <title>DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思 | 芥子屋</title>
   
 
 
@@ -104,7 +104,7 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">s1mple 的博客</h1>
+      <h1 class="site-title">芥子屋</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -209,7 +209,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="s1mple 的博客">
+      <meta itemprop="name" content="芥子屋">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -623,12 +623,16 @@
         </a>
       </div>
       <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
         <span class="site-state-item-count">8</span>
-        <span class="site-state-item-name">分类</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
         <span class="site-state-item-count">22</span>
-        <span class="site-state-item-name">标签</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
