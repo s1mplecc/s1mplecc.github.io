@@ -242,6 +242,20 @@
             </span>
 
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2018/05/10/Clean%20Code%20--%20%E7%AC%AC%E4%B8%89%E8%8A%82%EF%BC%9APartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2018/05/10/Clean%20Code%20--%20%E7%AC%AC%E4%B8%89%E8%8A%82%EF%BC%9APartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -381,13 +395,7 @@
 
           </div>
           
-    
-  <div class="comments">
-    <div id="disqus_thread">
-      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-    </div>
-  </div>
-  
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -598,25 +606,33 @@
       });
   </script>
 
+
 <script>
-  var disqus_config = function() {
-    this.page.url = "https://s1mplecc.github.io/2018/05/10/Clean%20Code%20--%20%E7%AC%AC%E4%B8%89%E8%8A%82%EF%BC%9APartDB%20%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/";
-    this.page.identifier = "2018/05/10/Clean Code -- 第三节：PartDB 案例与模版方法模式/";
-    this.page.title = "Clean Code -- 第三节：PartDB 案例与模版方法模式";
-    };
-  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://true.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'LL5WuMzDNh0Y7j17go8YWYQ8-gzGzoHsz',
+      appKey     : 'eGkSV4kghSvWKeQvrDPjf6ig',
+      placeholder: "说点什么吧。",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
 </script>
 
 </body>
