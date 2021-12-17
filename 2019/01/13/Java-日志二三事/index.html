@@ -278,13 +278,13 @@
 <h3 id="Log4j2"><a href="#Log4j2" class="headerlink" title="Log4j2"></a>Log4j2</h3><p>现在有了更好的 SLF4J 和 Logback 正慢慢取代 JCL 和 Log4j，然而维护 Log4j 的人不想坐视用户一点点被 SLF4J /Logback 蚕食，所以 Log4j2 诞生了。Log4j2 和 Log4j1.x 并不兼容，设计上很大程度上模仿了 SLF4J/Logback，性能上也获得了很大的提升。Log4j2 也做了 Facade/Implementation 分离的设计，分成了 log4j-api 和 log4j-core。</p>
 <h2 id="Facade-amp-Implementation"><a href="#Facade-amp-Implementation" class="headerlink" title="Facade &amp; Implementation"></a>Facade &amp; Implementation</h2><p>JCL、SLF4J 和 Log4j2 日志框架都使用了 GoF 设计模式中的门面模式（<strong>Facade Pattern</strong>），将接口和实现分离，定义统一的接口，而实现可以由用户自由选择。现在我们有了三个流行的 Log Facade，以及多个 Log Implementation，那么该如何配合使用呢？</p>
 <h3 id="SLF4J"><a href="#SLF4J" class="headerlink" title="SLF4J"></a>SLF4J</h3><p>Gülcü 是个追求完美的人，他决定让 SLF4J 和这些 Log 之间都能够方便的互相替换，所以做了各种 <strong>Adapter</strong> 和 <strong>Bridge</strong> 来连接:</p>
-<p><img data-src="0.jpg" alt="0a9ca27a6fcb038fca91153b1147e5cc.jpeg"></p>
+<p><img data-src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/0.jpg" alt="0a9ca27a6fcb038fca91153b1147e5cc.jpeg"></p>
 <p>有趣的是，唯独没有 slf4j-over-log4j2 的桥接库，而且 log4j-to-slf4j 和 log4j-slf4j-impl 也是由 Apache 自己开发的。</p>
 <p>slf4j-api 只是 Log Facade 的依赖，添加了该依赖意味着在编码时你能够使用 <code>Logger log = LoggerFactory.getLogger(Main.class);</code> 和 <code>log.info(&quot;hello, &#123;&#125;&quot;, &quot;world&quot;);</code> 这种方式。除此之外，还需要添加 Log Implementation 的依赖。</p>
 <p>下图是 <a target="_blank" rel="noopener" href="https://www.slf4j.org/manual.html">SLF4J官网</a> 介绍可以绑定的日志实现框架。其中 slf4j-simple 是为小项目提供的简单实现；logback-classic 是官方的原生实现，不需要额外的适配器。而 <code>slf4j-log4j12</code> 和 <code>slf4j-jdk14</code> 分别是适配到 Log4j 和 JUL 的依赖，JUL 由于是 JDK 自带所以不需要额外依赖，而 Log4j 则还需要添加自己的底层实现依赖。</p>
-<p><img data-src="1.png" alt="b7d8f119aca4c91e4d72283f7198148f.png"></p>
+<p><img data-src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/1.png" alt="b7d8f119aca4c91e4d72283f7198148f.png"></p>
 <p>下面这张图展示了 SLF4J 绑定不同日志实现框架需要的依赖：</p>
-<p><img data-src="2.png" alt="d8261ab119309917e25180ef0ae42abe.png"></p>
+<p><img data-src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/2.png" alt="d8261ab119309917e25180ef0ae42abe.png"></p>
 <h3 id="Log4j2-1"><a href="#Log4j2-1" class="headerlink" title="Log4j2"></a>Log4j2</h3><p>关于 Log Facade 选择 SLF4J 还是 Log4j2，个人觉得要看项目需求。总的来说 SLF4J 的兼容性更好，日志实现可以随意搭配使用；虽然 Log4j2 可以通过 log4j-to-slf4j 桥接到 SLF4J 再使用其他的 Log Implementation，但这必然带来多余的性能消耗。</p>
 <p>而 Log4j2 的优点则在于性能，在 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/41498021/is-it-worth-to-use-slf4j-with-log4j2">Is it worth to use slf4j with log4j2</a> 这个问题中推荐直接面向 Log4j2 API 编程，理由如下：</p>
 <ul>
@@ -306,8 +306,8 @@
 <li>Log4j2 实现了“无垃圾”和“低垃圾”模式。简单地说，Log4j2 在记录日志时，能够重用对象（如String等），尽可能避免实例化新的临时对象，减少因日志记录产生的垃圾对象，减少垃圾回收带来的性能下降</li>
 </ul>
 <p>这是 Apache 官方提供的同步和异步写日志时的性能对比图：</p>
-<p><img data-src="3.png" alt="900a0952b7540882925dd50699dc3e29.png"></p>
-<p><img data-src="4.png" alt="c5b42a899b63e265a3e2f4300d443ecb.png"></p>
+<p><img data-src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/3.png" alt="900a0952b7540882925dd50699dc3e29.png"></p>
+<p><img data-src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/4.png" alt="c5b42a899b63e265a3e2f4300d443ecb.png"></p>
 <p>所以综上所诉，个人的看法是：<strong>如果对性能有要求，且 Log Implementation 想选用 Log4j2 的话，推荐 Log Facade 直接使用 Log4j2 API</strong>。</p>
 <h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><h3 id="总是使用-Log-Facade，而不是具体-Log-Implementation"><a href="#总是使用-Log-Facade，而不是具体-Log-Implementation" class="headerlink" title="总是使用 Log Facade，而不是具体 Log Implementation"></a>总是使用 Log Facade，而不是具体 Log Implementation</h3><p>正如之前所说的，使用 Log Facade 可以方便的切换具体的日志实现。而且，如果依赖多个项目，使用了不同的 Log Facade，还可以方便的通过 Adapter 转接到同一个实现上。如果依赖项目使用了多个不同的日志实现，就麻烦的多了。</p>
 <p>具体来说，现在<strong>推荐使用 Log4j2 API 或者 SLF4j</strong>，不推荐继续使用 JCL。</p>

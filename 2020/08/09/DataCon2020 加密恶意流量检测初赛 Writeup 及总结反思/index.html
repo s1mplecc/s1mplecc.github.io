@@ -254,7 +254,7 @@
 
       
         <h2 id="初赛题目"><a href="#初赛题目" class="headerlink" title="初赛题目"></a>初赛题目</h2><p>主办方提供了 black/white/test 三个 pcap 文件夹，其中 black 和 white 分别是检测出有/无恶意软件感染的客户端 IP 组，要求选手对 test 数据集进行判定。</p>
-<p><img data-src="0.png" alt="09bda35ff290f2e34d88d50e71d98f1a.png"></p>
+<p><img data-src="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/0.png" alt="09bda35ff290f2e34d88d50e71d98f1a.png"></p>
 <h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>该题的解题过程应分为以下三个大步骤：</p>
 <ol>
 <li><strong>特征选择（Feature Selection）</strong>，选取对于区分正常/恶意流量有明显作用的 Features。</li>
@@ -275,9 +275,9 @@
 <li>客户端传回客户端公钥（<strong>Client Key Exchange</strong>），客户端确立连接；</li>
 <li>服务器端确立连接，开始 HTTP 通信。</li>
 </ol>
-<p><img data-src="1.png" alt="5b01483a65bdc17c68873508796bb85e.png"></p>
+<p><img data-src="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/1.png" alt="5b01483a65bdc17c68873508796bb85e.png"></p>
 <p>以上加粗的四种消息类型可以通过 TLS 握手协议的 <strong>Handshake Type</strong> 做区分：</p>
-<p><img data-src="2.png" alt="bff6a460bcaa7c442014c3eb89deb26f.png"></p>
+<p><img data-src="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/2.png" alt="bff6a460bcaa7c442014c3eb89deb26f.png"></p>
 <p>基于此，我们选取了以下特征：</p>
 <ul>
 <li><strong>客户端支持的加密套件数组</strong>（Cipher suites），<strong>服务器端选择的加密套件</strong>。</li>
@@ -362,7 +362,7 @@
 </tr>
 </tbody></table>
 <p>除 <code>flowmeter.log</code> 之外我们还需要关注 <code>conn.log</code>、<code>ssl.log</code> 和 <code>X509.log</code>。这几个日志共同字段 <code>uid</code> 是 Zeek 根据一次连接的源/目的 IP、源/目的端口四元组生成的唯一 ID。为了方便后续的处理，我们将这几个日志文件统一读入，使用 <code>uid</code> 字段连接后转成 csv 格式输出到文件。<strong>最终我们提取的特征如下：</strong></p>
-<p><img data-src="3.jpeg" alt="7d1475ca9c4d88e2c3e078a126fdfd52.jpeg"></p>
+<p><img data-src="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/3.jpeg" alt="7d1475ca9c4d88e2c3e078a126fdfd52.jpeg"></p>
 <h3 id="特征向量化"><a href="#特征向量化" class="headerlink" title="特征向量化"></a>特征向量化</h3><p>因为模型训练不支持 <code>str</code> 类型的特征，所以需要对 <code>version</code> 和 <code>server_cipher</code> 等字段进行特征向量化。</p>
 <table>
 <thead>
@@ -450,7 +450,7 @@
 </tbody></table>
 <p>另外需要注意的是，<strong>需要对特征列进行补全</strong>，否则在进行模型训练时会出现特征个数不匹配的问题。例如：white.pcap 文件中 TLS versions 包含 <code>[&#39;TLSv1.0&#39;, &#39;TLSv1.2&#39;, &#39;SSLv3&#39;]</code> 三个版本，而 black 和 test 的 pcap 文件中除这三个版本外还包含 <code>&#39;TLSv1.1&#39;</code> 版本，所以需要在 white 中加入 <code>version=TLSv1.1</code> 全为 0 的列。</p>
 <h3 id="模型选取及参数"><a href="#模型选取及参数" class="headerlink" title="模型选取及参数"></a>模型选取及参数</h3><p>需要注意的是：white 已明确没有被恶意软件感染，所以产生的流量可以全部标注为正常流量，而 black 明确的只是客户端感染了恶意软件，但产生的流量不一定全为恶意流量。所以实际上是<strong>对不平衡样本数据进行训练和预测</strong>。遵循这个思路，可以采用 <strong>Anomaly Detector</strong> + <strong>Misuse Detector</strong> 的联合分类器进行训练。</p>
-<p><img data-src="4.png" alt="fe7a1c020a03492fd8b465e8541a410e.png"></p>
+<p><img data-src="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/4.png" alt="fe7a1c020a03492fd8b465e8541a410e.png"></p>
 <p>基于全正常流量的 white.pcap 文件进行 <strong>one-class classification</strong> 训练异常检测器 Anomaly Detector；再用该分类器对 black.pcap 文件进行推理预测恶意流量；结合 black 中检测的恶意流量和 white 正常流量训练二分类器；最终采用二分类器对 test 中的流量进行检测。</p>
 <h4 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h4><p>数据集是我们之前经过 Zeek 特征提取、特征向量化后产生的 <code>white.csv</code>、<code>black.csv</code> 和 <code>test.csv</code> 三个 csv 文件，使用 pandas 读入后定义一个列名数组 <code>data_f</code> 来获取相应特征：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">white_df = pd.read_csv(<span class="string">&quot;white.csv&quot;</span>,index_col=<span class="number">0</span>)</span><br><span class="line">black_df = pd.read_csv(<span class="string">&quot;black.csv&quot;</span>,index_col=<span class="number">0</span>)</span><br><span class="line">test_df = pd.read_csv(<span class="string">&quot;test.csv&quot;</span>,index_col=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">white_flow = white_df[data_f]</span><br><span class="line">black_flow = black_df[data_f]</span><br><span class="line">test_flow = test_df[data_f]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 源 IP 用于生成结果 result.txt 文件时使用</span></span><br><span class="line">test_ip = test_df[<span class="string">&#x27;id.oirg_h&#x27;</span>]</span><br></pre></td></tr></table></figure>
@@ -478,7 +478,7 @@
 
 <h2 id="总结与反思"><a href="#总结与反思" class="headerlink" title="总结与反思"></a>总结与反思</h2><p>这次比赛几次提交点的最好成绩是 72.5 分，距离复赛要求的名次差几名，很遗憾无缘复赛。总结了失利的几点原因：</p>
 <ol>
-<li>对恶意流量的特征不熟悉，导致花了很多时间去确定需要提取哪些 Features，浪费了前面的检查点。其实我们最后提取的 Features 还有很大的提升空间，比如数据包的时间序列特征，我们只提取了均值、方差等特征，还有字节分布等重要特征未进行有效提取。<br><img data-src="5.png" alt="e67c9834b783a0c2b314e2dd35719671.png"></li>
+<li>对恶意流量的特征不熟悉，导致花了很多时间去确定需要提取哪些 Features，浪费了前面的检查点。其实我们最后提取的 Features 还有很大的提升空间，比如数据包的时间序列特征，我们只提取了均值、方差等特征，还有字节分布等重要特征未进行有效提取。<br><img data-src="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/5.png" alt="e67c9834b783a0c2b314e2dd35719671.png"></li>
 <li>对模型的选择和参数认识不够，只是盲目的更换模型和调参，一开始发现模型和参数对结果的影响很大，实际上还是特征提取的不够好。当提取了能有效区分正常/恶意流量的特征后，模型的选择和参数对结果影响就较小了，所以最重要的依然是有效特征的提取。</li>
 </ol>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>

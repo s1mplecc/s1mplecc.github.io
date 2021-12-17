@@ -265,7 +265,7 @@
 <li>不支持离线编辑文章。虽说这个可以本地写完了再一次性拷贝到服务器上，但这又回到了第 2 点。</li>
 <li>Themes 配置麻烦，不够统一。Kaldorei 主题是我废了很大劲才搜罗到的，还得每次修改完源码后压缩上传（调样式的时候调的我头疼）。</li>
 </ol>
-<p><img data-src="0.png" alt="dbdd8ad99f065192aa340cf474709b2d.png"><br><img data-src="1.png" alt="fa0a3c8ae59030f8e5ef80a9b04d8c7d.png"></p>
+<p><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/0.png" alt="dbdd8ad99f065192aa340cf474709b2d.png"><br><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/1.png" alt="fa0a3c8ae59030f8e5ef80a9b04d8c7d.png"></p>
 <h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><p>优点：</p>
 <ol>
 <li>文档本地化。在本地编写博客，一条指令即可生成静态网页（具体体现就是你在 <code>source/_posts</code> 下编写 Markdown，写完了执行 <code>hexo g</code> 就可以生成样式美观的 <code>index.html</code>）。</li>
@@ -273,7 +273,7 @@
 <li>丰富的插件和主题，配置也统一化了。比如图中我使用的 Next 主题，主题的配置修改 <code>theme/next/_config.yml</code>；Hexo 的配置修改主目录的 <code>_config.yml</code> 即可。</li>
 <li>图片上传还算方便。在与文章同名的文件夹下保存图片即可。这个下面会细说。</li>
 </ol>
-<p><img data-src="2.png" alt="6bc65c0ff0fb6d62ea90ce4c35c04ac9.png"><br><img data-src="3.png" alt="8b1c5aa127adbfef220cfb30a6d55e1d.png"></p>
+<p><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/2.png" alt="6bc65c0ff0fb6d62ea90ce4c35c04ac9.png"><br><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/3.png" alt="8b1c5aa127adbfef220cfb30a6d55e1d.png"></p>
 <h2 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h2><h3 id="创建-GitHub-Pages-仓库"><a href="#创建-GitHub-Pages-仓库" class="headerlink" title="创建 GitHub Pages 仓库"></a>创建 GitHub Pages 仓库</h3><p>GitHub Pages 是面向用户、组织和项目开放的公共静态页面搭建托管服务，站点可以被免费托管在 GitHub 上，你可以选择使用 GitHub Pages 默认提供的域名 <code>github.io</code> 或者自定义域名来发布站点。</p>
 <p>GitHub Pages 分为两类，用户主页和项目主页。我们需要部署的是用户主页。需要在 GitHub 上新建一个仓库，<strong>仓库名必须为</strong> <code>$&#123;github-username&#125;.github.io</code>，这样才会被识别为用户主页。用户主页是唯一的，填其他名称只会被当成普通项目。通过 <code>https://$&#123;github-username&#125;.github.io</code> 进行访问。</p>
 <p>创建完成后将仓库 clone 至本地。</p>
@@ -355,7 +355,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;s1mple.online&#x27;</span> &gt; ./<span class="built_in">source</span>/CNAME</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
 
 <p>第三步，在 GitHub Pages 项目的配置中<strong>绑定个人域名</strong>，记得将 Enforce HTTPS 选项勾选上（GitHub 提供免费的 HTTPS 服务）。保存成功后如下图提示即可通过 <code>https://s1mple.online</code> 访问。</p>
-<p><img data-src="5.png" alt="5"></p>
+<p><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/5.png" alt="5"></p>
 <h2 id="图片引用"><a href="#图片引用" class="headerlink" title="图片引用"></a>图片引用</h2><p>当项目中只用到少量图片时，可以将图片统一放在 <code>source/images</code> 文件夹中，通过绝对路径访问。比如头像。</p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Markdown</span></span><br><span class="line"><span class="type">![avatar](/images/avatar.jpeg)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># themes/next/_config.yml</span></span><br><span class="line"><span class="attr">avatar:</span></span><br><span class="line">  <span class="attr">url:</span> <span class="string">/images/avatar.jpeg</span></span><br></pre></td></tr></table></figure>
 
@@ -373,7 +373,7 @@
 <li>按照 Hexo 的规定，创建与文章标题一致的文件夹用于存放文章中的图片，并更换文章中图片的 Markdown 链接。</li>
 </ul>
 <p>这样可以将整个 <code>downloads</code> 文件夹拷贝到 Hexo 的 <code>source/_posts</code> 目录下发布即可！</p>
-<p><img data-src="4.png" alt="7292889b7bb90233a1ac2dd1ac2cd97a.png"></p>
+<p><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/4.png" alt="7292889b7bb90233a1ac2dd1ac2cd97a.png"></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://pages.github.com/">GitHub Pages官网</a></li>
 <li><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/index.html">Hexo官网</a></li>

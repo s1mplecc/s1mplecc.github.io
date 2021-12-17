@@ -20,37 +20,30 @@
     var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="什么是二分图 定义：设 G&#x3D;(V, E) 是一个无向图，如果顶点 V 可分割为两个互不相交的子集｛U｝、｛V｝，并且图中的每条边 (i, j) 所关联的两个顶点 i 和 j 分别属于这两个不同的顶点集 i∈ U，j∈ V，则称图 G 为一个二分图。二分图的一个等价定义是：不含有「含奇数条边的环」的图。  二分图（Bipartite Graph）是指图中的顶点可以划分到两个不相交的集合中，同一个集合">
-<meta property="og:type" content="article">
-<meta property="og:title" content="图流算法之 Bipartiteness Check">
-<meta property="og:url" content="https://s1mplecc.github.io/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/index.html">
+  <meta name="description" content="春光恰与少年同，十里清风慕天青">
+<meta property="og:type" content="website">
+<meta property="og:title" content="芥子屋">
+<meta property="og:url" content="https://s1mplecc.github.io/page/16/index.html">
 <meta property="og:site_name" content="芥子屋">
-<meta property="og:description" content="什么是二分图 定义：设 G&#x3D;(V, E) 是一个无向图，如果顶点 V 可分割为两个互不相交的子集｛U｝、｛V｝，并且图中的每条边 (i, j) 所关联的两个顶点 i 和 j 分别属于这两个不同的顶点集 i∈ U，j∈ V，则称图 G 为一个二分图。二分图的一个等价定义是：不含有「含奇数条边的环」的图。  二分图（Bipartite Graph）是指图中的顶点可以划分到两个不相交的集合中，同一个集合">
+<meta property="og:description" content="春光恰与少年同，十里清风慕天青">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s1mplecc.github.io/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/0.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/1.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/2.png">
-<meta property="article:published_time" content="2020-07-13T13:28:17.000Z">
-<meta property="article:modified_time" content="2021-12-17T05:47:55.612Z">
 <meta property="article:author" content="s1mple">
-<meta property="article:tag" content="流处理">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s1mplecc.github.io/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/0.png">
 
-<link rel="canonical" href="https://s1mplecc.github.io/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/">
+<link rel="canonical" href="https://s1mplecc.github.io/page/16/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : false,
-    isPost : true,
+    isHome : true,
+    isPost : false,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>图流算法之 Bipartiteness Check | 芥子屋</title>
+  <title>芥子屋</title>
   
 
 
@@ -190,14 +183,13 @@
         <div class="content-wrap">
           
 
-          <div class="content post posts-expand">
+          <div class="content index posts-expand">
             
-
-    
+      
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -209,9 +201,10 @@
       <meta itemprop="name" content="芥子屋">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          图流算法之 Bipartiteness Check
-        </h1>
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/" class="post-title-link" itemprop="url">部署 Ghost Blog</a>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -220,7 +213,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-07-13 21:28:17" itemprop="dateCreated datePublished" datetime="2020-07-13T21:28:17+08:00">2020-07-13</time>
+              <time title="创建时间：2017-11-01 05:08:37" itemprop="dateCreated datePublished" datetime="2017-11-01T05:08:37+08:00">2017-11-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -235,7 +228,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Algorithms/" itemprop="url" rel="index"><span itemprop="name">Algorithms</span></a>
+                  <a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a>
                 </span>
             </span>
 
@@ -250,101 +243,80 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="什么是二分图"><a href="#什么是二分图" class="headerlink" title="什么是二分图"></a>什么是二分图</h2><blockquote>
-<p><strong>定义</strong>：设 G=(V, E) 是一个无向图，如果顶点 V 可分割为两个互不相交的子集｛U｝、｛V｝，并且图中的每条边 (i, j) 所关联的两个顶点 i 和 j 分别属于这两个不同的顶点集 i∈ U，j∈ V，则称图 G 为一个二分图。<strong>二分图的一个等价定义是：不含有「含奇数条边的环」的图</strong>。</p>
+          <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>Ghost是比较简约、轻量级的博客平台，而且文档编写使用markdown完成的。所以本片博客将介绍如何在服务器上搭建了Ghost。</p>
 </blockquote>
-<p>二分图（Bipartite Graph）是指<strong>图中的顶点可以划分到两个不相交的集合中，同一个集合中的顶点不相邻</strong>，即同一个集合中的两个顶点之间不存在边。如下图，我可以将左侧的蓝色和紫色构成的图转化为右图的二分图，集合 A 中全由紫色顶点构成，集合 B 中全由蓝色顶点构成，只存在<code>蓝-紫</code>（<code>紫-蓝</code>）边，同色顶点间不存在边。</p>
-<p><img data-src="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/0.png" alt="bab01ea393c68a26dee629ce0d7e4de3.png"></p>
-<p>所以二分图又可以等价于二色图（Two-colorable Graph），以下是一些二分图的常见示例，如星状图、网格图、齿轮图等。</p>
-<p><img data-src="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/1.png" alt="14bf3a04408d7eacdf1b4dc323acf58c.png"></p>
-<h2 id="Bipartiteness-Check"><a href="#Bipartiteness-Check" class="headerlink" title="Bipartiteness Check"></a>Bipartiteness Check</h2><h3 id="批处理"><a href="#批处理" class="headerlink" title="批处理"></a>批处理</h3><p>那么如何检测一个图是否为二分图呢？在批处理情形下，即一个图的所有顶点和所有边的信息都已明确，我们借助于二色图的思想，可以通过<strong>染色法</strong>来判断一个图是否为二分图。算法可以通过 BFS 广度优先算法来实现，具体步骤如下：</p>
-<ol>
-<li>从任意一个顶点出发，将该顶点染成黑色。</li>
-<li>遍历该顶点的所有相邻顶点，将其染成白色。</li>
-<li>采用 BFS 依次遍历各个顶点的相邻顶点，将其染成与自身颜色相反的颜色。</li>
-<li>当出现<strong>已访问过的相邻顶点颜色与自己相同，则该图不是二分图</strong>。否则，该图为二分图。</li>
-</ol>
-<h3 id="流处理"><a href="#流处理" class="headerlink" title="流处理"></a>流处理</h3><p>在流处理情形下，我们无法预知图的所有信息，取而代之的是，图的边（Edge）作为输入持续不断的流入我们的系统中。在这种情况下，考虑如何实时地判断当前所有边构成的图是否为二分图？</p>
-<p>我们可以参考 GitHub 上的 <a target="_blank" rel="noopener" href="https://github.com/vasia/gelly-streaming">Gelly Streaming 项目</a>，该项目是 Flink 的一个轻量级图流处理 API，提供了一些图流分析接口，并实现了部分图的流处理算法。</p>
-<p>Gelly Streaming 的算法核心思想仍然是染色法，具体步骤如下：</p>
-<ol>
-<li>在一条边进入系统时，如果该边是已经存在的边，则丢弃；如果该边的两个顶点均不存在，则将其染成两个不同的颜色；如果该边有且仅有一个顶点已存在（已染色），则将另一个顶点染成相反的颜色。</li>
-<li>如果该边的两个顶点均已存在，则可能出现三种情况：</li>
-</ol>
+<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
+<li>Ubuntu 16.04</li>
+<li>MySQL</li>
+<li>NGINX (minimum of 1.9.5 for SSL)</li>
+<li>Systemd</li>
+<li>Node v6 installed via NodeSource</li>
+<li>At least 1GB memory (swap can be used)</li>
+<li>A non-root user for running ghost commands</li>
+</ul>
+<h2 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h2><p><a target="_blank" rel="noopener" href="https://docs.ghost.org/v1.0.0/docs/install">官网安装文档</a>   </p>
+<blockquote>
+<p>如果你的数据库在其他服务器上，可以不安装mysql</p>
+</blockquote>
 <ul>
-<li>新边的加入使原先的图构成了「含奇数条边的环」，如下图此时若到来一条 <code>2 - 4</code> 或 <code>7 - 8</code> 的边，均破坏了二分图的性质。此时的判断条件是：<strong>两个顶点同属于一个 Component 且两个顶点的颜色相同</strong>。</li>
-<li>新边的加入使原先的图构成了「含偶数条边的环」，则图依然保持二分图的性质。此时的判断条件是：<strong>两个顶点同属于一个 Component 且两个顶点的颜色相异</strong>。</li>
-<li>新边的两个顶点分属不同的 Componets，如下图此时若到来一条 <code>1 - 4</code> 边，图依然保持二分图的性质。我们可以做简单的证明：由于之前的两个单独的 Components 均是二分图，则我们可以分别将它们的顶点划分到两个不相交的集合中｛U1｝、｛V1｝和｛U2｝、｛V2｝中且令新边（i，j）的顶点i∈ U1，j∈ V2，由此可得出由｛U1｝、｛U2｝构成的集合｛U｝与｛V1｝、｛V2｝构成的集合｛V｝不相交，未破环二分图的性质。此时的判断条件：<strong>两个顶点分属于不同的 Components</strong>。在算法实现时，我们需要将两个 Components 合并为一个 Component，即 Gelly 算法中的 <code>merge</code> 操作。需要注意的是，此时若两个顶点（已染色）颜色不同，则直接合并，若两个顶点颜色相同，则需要将其中的一个 Component <strong>颜色反转</strong>。</li>
+<li>更新软件包源以及更新通过包源安装的软件  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br></pre></td></tr></table></figure></li>
+<li>mysql、ngnix、systemd都可以通过<code>sudo apt-get install</code>命令安装</li>
+<li>由于ghost是基于nodejs开发的，所以要安装nodejs，执行下面这俩条命令  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash </span><br><span class="line">sudo apt-get install -y nodejs</span><br></pre></td></tr></table></figure></li>
+<li>安装ghost-cli命令行程序  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm i -g ghost-cli</span><br></pre></td></tr></table></figure></li>
+<li>安装完成后可以使用<code>ghost</code>命令，<code>ghost help</code>查看帮助，ghost安装需要一个空的文件夹  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /home/s1mple/ghost</span><br></pre></td></tr></table></figure></li>
+<li><code>cd</code>到这个目录下，执行<code>ghost install</code>命令即可</li>
 </ul>
-<p><img data-src="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/2.png" alt="2bb51c94931f8c2b1ec93c3162d54501.png"></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.educative.io/edpresso/what-is-a-bipartite-graph">What is a bipartite graph?</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/vasia/gelly-streaming">Gelly Streaming：An experiemental API for single-pass graph streaming analytics on Apache Flink.</a></li>
+<blockquote>
+<p>1.安装过程中会配置数据库，需要提前建个空的database。如果mysql装在本机，就输入localhost，装在别的服务器上就需要输入服务器IP<br>2.询问是否使用nginx可以选no，可以自己手动配置nginx。实际上他帮你配置将80端口的请求转发到ghost的2368端口<br>3.询问是否新建”ghost”用户可以选no，若选yes他会在数据库中新建此用户，并且在ghost后台管理可以看到此用户和一些默认文章。</p>
+</blockquote>
+<h3 id="After-Installation"><a href="#After-Installation" class="headerlink" title="After Installation"></a>After Installation</h3><ul>
+<li>安装后当前文件下会生成<strong>config.production.json</strong>文件，配置信息在这里。<code>ghost ls</code>查看当前ghost运行实例信息，<code>ghost restart</code>重启ghost。</li>
+<li>安装完成后，访问<code>／ghost</code>进入后台管理系统，根据引导创建用户。</li>
+<li>在后台Design模块中可以导入主题zip压缩包，<code>/ghost/#/settings/design</code>。在Ghost Marketplace下找了个时间轴的主题，并修改了部分视觉效果。<a target="_blank" rel="noopener" href="https://github.com/s1mplecc/ghost-theme">时间轴主题下载链接</a></li>
+</ul>
+<h3 id="Redirect-Port-With-Nginx"><a href="#Redirect-Port-With-Nginx" class="headerlink" title="Redirect Port With Nginx"></a>Redirect Port With Nginx</h3><blockquote>
+<p>很尴尬，因为Aliyun的服务器需要备案，80端口有时候会出现抽风的情况。所以有必要先配置个其他端口（2368端口太难记了），比如8080。</p>
+</blockquote>
+<ul>
+<li><code>cat /etc/nginx/nginx.conf </code>发现nginx配置文件包括如下两行  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">include /etc/nginx/conf.d/*.conf;</span><br><span class="line">include /etc/nginx/sites-enabled/*;</span><br></pre></td></tr></table></figure>
+  意思就是配置文件会导入上述两个目录中的文件。所以我们可以<code>cd /etc/nginx/sites-enabled/</code>中。</li>
+<li>发现目录下有个<strong>s1mple.info.conf</strong>文件，这其实就是ghost配置nginx的文件。  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp s1mple.info.conf ghost_8080.conf</span><br></pre></td></tr></table></figure></li>
+<li>修改<code>ghost_8080.conf</code>中的监听端口80为8080,<code>service nginx restart</code>重启nginx</li>
+<li>修改ghost安装目录下的<strong>config.production.json</strong>,重启ghost  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;url&quot;: &quot;http://s1mple.info:8080&quot;,</span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>有个端口号看着很丑，等备案完成，删掉<code>ghost_8080.conf</code>就行了。（你看，国外主机就不用备案）</p>
+</blockquote>
+<h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><ul>
+<li>本来想在docker容器中部署Ghost,但是可能由于docker和宿主系统隔离的原因，systemd命令不能正常运行<code>Failed to connect to bus: No such file or directory</code>。暂时没找到解决方法。不过我在docker里部署了另一个博客平台jPress。<a target="_blank" rel="noopener" href="https://jpress.s2mple.xyz/">跳转链接</a></li>
+<li>jPress是基于java的轻量级博客平台，前身是WordPress。也许下个博客我会介绍如何用docker部署jPress，谁知道呢。</li>
 </ul>
 
-    </div>
-
-    
-    
-    
-        <div class="reward-container">
-  <div></div>
-  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
-    打赏
-  </button>
-  <div id="qr" style="display: none;">
       
-      <div style="display: inline-block;">
-        <img src="/images/wechatpay.jpeg" alt="s1mple 微信支付">
-        <p>微信支付</p>
-      </div>
-
-  </div>
-</div>
-
-
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E6%B5%81%E5%A4%84%E7%90%86/" rel="tag"># 流处理</a>
-          </div>
-
-        
-  <div class="post-widgets">
-    <div class="wp_rating">
-      <div id="wpac-rating"></div>
     </div>
-  </div>
 
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2020/01/03/%E4%BD%BF%E7%94%A8%E6%B5%81%E7%95%85%E6%8E%A5%E5%8F%A3%E7%BC%96%E5%86%99-Kafka-%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/" rel="prev" title="使用流畅接口编写 Kafka 集成测试框架">
-      <i class="fa fa-chevron-left"></i> 使用流畅接口编写 Kafka 集成测试框架
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/" rel="next" title="DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思">
-      DataCon2020 加密恶意流量检测初赛 Writeup 及总结反思 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
     
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
   </article>
   
   
   
 
 
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span>
+  </nav>
+
+
 
           </div>
           
-    
-  <div class="comments">
-    <div id="disqus_thread">
-      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-    </div>
-  </div>
-  
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -391,7 +363,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%8C%E5%88%86%E5%9B%BE"><span class="nav-number">1.</span> <span class="nav-text">什么是二分图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bipartiteness-Check"><span class="nav-number">2.</span> <span class="nav-text">Bipartiteness Check</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%B9%E5%A4%84%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">批处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E5%A4%84%E7%90%86"><span class="nav-number">2.2.</span> <span class="nav-text">流处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -544,37 +515,7 @@
   
 
   
-  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
-  <script>
-      window.addEventListener('load', () => {
-      quicklink({
-        timeout : 3000,
-        priority: true,
-        ignores : [uri => uri.includes('#'),uri => uri === 'https://s1mplecc.github.io/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/',]
-      });
-      });
-  </script>
 
-<script>
-  var disqus_config = function() {
-    this.page.url = "https://s1mplecc.github.io/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/";
-    this.page.identifier = "2020/07/13/图流算法之-Bipartiteness-Check/";
-    this.page.title = "图流算法之 Bipartiteness Check";
-    };
-  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://true.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
-</script>
 
 </body>
 </html>

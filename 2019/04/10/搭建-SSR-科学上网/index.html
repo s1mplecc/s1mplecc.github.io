@@ -262,7 +262,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget</span><br><span class="line"></span><br><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; bash ssr.sh</span><br></pre></td></tr></table></figure>
 
 <p>等待下载完成后出现如下界面，按照提示一步步进行配置</p>
-<p><img data-src="0.png" alt="6e65c95d5ad590eec8be684361594373.png"></p>
+<p><img data-src="/2019/04/10/%E6%90%AD%E5%BB%BA-SSR-%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/0.png" alt="6e65c95d5ad590eec8be684361594373.png"></p>
 <p>依次会配置：</p>
 <ol>
 <li>端口和密码（端口建议设置 1000 ～ 65535 之间）</li>
@@ -272,12 +272,12 @@
 <li>每个端口的连接设备数限制、速度限制（auth_* 系列协议，并且不兼容原版时才有效）</li>
 </ol>
 <p>配置完成后等待部署完成，终端会打印配置信息，这些就是需要在 SSR 客户端填入的配置。现在可以直接进入下一个章节：配置SSR客户端。</p>
-<p><img data-src="1.jpeg" alt="6a90ecf445798cb2c69a8bc05abd0a0a.png"></p>
+<p><img data-src="/2019/04/10/%E6%90%AD%E5%BB%BA-SSR-%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/1.jpeg" alt="6a90ecf445798cb2c69a8bc05abd0a0a.png"></p>
 <h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><p>默认情况下部署的是单端口模式，即多人共享一个端口。可以切换为多端口模式，一个用户一个端口，方便管理。直接执行 <code>bash ssr.sh</code> 键入 9 即可。</p>
 <p>此外，键入 7 你可以随时修改 SSR 服务端的配置，以及在多端口模式下添加新用户，为他们分配新的端口号和密码。</p>
-<p><img data-src="2.jpeg" alt="17f12e5ebc74a4105bacbeb69662a1f0.png"></p>
+<p><img data-src="/2019/04/10/%E6%90%AD%E5%BB%BA-SSR-%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/2.jpeg" alt="17f12e5ebc74a4105bacbeb69662a1f0.png"></p>
 <h2 id="配置SSR客户端"><a href="#配置SSR客户端" class="headerlink" title="配置SSR客户端"></a>配置SSR客户端</h2><p>打开 SSR 客户端，按照服务端的配置填入对应配置。</p>
-<p><img data-src="3.png" alt="7a34639c35446ec3808356b7eef07dc4.png"></p>
+<p><img data-src="/2019/04/10/%E6%90%AD%E5%BB%BA-SSR-%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/3.png" alt="7a34639c35446ec3808356b7eef07dc4.png"></p>
 <p>至此就可以 Google 了，但网速较慢，可以使用锐速进行加速。锐速也有一键部署脚本，加速后对速度的提升很明显，所以推荐部署加速脚本。该加速方法是开机自动启动，部署一次就可以了。</p>
 <h2 id="锐速加速"><a href="#锐速加速" class="headerlink" title="锐速加速"></a>锐速加速</h2><h3 id="更换操作系统内核"><a href="#更换操作系统内核" class="headerlink" title="更换操作系统内核"></a>更换操作系统内核</h3><p>安装锐速前需要先更换操作系统内核，下载更换内核脚本并执行</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --no-check-certificate https://blog.asuhu.com/sh/ruisu.sh &amp;&amp; bash ruisu.sh</span><br></pre></td></tr></table></figure>
@@ -288,9 +288,9 @@
 <p>等待安装完成后即可体验飞一般的上网速度。</p>
 <h2 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h2><p>Vultr 提供方便快捷的快照 Snapshot 功能用于备份服务器。为防止服务器 IP 被封，我们可以备份服务器，方便将来重新部署。</p>
 <p>在 Vultr 用户界面的 Servers 中添加快照，快照创建需要一点时间</p>
-<p><img data-src="4.png" alt="1d8690c7a6d4d85711e11f2485996ba8.png"></p>
+<p><img data-src="/2019/04/10/%E6%90%AD%E5%BB%BA-SSR-%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/4.png" alt="1d8690c7a6d4d85711e11f2485996ba8.png"></p>
 <p>将来在 Deploy new instance 新建实例时，服务器类型选择快照即可</p>
-<p><img data-src="5.png" alt="1c652a6a3177df0e85958f81faa58043.png"></p>
+<p><img data-src="/2019/04/10/%E6%90%AD%E5%BB%BA-SSR-%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/5.png" alt="1c652a6a3177df0e85958f81faa58043.png"></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/Alvin9999/new-pac/wiki/%E8%87%AA%E5%BB%BAss%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%95%99%E7%A8%8B">自建ss服务器教程</a></li>
 </ul>

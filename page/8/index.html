@@ -189,7 +189,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/07/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E5%85%A8%E8%AE%BE%E7%BD%AE/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -203,7 +203,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/11/07/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E5%85%A8%E8%AE%BE%E7%BD%AE/" class="post-title-link" itemprop="url">服务器安全设置</a>
+            <a href="/2018/09/27/Trunk%20Based%20Development%20%E4%B8%BB%E5%B9%B2%E5%BC%80%E5%8F%91%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">Trunk Based Development 主干开发模型</a>
         </h2>
 
         <div class="post-meta">
@@ -213,7 +213,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-11-07 09:22:17" itemprop="dateCreated datePublished" datetime="2017-11-07T09:22:17+08:00">2017-11-07</time>
+              <time title="创建时间：2018-09-27 02:35:29" itemprop="dateCreated datePublished" datetime="2018-09-27T02:35:29+08:00">2018-09-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -228,7 +228,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a>
+                  <a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a>
                 </span>
             </span>
 
@@ -244,58 +244,54 @@
 
       
           <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>在上个月月底的时候，阿里云通知我服务器在美国被异地登陆了，今天有时间整理了一些关于服务器安全的设置。</p>
+<p>在之前的博文中我们介绍了 Git Flow 分支模型，正如文中所说，Git Flow 偏向于控制管理，使用了较多的分支，流程颇为复杂。大量的团队在实践过程中也遇到了颇多问题，其中大部分来自长期存在的分支。随着软件开发模型的演进，GitHub Flow、Trunk Based Development 等模型也应运而生，也已被 Google、Facebook、TW 等企业实践。本文主要介绍 TBD 模型。</p>
 </blockquote>
-<h2 id="Locate-the-Matter"><a href="#Locate-the-Matter" class="headerlink" title="Locate the Matter"></a>Locate the Matter</h2><ul>
-<li><p>当时我正好在用服务器，感觉异常的卡，用<code>htop</code>监控程序查看发现cpu正在被两个一样的进程100%占用，Command是<code>/usr/sbin/ApacheX</code>，去目录下找了下，没有该脚本，网上搜了也没该进程的信息。现在看来应该是黑客伪造的</p>
+<h2 id="Git-Flow的问题"><a href="#Git-Flow的问题" class="headerlink" title="Git Flow的问题"></a>Git Flow的问题</h2><ul>
+<li><p><strong>合并冲突</strong>，合并冲突在使用 Git Flow 是非常常见的。原因很简单：如果你有多个并行功能分支，他们长时间存在，那么很可能代码库的相同部分在两个功能分支中被分别更改。合并冲突不仅对于需要手动解决的开发人员来说是令人沮丧的，也增加了在代码中破坏某些功能的风险，因为当你不得不决定使用哪个版本代码时，很容易犯错。</p>
 </li>
-<li><p>查看日志，<code>vi /var/log/auth.log</code>，发现下面几行<br><img data-src="/0.png" alt="-----2017-10-31---11.24.57-1"></p>
+<li><p><strong>功能分离</strong>，在合并到同一个分支之前，你不能测试两个功能的组合。当你在单独的分支中开发几天甚至几周的功能时，当合并回主分支后，可能也会发生两个功能的相互作用影响了你的代码。</p>
 </li>
-<li><p>很奇怪，我平时都是用ssh连接服务器的，正常应该是这样的<br><img data-src="/1.png" alt="-----2017-11-08---11.12.08"></p>
+<li><p><strong>并没有做到持续交付</strong>，在 Git Flow 分支模型下，发布是非常有计划的，一个 feature 必须要经过一系列步骤才能到达生产环境，在时间上平均一个 feature 都要等待 两周时间才能长线，这样的等待并非是需求上的“按计划发布”，而是从技术上就造成了发布瓶颈，显然难以达到持续交付的要求。</p>
 </li>
-<li><p>居然被人用密码登录了，一查IP，果然是美国的。当初测试切换用户时嫌麻烦修改了密码，直接用的root，被人试出来了。</p>
+<li><p><strong>与持续集成相悖</strong>，你会发现，在坚持持续集成实践的情况下，feature 分支是一件非常矛盾的事情。持续集成鼓励更加频繁的代码集成和交互，让冲突越早解决越好。feature 分支的代码隔离策略却在尽可能推迟代码的集成。</p>
 </li>
 </ul>
-<h2 id="Solve"><a href="#Solve" class="headerlink" title="Solve"></a>Solve</h2><ul>
-<li><p>执行<code>passwd</code>修改密码，不加参数默认当前用户，加参数指定用户</p>
-</li>
-<li><p>修改ssh配置文件<strong>sshd_config</strong>，友情提示修改配置时开启多个窗口，以免登不上去还能用别的窗口修改回来</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
-<p>  <a target="_blank" rel="noopener" href="http://blog.csdn.net/chenvast/article/details/72621086">SSHD配置文件详解</a></p>
-</li>
-<li><p>修改ssh端口，为防止黑客暴力破解22端口</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Port xxx</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ol>
-<li>现在你需要使用<code>ssh &#123;user&#125;@&#123;IP&#125; -p &#123;port&#125;</code>来登录你的服务器。如果觉得麻烦，可以<code>!ssh</code>执行上一次的ssh命令，或者<code>history | grep ssh</code>粘贴命令。</li>
-<li>传输文件时使用<code>scp -P &#123;port&#125;</code>来指定端口。<strong>scp</strong>(secure copy)通过ssh端口就行加密传输。</li>
-<li><strong>ssh_config</strong>是针对客户端的配置文件，<strong>sshd_config</strong>是针对服务器端的配置文件，服务器后台运行的也是<strong>sshd</strong>守护进程(Daemon)。</li>
-</ol>
+<h2 id="GitHub-Flow"><a href="#GitHub-Flow" class="headerlink" title="GitHub Flow"></a>GitHub Flow</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://guides.github.com/introduction/flow/">GitHub Flow</a> 是一个更轻量级的软件开发模型，示意图如下。它摒弃了 Git Flow 中繁杂的分支，<strong>只保留一个主分支 master</strong>。开发新功能时从 master 分支上拉取 feature 分支，开发完成后发起 <strong>Pull-Request</strong>，小组内进行评审和反馈，此时也进行 <strong>Code Review</strong>。测试通过后合并回主分支。</p>
+</blockquote>
+<p><img data-src="/0.png" alt="GitHub-Flow2-1"></p>
+<p>相比于 Git Flow，这种方式因为省去了一些分支而降低了复杂度，同时也更符合持续集成的思想，以一张故事卡为集成的最小单位，相对来说集成的周期短，反馈的速度也快，能够及早的遇到问题并及早解决。</p>
+<p>顺着持续集成的思想，如果我们把 GitHub Flow 分支模型做得再极致一点，我们不要 feature 分支，或者把 feature 分支只留在本地；不需要使用 Pull-Request 而是直接 Push 到远程 master 分支，我们就做到了 Trunk based Development。</p>
+<h2 id="TBD"><a href="#TBD" class="headerlink" title="TBD"></a>TBD</h2><blockquote>
+<p><strong>Trunk based Development</strong>，又叫<strong>主干开发</strong>，是一套代码分支管理策略，开发人员之间通过约定向被指定为<strong>主干</strong>的分支提交代码，以此抵抗因为长期存在的多分支导致的开发压力。此举可<strong>避免分支合并的困扰，保证随时拥有可发布的版本</strong>。“主干”这个词隐喻了树木生长的场景，树木最粗最长的部位是主干，分支从主干分离出来但是长度有限。</p>
+</blockquote>
+<p><img data-src="/1.jpg" alt="what_is_trunk"></p>
+<p>使用主干开发后，我们的代码库原则上就只能有一个 Trunk 分支即 master 分支了，所有新功能的提交也都提交到 master 分支上，保证每次提交后 master 分支都是可随时发布的状态。没有了分支的代码隔离，测试和解决冲突都变得简单，持续集成也变得稳定了许多，但也有如下几个问题：</p>
 <ul>
-<li><p>启用ssh密钥认证，指定密钥存放路径</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RSAAuthentication    yes</span><br><span class="line">PubkeyAuthentication    yes</span><br><span class="line">AuthorizedKeysFile    /root/.ssh/authorized_keys /home/s1mple/.ssh/authorized_keys</span><br></pre></td></tr></table></figure></li>
-<li><p>禁用密码登录，只允许ssh登录</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PasswordAuthentication no</span><br><span class="line">UseLogin no</span><br><span class="line">PermitRootLogin yes</span><br></pre></td></tr></table></figure></li>
-<li><p>另外，阿里云的服务器在你终端一段时间没有指令输入会断开，可以这样避免</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClientAliveInterval  30</span><br></pre></td></tr></table></figure>
-<p>  每30s发送一个心跳包</p>
+<li><p><strong>如何避免发布引入未完成 Feature</strong>，答案是使用 <strong>Feature Toggle</strong>。在代码库里加一个特性开关来随时打开和关闭新特性是最容易想到的也是最容易被质疑的解决方案。Feature Toggle 是有成本的，不管是在加 Toggle 时的代码设计，还是在移除 Toggle 时的人力成本和风险，都是需要和它带来的价值进行衡量的。</p>
 </li>
-<li><p>修改完成后<code>service sshd restart</code>使配置生效</p>
+<li><p><strong>如何进行线上 Bug Fix</strong>，答案是在发布时打上 Release Tag，一旦发现这个版本有问题，如果此时 master 分支还没有其他提交，那可以直接在 master 分支上 Hot Fix 然后合并至 release 分支；如果 master 分支已经有了提交就需要做以下三件事：</p>
+<ul>
+<li>从 Release Tag 创建发布分支。</li>
+<li>在 master 上做 Fix Bug 提交。</li>
+<li>将 Fix Bug 提交 <strong>Cherry Pick</strong> 到 release 分支。</li>
+<li>为 release 分支打上新的 Tag 并做一次发布。</li>
+</ul>
 </li>
 </ul>
-<h2 id="About-SSH"><a href="#About-SSH" class="headerlink" title="About SSH"></a>About SSH</h2><blockquote>
-<p><strong>SSH</strong>(Secure Shell)协议，专为远程登录会话提供安全性的协议，传输的数据都进行了加密。SSH提供两种级别的安全验证，第一种是<strong>基于口令</strong>的安全验证。第二种是<strong>基于密匙</strong>的安全验证，较之第一种不需要传输口令，但速度稍慢一些。</p>
-</blockquote>
-<h4 id="基于密钥的安全验证"><a href="#基于密钥的安全验证" class="headerlink" title="基于密钥的安全验证"></a>基于密钥的安全验证</h4><blockquote>
-<p>客户端创建<strong>一对密钥</strong>，公钥存放在服务器上，当你想通过ssh远程连接服务器时进行<strong>公钥比对</strong>。如果一致，服务器就用公用密匙加密“质询”(challenge)并把它发送给客户端。客户端收到“质询”之后就可以用你的<strong>私钥解密</strong>再把它发送给服务器。<br>这个配对密钥类似<strong>Https</strong>协议中的对称密钥。是基于<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/RSA%E7%AE%97%E6%B3%95">RSA算法</a>的。</p>
-</blockquote>
-<ul>
-<li><p>在本地执行<code>ssh-keygen</code>生成配对密钥，在你的<code>~/.ssh</code>目录下会生成两个文件，<code>id_rsa</code>私钥，<code>id_rsa.pub</code>公钥。</p>
+<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><ul>
+<li><p>主干开发是助力实现<strong>持续集成</strong>和<strong>持续交付</strong>的关键因素。开发团队的成员一天多次地将代码提交到主干分支，满足了持续交付的必要条件。团队的工作在 24 小时内就可以被整合，这保证了代码版本随时处于可发布状态，使得持续交付成为可能。</p>
 </li>
-<li><p>将公钥拷贝到服务器的<code>~/.ssh/authorized_keys</code>文件中</p>
+<li><p>你可以选择直接向主干分支提交代码的方式（适用于小团队）或者采用 Pull-Request 的方式，只要保证特性分支不能长期存在，并且产品是独立存在的。</p>
 </li>
-<li><p>给<code>authorized_keys</code>增加不可修改、删除的权限</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chattr +i authorized_keys</span><br></pre></td></tr></table></figure></li>
+<li><p>根据团队规模和提交频率，<strong>特性分支可用于合并到主干分支前的代码审查和持续集成</strong>。这些特性分支可以让开发人员在代码合并到主干分支之前进行持续审查，而对于较小规模的团队，则可以直接向主干分支提交。</p>
+</li>
+<li><p>根据预期的发布频率，你的团队或许需要实时从主干分支创建<strong>发布分支</strong>以确保发布版本不会有新的提交，这些分支应该在发布完成后一段时间内删除。另一方面，你的团队也可以选择从主干分支发布而不需要发布分支，并采用“<strong>修复前进（fix forward）</strong>”的策略进行 bug fix，这种发布策略适用于高吞吐量的团队（high-throughput teams）。</p>
+</li>
+</ul>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://cn.trunkbaseddevelopment.com/">TBD中文官网</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.duyidong.com/2017/10/29/trunk-base-development/#Github-Flow">分支模型与主干开发</a></li>
 </ul>
 
       
@@ -316,7 +312,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/06/%E4%BD%BF%E7%94%A8%20Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -330,7 +326,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/11/06/%E4%BD%BF%E7%94%A8%20Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/" class="post-title-link" itemprop="url">使用 Certbot 配置 HTTPS</a>
+            <a href="/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/" class="post-title-link" itemprop="url">Git 进阶教程</a>
         </h2>
 
         <div class="post-meta">
@@ -340,7 +336,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-11-06 04:04:46" itemprop="dateCreated datePublished" datetime="2017-11-06T04:04:46+08:00">2017-11-06</time>
+              <time title="创建时间：2018-09-18 02:02:04" itemprop="dateCreated datePublished" datetime="2018-09-18T02:02:04+08:00">2018-09-18</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -355,7 +351,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a>
+                  <a href="/categories/Concepts/" itemprop="url" rel="index"><span itemprop="name">Concepts</span></a>
                 </span>
             </span>
 
@@ -370,60 +366,60 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文介绍在搭建了服务器并且配置了域名后，如何通过 Certbot 将原先的 <code>http://</code> 域名配置为 <code>https://</code> 域名。文章的最后介绍了 HTTPS 基于的 SSL 协议，以及和 SSL 加密通信过程类似的 SSH 协议。</p>
-<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ul>
-<li>Ubuntu 16.04</li>
-<li>Nginx</li>
+          <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>你的本地仓库由 Git 维护的三棵「树」组成。第一个是你的<strong>工作目录（Working dir）</strong>，它持有实际文件，即你所见的；第二个是<strong>缓存区（Stage or Index）</strong>，它像个缓存区域，临时保存你的改动；第三个是<strong>提交历史（Commit history）</strong>，包含的 HEAD 指针指向你最近一次 commit 的引用。关于工作区和缓存区概念可参考<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000">廖雪峰的Git教程</a>。</p>
+<p><img data-src="/0.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f62617369632d75736167652e737667-1"></p>
+<p>上面的四条命令在工作目录、stage 缓存（也叫做索引）和 commit 历史之间复制文件。</p>
+<ul>
+<li><code>git add files</code> 把工作目录中的文件加入 stage 缓存。</li>
+<li><code>git commit</code> 把 stage 缓存生成一次 commit，并加入 commit 历史。</li>
+<li><code>git reset -- files</code> 撤销最后一次 git add files，你也可以用 git reset 撤销所有 stage 缓存文件。</li>
+<li><code>git checkout -- files</code> 把文件从 stage 缓存复制到工作目录，用来丢弃本地修改。</li>
 </ul>
-<h2 id="安装配置-Certbot"><a href="#安装配置-Certbot" class="headerlink" title="安装配置 Certbot"></a>安装配置 Certbot</h2><p>添加软件源：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install software-properties-common</span><br><span class="line">sudo add-apt-repository ppa:certbot/certbot</span><br></pre></td></tr></table></figure>
+<h2 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h2><p><code>git merge</code> 命令把不同分支合并起来。合并前，索引必须和当前提交相同。**<code>git merge other</code> 用于将 other 分支上的提交合并到当前分支**。</p>
+<p>如果另一个分支是当前提交的祖父节点，那么合并命令将什么也不做。另一种情况是如果当前提交是另一个分支的祖父节点，就导致 <strong>fast-forward</strong> 合并，HEAD 指针只是简单的移动。</p>
+<p><img data-src="/1.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652d66662e737667"></p>
+<p>否则就是一次真正的合并。默认把当前提交（<em>ed489</em> 如下所示）和另一个提交（_33104_）以及他们的共同祖父节点（_b325c_）进行一次<strong>三方合并</strong>。结果是先保存当前目录和索引，然后和父节点 <em>33104</em> 一起做一次<strong>新提交</strong>。</p>
+<p><img data-src="/2.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652e737667"></p>
+<h2 id="cherry-pick"><a href="#cherry-pick" class="headerlink" title="cherry-pick"></a>cherry-pick</h2><p><code>git cherry-pick</code> 命令「复制」一个提交节点并在当前分支做一次完全一样的新提交。</p>
+<p><img data-src="/3.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6368657272792d7069636b2e737667"></p>
+<h2 id="rebase"><a href="#rebase" class="headerlink" title="rebase"></a>rebase</h2><p><code>git rebase</code> 是合并命令的另一种选择。merge 把两个分支合并进行一次新提交，提交历史不是线性的。rebase 在当前分支上重演另一个分支的历史，<strong>提交历史是线性的</strong>。</p>
+<p><img data-src="/4.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f7265626173652e737667"></p>
+<p>上面的命令都在 <em>topic</em> 分支中进行，执行 <code>git rebase master</code> 意味着将 <em>topic</em> 分支基于  <em>master</em> 分支进行重演，在 <em>da985</em> 后附加对应于 <em>169a6</em> 和 <em>2c33a</em> 的两次新提交，所以提交历史是线性的。</p>
+<h3 id="rebase-和-merge-的区别"><a href="#rebase-和-merge-的区别" class="headerlink" title="rebase 和 merge 的区别"></a>rebase 和 merge 的区别</h3><p>在 <em>topic</em> 分支中执行 <code>git rebase master</code> 后的分支树：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">      A---B topic</span><br><span class="line">     /</span><br><span class="line">D---E---F---G master</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">              A&#x27;--B&#x27; topic</span><br><span class="line">             /</span><br><span class="line">D---E---F---G master</span><br></pre></td></tr></table></figure>
 
-<p>可以看到 <code>/etc/apt/sources.list.d</code> 目录下多了个 <code>certbot-ubuntu-certbot-xenial.list</code> 文件，内容如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deb http://ppa.launchpad.net/certbot/certbot/ubuntu xenial main</span><br><span class="line"># deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu xenial main</span><br></pre></td></tr></table></figure>
+<p>在 <em>topic</em> 分支中执行 <code>git merge master</code> 后的分支树：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">      A---B topic</span><br><span class="line">     /</span><br><span class="line">D---E---F---G master</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      A---B---H topic</span><br><span class="line">     /       / </span><br><span class="line">D---E---F---G master</span><br></pre></td></tr></table></figure>
 
-<p>安装Certbot：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install python-certbot-nginx </span><br></pre></td></tr></table></figure>
-
-<p>使用如下命令自动配置Nginx服务，也可以加上 <code>certonly</code> 参数来手动配置nginx。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo certbot --nginx</span><br></pre></td></tr></table></figure>
-
-<p>出现如下文字，说明Certbot读取了nginx配置文件。默认回车选择所有：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Which names would you like to activate HTTPS for?</span><br><span class="line">-------------------------------------------------</span><br><span class="line">1: s1mple.info</span><br><span class="line">2: www.s1mple.info</span><br></pre></td></tr></table></figure>
-
-<p>选择是否重定位到HTTPS：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.</span><br><span class="line">-------------------------------------------------------------------------------------</span><br><span class="line">1: No redirect - Make no further changes to the webserver configuration.</span><br><span class="line">2: Redirect - Make all requests redirect to secure HTTPS access. Choose this for</span><br><span class="line">new sites, or if you&#x27;re confident your site works on HTTPS. You can undo this</span><br><span class="line">change by editing your web server&#x27;s configuration.</span><br></pre></td></tr></table></figure>
-
-<p>配置成功，有效期为90天，过期需要使用 <code>certbot renew</code> 更新新的证书。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">IMPORTANT NOTES:</span><br><span class="line">- Congratulations! Your certificate and chain have been saved at:</span><br><span class="line">  /etc/letsencrypt/live/simple. info/fullchain.pem</span><br><span class="line">  Your key file has been saved at:</span><br><span class="line">  /etc/letsencrypt/live/simple. info/privkey.pem</span><br><span class="line">  Your cert will expire on 2018-02-04. To obtain a new or tweaked</span><br><span class="line">  version of this certificate in the future, simply run certbot again</span><br><span class="line">  with the “certonly&quot; option. To non-interactively renew xall* of</span><br><span class="line">  your certificates, run &quot;certbot renew&quot;</span><br></pre></td></tr></table></figure>
-
-<p>现在你可以通过HTTPS访问你的网站了。</p>
-<p>我们查看一下Nginx配置文件，文件名对应你的域名，以 <code>.conf</code> 结尾，发现新增了如下内容：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">listen 443 ssl; # managed by Certbot</span><br><span class="line">ssl_certificate /etc/letsencrypt/live/s1mple.info/fullchain.pem; # managed by Certbot</span><br><span class="line">ssl_certificate_key /etc/letsencrypt/live/s1mple.info/privkey.pem; # managed by Certbot</span><br><span class="line">include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot</span><br><span class="line"></span><br><span class="line"># Redirect non-https traffic to https</span><br><span class="line">if ($scheme != &quot;https&quot;) &#123;</span><br><span class="line">    return 301 https://$host$request_uri;</span><br><span class="line">&#125; # managed by Certbot</span><br></pre></td></tr></table></figure>
-
-<p>说明Nginx在监听443端口，并将不是HTTPS的请求重定位到HTTPS。</p>
-<h2 id="协议原理"><a href="#协议原理" class="headerlink" title="协议原理"></a>协议原理</h2><h3 id="SSL"><a href="#SSL" class="headerlink" title="SSL"></a>SSL</h3><p><strong>HTTPS(Http over Secure Socket Layer)</strong> 是基于SSL加密的更安全的HTTP协议，默认端口443。SSL握手协议过程如下：</p>
-<ol>
-<li>客户端的浏览器向服务器传送客户端SSL协议的版本号，加密算法的种类，产生的随机数，以及其他通讯所需要信息。</li>
-<li>服务器向客户端传送SSL协议的版本号，加密算法的种类，随机数以及其他相关信息，同时<strong>服务器还将向客户端传送自己的证书</strong>。</li>
-<li>客户端利用服务器传过来的信息<strong>验证服务器的合法性</strong>，服务器的合法性包括：证书是否过期，发行服务器证书的CA是否可靠，发行者证书的公钥能否正确解开服务器证书的“发行者的数字签名”，服务器证书上的域名是否和服务器的实际域名相匹配。</li>
-<li>客户端随机产生一个用于后面通讯的“对话密钥”，然后用服务器的公钥（从步骤2中的服务器的证书中获得）对其加密，然后传给服务器。</li>
-<li><strong>服务器用私钥解密</strong>“对话密钥”（此处的公钥和私钥是对应的，公钥加密的数据只能用私钥解密，服务器私钥只在服务器端保留），然后用其作为服务器和客户端的“通话密码”加解密通讯。具体的加密算法详见<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95">RSA加密算法</a>。</li>
-<li>SSL的握手部分结束，SSL安全通道的数据通讯开始，客户和服务器开始使用对话密钥进行数据通讯，同时进行通讯完整性的检验。</li>
-</ol>
-<p><img data-src="0.png" alt="78ab162bf20b438ca377faa87f4ea2a2_th"></p>
-<h3 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h3><p><strong>SSH(Secure Shell)<strong>协议，专为远程登录会话提供安全性的协议，传输的数据都进行了加密。SSH提供两种级别的安全验证，第一种是</strong>基于口令</strong>的安全验证。第二种是<strong>基于密匙</strong>的安全验证，不需要传输口令，原理同 SSL 类似。下面介绍一下 SSH 基于密钥的安全验证。</p>
-<p>客户端创建<strong>一对密钥</strong>（公钥和私钥），公钥存放在服务器上的 authorized_keys 文件中，当你想通过 ssh 远程连接服务器时会进行<strong>公钥比对</strong>。如果一致，服务器就用公用密匙加密“质询”（challenge）并把它发送给客户端。客户端收到“质询”之后就可以用你的<strong>私钥解密</strong>再把它发送给服务器。</p>
-<p>SSH 通过密钥连接服务器步骤如下：</p>
-<ol>
-<li>在本地执行<code>ssh-keygen</code>生成配对密钥，在你的<code>~/.ssh</code>目录下会生成两个文件，<code>id_rsa</code>私钥，<code>id_rsa.pub</code>公钥。</li>
-<li>将公钥拷贝到服务器的<code>~/.ssh/authorized_keys</code>文件中。</li>
-<li>使用<code>chattr +i authorized_keys</code>命令给<code>authorized_keys</code>增加不可修改、删除的权限。</li>
-<li>在本地使用<code>ssh &#123;username&#125;@&#123;ip&#125;</code>连接服务器。第一次连接会询问你是否继续，选择 yes 则将连接信息添加到<code>~/.ssh/known_hosts</code>文件中，此后连接不再询问。</li>
-</ol>
+<p>rebase 最大的好处是你的项目历史会是非常整洁的线性，不像 merge 那样引入多余的合并提交。但同时，rebase 也会带来两个后果：安全性和可跟踪性。使用时要遵守 <strong>rebase 的黄金法则：绝不要在公共的分支上使用它</strong>。可跟踪性是指 rebase 不会有合并提交中附带的信息，你看不到 <em>topic</em> 分支中并入了 <em>master</em> 的哪些更改。</p>
+<h2 id="reset"><a href="#reset" class="headerlink" title="reset"></a>reset</h2><p><code>git reset</code> 命令把当前分支指向另一个位置，并且有选择的变动工作目录和索引。如果<strong>你的更改还没有共享给别人</strong>，reset 是撤销这些更改的简单方法。当你开发一个功能的时候发现「糟糕，我做了什么？我应该重新来过！」时，reset 就像是 <code>go-to</code> 命令一样。</p>
+<p><img data-src="/5.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f72657365742d636f6d6d69742e737667"></p>
+<p>还可以通过传入参数来修改你的缓存区或工作目录：</p>
+<ul>
+<li><code>--soft</code> 缓存区和工作目录都不会被改变。</li>
+<li><code>--mixed</code> 默认选项。缓存区同步到你指定的提交，但工作目录不受影响。</li>
+<li><code>--hard</code> 缓存区和工作目录都同步到你指定的提交。</li>
+</ul>
+<p>把这些参数想成定义 <code>git reset</code> 操作的<strong>作用域</strong>就容易理解多了。拿上图举例来说，如果执行 <code>git reset --soft HEAD~3</code>，那么文件不会被修改，后三次提交被 <code>git add</code> 添加到暂存区，相当于只撤销了 <code>git commit</code>；<code>git reset --mixed HEAD~3</code> 则文件不会被修改，但后三次提交没有添加到暂存区；<code>git reset --hard HEAD~3</code> 则文件会被回退到 <em>b325c</em> 时的状态。</p>
+<h2 id="revert"><a href="#revert" class="headerlink" title="revert"></a>revert</h2><p><strong>revert 撤销一个提交的同时会创建一个新的提交</strong>。这是一个安全的方法，因为它不会重写提交历史。比如，下图执行 <code>git revert HEAD~2</code> 会创建一个新的提交来撤销前两个提交的更改，然后把新的提交加入提交历史。</p>
+<p><img data-src="/6.svg" alt="06"></p>
+<p>相比 <code>git reset</code>，它不会改变现在的提交历史。因此，**<code>git revert</code> 可以用在公共分支上，<code>git reset</code> 应该用在私有分支上**。你也可以把 <code>git revert</code> 用作撤销已经 push 的更改，而 <code>git reset</code> 用来撤销已经 commit 但没有 push 的更改，或者 <code>git reset HEAD</code> 撤销没有 commit 的更改。</p>
+<h2 id="checkout"><a href="#checkout" class="headerlink" title="checkout"></a>checkout</h2><p><strong>checkout 命令用于从历史提交（或者暂存区域）中拷贝文件到工作目录，也可用于切换分支</strong>。</p>
+<p>当给出一个（本地）分支时，那么 <em>HEAD</em> 指针将指向那个分支，也就是说，我们「切换」到那个分支了。<strong>stage 缓存和工作目录中的内容会和 <em>HEAD</em> 对应的提交节点一致</strong>。</p>
+<p><img data-src="/7.svg" alt="a"></p>
+<p>当指定的是一个标签、远程分支、SHA-1 值或者是像 master~3 类似的东西，就会得到一个<strong>匿名分支</strong>，又称作 <strong>detached HEAD（被分离的 HEAD 标识）</strong>。这样可以很方便地在历史版本之间互相切换。比如说你想要编译 1.2.1 版本，你可以运行 <code>git checkout v1.2.1</code>（这是一个标签 tag，而非分支名），编译，安装，然后切换回原先分支。</p>
+<p><img data-src="/8.svg" alt="b"></p>
+<p>当提交操作涉及到 detached HEAD 时，其行为会略有不同。<em>HEAD</em> 处于分离状态（不依附于任一分支）时，提交操作可以正常进行，但是不会更新任何已命名的分支。你可以认为这是在更新一个匿名分支。</p>
+<p><img data-src="/9.svg" alt="c"></p>
+<p>一旦此后你切换到别的分支，比如说 _master_，那么这个提交节点（可能）再也不会被引用到，将会被丢弃掉。</p>
+<p><img data-src="/10.svg" alt="d"></p>
+<p>但是，如果你想保存这个状态，可以用命令 <code>git checkout -b name</code> 来创建一个新的分支。</p>
+<p><img data-src="/11.svg" alt="e"></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://certbot.eff.org/#ubuntuxenial-nginx">Certbot官方文档</a></li>
-<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html">图解SSL/TLS协议 —— 阮一峰</a></li>
-<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95">RSA加密算法 —— WiKi</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/geeeeeeeeek/git-recipes">git-recipes —— GitHub 8k star 的高质量教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Merging vs. Rebasing</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting">Resetting, Checking Out &amp; Reverting</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000">Git教程 —— 廖雪峰</a></li>
 </ul>
 
       
@@ -444,7 +440,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/04/%E4%BD%BF%E7%94%A8%20Docker%20%E9%83%A8%E7%BD%B2%20Java%20Web%20%E5%BA%94%E7%94%A8/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -458,7 +454,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/11/04/%E4%BD%BF%E7%94%A8%20Docker%20%E9%83%A8%E7%BD%B2%20Java%20Web%20%E5%BA%94%E7%94%A8/" class="post-title-link" itemprop="url">使用 Docker 部署 Java Web 应用</a>
+            <a href="/2018/07/30/Mac%20%E7%9A%84%E7%BB%88%E6%9E%81%20Shell%20--%20ZSH/" class="post-title-link" itemprop="url">Mac 的终极 Shell -- ZSH</a>
         </h2>
 
         <div class="post-meta">
@@ -468,7 +464,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-11-04 05:42:30" itemprop="dateCreated datePublished" datetime="2017-11-04T05:42:30+08:00">2017-11-04</time>
+              <time title="创建时间：2018-07-30 07:46:19" itemprop="dateCreated datePublished" datetime="2018-07-30T07:46:19+08:00">2018-07-30</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -498,62 +494,44 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>JPress是基于JAVA的博客平台，作为一个Web程序，我将用它演示如何构建自己的Docker镜像，以及如何使用Docker部署Java Web应用。</p>
-<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
-<li>服务器 ubuntu 16.04</li>
-<li>下载好的jpress.war包，<a target="_blank" rel="noopener" href="http://jpress.cnitti.net/c/11.html">下载地址</a>，下载下来先在IDE里跑了测试一下，以免服务器上出问题</li>
-<li>构建好的java-web开发环境Docker镜像，<a target="_blank" rel="noopener" href="http://s1mple.info/deploy-with-docker/">如何构建</a></li>
-<li>Nginx</li>
-<li>Mysql</li>
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>目前常用的 Linux 系统和 OS X 系统的默认 Shell 都是 bash，但是真正强大的 Shell 是深藏不露的 zsh， 这货绝对是马车中的跑车，跑车中的飞行车，史称『终极 Shell』，但是由于配置过于复杂，所以初期无人问津，很多人跑过来看看 zsh 的配置指南，什么都不说转身就走了。直到有一天，国外某位大牛开源出一个能够让你快速上手的 zsh 项目，叫做『oh my zsh』，使得 zsh 逐渐流行起来。</p>
+<h2 id="ZSH"><a href="#ZSH" class="headerlink" title="ZSH"></a>ZSH</h2><p>安装 zsh。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install zsh</span><br></pre></td></tr></table></figure>
+
+<p>安装完后在 Terminal 的设置中设置默认使用 zsh。</p>
+<p><img data-src="/0.png" alt="8F9622E7-901E-46F0-94D7-B5E7AEE04C08"></p>
+<h2 id="Oh-My-Zsh"><a href="#Oh-My-Zsh" class="headerlink" title="Oh My Zsh"></a>Oh My Zsh</h2><p>oh-my-zsh 是最为流行的 zsh 配置文件，提供了完善的插件体系，相关的文件在<code>~/.oh-my-zsh/plugins</code>目录下。<a target="_blank" rel="noopener" href="https://github.com/robbyrussell/oh-my-zsh">GitHub 链接</a>。</p>
+<p>安装 oh-my-zsh：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>安装完成后<code>source ~/.zshrc</code>使之生效。</p>
+<h3 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h3><p>在<code>.zshrc</code>中添加配置，其中可以自定义<code>alias</code>用于简化命令，这里贴出我的配置。<code>alias -s</code>意为 define suffix aliases，譬如命令行输入<code>xxx.gz</code>就相当于<code>tar -xzvf xxx.gz</code>。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># compress relatived</span></span><br><span class="line"><span class="built_in">alias</span> -s gz=<span class="string">&#x27;tar -xzvf&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> -s tgz=<span class="string">&#x27;tar -xzvf&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> -s zip=<span class="string">&#x27;unzip&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> -s bz2=<span class="string">&#x27;tar -xjvf&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># sublime text</span></span><br><span class="line"><span class="built_in">alias</span> subl=<span class="string">&quot;open -a &#x27;Sublime Text&#x27;&quot;</span></span><br><span class="line"><span class="built_in">alias</span> -s php=subl</span><br><span class="line"><span class="built_in">alias</span> -s rb=subl</span><br><span class="line"><span class="built_in">alias</span> -s html=crm</span><br><span class="line"><span class="built_in">alias</span> -s xml=subl</span><br><span class="line"><span class="built_in">alias</span> -s txt=subl</span><br><span class="line"><span class="built_in">alias</span> -s hbs=subl</span><br><span class="line"></span><br><span class="line"><span class="comment"># macdown</span></span><br><span class="line"><span class="built_in">alias</span> macdown=<span class="string">&quot;open -a MacDown&quot;</span></span><br><span class="line"><span class="built_in">alias</span> -s md=macdown</span><br><span class="line"></span><br><span class="line"><span class="comment"># git relatived</span></span><br><span class="line"><span class="built_in">alias</span> gpom=<span class="string">&#x27;git push -u origin master&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> grao=<span class="string">&#x27;git remote add origin&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># others</span></span><br><span class="line"><span class="built_in">alias</span> his=<span class="string">&#x27;history&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> la=<span class="string">&#x27;ls -a&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> ll=<span class="string">&#x27;ls -alh&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>添加如下配置后，可以使用<code>subl a.txt</code>或者直接输入<code>a.txt</code>通过 Sublime 打开文本文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alias subl=&quot;open -a &#x27;Sublime Text&#x27;&quot;</span><br><span class="line">alias -s txt=subl</span><br></pre></td></tr></table></figure>
+
+<p>另外，添加了两个常用 Git 命令的缩写，其实 Oh My Zsh 已经包含了许多 Git 的简写命令，比如常用的<code>gst</code>即<code>git status</code>的简写。可以使用命令<code>alias</code>查看还有哪些简写命令。</p>
+<h2 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h2><p>oh-my-zsh 有很多提升命令行效率的实用工具，我目前使用了如下四个插件，确实在使用过程中体验到效率的提升。安装完成后在<code>.zshrc</code>中打开插件，其中 git 是默认安装并开启的插件，前面也提到有许多简写命令，这里不多赘述，请自行查阅。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">plugins=(</span><br><span class="line">  git</span><br><span class="line">  Z</span><br><span class="line">  zsh-syntax-highlighting</span><br><span class="line">  zsh-autosuggestions</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Z"><a href="#Z" class="headerlink" title="Z"></a>Z</h3><p><a target="_blank" rel="noopener" href="https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/z">Z 插件</a>，功能和 autojump 类似，使用<code>z &#123;path&#125;</code>实现目录间快速跳转，并且作为 oh-my-zsh 的内置组件，只需要在<code>.zshrc</code>中打开即可。</p>
+<p>如图，Z 插件会记录你前往的目录，并根据进入次数计算权重（<code>z -r</code>查看权重），以后再进入该目录只用<code>z ddd</code>，会进行<strong>模糊匹配</strong>，前往<strong>权重最高</strong>的目录。</p>
+<p><img data-src="/1.png" alt="678A0E3A-EDE9-4D9B-AA39-A6E14DC6E2EC"></p>
+<h3 id="zsh-syntax-highlighting"><a href="#zsh-syntax-highlighting" class="headerlink" title="zsh-syntax-highlighting"></a>zsh-syntax-highlighting</h3><p><a target="_blank" rel="noopener" href="https://github.com/zsh-users/zsh-syntax-highlighting">Zsh 语法高亮插件</a>。安装后终端输入的命令正确会<strong>绿色高亮</strong>显示，输入错误会显示红色，用于在执行命令前检查是否有语法错误。</p>
+<p><img data-src="/2.png" alt="82881CCA-A343-45D1-9A1D-4DD8E77E1B78"></p>
+<p>安装 zsh-syntax-highlighting，完成后在<code>.zshrc</code>中添加。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="variable">$&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;</span>/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
+
+<h3 id="zsh-autosuggestions"><a href="#zsh-autosuggestions" class="headerlink" title="zsh-autosuggestions"></a>zsh-autosuggestions</h3><p><a target="_blank" rel="noopener" href="https://github.com/zsh-users/zsh-autosuggestions">Zsh 命令自动补全插件</a>，效率神器。如图输入命令时，会给出建议的命令（灰色部分）按键盘 <code>→</code> 补全。</p>
+<p><img data-src="/3.png" alt="8B1B4FDE-F810-4E90-B20A-37274ABDDFDE"></p>
+<p>安装 zsh-autosuggestions，完成后在<code>.zshrc</code>中添加。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git://github.com/zsh-users/zsh-autosuggestions <span class="variable">$ZSH_CUSTOM</span>/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/19556676">终极 Shell——ZSH - 知乎专栏</a></li>
+<li><a target="_blank" rel="noopener" href="http://wulfric.me/2015/08/zsh/">一些命令行效率工具</a></li>
 </ul>
-<h2 id="构建JPress镜像"><a href="#构建JPress镜像" class="headerlink" title="构建JPress镜像"></a>构建JPress镜像</h2><p>在部署JPress之前我们需要先构建JPress镜像，以便生成容器实例。首先修改Tomcat的配置文件，以适用于JPress。</p>
-<h3 id="server-xml"><a href="#server-xml" class="headerlink" title="server.xml"></a>server.xml</h3><p>创建<code>java-web-env</code>容器实例，进入bash：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it s1mple1995/java-web-env bash</span><br></pre></td></tr></table></figure>
-
-<p>修改Tomcat配置文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /usr/local/lib/tomcat9/conf/server.xml</span><br></pre></td></tr></table></figure>
-
-<p>修改8080端口为1110，并修改<code>&lt;Context&gt;</code>标签，意思是Web应用文件夹名为<code>jpress</code>，访问路径为根路径：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Context docBase=&quot;jpress&quot; path=&quot;&quot; reloadable=&quot;true&quot; /&gt;</span><br></pre></td></tr></table></figure>
-
-<p>退出容器，并生成新的镜像：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit $&#123;container ID&#125; s1mple1995/jpress</span><br></pre></td></tr></table></figure>
-<p>现在你有了jpress的镜像，但是Tomcat的webapps目录下空空如也，我们需要通过<strong>Dockerfile</strong>来构建更完善的jpress镜像。</p>
-<h3 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h3><p>先在服务器上创建一个jpress文件夹，将<strong>jpress.war</strong><code>scp</code>到此目录下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /home/s1mple/jpress</span><br></pre></td></tr></table></figure>
-<p>执行<code>vim Dockerfile</code>编写镜像构建文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># Base image</span><br><span class="line">From s1mple1995/jpress</span><br><span class="line"></span><br><span class="line">USER root</span><br><span class="line"></span><br><span class="line"># environment variables</span><br><span class="line">ENV APP /usr/local/lib/tomcat9/webapps</span><br><span class="line"></span><br><span class="line"># Copy the current directory contents into the container at $APP</span><br><span class="line">ADD ./jpress.war $APP</span><br><span class="line"></span><br><span class="line"># Make port 1110 available to the world outside this container</span><br><span class="line">EXPOSE 1110</span><br><span class="line"></span><br><span class="line">WORKDIR $APP</span><br><span class="line"></span><br><span class="line">CMD [&quot;service&quot;, &quot;tomcat&quot;, &quot;run&quot;]</span><br></pre></td></tr></table></figure>
-
-<p>其中，<strong>From</strong>指依赖的基础镜像。<strong>USER</strong>默认就是root，在生产环境为了安全可以指定其他用户。<strong>ENV</strong>是环境变量。<strong>ADD</strong>或者<strong>COPY</strong>命令将我们的war包拷贝到webapps目录下。<strong>EXPOSE</strong>开放端口。<strong>WORKDIR</strong>表示你进入容器时的初始路径。<strong>CMD</strong>为容器启动时执行的命令。这里使用<code>service tomcat run</code>而不是<code>start</code>是因为容器会监控前台如果没有输出，在<code>start</code>命令执行完后就会自动退出。而<code>run</code>命令是前台运行。我之前一直用<code>start</code>命令发现容器总是刚启动就退出。<br>更多命令请参考<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/reference/builder/#from">官方文档</a>。</p>
-<h3 id="构建Docker镜像"><a href="#构建Docker镜像" class="headerlink" title="构建Docker镜像"></a>构建Docker镜像</h3><p>现在所有准备工作都已完成，你可以构建自己的JPress镜像了。</p>
-<p>在<code>/home/s1mple/jpress</code>目录下执行，<code>-t</code>给新镜像打上标签：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t s1mple1995/jpress .</span><br></pre></td></tr></table></figure>
-
-<p>可以看到控制台输出了一些信息：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Sending build context to Docker daemon 20.@6MB</span><br><span class="line">Step 1/6 : FROM simple1995/jpress</span><br><span class="line">---&gt; 6c7F7aa5716d</span><br><span class="line">Step 2/6 : USER root</span><br><span class="line">---&gt; Running in d29bd2d7cf4e</span><br><span class="line">---&gt; 616922ef516c</span><br><span class="line">Removing intermediate container d29bd2d7cf4e</span><br><span class="line">Step 3/6 : ENV APP /usr/local/lib/tomcat9/webapps</span><br><span class="line">---&gt; Running in 5667a207¢898</span><br><span class="line">---&gt; b6c061148616</span><br><span class="line">Removing intermediate container 5667a267¢898</span><br><span class="line">Step 4/6 : ADD ./jpress.war SAPP</span><br><span class="line">---&gt; a82c14e949e0</span><br><span class="line">Step 5/6 : EXPOSE 1110</span><br><span class="line">---&gt; Running in b31964ddfefo</span><br><span class="line">---&gt; cd9de2d7786F</span><br><span class="line">Removing intermediate container b31964ddfefo</span><br><span class="line">Step 6/6 : CMD service tomcat run</span><br><span class="line">---&gt; Running in @4a6a78fa77a</span><br><span class="line">---&gt; de9b3648553e</span><br><span class="line">Removing intermediate container @4a6a78fa77a</span><br><span class="line">Successfully built de9b3648553e</span><br><span class="line">Successfully tagged s1mple1995/jpress:latest</span><br></pre></td></tr></table></figure>
-
-<p>Dockerfile里的每一句命令都会在一个新的容器中运行，并生成一个新的镜像，再将中间过渡的容器移除。</p>
-<p>我们来验证一下，执行<code>docker images</code>看到我的两个镜像：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">REPOSITORY                  TAG          IMAGE ID</span><br><span class="line">s1mple1995/jpress           latest       de9b3648553e</span><br><span class="line">simple1995/java-web-env     latest       292d98d8d6d4</span><br></pre></td></tr></table></figure>
-
-<p>执行<code>docker image history de9</code>查看jpress镜像历史</p>
-<p><img data-src="/2.png" alt="-----2017-11-04---7.01.30"></p>
-<p>甚至可以看到我们通过<code>bash</code>修改tomcat配置文件后提交的镜像，你可以通过运行这些镜像来回退你的操作</p>
-<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><p>运行，<code>-p</code>绑定端口，<code>-v</code>挂载宿主机与容器的共享文件夹：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -d -p 1110:1110 -v /home/s1mple/jpress/:/usr/local/lib/tomcat9/webapps s1mple1995/jpress</span><br></pre></td></tr></table></figure>
-
-<p>不出意外，你现在就可以在浏览器上访问<code>http://&#123;domain&#125;:1110/install</code>进入JPress安装向导，按照步骤，填写数据库信息，需要提前建库。数据库主机填写你安装了mysql的服务器IP。</p>
-<p>如果长时间未加载，可以执行<code>docker restart</code>命令重启容器</p>
-<h2 id="Nginx重定位"><a href="#Nginx重定位" class="headerlink" title="Nginx重定位"></a>Nginx重定位</h2><p>通过nginx配置二级域名，你现在可以通过 <a target="_blank" rel="noopener" href="http://jpress.s1mple.info/">http://jpress.s1mple.info</a> 访问我的jpress博客。</p>
-<p>首先你要保证开放了二级域名。我的域名是在GoDaddy上买的，需要在他的DNS管理界面添加<code>*.s1mple.info</code>。</p>
-<p>添加nginx配置文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/nginx/sites-enabled</span><br><span class="line">cp ghost_8080.conf jpress.conf</span><br></pre></td></tr></table></figure>
-
-<p>修改jpress.conf文件，添加80、8080端口：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server_name jpress.s1mple.info www.jpress.s1mple.info;</span><br><span class="line"></span><br><span class="line">location / &#123;</span><br><span class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">    proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">    proxy_set_header Host $http_host;</span><br><span class="line">    proxy_pass http://127.0.0.1:1110;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>执行<code>service nginx restart</code>即可。</p>
-<p>效果图<br><img data-src="/3.png" alt="-----2017-11-20---9.42.47"></p>
 
       
     </div>
@@ -573,7 +551,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/02/%E5%AE%89%E8%A3%85%20JDK&Tomcat/">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/07/19/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B9%8B%20Web%20%E6%A1%88%E4%BE%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -587,7 +565,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/11/02/%E5%AE%89%E8%A3%85%20JDK&Tomcat/" class="post-title-link" itemprop="url">安装 JDK & Tomcat</a>
+            <a href="/2018/07/19/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B9%8B%20Web%20%E6%A1%88%E4%BE%8B/" class="post-title-link" itemprop="url">Java 异常处理之 Web 案例</a>
         </h2>
 
         <div class="post-meta">
@@ -597,7 +575,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-11-02 14:17:06" itemprop="dateCreated datePublished" datetime="2017-11-02T14:17:06+08:00">2017-11-02</time>
+              <time title="创建时间：2018-07-19 08:00:23" itemprop="dateCreated datePublished" datetime="2018-07-19T08:00:23+08:00">2018-07-19</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -612,7 +590,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a>
+                  <a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a>
                 </span>
             </span>
 
@@ -627,314 +605,193 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>Tomcat是现在主流的应用服务器。可以直接将基于Spring框架的Java Web应用部署到Tomcat上。本文将介绍如何安装JDK和Tomcat</p>
-</blockquote>
-<h2 id="Prerequisite"><a href="#Prerequisite" class="headerlink" title="Prerequisite"></a>Prerequisite</h2><ul>
-<li>服务器：Ubuntu 16.04</li>
-<li>良好的网络环境</li>
-</ul>
-<h2 id="Install-JDK"><a href="#Install-JDK" class="headerlink" title="Install JDK"></a>Install JDK</h2><blockquote>
-<p>官网安装jdk，相对较麻烦，但是官网毕竟权威</p>
-</blockquote>
-<ul>
-<li><p><a target="_blank" rel="noopener" href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">oracle官网</a>复制jdk下载链接，执行<code>wget</code>命令即可</p>
-</li>
-<li><p>解压<code>.tar.gz</code>压缩包，并改名</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mv jdk-8u151-linux-x64.tar.gz /usr/local/lib/</span><br><span class="line">tar -xzvf jdk-8u151-linux-x64.tar.gz</span><br><span class="line">mv jdk-8u151-linux-x64 jdk8</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>vim ~/.bashrc</code>配置环境变量，<a target="_blank" rel="noopener" href="http://www.cnblogs.com/wangchenyang/archive/2011/08/17/2143620.html">为什么要设置Java环境变量</a></p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/local/lib/jdk8</span><br><span class="line">export JRE_HOME=$&#123;JAVA_HOME&#125;/jre</span><br><span class="line">export CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib:$&#123;JRE_HOME&#125;/lib  </span><br><span class="line">export PATH=$&#123;JAVA_HOME&#125;/bin:$PATH </span><br></pre></td></tr></table></figure></li>
-</ul>
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>基于我的上一篇博客：<a target="_blank" rel="noopener" href="https://s2mple.xyz/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">Java 异常处理</a>中的观点，我编写了一个简单的 Web 案例，包括自定义异常类，在合适的层面处理，以及遇到的由于代码 Bug 抛出运行时异常的情形。示例代码已经上传至 <a target="_blank" rel="noopener" href="https://github.com/s1mplecc/exception-demo">GitHub</a>，包含基于 Spring Boot 的 Java 后端代码以及基于 Vue.js 的前端代码两个部分。</p>
+<p>我们的演示案例有两个功能，获取用户列表以及注册新用户，界面如下所示：</p>
+<p><img data-src="/0.png" alt="102BDB82-6CAD-4C3F-A5EC-5F1052F3A337"></p>
+<h2 id="后端实现"><a href="#后端实现" class="headerlink" title="后端实现"></a>后端实现</h2><p>先看一下我们领域模型 User，为简化代码未使用数据库，而是模拟数据库的自增主键自动生成 userId。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> userIdGenerateKey = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer userId;</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">    <span class="keyword">private</span> String phone;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    User(String username, String phone, Integer age) &#123;</span><br><span class="line">        <span class="keyword">this</span>.userId = User.userIdGenerateKey++;</span><br><span class="line">        <span class="keyword">this</span>.username = username;</span><br><span class="line">        <span class="keyword">this</span>.phone = phone;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    User(User userWithoutId) &#123;</span><br><span class="line">        <span class="keyword">this</span>(userWithoutId.username, userWithoutId.phone, userWithoutId.age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在资源库<code>UserRepository</code>一层使用<code>List</code>直接在内存中存储用户，并初始化了两条用户信息。对外提供<code>users()</code>返回所有用户以及<code>addUser()</code>添加一个新用户两个接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserRepository</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;User&gt; users = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UserRepository</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        users.add(<span class="keyword">new</span> User(<span class="string">&quot;Jack&quot;</span>, <span class="string">&quot;13500000000&quot;</span>, <span class="number">18</span>));</span><br><span class="line">        users.add(<span class="keyword">new</span> User(<span class="string">&quot;Tom&quot;</span>, <span class="string">&quot;13500000001&quot;</span>, <span class="number">19</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">users</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> users;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addUser</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        users.add(user);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>考虑到在业务功能为获取用户列表和注册新用户，而注册功能还可能包括发送验证邮件等之类的功能，所以有必要将其提取至 Service 层提供一个<code>register()</code>接口。目前只是单纯的调用资源库的<code>addUser()</code>添加一个新的用户。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserRepository userRepository;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        userRepository.addUser(<span class="keyword">new</span> User(user));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Controller 层代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/users&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserRepository userRepository;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserService userService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">users</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userRepository.users();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(<span class="meta">@RequestBody</span> User user)</span> </span>&#123;</span><br><span class="line">        userService.register(user);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="添加业务规则进行校验"><a href="#添加业务规则进行校验" class="headerlink" title="添加业务规则进行校验"></a>添加业务规则进行校验</h3><p>上述案例还是未抛出任何异常的情况，实际业务必然会对用户输入做一定约束。假设注册新用户有如下业务规则：1. 用户名是必填项，不能为空；2. 年龄和电话号码为可选项，如果填入年龄，必须是大于零的合法数字。</p>
+<p>那么根据 DDD 的思想以及信息专家模式，检查用户名和年龄是否合法应该属于领域对象 User。如下所示，这里先埋个坑，也是我未思考全面所留下的隐患，一会儿会提及。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// User</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">checkAgeIsLegal</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.age &gt;= <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">checkUsernameIsNotEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> username != <span class="keyword">null</span> &amp;&amp; !<span class="string">&quot;&quot;</span>.equals(username.trim());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="抛出异常"><a href="#抛出异常" class="headerlink" title="抛出异常"></a>抛出异常</h3><p>如果客户输入的值不符合要求，我们应当抛出一个异常提醒用户及时修正。自定义<code>RequestArgsIllegalException</code>异常类，意为请求参数非法，重写<code>getMessage()</code>方法。异常类的命名要清晰准确反应问题。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RequestArgsIllegalException</span> <span class="keyword">extends</span> <span class="title">Exception</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RequestArgsIllegalException</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(message);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RequestArgsIllegalException</span><span class="params">(String message, Throwable cause)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(message, cause);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getMessage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Illegal request arguments: &quot;</span> + <span class="keyword">super</span>.getMessage();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在服务层的<code>register()</code>接口，我们使用<strong>卫语句</strong>检查参数，如果非法则抛出包含了异常信息的异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// UserService</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(User user)</span> <span class="keyword">throws</span> RequestArgsIllegalException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!user.checkAgeIsLegal()) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RequestArgsIllegalException(<span class="string">&quot;age cannot be less than zero&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!user.checkUsernameIsNotEmpty()) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RequestArgsIllegalException(<span class="string">&quot;username can not be empty&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    userRepository.addUser(<span class="keyword">new</span> User(user));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 Controller 层捕获异常并将异常信息返回给前端：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// UserController</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@PostMapping</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(<span class="meta">@RequestBody</span> User user, HttpServletResponse response)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        userService.register(user);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (RequestArgsIllegalException e) &#123;</span><br><span class="line">        logger.warn(<span class="string">&quot;&#123;&#125;. &#123;&#125;&quot;</span>, e.getMessage(), user);</span><br><span class="line">        response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="接口调试"><a href="#接口调试" class="headerlink" title="接口调试"></a>接口调试</h2><p>使用 Postman 测试后端<code>register()</code>接口，请求体如下，其中年龄违反了业务规则。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;username&quot;</span>: <span class="string">&quot;Halen&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;age&quot;</span>: <span class="number">-1</span>,</span><br><span class="line">    <span class="attr">&quot;phone&quot;</span>: <span class="string">&quot;13500000002&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过 Postman 返回的错误信息，状态吗<code>status</code>为 400，错误信息<code>message</code>为 “Illegal request arguments: age cannot be less than zero” 都已经被包装在返回的消息体中。同理，用户名为空也是一样就不贴出来了。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;timestamp&quot;</span>: <span class="number">1532055599002</span>,</span><br><span class="line">    <span class="attr">&quot;status&quot;</span>: <span class="number">400</span>,</span><br><span class="line">    <span class="attr">&quot;error&quot;</span>: <span class="string">&quot;Bad Request&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;message&quot;</span>: <span class="string">&quot;Illegal request arguments: age cannot be less than zero&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;path&quot;</span>: <span class="string">&quot;/users&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里又要提到我之前说到的那个坑了，也是我在使用 Postman 测试接口时发现的 Bug。根据业务规则允许用户不填入年龄和电话号码。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 请求消息体</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;username&quot;</span>: <span class="string">&quot;Halen&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 响应消息体</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;timestamp&quot;</span>: <span class="number">1532056232417</span>,</span><br><span class="line">    <span class="attr">&quot;status&quot;</span>: <span class="number">500</span>,</span><br><span class="line">    <span class="attr">&quot;error&quot;</span>: <span class="string">&quot;Internal Server Error&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;message&quot;</span>: <span class="string">&quot;No message available&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;path&quot;</span>: <span class="string">&quot;/users&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>非常可怕的 500 服务器内部错误出现了！根据响应消息完全无法定位错误出处。一般来说，这种情况是后端代码出了 Bug，所幸我们还能查看控制台输出或者日志。果不其然，一个空指针异常被抛出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">java.lang.NullPointerException: null</span><br><span class="line">    at info.s1mple.exceptiondemo.domian.model.user.User.checkAgeIsLegal(User.java:30)</span><br></pre></td></tr></table></figure>
+
+<p>原来是<code>checkAgeIsLegal()</code>方法出了问题，赶紧去及时修复 Bug，根据业务规则，添加<code>this.age == null</code>认为年龄为空合法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">checkAgeIsLegal</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.age == <span class="keyword">null</span> || <span class="keyword">this</span>.age &gt;= <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="前端实现"><a href="#前端实现" class="headerlink" title="前端实现"></a>前端实现</h2><p>前端实现就很简单了，捕获到错误直接 alert 出来。前端使用 axios 发送异步请求，请求后端的注册用户接口，<code>this.user</code>是绑定了用户输入表单值的 User 对象。如果参数符合要求提示成功，如果参数非法则会走入<code>catch</code>分支将错误原因提醒给用户。注意到 Error 对象是做了封装的，我们要获取可以在<code>err.response.data</code>中获取。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">register</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    axios.post(<span class="string">&#x27;http://localhost:8080/users&#x27;</span>, <span class="built_in">this</span>.user)</span><br><span class="line">      .then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        alert(<span class="string">&#x27;Success!&#x27;</span>)</span><br><span class="line">        <span class="built_in">this</span>.loadUsers()</span><br><span class="line">      &#125;)</span><br><span class="line">      .catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">        alert(err.response.data.message)</span><br><span class="line">      &#125;)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>前端捕获了异常将异常出错信息弹框显示：</p>
+<p><img data-src="/1.png" alt="06A6A59C-1FDF-4BA6-9DDB-6D29BDD489A9"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>由此我们整个的前后端异常处理的过程就贯通了，在这个案例中我使用的是受控异常（Checked Exception）并且自定义了异常类。可以看到，相较于运行时异常（RuntimeException），它的好处在于能够很好的将异常分门别类，并且捕获异常返回相应的异常码给前端，也方便前端的报错呈现。最后我们总结一下：<strong>对于由用户操作引起的异常，在我们的控制范围之内，应当使用合适的受控异常对其进行捕获并反馈给前端</strong>。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="s1mple">
+      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="芥子屋">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="url">Java 异常处理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-07-16 05:21:06" itemprop="dateCreated datePublished" datetime="2018-07-16T05:21:06+08:00">2018-07-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-17 13:47:55" itemprop="dateModified" datetime="2021-12-17T13:47:55+08:00">2021-12-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>一直以来，Java 的异常处理可能是每个 Java 程序员都需要面对和经历的难题之一。何时该抛出异常，该抛出何种异常，需不需要自定义异常类，何时又该捕获异常并处理，相信每一个 Java 程序员或多或少都有这样的疑问。最近也是觉得项目需要统一规范的异常处理，所以花了些时间研读 <em>Thinking in Java</em>、《阿里巴巴 Java 开发手册》以及前辈们总结的优质文章，归纳了一些自认为比较关键的部分，希望有助于大家更好的设计如何处理异常。关键还是需要大量优秀源码的阅读经验。</p>
 <blockquote>
-<p><strong>bashrc</strong>与<strong>profile</strong>都用于保存用户的环境信息，**/etc/profile** 中设定的变量(全局)的可以作用于任何用户。**~/.bashrc** 该文件包含专用于某个用户的bash shell的bash信息,当该用户登录时以及每次打开新的shell时,该文件被读取。需要注意的是我在docker容器中的 <strong>/etc/profile</strong> 配置java环境变量时，重启容器发现配置没生效，应该是操作系统在重启时加载 <strong>/etc/profile</strong> 文件，但是docker容器就没有这种操作了。</p>
+<p>异常的设计初衷是将<strong>运行时产生的错误信息通过某种方式传递给某个接收者 —— 该接收者将知道如何正确的处理这个问题</strong>。Java 使用异常来提供一致的错误报告模型，使得构件能够与客户端代码可靠地沟通问题。实际上，<strong>异常处理的一个重要目标就是把错误处理的代码同错误发生的地点分离</strong>，使得你在某处专注于要完成的事，而在另一处处理错误。既分离了主干代码和错误处理逻辑，又可以重用错误处理代码。—— <em>Thinking in Java</em></p>
 </blockquote>
-<ul>
-<li><code>source ~/.bashrc</code>使文件生效</li>
-</ul>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a><strong>Tips</strong></h4><ol>
-<li>当你执行一条命令，系统会去PATH路径下查找该命令，比如你现在可以执行<code>java -version</code>命令。<code>echo $PATH</code>查看PATH设置。   </li>
-<li>全局环境变量，可以<code>$&#123;&#125;</code>或者<code>$</code>引用，你现在可以<code>echo $&#123;JAVA_HOME&#125;</code>打印该值。<code>env</code>查看环境变量设置。</li>
+<p>上面所说的接受者其实分为两类，一类是开发人员，另一类是使用用户。所以，实际上异常设计出来：</p>
+<ol>
+<li>帮助开发人员定位错误，修复代码漏洞。</li>
+<li>反馈给客户端用户，比如表单的输入值非法，让他得以更正错误。</li>
 </ol>
-<blockquote>
-<p>如果你觉得官网太麻烦，可以安装openjdk，虽说是阉割版，但足够满足你的需求了</p>
-</blockquote>
-<ul>
-<li>安装<strong>openjdk</strong>只需要下面一行命令  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install openjdk-8-jdk</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="Tips-1"><a href="#Tips-1" class="headerlink" title="Tips"></a><strong>Tips</strong></h4><ol>
-<li>你可以通过如下命令查看有关jdk版本和信息。 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-cache search jdk</span><br><span class="line">apt-cache show openjdk-8-jdk</span><br></pre></td></tr></table></figure></li>
-<li>java有关的可执行文件被安装在<code>/usr/bin</code>目录下，但是环境变量并没有设置。</li>
+<h2 id="异常分类"><a href="#异常分类" class="headerlink" title="异常分类"></a>异常分类</h2><p>Java 将异常分为两个大类：<strong>非检查型异常（Unchecked Exception）</strong>，也称非受控异常。以及<strong>检查型异常（Checked Exception）</strong>，也称受控异常。这两者的区别在于：</p>
+<ol>
+<li>Check Exception 编译器会做强制检查，必须使用<code>try...catch</code>捕获或者<code>throws</code>在方法签名处申明，否则编译不通过。</li>
+<li>Unchecked Exception 发生在运行期，具有不确定性，通常是由于程序的<strong>逻辑问题</strong>所引起的，所以在程序设计中我们需要考虑周全，尽量通过<strong>提前预检</strong>避免这类异常。</li>
 </ol>
-<h2 id="Install-Tomcat"><a href="#Install-Tomcat" class="headerlink" title="Install Tomcat"></a>Install Tomcat</h2><ul>
-<li><p>照例，<a target="_blank" rel="noopener" href="https://tomcat.apache.org/download-90.cgi">官网</a>下载、解压。这里不再赘述</p>
-</li>
-<li><p>配置Tomcat为服务，<code>cd /usr/local/lib/tomcat9</code>目录下</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp ./bin/catalina.sh /etc/init.d/tomcat</span><br></pre></td></tr></table></figure></li>
-<li><p><code>vim /etc/init.d/tomcat</code>加入如下内容</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">JAVA_HOME=/usr/local/lib/jdk8</span><br><span class="line">JRE_HOME=$&#123;JAVA_HOME&#125;/jre</span><br><span class="line">CATALINA_HOME=/usr/local/lib/tomcat9</span><br><span class="line">CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib:$&#123;CATALINA_HOME&#125;/lib</span><br></pre></td></tr></table></figure></li>
-<li><p>添加<strong>restart</strong>命令，<code>&quot;$1&quot;</code>指输入的第一个参数</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    elif [ &quot;$1&quot; = &quot;restart&quot; ] ; then</span><br><span class="line">        service tomcat stop</span><br><span class="line">        sleep 1</span><br><span class="line">        service tomcat start</span><br><span class="line">    ```    </span><br><span class="line">- 保存退出，现在可以通过`service tomcat [start|stop|restart]`来启动、停止Tomcat。查看是否正常启动</span><br></pre></td></tr></table></figure>
-<p>  curl localhost:8080</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### **Tips**</span><br><span class="line"></span><br><span class="line">1. 你的应用程序安装路径在**webapps**下。在部署你自己的应用前执行`rm -r webapps/*`清空文件夹    </span><br><span class="line">2. Tomcat的配置文件在`conf/server.xml`中</span><br><span class="line"></span><br><span class="line">### **About server.xml**</span><br><span class="line"></span><br><span class="line">- [server.xml详解](http://www.cnblogs.com/gugnv/archive/2012/02/01/2334187.html)</span><br><span class="line"></span><br><span class="line">- 默认开启8080端口，可以修改端口号</span><br></pre></td></tr></table></figure>
-<p>  &lt;Connector port=”8080” protocol=”HTTP/1.1”</p>
-<pre><code>         connectionTimeout=&quot;20000&quot;
-         redirectPort=&quot;8443&quot; /&gt;
-</code></pre>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- `&lt;Host&gt;`标签中，**appBase**解释了为什么将Java Web程序打包放在此目录下。**unpackWARs**为true自动解压war包，**autoDeploy**自动部署。所以在Tomcat启动后识别webapps目录下`.war`结尾的war包自动解压、部署。</span><br></pre></td></tr></table></figure>
-<p>  &lt;Host name=”localhost”  appBase=”webapps”</p>
-<pre><code>    unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;
-</code></pre>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 在`&lt;Host&gt;`标签中可设置`&lt;Context&gt;`上下文标签。**docBase**是应用程序包名，**path**是url前缀，**reloadable**为true时自动检测应用程序的`/WEB-INF/lib`和`/WEB-INF/classes`目录的变化，自动装载新的应用程序</span><br></pre></td></tr></table></figure>
-  <Context docBase="app" path="/app" reloadable="true" />
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 如果不配置`&lt;Context&gt;`标签，将默认以应用程序文件夹名字作为url前缀，如**webapps**目录下应用程序文件夹名为**jpress**，则url为</span><br></pre></td></tr></table></figure>
-  http://{IP}:{port}/jpress/
-  ```</li>
-</ul>
+<p>Java 中异常的继承结构如下图所示：</p>
+<p><img data-src="/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/0.jpg" alt="v2-2cb1558f17876f329804fcced62661ef_1200x500"></p>
+<h3 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h3><p>Error 表示<strong>系统级别的错误</strong>，应用程序本身无法克服和恢复的一种严重问题，例如 JVM 栈溢出<code>StackOverFlowError</code>、内存溢出<code>OutOfMemoryError</code>等。<strong>在编码中不应该主动抛出 Error 类型的异常</strong>。</p>
+<h3 id="运行时异常"><a href="#运行时异常" class="headerlink" title="运行时异常"></a>运行时异常</h3><p>运行时异常<code>RuntimeException</code>是<code>Exception</code>衍生子类中的非检查型异常，即编译器不会强制要求捕获或者声明抛出。<code>RuntimeException</code>发生的时候，表示程序中出现了编程错误（即 Bug），所以应该找出错误修改程序，而不是去捕获。比如空指针异常<code>NullPointerException</code>、数组下标越界<code>ArrayIndexOutOfBoundsException</code>，程序员可以通过提前预检去避免该类错误。</p>
+<h3 id="受控异常"><a href="#受控异常" class="headerlink" title="受控异常"></a>受控异常</h3><p>绝大多数受控异常（Checked Exception）位于<code>java.io</code>包内，这是合乎情理的，因为在你请求了不存在的系统资源的时候，一段健壮的程序必须能够优雅的处理这种情况，而不应该挂掉。比如<code>FileNotFoundException</code>可能是用户删除了文件，或者<code>ConnectException</code>网络中断导致的连接异常，这类问题可以通过用户恢复文件或检查网络及时矫正。</p>
+<h2 id="异常处理的最佳实践"><a href="#异常处理的最佳实践" class="headerlink" title="异常处理的最佳实践"></a>异常处理的最佳实践</h2><p>异常堆栈信息提供了导致异常出现的方法调用链的精确顺序，包括每个方法调用的类名，方法名，代码文件名以及行数，以此来精确定位异常出现的现场。在有效使用异常的情况下，异常类型回答了<strong>什么</strong>异常被抛出，异常堆栈跟踪回答了<strong>在哪</strong>抛出，异常信息回答了<strong>为什么</strong>会抛出，如果你的异常没有回答以上全部问题，那么可能你没有很好地使用它们。本文主要介绍异常使用的两大原则：<strong>提早抛出</strong>和<strong>延迟捕获</strong>。更多请参考博客最后的参考文章，推荐研读《阿里巴巴 Java 开发手册》。</p>
+<h3 id="提早抛出"><a href="#提早抛出" class="headerlink" title="提早抛出"></a>提早抛出</h3><p>来看以下代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readFile</span><span class="params">(String filename)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">    InputStream in = <span class="keyword">new</span> FileInputStream(filename);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// read file...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile(<span class="keyword">null</span>); <span class="comment">// throw exception</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Exception in thread &quot;main&quot; java.lang.NullPointerException</span></span><br><span class="line"><span class="comment">at java.io.FileInputStream.&lt;init&gt;(FileInputStream.java:130)</span></span><br><span class="line"><span class="comment">at java.io.FileInputStream.&lt;init&gt;(FileInputStream.java:93)</span></span><br><span class="line"><span class="comment">at info.s1mple.exceptiondemo.ExceptionDemo.readFile(ExceptionDemo.java:15)</span></span><br><span class="line"><span class="comment">at info.s1mple.exceptiondemo.ExceptionDemo.main(ExceptionDemo.java:10) */</span></span><br></pre></td></tr></table></figure>
 
-      
-    </div>
+<p>以上代码展示了<code>FileInputStream</code>类的构造函数传入<code>null</code>值导致的<code>NullPointerException</code>异常。不幸的是，<code>NullPointerException</code>是 Java 中信息量最少的（却也是最常遭遇且让人崩溃的）异常。它压根不提我们最关心的事情：到底哪里是<code>null</code>。所以我们不得不回退几步去找哪里出了错。</p>
+<p>通过跟踪堆栈打印信息，我们可以确定错误原因是向<code>readFile()</code>传入了一个空文件名参数。既然<code>readFile()</code>不能处理空文件名，所以马上检查该条件，如果文件名为空则抛出非法参数异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readFile</span><span class="params">(String filename)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (filename == <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;filename is null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    InputStream in = <span class="keyword">new</span> FileInputStream(filename);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// read file...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile(<span class="keyword">null</span>); <span class="comment">// throw exception</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Exception in thread &quot;main&quot; java.lang.IllegalArgumentException: filename is null</span></span><br><span class="line"><span class="comment">    at info.s1mple.exceptiondemo.ExceptionDemo.readFile(ExceptionDemo.java:15)</span></span><br><span class="line"><span class="comment">    at info.s1mple.exceptiondemo.ExceptionDemo.main(ExceptionDemo.java:10) */</span></span><br></pre></td></tr></table></figure>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+<p>这里使用<code>IllegalArgumentException</code>继承自<code>RuntimeException</code>的非受控异常，所以不强制要求在方法签名处声明。实际开发中根据业务要求，假如文件名是由用户输入，那可以自定义类似<code>RequestArgsIllegalException</code>的受控异常类将错误信息返回给前端并呈现给用户。在命名自定义异常类时要清晰准确。</p>
+<p>类似上述代码中的<code>if statement</code>被称为<strong>卫语句（guard clauses）</strong>，原则是将可能出错的每个分支做<strong>单独检查</strong>，要么抛出异常要么立即返回，将正常的实现代码放在卫语句之后保证运行到此处时所有条件都已通过。如此既避免了嵌套层次过多的<code>if...else</code>条件分支，又使得实现代码被剥离出来放在最后集中处理。</p>
+<p>通过提早抛出异常（又称<strong>迅速失败</strong>），异常得以清晰又准确。堆栈信息立即反映出什么出了错（提供了非法参数值），为什么出错（文件名不能为空值），以及哪里出的错。另外，其中包含的异常信息<code>&quot;filename is null&quot;</code>使得异常提供的信息更加丰富，而这是我们之前代码中抛出的<code>NullPointerException</code>所无法提供的。</p>
+<h3 id="延迟捕获"><a href="#延迟捕获" class="headerlink" title="延迟捕获"></a>延迟捕获</h3><p>编写异常的程序员最可能犯的一个错误是，在程序有能力处理异常之前就捕获它。问题在于，捕获之后该拿异常怎么办？最不该的就是什么都不做。空的<code>catch</code>块等于把整个异常丢进黑洞，能够说明何时何处为何出错的所有信息都会丢失。把异常写到日志中还稍微好点，至少有迹可循。但我们总不能指望用户去阅读或者理解日志文件和异常信息。阿里开发手册中说道：<strong>捕获异常是为了处理它，不要捕获了却什么都不处理而抛弃之，如果不想处理它，请将该异常抛给它的调用者。最外层的业务使用者，必须处理异常，将其转化为用户可以理解的内容</strong>。</p>
+<p>在有条件处理异常之前过早捕获它，通常会导致更严重的错误和其他异常。例如，如果上文的<code>readFile()</code>方法在调用<code>FileInputStream</code>构造方法时立即捕获和记录可能抛出的<code>FileNotFoundException</code>，代码会变成下面这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readFile</span><span class="params">(String filename)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    InputStream in = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        in = <span class="keyword">new</span> FileInputStream(filename);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">        logger.error(<span class="string">&quot;file not found: &#123;&#125;&quot;</span>, filename);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    in.read(); <span class="comment">// may produce NullPointerException</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile(<span class="string">&quot;xxx&quot;</span>); <span class="comment">// throw exception</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">13:10:27.439 [main] ERROR info.s1mple.exceptiondemo.ExceptionDemo - file not found: xxx</span></span><br><span class="line"><span class="comment">Exception in thread &quot;main&quot; java.lang.NullPointerException</span></span><br><span class="line"><span class="comment">    at info.s1mple.exceptiondemo.ExceptionDemo.readFile(ExceptionDemo.java:32)</span></span><br><span class="line"><span class="comment">    at info.s1mple.exceptiondemo.ExceptionDemo.main(ExceptionDemo.java:16) */</span></span><br></pre></td></tr></table></figure>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/02/%E6%9E%84%E5%BB%BA%E4%BD%A0%E7%9A%84Docker%E9%95%9C%E5%83%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="芥子屋">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/11/02/%E6%9E%84%E5%BB%BA%E4%BD%A0%E7%9A%84Docker%E9%95%9C%E5%83%8F/" class="post-title-link" itemprop="url">构建你的 Docker 镜像</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-11-02 05:44:16" itemprop="dateCreated datePublished" datetime="2017-11-02T05:44:16+08:00">2017-11-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-17 13:47:55" itemprop="dateModified" datetime="2021-12-17T13:47:55+08:00">2021-12-17</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>Docker实现了宿主系统和Docker容器(container)的隔离，使用Docker可以将构建开发所需环境的镜像(images)，再根据镜像生成容器实例。实现不依赖宿主机环境的高效部署、测试。</p>
+<p>上面的代码在完全没有能力从<code>FileNotFoundException</code>中恢复过来的情况下就捕获了它。如果文件无法找到，那么<code>in.read()</code>就不应该执行。尽管我们捕获了<code>FileNotFoundException</code>异常并打印了日志，但是一个更让人头疼的<code>NullPointerException</code>将被抛出。错误信息不仅误导了我们出了什么错（真正的错误是文件找不到而不是空指针），还误导了错误的出处，不应该在<code>in.read()</code>而应该在<code>new FileInputStream(filename)</code>。</p>
+<p>所以<code>readFile()</code>真正应该做的事情不是捕获这些异常，那应该是什么？看起来有点有悖常理，通常最合适的做法其实是什么都不做，不要马上捕获异常。把责任交给<code>readFile()</code>的调用者，让它来决定文件缺失的处理方法，有可能会提示用户指定其他文件，或者使用默认值，实在不行的话警告用户并退出程序。</p>
+<p>当然，最终你的程序需要捕获异常，否则会意外终止。但这里的技巧是<strong>在合适的层面捕获异常</strong>，以便你的程序要么可以从异常中有意义地恢复并继续下去，而不导致更深入的错误；要么能够为用户提供明确的信息，引导他们修正错误。如果当前所在方法无法胜任，那么就不要处理异常，而将它抛出直至具备处理这个异常的能力的作用域来处理。</p>
+<h2 id="该抛出何种异常"><a href="#该抛出何种异常" class="headerlink" title="该抛出何种异常"></a>该抛出何种异常</h2><p>那么抛出异常时该抛出何种异常，是 Checked Exception 还是 Unchecked Exception ？我在网上查阅资料时发现不同的人对此有不同的观点，不管是开发人员还是项目的 Leader。有的认为该全部抛出 Unchecked Exception 类型的异常，并在某一层面做统一捕获处理，这样做的优点是保证了方法的纯粹性。另一种观点则不支持抛出<code>RuntimeException</code>。通过阅读《Thinking in Java》和<a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/java/j-jtp05254/">关于异常的争论：要检查，还是不要检查？– IBM developerWorks</a>（这是一篇非常优质的文章）发现很多资深的专家甚至是语言的设计者对此持有不同观点。</p>
+<h3 id="传统的观点"><a href="#传统的观点" class="headerlink" title="传统的观点"></a>传统的观点</h3><blockquote>
+<p>“If a client can reasonably be expected to recover from an exception, make it a checked exception. If a client cannot do anything to recover from the exception, make it an unchecked exception.” —— <em>The Java Tutorial</em></p>
 </blockquote>
-<p>油条有一篇很好的文章介绍了Docker的工作原理。<a target="_blank" rel="noopener" href="https://0x233.com/shen-qi-de-dockerdao-di-zuo-liao-shi-yao/">链接</a></p>
-<h2 id="Get-Started"><a href="#Get-Started" class="headerlink" title="Get Started"></a>Get Started</h2><p>安装Docker,<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/installation/">官网文档</a></p>
-<blockquote>
-<p>1.官方镜像仓库：<a target="_blank" rel="noopener" href="https://hub.docker.com/">https://hub.docker.com/</a><br>2.官网下载速度较慢，推荐DaoCloud仓库，和官网同步更新的 <a target="_blank" rel="noopener" href="https://hub.daocloud.io/">https://hub.daocloud.io/</a></p>
-</blockquote>
-<p>下载ubuntu基础镜像，冒号后是标签</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull daocloud.io/library/ubuntu:16.04</span><br></pre></td></tr></table></figure>
-<p>执行<code>docker images</code>查看已下载的镜像</p>
-<p>创建容器实例，返回容器ID。<code>-d</code>后台运行</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -it daocloud.io/library/ubuntu:16.04</span><br></pre></td></tr></table></figure>
-<p>执行<code>docker ps</code>查看正在运行的容器</p>
-<h2 id="Build-Your-Image"><a href="#Build-Your-Image" class="headerlink" title="Build Your Image"></a>Build Your Image</h2><p>进入容器，ID输入可区分的几位就可以了</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 4e bash</span><br></pre></td></tr></table></figure>
-<p>可以看到在容器中有一套全新的目录结构，与宿主机是隔离的。</p>
-<p>更改软件源为阿里云源</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/apt/</span><br><span class="line">cp sources.list sources.list_backup </span><br><span class="line">cat /dev/null &gt; sources.list </span><br></pre></td></tr></table></figure>
-
-<p><code>vim sources.list</code>将如下内容加入文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial main</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial main</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates main</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates main</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial universe</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial universe</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates universe</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates universe</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-security main</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-security main</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-security universe</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-security universe</span><br></pre></td></tr></table></figure>
-
-<p>日常<code>apt-get update|upgrade</code>之后着手安装jdk和Tomcat了</p>
-<p>我的另一篇博客详细介绍了如何<a target="_blank" rel="noopener" href="http://s1mple.info/install-java-tomcat/">安装 JDK&amp;Tomcat</a></p>
-<blockquote>
-<p>如果你成功到了这里，那恭喜你，你自己的开发环境镜像已经构建完了。还需要一些步骤来将你的镜像推上云端！</p>
-</blockquote>
-<h2 id="Push-It"><a href="#Push-It" class="headerlink" title="Push It !"></a>Push It !</h2><p><code>exit</code>或者<code>ctrl+d</code>退出当前容器，<code>docker ps</code>查看容器ID</p>
-<p>根据容器创建一个新的镜像，不加标签默认<strong>latest</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit 4e s1mple1995/java-web-env</span><br></pre></td></tr></table></figure>
-
-<p>在<code>push</code>前需要在<a target="_blank" rel="noopener" href="https://cloud.docker.com/">docker官网</a>注册账户，用于存放自己的镜像</p>
-<p>在<strong>Docker Cloud</strong>中<strong>create repository</strong>，镜像名要和服务器中的镜像名一致，不一致可以使用如下命令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag local-image:tagname new-repo:tagname</span><br></pre></td></tr></table></figure>
-
-<p>在服务器端登录</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login</span><br></pre></td></tr></table></figure>
-
-<p>执行push命令，等待上传完成</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push s1mple1995/java-web-env</span><br></pre></td></tr></table></figure>
-
-<p>现在你的镜像已经存放在Docker Cloud云端了，搜索你的镜像，随时随地可以pull下来。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search s1mple1995</span><br></pre></td></tr></table></figure>
-
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ol>
-<li>Docker的镜像管理很像git的版本控制。</li>
-<li>你也可以使用阿里云的容器镜像服务。如果你的服务器是阿里云的ECS，可以使用内网传输，速度非常快。 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login registry-vpc.cn-hangzhou.aliyuncs.com</span><br></pre></td></tr></table></figure></li>
-</ol>
-<p>​    </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://s1mplecc.github.io/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="s1mple">
-      <meta itemprop="description" content="春光恰与少年同，十里清风慕天青">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="芥子屋">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/" class="post-title-link" itemprop="url">部署 Ghost Blog</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-11-01 05:08:37" itemprop="dateCreated datePublished" datetime="2017-11-01T05:08:37+08:00">2017-11-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-17 13:47:55" itemprop="dateModified" datetime="2021-12-17T13:47:55+08:00">2021-12-17</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Ops/" itemprop="url" rel="index"><span itemprop="name">Ops</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>Ghost是比较简约、轻量级的博客平台，而且文档编写使用markdown完成的。所以本片博客将介绍如何在服务器上搭建了Ghost。</p>
-</blockquote>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li>Ubuntu 16.04</li>
-<li>MySQL</li>
-<li>NGINX (minimum of 1.9.5 for SSL)</li>
-<li>Systemd</li>
-<li>Node v6 installed via NodeSource</li>
-<li>At least 1GB memory (swap can be used)</li>
-<li>A non-root user for running ghost commands</li>
-</ul>
-<h2 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h2><p><a target="_blank" rel="noopener" href="https://docs.ghost.org/v1.0.0/docs/install">官网安装文档</a>   </p>
-<blockquote>
-<p>如果你的数据库在其他服务器上，可以不安装mysql</p>
-</blockquote>
+<p>Sun 公司的 <em>The Java Tutorial</em> 摘录中，总结了关于将一个异常声明为检查型还是非检查型的传统观点。</p>
+<p>因为 Java 语言并不要求方法捕获或者指定运行时异常，因此编写只抛出运行时异常的代码或者使得他们的所有异常子类都继承自<code>RuntimeException</code>，对于程序员来说是有吸引力的。这些编程捷径允许程序员编写 Java 代码不会受到来自编译器的所有挑剔性错误的干扰。尽管对于程序员来说这似乎比较方便，但是它回避了 Java 的捕获或者指定要求的意图，并且对于那些使用您提供的类的程序员可能会导致问题。 </p>
+<p>如果您仅仅是因此而抛出一个<code>RuntimeException</code>或者它的子类，那么您换取到了什么呢？您只是获得了抛出一个异常而不用您指定这样做的能力。换句话说，这是一种用于避免文档化方法所能抛出的异常的方式。在什么时候这是有益的？也就是说，在什么时候避免注明一个方法的行为是有益的？答案是“几乎从不”。</p>
+<p><strong>换句话说，Sun 告诉我们检查型异常应该是准则。</strong> 该教程通过多种方式继续说明，通常应该抛出检查型异常，而不是<code>RuntimeException</code> —— 除非您是 JVM。</p>
+<p>在 <em>Effective Java: Programming Language Guide</em> 一书中，Josh Bloch 提供了下列关于检查型和非检查型异常的知识点，这些与 <em>The Java Tutorial</em> 中的建议相一致（但是并不完全严格一致）：</p>
 <ul>
-<li>更新软件包源以及更新通过包源安装的软件  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br></pre></td></tr></table></figure></li>
-<li>mysql、ngnix、systemd都可以通过<code>sudo apt-get install</code>命令安装</li>
-<li>由于ghost是基于nodejs开发的，所以要安装nodejs，执行下面这俩条命令  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash </span><br><span class="line">sudo apt-get install -y nodejs</span><br></pre></td></tr></table></figure></li>
-<li>安装ghost-cli命令行程序  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm i -g ghost-cli</span><br></pre></td></tr></table></figure></li>
-<li>安装完成后可以使用<code>ghost</code>命令，<code>ghost help</code>查看帮助，ghost安装需要一个空的文件夹  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /home/s1mple/ghost</span><br></pre></td></tr></table></figure></li>
-<li><code>cd</code>到这个目录下，执行<code>ghost install</code>命令即可</li>
+<li><strong>第 39 条：只为异常条件使用异常。</strong> 也就是说，不要为控制流程而使用异常，比如应当使用<code>Iterator.hasNext()</code>去判断迭代边界，而不是在调用<code>Iterator.next()</code>捕获<code>NoSuchElementException</code>。</li>
+<li><strong>第 40 条：为可恢复的条件使用检查型异常，为编程错误使用运行时异常。</strong> 这里，Bloch 回应传统的 Sun 观点 —— 运行时异常应该只是用于指示编程错误，例如违反前置条件。</li>
+<li><strong>第 41 条：避免不必要的使用检查型异常。</strong> 换句话说，对于调用者不可能从其中恢复的情形，或者惟一可以预见的响应将是程序退出，则不要使用检查型异常。</li>
+<li><strong>第 43 条：抛出与抽象相适应的异常。</strong> 换句话说，一个方法所抛出的异常应该在一个抽象层次上定义，该抽象层次与该方法做什么相一致，而不一定与方法的底层实现细节相一致。例如，一个从文件、数据库装载资源的方法在不能找到资源时，应该抛出某种<code>ResourceNotFound</code>异常（通常使用异常链来保存隐含的原因），而不是更底层的<code>IOException</code>、<code>SQLException</code>。</li>
 </ul>
-<blockquote>
-<p>1.安装过程中会配置数据库，需要提前建个空的database。如果mysql装在本机，就输入localhost，装在别的服务器上就需要输入服务器IP<br>2.询问是否使用nginx可以选no，可以自己手动配置nginx。实际上他帮你配置将80端口的请求转发到ghost的2368端口<br>3.询问是否新建”ghost”用户可以选no，若选yes他会在数据库中新建此用户，并且在ghost后台管理可以看到此用户和一些默认文章。</p>
-</blockquote>
-<h3 id="After-Installation"><a href="#After-Installation" class="headerlink" title="After Installation"></a>After Installation</h3><ul>
-<li>安装后当前文件下会生成<strong>config.production.json</strong>文件，配置信息在这里。<code>ghost ls</code>查看当前ghost运行实例信息，<code>ghost restart</code>重启ghost。</li>
-<li>安装完成后，访问<code>／ghost</code>进入后台管理系统，根据引导创建用户。</li>
-<li>在后台Design模块中可以导入主题zip压缩包，<code>/ghost/#/settings/design</code>。在Ghost Marketplace下找了个时间轴的主题，并修改了部分视觉效果。<a target="_blank" rel="noopener" href="https://github.com/s1mplecc/ghost-theme">时间轴主题下载链接</a></li>
-</ul>
-<h3 id="Redirect-Port-With-Nginx"><a href="#Redirect-Port-With-Nginx" class="headerlink" title="Redirect Port With Nginx"></a>Redirect Port With Nginx</h3><blockquote>
-<p>很尴尬，因为Aliyun的服务器需要备案，80端口有时候会出现抽风的情况。所以有必要先配置个其他端口（2368端口太难记了），比如8080。</p>
-</blockquote>
+<h3 id="重新考察检查型异常"><a href="#重新考察检查型异常" class="headerlink" title="重新考察检查型异常"></a>重新考察检查型异常</h3><p>最近，几位受尊敬的专家，包括 <em>Thinking in Java</em> 作者 Bruce Eckel 和 <em>J2EE Design and Development</em> 作者 Rod Johnson，已经公开声明尽管他们最初完全同意检查型异常的正统观点，但是他们已经认定<strong>排他性</strong>使用检查型异常的想法并没有最初看起来那样好，并且<strong>对于许多大型项目，检查型异常已经成为一个重要的问题来源</strong>。Eckel 提出了一个更为极端的观点，建议所有的异常应该是非检查型的；Johnson 的观点要保守一些，但是仍然暗示传统的优先选择检查型异常是过分的。Martin Fowler 也说过：“总的来说，我觉得异常很不错，但是 Java 的‘被检查的异常’带来的麻烦比好处要多。”</p>
+<p>不恰当的使用检查型异常会导致许多问题：</p>
 <ul>
-<li><code>cat /etc/nginx/nginx.conf </code>发现nginx配置文件包括如下两行  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">include /etc/nginx/conf.d/*.conf;</span><br><span class="line">include /etc/nginx/sites-enabled/*;</span><br></pre></td></tr></table></figure>
-  意思就是配置文件会导入上述两个目录中的文件。所以我们可以<code>cd /etc/nginx/sites-enabled/</code>中。</li>
-<li>发现目录下有个<strong>s1mple.info.conf</strong>文件，这其实就是ghost配置nginx的文件。  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp s1mple.info.conf ghost_8080.conf</span><br></pre></td></tr></table></figure></li>
-<li>修改<code>ghost_8080.conf</code>中的监听端口80为8080,<code>service nginx restart</code>重启nginx</li>
-<li>修改ghost安装目录下的<strong>config.production.json</strong>,重启ghost  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;url&quot;: &quot;http://s1mple.info:8080&quot;,</span><br></pre></td></tr></table></figure></li>
+<li><strong>检查型异常不适当地暴露实现细节</strong>。如果选择不处理而将异常逐层向上抛出，势必会导致方法与底层实现所抛异常相耦合。举个例子，一个<code>loadUserProfile()</code>方法可能会去调用加载数据库或者加载文件系统的代码，而在该方法层面抛出<code>SQLException</code>或是<code>FileNotFoundException</code>，这实际上违反了 Bloch 的 第 43 条 —— 被抛出的异常所位于的抽象层次与抛出它们的方法不一致。所以你可能需要重新包装一个<code>NoSuchUserException</code>并抛出。</li>
+<li><strong>不稳定的方法签名</strong>。你可能对因为实现的改变而修改方法签名声明的异常感到厌烦，事实上这也是由于业务方法与具体实现相耦合所导致的。本质上还是没遵循第 43 条，方法在遇到失败时应该抛出一个异常，并且该异常应该反映该方法做什么（就像<code>NoSuchUserException</code>反应出该方法是去查询用户），而不是它具体如何做（像<code>SQLException</code>反应出需要连接数据库）。</li>
+<li><strong>难以理解的代码</strong>。因为许多方法都抛出一定数目的不同异常，错误处理的代码相对于实际的功能代码的比率可能会偏高，使得难以找到一个方法中实际完成功能的代码。异常通过集中错误处理来设想减少代码的，但是一个具有三行代码和六个 catch 块（其中每个块只是记录异常或者包装并重新抛出异常）的方法看起来比较膨胀并且会使得本来简单的代码变得模糊。这与异常设计的初衷相违背。</li>
 </ul>
-<blockquote>
-<p>有个端口号看着很丑，等备案完成，删掉<code>ghost_8080.conf</code>就行了。（你看，国外主机就不用备案）</p>
-</blockquote>
-<h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><ul>
-<li>本来想在docker容器中部署Ghost,但是可能由于docker和宿主系统隔离的原因，systemd命令不能正常运行<code>Failed to connect to bus: No such file or directory</code>。暂时没找到解决方法。不过我在docker里部署了另一个博客平台jPress。<a target="_blank" rel="noopener" href="https://jpress.s2mple.xyz/">跳转链接</a></li>
-<li>jPress是基于java的轻量级博客平台，前身是WordPress。也许下个博客我会介绍如何用docker部署jPress，谁知道呢。</li>
+<p>基于以上种种原因，Bruce Eckel 声称在使用 Java 语言多年后，他已经得出这样的结论，认为检查型异常是一个失败的发明。Eckel 提倡将所有的异常都作为非检查型的。如果查看 Eckel 的 Web 站点上的讨论，您将会发现回应者是严重分裂的。一些人认为他的提议是荒谬的；一些人认为这是一个重要的思想。</p>
+<p>Rod Johnson 采取一个不太激进的方法。他提出，<strong>一些异常本质上是次要的返回代码</strong>（它通常指示违反业务规则），该类异常的作用通常在于中断违反业务规则的操作，抛出至处理错误的层面被捕获（指示如何修正）。Johnson 提倡对于该类异常使用检查型异常。</p>
+<h3 id="该使用何种异常"><a href="#该使用何种异常" class="headerlink" title="该使用何种异常"></a>该使用何种异常</h3><p>关于是否使用检查型异常的决定是复杂的，并且很显然没有明显的答案。Sun 的建议是对于任何情况使用它们，而 C# 方法（也就是 Eckel 和其他人所赞同的）是对于任何情况都不使用它们。其他人表示可以折中考虑。个人认为并没有绝对的对与错，<strong>选择何种异常在于团队的统一规范</strong>。非检查型异常的最大风险之一就是它并没有按照检查型异常采用的方式那样自我<strong>文档化</strong>。阅读 Java 源码发现，不管是检查型异常还是非检查型异常，都在文档中标明了该方法会抛出何种异常。在决定使用非检查型异常更需如此，不管是提示自己还是使用你提供的类库的其他人员。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>《Thinking in Java》</li>
+<li><a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/java/j-jtp05254/">关于异常的争论：要检查，还是不要检查？– IBM developerWorks</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/28302269">Java异常的深入研究与分析 – 知乎</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/28254987">如何优雅的处理异常？– 知乎</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/skywang12345/p/3544287.html">《Effective Java》中关于异常处理的几条建议</a></li>
 </ul>
 
       
@@ -954,7 +811,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
