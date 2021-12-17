@@ -342,47 +342,14 @@
 
 <p>从远程库克隆下来的是完整的版本库，含有<code>.git</code>文件夹，其下的<code>config</code>文件夹包括了本仓库的配置信息。包含了url、远程库的名字以及分支等：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">➜ cat .git/config</span><br><span class="line"></span><br><span class="line">[remote &quot;origin&quot;]</span><br><span class="line">    url = git@github.com:s1mplecc/MyHashMap.git</span><br><span class="line">    fetch = +refs/heads/*:refs/remotes/origin/*</span><br><span class="line">[branch &quot;master&quot;]</span><br><span class="line">    remote = origin</span><br><span class="line">    merge = refs/heads/master</span><br></pre></td></tr></table></figure>
-
-<p>第二种方式，<code>git init</code>是将当前目录初始化为Git可以管理的仓库。会在当前目录下生成了<code>.git</code>文件夹。</p>
-<p>如果要将本地仓库推到服务器上，需要现在服务器上创建一个repository，然后在本地目录下绑定服务器上的repository，origin是版本库默认的名字：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin git@github.com:s1mplecc/MyHashMap.git</span><br></pre></td></tr></table></figure>
-<h3 id="提交变更"><a href="#提交变更" class="headerlink" title="提交变更"></a>提交变更</h3><p>当你对版本库中的文件做了变更（增删改），可以使用<code>git status</code>命令查看当前版本库的状态：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">➜  github.io git:(hexo) ✗ git status</span><br><span class="line">On branch hexo</span><br><span class="line">Your branch is ahead of &#x27;origin/hexo&#x27; by 9 commits.</span><br><span class="line">  (use &quot;git push&quot; to publish your local commits)</span><br><span class="line"></span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span><br><span class="line"></span><br><span class="line">    modified:   &quot;source/_posts/ES6\346\226\260\347\211\271\346\200\247.md&quot;</span><br><span class="line">    modified:   &quot;source/_posts/Git Flow \346\250\241\345\236\213\344\273\245\345\217\212\345\267\245\345\205\267\347\232\204\344\275\277\347\224\250.md&quot;</span><br><span class="line"></span><br><span class="line">no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</span><br></pre></td></tr></table></figure>
-
-<p><code>git add .</code>或者<code>git add all</code>将所有修改提交到暂存区。<code>.</code>表示当前目录下所有修改了的文件，当然也可以指定某个文件。</p>
-<p>将暂存区的所有内容提交到当前分支，默认分支即Git为我们自动创建的<strong>master</strong>分支。<code>-m</code>参数后面接提交的message：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &quot;balabala&quot;</span><br></pre></td></tr></table></figure>
-
-<p>将当前分支提交到远程库中，<code>-u</code>第一次使用时将本地的master分支绑定到远程库的master分支，以后可以省略不加：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
-
-<p>从远程库拉取修改：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
-
-<p>在开发过程中会有频繁的提交，所以日常中我们用到最多的就是上述命令了。本质上本地与远程版本库的同步就是记录下每次的<strong>修改信息</strong>。Git会帮我们记录下每次提交的修改，方便我们进行同步、回退以及合并。</p>
-<h4 id="gitignore"><a href="#gitignore" class="headerlink" title=".gitignore"></a>.gitignore</h4><p>说到<code>add</code>不得不提<code>.gitignore</code>这个文件，它的作用是忽略一些文件的提交，比如IntelliJ IDEA生成的<code>.idea</code>文件、编译生成的<code>target</code>文件等等。这类文件不需要提交到服务器污染大家的环境。关于<code>.gitignore</code>的编写github上都有现成的模版。另外IDE也可以安装相应的gitignore插件。</p>
-<h3 id="查看提交历史"><a href="#查看提交历史" class="headerlink" title="查看提交历史"></a>查看提交历史</h3><p>正是Git帮我们记录了每次提交的修改，我们可以通过命令查看历史信息，以及每次做了什么修改。</p>
-<p><code>git log</code>查看提交历史，每条记录有一个唯一的id用于标识，使用时可以使用可以唯一表示的前几位。添加参数<code>-p &lt;file&gt;/&lt;commit id&gt;</code>查看指定文件或某次commit的历史信息：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">commit 24345a1a74184f99eb32202bfcc1cd0fd6ac945d (HEAD -&gt; master)</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:33:56 2017 +0800</span><br><span class="line"></span><br><span class="line">    second commit</span><br><span class="line"></span><br><span class="line">commit b90b6da1573d55ef59a900d435d903e41667f61e</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:31:43 2017 +0800</span><br><span class="line"></span><br><span class="line">    first commit</span><br></pre></td></tr></table></figure>
-
-<p><code>git diff b90b6da</code>查看某次提交后与当前版本的区别，可以看到我在文本中添加了一行second：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@@ -1 +1,2 @@</span><br><span class="line"> first</span><br><span class="line">+second</span><br></pre></td></tr></table></figure>
-<p><code>git reflog</code>查看命令操作历史。</p>
-<h3 id="撤销变更"><a href="#撤销变更" class="headerlink" title="撤销变更"></a>撤销变更</h3><p>如果你在提交了某次变更后又想撤销这次变更，Git也提供了撤销和回退的功能。Git将提交记录（节点）串成一条线，<strong>HEAD</strong>就是一指向当前版本的指针，做回退操作其实就是这个指针在这条线上的节点间移动。牢记：<strong>Git跟踪并管理的是修改，而非文件</strong>。</p>
-<p><code>reset</code>命令回退到指定的某个版本，<code>HEAD</code>表示当前版本，<code>HEAD^</code>表示上一个版本。也可以用具体的 commit id：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard HEAD^</span><br></pre></td></tr></table></figure>
-
-<p>如果你修改了某个文件，但还没有<code>add</code>，可以直接舍弃这次修改：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -- &lt;file&gt;</span><br></pre></td></tr></table></figure>
-
-<p>如果你已经<code>commit</code>了，也可以还原回去：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git revert &lt;commit id&gt;</span><br></pre></td></tr></table></figure>
-<p>revert与reset的区别在于，revert会生成一次新的提交去移除某些提交（相当于反向操作），在节点线上还是向前走的。而reset是把HEAD指针后移到指定节点，直接从这个节点走出新的一条线。可以参考<a target="_blank" rel="noopener" href="http://www.cnblogs.com/houpeiyong/p/5890748.html">代码回滚：git reset、git checkout和git revert区别和联系</a>。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://education.github.com/git-cheat-sheet-education.pdf">git-cheatsheet</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000">Git教程 —— 廖雪峰</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/11/28/Git%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -496,70 +463,14 @@
 <li><p>现在我们添加一个文件，测试将其push到服务器上</p>
   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">touch abc.txt</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;first commit&quot;</span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="搭建Maven私服"><a href="#搭建Maven私服" class="headerlink" title="搭建Maven私服"></a>搭建Maven私服</h2><blockquote>
-<p>Nexus是目前Sonatype公司开发的搭建Maven企业级私服的工具，有付费版本<strong>Pro</strong>和开源版本<strong>OSS</strong> (Open Source Software)</p>
-</blockquote>
-<ul>
-<li><p>上传jdk、maven和nexus的tar包并解压改名，如下</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@git-maven:/opt# ls</span><br><span class="line">git-repo  jdk  maven  nexus sonatype-work</span><br></pre></td></tr></table></figure>
-<p>  其中<code>sonatype-work</code>文件夹用于存放私服的配置，日志文件和依赖包</p>
-</li>
-<li><p>修改环境变量，<code>vi /etc/profile</code></p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># maven</span><br><span class="line">export M3_HOME=/opt/maven</span><br><span class="line">export PATH=$M3_HOME/bin:$PATH</span><br><span class="line"></span><br><span class="line"># jdk</span><br><span class="line">export JAVA_HOME=/opt/jdk</span><br><span class="line">export JRE_HOME=$&#123;JAVA_HOME&#125;/jre</span><br><span class="line">export CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib:$&#123;JRE_HOME&#125;/lib</span><br><span class="line">export PATH=$&#123;JAVA_HOME&#125;/bin:$PATH</span><br><span class="line"></span><br><span class="line"># nexus</span><br><span class="line">export PATH=/opt/nexus/bin:$PATH</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使环境变量生效，<code>source /etc/profile</code>，现在可以执行<code>nexus</code>命令查看它的一些操作，如下</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Usage: nexus &#123; console | start | stop | restart | status | dump &#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>nexus不建议使用root用户启动，所以我们新建nexus用户，<code>adduser nexus</code>。<strong>注意</strong>，关于nexus的操作最好都在nexus用户下执行</p>
-</li>
-<li><p>切换到nexus用户，<code>su - nexus</code>，启动nexus</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nexus start</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果已正常启动，访问<code>&#123;IP&#125;:8081</code>即可前往控制台，8081为nexus默认端口，默认用户名admin，密码admin123，可在控制台中修改密码<br><img data-src="/0.png" alt="-----2017-11-22---4.40.57"></p>
-</li>
-</ul>
-<h4 id="Tips-1"><a href="#Tips-1" class="headerlink" title="Tips"></a>Tips</h4><blockquote>
-<p>其中<strong>maven-public</strong>是一个组，包含了<strong>maven-central</strong>(代理中央仓库，存放依赖构件)、<strong>maven-releases</strong>(存放发行版本)、<strong>maven-snapshots</strong>(存放快照版本)。</p>
-</blockquote>
-<h2 id="导入依赖包"><a href="#导入依赖包" class="headerlink" title="导入依赖包"></a>导入依赖包</h2><ul>
-<li><a target="_blank" rel="noopener" href="http://mvnrepository.com/">Maven中央仓库网址</a></li>
-</ul>
-<blockquote>
-<p>现在已经成功部署了Nexus。可以通过配置你的项目，使其从你的私服上拉取依赖包，如果拉取不到，它会到Maven中央仓库拉取依赖并保存在服务器上</p>
-</blockquote>
-<ul>
-<li><p>新建Maven项目，修改<code>pom.xml</code></p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;repositories&gt;</span><br><span class="line">    &lt;repository&gt;</span><br><span class="line">        &lt;id&gt;nexus&lt;/id&gt;</span><br><span class="line">        &lt;name&gt;nexus&lt;/name&gt;</span><br><span class="line">        &lt;url&gt;http://&#123;IP&#125;:8081/repository/maven-public/&lt;/url&gt;</span><br><span class="line">    &lt;/repository&gt;</span><br><span class="line">&lt;/repositories&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在<code>&lt;dependencies&gt;</code>中添加你需要的依赖，执行<code>mvn package</code>打包项目即可</p>
-</li>
-<li><p>控制台上查看服务器上已经存储的依赖包<br><img data-src="/1.png" alt="-----2017-11-22---4.41.17"></p>
-</li>
-</ul>
-<h2 id="搭建GitLab"><a href="#搭建GitLab" class="headerlink" title="搭建GitLab"></a>搭建GitLab</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://mirror.tuna.tsinghua.edu.cn/help/gitlab-ce/">清华大学开源软件镜像站</a></li>
-</ul>
-<blockquote>
-<p>有空搭了个Gitlab，可以方便管理项目和成员公钥。但是运行GitLab对服务器内存的要求较高。官网明确要求内存至少4G</p>
-</blockquote>
-<ul>
-<li><p>信任GitLab的GPG公钥</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://packages.gitlab.com/gpg.key 2&gt; /dev/null | sudo apt-key add - &amp;&gt;/dev/null</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>添加清华的镜像源，<code>touch /etc/apt/sources.list.d/gitlab-ce.list</code></p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/ubuntu xenial main</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装gitlab-ce</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install gitlab-ce</span><br></pre></td></tr></table></figure></li>
-<li><p>修改GitLab的Url，<code>vi /etc/gitlab/gitlab.rb</code></p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">external_url &#x27;http://&#123;domain or IP&#125;&#x27;</span><br></pre></td></tr></table></figure></li>
-<li><p>启动GitLab</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure></li>
-</ul>
-<blockquote>
-<p>访问你的Url进行注册登录即可，可以创建Groups、Projects，并添加你的SSH公钥。另外修改root用户密码参考文章：<a target="_blank" rel="noopener" href="http://blog.csdn.net/yin138/article/details/51394868">http://blog.csdn.net/yin138/article/details/51394868</a></p>
-</blockquote>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/11/21/%E6%90%AD%E5%BB%BAGit%E5%92%8CMaven%E7%A7%81%E6%9C%8D/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -751,93 +662,14 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.10.6 master</span><br><span class="line">192.168.10.7 slave01</span><br><span class="line">192.168.10.8 slave02</span><br></pre></td></tr></table></figure>
 
 <h3 id="配置ssh免密通信"><a href="#配置ssh免密通信" class="headerlink" title="配置ssh免密通信"></a>配置ssh免密通信</h3><p>普通用户登录后，执行<code>sudo passwd root</code>修改root密码，<code>su root</code>切换为root用户。</p>
-<p>修改 ssh 配置文件 <code>/etc/ssh/sshd_config</code>，允许root登录。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PermitRootLogin yes</span><br><span class="line">RSAAuthentication yes</span><br><span class="line">PubkeyAuthentication yes</span><br></pre></td></tr></table></figure>
-
-<p>在<code>/root</code>目录下执行如下命令，生成<code>.ssh</code>文件夹和公钥私钥。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br></pre></td></tr></table></figure>
-
-<p>将三台服务器以及客户端主机的公钥复制到三台服务器的<code>/root/.ssh/authorized_keys</code>文件中。并重启ssh服务。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service sshd restart</span><br></pre></td></tr></table></figure>
-
-<p>现在已完成了服务器间 ssh 免密通信的功能，可以通过 scp 命令将文件从客户端主机分发到各个服务器，以及从主节点服务器分发到从节点服务器。scp 命令使用格式如下：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp ~/Downloads/jdk-8u144-linux-x64.tar.gz root@master:/opt</span><br></pre></td></tr></table></figure>
-
-<p>接下来按照步骤依次安装 JDK、Hadoop和Spark。均安装在 <code>/opt</code> 目录下，并分别命名为 jdk8、hadoop、spark。</p>
-<h2 id="安装软件包"><a href="#安装软件包" class="headerlink" title="安装软件包"></a>安装软件包</h2><p>将下载好的 JDK、Hadoop和Spark 的软件安装包分发到主节点的<code>/opt</code>路径下，解压并改名。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xzvf jdk-8u144-linux-x64.tar.gz</span><br><span class="line">mv jdk1.8.0_144/ jdk8</span><br><span class="line">mv jdk-8u144-linux-x64.tar.gz /tmp</span><br></pre></td></tr></table></figure>
-
-<p>同理，解压hadoop和spark压缩包至 <code>/opt</code> 路径下，改名为hadoop和spark，然后将整个 <code>/opt</code> 文件夹从主节点分发给从节点。</p>
-<h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><p>修改服务器环境变量配置文件 <code>/etc/profile</code>。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/opt/jdk8</span><br><span class="line"><span class="built_in">export</span> JRE_HOME=<span class="variable">$&#123;JAVA_HOME&#125;</span>/jre</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib:<span class="variable">$&#123;JRE_HOME&#125;</span>/lib</span><br><span class="line"><span class="built_in">export</span> HADOOP_HOME=/opt/hadoop</span><br><span class="line"><span class="built_in">export</span> SPARK_HOME=/opt/spark</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin:<span class="variable">$HADOOP_HOME</span>/sbin:<span class="variable">$HADOOP_HOME</span>/bin:<span class="variable">$SPARK_HOME</span>/bin:<span class="variable">$SPARK_HOME</span>/sbin:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
-
-<p>可以直接将修改后的配置文件分发给从节点。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp /etc/profile root@slave01:/etc/profile</span><br><span class="line">scp /etc/profile root@slave02:/etc/profile</span><br></pre></td></tr></table></figure>
-
-<p>三台服务器都需执行 <code>source /etc/profile</code> 命令，使配置文件生效。</p>
-<h2 id="配置Hadoop"><a href="#配置Hadoop" class="headerlink" title="配置Hadoop"></a>配置Hadoop</h2><p>Hadoop支持为所有主从节点采用同一套配置文件，除非新机器的硬件规格与现有机器不同时，需要一套新的配置文件以充分利用新硬件的额外资源。<a target="_blank" rel="noopener" href="http://hadoop.apache.org/docs/r2.6.5/hadoop-project-dist/hadoop-common/ClusterSetup.html">官网配置文档</a> </p>
-<ul>
-<li><strong>HDFS（Hadoop分布式文件系统）</strong>：启动HDFS时主节点启动NameNode，负责管理namespace、控制客户端访问。从节点启动DataNode，提供存储和客户端读写操作。</li>
-<li><strong>Hadoop YARN（资源管理系统）</strong>：用于改善MapReduce的实现，启动Yarn时主节点启动ResourceManager，用于调度、分发资源。从节点启动NodeManager，用于启动、监控运行应用程序的容器。</li>
-</ul>
-<p><code>cd /opt/hadoop/etc/hadoop</code>，前往hadoop配置文件目录。</p>
-<p><code>vi hadoop-env.sh</code>，修改运行hadoop时的环境变量。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/opt/jdk8</span><br><span class="line"><span class="built_in">export</span> HADOOP_HEAPSIZE=8000</span><br><span class="line"><span class="built_in">export</span> HADOOP_LOG_DIR=/var/<span class="built_in">log</span>/hadoop</span><br></pre></td></tr></table></figure>
-
-<p><code>vi core-site.xml</code>，该属性描述了HDFS文件系统的URI，默认端口是8020。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://master:9000<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><code>vi hdfs-site.xml</code>，Hadoop守护进程配置，包括Namenode、辅助NameNode和DataNode等。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.name.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>/root/hdfs/name<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.datanode.data.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>/root/hdfs/data<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.checkpoint.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>/root/hdfs/namesecondary<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>分别配置了namenode存储永久性文件系统元数据的目录、datanode存储数据块目录、辅助namenode存储文件系统的检查点目录。均可冗余备份，逗号隔开。</p>
-<p><code>vi yarn-site.xml</code>，Yarn守护进程的配置项，包括资源管理器、web应用代理服务器和节点管理器。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">&lt;!-Site specific YARN configuration properties --&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.hostname<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>master<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.webapp.address<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>master:10000<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.local-dirs<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>/root/nm-local-dir<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.resource.memory-mb<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>8192<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.resource.cpu-vcores<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>4<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>mapreduce.shuffle<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><code>vi slaves</code>，在该文件中列出所有从节点的主机名或IP。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slave01</span><br><span class="line">slave02</span><br></pre></td></tr></table></figure>
-
-<h2 id="配置Spark"><a href="#配置Spark" class="headerlink" title="配置Spark"></a>配置Spark</h2><p>Apache Spark是专为大规模数据处理而设计的快速通用的计算引擎。它并没有以MapReduce作为执行引擎，而是使用的自己的分布式运行环境在集群上执行工作。Spark与Hadoop紧密集成，可以在Yarn上运行并支持HDFS。</p>
-<p><code>cd /opt/spark/conf</code>前往Spark配置文件目录。</p>
-<p>拷贝模版文件。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp spark-env.sh.template spark-env.sh</span><br><span class="line">cp slaves.template slaves</span><br></pre></td></tr></table></figure>
-
-<p><code>vi slaves</code>添加从节点。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slave01</span><br><span class="line">slave02</span><br></pre></td></tr></table></figure>
-
-<p><code>vi spark-env.sh</code>，配置spark启动环境脚本。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/opt/jdk8</span><br><span class="line"><span class="built_in">export</span> HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop</span><br><span class="line"><span class="built_in">export</span> SPARK_MASTER_HOST=master</span><br><span class="line"><span class="built_in">export</span> SPARK_MASTER_PORT=7077</span><br><span class="line"><span class="built_in">export</span> SPARK_WORKER_CORES=1</span><br><span class="line"><span class="built_in">export</span> SPARK_WORKER_MEMORY=1g</span><br></pre></td></tr></table></figure>
-
-<p><code>vi spark-defaults.conf</code>。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spark.master                     spark://master:7077</span><br><span class="line">spark.driver.memory              8g</span><br></pre></td></tr></table></figure>
-
-<h2 id="启动和测试"><a href="#启动和测试" class="headerlink" title="启动和测试"></a>启动和测试</h2><blockquote>
-<p>以下操作均在主节点下完成，主节点会启动从节点的相关程序。</p>
-</blockquote>
-<p>在<code>/root</code>目录下新建存储文件夹，目录结构如下。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── hdfs</span><br><span class="line">│   ├── data</span><br><span class="line">│   ├── name</span><br><span class="line">│   └── namesecondary</span><br><span class="line">└── nm-local-dir</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>分发给从节点。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">scp -r hdfs/ root@slave01:/root/</span><br><span class="line">scp -r hdfs/ root@slave02:/root/</span><br><span class="line">scp -r nm-local-dir/ root@slave01:/root/</span><br><span class="line">scp -r nm-local-dir/ root@slave02:/root/</span><br></pre></td></tr></table></figure>
-
-<p>现在JDK、Hadoop和Spark均已安装配置完成，将<code>/opt</code>文件夹分发给从节点。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r /opt root@slave01:/</span><br><span class="line">scp -r /opt root@slave02:/</span><br></pre></td></tr></table></figure>
-
-<h3 id="启动hadoop"><a href="#启动hadoop" class="headerlink" title="启动hadoop"></a>启动hadoop</h3><p>执行<code>ufw disable</code>关闭防火墙。</p>
-<p>初始化文件系统</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs namenode -format</span><br></pre></td></tr></table></figure>
-
-<p>启动Hadoop集群（该命令其实是包含了<code>start-dfs.sh</code>和<code>start-yarn.sh</code>两个命令）。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start-all.sh</span><br></pre></td></tr></table></figure>
-
-<p>在各节点上执行<code>jps</code>查看启动情况，日志文件在<code>/opt/hadoop/logs</code>目录下。</p>
-<p>在本地浏览器上访问<code>&#123;IP&#125;:/50070</code>查看hdfs的WebUI（50070为默认端口）；访问<code>&#123;IP&#125;:/10000</code>查看ResourceManager的WebUI。</p>
-<h3 id="启动Spark"><a href="#启动Spark" class="headerlink" title="启动Spark"></a>启动Spark</h3><p>启动Spark集群。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/spark/sbin/start-all.sh</span><br></pre></td></tr></table></figure>
-
-<p>各节点执行<code>jps</code>可以看到主节点启动了Master程序，从节点启动了Worker程序。</p>
-<p>可以在本地浏览器上访问<code>&#123;IP&#125;:8080</code>验证Spark已启动</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/11/15/%E4%BB%8E%E9%9B%B6%E9%83%A8%E7%BD%B2%20Spark%20%E9%9B%86%E7%BE%A4/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 

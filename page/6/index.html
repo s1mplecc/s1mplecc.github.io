@@ -253,27 +253,14 @@
 
 <p>下面我继续演示“客户下订单”这个例子。一个订单包含多个订单项，每个订单项包含商品项和购买的数量。在提交订单时一个订单项应当是可跳过的，这意味着我更希望在没有此订单项（缺货）的情况下提交订单，而不是推迟提交整个订单。所以这里可以给整个订单一个“急促（rush）”的状态标识。</p>
 <p>要实现上述功能，最常见的编码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeNormal</span><span class="params">(Customer customer)</span> </span>&#123;</span><br><span class="line">    Order o1 = <span class="keyword">new</span> Order();</span><br><span class="line">    customer.addOrder(o1);</span><br><span class="line">    OrderLine line1 = <span class="keyword">new</span> OrderLine(<span class="number">6</span>, Product.find(<span class="string">&quot;TAL&quot;</span>));</span><br><span class="line">    o1.addLine(line1);</span><br><span class="line">    OrderLine line2 = <span class="keyword">new</span> OrderLine(<span class="number">5</span>, Product.find(<span class="string">&quot;HPK&quot;</span>));</span><br><span class="line">    o1.addLine(line2);</span><br><span class="line">    OrderLine line3 = <span class="keyword">new</span> OrderLine(<span class="number">3</span>, Product.find(<span class="string">&quot;LGV&quot;</span>));</span><br><span class="line">    o1.addLine(line3);</span><br><span class="line">    line2.setSkippable(<span class="keyword">true</span>);</span><br><span class="line">    o1.setRush(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>本质上我们创建了多个对象然后将它们组装在一起。如果无法在构造函数中设置所有内容，那么就需要创建临时变量来帮助我们完成组装 —— 尤其是将集合项添加到集合中。</p>
-<p>下面是使用流畅接口实现相同的组装：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeFluent</span><span class="params">(Customer customer)</span> </span>&#123;</span><br><span class="line">    customer.newOrder()</span><br><span class="line">            .with(<span class="number">6</span>, <span class="string">&quot;TAL&quot;</span>)</span><br><span class="line">            .with(<span class="number">5</span>, <span class="string">&quot;HPK&quot;</span>).skippable()</span><br><span class="line">            .with(<span class="number">3</span>, <span class="string">&quot;LGV&quot;</span>)</span><br><span class="line">            .priorityRush();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>关于这种风格最重要的一点就是，基于 Internal DomainSpecificLanguage 将要做的事沿着一条线进行编码（译者注：Domain Specific Language，DSL，领域专用语言）。实际上这也是为什么我们选择用 “Fluent” 一词来描述它，在很多方面这两个术语是同义词。<strong>这种 API 被设计为可读的和流式的，这种流畅性的代价是在设计和构建 API 时需要花更多的功夫</strong>。构造函数、setter 和 add 方法的 API 简单且容易编写，但要想提供一个漂亮的流畅接口则需要更多的思考。</p>
-<p>事实上，刚才我想用在 Calgary 咖啡店吃早餐的时间完成这个小例子的编码，但是我搞砸了，看来好的流畅接口需要花费一些时间去实现。如果你想找一个比较成熟的例子，可以看看 <a target="_blank" rel="noopener" href="http://jmock.org/">JMock</a>。与任何 mocking 库一样，JMock 需要创建复杂的行为规范。在过去几年中已经构建了许多 mocking 库，而 JMock 的这个则包含了非常漂亮的流畅接口，使用体验非常好。这是它的一个例子：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mock.expects(once())</span><br><span class="line">    .method(<span class="string">&quot;m&quot;</span>)</span><br><span class="line">    .with(or(stringContains(<span class="string">&quot;hello&quot;</span>), stringContains(<span class="string">&quot;howdy&quot;</span>)));</span><br></pre></td></tr></table></figure>
-
-<p>我看到 Steve Freeman 和 Nat Price 在 <a target="_blank" rel="noopener" href="https://www.martinfowler.com/bliki/JAOO2005.html">JAOO2005</a> 上就 JMock API 的演变发表了精彩的演讲，演讲相关的内容他们已经发表到一篇 <a target="_blank" rel="noopener" href="http://www.mockobjects.com/files/evolving_an_edsl.ooplsa2006.pdf">OOPSLA论文</a> 上。</p>
-<p>到目前为止，我们看到用于创建对象配置的流畅接口通常会涉及到 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Value_object">值对象</a>。我不确定这是否属于流畅接口的一个定义特征，虽然我怀疑它们出现在声明性上下文中有某种关联。对我们而言，<strong>流畅性的关键考验在于领域特定语言的质量</strong>。API 使用起来越像流式的语言，它就越流畅。</p>
-<p>像这样构建一个流畅接口会导致一些不符合使用习惯的 API。其中最明显的一个就是 setter 会有返回值（在订单示例中，<code>with</code> 方法为订单添加一个订单项并返回整个订单），而惯例是修改性质的方法返回 <code>void</code>，因为这样遵循 <a target="_blank" rel="noopener" href="https://martinfowler.com/bliki/CommandQuerySeparation.html">CommandQuerySeparation</a> 原则（译者注：CQS，命令查询分离原则）。这个约定确实妨碍了流畅接口，所以我倾向于暂不遵循这个惯例。</p>
-<p>你应该<strong>根据流畅接口的下一个行为（fluent action）去选择返回类型</strong>。JMock 提出了一个重点：根据接下来的需要改变其返回类型。<strong>这种风格的一个很好的优点是方法补完后（intellisense）有助于告诉你接下来要键入什么 —— 有点像 IDE 中的智能提示</strong>。总的来说，我发现动态语言对于 DSL 来说效果更好，因为它们的语法往往更简洁。但是，使用方法补完是静态语言的一个优点。</p>
-<p>流畅接口定义的方法的一个问题是它们可能名不符实。举个例子，你去查看 <code>with</code> 方法的文档可能并没有什么意义，因为这个方法的实现和 <code>with</code> 并没有什么关联。我承认光就方法的命名来说这不是一个好的命名，因为它根本不能表达该方法实际做了什么。只有在流畅行为的上下文中这种命名才能显示出它的优势（译者注：这点我在编码时也深有体会，流畅接口的方法实现与方法命名常常做的是两回事，比如说把值对象传递下去）。解决此问题的一种可能的方法是只在此上下文中使用 builder 对象（译者注：可以参考 Builder Pattern，比如 <code>new BankAccount.Builder(4567L).withOwner(&quot;Homer&quot;).atBranch(&quot;Springfield&quot;).build();</code>，只在最后一步 <code>build()</code> 中进行构建）。</p>
-<p>Eric 提到的一点是，到目前为止，他使用并看到了流畅的接口大多是关于值对象的配置。值对象不具有领域意义的标识（Identity），因此你可以轻松创建并丢弃它们。所以接口的流畅度取决于使用旧值构造新值。从这个意义上讲，订单案例并不典型，因为它属于 <a target="_blank" rel="noopener" href="https://www.martinfowler.com/bliki/EvansClassification.html">EvansClassification</a> 中的实体对象（Entity）。（译者注：Evans Classification，Evans 关于领域对象的分类 Entity、Value Object 和 Service）</p>
-<p>目前为止我还没有看到很多的流畅接口，可以得出结论，我们对它们的优缺点了解还不够。所以任何使用它们的劝告都只能是初步的 —— 但我认为它们已经成熟，可以进行更多的尝试。</p>
-<p><a target="_blank" rel="noopener" href="https://bofh.org.uk/2005/12/21/fluent-interfaces/">Piers Cawley</a> 对本文有一个很好的跟进。</p>
-<p><strong>更新</strong>（2008年6月23日）。自从我写这篇文章以来，这个术语被广泛使用，这给了我一种令人愉快的满足感。在我一直在研究的书中，我已经提炼了关于流畅接口和内部 DSLs 的想法。我也注意到了一个常见的误解 —— 很多人似乎将流畅接口与方法链（Method Chaining）等同起来。当然链式接口是使用了流畅接口的一种常用的技术，但真正的流畅接口远不止于此。</p>
-<p>我上面展示的 JMock 示例使用了方法链，但同时也使用嵌套函数和对象作用域。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/01/23/Fluent%20Interface%20--%20Martin%20Fowler%20%E5%8D%9A%E5%AE%A2%E8%AF%91%E6%96%87/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -353,91 +340,15 @@
 <p><strong>SLF4J</strong> (Simple Log Facade For Java) 因其优秀的性能和理念很快受到了广泛欢迎，2016 年的统计显示，GitHub 上的热门 Java 项目中，SLF4J 是使用率第二名的类库（第一名是 Junit）。</p>
 <p><strong>Logback</strong> 则吸取了 Log4j 的经验，实现了很多强大的新功能，再加上它和 SLF4J 能够无缝集成，也受到了欢迎。</p>
 <p>在这期间，Apache Logging 则一直在关门憋大招，<strong>Log4j2</strong> 在 beta 版鼓捣了几年，终于在 2014 年发布了 GA 版，不仅吸收了 Logback 的先进功能，更通过优秀的锁机制、LMAX Disruptor、”无垃圾”机制等先进特性，在性能上全面超越了 Log4j 和 Logback。</p>
-<h3 id="Log4j-1-x"><a href="#Log4j-1-x" class="headerlink" title="Log4j 1.x"></a>Log4j 1.x</h3><p>Log4j (Log For Java) 是在 Logback 出现之前被广泛使用的日志库，由 Gülcü 于 2001 年发布，后来成为 Apache 基金会的顶级项目。Log4j 在设计上非常优秀，对后续的 Java Log 框架有长久而深远的影响，也产生了 Log4c、Log4s、Log4perl 等到其他语言的移植。Log4j 的短板在于性能，在Logback 和 Log4j2 出来之后，Log4j 的使用也减少了。</p>
-<h3 id="Commons-Logging"><a href="#Commons-Logging" class="headerlink" title="Commons Logging"></a>Commons Logging</h3><p>Commons Logging，简称 JCL，是 Apache 下属项目。JCL 是一个 <strong>Log Facade，只提供 Log API，不提供实现</strong>，然后有 Adapter 来使用 Log4j 或者 JDK 中自带的 JUL（Java Util Logging）作为 <strong>Log Implementation</strong>。</p>
-<p>不同的项目可能各自使用了不同的日志库，如果你的项目依赖的其他项目各自使用了不同的日志库，你想控制日志行为，就需要针对每个日志库都写一个配置文件，那岂不是很麻烦?所以这个时候 JCL 就出现了。</p>
-<p>在程序中日志创建和记录都是用 JCL 中的接口，而真正运行时会搜索当前 ClassPath 中有什么实现，如果有 Log4j 就是用 Log4j，如果啥都没有则使用 JDK 的 JUL。这样，在你的项目中，还有第三方的项目中，大家记录日志都使用 JCL 的接口，然后最终运行程序时，可以按照自己的需求(或者喜好)来选择使用合适的 Log Implementation。比如你想使用 Log4j，就添加 Log4j 的依赖并编写一个 Log4j 的配置文件（通常命名为 <code>log4j.properties</code>）。</p>
-<h3 id="SLF4J-Logback"><a href="#SLF4J-Logback" class="headerlink" title="SLF4J/Logback"></a>SLF4J/Logback</h3><p>SLF4J (Simple Logging <strong>Facade</strong> for Java) 和 Logback 也是 Gülcü 创立的项目，其创立主要是为了提供更高性能的实现。其中，SLF4j 是类似于 JCL 的 Log Facade，Logback 是类似于 Log4j 的 Log Implementation。</p>
-<p>SLF4J 出现的缘由是 Gülcü 认为 JCL 的 API 设计得不好，容易让使用者写出性能有问题的代码。比如在用 JCL 输出一个 debug 级别的 log：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger.debug(<span class="string">&quot;start process request, url: &quot;</span> + url);</span><br></pre></td></tr></table></figure>
-
-<p>这个有什么问题呢？一般生产环境 log 级别都会设到 info 或者以上，那这条 log 是不会被输出的。然而不管会不会输出，这其中都会做一个字符串连接操作，然后生产一个新的字符串。如果这条语句在循环或者被调用很多次的函数中，就会多做很多无用的字符串连接，影响性能。所以 JCL 的最佳实践推荐这么写：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">    logger.debug(<span class="string">&quot;start process request, url: &quot;</span> + url);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>显然作为 API 来说这太为繁琐，所以 SLF4J 提供了新的 API，方便开发者使用:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger.debug(<span class="string">&quot;start process request, url: &#123;&#125;&quot;</span>, url);</span><br></pre></td></tr></table></figure>
-
-<p>这样的话，在不输出 log 的时候避免了字符串拼接的开销；在输出的时候需要做一个字符串 format，代价比手工拼接字符串大一些，但是可以接受。</p>
-<p>而 Logback 则是作为 Log4j 的取缔者来开发的，提供了性能更好的实现，以及异步 logger，Filter 等更多的特性。</p>
-<h3 id="Log4j2"><a href="#Log4j2" class="headerlink" title="Log4j2"></a>Log4j2</h3><p>现在有了更好的 SLF4J 和 Logback 正慢慢取代 JCL 和 Log4j，然而维护 Log4j 的人不想坐视用户一点点被 SLF4J /Logback 蚕食，所以 Log4j2 诞生了。Log4j2 和 Log4j1.x 并不兼容，设计上很大程度上模仿了 SLF4J/Logback，性能上也获得了很大的提升。Log4j2 也做了 Facade/Implementation 分离的设计，分成了 log4j-api 和 log4j-core。</p>
-<h2 id="Facade-amp-Implementation"><a href="#Facade-amp-Implementation" class="headerlink" title="Facade &amp; Implementation"></a>Facade &amp; Implementation</h2><p>JCL、SLF4J 和 Log4j2 日志框架都使用了 GoF 设计模式中的门面模式（<strong>Facade Pattern</strong>），将接口和实现分离，定义统一的接口，而实现可以由用户自由选择。现在我们有了三个流行的 Log Facade，以及多个 Log Implementation，那么该如何配合使用呢？</p>
-<h3 id="SLF4J"><a href="#SLF4J" class="headerlink" title="SLF4J"></a>SLF4J</h3><p>Gülcü 是个追求完美的人，他决定让 SLF4J 和这些 Log 之间都能够方便的互相替换，所以做了各种 <strong>Adapter</strong> 和 <strong>Bridge</strong> 来连接:</p>
-<p><img data-src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/0.jpg" alt="0a9ca27a6fcb038fca91153b1147e5cc.jpeg"></p>
-<p>有趣的是，唯独没有 slf4j-over-log4j2 的桥接库，而且 log4j-to-slf4j 和 log4j-slf4j-impl 也是由 Apache 自己开发的。</p>
-<p>slf4j-api 只是 Log Facade 的依赖，添加了该依赖意味着在编码时你能够使用 <code>Logger log = LoggerFactory.getLogger(Main.class);</code> 和 <code>log.info(&quot;hello, &#123;&#125;&quot;, &quot;world&quot;);</code> 这种方式。除此之外，还需要添加 Log Implementation 的依赖。</p>
-<p>下图是 <a target="_blank" rel="noopener" href="https://www.slf4j.org/manual.html">SLF4J官网</a> 介绍可以绑定的日志实现框架。其中 slf4j-simple 是为小项目提供的简单实现；logback-classic 是官方的原生实现，不需要额外的适配器。而 <code>slf4j-log4j12</code> 和 <code>slf4j-jdk14</code> 分别是适配到 Log4j 和 JUL 的依赖，JUL 由于是 JDK 自带所以不需要额外依赖，而 Log4j 则还需要添加自己的底层实现依赖。</p>
-<p><img data-src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/1.png" alt="b7d8f119aca4c91e4d72283f7198148f.png"></p>
-<p>下面这张图展示了 SLF4J 绑定不同日志实现框架需要的依赖：</p>
-<p><img data-src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/2.png" alt="d8261ab119309917e25180ef0ae42abe.png"></p>
-<h3 id="Log4j2-1"><a href="#Log4j2-1" class="headerlink" title="Log4j2"></a>Log4j2</h3><p>关于 Log Facade 选择 SLF4J 还是 Log4j2，个人觉得要看项目需求。总的来说 SLF4J 的兼容性更好，日志实现可以随意搭配使用；虽然 Log4j2 可以通过 log4j-to-slf4j 桥接到 SLF4J 再使用其他的 Log Implementation，但这必然带来多余的性能消耗。</p>
-<p>而 Log4j2 的优点则在于性能，在 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/41498021/is-it-worth-to-use-slf4j-with-log4j2">Is it worth to use slf4j with log4j2</a> 这个问题中推荐直接面向 Log4j2 API 编程，理由如下：</p>
-<ul>
-<li>Message API</li>
-<li>Lambdas for lazy logging</li>
-<li>Log any Object instead of just Strings</li>
-<li>Garbage-free: avoid creating varargs or creating Strings where possible</li>
-<li>CloseableThreadContext automatically removes items from the MDC when you’re finished with them</li>
-</ul>
-<p>Logback 和 Log4j2 都宣称自己是 Log4j 的后代，一个是出自同一作者，另一个则是在名字上根正苗红。撇开血统不谈，比较一下 Log4j2 和 Logback：</p>
-<ul>
-<li>Log4j2 比 Logback 更新。Log4j2 的 GA 版在 2014 年底才推出，比 Logback 晚了好几年，这期间 Log4j2 确实吸收了 SLF4J 和 Logback 的一些优点（比如日志模板），同时应用了不少的新技术</li>
-<li>由于采用了更先进的锁机制和 LMAX Disruptor 库，Log4j2 的性能优于 Logback，尤其是在多线程环境下和使用异步日志的环境下</li>
-<li>二者都支持 Filter（应该说是 Log4j2 借鉴了 Logback 的 Filter），能够实现灵活的日志记录规则（例如仅对一部分用户记录 DEBUG 级别的日志）</li>
-<li>二者都支持对配置文件的动态更新</li>
-<li>二者都能够适配 SLF4J， Logback 与 SLF4J 的适配应该会更好一些，毕竟省掉了一层适配库</li>
-<li>Logback 能够自动压缩/删除旧日志</li>
-<li>Logback 提供了对日志的 HTTP 访问功能</li>
-<li>Log4j2 实现了“无垃圾”和“低垃圾”模式。简单地说，Log4j2 在记录日志时，能够重用对象（如String等），尽可能避免实例化新的临时对象，减少因日志记录产生的垃圾对象，减少垃圾回收带来的性能下降</li>
-</ul>
-<p>这是 Apache 官方提供的同步和异步写日志时的性能对比图：</p>
-<p><img data-src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/3.png" alt="900a0952b7540882925dd50699dc3e29.png"></p>
-<p><img data-src="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/4.png" alt="c5b42a899b63e265a3e2f4300d443ecb.png"></p>
-<p>所以综上所诉，个人的看法是：<strong>如果对性能有要求，且 Log Implementation 想选用 Log4j2 的话，推荐 Log Facade 直接使用 Log4j2 API</strong>。</p>
-<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><h3 id="总是使用-Log-Facade，而不是具体-Log-Implementation"><a href="#总是使用-Log-Facade，而不是具体-Log-Implementation" class="headerlink" title="总是使用 Log Facade，而不是具体 Log Implementation"></a>总是使用 Log Facade，而不是具体 Log Implementation</h3><p>正如之前所说的，使用 Log Facade 可以方便的切换具体的日志实现。而且，如果依赖多个项目，使用了不同的 Log Facade，还可以方便的通过 Adapter 转接到同一个实现上。如果依赖项目使用了多个不同的日志实现，就麻烦的多了。</p>
-<p>具体来说，现在<strong>推荐使用 Log4j2 API 或者 SLF4j</strong>，不推荐继续使用 JCL。</p>
-<h3 id="只添加一个-Log-Implementation-依赖"><a href="#只添加一个-Log-Implementation-依赖" class="headerlink" title="只添加一个 Log Implementation 依赖"></a>只添加一个 Log Implementation 依赖</h3><p>毫无疑问，项目中应该只使用一个具体的 Log Implementation，<strong>建议使用 Logback 或者 Log4j2</strong>。如果有依赖的项目中，使用的 Log Facade 不支持直接使用当前的 Log Implementation，就添加合适的桥接器依赖。</p>
-<h3 id="总是为-Log-Implementation-依赖设置-optional-和-runtime-scope"><a href="#总是为-Log-Implementation-依赖设置-optional-和-runtime-scope" class="headerlink" title="总是为 Log Implementation 依赖设置 optional 和 runtime scope"></a>总是为 Log Implementation 依赖设置 optional 和 runtime scope</h3><p>在项目中，Log Implementation 的依赖强烈建议设置为 runtime scope，并且设置为 optional。例如项目中使用了 SLF4J 作为 Log Facade，然后想使用 Logback 作为 Implementation，那么使用 POM 文件应该这么写：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;slf4j.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>ch.qos.logback<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>logback-classic<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;logback.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>设为 optional，<strong>依赖不会传递</strong>，这样如果你的项目被别的项目依赖，它就不会引入不想要的 Log Implementation 依赖，即<strong>使用你提供的库的用户可以自定义 Log Implementation</strong>；</p>
-<p>Scope 设置为 runtime，是为了防止开发人员在项目中直接使用 Log Implementation 中的类，而不适用 Log Facade 中的类，即<strong>编码时程序员只可见 Log Facade 层面而不必关注实现层面</strong>。</p>
-<h3 id="如果有必要，排除依赖的第三方库中的-Log-Impementation-依赖"><a href="#如果有必要，排除依赖的第三方库中的-Log-Impementation-依赖" class="headerlink" title="如果有必要，排除依赖的第三方库中的 Log Impementation 依赖"></a>如果有必要，排除依赖的第三方库中的 Log Impementation 依赖</h3><p>这是很常见的一个问题，第三方库的开发者未必会把具体的日志实现或者桥接器的依赖设置为 optional，然后你的项目继承了这些依赖。然而具体的日志实现未必是你想使用的，比如他依赖了 Log4j，你想使用 Logback，这样程序在运行时会检测到有多个日志实现类，如下图。另外，如果不同的第三方依赖使用了不同的桥接器和 Log 实现，也容易形成环。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SLF4J: Class path contains multiple SLF4J bindings.</span><br><span class="line">SLF4J: Found binding in [jar:file:/Users/s1mple/.m2/repository/org/slf4j/slf4j-log4j12/1.7.5/slf4j-log4j12-1.7.5.jar!/org/slf4j/impl/StaticLoggerBinder.class]</span><br><span class="line">SLF4J: Found binding in [jar:file:/Users/s1mple/.m2/repository/com/caacitc/slf4j-jdk14-1.6.1.jar/1.0.2/slf4j-jdk14-1.6.1.jar-1.0.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]</span><br></pre></td></tr></table></figure>
-
-<p>这种情况下，推荐的处理方法，是<strong>使用 exclude 来排除所有的这些 Log 实现和桥接器的依赖，只保留第三方库里面对 Log Facade 的依赖</strong>。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.jstorm<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jstorm-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>log4j-over-slf4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>ch.qos.logback<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>logback-classic<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>另外，在 IntelliJ IDEA 中，可以使用 <strong>Show Maven Dependencies</strong> 查看依赖关系图，可以方便的搜索依赖并 exclude 掉。</p>
-<h3 id="避免为不会输出的-log-付出代价"><a href="#避免为不会输出的-log-付出代价" class="headerlink" title="避免为不会输出的 log 付出代价"></a>避免为不会输出的 log 付出代价</h3><p>Log 库都可以灵活的设置输出界别，所以每一条程序中的 log，都是有可能不会被输出的。这时候要注意不要额外的付出代价。</p>
-<p>先看两个有问题的写法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">logger.debug(<span class="string">&quot;start process request, url: &quot;</span> + url);</span><br><span class="line">logger.debug(<span class="string">&quot;receive request: &#123;&#125;&quot;</span>, toJson(request));</span><br></pre></td></tr></table></figure>
-
-<p>第一条是直接做了字符串拼接，所以即使日志级别高于 debug 也会做一个字符串连接操作；第二条虽然用了 SLF4J/Log4j2 中的懒求值方式来避免不必要的字符串拼接开销，但是 <code>toJson()</code> 这个函数却是都会被调用并且开销更大。</p>
-<p>推荐的写法如下:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">logger.debug(<span class="string">&quot;start process request, url:&#123;&#125;&quot;</span>, url); <span class="comment">// SLF4J/LOG4J2</span></span><br><span class="line"><span class="keyword">if</span> (logger.isDebugEnabled()) &#123; <span class="comment">// SLF4J/LOG4J2</span></span><br><span class="line">    logger.debug(<span class="string">&quot;receive request: &quot;</span> + toJson(request)); </span><br><span class="line">&#125;</span><br><span class="line">logger.debug(<span class="string">&quot;receive request: &#123;&#125;&quot;</span>, () -&gt; toJson(request)); <span class="comment">// LOG4J2</span></span><br><span class="line">logger.debug(() -&gt; <span class="string">&quot;receive request: &quot;</span> + toJson(request)); <span class="comment">// LOG4J2</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="日志中尽量避免输出行号，函数名等字段"><a href="#日志中尽量避免输出行号，函数名等字段" class="headerlink" title="日志中尽量避免输出行号，函数名等字段"></a>日志中尽量避免输出行号，函数名等字段</h3><p>原因是，为了获取语句所在的函数名，或者行号，log 库的实现都是获取当前的 stacktrace，然后分析取出这些信息，而获取 stacktrace 的代价是很昂贵的。如果有很多的日志输出，就会占用大量的 CPU。在没有特殊需要的情况下，建议不要在日志中输出这些这些字段。</p>
-<p>正确做法是使用日志打印的类名和内容定位到代码位置。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(Main.class);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;hello world&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 16:08:14.913 [main] INFO com.github.s1mplecc.log.Main - hello world</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24272450">Java 日志框架解析(上) - 历史演进</a></li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24275518">Java 日志框架解析(下) - 最佳实践</a></li>
-<li><a target="_blank" rel="noopener" href="http://codepub.cn/2017/03/08/Programming-to-the-log4j2-API-instead-of-slf4j/">面向log4j2 API编程而不是slf4j</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.slf4j.org/manual.html">SLF4J 官方文档</a></li>
-<li><a target="_blank" rel="noopener" href="https://logging.apache.org/log4j/2.x/performance.html">Apache Log4j2 官方文档</a></li>
-</ul>
-
+<h3 id="Log4j-1-x"><a href="#Log4j-1-x" class="headerlink" title="Log4j 1.x"></a>Log4j 1.x</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -531,114 +442,14 @@
 <li>丰富的插件和主题，配置也统一化了。比如图中我使用的 Next 主题，主题的配置修改 <code>theme/next/_config.yml</code>；Hexo 的配置修改主目录的 <code>_config.yml</code> 即可。</li>
 <li>图片上传还算方便。在与文章同名的文件夹下保存图片即可。这个下面会细说。</li>
 </ol>
-<p><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/2.png" alt="6bc65c0ff0fb6d62ea90ce4c35c04ac9.png"><br><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/3.png" alt="8b1c5aa127adbfef220cfb30a6d55e1d.png"></p>
-<h2 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h2><h3 id="创建-GitHub-Pages-仓库"><a href="#创建-GitHub-Pages-仓库" class="headerlink" title="创建 GitHub Pages 仓库"></a>创建 GitHub Pages 仓库</h3><p>GitHub Pages 是面向用户、组织和项目开放的公共静态页面搭建托管服务，站点可以被免费托管在 GitHub 上，你可以选择使用 GitHub Pages 默认提供的域名 <code>github.io</code> 或者自定义域名来发布站点。</p>
-<p>GitHub Pages 分为两类，用户主页和项目主页。我们需要部署的是用户主页。需要在 GitHub 上新建一个仓库，<strong>仓库名必须为</strong> <code>$&#123;github-username&#125;.github.io</code>，这样才会被识别为用户主页。用户主页是唯一的，填其他名称只会被当成普通项目。通过 <code>https://$&#123;github-username&#125;.github.io</code> 进行访问。</p>
-<p>创建完成后将仓库 clone 至本地。</p>
-<h3 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h3><p>GitHub Pages 会自动部署静态网页文件，并<strong>将 master 分支作为部署的默认分支</strong>。为将静态网页和源文件（包含文章、主题等）分离开，强烈建议创建新分支。<code>git checkout -b hexo</code> 创建 hexo 分支。<strong>应当只将 master 分支当作静态网页的发布分支，而文档编辑和 Hexo 命令操作等都在 hexo 分支上完成</strong>。这样在执行 <code>hexo generate -deploy</code> 时就会将生成的静态文件（整个 <code>public</code> 文件夹）发布到 GitHub 的 master 分支上。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜  github.io git:(hexo) ✗ git branch -v    </span><br><span class="line"></span><br><span class="line">* hexo                  0d03653 dump ghost markdown files to hexo</span><br><span class="line">  master                673d037 initial commit</span><br></pre></td></tr></table></figure>
-
-<h3 id="安装-Hexo"><a href="#安装-Hexo" class="headerlink" title="安装 Hexo"></a>安装 Hexo</h3><p>Hexo 和 Ghost 一样，都是使用 Node.js 编写的，所以使用 npm 安装。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
-
-<p>完成后执行 <code>hexo -v</code> 验证是否正确安装。</p>
-<h3 id="生成-Hexo-项目"><a href="#生成-Hexo-项目" class="headerlink" title="生成 Hexo 项目"></a>生成 Hexo 项目</h3><p>现在你可以使用 <code>hexo</code> 命令了，在生成 Hexo 项目前需要确保一件事：你已将 Git 仓库 clone 至本地，并且处于 hexo 分支上。由于只能在<strong>空文件夹</strong>下生成 Hexo 项目，所以我们先将 <code>.git</code> 文件夹整个移出去，然后执行 <code>hexo init</code> 命令。最后别忘了将 <code>.git</code> 文件夹移回来。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜  github.io git:(hexo) ✗ mv .git ../</span><br><span class="line">➜  github.io ✗ hexo init </span><br><span class="line">➜  github.io ✗ mv ../.git ./</span><br></pre></td></tr></table></figure>
-
-<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜  github.io git:(hexo) ✗ ls -F         </span><br><span class="line">_admin-config.yml  node_modules/      public/            themes/</span><br><span class="line">_config.yml        package-lock.json  scaffolds/         yarn.lock</span><br><span class="line">db.json            package.json       <span class="built_in">source</span>/</span><br></pre></td></tr></table></figure>
-
-<p>主要打交道的是下面这几个文件：</p>
-<ul>
-<li><code>_config.yml</code> Hexo 的配置文件，你的自定义配置会在该文件中修改</li>
-<li><code>scaffolds/</code> 保存了 hexo 生成新文章所用的模版文件</li>
-<li><code>source/</code> 主要保存文章的 Markdown 源文件</li>
-<li><code>themes/</code> 保存主题的源代码</li>
-<li><code>public/</code> 生成的静态文件，包括图片、Tags、Categories 等都保存在这里。执行 <code>hexo g</code> 生成；<code>hexo clean</code> 则会清空该文件夹。部署到 GitHub Pages 上的亦即该文件夹下的内容。</li>
-</ul>
-<h3 id="部署到-GitHub"><a href="#部署到-GitHub" class="headerlink" title="部署到 GitHub"></a>部署到 GitHub</h3><p>最开始 <code>source</code> 文件夹中会自带一篇介绍 Hexo 的文章，我们可以直接拿它来测试部署是否成功。</p>
-<p>Hexo 支持本地启动，命令为：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hexo serve</span></span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
-
-<p>启动后访问 <code>http://localhost:4000</code>，就应该能看到自带的那篇文章。但为了能部署到 GitHub Pages 上，我们还需要做两件事：<strong>安装插件</strong>和<strong>修改配置</strong>。</p>
-<p>在项目所在目录下执行：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-
-<p>修改 <code>_config.yml</code> 将 repo 指定为自己的仓库地址，发布到的分支默认为 master：</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:username/username.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-
-<p>现在，执行如下命令即可将发布文章：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hexo generate -deploy</span></span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
-
-<p>访问你的网址 <code>https://$&#123;github-username&#125;.github.io</code> 去见证成果吧！</p>
-<h2 id="更换主题"><a href="#更换主题" class="headerlink" title="更换主题"></a>更换主题</h2><p>Hexo 自带的默认主题是 landscape，不过我们可以从 <a target="_blank" rel="noopener" href="https://hexo.io/themes/">Hexo主题库</a> 或 GitHub 上找到自己喜欢的主题。Next 是 Hexo 最受欢迎的主题之一，下面我将用它向大家演示如何更换主题。</p>
-<p>Ps: 目前 Next 主题已经升级到 v6.0 版本以上，GitHub 上的仓库从原先的旧版本（v5.1.4 及以下）：<code>https://github.com/iissnan/hexo-theme-next</code> 迁移到了新仓库中：<code>https://github.com/theme-next/hexo-theme-next</code>，目前版本是 v6.6.0。如果安装的是 v5 版本，在启动时会提示升级。</p>
-<p><strong>下载源码</strong>，直接将 Next 项目克隆到 Hexo 目录的 <code>themes</code> 文件夹下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/theme-next/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
-
-<p><strong>启用 Next 主题</strong>，修改 Hexo 的 <code>_config.yml</code></p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># theme: landscape</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br></pre></td></tr></table></figure>
-
-<p>v6.0 版本以上的 <a target="_blank" rel="noopener" href="https://theme-next.org/docs/getting-started/">Next官方文档</a> 也做了迁移，描述的很详细，包含了主题设置、三方服务和插件的配置等。所有要找的 <code>themes/next/_config.yml</code> 中的配置项在官方文档中都能找到。</p>
-<h2 id="更换域名"><a href="#更换域名" class="headerlink" title="更换域名"></a>更换域名</h2><p>部署到 GitHub Pages 上会提供 <code>https://$&#123;github-username&#125;.github.io</code> 默认的域名以供访问。除此之外，GitHub Pages 也提供绑定自定义域名的功能。</p>
-<p>首先，你需要在阿里云万网、腾讯云或者 GoDaddy 上购买域名（我选择 GoDaddy 是因为它不需要备案），然后<strong>配置域名解析</strong>。下表是我的个性域名 <code>s1mple.online</code> 的配置项。其中：</p>
-<ul>
-<li>CNAME 项用于将所有 <code>*.s1mple.online</code> 包含三级域名（不包括 <code>s1mple.online</code>）的访问路由到 <code>s1mplecc.github.io</code>。</li>
-<li>A 项将二级域名 <code>s1mple.online</code> 路由到 <code>192.30.252.153</code>。此值可通过 <code>ping s1mplecc.github.io</code> 获得。</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>记录类型</th>
-<th>记录类型</th>
-<th>记录值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>记录类型</td>
-<td>主机记录</td>
-<td>记录值</td>
-</tr>
-<tr>
-<td>CNAME</td>
-<td>*</td>
-<td>s1mplecc.github.io</td>
-</tr>
-<tr>
-<td>A</td>
-<td>@</td>
-<td>192.30.252.153</td>
-</tr>
-</tbody></table>
-<p>第二步，在本地 Hexo 的 <code>source</code> 文件夹下添加<strong>名为 CNAME 的文件</strong>，内容为个人域名地址，比如我的 <code>s1mple.online</code>。并执行 <code>hexo g -d</code> 部署到服务器。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;s1mple.online&#x27;</span> &gt; ./<span class="built_in">source</span>/CNAME</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
-
-<p>第三步，在 GitHub Pages 项目的配置中<strong>绑定个人域名</strong>，记得将 Enforce HTTPS 选项勾选上（GitHub 提供免费的 HTTPS 服务）。保存成功后如下图提示即可通过 <code>https://s1mple.online</code> 访问。</p>
-<p><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/5.png" alt="5"></p>
-<h2 id="图片引用"><a href="#图片引用" class="headerlink" title="图片引用"></a>图片引用</h2><p>当项目中只用到少量图片时，可以将图片统一放在 <code>source/images</code> 文件夹中，通过绝对路径访问。比如头像。</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Markdown</span></span><br><span class="line"><span class="type">![avatar](/images/avatar.jpeg)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># themes/next/_config.yml</span></span><br><span class="line"><span class="attr">avatar:</span></span><br><span class="line">  <span class="attr">url:</span> <span class="string">/images/avatar.jpeg</span></span><br></pre></td></tr></table></figure>
-
-<p>除此之外，图片还可以放在 <code>source/_posts</code> 下与文章同名的目录中。需要先将 Hexo 配置文件中的开关打开。</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hexo _config.yml</span></span><br><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<p>这样在执行 <code>hexo new xxx</code> 后会在 <code>source/_posts</code> 中会生成文章 <code>xxx.md</code> 和同名文件夹 <code>xxx</code>。将图片资源放在 <code>xxx</code> 中，然后在 <code>xxx.md</code> 中使用图片的文件名引用它。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![](image.jpg)</span><br></pre></td></tr></table></figure>
-
-<h2 id="ghost-to-hexo-migrater"><a href="#ghost-to-hexo-migrater" class="headerlink" title="ghost-to-hexo-migrater"></a>ghost-to-hexo-migrater</h2><p>我自己用 Python 写了一个迁移 Ghost 博客至 Hexo 的程序，项目已经提交到 <a target="_blank" rel="noopener" href="https://github.com/s1mplecc/ghost-to-hexo-migrater">GitHub</a>。</p>
-<p>主要做了如下事情：</p>
-<ul>
-<li>通过 Ghost API 将 Ghost 博客上的所有文章和图片下载到本地。</li>
-<li>给每篇文章加上 Hexo 规定的 header，包括 Title、创建日期、Tags；由于 Ghost 博客不支持分类，所以保留 categories 默认为空。</li>
-<li>按照 Hexo 的规定，创建与文章标题一致的文件夹用于存放文章中的图片，并更换文章中图片的 Markdown 链接。</li>
-</ul>
-<p>这样可以将整个 <code>downloads</code> 文件夹拷贝到 Hexo 的 <code>source/_posts</code> 目录下发布即可！</p>
-<p><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/4.png" alt="7292889b7bb90233a1ac2dd1ac2cd97a.png"></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://pages.github.com/">GitHub Pages官网</a></li>
-<li><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/index.html">Hexo官网</a></li>
-<li><a target="_blank" rel="noopener" href="https://theme-next.org/docs/getting-started/">Next官方文档</a> </li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/5acf02086fb9a028b92d8652#heading-17">GitHub Pages部署个人博客（Hexo篇）—— 掘金</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -723,124 +534,14 @@
 
 <h3 id="urllib"><a href="#urllib" class="headerlink" title="urllib"></a>urllib</h3><p>模拟浏览器发起一个 HTTP 请求，我们需要用到 <code>urllib.request</code> 模块。其 <code>urlopen()</code> 方法用于发起请求并获取响应结果，该方法可单独传入一个 <code>urllib.request.Request</code> 对象，并返回一个 <code>http.client.HTTPResponse</code> 对象。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__fetch_html</span>(<span class="params">url, decode=<span class="string">&#x27;UTF-8&#x27;</span></span>):</span></span><br><span class="line">    req = request.Request(url)</span><br><span class="line">    req.add_header(<span class="string">&#x27;User-Agent&#x27;</span>, <span class="string">&#x27;Mozilla/5.0&#x27;</span>)</span><br><span class="line">    <span class="keyword">with</span> request.urlopen(req) <span class="keyword">as</span> res:</span><br><span class="line">        <span class="keyword">return</span> res.read().decode(decode)</span><br></pre></td></tr></table></figure>
-
-<p>使用 <code>Request</code> 包装请求头。如果不设置 headers 中的 <strong>User-Agent</strong>，默认的 User-Agent 是 Python-urllib。可能一些网站会将该请求拦截，所以需要伪装成浏览器发起请求。</p>
-<h3 id="Beautiful-Soup"><a href="#Beautiful-Soup" class="headerlink" title="Beautiful Soup"></a>Beautiful Soup</h3><blockquote>
-<p>Beautiful Soup is a Python library for pulling data out of HTML and XML files. It works with your favorite parser to provide idiomatic ways of navigating, searching, and modifying the parse tree. It commonly saves programmers hours or days of work.</p>
-</blockquote>
-<p>Beautiful Soup 用于从 HTML 或 XML 文件中提取数据，提供的功能非常强大。它支持 Python 标准库中的 HTML 解析器：<code>BeautifulSoup(markup, &quot;html.parser&quot;)</code>，还支持一些第三方的解析器（如 html5lib、lxml 等）。</p>
-<p>Beautiful Soup 将 HTML 文档转换成一个复杂的树形结构,每个节点都是 Python 对象,所有对象可以归纳为4种: <code>Tag</code>，<code>NavigableString</code>，<code>BeautifulSoup</code>，<code>Comment</code>。<code>Tag</code> 对象与 XML 或 HTML 原生文档中的 tag 相同，所以非常适合用于<strong>定位</strong>。下面列出一些常见用法，感兴趣的同学可以查阅 <a target="_blank" rel="noopener" href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/">官方文档</a>。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">soup.title</span><br><span class="line"><span class="comment"># &lt;title&gt;The Dormouse&#x27;s story&lt;/title&gt;</span></span><br><span class="line"></span><br><span class="line">soup.a</span><br><span class="line"><span class="comment"># &lt;a class=&quot;sister&quot; href=&quot;http://example.com/elsie&quot; id=&quot;link1&quot;&gt;Elsie&lt;/a&gt;</span></span><br><span class="line"></span><br><span class="line">soup.find_all(<span class="string">&#x27;a&#x27;</span>)</span><br><span class="line"><span class="comment"># [&lt;a class=&quot;sister&quot; href=&quot;http://example.com/elsie&quot; id=&quot;link1&quot;&gt;Elsie&lt;/a&gt;,</span></span><br><span class="line"><span class="comment">#  &lt;a class=&quot;sister&quot; href=&quot;http://example.com/lacie&quot; id=&quot;link2&quot;&gt;Lacie&lt;/a&gt;,</span></span><br><span class="line"><span class="comment">#  &lt;a class=&quot;sister&quot; href=&quot;http://example.com/tillie&quot; id=&quot;link3&quot;&gt;Tillie&lt;/a&gt;]</span></span><br><span class="line"></span><br><span class="line">soup.find(<span class="string">&#x27;a&#x27;</span>, <span class="built_in">id</span>=<span class="string">&#x27;link3&#x27;</span>)</span><br><span class="line"><span class="comment"># &lt;a class=&quot;sister&quot; href=&quot;http://example.com/tillie&quot; id=&quot;link3&quot;&gt;Tillie&lt;/a&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> link <span class="keyword">in</span> soup.find_all(<span class="string">&#x27;a&#x27;</span>):</span><br><span class="line">    <span class="built_in">print</span>(link.get(<span class="string">&#x27;href&#x27;</span>))</span><br><span class="line">    <span class="comment"># http://example.com/elsie</span></span><br><span class="line">    <span class="comment"># http://example.com/lacie</span></span><br><span class="line">    <span class="comment"># http://example.com/tillie</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h3><p>从 Python3.2 开始 <code>concurrent.futures</code> 被纳入了标准库，这个模块中有2个类：<code>ThreadPoolExecutor</code> 和 <code>ProcessPoolExecutor</code>，分别对 <code>threading</code> 多线程库和 <code>multiprocessing</code> 多进程库的进行了高级别的抽象，封装了统一的接口。</p>
-<p>关于是使用多线程还是多进程，大部分人可能有所耳闻，Python 推荐使用多进程而不是多线程。我自己测试的情况也是爬取 3000 章时使用 <code>ProcessPoolExecutor</code> 大约需要 20s，使用 <code>ThreadPoolExecutor</code> 需要大概 40s，性能差了一倍。</p>
-<p>其他语言，CPU 是多核时是支持多个线程同时执行的。但在 Python 中，无论是单核还是多核，<strong>同时只能由一个线程在执行</strong>，其根源是 <strong>GIL</strong> 的存在（只存在于 CPython，PyPy 和 Jython 中没有）。</p>
-<p>GIL 全称 <strong>Global Interpreter Lock</strong>(全局解释器锁)，是 Python 设计之初为了数据安全所做的决定。某个线程想要执行，必须先拿到 GIL，并且在一个 Python 进程中只有一个 GIL。并且每次释放 GIL 锁时线程会进行锁竞争，切换线程也会消耗资源。这就是为什么在多核 CPU 上 Python 的多线程效率并不高的原因所在，以至于 Python 的专家们精心制作了一个标准答案：<strong>不要使用多线程，请使用多进程</strong>。</p>
-<p>此外，Python 可使用 <strong>perf</strong> 库进行性能测试，以下是爬取 50 章时的性能：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  crawler ✗ python3 -m perf timeit <span class="string">&#x27;import app;app.run(&quot;12/12455&quot;)&#x27;</span></span><br><span class="line">...</span><br><span class="line">* the standard deviation (281 ms) is 24% of the mean (1.16 sec)</span><br><span class="line">* the maximum (2.02 sec) is 73% greater than the mean (1.16 sec)</span><br><span class="line"></span><br><span class="line">Mean +- std dev: 1.16 sec +- 0.28 sec</span><br></pre></td></tr></table></figure>
-
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="venv"><a href="#venv" class="headerlink" title="venv"></a>venv</h3><p><strong>venv</strong>，全称 <strong>virtualenv</strong> 虚拟环境。用过 JavaScript 的同学都知道，执行 <code>npm install xxx</code> 时会在当前目录生成一个 <code>node_modules</code> 目录，依赖会被安装在这个目录下，除非你加上 <code>-g/--global</code> 全局参数，否则安装的依赖只对当前项目生效（不是全局依赖）。这其实相当于做了一层隔离，将当前项目的环境与全局环境隔离开，有利于版本的管理。</p>
-<p>venv 也是这样的作用，用于<strong>为一个应用创建一套隔离的 Python 运行环境</strong>。在这个环境中，你可以管理 Python 版本，pip 版本，以及你所用的三方库的版本，而不会与全局环境冲突。</p>
-<p>如果你使用的是 PyCharm，那么创建项目时就可以勾选使用 venv（这也是建议的选择）。效果如下图：<br><img data-src="/0.png" alt="Screen-Shot-2018-12-03-at-11.01.47-AM">命令行多了 (venv) 前缀：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  crawler ✗</span><br></pre></td></tr></table></figure>
-
-<p>如果你不是使用的 PyCharm，参考这篇文档：<a target="_blank" rel="noopener" href="https://www.kancloud.cn/smilesb101/python3_x/298883">virtualenv</a></p>
-<h3 id="风格规范"><a href="#风格规范" class="headerlink" title="风格规范"></a>风格规范</h3><p>Python 风格规范我参考的 <a target="_blank" rel="noopener" href="https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/python_style_rules/#id16">Google 开源项目风格指南</a>。推荐使用 <strong>PyCharm</strong> IDE，和 IntelliJ IDEA 一样产自 JetBrains 公司，非常良心的软件，会有一些风格提示，并且可以使用快捷键（Ctrl/Cmd + Shift + L）自动格式化。这里主要说说命名吧。</p>
-<h4 id="命名"><a href="#命名" class="headerlink" title="命名"></a>命名</h4><p><strong>应该避免的名称</strong></p>
-<ol>
-<li>单字符名称, 除了计数器和迭代器</li>
-<li>包/模块名中的连字符(-)</li>
-<li>双下划线开头并结尾的名称( Python 保留, 例如<code>__init__</code>)</li>
-</ol>
-<p><strong>命名约定</strong></p>
-<ol>
-<li>用<strong>单下划线(_)开头</strong>表示模块变量或函数是 protected 的(使用 <code>from module import *</code> 时不会包含)。</li>
-<li>用<strong>双下划线(__)开头</strong>的实例变量或方法表示类内私有。</li>
-<li>对类名使用大写字母开头的单词(如 CapWords，即 Pascal 风格)，但是模块名应该用小写加下划线的方式(如 lower_with_under.py )。尽管已经有很多现存的模块使用类似于CapWords.py 这样的命名，但现在已经不鼓励这样做，因为如果模块名碰巧和类名一致，这会让人困扰。</li>
-</ol>
-<p><strong>Python之父Guido推荐的规范</strong></p>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Public</th>
-<th>Internal</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Modules</td>
-<td>lower_with_under</td>
-<td>_lower_with_under</td>
-</tr>
-<tr>
-<td>Packages</td>
-<td>lower_with_under</td>
-<td></td>
-</tr>
-<tr>
-<td>Classes</td>
-<td>CapWords</td>
-<td>_CapWords</td>
-</tr>
-<tr>
-<td>Exceptions</td>
-<td>CapWords</td>
-<td></td>
-</tr>
-<tr>
-<td>Functions</td>
-<td>lower_with_under()</td>
-<td>_lower_with_under()</td>
-</tr>
-<tr>
-<td>Global/Class Constants</td>
-<td>CAPS_WITH_UNDER</td>
-<td>_CAPS_WITH_UNDER</td>
-</tr>
-<tr>
-<td>Global/Class Variables</td>
-<td>lower_with_under</td>
-<td>_lower_with_under</td>
-</tr>
-<tr>
-<td>Instance Variables</td>
-<td>lower_with_under</td>
-<td>_lower_with_under (protected) or __lower_with_under (private)</td>
-</tr>
-<tr>
-<td>Method Names</td>
-<td>lower_with_under()</td>
-<td>_lower_with_under() (protected) or __lower_with_under() (private)</td>
-</tr>
-<tr>
-<td>Function/Method Parameters</td>
-<td>lower_with_under</td>
-<td></td>
-</tr>
-<tr>
-<td>Local Variables</td>
-<td>lower_with_under</td>
-<td></td>
-</tr>
-</tbody></table>
-<h4 id="Main"><a href="#Main" class="headerlink" title="Main"></a>Main</h4><p><strong>所有的顶级代码在模块导入时都会被执行</strong>。即使是一个打算被用作脚本的文件，也应该是可导入的。并且简单的导入不应该导致这个脚本的主功能(main functionality)被执行，这是一种副作用。主功能应该放在一个函数中，并在执行主程序前总是检查 <code>if __name__ == &#39;__main__&#39;</code>。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">      ...</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-<p><code>__name__</code> 是内置变量，指代<strong>当前模块名</strong>，当模块被直接运行时模块名为 <code>__main__</code>。这句话的意思就是，当模块被直接运行时，下面代码块将被运行，当模块是被导入时，代码块不被运行。</p>
-<h3 id="文件写入"><a href="#文件写入" class="headerlink" title="文件写入"></a>文件写入</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">os.makedirs(<span class="string">&#x27;downloads&#x27;</span>, exist_ok=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">f&#x27;./downloads/<span class="subst">&#123;title&#125;</span>.txt&#x27;</span>, <span class="string">&#x27;wt+&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="keyword">for</span> content <span class="keyword">in</span> contents:</span><br><span class="line">        f.write(content)</span><br></pre></td></tr></table></figure>
-
-<p>第一句用于创建 downloads 文件夹，<code>exist_ok=True</code> 参数允许创建的文件夹已存在，否则会抛出 <code>FileExistsError</code> 异常。</p>
-<p>第二句 <code>with ... as ...</code> 的用法和 Java 中的 <code>try with resources</code> 有点类似，这里它会自动关闭打开的文件流。它的核心思想是 with 所求值的对象必须有一个 <code>__enter()__</code> 方法和一个 <code>__exit()__</code> 方法，在 with 代码块开始和结束这两个方法会被执行。如果出现异常则会执行 <code>__exit()__</code>，并传入三个参数 <code>exc_type</code>，<code>exc_value</code>，<code>exc_traceback</code> 用于异常处理。</p>
-<p><code>open(&#39;abc.txt&#39;, &#39;a+&#39;)</code> 打开文件时不同的参数有不同的作用，我这里用的 <code>wt+</code> 表示以文本格式打开一个文件用于读写，如果该文件已存在则将其覆盖，如果该文件不存在则创建新文件。还有其他参数，例如 <code>a+</code> 代表 append 追加，<code>r</code> 表示只读等等。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.kancloud.cn/smilesb101/python3_x/295557">廖雪峰的Python3.x教程</a></li>
-<li><a target="_blank" rel="noopener" href="https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/python_style_rules/#id16">Python 风格指南 —— Google 开源项目风格指南</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2e190438bd9c">详解 python3 urllib</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/">Beautiful Soup 4 官方文档</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/concurrent.futures.html">concurrent.futures — Launching parallel tasks 官方文档</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.louie.lu/2017/08/01/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84-python-%E6%A8%99%E6%BA%96%E5%87%BD%E5%BC%8F%E5%BA%AB%E7%94%A8%E6%B3%95-06-concurrent-futures/">concurrent.futures 性能分析</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -925,89 +626,14 @@
 </ul>
 <p>为了简化代码（偷懒），就在想能不能通过统一的处理完成这些 Merge 逻辑。首先想到的是代码生成，类似 MyBatis Generator，重复的工作交给脚本或者工具多好。但是很快就否定了这种方案，配置这些类的工作量也不小，而且很多类中有自己的业务逻辑，一不小心覆盖了也不行。那注解行不行呢？Spring Boot 就大量使用注解替换了之前配置繁杂的 XML 文件。实际编码后验证是可行的！本文将介绍如何<strong>配合使用 Java 的注解和反射</strong>实现上述问题中的 Merge 操作。示例代码已上传到 <a target="_blank" rel="noopener" href="https://github.com/s1mplecc/merging">GitHub</a> 上。</p>
 <h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p>每当你创建描述符性质的类或者接口时，一旦其中包含重复性的工作，就可以考虑使用注解来简化与自动化该过程。一个注解准确意义上来说，只不过是一种特殊的注释而已，如果没有<strong>解析</strong>它的代码，它可能连注释都不如。而解析注解往往有两种方式，一种是<strong>编译期扫描</strong>，典型的例如 <code>@Override</code>，这种只适用于编译器已经认识的注解，一般都是 JDK 内置注解；另一种则是通过<strong>运行期反射</strong>，也是在我们自定义注解后需要自己编码的。</p>
-<h3 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h3><p>Java提供了四种元注解，专门负责<strong>修饰其他注解</strong>：</p>
-<ul>
-<li><code>@Target</code>：注解的作用目标</li>
-<li><code>@Retention</code>：注解的生命周期</li>
-<li><code>@Documented</code>：注解是否要包含在 JavaDoc 文档中</li>
-<li><code>@Inherited</code>：子类是否继承该注解</li>
-</ul>
-<h4 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h4><p><code>@Target</code> 用于定义注解的<strong>作用域</strong>，源码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.ANNOTATION_TYPE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Target &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns an array of the kinds of elements an annotation type</span></span><br><span class="line"><span class="comment">     * can be applied to.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    ElementType[] value();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中 <code>ElementType</code> 是一个枚举类型，包含以下值：</p>
-<ul>
-<li><code>ElementType.TYPE</code>：允许注解作用在类、接口和枚举上</li>
-<li><code>ElementType.FIELD</code>：允许作用在属性字段上</li>
-<li><code>ElementType.METHOD</code>：允许作用在方法上</li>
-<li><code>ElementType.PARAMETER</code>：允许作用在方法参数上</li>
-<li><code>ElementType.CONSTRUCTOR</code>：允许作用在构造器上</li>
-<li><code>ElementType.LOCAL_VARIABLE</code>：允许作用在本地局部变量上</li>
-<li><code>ElementType.ANNOTATION_TYPE</code>：允许作用在注解上</li>
-<li><code>ElementType.PACKAGE</code>：允许作用在包上</li>
-</ul>
-<p>当允许有多个作用域时使用花括号 <code>&#123;&#125;</code> 包裹，比如这样：<code>@Target(&#123; ElementType.TYPE, ElementType.FIELD &#125;)</code></p>
-<h4 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h4><p><code>@Retention</code> 用于标明注解存在的<strong>生命周期</strong>，源码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.ANNOTATION_TYPE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Retention &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns the retention policy.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">RetentionPolicy <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>RetentionPolicy</code> 也是一个枚举类型，包含以下值：</p>
-<ul>
-<li><code>RetentionPolicy.SOURCE</code>：在源文件中保留，编译为 .class 文件时会被丢弃，比如 <code>@Override</code>、<code>@SuppressWarnings</code></li>
-<li><code>RetentionPolicy.CLASS</code>：.class 文件中会保留，但运行时丢弃</li>
-<li><code>RetentionPolicy.RUNTIME</code>：运行时保留，可以通过<strong>反射获取</strong></li>
-</ul>
-<p>剩下两种类型的注解用的不多，也比较简单，这里不再详细的介绍了，只需要知道他们各自的作用即可。<code>@Documented</code> 修饰的注解，当执行 JavaDoc 文档打包时会被保存进文档，否则将被丢弃。<code>@Inherited</code> 注解修饰的注解是有<strong>继承性</strong>的，也就说我们的注解修饰了一个类，而该类的子类将自动继承父类的该注解。该注解只作用于类，对属性或方法无效。</p>
-<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>Java 反射机制是指在<strong>程序运行时（Runtime）识别和使用对象的类型信息</strong>。以下内容摘自《Thinking in Java》，是我认为的有利于理解反射的核心概念。</p>
-<blockquote>
-<p>要理解反射的工作原理，首先必须知道<strong>类型信息</strong>在运行时是如何表示的。这项工作是由称为 <strong>Class</strong> 对象的特殊对象完成的，它包含了与类有关的信息。事实上，Class 对象就是用来创建类的所有“常规”对象的。</p>
-<p>类是程序的一部分，每个类都有一个 Class 对象。换言之，每当编写并且编译了一个新类，就会产生一个 Class 对象（更恰当地说，是被保存在一个同名的 <code>.class</code> 文中）。为了生成这个类的对象，运行这个程序的 Java 虚拟机（JVM）将使用被称为<strong>类加载器</strong>的子系统。类加载器首先检查这个类的 Class 对象是否已经加载。如果尚未加载，默认的类加载器就会根据类名查找 <code>.class</code> 文件。<strong>一旦某个类的 Class 对象被载入内存，它就被用来创建这个类的所有对象</strong>。</p>
-<p><code>Class</code> 类和 <code>java.lang.reflect</code> 类库一起对反射的概念提供了支持，该类库包含 <code>Field</code>、<code>Method</code> 以及 <code>Constructor</code> 类。这些类型的对象是由 JVM 在运行时创建的，用以<strong>表示未知类里对应的成员</strong>。这样你就可以使用 <code>Constructor</code> 创建新的对象，用 <code>get()</code> 和 <code>set()</code> 方法读取和修改与 <code>Field</code> 对象关联的字段，用 <code>invoke()</code> 方法调用与 <code>Method</code> 对象关联的方法等等。另外，还可以调用 <code>getFields()</code>、<code>getMethods()</code> 和 <code>getConstructors()</code> 等方法以返回表示字段、方法以及构造器的对象的数组（可以查看 Class 类源码了解更多资料）。</p>
-<p>重要的是，要认识到反射机制并没有什么神奇之处。当通过反射与一个未知类型的对象打交道时，JVM 只是简单地检查这个对象，看它属于哪个特定的类。在用它做其他事情之前必须先加在那个类的 Class 对象。对于反射机制来说，<code>.class</code> 文件在编译时是不可获取的，所以是在运行时打开和检查 <code>.class</code> 文件。</p>
-</blockquote>
-<p>这里简单的介绍一下我们编码时用到的与反射有关的方法：</p>
-<ul>
-<li><code>obj.getClass();</code> Java 提供了三种方式获取类的 Class 对象的引用：<code>Class.forName()</code> 通过类名获取；<code>obj.getClass();</code> 通过对象获取和 <code>Object.class</code> 通过类字面常量获取。</li>
-<li><code>getDeclaredFields();</code> 获取类中声明的所有字段，不包括父类和接口中的字段。它与 <code>getFields()</code> 的区别在于，<code>getFields()</code> 是获取所在类以及父类和接口中的所有访问修饰符为 <code>public</code> 的字段。</li>
-<li><code>getAnnotation();</code> 获取标注的注解实例对象。</li>
-</ul>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="Merge-粒度与等级"><a href="#Merge-粒度与等级" class="headerlink" title="Merge 粒度与等级"></a>Merge 粒度与等级</h3><p>回到我们的问题上来，首先考虑一个问题：Merge 的粒度应该位于什么层次？如果是类级别的，意味着整个类的所有属性将一视同仁，要么都合并要么都不，显然这样是不行的。Merge 的<strong>粒度应该在属性字段上</strong>，为此，我们专门定义了字段的 Merge 等级 <code>Level</code>：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">Level</span> </span>&#123;</span><br><span class="line">    <span class="comment">/* 无论新值为何值，都会覆盖旧值 */</span></span><br><span class="line">    Mandatory,</span><br><span class="line">    <span class="comment">/* 如果新值不为null，覆盖旧值，否则不覆盖 */</span></span><br><span class="line">    Required,</span><br><span class="line">    <span class="comment">/* 忽略，不做合并处理 */</span></span><br><span class="line">    Ignored;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="自定义注解-MergeOn"><a href="#自定义注解-MergeOn" class="headerlink" title="自定义注解 @MergeOn"></a>自定义注解 @MergeOn</h3><p>接下来就需要自定义我们的注解：<code>@MergeOn</code>，作用在字段上，在运行时有效：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(ElementType.FIELD)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MergeOn &#123;</span><br><span class="line">    <span class="function">Level <span class="title">level</span><span class="params">()</span> <span class="keyword">default</span> Level.Required</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用 <code>default</code> 关键字可以设置缺省等级为 <code>Required</code>。</p>
-<h3 id="通过反射将字段设值"><a href="#通过反射将字段设值" class="headerlink" title="通过反射将字段设值"></a>通过反射将字段设值</h3><p>现在，还差最后一步，就是如何通过反射将字段设值。要想让实体类实现 Merge，首先需要定义一个接口 <code>Merging</code> 让实体类去继承它，然后接口中得有一个默认方法 <code>mergeWith(T newEntity)</code>，它将做下面这几件事：</p>
-<ul>
-<li>通过反射获取 Entity 声明的所有字段</li>
-<li>通过反射获取字段上 <code>@MergeOn</code> 注解的 Level</li>
-<li>通过 Level 走不同的分支去给字段设值，是强制或是忽略亦或是只有非空情况下才设值。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Merging</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Merging</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">mergeWith</span><span class="params">(T newEntity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.getClass() != newEntity.getClass()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MergeWithDifferentClassTypeException(</span><br><span class="line">                    String.format(<span class="string">&quot;&lt;%s&gt; can not merge with other class type &lt;%s&gt;&quot;</span>, <span class="keyword">this</span>.getClass().getName(), newEntity.getClass().getName()));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Field[] fields = <span class="keyword">this</span>.getClass().getDeclaredFields(); <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Field field : fields) &#123;</span><br><span class="line">            MergeOn mergeOn = field.getAnnotation(MergeOn.class); <span class="comment">// 2</span></span><br><span class="line">            field.setAccessible(<span class="keyword">true</span>); <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (mergeOn == <span class="keyword">null</span> || mergeOn.level().isRequired()) &#123; <span class="comment">// 4...</span></span><br><span class="line">                    Object newFieldValue = field.get(newEntity);</span><br><span class="line">                    <span class="keyword">if</span> (newFieldValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        field.set(<span class="keyword">this</span>, newFieldValue);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (mergeOn.level().isMandatory()) &#123; <span class="comment">// 4...</span></span><br><span class="line">                    field.set(<span class="keyword">this</span>, field.get(newEntity)); <span class="comment">// 5</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IllegalAccessException ex) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> MergeOnFieldIllegalAccessException(field.getName(), ex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>我们看看代码具体的实现步骤（注释中标明了顺序）：</p>
-<ol>
-<li><code>this.getClass().getDeclaredFields();</code> 获取类中声明的所有字段，不包含父类和接口中的字段。<code>this</code> 指向的是实现接口的实体类。</li>
-<li><code>field.getAnnotation(MergeOn.class);</code> 获取字段上的 <code>@MergeOn</code> 注解实例。</li>
-<li><code>field.setAccessible(true);</code> 由于字段通常是 <code>private</code> 修饰的，就需要<strong>获取访问权</strong>（并不是修改实际权限），否则将抛出 <code>IllegalAccessException</code> 异常。由此可见，反射有可能破环封装性。</li>
-<li>根据 Level 做相应设值。如果无注解或 Level 为 Required，则新值非空时覆盖旧值；如果是强制（Mandatory）则始终覆盖；否则（Ignored），忽略不做处理。</li>
-<li><code>field.set(this, field.get(newEntity));</code> 字段设值的实际操作，接口设计看上去有点反人类。第一个参数为需要设置字段的对象，此处为 oldEntity，第二个参数为要设置的值，此处为新对象的字段值。</li>
-</ol>
-<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>接下来我将演示如何使用这个接口，并编写单元测试验证其正确性。</p>
-<p>首先定义实体类 Entity。</p>
-<ul>
-<li>为了测试全面性，加入了各种类型的属性字段，包括基础类型、集合、数组和类；同时，<code>@MergeOn</code> 注解覆盖了所有 Level，还包括缺省和无注解的情况。</li>
-<li>为了简单，直接在字段声明时赋初值。即 <code>new Entity()</code> 出来的可以看成旧的模型对象（oldEntity）。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Entity</span> <span class="keyword">implements</span> <span class="title">Merging</span>&lt;<span class="title">Entity</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@MergeOn(level = Level.Ignored)</span></span><br><span class="line">    <span class="keyword">private</span> String string = <span class="string">&quot;string&quot;</span>;</span><br><span class="line">    <span class="meta">@MergeOn</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> anInt = <span class="number">1</span>;</span><br><span class="line">    <span class="meta">@MergeOn(level = Level.Mandatory)</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; stringList = Arrays.asList(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>);</span><br><span class="line">    <span class="meta">@MergeOn(level = Level.Required)</span></span><br><span class="line">    <span class="keyword">private</span> String[] strings = <span class="keyword">new</span> String[]&#123;<span class="string">&quot;sArr1&quot;</span>, <span class="string">&quot;sArr2&quot;</span>&#125;;</span><br><span class="line">    <span class="keyword">private</span> Email email = <span class="keyword">new</span> Email(<span class="string">&quot;zz@163.com&quot;</span>);</span><br><span class="line">    <span class="keyword">private</span> Set&lt;Email&gt; emails = Sets.newLinkedHashSet(<span class="keyword">new</span> Email(<span class="string">&quot;zz@163.com&quot;</span>), <span class="keyword">new</span> Email(<span class="string">&quot;zz@gmail.com&quot;</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Email</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String value;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Email</span><span class="params">(String value)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.value = value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>理想情况下，<code>string</code> 字段新值应当被忽略；<code>stringList</code> 在新值为 null 时也会被强制覆盖；其他缺省和无注解的应当行为与 <code>@MergeOn(level = Level.Required)</code> 一致，即非空时才会覆盖旧值。以下为测试代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_merge_new_entity_with_different_merge_level</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Entity newEntity = <span class="keyword">new</span> Entity();</span><br><span class="line">    newEntity.setString(<span class="string">&quot;newString&quot;</span>);  <span class="comment">// Ignored</span></span><br><span class="line">    newEntity.setAnInt(<span class="number">2</span>);</span><br><span class="line">    newEntity.setStringList(<span class="keyword">null</span>);  <span class="comment">// Mandatory</span></span><br><span class="line">    newEntity.setStrings(<span class="keyword">new</span> String[]&#123;<span class="string">&quot;newS1&quot;</span>, <span class="string">&quot;newS2&quot;</span>, <span class="string">&quot;newS3&quot;</span>&#125;);</span><br><span class="line">    newEntity.setEmail(<span class="keyword">new</span> Entity.Email(<span class="string">&quot;newEmail@163.com&quot;</span>));</span><br><span class="line">    newEntity.setEmails(<span class="keyword">null</span>); <span class="comment">// Required, wished not be overwrited</span></span><br><span class="line"></span><br><span class="line">    Entity entity = <span class="keyword">new</span> Entity(); <span class="comment">// oldEntity</span></span><br><span class="line">    entity.mergeWith(newEntity);</span><br><span class="line"></span><br><span class="line">    assertThat(entity.getString()).isEqualTo(<span class="string">&quot;string&quot;</span>);</span><br><span class="line">    assertThat(entity.getAnInt()).isEqualTo(<span class="number">2</span>);</span><br><span class="line">    assertThat(entity.getStringList()).isNull();</span><br><span class="line">    assertThat(entity.getStrings()).containsSequence(<span class="string">&quot;newS1&quot;</span>, <span class="string">&quot;newS2&quot;</span>, <span class="string">&quot;newS3&quot;</span>);</span><br><span class="line">    assertThat(entity.getEmail().getValue()).isEqualTo(<span class="string">&quot;newEmail@163.com&quot;</span>);</span><br><span class="line">    assertThat(entity.getEmails()).hasSize(<span class="number">2</span>);</span><br><span class="line">    assertThat(entity.getEmails()).contains(<span class="keyword">new</span> Entity.Email(<span class="string">&quot;zz@163.com&quot;</span>));</span><br><span class="line">    assertThat(entity.getEmails()).contains(<span class="keyword">new</span> Entity.Email(<span class="string">&quot;zz@gmail.com&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/5b45bd715188251b3a1db54f">JAVA 注解的基本原理 —— 掘金</a></li>
-<li>Thinking in Java 第14章：类型信息</li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/11/29/%E7%BB%93%E5%90%88%E6%A1%88%E4%BE%8B%E4%BD%BF%E7%94%A8%20Java%20%E6%B3%A8%E8%A7%A3%E5%92%8C%E5%8F%8D%E5%B0%84/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 

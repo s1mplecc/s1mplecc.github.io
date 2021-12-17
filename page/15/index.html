@@ -283,21 +283,15 @@
 <li><p>修改完成后<code>service sshd restart</code>使配置生效</p>
 </li>
 </ul>
-<h2 id="About-SSH"><a href="#About-SSH" class="headerlink" title="About SSH"></a>About SSH</h2><blockquote>
-<p><strong>SSH</strong>(Secure Shell)协议，专为远程登录会话提供安全性的协议，传输的数据都进行了加密。SSH提供两种级别的安全验证，第一种是<strong>基于口令</strong>的安全验证。第二种是<strong>基于密匙</strong>的安全验证，较之第一种不需要传输口令，但速度稍慢一些。</p>
-</blockquote>
-<h4 id="基于密钥的安全验证"><a href="#基于密钥的安全验证" class="headerlink" title="基于密钥的安全验证"></a>基于密钥的安全验证</h4><blockquote>
-<p>客户端创建<strong>一对密钥</strong>，公钥存放在服务器上，当你想通过ssh远程连接服务器时进行<strong>公钥比对</strong>。如果一致，服务器就用公用密匙加密“质询”(challenge)并把它发送给客户端。客户端收到“质询”之后就可以用你的<strong>私钥解密</strong>再把它发送给服务器。<br>这个配对密钥类似<strong>Https</strong>协议中的对称密钥。是基于<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/RSA%E7%AE%97%E6%B3%95">RSA算法</a>的。</p>
-</blockquote>
-<ul>
-<li><p>在本地执行<code>ssh-keygen</code>生成配对密钥，在你的<code>~/.ssh</code>目录下会生成两个文件，<code>id_rsa</code>私钥，<code>id_rsa.pub</code>公钥。</p>
-</li>
-<li><p>将公钥拷贝到服务器的<code>~/.ssh/authorized_keys</code>文件中</p>
-</li>
-<li><p>给<code>authorized_keys</code>增加不可修改、删除的权限</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chattr +i authorized_keys</span><br></pre></td></tr></table></figure></li>
-</ul>
-
+<h2 id="About-SSH"><a href="#About-SSH" class="headerlink" title="About SSH"></a>About SSH</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/11/07/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E5%85%A8%E8%AE%BE%E7%BD%AE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -382,50 +376,14 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deb http://ppa.launchpad.net/certbot/certbot/ubuntu xenial main</span><br><span class="line"># deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu xenial main</span><br></pre></td></tr></table></figure>
 
 <p>安装Certbot：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install python-certbot-nginx </span><br></pre></td></tr></table></figure>
-
-<p>使用如下命令自动配置Nginx服务，也可以加上 <code>certonly</code> 参数来手动配置nginx。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo certbot --nginx</span><br></pre></td></tr></table></figure>
-
-<p>出现如下文字，说明Certbot读取了nginx配置文件。默认回车选择所有：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Which names would you like to activate HTTPS for?</span><br><span class="line">-------------------------------------------------</span><br><span class="line">1: s1mple.info</span><br><span class="line">2: www.s1mple.info</span><br></pre></td></tr></table></figure>
-
-<p>选择是否重定位到HTTPS：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.</span><br><span class="line">-------------------------------------------------------------------------------------</span><br><span class="line">1: No redirect - Make no further changes to the webserver configuration.</span><br><span class="line">2: Redirect - Make all requests redirect to secure HTTPS access. Choose this for</span><br><span class="line">new sites, or if you&#x27;re confident your site works on HTTPS. You can undo this</span><br><span class="line">change by editing your web server&#x27;s configuration.</span><br></pre></td></tr></table></figure>
-
-<p>配置成功，有效期为90天，过期需要使用 <code>certbot renew</code> 更新新的证书。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">IMPORTANT NOTES:</span><br><span class="line">- Congratulations! Your certificate and chain have been saved at:</span><br><span class="line">  /etc/letsencrypt/live/simple. info/fullchain.pem</span><br><span class="line">  Your key file has been saved at:</span><br><span class="line">  /etc/letsencrypt/live/simple. info/privkey.pem</span><br><span class="line">  Your cert will expire on 2018-02-04. To obtain a new or tweaked</span><br><span class="line">  version of this certificate in the future, simply run certbot again</span><br><span class="line">  with the “certonly&quot; option. To non-interactively renew xall* of</span><br><span class="line">  your certificates, run &quot;certbot renew&quot;</span><br></pre></td></tr></table></figure>
-
-<p>现在你可以通过HTTPS访问你的网站了。</p>
-<p>我们查看一下Nginx配置文件，文件名对应你的域名，以 <code>.conf</code> 结尾，发现新增了如下内容：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">listen 443 ssl; # managed by Certbot</span><br><span class="line">ssl_certificate /etc/letsencrypt/live/s1mple.info/fullchain.pem; # managed by Certbot</span><br><span class="line">ssl_certificate_key /etc/letsencrypt/live/s1mple.info/privkey.pem; # managed by Certbot</span><br><span class="line">include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot</span><br><span class="line"></span><br><span class="line"># Redirect non-https traffic to https</span><br><span class="line">if ($scheme != &quot;https&quot;) &#123;</span><br><span class="line">    return 301 https://$host$request_uri;</span><br><span class="line">&#125; # managed by Certbot</span><br></pre></td></tr></table></figure>
-
-<p>说明Nginx在监听443端口，并将不是HTTPS的请求重定位到HTTPS。</p>
-<h2 id="协议原理"><a href="#协议原理" class="headerlink" title="协议原理"></a>协议原理</h2><h3 id="SSL"><a href="#SSL" class="headerlink" title="SSL"></a>SSL</h3><p><strong>HTTPS(Http over Secure Socket Layer)</strong> 是基于SSL加密的更安全的HTTP协议，默认端口443。SSL握手协议过程如下：</p>
-<ol>
-<li>客户端的浏览器向服务器传送客户端SSL协议的版本号，加密算法的种类，产生的随机数，以及其他通讯所需要信息。</li>
-<li>服务器向客户端传送SSL协议的版本号，加密算法的种类，随机数以及其他相关信息，同时<strong>服务器还将向客户端传送自己的证书</strong>。</li>
-<li>客户端利用服务器传过来的信息<strong>验证服务器的合法性</strong>，服务器的合法性包括：证书是否过期，发行服务器证书的CA是否可靠，发行者证书的公钥能否正确解开服务器证书的“发行者的数字签名”，服务器证书上的域名是否和服务器的实际域名相匹配。</li>
-<li>客户端随机产生一个用于后面通讯的“对话密钥”，然后用服务器的公钥（从步骤2中的服务器的证书中获得）对其加密，然后传给服务器。</li>
-<li><strong>服务器用私钥解密</strong>“对话密钥”（此处的公钥和私钥是对应的，公钥加密的数据只能用私钥解密，服务器私钥只在服务器端保留），然后用其作为服务器和客户端的“通话密码”加解密通讯。具体的加密算法详见<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95">RSA加密算法</a>。</li>
-<li>SSL的握手部分结束，SSL安全通道的数据通讯开始，客户和服务器开始使用对话密钥进行数据通讯，同时进行通讯完整性的检验。</li>
-</ol>
-<p><img data-src="/2017/11/06/%E4%BD%BF%E7%94%A8%20Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/0.png" alt="78ab162bf20b438ca377faa87f4ea2a2_th"></p>
-<h3 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h3><p><strong>SSH(Secure Shell)<strong>协议，专为远程登录会话提供安全性的协议，传输的数据都进行了加密。SSH提供两种级别的安全验证，第一种是</strong>基于口令</strong>的安全验证。第二种是<strong>基于密匙</strong>的安全验证，不需要传输口令，原理同 SSL 类似。下面介绍一下 SSH 基于密钥的安全验证。</p>
-<p>客户端创建<strong>一对密钥</strong>（公钥和私钥），公钥存放在服务器上的 authorized_keys 文件中，当你想通过 ssh 远程连接服务器时会进行<strong>公钥比对</strong>。如果一致，服务器就用公用密匙加密“质询”（challenge）并把它发送给客户端。客户端收到“质询”之后就可以用你的<strong>私钥解密</strong>再把它发送给服务器。</p>
-<p>SSH 通过密钥连接服务器步骤如下：</p>
-<ol>
-<li>在本地执行<code>ssh-keygen</code>生成配对密钥，在你的<code>~/.ssh</code>目录下会生成两个文件，<code>id_rsa</code>私钥，<code>id_rsa.pub</code>公钥。</li>
-<li>将公钥拷贝到服务器的<code>~/.ssh/authorized_keys</code>文件中。</li>
-<li>使用<code>chattr +i authorized_keys</code>命令给<code>authorized_keys</code>增加不可修改、删除的权限。</li>
-<li>在本地使用<code>ssh &#123;username&#125;@&#123;ip&#125;</code>连接服务器。第一次连接会询问你是否继续，选择 yes 则将连接信息添加到<code>~/.ssh/known_hosts</code>文件中，此后连接不再询问。</li>
-</ol>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://certbot.eff.org/#ubuntuxenial-nginx">Certbot官方文档</a></li>
-<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html">图解SSL/TLS协议 —— 阮一峰</a></li>
-<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95">RSA加密算法 —— WiKi</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/11/06/%E4%BD%BF%E7%94%A8%20Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -511,50 +469,14 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it s1mple1995/java-web-env bash</span><br></pre></td></tr></table></figure>
 
 <p>修改Tomcat配置文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /usr/local/lib/tomcat9/conf/server.xml</span><br></pre></td></tr></table></figure>
-
-<p>修改8080端口为1110，并修改<code>&lt;Context&gt;</code>标签，意思是Web应用文件夹名为<code>jpress</code>，访问路径为根路径：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Context docBase=&quot;jpress&quot; path=&quot;&quot; reloadable=&quot;true&quot; /&gt;</span><br></pre></td></tr></table></figure>
-
-<p>退出容器，并生成新的镜像：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit $&#123;container ID&#125; s1mple1995/jpress</span><br></pre></td></tr></table></figure>
-<p>现在你有了jpress的镜像，但是Tomcat的webapps目录下空空如也，我们需要通过<strong>Dockerfile</strong>来构建更完善的jpress镜像。</p>
-<h3 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h3><p>先在服务器上创建一个jpress文件夹，将<strong>jpress.war</strong><code>scp</code>到此目录下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /home/s1mple/jpress</span><br></pre></td></tr></table></figure>
-<p>执行<code>vim Dockerfile</code>编写镜像构建文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># Base image</span><br><span class="line">From s1mple1995/jpress</span><br><span class="line"></span><br><span class="line">USER root</span><br><span class="line"></span><br><span class="line"># environment variables</span><br><span class="line">ENV APP /usr/local/lib/tomcat9/webapps</span><br><span class="line"></span><br><span class="line"># Copy the current directory contents into the container at $APP</span><br><span class="line">ADD ./jpress.war $APP</span><br><span class="line"></span><br><span class="line"># Make port 1110 available to the world outside this container</span><br><span class="line">EXPOSE 1110</span><br><span class="line"></span><br><span class="line">WORKDIR $APP</span><br><span class="line"></span><br><span class="line">CMD [&quot;service&quot;, &quot;tomcat&quot;, &quot;run&quot;]</span><br></pre></td></tr></table></figure>
-
-<p>其中，<strong>From</strong>指依赖的基础镜像。<strong>USER</strong>默认就是root，在生产环境为了安全可以指定其他用户。<strong>ENV</strong>是环境变量。<strong>ADD</strong>或者<strong>COPY</strong>命令将我们的war包拷贝到webapps目录下。<strong>EXPOSE</strong>开放端口。<strong>WORKDIR</strong>表示你进入容器时的初始路径。<strong>CMD</strong>为容器启动时执行的命令。这里使用<code>service tomcat run</code>而不是<code>start</code>是因为容器会监控前台如果没有输出，在<code>start</code>命令执行完后就会自动退出。而<code>run</code>命令是前台运行。我之前一直用<code>start</code>命令发现容器总是刚启动就退出。<br>更多命令请参考<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/reference/builder/#from">官方文档</a>。</p>
-<h3 id="构建Docker镜像"><a href="#构建Docker镜像" class="headerlink" title="构建Docker镜像"></a>构建Docker镜像</h3><p>现在所有准备工作都已完成，你可以构建自己的JPress镜像了。</p>
-<p>在<code>/home/s1mple/jpress</code>目录下执行，<code>-t</code>给新镜像打上标签：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t s1mple1995/jpress .</span><br></pre></td></tr></table></figure>
-
-<p>可以看到控制台输出了一些信息：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Sending build context to Docker daemon 20.@6MB</span><br><span class="line">Step 1/6 : FROM simple1995/jpress</span><br><span class="line">---&gt; 6c7F7aa5716d</span><br><span class="line">Step 2/6 : USER root</span><br><span class="line">---&gt; Running in d29bd2d7cf4e</span><br><span class="line">---&gt; 616922ef516c</span><br><span class="line">Removing intermediate container d29bd2d7cf4e</span><br><span class="line">Step 3/6 : ENV APP /usr/local/lib/tomcat9/webapps</span><br><span class="line">---&gt; Running in 5667a207¢898</span><br><span class="line">---&gt; b6c061148616</span><br><span class="line">Removing intermediate container 5667a267¢898</span><br><span class="line">Step 4/6 : ADD ./jpress.war SAPP</span><br><span class="line">---&gt; a82c14e949e0</span><br><span class="line">Step 5/6 : EXPOSE 1110</span><br><span class="line">---&gt; Running in b31964ddfefo</span><br><span class="line">---&gt; cd9de2d7786F</span><br><span class="line">Removing intermediate container b31964ddfefo</span><br><span class="line">Step 6/6 : CMD service tomcat run</span><br><span class="line">---&gt; Running in @4a6a78fa77a</span><br><span class="line">---&gt; de9b3648553e</span><br><span class="line">Removing intermediate container @4a6a78fa77a</span><br><span class="line">Successfully built de9b3648553e</span><br><span class="line">Successfully tagged s1mple1995/jpress:latest</span><br></pre></td></tr></table></figure>
-
-<p>Dockerfile里的每一句命令都会在一个新的容器中运行，并生成一个新的镜像，再将中间过渡的容器移除。</p>
-<p>我们来验证一下，执行<code>docker images</code>看到我的两个镜像：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">REPOSITORY                  TAG          IMAGE ID</span><br><span class="line">s1mple1995/jpress           latest       de9b3648553e</span><br><span class="line">simple1995/java-web-env     latest       292d98d8d6d4</span><br></pre></td></tr></table></figure>
-
-<p>执行<code>docker image history de9</code>查看jpress镜像历史</p>
-<p><img data-src="/2.png" alt="-----2017-11-04---7.01.30"></p>
-<p>甚至可以看到我们通过<code>bash</code>修改tomcat配置文件后提交的镜像，你可以通过运行这些镜像来回退你的操作</p>
-<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><p>运行，<code>-p</code>绑定端口，<code>-v</code>挂载宿主机与容器的共享文件夹：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -d -p 1110:1110 -v /home/s1mple/jpress/:/usr/local/lib/tomcat9/webapps s1mple1995/jpress</span><br></pre></td></tr></table></figure>
-
-<p>不出意外，你现在就可以在浏览器上访问<code>http://&#123;domain&#125;:1110/install</code>进入JPress安装向导，按照步骤，填写数据库信息，需要提前建库。数据库主机填写你安装了mysql的服务器IP。</p>
-<p>如果长时间未加载，可以执行<code>docker restart</code>命令重启容器</p>
-<h2 id="Nginx重定位"><a href="#Nginx重定位" class="headerlink" title="Nginx重定位"></a>Nginx重定位</h2><p>通过nginx配置二级域名，你现在可以通过 <a target="_blank" rel="noopener" href="http://jpress.s1mple.info/">http://jpress.s1mple.info</a> 访问我的jpress博客。</p>
-<p>首先你要保证开放了二级域名。我的域名是在GoDaddy上买的，需要在他的DNS管理界面添加<code>*.s1mple.info</code>。</p>
-<p>添加nginx配置文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/nginx/sites-enabled</span><br><span class="line">cp ghost_8080.conf jpress.conf</span><br></pre></td></tr></table></figure>
-
-<p>修改jpress.conf文件，添加80、8080端口：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server_name jpress.s1mple.info www.jpress.s1mple.info;</span><br><span class="line"></span><br><span class="line">location / &#123;</span><br><span class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">    proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">    proxy_set_header Host $http_host;</span><br><span class="line">    proxy_pass http://127.0.0.1:1110;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>执行<code>service nginx restart</code>即可。</p>
-<p>效果图<br><img data-src="/3.png" alt="-----2017-11-20---9.42.47"></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/11/04/%E4%BD%BF%E7%94%A8%20Docker%20%E9%83%A8%E7%BD%B2%20Java%20Web%20%E5%BA%94%E7%94%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -652,46 +574,15 @@
 <ul>
 <li><code>source ~/.bashrc</code>使文件生效</li>
 </ul>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a><strong>Tips</strong></h4><ol>
-<li>当你执行一条命令，系统会去PATH路径下查找该命令，比如你现在可以执行<code>java -version</code>命令。<code>echo $PATH</code>查看PATH设置。   </li>
-<li>全局环境变量，可以<code>$&#123;&#125;</code>或者<code>$</code>引用，你现在可以<code>echo $&#123;JAVA_HOME&#125;</code>打印该值。<code>env</code>查看环境变量设置。</li>
-</ol>
-<blockquote>
-<p>如果你觉得官网太麻烦，可以安装openjdk，虽说是阉割版，但足够满足你的需求了</p>
-</blockquote>
-<ul>
-<li>安装<strong>openjdk</strong>只需要下面一行命令  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install openjdk-8-jdk</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="Tips-1"><a href="#Tips-1" class="headerlink" title="Tips"></a><strong>Tips</strong></h4><ol>
-<li>你可以通过如下命令查看有关jdk版本和信息。 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-cache search jdk</span><br><span class="line">apt-cache show openjdk-8-jdk</span><br></pre></td></tr></table></figure></li>
-<li>java有关的可执行文件被安装在<code>/usr/bin</code>目录下，但是环境变量并没有设置。</li>
-</ol>
-<h2 id="Install-Tomcat"><a href="#Install-Tomcat" class="headerlink" title="Install Tomcat"></a>Install Tomcat</h2><ul>
-<li><p>照例，<a target="_blank" rel="noopener" href="https://tomcat.apache.org/download-90.cgi">官网</a>下载、解压。这里不再赘述</p>
-</li>
-<li><p>配置Tomcat为服务，<code>cd /usr/local/lib/tomcat9</code>目录下</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp ./bin/catalina.sh /etc/init.d/tomcat</span><br></pre></td></tr></table></figure></li>
-<li><p><code>vim /etc/init.d/tomcat</code>加入如下内容</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">JAVA_HOME=/usr/local/lib/jdk8</span><br><span class="line">JRE_HOME=$&#123;JAVA_HOME&#125;/jre</span><br><span class="line">CATALINA_HOME=/usr/local/lib/tomcat9</span><br><span class="line">CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib:$&#123;CATALINA_HOME&#125;/lib</span><br></pre></td></tr></table></figure></li>
-<li><p>添加<strong>restart</strong>命令，<code>&quot;$1&quot;</code>指输入的第一个参数</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    elif [ &quot;$1&quot; = &quot;restart&quot; ] ; then</span><br><span class="line">        service tomcat stop</span><br><span class="line">        sleep 1</span><br><span class="line">        service tomcat start</span><br><span class="line">    ```    </span><br><span class="line">- 保存退出，现在可以通过`service tomcat [start|stop|restart]`来启动、停止Tomcat。查看是否正常启动</span><br></pre></td></tr></table></figure>
-<p>  curl localhost:8080</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### **Tips**</span><br><span class="line"></span><br><span class="line">1. 你的应用程序安装路径在**webapps**下。在部署你自己的应用前执行`rm -r webapps/*`清空文件夹    </span><br><span class="line">2. Tomcat的配置文件在`conf/server.xml`中</span><br><span class="line"></span><br><span class="line">### **About server.xml**</span><br><span class="line"></span><br><span class="line">- [server.xml详解](http://www.cnblogs.com/gugnv/archive/2012/02/01/2334187.html)</span><br><span class="line"></span><br><span class="line">- 默认开启8080端口，可以修改端口号</span><br></pre></td></tr></table></figure>
-<p>  &lt;Connector port=”8080” protocol=”HTTP/1.1”</p>
-<pre><code>         connectionTimeout=&quot;20000&quot;
-         redirectPort=&quot;8443&quot; /&gt;
-</code></pre>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- `&lt;Host&gt;`标签中，**appBase**解释了为什么将Java Web程序打包放在此目录下。**unpackWARs**为true自动解压war包，**autoDeploy**自动部署。所以在Tomcat启动后识别webapps目录下`.war`结尾的war包自动解压、部署。</span><br></pre></td></tr></table></figure>
-<p>  &lt;Host name=”localhost”  appBase=”webapps”</p>
-<pre><code>    unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;
-</code></pre>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 在`&lt;Host&gt;`标签中可设置`&lt;Context&gt;`上下文标签。**docBase**是应用程序包名，**path**是url前缀，**reloadable**为true时自动检测应用程序的`/WEB-INF/lib`和`/WEB-INF/classes`目录的变化，自动装载新的应用程序</span><br></pre></td></tr></table></figure>
-  <Context docBase="app" path="/app" reloadable="true" />
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">- 如果不配置`&lt;Context&gt;`标签，将默认以应用程序文件夹名字作为url前缀，如**webapps**目录下应用程序文件夹名为**jpress**，则url为</span><br></pre></td></tr></table></figure>
-  http://{IP}:{port}/jpress/
-  ```</li>
-</ul>
-
+<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a><strong>Tips</strong></h4>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/11/02/%E5%AE%89%E8%A3%85%20JDK&Tomcat/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -776,45 +667,14 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull daocloud.io/library/ubuntu:16.04</span><br></pre></td></tr></table></figure>
 <p>执行<code>docker images</code>查看已下载的镜像</p>
 <p>创建容器实例，返回容器ID。<code>-d</code>后台运行</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -it daocloud.io/library/ubuntu:16.04</span><br></pre></td></tr></table></figure>
-<p>执行<code>docker ps</code>查看正在运行的容器</p>
-<h2 id="Build-Your-Image"><a href="#Build-Your-Image" class="headerlink" title="Build Your Image"></a>Build Your Image</h2><p>进入容器，ID输入可区分的几位就可以了</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 4e bash</span><br></pre></td></tr></table></figure>
-<p>可以看到在容器中有一套全新的目录结构，与宿主机是隔离的。</p>
-<p>更改软件源为阿里云源</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/apt/</span><br><span class="line">cp sources.list sources.list_backup </span><br><span class="line">cat /dev/null &gt; sources.list </span><br></pre></td></tr></table></figure>
-
-<p><code>vim sources.list</code>将如下内容加入文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial main</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial main</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates main</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates main</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial universe</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial universe</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates universe</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates universe</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-security main</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-security main</span><br><span class="line">deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-security universe</span><br><span class="line">deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-security universe</span><br></pre></td></tr></table></figure>
-
-<p>日常<code>apt-get update|upgrade</code>之后着手安装jdk和Tomcat了</p>
-<p>我的另一篇博客详细介绍了如何<a target="_blank" rel="noopener" href="http://s1mple.info/install-java-tomcat/">安装 JDK&amp;Tomcat</a></p>
-<blockquote>
-<p>如果你成功到了这里，那恭喜你，你自己的开发环境镜像已经构建完了。还需要一些步骤来将你的镜像推上云端！</p>
-</blockquote>
-<h2 id="Push-It"><a href="#Push-It" class="headerlink" title="Push It !"></a>Push It !</h2><p><code>exit</code>或者<code>ctrl+d</code>退出当前容器，<code>docker ps</code>查看容器ID</p>
-<p>根据容器创建一个新的镜像，不加标签默认<strong>latest</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit 4e s1mple1995/java-web-env</span><br></pre></td></tr></table></figure>
-
-<p>在<code>push</code>前需要在<a target="_blank" rel="noopener" href="https://cloud.docker.com/">docker官网</a>注册账户，用于存放自己的镜像</p>
-<p>在<strong>Docker Cloud</strong>中<strong>create repository</strong>，镜像名要和服务器中的镜像名一致，不一致可以使用如下命令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag local-image:tagname new-repo:tagname</span><br></pre></td></tr></table></figure>
-
-<p>在服务器端登录</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login</span><br></pre></td></tr></table></figure>
-
-<p>执行push命令，等待上传完成</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push s1mple1995/java-web-env</span><br></pre></td></tr></table></figure>
-
-<p>现在你的镜像已经存放在Docker Cloud云端了，搜索你的镜像，随时随地可以pull下来。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search s1mple1995</span><br></pre></td></tr></table></figure>
-
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><ol>
-<li>Docker的镜像管理很像git的版本控制。</li>
-<li>你也可以使用阿里云的容器镜像服务。如果你的服务器是阿里云的ECS，可以使用内网传输，速度非常快。 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login registry-vpc.cn-hangzhou.aliyuncs.com</span><br></pre></td></tr></table></figure></li>
-</ol>
-<p>​    </p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/11/02/%E6%9E%84%E5%BB%BA%E4%BD%A0%E7%9A%84Docker%E9%95%9C%E5%83%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 

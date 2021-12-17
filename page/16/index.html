@@ -270,29 +270,15 @@
 <blockquote>
 <p>1.安装过程中会配置数据库，需要提前建个空的database。如果mysql装在本机，就输入localhost，装在别的服务器上就需要输入服务器IP<br>2.询问是否使用nginx可以选no，可以自己手动配置nginx。实际上他帮你配置将80端口的请求转发到ghost的2368端口<br>3.询问是否新建”ghost”用户可以选no，若选yes他会在数据库中新建此用户，并且在ghost后台管理可以看到此用户和一些默认文章。</p>
 </blockquote>
-<h3 id="After-Installation"><a href="#After-Installation" class="headerlink" title="After Installation"></a>After Installation</h3><ul>
-<li>安装后当前文件下会生成<strong>config.production.json</strong>文件，配置信息在这里。<code>ghost ls</code>查看当前ghost运行实例信息，<code>ghost restart</code>重启ghost。</li>
-<li>安装完成后，访问<code>／ghost</code>进入后台管理系统，根据引导创建用户。</li>
-<li>在后台Design模块中可以导入主题zip压缩包，<code>/ghost/#/settings/design</code>。在Ghost Marketplace下找了个时间轴的主题，并修改了部分视觉效果。<a target="_blank" rel="noopener" href="https://github.com/s1mplecc/ghost-theme">时间轴主题下载链接</a></li>
-</ul>
-<h3 id="Redirect-Port-With-Nginx"><a href="#Redirect-Port-With-Nginx" class="headerlink" title="Redirect Port With Nginx"></a>Redirect Port With Nginx</h3><blockquote>
-<p>很尴尬，因为Aliyun的服务器需要备案，80端口有时候会出现抽风的情况。所以有必要先配置个其他端口（2368端口太难记了），比如8080。</p>
-</blockquote>
-<ul>
-<li><code>cat /etc/nginx/nginx.conf </code>发现nginx配置文件包括如下两行  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">include /etc/nginx/conf.d/*.conf;</span><br><span class="line">include /etc/nginx/sites-enabled/*;</span><br></pre></td></tr></table></figure>
-  意思就是配置文件会导入上述两个目录中的文件。所以我们可以<code>cd /etc/nginx/sites-enabled/</code>中。</li>
-<li>发现目录下有个<strong>s1mple.info.conf</strong>文件，这其实就是ghost配置nginx的文件。  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp s1mple.info.conf ghost_8080.conf</span><br></pre></td></tr></table></figure></li>
-<li>修改<code>ghost_8080.conf</code>中的监听端口80为8080,<code>service nginx restart</code>重启nginx</li>
-<li>修改ghost安装目录下的<strong>config.production.json</strong>,重启ghost  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;url&quot;: &quot;http://s1mple.info:8080&quot;,</span><br></pre></td></tr></table></figure></li>
-</ul>
-<blockquote>
-<p>有个端口号看着很丑，等备案完成，删掉<code>ghost_8080.conf</code>就行了。（你看，国外主机就不用备案）</p>
-</blockquote>
-<h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><ul>
-<li>本来想在docker容器中部署Ghost,但是可能由于docker和宿主系统隔离的原因，systemd命令不能正常运行<code>Failed to connect to bus: No such file or directory</code>。暂时没找到解决方法。不过我在docker里部署了另一个博客平台jPress。<a target="_blank" rel="noopener" href="https://jpress.s2mple.xyz/">跳转链接</a></li>
-<li>jPress是基于java的轻量级博客平台，前身是WordPress。也许下个博客我会介绍如何用docker部署jPress，谁知道呢。</li>
-</ul>
-
+<h3 id="After-Installation"><a href="#After-Installation" class="headerlink" title="After Installation"></a>After Installation</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
