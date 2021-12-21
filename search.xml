@@ -7062,7 +7062,7 @@ zuul:
   <entry>
     <title>网站外链爬虫</title>
     <url>/2021/12/17/%E7%BD%91%E7%AB%99%E5%A4%96%E9%93%BE%E7%88%AC%E8%99%AB/</url>
-    <content><![CDATA[<h2 id="项目介绍"><a href="#项目介绍" class="headerlink" title="项目介绍"></a>项目介绍</h2><p>网站外链爬虫，使用轻量级 Web 应用框架 Flask，以 Restful 接口提供服务，支持容器化部署。项目地址：<a href="https://github.com/s1mplecc/external-link-crawer">https://github.com/s1mplecc/external-link-crawer</a> ，需要 Python 版本 3.x。</p>
+    <content><![CDATA[<h2 id="项目介绍"><a href="#项目介绍" class="headerlink" title="项目介绍"></a>项目介绍</h2><p>网站外链爬虫，使用轻量级 Web 应用框架 Flask，以 Restful 接口提供服务，支持容器化部署。项目地址：<a href="https://github.com/s1mplecc/external-link-crawler">https://github.com/s1mplecc/external-link-crawler</a> ，需要 Python 版本 3.x。</p>
 <p>对于传入的网站 URL，获取其 HTML 网页，提取外部链接的域名。包含如下几类外链：</p>
 <ul>
 <li>超链接，标签 <code>a</code> 下的 <code>href</code> 属性；</li>
@@ -7071,7 +7071,7 @@ zuul:
 <li>外部 JavaScript 脚本文件，标签 <code>script</code> 下  <code>src</code> 属性。</li>
 </ul>
 <h2 id="本地运行"><a href="#本地运行" class="headerlink" title="本地运行"></a>本地运行</h2><p>Step 1：克隆项目。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> https://github.com/s1mplecc/external-link-crawer.git</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> https://github.com/s1mplecc/external-link-crawler.git</span></span><br></pre></td></tr></table></figure>
 
 <p>Step 2：安装依赖，包括 Flask 和 BeautifulSoup4。建议使用 Virtualenv 局部安装依赖。</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> pip3 install -r requirements.txt</span> </span><br></pre></td></tr></table></figure>
@@ -7084,13 +7084,13 @@ zuul:
 
 <p>使用 Gunicorn 启动 Flask 应用。由于爬虫运行效率主要受网络延迟影响，因此为提高并发吞吐量，使用多进程 + 协程方式部署。协程由 Gevent 库支持。参数 <code>-w</code> 指定进程数，每个进程默认最大并发连接数 1000。Gunicorn 应用端口号默认为 8000。</p>
 <p>Step 1：拉取镜像。镜像已提交至 Docker Hub 仓库。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker pull s1mplecc/external-link-crawer</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker pull s1mplecc/external-link-crawler</span></span><br></pre></td></tr></table></figure>
 
 <p>也可以在本地手动构建镜像。克隆下项目后，在 Dockerfile 所在目录执行：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker build -t s1mplecc/external-link-crawer .</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker build -t s1mplecc/external-link-crawler .</span></span><br></pre></td></tr></table></figure>
 
 <p>Step 2：启动容器，映射端口。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker run -d -p 5000:8000 --name external-link-crawer s1mplecc/external-link-crawer</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker run -d -p 5000:8000 --name external-link-crawler s1mplecc/external-link-crawler</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="请求格式"><a href="#请求格式" class="headerlink" title="请求格式"></a>请求格式</h2><ul>
 <li>请求类型 GET；</li>
@@ -7115,10 +7115,10 @@ zuul:
 <figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">FROM</span> python:<span class="number">3.8</span>-slim</span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> FLASK_WORK_DIR=<span class="string">&quot;/root/flask&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> <span class="variable">$FLASK_WORK_DIR</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> . .</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip3 install -r requirements.txt</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip3 install gunicorn gevent</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> chmod +x gunicorn_starter.sh</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> [<span class="string">&quot;./gunicorn_starter.sh&quot;</span>]</span></span><br></pre></td></tr></table></figure>
 
 <p>Step 2：构建镜像。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker build -t s1mplecc/external-link-crawer .</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker build -t s1mplecc/external-link-crawler .</span></span><br></pre></td></tr></table></figure>
 
 <p>Step 3：推送到远端仓库。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker tag s1mplecc/external-link-crawer docker.io/s1mplecc/external-link-crawer</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> docker push docker.io/s1mplecc/external-link-crawer</span> </span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker tag s1mplecc/external-link-crawler docker.io/s1mplecc/external-link-crawler</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> docker push docker.io/s1mplecc/external-link-crawler</span> </span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>Projects</category>
