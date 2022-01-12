@@ -760,10 +760,10 @@
 <p>通常，为了应对高速流动的无界数据流，流处理对于处理效率要求更高，内存占用要求更低，与之相对的，相较批处理对于错误的容忍度要更高。</p>
 <p>本文介绍了 Apache Storm、Apache Flink 和 Spark Streaming 三种常用流处理框架，主要包含它们各自的拓扑结构和运行时架构，最后还对流处理框架的演进和流批一体化的趋势做了简要介绍。</p>
 <h2 id="Apache-Storm"><a href="#Apache-Storm" class="headerlink" title="Apache Storm"></a>Apache Storm</h2><p><a target="_blank" rel="noopener" href="https://storm.apache.org/index.html">Apache Storm</a> 是一个分布式实时计算框架，主要使用 Clojure 和 Java 语言编写，目前最新版本 2.2.0。在 Storm 中，数据流被抽象为 tuples，由数据和 ID 标识符组成。Storm 的拓扑结构（Topology）是一个有向无环图，由<strong>输入节点Spouts</strong>、<strong>处理节点Bolts</strong>和<strong>代表数据流的边</strong>三部分组成，如下图所示：</p>
-<p><img src="/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/1.png" alt="7f120eb6c1e92b4775e84d196100e3f5.png"></p>
+<p><img data-src="/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/1.png" alt="7f120eb6c1e92b4775e84d196100e3f5.png"></p>
 <p>Spouts 是整个拓扑结构的入口点，负责将输入数据流转换为 tuples，送至 Bolts 进行处理；Bolts 负责处理输入流并转换为输出流，它维护了处理逻辑，能够对 tuples 执行过滤、映射、聚合等函数式操作，还能与数据库进行交互。</p>
 <p>Storm 的运行时架构与 Hadoop 类似，也是经典的主从模式（master-slave）。Storm 中的主节点（master node）运行一个叫做 <strong>Nimbus</strong> 的程序，由其负责资源分配和任务调度，用户定义的 Topology 会被提交到 Nimbus 上；从节点（worker node）运行 <strong>Supervisor</strong> 程序，负责执行 Nimbus 分配的任务，其上可以运行一个或多个工作进程（worker process），每个工作进程执行 Topology 的一个子集。Nimbus 不能直接与 Supervisor 进行交互，两者需要通过 <strong>ZooKeeper</strong> 进行协作，ZooKeeper 保存调度信息、心跳信息、集群状态和配置信息。</p>
-<p><img src="/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/2.png" alt="aa1882c89b70544081866ade75563064.png"></p>
+<p><img data-src="/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/2.png" alt="aa1882c89b70544081866ade75563064.png"></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/11/23/%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D-Storm%E3%80%81Flink-Spark/#more" rel="contents">

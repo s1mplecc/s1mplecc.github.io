@@ -285,9 +285,9 @@
 </li>
 <li><p>在添加实例成功后第一件事是<code>ping</code>一下公网 IP 是否是通的，有些时候分配的 IP 是被大陆给墙了的。<code>ping</code>通后我习惯的首件要事就是添加我的 ssh 公钥以及修改 ssh 的一些策略，比如修改默认端口号、禁用密码登陆之类的，一切都是为安全考虑（吃了第一次的亏，一夜之间异常登陆三十次）</p>
 </li>
-<li><p>迁移 Ghost 博客之前需要先将原先服务器上的相关文件下载到本地，再上传到新的服务器上。主要包含文章内容，图片以及主题。所幸 Ghost 博客提供了 Export/Import 功能，而且是所有文件导出到一个大 Json 文件中，很方便迁移<br><img src="/0.png" alt="14070DA1-C3CD-4A9F-AE52-D4D2DE4A2CDB">主题也很方便，我之前就将代码上传至 <a target="_blank" rel="noopener" href="https://github.com/s1mplecc/ghost-theme-kaldorei">GitHub</a>，克隆下来压缩上传就行。图片稍微麻烦点，需要将 Ghost 目录下的整个<code>content/images</code>文件夹<code>scp</code>到本地，再<code>scp</code>到 Vultr 服务器上，可能要花些时间</p>
+<li><p>迁移 Ghost 博客之前需要先将原先服务器上的相关文件下载到本地，再上传到新的服务器上。主要包含文章内容，图片以及主题。所幸 Ghost 博客提供了 Export/Import 功能，而且是所有文件导出到一个大 Json 文件中，很方便迁移<br><img data-src="/0.png" alt="14070DA1-C3CD-4A9F-AE52-D4D2DE4A2CDB">主题也很方便，我之前就将代码上传至 <a target="_blank" rel="noopener" href="https://github.com/s1mplecc/ghost-theme-kaldorei">GitHub</a>，克隆下来压缩上传就行。图片稍微麻烦点，需要将 Ghost 目录下的整个<code>content/images</code>文件夹<code>scp</code>到本地，再<code>scp</code>到 Vultr 服务器上，可能要花些时间</p>
 </li>
-<li><p>接下来去修改你的域名设置，我是在 <a target="_blank" rel="noopener" href="https://sg.godaddy.com/zh">GoDaddy</a> 上购买的域名，所以去狗爹网修改配置如下<br><img src="/1.png" alt="64F8A358-E544-4FA3-819C-7F38F5327A5A"></p>
+<li><p>接下来去修改你的域名设置，我是在 <a target="_blank" rel="noopener" href="https://sg.godaddy.com/zh">GoDaddy</a> 上购买的域名，所以去狗爹网修改配置如下<br><img data-src="/1.png" alt="64F8A358-E544-4FA3-819C-7F38F5327A5A"></p>
 </li>
 <li><p>准备工作已经做好，剩下的就是在新服务器上搭建环境和部署博客了。必要的东西也就三个，Nginx 用于做端口映射，Docker 用于运行 Ghost 容器，Certbot 用来配置 Https。Nginx 在 Ubuntu 上安装很简单，使用<code>apt-get</code>命令即可。Certbot 安装在我的另一篇博客<a target="_blank" rel="noopener" href="https://s2mple.xyz/configure-https-with-certbot/">Certbot配置Https</a>中有详细介绍。我们着重介绍一下如何安装 Docker</p>
 </li>

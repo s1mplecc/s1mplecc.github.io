@@ -317,7 +317,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">REPOSITORY                  TAG          IMAGE ID</span><br><span class="line">s1mple1995/jpress           latest       de9b3648553e</span><br><span class="line">simple1995/java-web-env     latest       292d98d8d6d4</span><br></pre></td></tr></table></figure>
 
 <p>执行<code>docker image history de9</code>查看jpress镜像历史</p>
-<p><img src="/2.png" alt="-----2017-11-04---7.01.30"></p>
+<p><img data-src="/2.png" alt="-----2017-11-04---7.01.30"></p>
 <p>甚至可以看到我们通过<code>bash</code>修改tomcat配置文件后提交的镜像，你可以通过运行这些镜像来回退你的操作</p>
 <h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><p>运行，<code>-p</code>绑定端口，<code>-v</code>挂载宿主机与容器的共享文件夹：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -d -p 1110:1110 -v /home/s1mple/jpress/:/usr/local/lib/tomcat9/webapps s1mple1995/jpress</span><br></pre></td></tr></table></figure>
@@ -333,7 +333,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server_name jpress.s1mple.info www.jpress.s1mple.info;</span><br><span class="line"></span><br><span class="line">location / &#123;</span><br><span class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">    proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">    proxy_set_header Host $http_host;</span><br><span class="line">    proxy_pass http://127.0.0.1:1110;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>执行<code>service nginx restart</code>即可。</p>
-<p>效果图<br><img src="/3.png" alt="-----2017-11-20---9.42.47"></p>
+<p>效果图<br><img data-src="/3.png" alt="-----2017-11-20---9.42.47"></p>
 
     </div>
 

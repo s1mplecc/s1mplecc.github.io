@@ -293,13 +293,13 @@
 <h2 id="GitHub-Flow"><a href="#GitHub-Flow" class="headerlink" title="GitHub Flow"></a>GitHub Flow</h2><blockquote>
 <p><a target="_blank" rel="noopener" href="https://guides.github.com/introduction/flow/">GitHub Flow</a> 是一个更轻量级的软件开发模型，示意图如下。它摒弃了 Git Flow 中繁杂的分支，<strong>只保留一个主分支 master</strong>。开发新功能时从 master 分支上拉取 feature 分支，开发完成后发起 <strong>Pull-Request</strong>，小组内进行评审和反馈，此时也进行 <strong>Code Review</strong>。测试通过后合并回主分支。</p>
 </blockquote>
-<p><img src="/0.png" alt="GitHub-Flow2-1"></p>
+<p><img data-src="/0.png" alt="GitHub-Flow2-1"></p>
 <p>相比于 Git Flow，这种方式因为省去了一些分支而降低了复杂度，同时也更符合持续集成的思想，以一张故事卡为集成的最小单位，相对来说集成的周期短，反馈的速度也快，能够及早的遇到问题并及早解决。</p>
 <p>顺着持续集成的思想，如果我们把 GitHub Flow 分支模型做得再极致一点，我们不要 feature 分支，或者把 feature 分支只留在本地；不需要使用 Pull-Request 而是直接 Push 到远程 master 分支，我们就做到了 Trunk based Development。</p>
 <h2 id="TBD"><a href="#TBD" class="headerlink" title="TBD"></a>TBD</h2><blockquote>
 <p><strong>Trunk based Development</strong>，又叫<strong>主干开发</strong>，是一套代码分支管理策略，开发人员之间通过约定向被指定为<strong>主干</strong>的分支提交代码，以此抵抗因为长期存在的多分支导致的开发压力。此举可<strong>避免分支合并的困扰，保证随时拥有可发布的版本</strong>。“主干”这个词隐喻了树木生长的场景，树木最粗最长的部位是主干，分支从主干分离出来但是长度有限。</p>
 </blockquote>
-<p><img src="/1.jpg" alt="what_is_trunk"></p>
+<p><img data-src="/1.jpg" alt="what_is_trunk"></p>
 <p>使用主干开发后，我们的代码库原则上就只能有一个 Trunk 分支即 master 分支了，所有新功能的提交也都提交到 master 分支上，保证每次提交后 master 分支都是可随时发布的状态。没有了分支的代码隔离，测试和解决冲突都变得简单，持续集成也变得稳定了许多，但也有如下几个问题：</p>
 <ul>
 <li><p><strong>如何避免发布引入未完成 Feature</strong>，答案是使用 <strong>Feature Toggle</strong>。在代码库里加一个特性开关来随时打开和关闭新特性是最容易想到的也是最容易被质疑的解决方案。Feature Toggle 是有成本的，不管是在加 Toggle 时的代码设计，还是在移除 Toggle 时的人力成本和风险，都是需要和它带来的价值进行衡量的。</p>

@@ -874,7 +874,7 @@
 <p>而在安全领域方面，老式的威胁检测系统通过使用启发式的和静态的签名（signature）来检测威胁和异常。例如：杀毒软件会根据病毒程序的特征，生成并维持一个病毒的签名库（保持持续更新），在查杀时通过与库中的签名比对来识别病毒程序。基于签名的威胁检测技术虽然容易理解，但并不健壮，它的最大的问题之一是：在数据规模、数据流速显著增大时，如何保证签名比对过程与数据流入速度匹配。每个包需要与数据库中的每个签名比对，如果不能保持同步，那意味着只能抛弃部分数据包，由此就会产生“漏网之鱼”。</p>
 <p>如今，基于签名的系统逐渐被智能网络安全代理（Intelligent cybersecurity agent）所取代。机器学习在识别新型恶意软件、零日漏洞攻击（zero-day attack）、高级可持续威胁（advanced persistent threats，简称 APT）方面取得积极进展。</p>
 <p>一般来说，由于攻击的复杂特性，要做到完全预防是很难的，机器学习能做到在攻击的初期识别攻击并防止其扩散到整个系统。许多网络安全公司使用诸如用户行为分析（user behavior analytics）和预测分析（predictive analytics）的高级分析方法，在威胁生命周期的早期阶段识别 APT 攻击，这种方式能够有效预防身份数据泄漏和内部威胁。规范分析（prescriptive analytics）则更具有响应性，能够在网络攻击发生以后分析该采取什么响应措施能将损失降到最小。</p>
-<p><img src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/1.png" alt="48e9cf0bd45e3630c4346d142839c8a1.png"></p>
+<p><img data-src="/2020/10/07/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8-%E2%80%94%E2%80%94-Chapter-1-Basics-of-Machine-Learning-in-Cybersecurity/1.png" alt="48e9cf0bd45e3630c4346d142839c8a1.png"></p>
 <h2 id="机器学习中的数据"><a href="#机器学习中的数据" class="headerlink" title="机器学习中的数据"></a>机器学习中的数据</h2><p>数据是机器学习的核心。数据分为结构化数据和非结构化数据，<strong>结构化数据（structured data）</strong>可以被映射为二维表结构，包含表头（Header）和表内元素，传统的关系型数据库（RDBMS）如 MySQL、Oracle 等都是以这种方式存放结构化数据；而<strong>非结构化数据（unstructured data）</strong>数据结构不规则或不完整，没有预定义的数据模型，例如图片、音频/视频等；融合了结构化和非结构化的数据称为<strong>半结构化数据（semi-structured data）</strong>。</p>
           <!--noindex-->
             <div class="post-button">
@@ -987,7 +987,7 @@
           <h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2><p>时间复杂度并不是表示一个程序解决问题需要花多少时间，而是<strong>当问题规模扩大后，程序需要的时间长度增长得有多快</strong>。</p>
 <p>不管数据有多大，程序处理花的时间始终是那么多的，我们就说这个程序性能很好，具有$O(1)$的时间复杂度，也称常数级复杂度；数据规模变得有多大，花的时间也跟着变得有多长，这个程序的时间复杂度就是$O(n)$，比如找n个数中的最大值；而像冒泡排序、插入排序等，数据扩大2倍，时间变慢4倍的，属于$O(n^2)$的复杂度。还有一些穷举类的算法，所需时间长度成几何阶数上涨，这就是$O(a^n)$的指数级复杂度，甚至$O(n!)$的阶乘级复杂度。</p>
 <p>我们将复杂度量级按照数量级递增进行排序得到下图，并将其分为两类：<strong>多项式量级</strong>和<strong>非多项式量级</strong>，后者的复杂度远远大于前者。</p>
-<p><img src="/2020/09/22/%E4%BB%80%E4%B9%88%E6%98%AFP-NP-NPC%E4%BB%A5%E5%8F%8ANP-Hard%E9%97%AE%E9%A2%98%EF%BC%9F/0.jpg" alt="3723793cc5c810e9d5b06bc95325bf0a.jpeg"></p>
+<p><img data-src="/2020/09/22/%E4%BB%80%E4%B9%88%E6%98%AFP-NP-NPC%E4%BB%A5%E5%8F%8ANP-Hard%E9%97%AE%E9%A2%98%EF%BC%9F/0.jpg" alt="3723793cc5c810e9d5b06bc95325bf0a.jpeg"></p>
 <p>多项式级的复杂度包括$O(1),O(log(n)),O(n^a)$等，它的规模n出现在底数的位置；非多项式级只包含$O(a^n),O(n!)$两种，其复杂度计算机往往不能承受。</p>
 <p>自然地，人们会想到一个问题：会不会所有的问题都可以找到复杂度为多项式级的算法呢？很遗憾，答案是否定的。举个例子，输出从1到n这n个数的全排列。不管你用什么方法，你的复杂度都是阶乘级，因为你总得用阶乘级的时间打印出结果来。</p>
 <p>还有另外一个经典的问题：<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%93%88%E5%AF%86%E9%A1%BF%E5%9B%BE">Hamilton回路</a>。问题是这样的：给你一个图，问你能否找到一条经过每个顶点一次且恰好一次（不遗漏也不重复）最后回到起点的路径（满足这个条件的路径叫做Hamilton回路）。这个问题目前还没有找到多项式级的算法。事实上，这个问题就是我们后面要说的NPC问题。</p>
@@ -1106,11 +1106,11 @@
 </blockquote>
 <p>东大网安本科组员：翟思宇、肖遥、宋昌霖、胡钺琳、赵泽瑞、赵钧陶<br>指导老师：肖卿俊</p>
 <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本实验搭载高速以太网卡，通过持续的高速数据传输，达到逼近目标服务器链路的传输速率极限，以模拟 (D)Dos 攻击的效果。攻击主机系统采用 Ubuntu Server 版本，受 Linux 系统 I/O 的内核机制的影响，发包速率受到限制。本实验创新性的利用 DPDK 软件平台绕过系统内核，实现高数据吞吐率的效果。</p>
-<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/0.png" alt="81db04d3b1658e9c254bfbfce6dedde2.png"></p>
+<p><img data-src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/0.png" alt="81db04d3b1658e9c254bfbfce6dedde2.png"></p>
 <p>如上图，Linux 内核协议栈的实现决定了它内核网络协议的性能不佳，Linux 在内核收包处理时，将网卡收到的报文通过 DMA 放到内存，网卡出发中断通知系统有报文到达，系统分配 sk_buff，将报文拷贝到 sk_buff 中，交由协议栈处理，之后将其送用户态应用程序处理。</p>
 <p>这种情况下，报文数量的增多将急剧增加资源的消耗。这包含报文产生 CPU 中断的上下文切换、为报文申请分配 sk_buff 消耗的资源、用户态程序收发包时产生系统调用和上下文切换带来的系统资源消耗。Kernel Bypass（内核旁路）技术应运而生，DPDK 正是采用的上图图由这种类 DMA 机制，直接将数据包从硬件（网卡端口）传输至用户态应用程序，以此来实现低延迟、低消耗的高吞吐网络传输。</p>
 <p>TRex 是思科研发的一款成熟的基于 DPDK 的网络测试工具。它运行在标准的 Intel 处理芯片上，同时支持 stateful 和 stateless 两种模式，stateful 可以描述 L4~L7 层的应用场景，而 stateless 主要用于进行定制包的发包。本实验主要利用 TRex 的 DPDK 高线速发包能力，模拟对目标服务器进行 (D)Dos 打击。</p>
-<p><img src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/1.png" alt="7a135e990f639b406cd1cc244d4943f3.png"></p>
+<p><img data-src="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/1.png" alt="7a135e990f639b406cd1cc244d4943f3.png"></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/09/17/%E5%9F%BA%E4%BA%8EDPDK%E7%9A%84%E6%A8%A1%E6%8B%9F-D-Dos%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/#more" rel="contents">
@@ -1220,7 +1220,7 @@
 
       
           <h2 id="初赛题目"><a href="#初赛题目" class="headerlink" title="初赛题目"></a>初赛题目</h2><p>主办方提供了 black/white/test 三个 pcap 文件夹，其中 black 和 white 分别是检测出有/无恶意软件感染的客户端 IP 组，要求选手对 test 数据集进行判定。</p>
-<p><img src="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/0.png" alt="09bda35ff290f2e34d88d50e71d98f1a.png"></p>
+<p><img data-src="/2020/08/09/DataCon2020%20%E5%8A%A0%E5%AF%86%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E6%A3%80%E6%B5%8B%E5%88%9D%E8%B5%9B%20Writeup%20%E5%8F%8A%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/0.png" alt="09bda35ff290f2e34d88d50e71d98f1a.png"></p>
 <h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>该题的解题过程应分为以下三个大步骤：</p>
 <ol>
 <li><strong>特征选择（Feature Selection）</strong>，选取对于区分正常/恶意流量有明显作用的 Features。</li>

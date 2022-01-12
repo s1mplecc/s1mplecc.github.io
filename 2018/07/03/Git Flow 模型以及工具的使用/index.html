@@ -278,7 +278,7 @@
       
         <h2 id="Git-Flow-是什么？"><a href="#Git-Flow-是什么？" class="headerlink" title="Git Flow 是什么？"></a>Git Flow 是什么？</h2><p>2010 年 5 月，在一篇名为 “<a target="_blank" rel="noopener" href="https://nvie.com/posts/a-successful-git-branching-model/">A successful Git branching model</a>” 的博文中，Vincent Driessen 介绍了一种构建在 Git 之上的软件开发模型。<strong>通过利用 Git 创建和管理分支的能力，为每个分支设定具有特定的含义名称，并将软件生命周期中的各类活动归并到不同的分支上，实现了软件开发过程不同阶段的相互隔离</strong>。这种软件开发的活动模型被 Vincent 称为 “<strong>Git Flow</strong>”。</p>
 <h2 id="Git-Flow-流程图"><a href="#Git-Flow-流程图" class="headerlink" title="Git Flow 流程图"></a>Git Flow 流程图</h2><p>这是 Vincent 博文中的 Git FLow 流程图，该图从右向左，从上到下看：</p>
-<p><img src="/0.png" alt="git-flow-model"></p>
+<p><img data-src="/0.png" alt="git-flow-model"></p>
 <h2 id="Git-Flow-Branches"><a href="#Git-Flow-Branches" class="headerlink" title="Git Flow Branches"></a>Git Flow Branches</h2><p>Git Flow 的核心就是<strong>分支（Branch）</strong>，通过在项目的不同阶段对 Branch 的不同操作（包括但不限于 create、merge、rebase 等）来实现一个完整的高效率的工作流程。Git Flow Branches 主要分为两大类：<strong>Main Branches（主分支）</strong> 和 <strong>Supporting branches（辅助分支）</strong>。 其中 Main Branches 中又包含了 <strong>Master</strong> 和 <strong>Develop</strong>，而 Supporting branches 中包含了 <strong>Feature</strong>、<strong>Release</strong>、<strong>Hotfix</strong> 以及其他自定义分支。</p>
 <h3 id="Master"><a href="#Master" class="headerlink" title="Master"></a>Master</h3><ul>
 <li><p><strong>master 分支上存放的是最稳定的正式版本</strong>，并且该分支的代码应该是随时可在生产环境中使用的代码（<strong>Production Ready state</strong>）。当一个版本开发完毕后，产生了一份新的稳定的可供发布的代码时，master 分支上的代码要被更新。同时，每一次更新，都需要在 master 上打上对应的版本号（tag）。</p>

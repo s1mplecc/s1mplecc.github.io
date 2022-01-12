@@ -291,7 +291,7 @@
 <li>Unchecked Exception 发生在运行期，具有不确定性，通常是由于程序的<strong>逻辑问题</strong>所引起的，所以在程序设计中我们需要考虑周全，尽量通过<strong>提前预检</strong>避免这类异常。</li>
 </ol>
 <p>Java 中异常的继承结构如下图所示：</p>
-<p><img src="/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/0.jpg" alt="v2-2cb1558f17876f329804fcced62661ef_1200x500"></p>
+<p><img data-src="/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/0.jpg" alt="v2-2cb1558f17876f329804fcced62661ef_1200x500"></p>
 <h3 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h3><p>Error 表示<strong>系统级别的错误</strong>，应用程序本身无法克服和恢复的一种严重问题，例如 JVM 栈溢出<code>StackOverFlowError</code>、内存溢出<code>OutOfMemoryError</code>等。<strong>在编码中不应该主动抛出 Error 类型的异常</strong>。</p>
 <h3 id="运行时异常"><a href="#运行时异常" class="headerlink" title="运行时异常"></a>运行时异常</h3><p>运行时异常<code>RuntimeException</code>是<code>Exception</code>衍生子类中的非检查型异常，即编译器不会强制要求捕获或者声明抛出。<code>RuntimeException</code>发生的时候，表示程序中出现了编程错误（即 Bug），所以应该找出错误修改程序，而不是去捕获。比如空指针异常<code>NullPointerException</code>、数组下标越界<code>ArrayIndexOutOfBoundsException</code>，程序员可以通过提前预检去避免该类错误。</p>
 <h3 id="受控异常"><a href="#受控异常" class="headerlink" title="受控异常"></a>受控异常</h3><p>绝大多数受控异常（Checked Exception）位于<code>java.io</code>包内，这是合乎情理的，因为在你请求了不存在的系统资源的时候，一段健壮的程序必须能够优雅的处理这种情况，而不应该挂掉。比如<code>FileNotFoundException</code>可能是用户删除了文件，或者<code>ConnectException</code>网络中断导致的连接异常，这类问题可以通过用户恢复文件或检查网络及时矫正。</p>

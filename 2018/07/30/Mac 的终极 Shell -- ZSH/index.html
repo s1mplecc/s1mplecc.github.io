@@ -284,7 +284,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install zsh</span><br></pre></td></tr></table></figure>
 
 <p>安装完后在 Terminal 的设置中设置默认使用 zsh。</p>
-<p><img src="/0.png" alt="8F9622E7-901E-46F0-94D7-B5E7AEE04C08"></p>
+<p><img data-src="/0.png" alt="8F9622E7-901E-46F0-94D7-B5E7AEE04C08"></p>
 <h2 id="Oh-My-Zsh"><a href="#Oh-My-Zsh" class="headerlink" title="Oh My Zsh"></a>Oh My Zsh</h2><p>oh-my-zsh 是最为流行的 zsh 配置文件，提供了完善的插件体系，相关的文件在<code>~/.oh-my-zsh/plugins</code>目录下。<a target="_blank" rel="noopener" href="https://github.com/robbyrussell/oh-my-zsh">GitHub 链接</a>。</p>
 <p>安装 oh-my-zsh：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
@@ -302,14 +302,14 @@
 
 <h3 id="Z"><a href="#Z" class="headerlink" title="Z"></a>Z</h3><p><a target="_blank" rel="noopener" href="https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/z">Z 插件</a>，功能和 autojump 类似，使用<code>z &#123;path&#125;</code>实现目录间快速跳转，并且作为 oh-my-zsh 的内置组件，只需要在<code>.zshrc</code>中打开即可。</p>
 <p>如图，Z 插件会记录你前往的目录，并根据进入次数计算权重（<code>z -r</code>查看权重），以后再进入该目录只用<code>z ddd</code>，会进行<strong>模糊匹配</strong>，前往<strong>权重最高</strong>的目录。</p>
-<p><img src="/1.png" alt="678A0E3A-EDE9-4D9B-AA39-A6E14DC6E2EC"></p>
+<p><img data-src="/1.png" alt="678A0E3A-EDE9-4D9B-AA39-A6E14DC6E2EC"></p>
 <h3 id="zsh-syntax-highlighting"><a href="#zsh-syntax-highlighting" class="headerlink" title="zsh-syntax-highlighting"></a>zsh-syntax-highlighting</h3><p><a target="_blank" rel="noopener" href="https://github.com/zsh-users/zsh-syntax-highlighting">Zsh 语法高亮插件</a>。安装后终端输入的命令正确会<strong>绿色高亮</strong>显示，输入错误会显示红色，用于在执行命令前检查是否有语法错误。</p>
-<p><img src="/2.png" alt="82881CCA-A343-45D1-9A1D-4DD8E77E1B78"></p>
+<p><img data-src="/2.png" alt="82881CCA-A343-45D1-9A1D-4DD8E77E1B78"></p>
 <p>安装 zsh-syntax-highlighting，完成后在<code>.zshrc</code>中添加。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="variable">$&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;</span>/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
 
 <h3 id="zsh-autosuggestions"><a href="#zsh-autosuggestions" class="headerlink" title="zsh-autosuggestions"></a>zsh-autosuggestions</h3><p><a target="_blank" rel="noopener" href="https://github.com/zsh-users/zsh-autosuggestions">Zsh 命令自动补全插件</a>，效率神器。如图输入命令时，会给出建议的命令（灰色部分）按键盘 <code>→</code> 补全。</p>
-<p><img src="/3.png" alt="8B1B4FDE-F810-4E90-B20A-37274ABDDFDE"></p>
+<p><img data-src="/3.png" alt="8B1B4FDE-F810-4E90-B20A-37274ABDDFDE"></p>
 <p>安装 zsh-autosuggestions，完成后在<code>.zshrc</code>中添加。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git://github.com/zsh-users/zsh-autosuggestions <span class="variable">$ZSH_CUSTOM</span>/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
 

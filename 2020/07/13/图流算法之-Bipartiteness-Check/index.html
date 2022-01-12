@@ -282,9 +282,9 @@
 <p><strong>定义</strong>：设 G=(V, E) 是一个无向图，如果顶点 V 可分割为两个互不相交的子集｛U｝、｛V｝，并且图中的每条边 (i, j) 所关联的两个顶点 i 和 j 分别属于这两个不同的顶点集 i∈ U，j∈ V，则称图 G 为一个二分图。<strong>二分图的一个等价定义是：不含有「含奇数条边的环」的图</strong>。</p>
 </blockquote>
 <p>二分图（Bipartite Graph）是指<strong>图中的顶点可以划分到两个不相交的集合中，同一个集合中的顶点不相邻</strong>，即同一个集合中的两个顶点之间不存在边。如下图，我可以将左侧的蓝色和紫色构成的图转化为右图的二分图，集合 A 中全由紫色顶点构成，集合 B 中全由蓝色顶点构成，只存在<code>蓝-紫</code>（<code>紫-蓝</code>）边，同色顶点间不存在边。</p>
-<p><img src="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/0.png" alt="bab01ea393c68a26dee629ce0d7e4de3.png"></p>
+<p><img data-src="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/0.png" alt="bab01ea393c68a26dee629ce0d7e4de3.png"></p>
 <p>所以二分图又可以等价于二色图（Two-colorable Graph），以下是一些二分图的常见示例，如星状图、网格图、齿轮图等。</p>
-<p><img src="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/1.png" alt="14bf3a04408d7eacdf1b4dc323acf58c.png"></p>
+<p><img data-src="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/1.png" alt="14bf3a04408d7eacdf1b4dc323acf58c.png"></p>
 <h2 id="Bipartiteness-Check"><a href="#Bipartiteness-Check" class="headerlink" title="Bipartiteness Check"></a>Bipartiteness Check</h2><h3 id="批处理"><a href="#批处理" class="headerlink" title="批处理"></a>批处理</h3><p>那么如何检测一个图是否为二分图呢？在批处理情形下，即一个图的所有顶点和所有边的信息都已明确，我们借助于二色图的思想，可以通过<strong>染色法</strong>来判断一个图是否为二分图。算法可以通过 BFS 广度优先算法来实现，具体步骤如下：</p>
 <ol>
 <li>从任意一个顶点出发，将该顶点染成黑色。</li>
@@ -304,7 +304,7 @@
 <li>新边的加入使原先的图构成了「含偶数条边的环」，则图依然保持二分图的性质。此时的判断条件是：<strong>两个顶点同属于一个 Component 且两个顶点的颜色相异</strong>。</li>
 <li>新边的两个顶点分属不同的 Componets，如下图此时若到来一条 <code>1 - 4</code> 边，图依然保持二分图的性质。我们可以做简单的证明：由于之前的两个单独的 Components 均是二分图，则我们可以分别将它们的顶点划分到两个不相交的集合中｛U1｝、｛V1｝和｛U2｝、｛V2｝中且令新边（i，j）的顶点i∈ U1，j∈ V2，由此可得出由｛U1｝、｛U2｝构成的集合｛U｝与｛V1｝、｛V2｝构成的集合｛V｝不相交，未破环二分图的性质。此时的判断条件：<strong>两个顶点分属于不同的 Components</strong>。在算法实现时，我们需要将两个 Components 合并为一个 Component，即 Gelly 算法中的 <code>merge</code> 操作。需要注意的是，此时若两个顶点（已染色）颜色不同，则直接合并，若两个顶点颜色相同，则需要将其中的一个 Component <strong>颜色反转</strong>。</li>
 </ul>
-<p><img src="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/2.png" alt="2bb51c94931f8c2b1ec93c3162d54501.png"></p>
+<p><img data-src="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/2.png" alt="2bb51c94931f8c2b1ec93c3162d54501.png"></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://www.educative.io/edpresso/what-is-a-bipartite-graph">What is a bipartite graph?</a></li>
 <li><a target="_blank" rel="noopener" href="https://github.com/vasia/gelly-streaming">Gelly Streaming：An experiemental API for single-pass graph streaming analytics on Apache Flink.</a></li>

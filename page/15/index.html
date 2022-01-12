@@ -277,9 +277,9 @@
 <h2 id="Locate-the-Matter"><a href="#Locate-the-Matter" class="headerlink" title="Locate the Matter"></a>Locate the Matter</h2><ul>
 <li><p>当时我正好在用服务器，感觉异常的卡，用<code>htop</code>监控程序查看发现cpu正在被两个一样的进程100%占用，Command是<code>/usr/sbin/ApacheX</code>，去目录下找了下，没有该脚本，网上搜了也没该进程的信息。现在看来应该是黑客伪造的</p>
 </li>
-<li><p>查看日志，<code>vi /var/log/auth.log</code>，发现下面几行<br><img src="/0.png" alt="-----2017-10-31---11.24.57-1"></p>
+<li><p>查看日志，<code>vi /var/log/auth.log</code>，发现下面几行<br><img data-src="/0.png" alt="-----2017-10-31---11.24.57-1"></p>
 </li>
-<li><p>很奇怪，我平时都是用ssh连接服务器的，正常应该是这样的<br><img src="/1.png" alt="-----2017-11-08---11.12.08"></p>
+<li><p>很奇怪，我平时都是用ssh连接服务器的，正常应该是这样的<br><img data-src="/1.png" alt="-----2017-11-08---11.12.08"></p>
 </li>
 <li><p>居然被人用密码登录了，一查IP，果然是美国的。当初测试切换用户时嫌麻烦修改了密码，直接用的root，被人试出来了。</p>
 </li>
