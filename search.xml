@@ -1652,43 +1652,6 @@
       </tags>
   </entry>
   <entry>
-    <title>JavaScript 简介</title>
-    <url>/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>JavaScript</strong>是目前前端开发中最流行的语言，在学习的过程中会遇到各种<strong>JS</strong>有关的名词。本文章的主要目的是介绍<strong>ECMAScript</strong>(or <strong>ES</strong>)、<strong>CommonJS</strong>、<strong>Node.js</strong>、<strong>Vue.js</strong>或<strong>AngularJS</strong>等与<strong>JavaScript</strong>之间的联系。</p>
-<h2 id="ECMAScript"><a href="#ECMAScript" class="headerlink" title="ECMAScript"></a>ECMAScript</h2><p><strong>ECMAScript</strong>和<strong>JavaScript</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>（另外的实现还有<strong>Jscript</strong> 和<strong>ActionScript</strong>等）。</p>
-<p><strong>JavaScript</strong>的创造者<strong>Netscape</strong>公司，将<strong>JavaScript</strong>提交给国际标准化组织<strong>ECMA</strong>，希望这种语言能够成为国际标准，标准委员会最终决定，标准在每年的6月份正式发布一次，作为当年的正式版本。</p>
-<p>目前的几乎所有的浏览器（不包括低版本的IE），都已经支持<strong>ES5</strong>了，而写代码时最好采用<strong>ES6</strong>语法（毕竟语法糖写起来更舒服，还添加了很多必要的新特性，而且浏览器全面支持<strong>ES6</strong>是迟早的事）。不用担心浏览器不能识别新语法，<strong>Bable</strong>就是用来解决这种问题的工具。</p>
-<p><strong>Babel</strong>是一个广泛使用的<strong>ES6</strong>转码器，可以将<strong>ES6</strong>代码转为<strong>ES5</strong>代码，从而在浏览器环境运行。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 转码前</span></span><br><span class="line">input.map(<span class="function"><span class="params">item</span> =&gt;</span> item + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转码后</span></span><br><span class="line">input.map(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item + <span class="number">1</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><p>在介绍<strong>CommonJS</strong>之前有必要先介绍一下<strong>Node.js</strong>。首先明确一点，<strong>JavaScript</strong>和<strong>Python</strong>一样，是一种脚本语言，或者是<strong>解释型语言</strong>，和<strong>C、C++</strong> 这种需要编译成可执行文件再运行的语言不同，它的运行只需要解释器能够解释执行即可，而不需要编译器。<strong>浏览器</strong>就包含了解释执行网页中的<strong>JavaScript</strong>代码的功能。</p>
-<p>伴随着互联网和<strong>JavaScript</strong>语言的快速发展，人们不仅仅局限于拿JS来做前端开发，所以<strong>Node.js</strong>随之应运而生。<strong>Node.js</strong>作为一个后端的<strong>Javascrip</strong>t运行环境（解释器），这意味着你可以编写系统级或者服务器端的<strong>Javascript</strong>代码，交给<strong>Node.js</strong>来解释执行。</p>
-<p><strong>Node.js</strong>采用了<strong>Google Chrome</strong>浏览器的V8引擎（<strong>C++编写</strong>），性能很好，同时还提供了很多系统级的API，如文件操作、网络编程等。浏览器端的<strong>Javascript</strong>代码在运行时会受到各种安全性的限制，对客户系统的操作有限。相比之下，<strong>Node.js</strong>则是一个全面的后台运行时，基于<strong>Javascript</strong>提供了其他语言能够实现的许多功能。</p>
-<h2 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h2><p>可以说<strong>CommonJS</strong>和<strong>Node.js</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>。</p>
-<p><strong>ECMAScript</strong>提供核心语言功能，浏览器端的<strong>JavaScript实现</strong>包括了<strong>ES核心</strong>、<strong>DOM</strong>(or <strong>Document Object Model</strong>)和<strong>BOM</strong>(or <strong>Browser Object Model</strong>)，所以你在浏览器的<strong>JS</strong>控制台可以使用<code>document、window、alert...</code>等有关<strong>DOM</strong>和<strong>BOM</strong>的操作。</p>
-<p>而<strong>CommonJS</strong>主要为<strong>非浏览器的应用</strong>定义一套API（比如<strong>Node</strong>应用），从而填补了空白。它的终极目标是提供一个类似<strong>Python、Ruby</strong>和<strong>Java</strong>的<strong>标准库</strong>。</p>
-<p>可以看到在<strong>Node</strong>环境中没有定义<code>alert</code>和<code>document</code>，因为<strong>Node</strong>不关心<strong>DOM</strong>和<strong>BOM</strong>操作。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; alert(&#x27;!!!&#x27;)</span><br><span class="line">ReferenceError: alert is not defined</span><br><span class="line">&gt; document</span><br><span class="line">ReferenceError: document is not defined</span><br></pre></td></tr></table></figure>
-
-<p>但是它可以调用读取文件的函数，读取出了<code>a.txt</code>中的<code>Hello!</code>并打印，这是浏览器做不到也不应该去做的。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; const fs = require(&#x27;fs&#x27;);                 </span><br><span class="line">&gt; const content = fs.readFileSync(&#x27;./a.txt&#x27;,&#x27;utf-8&#x27;);</span><br><span class="line">&gt; console.log(content);</span><br><span class="line">hello!</span><br></pre></td></tr></table></figure>
-
-<h2 id="Vue-js、AngularJS…"><a href="#Vue-js、AngularJS…" class="headerlink" title="Vue.js、AngularJS…"></a>Vue.js、AngularJS…</h2><p>这些没什么好说的，之所以带上<strong>JS</strong>就是因为它们是用<strong>JavaScript</strong>语言开发的框架，实际上就是个<strong>JS库</strong>，用于简化我们前端代码的编写。</p>
-<p>至于为什么使用<strong>Vue.js</strong>这些框架需要安装<strong>Node.js</strong>，原因也很简单，因为很多工具（比如<strong>Babel、webpack</strong>）都是用<strong>Node</strong>开发出来的，这也是你为什么可以用<code>npm</code>安装的原因。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://es6.ruanyifeng.com/#docs/intro">ECMAScript6简介 - 阮一峰</a></li>
-<li><a href="http://www.commonjs.org/">CommonJS官网</a></li>
-<li><a href="https://nodejs.org/en/">Node.js官网</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Languages</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java 泛型</title>
     <url>/2018/02/28/Java%E6%B3%9B%E5%9E%8B/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我的上一篇博客<a href="https://s2mple.xyz/2018/02/27/Java%E6%B3%9B%E5%9E%8B%E4%B9%8B%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/">Java 泛型之类型擦除</a>只是对于 Java 泛型和类型擦除做了一个简要的介绍，本文主要是针对 Java 泛型做一些更深入的补充说明。</p>
@@ -1781,6 +1744,43 @@
       </categories>
       <tags>
         <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JavaScript 简介</title>
+    <url>/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>JavaScript</strong>是目前前端开发中最流行的语言，在学习的过程中会遇到各种<strong>JS</strong>有关的名词。本文章的主要目的是介绍<strong>ECMAScript</strong>(or <strong>ES</strong>)、<strong>CommonJS</strong>、<strong>Node.js</strong>、<strong>Vue.js</strong>或<strong>AngularJS</strong>等与<strong>JavaScript</strong>之间的联系。</p>
+<h2 id="ECMAScript"><a href="#ECMAScript" class="headerlink" title="ECMAScript"></a>ECMAScript</h2><p><strong>ECMAScript</strong>和<strong>JavaScript</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>（另外的实现还有<strong>Jscript</strong> 和<strong>ActionScript</strong>等）。</p>
+<p><strong>JavaScript</strong>的创造者<strong>Netscape</strong>公司，将<strong>JavaScript</strong>提交给国际标准化组织<strong>ECMA</strong>，希望这种语言能够成为国际标准，标准委员会最终决定，标准在每年的6月份正式发布一次，作为当年的正式版本。</p>
+<p>目前的几乎所有的浏览器（不包括低版本的IE），都已经支持<strong>ES5</strong>了，而写代码时最好采用<strong>ES6</strong>语法（毕竟语法糖写起来更舒服，还添加了很多必要的新特性，而且浏览器全面支持<strong>ES6</strong>是迟早的事）。不用担心浏览器不能识别新语法，<strong>Bable</strong>就是用来解决这种问题的工具。</p>
+<p><strong>Babel</strong>是一个广泛使用的<strong>ES6</strong>转码器，可以将<strong>ES6</strong>代码转为<strong>ES5</strong>代码，从而在浏览器环境运行。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 转码前</span></span><br><span class="line">input.map(<span class="function"><span class="params">item</span> =&gt;</span> item + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转码后</span></span><br><span class="line">input.map(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item + <span class="number">1</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><p>在介绍<strong>CommonJS</strong>之前有必要先介绍一下<strong>Node.js</strong>。首先明确一点，<strong>JavaScript</strong>和<strong>Python</strong>一样，是一种脚本语言，或者是<strong>解释型语言</strong>，和<strong>C、C++</strong> 这种需要编译成可执行文件再运行的语言不同，它的运行只需要解释器能够解释执行即可，而不需要编译器。<strong>浏览器</strong>就包含了解释执行网页中的<strong>JavaScript</strong>代码的功能。</p>
+<p>伴随着互联网和<strong>JavaScript</strong>语言的快速发展，人们不仅仅局限于拿JS来做前端开发，所以<strong>Node.js</strong>随之应运而生。<strong>Node.js</strong>作为一个后端的<strong>Javascrip</strong>t运行环境（解释器），这意味着你可以编写系统级或者服务器端的<strong>Javascript</strong>代码，交给<strong>Node.js</strong>来解释执行。</p>
+<p><strong>Node.js</strong>采用了<strong>Google Chrome</strong>浏览器的V8引擎（<strong>C++编写</strong>），性能很好，同时还提供了很多系统级的API，如文件操作、网络编程等。浏览器端的<strong>Javascript</strong>代码在运行时会受到各种安全性的限制，对客户系统的操作有限。相比之下，<strong>Node.js</strong>则是一个全面的后台运行时，基于<strong>Javascript</strong>提供了其他语言能够实现的许多功能。</p>
+<h2 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h2><p>可以说<strong>CommonJS</strong>和<strong>Node.js</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>。</p>
+<p><strong>ECMAScript</strong>提供核心语言功能，浏览器端的<strong>JavaScript实现</strong>包括了<strong>ES核心</strong>、<strong>DOM</strong>(or <strong>Document Object Model</strong>)和<strong>BOM</strong>(or <strong>Browser Object Model</strong>)，所以你在浏览器的<strong>JS</strong>控制台可以使用<code>document、window、alert...</code>等有关<strong>DOM</strong>和<strong>BOM</strong>的操作。</p>
+<p>而<strong>CommonJS</strong>主要为<strong>非浏览器的应用</strong>定义一套API（比如<strong>Node</strong>应用），从而填补了空白。它的终极目标是提供一个类似<strong>Python、Ruby</strong>和<strong>Java</strong>的<strong>标准库</strong>。</p>
+<p>可以看到在<strong>Node</strong>环境中没有定义<code>alert</code>和<code>document</code>，因为<strong>Node</strong>不关心<strong>DOM</strong>和<strong>BOM</strong>操作。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; alert(&#x27;!!!&#x27;)</span><br><span class="line">ReferenceError: alert is not defined</span><br><span class="line">&gt; document</span><br><span class="line">ReferenceError: document is not defined</span><br></pre></td></tr></table></figure>
+
+<p>但是它可以调用读取文件的函数，读取出了<code>a.txt</code>中的<code>Hello!</code>并打印，这是浏览器做不到也不应该去做的。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; const fs = require(&#x27;fs&#x27;);                 </span><br><span class="line">&gt; const content = fs.readFileSync(&#x27;./a.txt&#x27;,&#x27;utf-8&#x27;);</span><br><span class="line">&gt; console.log(content);</span><br><span class="line">hello!</span><br></pre></td></tr></table></figure>
+
+<h2 id="Vue-js、AngularJS…"><a href="#Vue-js、AngularJS…" class="headerlink" title="Vue.js、AngularJS…"></a>Vue.js、AngularJS…</h2><p>这些没什么好说的，之所以带上<strong>JS</strong>就是因为它们是用<strong>JavaScript</strong>语言开发的框架，实际上就是个<strong>JS库</strong>，用于简化我们前端代码的编写。</p>
+<p>至于为什么使用<strong>Vue.js</strong>这些框架需要安装<strong>Node.js</strong>，原因也很简单，因为很多工具（比如<strong>Babel、webpack</strong>）都是用<strong>Node</strong>开发出来的，这也是你为什么可以用<code>npm</code>安装的原因。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://es6.ruanyifeng.com/#docs/intro">ECMAScript6简介 - 阮一峰</a></li>
+<li><a href="http://www.commonjs.org/">CommonJS官网</a></li>
+<li><a href="https://nodejs.org/en/">Node.js官网</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Languages</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -3000,6 +3000,73 @@
       </tags>
   </entry>
   <entry>
+    <title>Python 环境准备</title>
+    <url>/2021/01/18/Python-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87/</url>
+    <content><![CDATA[<h2 id="Python-版本"><a href="#Python-版本" class="headerlink" title="Python 版本"></a>Python 版本</h2><p>目前 Python 主要活跃的有 Python 2.x 和 Python 3.x 两个大版本，与 C++ 和 Java 这种向后兼容的语言不同，Python 的两个版本互不兼容。舍弃兼容性是一种设计上的取舍，在我看来 Python 这种尤为注重“简约”的语言，敢于大胆摒弃一些有设计缺陷的旧包袱，从而拥抱新特性的作风，未尝不是一种 Pythonic 的体现，很大程度上避免了走向像 C++ 一样越来越臃肿晦涩的道路。</p>
+<p>Python 核心团队已于 2019 年正式宣布将在 2020 年停止对 Python2 的更新，在此期间会对 Python2 版本进行一些 bug 修复、安全增强以及移植等工作，以便使开发者顺利的从 Python2 迁移到 Python3。Python 2.7 是 2.x 系列的最后一个版本，官网上最新的 Python 2.7.18 版本发布于 2020 年 4 月 20 日。官方停止 Python2 更新的主要动机是想进行 Python3 的推广，以及同时维护两个版本给他们带来的工作负担。目前大部分 Python 开源项目已经兼容 Python3 了，所以<strong>强烈建议使用 Python3 来开发新的项目</strong>。</p>
+<p>一般较新的 Linux 发行版已经预装了 Python2 和 Python3，如果没有，也可以通过各自的包管理器进行安装和更新。Mac OS 环境下可以通过 Homebrew 工具来安装 Python，可以附加 <code>@ + 版本号</code> 安装指定版本。在一般情况下（不手动修改软链接），命令行中的 <code>python</code> 通常是 python 2.7 或其旧版本的别名，<code>python3</code> 才指代 Python3 版本，可以通过 <code>--version</code> 参数来查看安装的具体版本。由于两个版本互不兼容，在命令行运行 Python 脚本前需要先确定其所用的 Python 版本。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ brew install python  <span class="comment"># brew install python@2.7</span></span><br><span class="line">➜ python --version </span><br><span class="line">Python 2.7.10</span><br><span class="line"></span><br><span class="line">➜ brew install python3  <span class="comment"># brew install python@3.8</span></span><br><span class="line">➜ python3 --version</span><br><span class="line">Python 3.8.6</span><br></pre></td></tr></table></figure>
+
+<p>有时也需要在代码中，也就是<strong>运行时确定 Python 版本</strong>，此时用到的是内置的 sys 模块：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> sys</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(sys.version)</span><br><span class="line"><span class="number">3.8</span><span class="number">.6</span> (default, Oct  <span class="number">8</span> <span class="number">2020</span>, <span class="number">14</span>:07:<span class="number">53</span>) </span><br><span class="line">[Clang <span class="number">11.0</span><span class="number">.0</span> (clang-<span class="number">1100.0</span><span class="number">.33</span><span class="number">.17</span>)]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(sys.version_info)</span><br><span class="line">sys.version_info(major=<span class="number">3</span>, minor=<span class="number">8</span>, micro=<span class="number">6</span>, releaselevel=<span class="string">&#x27;final&#x27;</span>, serial=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>可以通过在运行时判断 Python 版本从而达到较好的兼容性，这在 Python 的内置模块以及标准库中使用较多。由于 <code>version_info</code> 本身是个 tuple 类型，重载了比较运算符，所以可以像下面这样直接进行比较：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># builtins.pyi</span></span><br><span class="line"><span class="keyword">if</span> sys.version_info &gt;= (<span class="number">3</span>, <span class="number">9</span>):</span><br><span class="line">    <span class="keyword">from</span> types <span class="keyword">import</span> GenericAlias</span><br><span class="line"></span><br><span class="line"><span class="comment"># contextlib2.py</span></span><br><span class="line"><span class="keyword">if</span> sys.version_info[:<span class="number">2</span>] &gt;= (<span class="number">3</span>, <span class="number">4</span>):</span><br><span class="line">    _abc_ABC = abc.ABC</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    _abc_ABC = abc.ABCMeta(<span class="string">&#x27;ABC&#x27;</span>, (<span class="built_in">object</span>,), &#123;<span class="string">&#x27;__slots__&#x27;</span>: ()&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>上面的源码来自于两个不同的文件，阅读源码可以发现一些 Python 版本变更的内容。比如自 Python 3.9 引入的 GenericAlias 类型；Python 3.4 之前继承抽象类时还得使用 ABCMeta 形式。</p>
+<p>一般情况下，除非你开发的是供他人使用的第三方库，并不需要你在运行时显式判断版本。一方面是版本对于你是可控的，另一方面是如果滥用版本判断会降低代码的整洁性。如果不得不这么做，可以像内置模块 builtins.pyi 一样在存根文件中统一进行处理。</p>
+<h2 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h2><blockquote>
+<p><strong>pip</strong> - The Python Package Installer. You can use pip to install packages from the Python Package Index (PyPI) and other indexes.</p>
+</blockquote>
+<p><a href="https://pip.pypa.io/en/stable/">pip</a> 是 Python 的包安装和管理工具，类似于 npm 之于 JavaScript。Python 3.x 以上的发行版本中都是自带 pip 的。在使用之前先确定 pip 的版本，Python3 中的 pip 是 pip3 的别名，但如果安装了 Python2 的 pip，那么在为 Python3 项目安装依赖时请使用 pip3 命令，因为这两个命令会将依赖安装在不同的目录下。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ pip --version</span><br><span class="line">pip 20.3.3 from /usr/<span class="built_in">local</span>/lib/python3.8/site-packages/pip (python 3.8)</span><br></pre></td></tr></table></figure>
+
+<p>常见的 pip 命令使用可以查阅官方文档，或者 <code>pip -h</code> 查阅帮助文档。与 JavaScript 的 package.json 一样，Python 也提供了统一管理依赖的配置文件 <strong>requirements.txt</strong>。文件中可以指定依赖的版本号，如果缺省则默认安装最新依赖。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">####### example-requirements.txt #######</span><br><span class="line">beautifulsoup4              # Requirements without Version Specifiers</span><br><span class="line">docopt == 0.6.1             # Version Matching. Must be version 0.6.1</span><br><span class="line">keyring &gt;= 4.1.1            # Minimum version 4.1.1</span><br><span class="line">coverage != 3.5             # Version Exclusion. Anything except version 3.5</span><br><span class="line">Mopidy-Dirble ~= 1.1        # Compatible release. Same as &gt;= 1.1, == 1.*</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>-r</code> 参数指定通过 requirements.txt 文件安装依赖：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+
+<p>有时我们需要进行项目迁移，比如将本地项目部署至服务器，为了保证重新安装依赖时不影响项目的正常运行，可以使用 freeze 指令将所需的依赖和具体版本号写入 requirements.txt 文件中，再一次性安装所有依赖。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ pip freeze &gt; requirements.txt</span><br><span class="line">➜ cat requirements.txt </span><br><span class="line">certifi==2020.11.8</span><br><span class="line">matplotlib==3.3.2</span><br><span class="line">numpy==1.19.4</span><br><span class="line">six==1.15.0</span><br></pre></td></tr></table></figure>
+
+<h2 id="环境隔离"><a href="#环境隔离" class="headerlink" title="环境隔离"></a>环境隔离</h2><p>在 JavaScript 中，使用 npm 安装依赖会在当前目录下生成一个 node_modules 文件夹，依赖会被安装在这个文件夹中。除非指定 <code>-g</code> 或 <code>--global</code> 参数，将会在全局环境中安装依赖，在 Mac OS 或 Linux 系统中一般会被安装到 <code>/usr/local/lib/node_modules</code> 目录下。这样做的好处是将全局环境与局部环境隔离，避免依赖冲突，尤其是两个项目依赖同一个库的不同版本时。</p>
+<p>Python 中也有类似的问题，《Effective Python – 编写高质量Python代码的59个有效方法》一书中的协作开发章节就提到：<strong>使用虚拟环境隔离项目</strong>。问题在于，通过 pip 命令安装的依赖是全局性的，这意味着这些安装好的模块可能会影响系统内的所有 Python 程序。全局依赖会被安装在特定 Python 版本的目录下，如 <code>/usr/local/lib/python3.8/site-packages</code>，对于使用 Python 3.8 的所有项目来说依赖是共享的。</p>
+<p>为此，Python 提供了一种解决方案，类似于 JavaScript 的局部环境，隔离出一个单独的 Python 局部环境，这种方案的典型就是 venv。</p>
+<h3 id="venv"><a href="#venv" class="headerlink" title="venv"></a>venv</h3><blockquote>
+<p><strong>venv</strong> (for Python 3) and <strong>virtualenv</strong> (for Python 2) allow you to manage separate package installations for different projects. If you are using Python 3.3 or newer, the venv module is the preferred way to create and manage virtual environments. venv is included in the Python standard library and requires no additional installation.</p>
+</blockquote>
+<p>从 Python 2.7 开始，Python 社区开发了一些较底层的创建<strong>虚拟环境</strong>（virtual environment）的工具，在 Python 2.7 中这个工具叫做 virtualenv，这是一个三方工具，需要使用 pip 安装。而《Effective Python》一书中提到的工具 pyvenv 是 Python 3.3 所引入的，但由于一些缺陷在 Python 3.6 中已被弃用。取而代之的是 Python 3.5 引入的内置模块 venv，可以通过 <code>python3 -m venv</code> 使用这个命令。</p>
+<p><a href="https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment">官方文档</a>中已经明确给出建议，如果使用的是 Python 3.3 及以后的版本，更加推荐使用 venv 去管理你的虚拟环境。下面我们扼要的介绍一下 venv 命令的使用方式。</p>
+<p>首先创建一个空项目 myproject，在该目录下执行 <code>python3 -m venv venv</code> 命令，第二个 venv 是创建的虚拟环境的文件夹名，系统中的环境会被拷贝到该目录下，包括 bin 中的 pip 和 python 命令，而 pip 安装的依赖会存放在 lib 目录中。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ mkdir myproject; <span class="built_in">cd</span> myproject</span><br><span class="line">➜ python3 -m venv venv</span><br><span class="line">➜ ls -F</span><br><span class="line">venv/</span><br><span class="line">➜ ls -F venv</span><br><span class="line">bin/        include/    lib/        pyvenv.cfg</span><br></pre></td></tr></table></figure>
+
+<p>为了启用这套虚拟环境需要先运行<strong>激活</strong>脚本，启用后会发现命令行多了 <code>(venv)</code>  前缀，这明确的提示了开发者现在处于虚拟环境中。默认情况下虚拟环境只安装了 pip 和 setuptools 两个初始依赖，此时的环境已经独立于全局环境，全局依赖不会影响到此项目。pip 和 python3 命令都指向虚拟环境 bin 目录下的命令。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ <span class="built_in">source</span> venv/bin/activate</span><br><span class="line">(venv) ➜ pip list    </span><br><span class="line">Package    Version</span><br><span class="line">---------- -------</span><br><span class="line">pip        20.2.1</span><br><span class="line">setuptools 49.2.1</span><br><span class="line">(venv) ➜ <span class="built_in">which</span> python3</span><br><span class="line">/Users/s1mple/Downloads/myproject/venv/bin/python3</span><br><span class="line">(venv) ➜ python3 --version</span><br><span class="line">Python 3.8.6</span><br></pre></td></tr></table></figure>
+
+<p>退出虚拟环境时使用 <code>deactivate</code> 命令。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">(venv) ➜ deactivate</span><br><span class="line">➜ <span class="built_in">which</span> python3</span><br><span class="line">/usr/<span class="built_in">local</span>/bin/python3</span><br></pre></td></tr></table></figure>
+
+<p>为了代替手动的在命令行创建虚拟环境，PyCharm 集成了 virtualenv 工具，并且官方文档已经标明：Python 3.3 版本之前使用第三方的 virtualenv 工具，Python 3.3 之后使用内置的 venv 模块。在新建项目时可以选择 New Virtualenv Environment 自动创建虚拟环境。</p>
+<p>有了虚拟环境，我们就可以使用 <code>pip freeze</code> 命令和 requirements.txt 文件很方便的重现一套环境。此外，在使用 venv 时，应当尽量避免移动环境目录，包括重命名项目名称，因为所有的路径（包括 python3 命令所指向的路径），都以硬编码的形式写在了安装目录中，更改目录路径将导致环境失效。解决办法是修改 <code>bin/active</code> 脚本中的 VIRTUAL_ENV 路径值，并重新激活。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># active</span></span><br><span class="line">VIRTUAL_ENV=<span class="string">&quot;/Users/s1mple/Downloads/myproject/venv&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Anaconda"><a href="#Anaconda" class="headerlink" title="Anaconda"></a>Anaconda</h3><p>如果你觉得 pip + venv 的方式太过底层，也可以使用 Anaconda。Anaconda 是一个更高层次的包管理器和环境管理器，它依托于 conda 之上开发的，conda 可以理解为整合了 pip 和 venv 的功能，区别在于 conda 是跨平台和不限语言的（支持 R 语言）。PyCharm 也对 conda 提供了支持，可以直接通过 conda 创建虚拟环境。</p>
+<p>Anaconda 的下载文件较大（500MB），不仅自带 Python 还附带了许多常用数据科学包，已经成为了数据科学方向百宝箱式的存在。Anaconda 也提供可视化界面。总的来说，对于不太熟悉底层操作的数据分析师来说，Anaconda 易于上手体验友好。但对于软件开发来说，Anaconda 显得过于臃肿，这也是我不选择使用它的原因。现如今的 Python 环境支持官方库已经做的很好，如果不是做数据科学方向的，建议使用原生的 pip + venv。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment">官方文档 Installing packages using pip and virtual environments</a></li>
+<li><a href="https://docs.python.org/3/library/venv.html">官方文档 venv — Creation of virtual environments</a></li>
+<li><a href="https://stackoverflow.com/questions/41573587/what-is-the-difference-between-venv-pyvenv-pyenv-virtualenv-virtualenvwrappe">What is the difference between venv, pyvenv, pyenv, virtualenv, virtualenvwrapper, pipenv, etc?</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Languages</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python 属性、特性和描述符</title>
     <url>/2021/04/26/Python-%E5%B1%9E%E6%80%A7%E3%80%81%E7%89%B9%E6%80%A7%E5%92%8C%E6%8F%8F%E8%BF%B0%E7%AC%A6/</url>
     <content><![CDATA[<h2 id="类的属性"><a href="#类的属性" class="headerlink" title="类的属性"></a>类的属性</h2><p>在 Python 中，数据属性和处理数据的方法统称为属性（attribute），方法也可称为方法属性，本质上是可调用的（callable）属性。Python 提供了丰富的 API 用于控制访问属性，以及实现动态属性。即使访问不存在的属性，也可以通过特殊方法实现“虚拟属性”，从而即时计算属性的值。</p>
@@ -3122,73 +3189,6 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Author</span>(<span class="params">models.Model</span>):</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">50</span>)</span><br><span class="line">    books = models.ManyToManyField(Book)</span><br><span class="line">    person = models.OneToOneField(<span class="string">&#x27;Person&#x27;</span>, models.CASCADE, null=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
 
 <p>当然，目前定义的描述符类还有提升的空间，比如 <code>price = Quantity(&#39;price&#39;)</code> 使用字符串对属性名进行初始化可能并不那么可靠。又比如想为字段设置更多限定，比如 Django 中设置的字段 max_length 等。其实，Django 框架使用到了 Python 更高阶的类元编程的特性 —— 元类。除了开放框架，一般用不到这个特性。后面我们会对元类加以介绍。</p>
-]]></content>
-      <categories>
-        <category>Languages</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python 环境准备</title>
-    <url>/2021/01/18/Python-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87/</url>
-    <content><![CDATA[<h2 id="Python-版本"><a href="#Python-版本" class="headerlink" title="Python 版本"></a>Python 版本</h2><p>目前 Python 主要活跃的有 Python 2.x 和 Python 3.x 两个大版本，与 C++ 和 Java 这种向后兼容的语言不同，Python 的两个版本互不兼容。舍弃兼容性是一种设计上的取舍，在我看来 Python 这种尤为注重“简约”的语言，敢于大胆摒弃一些有设计缺陷的旧包袱，从而拥抱新特性的作风，未尝不是一种 Pythonic 的体现，很大程度上避免了走向像 C++ 一样越来越臃肿晦涩的道路。</p>
-<p>Python 核心团队已于 2019 年正式宣布将在 2020 年停止对 Python2 的更新，在此期间会对 Python2 版本进行一些 bug 修复、安全增强以及移植等工作，以便使开发者顺利的从 Python2 迁移到 Python3。Python 2.7 是 2.x 系列的最后一个版本，官网上最新的 Python 2.7.18 版本发布于 2020 年 4 月 20 日。官方停止 Python2 更新的主要动机是想进行 Python3 的推广，以及同时维护两个版本给他们带来的工作负担。目前大部分 Python 开源项目已经兼容 Python3 了，所以<strong>强烈建议使用 Python3 来开发新的项目</strong>。</p>
-<p>一般较新的 Linux 发行版已经预装了 Python2 和 Python3，如果没有，也可以通过各自的包管理器进行安装和更新。Mac OS 环境下可以通过 Homebrew 工具来安装 Python，可以附加 <code>@ + 版本号</code> 安装指定版本。在一般情况下（不手动修改软链接），命令行中的 <code>python</code> 通常是 python 2.7 或其旧版本的别名，<code>python3</code> 才指代 Python3 版本，可以通过 <code>--version</code> 参数来查看安装的具体版本。由于两个版本互不兼容，在命令行运行 Python 脚本前需要先确定其所用的 Python 版本。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ brew install python  <span class="comment"># brew install python@2.7</span></span><br><span class="line">➜ python --version </span><br><span class="line">Python 2.7.10</span><br><span class="line"></span><br><span class="line">➜ brew install python3  <span class="comment"># brew install python@3.8</span></span><br><span class="line">➜ python3 --version</span><br><span class="line">Python 3.8.6</span><br></pre></td></tr></table></figure>
-
-<p>有时也需要在代码中，也就是<strong>运行时确定 Python 版本</strong>，此时用到的是内置的 sys 模块：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> sys</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(sys.version)</span><br><span class="line"><span class="number">3.8</span><span class="number">.6</span> (default, Oct  <span class="number">8</span> <span class="number">2020</span>, <span class="number">14</span>:07:<span class="number">53</span>) </span><br><span class="line">[Clang <span class="number">11.0</span><span class="number">.0</span> (clang-<span class="number">1100.0</span><span class="number">.33</span><span class="number">.17</span>)]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(sys.version_info)</span><br><span class="line">sys.version_info(major=<span class="number">3</span>, minor=<span class="number">8</span>, micro=<span class="number">6</span>, releaselevel=<span class="string">&#x27;final&#x27;</span>, serial=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-
-<p>可以通过在运行时判断 Python 版本从而达到较好的兼容性，这在 Python 的内置模块以及标准库中使用较多。由于 <code>version_info</code> 本身是个 tuple 类型，重载了比较运算符，所以可以像下面这样直接进行比较：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># builtins.pyi</span></span><br><span class="line"><span class="keyword">if</span> sys.version_info &gt;= (<span class="number">3</span>, <span class="number">9</span>):</span><br><span class="line">    <span class="keyword">from</span> types <span class="keyword">import</span> GenericAlias</span><br><span class="line"></span><br><span class="line"><span class="comment"># contextlib2.py</span></span><br><span class="line"><span class="keyword">if</span> sys.version_info[:<span class="number">2</span>] &gt;= (<span class="number">3</span>, <span class="number">4</span>):</span><br><span class="line">    _abc_ABC = abc.ABC</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    _abc_ABC = abc.ABCMeta(<span class="string">&#x27;ABC&#x27;</span>, (<span class="built_in">object</span>,), &#123;<span class="string">&#x27;__slots__&#x27;</span>: ()&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>上面的源码来自于两个不同的文件，阅读源码可以发现一些 Python 版本变更的内容。比如自 Python 3.9 引入的 GenericAlias 类型；Python 3.4 之前继承抽象类时还得使用 ABCMeta 形式。</p>
-<p>一般情况下，除非你开发的是供他人使用的第三方库，并不需要你在运行时显式判断版本。一方面是版本对于你是可控的，另一方面是如果滥用版本判断会降低代码的整洁性。如果不得不这么做，可以像内置模块 builtins.pyi 一样在存根文件中统一进行处理。</p>
-<h2 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h2><blockquote>
-<p><strong>pip</strong> - The Python Package Installer. You can use pip to install packages from the Python Package Index (PyPI) and other indexes.</p>
-</blockquote>
-<p><a href="https://pip.pypa.io/en/stable/">pip</a> 是 Python 的包安装和管理工具，类似于 npm 之于 JavaScript。Python 3.x 以上的发行版本中都是自带 pip 的。在使用之前先确定 pip 的版本，Python3 中的 pip 是 pip3 的别名，但如果安装了 Python2 的 pip，那么在为 Python3 项目安装依赖时请使用 pip3 命令，因为这两个命令会将依赖安装在不同的目录下。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ pip --version</span><br><span class="line">pip 20.3.3 from /usr/<span class="built_in">local</span>/lib/python3.8/site-packages/pip (python 3.8)</span><br></pre></td></tr></table></figure>
-
-<p>常见的 pip 命令使用可以查阅官方文档，或者 <code>pip -h</code> 查阅帮助文档。与 JavaScript 的 package.json 一样，Python 也提供了统一管理依赖的配置文件 <strong>requirements.txt</strong>。文件中可以指定依赖的版本号，如果缺省则默认安装最新依赖。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">####### example-requirements.txt #######</span><br><span class="line">beautifulsoup4              # Requirements without Version Specifiers</span><br><span class="line">docopt == 0.6.1             # Version Matching. Must be version 0.6.1</span><br><span class="line">keyring &gt;= 4.1.1            # Minimum version 4.1.1</span><br><span class="line">coverage != 3.5             # Version Exclusion. Anything except version 3.5</span><br><span class="line">Mopidy-Dirble ~= 1.1        # Compatible release. Same as &gt;= 1.1, == 1.*</span><br></pre></td></tr></table></figure>
-
-<p>使用 <code>-r</code> 参数指定通过 requirements.txt 文件安装依赖：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
-
-<p>有时我们需要进行项目迁移，比如将本地项目部署至服务器，为了保证重新安装依赖时不影响项目的正常运行，可以使用 freeze 指令将所需的依赖和具体版本号写入 requirements.txt 文件中，再一次性安装所有依赖。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ pip freeze &gt; requirements.txt</span><br><span class="line">➜ cat requirements.txt </span><br><span class="line">certifi==2020.11.8</span><br><span class="line">matplotlib==3.3.2</span><br><span class="line">numpy==1.19.4</span><br><span class="line">six==1.15.0</span><br></pre></td></tr></table></figure>
-
-<h2 id="环境隔离"><a href="#环境隔离" class="headerlink" title="环境隔离"></a>环境隔离</h2><p>在 JavaScript 中，使用 npm 安装依赖会在当前目录下生成一个 node_modules 文件夹，依赖会被安装在这个文件夹中。除非指定 <code>-g</code> 或 <code>--global</code> 参数，将会在全局环境中安装依赖，在 Mac OS 或 Linux 系统中一般会被安装到 <code>/usr/local/lib/node_modules</code> 目录下。这样做的好处是将全局环境与局部环境隔离，避免依赖冲突，尤其是两个项目依赖同一个库的不同版本时。</p>
-<p>Python 中也有类似的问题，《Effective Python – 编写高质量Python代码的59个有效方法》一书中的协作开发章节就提到：<strong>使用虚拟环境隔离项目</strong>。问题在于，通过 pip 命令安装的依赖是全局性的，这意味着这些安装好的模块可能会影响系统内的所有 Python 程序。全局依赖会被安装在特定 Python 版本的目录下，如 <code>/usr/local/lib/python3.8/site-packages</code>，对于使用 Python 3.8 的所有项目来说依赖是共享的。</p>
-<p>为此，Python 提供了一种解决方案，类似于 JavaScript 的局部环境，隔离出一个单独的 Python 局部环境，这种方案的典型就是 venv。</p>
-<h3 id="venv"><a href="#venv" class="headerlink" title="venv"></a>venv</h3><blockquote>
-<p><strong>venv</strong> (for Python 3) and <strong>virtualenv</strong> (for Python 2) allow you to manage separate package installations for different projects. If you are using Python 3.3 or newer, the venv module is the preferred way to create and manage virtual environments. venv is included in the Python standard library and requires no additional installation.</p>
-</blockquote>
-<p>从 Python 2.7 开始，Python 社区开发了一些较底层的创建<strong>虚拟环境</strong>（virtual environment）的工具，在 Python 2.7 中这个工具叫做 virtualenv，这是一个三方工具，需要使用 pip 安装。而《Effective Python》一书中提到的工具 pyvenv 是 Python 3.3 所引入的，但由于一些缺陷在 Python 3.6 中已被弃用。取而代之的是 Python 3.5 引入的内置模块 venv，可以通过 <code>python3 -m venv</code> 使用这个命令。</p>
-<p><a href="https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment">官方文档</a>中已经明确给出建议，如果使用的是 Python 3.3 及以后的版本，更加推荐使用 venv 去管理你的虚拟环境。下面我们扼要的介绍一下 venv 命令的使用方式。</p>
-<p>首先创建一个空项目 myproject，在该目录下执行 <code>python3 -m venv venv</code> 命令，第二个 venv 是创建的虚拟环境的文件夹名，系统中的环境会被拷贝到该目录下，包括 bin 中的 pip 和 python 命令，而 pip 安装的依赖会存放在 lib 目录中。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ mkdir myproject; <span class="built_in">cd</span> myproject</span><br><span class="line">➜ python3 -m venv venv</span><br><span class="line">➜ ls -F</span><br><span class="line">venv/</span><br><span class="line">➜ ls -F venv</span><br><span class="line">bin/        include/    lib/        pyvenv.cfg</span><br></pre></td></tr></table></figure>
-
-<p>为了启用这套虚拟环境需要先运行<strong>激活</strong>脚本，启用后会发现命令行多了 <code>(venv)</code>  前缀，这明确的提示了开发者现在处于虚拟环境中。默认情况下虚拟环境只安装了 pip 和 setuptools 两个初始依赖，此时的环境已经独立于全局环境，全局依赖不会影响到此项目。pip 和 python3 命令都指向虚拟环境 bin 目录下的命令。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">➜ <span class="built_in">source</span> venv/bin/activate</span><br><span class="line">(venv) ➜ pip list    </span><br><span class="line">Package    Version</span><br><span class="line">---------- -------</span><br><span class="line">pip        20.2.1</span><br><span class="line">setuptools 49.2.1</span><br><span class="line">(venv) ➜ <span class="built_in">which</span> python3</span><br><span class="line">/Users/s1mple/Downloads/myproject/venv/bin/python3</span><br><span class="line">(venv) ➜ python3 --version</span><br><span class="line">Python 3.8.6</span><br></pre></td></tr></table></figure>
-
-<p>退出虚拟环境时使用 <code>deactivate</code> 命令。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">(venv) ➜ deactivate</span><br><span class="line">➜ <span class="built_in">which</span> python3</span><br><span class="line">/usr/<span class="built_in">local</span>/bin/python3</span><br></pre></td></tr></table></figure>
-
-<p>为了代替手动的在命令行创建虚拟环境，PyCharm 集成了 virtualenv 工具，并且官方文档已经标明：Python 3.3 版本之前使用第三方的 virtualenv 工具，Python 3.3 之后使用内置的 venv 模块。在新建项目时可以选择 New Virtualenv Environment 自动创建虚拟环境。</p>
-<p>有了虚拟环境，我们就可以使用 <code>pip freeze</code> 命令和 requirements.txt 文件很方便的重现一套环境。此外，在使用 venv 时，应当尽量避免移动环境目录，包括重命名项目名称，因为所有的路径（包括 python3 命令所指向的路径），都以硬编码的形式写在了安装目录中，更改目录路径将导致环境失效。解决办法是修改 <code>bin/active</code> 脚本中的 VIRTUAL_ENV 路径值，并重新激活。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># active</span></span><br><span class="line">VIRTUAL_ENV=<span class="string">&quot;/Users/s1mple/Downloads/myproject/venv&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="Anaconda"><a href="#Anaconda" class="headerlink" title="Anaconda"></a>Anaconda</h3><p>如果你觉得 pip + venv 的方式太过底层，也可以使用 Anaconda。Anaconda 是一个更高层次的包管理器和环境管理器，它依托于 conda 之上开发的，conda 可以理解为整合了 pip 和 venv 的功能，区别在于 conda 是跨平台和不限语言的（支持 R 语言）。PyCharm 也对 conda 提供了支持，可以直接通过 conda 创建虚拟环境。</p>
-<p>Anaconda 的下载文件较大（500MB），不仅自带 Python 还附带了许多常用数据科学包，已经成为了数据科学方向百宝箱式的存在。Anaconda 也提供可视化界面。总的来说，对于不太熟悉底层操作的数据分析师来说，Anaconda 易于上手体验友好。但对于软件开发来说，Anaconda 显得过于臃肿，这也是我不选择使用它的原因。现如今的 Python 环境支持官方库已经做的很好，如果不是做数据科学方向的，建议使用原生的 pip + venv。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment">官方文档 Installing packages using pip and virtual environments</a></li>
-<li><a href="https://docs.python.org/3/library/venv.html">官方文档 venv — Creation of virtual environments</a></li>
-<li><a href="https://stackoverflow.com/questions/41573587/what-is-the-difference-between-venv-pyvenv-pyenv-virtualenv-virtualenvwrappe">What is the difference between venv, pyvenv, pyenv, virtualenv, virtualenvwrapper, pipenv, etc?</a></li>
-</ul>
 ]]></content>
       <categories>
         <category>Languages</category>
@@ -6907,74 +6907,6 @@ zuul:
       </tags>
   </entry>
   <entry>
-    <title>网站外链爬虫</title>
-    <url>/2021/12/17/%E7%BD%91%E7%AB%99%E5%A4%96%E9%93%BE%E7%88%AC%E8%99%AB/</url>
-    <content><![CDATA[<h2 id="项目介绍"><a href="#项目介绍" class="headerlink" title="项目介绍"></a>项目介绍</h2><p>网站外链爬虫，使用轻量级 Web 应用框架 Flask，以 Restful 接口提供服务，支持容器化部署。项目地址：<a href="https://github.com/s1mplecc/external-link-crawler">https://github.com/s1mplecc/external-link-crawler</a> ，需要 Python 版本 3.x。</p>
-<p>对于传入的网站 URL，获取其 HTML 网页，提取外部链接的域名。包含如下几类外链：</p>
-<ul>
-<li>超链接，标签 <code>a</code> 下的 <code>href</code> 属性；</li>
-<li>图片，标签 <code>img</code> 下的 <code>src</code> 属性；</li>
-<li>外部样式文件，标签 <code>link</code> 下  <code>href</code> 属性；</li>
-<li>外部 JavaScript 脚本文件，标签 <code>script</code> 下  <code>src</code> 属性。</li>
-</ul>
-<h2 id="本地运行"><a href="#本地运行" class="headerlink" title="本地运行"></a>本地运行</h2><p>Step 1：克隆项目。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> https://github.com/s1mplecc/external-link-crawler.git</span></span><br></pre></td></tr></table></figure>
-
-<p>Step 2：安装依赖，包括 Flask 和 BeautifulSoup4。建议使用 Virtualenv 局部安装依赖。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> pip3 install -r requirements.txt</span> </span><br></pre></td></tr></table></figure>
-
-<p>Step 3：在 IDE 中运行或通过 Flask 命令行工具启动应用，端口号默认为 5000。生产环境可使用 Gunicorn 部署。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">export</span> FLASK_ENV=<span class="string">&quot;development&quot;</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> flask run</span></span><br><span class="line"> * Environment: development</span><br><span class="line"> * Debug mode: on</span><br><span class="line"> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)</span><br></pre></td></tr></table></figure>
-
-<h2 id="容器化部署"><a href="#容器化部署" class="headerlink" title="容器化部署"></a>容器化部署</h2><p>除本地运行之外，也支持在生产环境中使用容器化方式部署，镜像入口脚本如下：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">gunicorn --worker-class=gevent --worker-connections=1000 -w 4 -b 0.0.0.0:8000 app:app</span><br></pre></td></tr></table></figure>
-
-<p>使用 Gunicorn 启动 Flask 应用。由于爬虫运行效率主要受网络延迟影响，因此为提高并发吞吐量，使用多进程 + 协程方式部署。协程由 Gevent 库支持。参数 <code>-w</code> 指定进程数，每个进程默认最大并发连接数 1000。Gunicorn 应用端口号默认为 8000。</p>
-<p>Step 1：拉取镜像。镜像已提交至 Docker Hub 仓库。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker pull s1mplecc/external-link-crawler</span></span><br></pre></td></tr></table></figure>
-
-<p>也可以在本地手动构建镜像。克隆下项目后，在 Dockerfile 所在目录执行：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker build -t s1mplecc/external-link-crawler .</span></span><br></pre></td></tr></table></figure>
-
-<p>Step 2：启动容器，映射端口。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker run -d -p 5000:8000 --name external-link-crawler s1mplecc/external-link-crawler</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="请求格式"><a href="#请求格式" class="headerlink" title="请求格式"></a>请求格式</h2><ul>
-<li>请求类型 GET；</li>
-<li>请求前缀 <code>/external-link-domains</code> ；</li>
-<li>参数 <code>url</code>，需传入合法 URL，否则返回参数异常状态码。</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> curl -XGET <span class="string">&quot;http://127.0.0.1:5000/external-link-domains?url=https://www.zhihu.com/&quot;</span></span></span><br></pre></td></tr></table></figure>
-
-<h2 id="响应格式"><a href="#响应格式" class="headerlink" title="响应格式"></a>响应格式</h2><p>响应体为 JSON 格式，包含如下字段：</p>
-<ul>
-<li><code>data</code> 字段，数据本体；</li>
-<li><code>code</code> 字段，状态码。成功 - 200，参数异常 - 400，服务器内部错误 - 500；</li>
-<li><code>messages</code> 字段，附加消息。出错时提示异常信息。</li>
-</ul>
-<p>响应样例如下：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;code&quot;</span>: <span class="number">200</span>,</span><br><span class="line">    <span class="attr">&quot;data&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;css_scripts_domains&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;https://hm.baidu.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://static.zhihu.com&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;css_scripts_domains_size&quot;</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="attr">&quot;href_domains&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;http://www.12377.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;http://www.beian.gov.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://app.mokahr.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://beian.miit.gov.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://tsm.miit.gov.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://www.zhihu.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://zhstatic.zhihu.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://zhuanlan.zhihu.com&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;href_domains_size&quot;</span>: <span class="number">8</span>,</span><br><span class="line">        <span class="attr">&quot;img_domains&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;https://pic2.zhimg.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://pic3.zhimg.com&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;img_domains_size&quot;</span>: <span class="number">2</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;messages&quot;</span>: <span class="string">&quot;[SUCCESS] ok&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>参数异常响应样例如下：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;code&quot;</span>: <span class="number">400</span>,</span><br><span class="line">    <span class="attr">&quot;data&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">&quot;messages&quot;</span>: <span class="string">&quot;[BAD_REQUEST] invalid param url value: xyz&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="镜像构建过程"><a href="#镜像构建过程" class="headerlink" title="镜像构建过程"></a>镜像构建过程</h2><p>Step 1：编写 Dockerfile。镜像基于 Python 官方镜像 3.8-slim 精简版本。将整个项目文件拷贝到镜像的工作目录内，在 <code>.dockerignore</code> 中指定忽略拷贝文件。入口文件为 Gunicorn 启动脚本。</p>
-<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">FROM</span> python:<span class="number">3.8</span>-slim</span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> FLASK_WORK_DIR=<span class="string">&quot;/root/flask&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> <span class="variable">$FLASK_WORK_DIR</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> . .</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip3 install -r requirements.txt</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip3 install gunicorn gevent</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> chmod +x gunicorn_starter.sh</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> [<span class="string">&quot;./gunicorn_starter.sh&quot;</span>]</span></span><br></pre></td></tr></table></figure>
-
-<p>Step 2：构建镜像。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker build -t s1mplecc/external-link-crawler .</span></span><br></pre></td></tr></table></figure>
-
-<p>Step 3：推送到远端仓库。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker tag s1mplecc/external-link-crawler docker.io/s1mplecc/external-link-crawler</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> docker push docker.io/s1mplecc/external-link-crawler</span> </span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Projects</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>结合源码深入理解 MapReduce 工作原理</title>
     <url>/2021/10/22/%E7%BB%93%E5%90%88%E6%BA%90%E7%A0%81%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-MapReduce-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/</url>
     <content><![CDATA[<h2 id="MapReduce-架构"><a href="#MapReduce-架构" class="headerlink" title="MapReduce 架构"></a>MapReduce 架构</h2><blockquote>
@@ -7126,6 +7058,74 @@ zuul:
       </categories>
       <tags>
         <tag>BigData</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网站外链爬虫</title>
+    <url>/2021/12/17/%E7%BD%91%E7%AB%99%E5%A4%96%E9%93%BE%E7%88%AC%E8%99%AB/</url>
+    <content><![CDATA[<h2 id="项目介绍"><a href="#项目介绍" class="headerlink" title="项目介绍"></a>项目介绍</h2><p>网站外链爬虫，使用轻量级 Web 应用框架 Flask，以 Restful 接口提供服务，支持容器化部署。项目地址：<a href="https://github.com/s1mplecc/external-link-crawler">https://github.com/s1mplecc/external-link-crawler</a> ，需要 Python 版本 3.x。</p>
+<p>对于传入的网站 URL，获取其 HTML 网页，提取外部链接的域名。包含如下几类外链：</p>
+<ul>
+<li>超链接，标签 <code>a</code> 下的 <code>href</code> 属性；</li>
+<li>图片，标签 <code>img</code> 下的 <code>src</code> 属性；</li>
+<li>外部样式文件，标签 <code>link</code> 下  <code>href</code> 属性；</li>
+<li>外部 JavaScript 脚本文件，标签 <code>script</code> 下  <code>src</code> 属性。</li>
+</ul>
+<h2 id="本地运行"><a href="#本地运行" class="headerlink" title="本地运行"></a>本地运行</h2><p>Step 1：克隆项目。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> https://github.com/s1mplecc/external-link-crawler.git</span></span><br></pre></td></tr></table></figure>
+
+<p>Step 2：安装依赖，包括 Flask 和 BeautifulSoup4。建议使用 Virtualenv 局部安装依赖。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> pip3 install -r requirements.txt</span> </span><br></pre></td></tr></table></figure>
+
+<p>Step 3：在 IDE 中运行或通过 Flask 命令行工具启动应用，端口号默认为 5000。生产环境可使用 Gunicorn 部署。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">export</span> FLASK_ENV=<span class="string">&quot;development&quot;</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> flask run</span></span><br><span class="line"> * Environment: development</span><br><span class="line"> * Debug mode: on</span><br><span class="line"> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)</span><br></pre></td></tr></table></figure>
+
+<h2 id="容器化部署"><a href="#容器化部署" class="headerlink" title="容器化部署"></a>容器化部署</h2><p>除本地运行之外，也支持在生产环境中使用容器化方式部署，镜像入口脚本如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">gunicorn --worker-class=gevent --worker-connections=1000 -w 4 -b 0.0.0.0:8000 app:app</span><br></pre></td></tr></table></figure>
+
+<p>使用 Gunicorn 启动 Flask 应用。由于爬虫运行效率主要受网络延迟影响，因此为提高并发吞吐量，使用多进程 + 协程方式部署。协程由 Gevent 库支持。参数 <code>-w</code> 指定进程数，每个进程默认最大并发连接数 1000。Gunicorn 应用端口号默认为 8000。</p>
+<p>Step 1：拉取镜像。镜像已提交至 Docker Hub 仓库。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker pull s1mplecc/external-link-crawler</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以在本地手动构建镜像。克隆下项目后，在 Dockerfile 所在目录执行：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker build -t s1mplecc/external-link-crawler .</span></span><br></pre></td></tr></table></figure>
+
+<p>Step 2：启动容器，映射端口。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker run -d -p 5000:8000 --name external-link-crawler s1mplecc/external-link-crawler</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="请求格式"><a href="#请求格式" class="headerlink" title="请求格式"></a>请求格式</h2><ul>
+<li>请求类型 GET；</li>
+<li>请求前缀 <code>/external-link-domains</code> ；</li>
+<li>参数 <code>url</code>，需传入合法 URL，否则返回参数异常状态码。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> curl -XGET <span class="string">&quot;http://127.0.0.1:5000/external-link-domains?url=https://www.zhihu.com/&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="响应格式"><a href="#响应格式" class="headerlink" title="响应格式"></a>响应格式</h2><p>响应体为 JSON 格式，包含如下字段：</p>
+<ul>
+<li><code>data</code> 字段，数据本体；</li>
+<li><code>code</code> 字段，状态码。成功 - 200，参数异常 - 400，服务器内部错误 - 500；</li>
+<li><code>messages</code> 字段，附加消息。出错时提示异常信息。</li>
+</ul>
+<p>响应样例如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;code&quot;</span>: <span class="number">200</span>,</span><br><span class="line">    <span class="attr">&quot;data&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;css_scripts_domains&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;https://hm.baidu.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://static.zhihu.com&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;css_scripts_domains_size&quot;</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="attr">&quot;href_domains&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;http://www.12377.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;http://www.beian.gov.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://app.mokahr.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://beian.miit.gov.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://tsm.miit.gov.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://www.zhihu.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://zhstatic.zhihu.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://zhuanlan.zhihu.com&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;href_domains_size&quot;</span>: <span class="number">8</span>,</span><br><span class="line">        <span class="attr">&quot;img_domains&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;https://pic2.zhimg.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://pic3.zhimg.com&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;img_domains_size&quot;</span>: <span class="number">2</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;messages&quot;</span>: <span class="string">&quot;[SUCCESS] ok&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>参数异常响应样例如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;code&quot;</span>: <span class="number">400</span>,</span><br><span class="line">    <span class="attr">&quot;data&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">&quot;messages&quot;</span>: <span class="string">&quot;[BAD_REQUEST] invalid param url value: xyz&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="镜像构建过程"><a href="#镜像构建过程" class="headerlink" title="镜像构建过程"></a>镜像构建过程</h2><p>Step 1：编写 Dockerfile。镜像基于 Python 官方镜像 3.8-slim 精简版本。将整个项目文件拷贝到镜像的工作目录内，在 <code>.dockerignore</code> 中指定忽略拷贝文件。入口文件为 Gunicorn 启动脚本。</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">FROM</span> python:<span class="number">3.8</span>-slim</span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> FLASK_WORK_DIR=<span class="string">&quot;/root/flask&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> <span class="variable">$FLASK_WORK_DIR</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> . .</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip3 install -r requirements.txt</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip3 install gunicorn gevent</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> chmod +x gunicorn_starter.sh</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> [<span class="string">&quot;./gunicorn_starter.sh&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+<p>Step 2：构建镜像。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker build -t s1mplecc/external-link-crawler .</span></span><br></pre></td></tr></table></figure>
+
+<p>Step 3：推送到远端仓库。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker tag s1mplecc/external-link-crawler docker.io/s1mplecc/external-link-crawler</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> docker push docker.io/s1mplecc/external-link-crawler</span> </span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Projects</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
