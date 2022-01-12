@@ -1307,7 +1307,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #00ffb0;
+  background: #b4ff20;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2817,4 +2817,20 @@ mjx-container + br {
 }
 .post-body {
   font-size: 0.975em;
+}
+body {
+  background: url("/images/background.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50% 50%;
+  background-size: cover;
+}
+.content-wrap {
+  opacity: 0.95;
+}
+.sidebar {
+  opacity: 0.95;
+}
+.header-inner {
+  background: rgba(255,255,255,0.95);
 }

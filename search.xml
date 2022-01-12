@@ -6907,6 +6907,74 @@ zuul:
       </tags>
   </entry>
   <entry>
+    <title>网站外链爬虫</title>
+    <url>/2021/12/17/%E7%BD%91%E7%AB%99%E5%A4%96%E9%93%BE%E7%88%AC%E8%99%AB/</url>
+    <content><![CDATA[<h2 id="项目介绍"><a href="#项目介绍" class="headerlink" title="项目介绍"></a>项目介绍</h2><p>网站外链爬虫，使用轻量级 Web 应用框架 Flask，以 Restful 接口提供服务，支持容器化部署。项目地址：<a href="https://github.com/s1mplecc/external-link-crawler">https://github.com/s1mplecc/external-link-crawler</a> ，需要 Python 版本 3.x。</p>
+<p>对于传入的网站 URL，获取其 HTML 网页，提取外部链接的域名。包含如下几类外链：</p>
+<ul>
+<li>超链接，标签 <code>a</code> 下的 <code>href</code> 属性；</li>
+<li>图片，标签 <code>img</code> 下的 <code>src</code> 属性；</li>
+<li>外部样式文件，标签 <code>link</code> 下  <code>href</code> 属性；</li>
+<li>外部 JavaScript 脚本文件，标签 <code>script</code> 下  <code>src</code> 属性。</li>
+</ul>
+<h2 id="本地运行"><a href="#本地运行" class="headerlink" title="本地运行"></a>本地运行</h2><p>Step 1：克隆项目。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> https://github.com/s1mplecc/external-link-crawler.git</span></span><br></pre></td></tr></table></figure>
+
+<p>Step 2：安装依赖，包括 Flask 和 BeautifulSoup4。建议使用 Virtualenv 局部安装依赖。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> pip3 install -r requirements.txt</span> </span><br></pre></td></tr></table></figure>
+
+<p>Step 3：在 IDE 中运行或通过 Flask 命令行工具启动应用，端口号默认为 5000。生产环境可使用 Gunicorn 部署。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">export</span> FLASK_ENV=<span class="string">&quot;development&quot;</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> flask run</span></span><br><span class="line"> * Environment: development</span><br><span class="line"> * Debug mode: on</span><br><span class="line"> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)</span><br></pre></td></tr></table></figure>
+
+<h2 id="容器化部署"><a href="#容器化部署" class="headerlink" title="容器化部署"></a>容器化部署</h2><p>除本地运行之外，也支持在生产环境中使用容器化方式部署，镜像入口脚本如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">gunicorn --worker-class=gevent --worker-connections=1000 -w 4 -b 0.0.0.0:8000 app:app</span><br></pre></td></tr></table></figure>
+
+<p>使用 Gunicorn 启动 Flask 应用。由于爬虫运行效率主要受网络延迟影响，因此为提高并发吞吐量，使用多进程 + 协程方式部署。协程由 Gevent 库支持。参数 <code>-w</code> 指定进程数，每个进程默认最大并发连接数 1000。Gunicorn 应用端口号默认为 8000。</p>
+<p>Step 1：拉取镜像。镜像已提交至 Docker Hub 仓库。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker pull s1mplecc/external-link-crawler</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以在本地手动构建镜像。克隆下项目后，在 Dockerfile 所在目录执行：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker build -t s1mplecc/external-link-crawler .</span></span><br></pre></td></tr></table></figure>
+
+<p>Step 2：启动容器，映射端口。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker run -d -p 5000:8000 --name external-link-crawler s1mplecc/external-link-crawler</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="请求格式"><a href="#请求格式" class="headerlink" title="请求格式"></a>请求格式</h2><ul>
+<li>请求类型 GET；</li>
+<li>请求前缀 <code>/external-link-domains</code> ；</li>
+<li>参数 <code>url</code>，需传入合法 URL，否则返回参数异常状态码。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> curl -XGET <span class="string">&quot;http://127.0.0.1:5000/external-link-domains?url=https://www.zhihu.com/&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="响应格式"><a href="#响应格式" class="headerlink" title="响应格式"></a>响应格式</h2><p>响应体为 JSON 格式，包含如下字段：</p>
+<ul>
+<li><code>data</code> 字段，数据本体；</li>
+<li><code>code</code> 字段，状态码。成功 - 200，参数异常 - 400，服务器内部错误 - 500；</li>
+<li><code>messages</code> 字段，附加消息。出错时提示异常信息。</li>
+</ul>
+<p>响应样例如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;code&quot;</span>: <span class="number">200</span>,</span><br><span class="line">    <span class="attr">&quot;data&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;css_scripts_domains&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;https://hm.baidu.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://static.zhihu.com&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;css_scripts_domains_size&quot;</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="attr">&quot;href_domains&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;http://www.12377.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;http://www.beian.gov.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://app.mokahr.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://beian.miit.gov.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://tsm.miit.gov.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://www.zhihu.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://zhstatic.zhihu.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://zhuanlan.zhihu.com&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;href_domains_size&quot;</span>: <span class="number">8</span>,</span><br><span class="line">        <span class="attr">&quot;img_domains&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;https://pic2.zhimg.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://pic3.zhimg.com&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;img_domains_size&quot;</span>: <span class="number">2</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;messages&quot;</span>: <span class="string">&quot;[SUCCESS] ok&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>参数异常响应样例如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;code&quot;</span>: <span class="number">400</span>,</span><br><span class="line">    <span class="attr">&quot;data&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">&quot;messages&quot;</span>: <span class="string">&quot;[BAD_REQUEST] invalid param url value: xyz&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="镜像构建过程"><a href="#镜像构建过程" class="headerlink" title="镜像构建过程"></a>镜像构建过程</h2><p>Step 1：编写 Dockerfile。镜像基于 Python 官方镜像 3.8-slim 精简版本。将整个项目文件拷贝到镜像的工作目录内，在 <code>.dockerignore</code> 中指定忽略拷贝文件。入口文件为 Gunicorn 启动脚本。</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">FROM</span> python:<span class="number">3.8</span>-slim</span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> FLASK_WORK_DIR=<span class="string">&quot;/root/flask&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> <span class="variable">$FLASK_WORK_DIR</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> . .</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip3 install -r requirements.txt</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip3 install gunicorn gevent</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> chmod +x gunicorn_starter.sh</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> [<span class="string">&quot;./gunicorn_starter.sh&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+<p>Step 2：构建镜像。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker build -t s1mplecc/external-link-crawler .</span></span><br></pre></td></tr></table></figure>
+
+<p>Step 3：推送到远端仓库。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker tag s1mplecc/external-link-crawler docker.io/s1mplecc/external-link-crawler</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> docker push docker.io/s1mplecc/external-link-crawler</span> </span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Projects</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>结合源码深入理解 MapReduce 工作原理</title>
     <url>/2021/10/22/%E7%BB%93%E5%90%88%E6%BA%90%E7%A0%81%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-MapReduce-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/</url>
     <content><![CDATA[<h2 id="MapReduce-架构"><a href="#MapReduce-架构" class="headerlink" title="MapReduce 架构"></a>MapReduce 架构</h2><blockquote>
@@ -7058,74 +7126,6 @@ zuul:
       </categories>
       <tags>
         <tag>BigData</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网站外链爬虫</title>
-    <url>/2021/12/17/%E7%BD%91%E7%AB%99%E5%A4%96%E9%93%BE%E7%88%AC%E8%99%AB/</url>
-    <content><![CDATA[<h2 id="项目介绍"><a href="#项目介绍" class="headerlink" title="项目介绍"></a>项目介绍</h2><p>网站外链爬虫，使用轻量级 Web 应用框架 Flask，以 Restful 接口提供服务，支持容器化部署。项目地址：<a href="https://github.com/s1mplecc/external-link-crawler">https://github.com/s1mplecc/external-link-crawler</a> ，需要 Python 版本 3.x。</p>
-<p>对于传入的网站 URL，获取其 HTML 网页，提取外部链接的域名。包含如下几类外链：</p>
-<ul>
-<li>超链接，标签 <code>a</code> 下的 <code>href</code> 属性；</li>
-<li>图片，标签 <code>img</code> 下的 <code>src</code> 属性；</li>
-<li>外部样式文件，标签 <code>link</code> 下  <code>href</code> 属性；</li>
-<li>外部 JavaScript 脚本文件，标签 <code>script</code> 下  <code>src</code> 属性。</li>
-</ul>
-<h2 id="本地运行"><a href="#本地运行" class="headerlink" title="本地运行"></a>本地运行</h2><p>Step 1：克隆项目。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> https://github.com/s1mplecc/external-link-crawler.git</span></span><br></pre></td></tr></table></figure>
-
-<p>Step 2：安装依赖，包括 Flask 和 BeautifulSoup4。建议使用 Virtualenv 局部安装依赖。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> pip3 install -r requirements.txt</span> </span><br></pre></td></tr></table></figure>
-
-<p>Step 3：在 IDE 中运行或通过 Flask 命令行工具启动应用，端口号默认为 5000。生产环境可使用 Gunicorn 部署。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">export</span> FLASK_ENV=<span class="string">&quot;development&quot;</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> flask run</span></span><br><span class="line"> * Environment: development</span><br><span class="line"> * Debug mode: on</span><br><span class="line"> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)</span><br></pre></td></tr></table></figure>
-
-<h2 id="容器化部署"><a href="#容器化部署" class="headerlink" title="容器化部署"></a>容器化部署</h2><p>除本地运行之外，也支持在生产环境中使用容器化方式部署，镜像入口脚本如下：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">gunicorn --worker-class=gevent --worker-connections=1000 -w 4 -b 0.0.0.0:8000 app:app</span><br></pre></td></tr></table></figure>
-
-<p>使用 Gunicorn 启动 Flask 应用。由于爬虫运行效率主要受网络延迟影响，因此为提高并发吞吐量，使用多进程 + 协程方式部署。协程由 Gevent 库支持。参数 <code>-w</code> 指定进程数，每个进程默认最大并发连接数 1000。Gunicorn 应用端口号默认为 8000。</p>
-<p>Step 1：拉取镜像。镜像已提交至 Docker Hub 仓库。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker pull s1mplecc/external-link-crawler</span></span><br></pre></td></tr></table></figure>
-
-<p>也可以在本地手动构建镜像。克隆下项目后，在 Dockerfile 所在目录执行：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker build -t s1mplecc/external-link-crawler .</span></span><br></pre></td></tr></table></figure>
-
-<p>Step 2：启动容器，映射端口。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker run -d -p 5000:8000 --name external-link-crawler s1mplecc/external-link-crawler</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="请求格式"><a href="#请求格式" class="headerlink" title="请求格式"></a>请求格式</h2><ul>
-<li>请求类型 GET；</li>
-<li>请求前缀 <code>/external-link-domains</code> ；</li>
-<li>参数 <code>url</code>，需传入合法 URL，否则返回参数异常状态码。</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> curl -XGET <span class="string">&quot;http://127.0.0.1:5000/external-link-domains?url=https://www.zhihu.com/&quot;</span></span></span><br></pre></td></tr></table></figure>
-
-<h2 id="响应格式"><a href="#响应格式" class="headerlink" title="响应格式"></a>响应格式</h2><p>响应体为 JSON 格式，包含如下字段：</p>
-<ul>
-<li><code>data</code> 字段，数据本体；</li>
-<li><code>code</code> 字段，状态码。成功 - 200，参数异常 - 400，服务器内部错误 - 500；</li>
-<li><code>messages</code> 字段，附加消息。出错时提示异常信息。</li>
-</ul>
-<p>响应样例如下：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;code&quot;</span>: <span class="number">200</span>,</span><br><span class="line">    <span class="attr">&quot;data&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;css_scripts_domains&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;https://hm.baidu.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://static.zhihu.com&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;css_scripts_domains_size&quot;</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="attr">&quot;href_domains&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;http://www.12377.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;http://www.beian.gov.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://app.mokahr.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://beian.miit.gov.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://tsm.miit.gov.cn&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://www.zhihu.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://zhstatic.zhihu.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://zhuanlan.zhihu.com&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;href_domains_size&quot;</span>: <span class="number">8</span>,</span><br><span class="line">        <span class="attr">&quot;img_domains&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;https://pic2.zhimg.com&quot;</span>,</span><br><span class="line">            <span class="string">&quot;https://pic3.zhimg.com&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;img_domains_size&quot;</span>: <span class="number">2</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;messages&quot;</span>: <span class="string">&quot;[SUCCESS] ok&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>参数异常响应样例如下：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;code&quot;</span>: <span class="number">400</span>,</span><br><span class="line">    <span class="attr">&quot;data&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">&quot;messages&quot;</span>: <span class="string">&quot;[BAD_REQUEST] invalid param url value: xyz&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="镜像构建过程"><a href="#镜像构建过程" class="headerlink" title="镜像构建过程"></a>镜像构建过程</h2><p>Step 1：编写 Dockerfile。镜像基于 Python 官方镜像 3.8-slim 精简版本。将整个项目文件拷贝到镜像的工作目录内，在 <code>.dockerignore</code> 中指定忽略拷贝文件。入口文件为 Gunicorn 启动脚本。</p>
-<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">FROM</span> python:<span class="number">3.8</span>-slim</span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> FLASK_WORK_DIR=<span class="string">&quot;/root/flask&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> <span class="variable">$FLASK_WORK_DIR</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> . .</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip3 install -r requirements.txt</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip3 install gunicorn gevent</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> chmod +x gunicorn_starter.sh</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> [<span class="string">&quot;./gunicorn_starter.sh&quot;</span>]</span></span><br></pre></td></tr></table></figure>
-
-<p>Step 2：构建镜像。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker build -t s1mplecc/external-link-crawler .</span></span><br></pre></td></tr></table></figure>
-
-<p>Step 3：推送到远端仓库。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker tag s1mplecc/external-link-crawler docker.io/s1mplecc/external-link-crawler</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> docker push docker.io/s1mplecc/external-link-crawler</span> </span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Projects</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
