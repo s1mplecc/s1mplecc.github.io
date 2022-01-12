@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="Preface 最近遇到需要在 Spring Cloud 框架中加入用户认证的功能，发现 GitHub 有第三方认证功能，遂先写了个 demo 实现通过 GitHub 三方认证完成用户认证，虽然不是最终解决方案，但是有助于理解用户认证的流程   代码沿用之前的 Sidecar – 将Node应用引入Spring Cloud 博客中的代码，用到以下模块   1234─ sidecar-example">
@@ -263,7 +263,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>11 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -297,7 +311,7 @@
 </li>
 <li><p>为了解决以上的问题，OAuth 协议应运而生。我们来看一下它的流程</p>
   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">简书问新浪微博：我想要获取用户 A 的头像和昵称，请你提供</span><br><span class="line">微博说：我需要经过用户Ａ 本人的许可 =&gt; 然后微博询问用户 A 是否要授权简书访问自己的头像和昵称</span><br><span class="line">用户授权后，微博对简书说：我给你一个临时钥匙（Token），你访问我带了这把钥匙，我就把用户的资料给你</span><br></pre></td></tr></table></figure></li>
-<li><p>以上流程可由下图表示<br><img data-src="/0.jpg" alt="291523855245_.pic"></p>
+<li><p>以上流程可由下图表示<br><img src="/0.jpg" alt="291523855245_.pic"></p>
 </li>
 <li><p>其中最关键的两个部分如下</p>
   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">② 用户同意授权给客户端，则认证服务器返回 Code，即授权码</span><br><span class="line">③ 客户端带着 Code，去认证服务器申领 Token</span><br></pre></td></tr></table></figure>
@@ -310,16 +324,16 @@
 <ul>
 <li><p>步骤如下</p>
   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">用户访问客户端，后者将前者导向认证服务器。</span><br><span class="line">认证服务器询问用户是否给予客户端授权。</span><br><span class="line">若用户给予授权，认证服务器将用户导向客户端事先指定的&quot;重定向URI&quot;（redirection URI），同时附上一个授权码。</span><br><span class="line">客户端收到授权码，附上早先的&quot;重定向URI&quot;，向认证服务器申请令牌。这一步是在客户端的后台的服务器上完成的，对用户不可见。</span><br><span class="line">认证服务器核对了授权码和重定向URI，确认无误后，向客户端发送访问令牌（access token）和更新令牌（refresh token）。</span><br></pre></td></tr></table></figure>
-<p>  <img data-src="/1.png" alt="bg2014051204"></p>
+<p>  <img src="/1.png" alt="bg2014051204"></p>
 </li>
 </ul>
 <h2 id="Register"><a href="#Register" class="headerlink" title="Register"></a>Register</h2><blockquote>
 <p>接下来进入正题，如何基于 GitHub 进行第三方认证。首先，我们需要先前往 GitHub 注册一个新的 OAuth App</p>
 </blockquote>
 <ul>
-<li><p>前往<code>https://github.com/settings/developers</code>点击<code>Register a new application</code>，出现如下界面，填写相应信息。注意，主页和回调的 URL 填写的都是<code>api-gateway</code>的地址<br><img data-src="/2.png" alt="B2241479-07A7-4E03-BB62-BCA4CDA5A4A3"></p>
+<li><p>前往<code>https://github.com/settings/developers</code>点击<code>Register a new application</code>，出现如下界面，填写相应信息。注意，主页和回调的 URL 填写的都是<code>api-gateway</code>的地址<br><img src="/2.png" alt="B2241479-07A7-4E03-BB62-BCA4CDA5A4A3"></p>
 </li>
-<li><p>注册成功后生成的<code>Client ID</code>和<code>Client Secret</code>是后续需要填写到配置文件中<br><img data-src="/3.png" alt="C65DDEFD-F282-4F12-A211-938767ECD7DA"></p>
+<li><p>注册成功后生成的<code>Client ID</code>和<code>Client Secret</code>是后续需要填写到配置文件中<br><img src="/3.png" alt="C65DDEFD-F282-4F12-A211-938767ECD7DA"></p>
 </li>
 </ul>
 <h2 id="Coding"><a href="#Coding" class="headerlink" title="Coding"></a>Coding</h2><blockquote>
@@ -341,30 +355,30 @@
 <p>现在就可以进行测试了。陆续启动<code>eureka-server</code>、<code>api-gateway</code>、<code>author-service</code>三个微服务</p>
 </blockquote>
 <ul>
-<li><p>访问<code>localhost:5555/</code>和<code>localhost:5555/test</code>接口，发现均不需要认证，即<code>security.ignored: /,/test</code>配置生效<br><img data-src="/4.png" alt="1C21C2B8-E689-4BBC-94EE-4ED74796994C"></p>
+<li><p>访问<code>localhost:5555/</code>和<code>localhost:5555/test</code>接口，发现均不需要认证，即<code>security.ignored: /,/test</code>配置生效<br><img src="/4.png" alt="1C21C2B8-E689-4BBC-94EE-4ED74796994C"></p>
 </li>
-<li><p>接下来通过网关访问<code>author-service</code>的接口，正常需要通过 GitHub 认证，事实证明确实如此。访问<code>http://localhost:5555/author-service/author/1</code>接口，跳转到<strong>用户授权</strong>界面<br><img data-src="/5.png" alt="D2FCA844-1A95-4907-A350-68A21ACCE38C"></p>
+<li><p>接下来通过网关访问<code>author-service</code>的接口，正常需要通过 GitHub 认证，事实证明确实如此。访问<code>http://localhost:5555/author-service/author/1</code>接口，跳转到<strong>用户授权</strong>界面<br><img src="/5.png" alt="D2FCA844-1A95-4907-A350-68A21ACCE38C"></p>
 </li>
-<li><p>确认授权后重定位到<code>/author-service/author/1</code>接口返回数据<br><img data-src="/6.png" alt="ED7EE656-F376-408D-9DB8-2C6908799A07-1"></p>
+<li><p>确认授权后重定位到<code>/author-service/author/1</code>接口返回数据<br><img src="/6.png" alt="ED7EE656-F376-408D-9DB8-2C6908799A07-1"></p>
 </li>
 <li><p>还可以访问<code>http://localhost:5555/user</code>来获取 GitHub 账号的信息，这个就不贴图了，自己测试即可</p>
 </li>
-<li><p>再回到 GitHub 的 OAuth 界面，发现<code>0 user</code>变成<code>1 user</code>了，在此你可以弃用所有的用户 Token 以及重置 Client Secret 密钥<br><img data-src="/7.png" alt="7E65EF94-3B65-4FE3-B814-29C6B8A54ECF"> </p>
+<li><p>再回到 GitHub 的 OAuth 界面，发现<code>0 user</code>变成<code>1 user</code>了，在此你可以弃用所有的用户 Token 以及重置 Client Secret 密钥<br><img src="/7.png" alt="7E65EF94-3B65-4FE3-B814-29C6B8A54ECF"> </p>
 </li>
 </ul>
 <h2 id="Analyze"><a href="#Analyze" class="headerlink" title="Analyze"></a>Analyze</h2><blockquote>
 <p>以下分析主要是为了看清重定位、URL 的参数和<code>application.yml</code>中的配置有何关联</p>
 </blockquote>
 <ul>
-<li><p>访问<code>http://localhost:5555/author-service/author/1</code>后，重定位到<code>http://localhost:5555/login</code><br><img data-src="/8.png" alt="D33AA927-F963-41C7-BE5F-6AA7C4FF09AF"></p>
+<li><p>访问<code>http://localhost:5555/author-service/author/1</code>后，重定位到<code>http://localhost:5555/login</code><br><img src="/8.png" alt="D33AA927-F963-41C7-BE5F-6AA7C4FF09AF"></p>
 </li>
-<li><p>访问<code>http://localhost:5555/login</code>重定位<code>https://github.com/login/oauth/authorize</code>即 GitHub 的用户授权路径<br><img data-src="/9.png" alt="E652C938-12A3-4A56-9367-0D07D76B1B66"></p>
+<li><p>访问<code>http://localhost:5555/login</code>重定位<code>https://github.com/login/oauth/authorize</code>即 GitHub 的用户授权路径<br><img src="/9.png" alt="E652C938-12A3-4A56-9367-0D07D76B1B66"></p>
 </li>
 <li><p><code>/login/oauth/authorize</code>这个界面才是用户看到的需要点击授权的页面，我们来看下 URL 携带的参数：</p>
   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">client_id: 554906e366f7861eab21</span><br><span class="line">redirect_uri: http://localhost:5555/login</span><br><span class="line">response_type: code</span><br><span class="line">state: z2MaR7</span><br></pre></td></tr></table></figure></li>
-<li><p>用户点击确认授权后，注意此 Token 非彼 Token<br><img data-src="/10.png" alt="71F69537-2DE4-49BD-AC22-774211576934"></p>
+<li><p>用户点击确认授权后，注意此 Token 非彼 Token<br><img src="/10.png" alt="71F69537-2DE4-49BD-AC22-774211576934"></p>
 </li>
-<li><p>接下来带着 code 和 state 访问<code>http://localhost:5555/login</code>再重定位到<code>http://localhost:5555/author-service/author/1</code>真正想访问的接口<br><img data-src="/11.png" alt="05DAA887-01B1-42F4-9C20-0820777E7D92"></p>
+<li><p>接下来带着 code 和 state 访问<code>http://localhost:5555/login</code>再重定位到<code>http://localhost:5555/author-service/author/1</code>真正想访问的接口<br><img src="/11.png" alt="05DAA887-01B1-42F4-9C20-0820777E7D92"></p>
 </li>
 </ul>
 <blockquote>
@@ -519,10 +533,16 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/zhang-zhen-2-52" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhang-zhen-2-52" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=64441901" title="网易云 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;64441901" rel="noopener" target="_blank"><i class="fas fa-music fa-fw"></i></a>
       </span>
   </div>
 
@@ -546,12 +566,24 @@
 
 <div class="copyright">
   
-  &copy; 
+  &copy; 2017 – 
   <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">s1mple</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">421k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -572,7 +604,6 @@
   
   <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 

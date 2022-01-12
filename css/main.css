@@ -1307,7 +1307,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #d611ff;
+  background: #de061f;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1633,10 +1633,7 @@ pre .javascript .function {
   position: fixed;
   transition-property: bottom;
   z-index: 1300;
-  width: 24px;
-}
-.back-to-top span {
-  display: none;
+  width: initial;
 }
 .back-to-top:hover {
   color: #fc6423;
@@ -2653,7 +2650,6 @@ mjx-container + br {
 }
 .links-of-author-item {
   margin: 5px 0 0;
-  width: 50%;
 }
 .links-of-author-item a,
 .links-of-author-item span.exturl {
@@ -2833,4 +2829,11 @@ body {
 }
 .header-inner {
   background: rgba(255,255,255,0.95);
+}
+.footer {
+  color: #cfd4d7;
+}
+.theme-link {
+  color: #cfd4d7;
+  --link-hover-color: #e3e3e3;
 }

@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言目前常用的 Linux 系统和 OS X 系统的默认 Shell 都是 bash，但是真正强大的 Shell 是深藏不露的 zsh， 这货绝对是马车中的跑车，跑车中的飞行车，史称『终极 Shell』，但是由于配置过于复杂，所以初期无人问津，很多人跑过来看看 zsh 的配置指南，什么都不说转身就走了。直到有一天，国外某位大牛开源出一个能够让你快速上手的 zsh 项目，叫做『oh my zsh』，">
@@ -254,7 +254,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -270,7 +284,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install zsh</span><br></pre></td></tr></table></figure>
 
 <p>安装完后在 Terminal 的设置中设置默认使用 zsh。</p>
-<p><img data-src="/0.png" alt="8F9622E7-901E-46F0-94D7-B5E7AEE04C08"></p>
+<p><img src="/0.png" alt="8F9622E7-901E-46F0-94D7-B5E7AEE04C08"></p>
 <h2 id="Oh-My-Zsh"><a href="#Oh-My-Zsh" class="headerlink" title="Oh My Zsh"></a>Oh My Zsh</h2><p>oh-my-zsh 是最为流行的 zsh 配置文件，提供了完善的插件体系，相关的文件在<code>~/.oh-my-zsh/plugins</code>目录下。<a target="_blank" rel="noopener" href="https://github.com/robbyrussell/oh-my-zsh">GitHub 链接</a>。</p>
 <p>安装 oh-my-zsh：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
@@ -288,14 +302,14 @@
 
 <h3 id="Z"><a href="#Z" class="headerlink" title="Z"></a>Z</h3><p><a target="_blank" rel="noopener" href="https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/z">Z 插件</a>，功能和 autojump 类似，使用<code>z &#123;path&#125;</code>实现目录间快速跳转，并且作为 oh-my-zsh 的内置组件，只需要在<code>.zshrc</code>中打开即可。</p>
 <p>如图，Z 插件会记录你前往的目录，并根据进入次数计算权重（<code>z -r</code>查看权重），以后再进入该目录只用<code>z ddd</code>，会进行<strong>模糊匹配</strong>，前往<strong>权重最高</strong>的目录。</p>
-<p><img data-src="/1.png" alt="678A0E3A-EDE9-4D9B-AA39-A6E14DC6E2EC"></p>
+<p><img src="/1.png" alt="678A0E3A-EDE9-4D9B-AA39-A6E14DC6E2EC"></p>
 <h3 id="zsh-syntax-highlighting"><a href="#zsh-syntax-highlighting" class="headerlink" title="zsh-syntax-highlighting"></a>zsh-syntax-highlighting</h3><p><a target="_blank" rel="noopener" href="https://github.com/zsh-users/zsh-syntax-highlighting">Zsh 语法高亮插件</a>。安装后终端输入的命令正确会<strong>绿色高亮</strong>显示，输入错误会显示红色，用于在执行命令前检查是否有语法错误。</p>
-<p><img data-src="/2.png" alt="82881CCA-A343-45D1-9A1D-4DD8E77E1B78"></p>
+<p><img src="/2.png" alt="82881CCA-A343-45D1-9A1D-4DD8E77E1B78"></p>
 <p>安装 zsh-syntax-highlighting，完成后在<code>.zshrc</code>中添加。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="variable">$&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;</span>/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
 
 <h3 id="zsh-autosuggestions"><a href="#zsh-autosuggestions" class="headerlink" title="zsh-autosuggestions"></a>zsh-autosuggestions</h3><p><a target="_blank" rel="noopener" href="https://github.com/zsh-users/zsh-autosuggestions">Zsh 命令自动补全插件</a>，效率神器。如图输入命令时，会给出建议的命令（灰色部分）按键盘 <code>→</code> 补全。</p>
-<p><img data-src="/3.png" alt="8B1B4FDE-F810-4E90-B20A-37274ABDDFDE"></p>
+<p><img src="/3.png" alt="8B1B4FDE-F810-4E90-B20A-37274ABDDFDE"></p>
 <p>安装 zsh-autosuggestions，完成后在<code>.zshrc</code>中添加。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git://github.com/zsh-users/zsh-autosuggestions <span class="variable">$ZSH_CUSTOM</span>/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
 
@@ -444,10 +458,16 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/zhang-zhen-2-52" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhang-zhen-2-52" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=64441901" title="网易云 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;64441901" rel="noopener" target="_blank"><i class="fas fa-music fa-fw"></i></a>
       </span>
   </div>
 
@@ -471,12 +491,24 @@
 
 <div class="copyright">
   
-  &copy; 
+  &copy; 2017 – 
   <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">s1mple</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">421k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -497,7 +529,6 @@
   
   <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 

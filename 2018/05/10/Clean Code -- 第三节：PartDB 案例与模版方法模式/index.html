@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。上一篇我们通过报表参数填充案例复习了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起。本篇我们将通过 PartDB 案例来见识 IDEA 中 Extract Superclass 等强大的重构功能，以及与案例相关的设计模式：模版方法模式。 准备工作 Intelli">
@@ -255,7 +255,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>12 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -308,17 +322,17 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// get connection</span></span><br><span class="line">Class.forName(DRIVER_CLASS);</span><br><span class="line">c = DriverManager.getConnection(DB_URL, USER, PASSWORD);</span><br><span class="line"></span><br><span class="line"><span class="comment">// get result set</span></span><br><span class="line">Statement stmt = c.createStatement();</span><br><span class="line">ResultSet rs = stmt.executeQuery(SQL_SELECT_PARTS);</span><br><span class="line"></span><br><span class="line"><span class="comment">// populate parts entity</span></span><br><span class="line"><span class="keyword">while</span> (rs.next()) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>然而，在学会重构之后，我们要习惯使用方法名产生注释的效果，<strong>注释不是越多越好，而要少而精，不必要的注释就不要</strong>。使用 <strong>提取方法（Cmd + Alt + M）</strong> 重构代码，并使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 移动方法顺序。</p>
-<p><img data-src="/0.png" alt="25C7F4CD-951E-4B05-8A98-5A0433520EDA"></p>
+<p><img src="/0.png" alt="25C7F4CD-951E-4B05-8A98-5A0433520EDA"></p>
 <p>注意我这里将<code>c</code>重命名（<strong>Shift + F6</strong>）为<code>connection</code>，<strong>命名要遵循在表达清楚业务含义的同时尽可能的短</strong>，<code>rs</code>、<code>err</code>甚至<code>e</code>这种因为频繁使用，基本上可以望文生义，所以可采用业界统一认可的缩写。但<code>c</code>这种命名，一旦代码量增多后，就可能带来阅读上的困扰，应当避免。顺便说一下，应该使用<code>populateParts()</code>而不是<code>populatePartList()</code>这种命名，因为<strong>命名应该站在功能层面，不应该暴露技术实现</strong>，万一哪一天，你改成 Set 了呢？</p>
 <p>我们来观察提取出的三个方法。<code>getConnection()</code>创建数据库连接，在抽象层面与业务无关的，实现层面我们暂不考虑用户自定义情况（实际上应该由配置文件读入），所以实现层面也与业务无关。<code>getResultSet()</code>执行 SQL 获取结果集，在抽象层面与业务无关。实现层面上由于<code>SQL_SELECT_PARTS</code>所以与业务强耦合。我们可以使用 <strong>Cmd + Alt + N</strong> ，将<code>select * from part</code> SQL 语句<strong>内联</strong>，再提取<code>getSql()</code>方法（<strong>Cmd + Alt + M</strong>）。</p>
-<p><img data-src="/1.png" alt="953ECD52-3430-4BFD-A662-24E78BCAF755"></p>
+<p><img src="/1.png" alt="953ECD52-3430-4BFD-A662-24E78BCAF755"></p>
 <p>如此一来，<code>getResultSet()</code>在实现层面也与业务无关了。而<code>getSql()</code>方法在抽象层面与业务无关，在实现层面就与业务有关了。<code>populateParts()</code>这个名字容易让人产生误解，我们将其重命名为<code>populateEntities()</code>，这样，它在抽象层面也与业务无关，而在实现层面与业务有关。为什么我一再强调<strong>抽象层面</strong>和<strong>实现层面</strong>与<strong>业务</strong>的关系，就是为了让方法变得纯粹。这也是软件设计中一种重要的设计思维：<strong>关注点分离</strong>，目的是将<strong>解决特定领域问题的代码从业务逻辑中独立出来，业务逻辑的代码中不再含有针对特定领域问题代码的调用，业务逻辑同特定领域问题的关系通过侧面来封装、维护，这样原本分散在在整个应用程序中的变动就可以很好的管理起来</strong>。比方有一个函数叫做<code>CreateNewCustomer()</code>，那么该函数只与客户的数据（属性）打交道，而给新客户自动发优惠券的动作就不能放到这个函数里面。</p>
 <p>现在，我们所有的方法都在抽象层面与业务无关，只有<code>getSql()</code>和<code>populateEntities()</code>在实现层面与业务有关。至此，我们拨开重重迷雾，冰山的一角轰然显现！既然大家都在抽象层面与业务无关，我们就应该<strong>抽象出更高阶的抽象类</strong>，这里就用到了 <strong>Extract Superclass</strong> 这个神奇的重构手法。</p>
-<p>使用 <strong>Ctrl + T</strong> 调出重构菜单，输入 super 就可以看到 Extract Superclass 的提示，敲击回车<br><img data-src="/2.png" alt="F0675E41-8516-4FC3-96BB-928AB1060D40">注意需要勾选组成父类的成员，这里除了最后一个<code>partList</code>是业务独有的，其他全勾选上，而<code>getSql()</code>和<code>populateEntities()</code>方法因为具体实现与业务相关，就应该是子类去重写，所以应当勾选上 Make abstract。</p>
+<p>使用 <strong>Ctrl + T</strong> 调出重构菜单，输入 super 就可以看到 Extract Superclass 的提示，敲击回车<br><img src="/2.png" alt="F0675E41-8516-4FC3-96BB-928AB1060D40">注意需要勾选组成父类的成员，这里除了最后一个<code>partList</code>是业务独有的，其他全勾选上，而<code>getSql()</code>和<code>populateEntities()</code>方法因为具体实现与业务相关，就应该是子类去重写，所以应当勾选上 Make abstract。</p>
 <p><strong>重构后的 JdbcTemplate 类</strong>：</p>
-<p><img data-src="/3.png" alt="68B462DA-CB1F-41FD-A519-6576CF7BD2FE"></p>
+<p><img src="/3.png" alt="68B462DA-CB1F-41FD-A519-6576CF7BD2FE"></p>
 <p><strong>重构后的 PartDB 类</strong>：</p>
-<p><img data-src="/4.png" alt="CC64100D-FC25-4825-85DD-83AECC318E86"></p>
+<p><img src="/4.png" alt="CC64100D-FC25-4825-85DD-83AECC318E86"></p>
 <p>为什么我在提取父类时直接将父类命名为 JdbcTemplate，大家应该不难想到，我们重构完成的抽象父类，就是一个最简化的 JdbcTemplate。许多框架亦是如此诞生的，使用者使用时让自己的业务实体类去继承这个模版类，重写业务相关方法。这也是软件设计模式中非常著名的<strong>模版方法模式</strong>。</p>
 <h2 id="模版方法模式"><a href="#模版方法模式" class="headerlink" title="模版方法模式"></a>模版方法模式</h2><p>模板方法模式说白了就是：<strong>定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤</strong>。代表具体逻辑步骤的方法称做**基本方法(primitive method)<strong>；而将基本方法汇总穿成一条线的方法叫做</strong>模板方法(template method)**，这个设计模式的名字也是由此而来。 </p>
 <p>在上述的抽象类 JdbcTemplate 中，我们的模版方法就应该是<code>populate()</code>方法</p>
@@ -479,10 +493,16 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/zhang-zhen-2-52" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhang-zhen-2-52" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=64441901" title="网易云 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;64441901" rel="noopener" target="_blank"><i class="fas fa-music fa-fw"></i></a>
       </span>
   </div>
 
@@ -506,12 +526,24 @@
 
 <div class="copyright">
   
-  &copy; 
+  &copy; 2017 – 
   <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">s1mple</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">421k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -532,7 +564,6 @@
   
   <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 

@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言前期工作：基于 Bind9 搭建内网 DNS 服务器，使得在 &#x2F;etc&#x2F;resolv.conf 中配置了该服务器 IP 的节点或终端的 DNS 流量都会流经该服务器，为集群 DNS 流量采集提供了先决基础。同时，初步使用日志记录 DNS 查询请求（配置在 &#x2F;etc&#x2F;named.conf 中），后续可采用 Packetbeat&#x2F;TShark 等工具主动捕获。DNS 查询日志内容格式如下： 123">
@@ -258,7 +258,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>8.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>20 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -279,7 +293,7 @@
 <li>使用网络数据包分析工具 <strong>Packetbeat</strong>。</li>
 </ul>
 <p>将日志文件转储到 Elasticsearch，一是作为历史归档考量，Bind9 日志存在存储时限，如果文件大小达到设置的上限，旧的日志文件会被循环覆盖。二是 JSON 格式易于拓展，支持嵌套和数组，且易于特征提取阶段 Python 进行处理。三是可视化支持好，在 Elasticsearch 数据集上，使用 Kibana 可以快速建立指标分析、图表分析以及时间序列分析等可视化。下图是基于 DNS 查询日志配置的 Kibana Dashboard 可视化界面。</p>
-<p><img data-src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/1.png" alt="93787acedd01f3ccf8ad7f2e4c62627d.png"></p>
+<p><img src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/1.png" alt="93787acedd01f3ccf8ad7f2e4c62627d.png"></p>
 <h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><ul>
 <li>操作系统 CentOS 7.9；</li>
 <li>Docker，版本 19.03.13；</li>
@@ -292,7 +306,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --name es01-test --net elastic -p 9200:9200 -p 9300:9300 -e <span class="string">&quot;discovery.type=single-node&quot;</span> docker.elastic.co/elasticsearch/elasticsearch:7.15.2</span><br><span class="line">$ docker run -d --name kib01-test --net elastic -p 5601:5601 -e <span class="string">&quot;ELASTICSEARCH_HOSTS=http://es01-test:9200&quot;</span> docker.elastic.co/kibana/kibana:7.15.2</span><br></pre></td></tr></table></figure>
 
 <p>成功启动容器后，可在 5601 端口访问 Kibana 首页。</p>
-<p><img data-src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/2.png" alt="d15ed7bec92f990449315ed49fa7bfeb.png"></p>
+<p><img src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/2.png" alt="d15ed7bec92f990449315ed49fa7bfeb.png"></p>
 <h2 id="使用-Filebeat-监听日志文件变更"><a href="#使用-Filebeat-监听日志文件变更" class="headerlink" title="使用 Filebeat 监听日志文件变更"></a>使用 Filebeat 监听日志文件变更</h2><p>Filebeat 是 <a target="_blank" rel="noopener" href="https://www.elastic.co/cn/beats/">Elastic/Beats</a> 数据采集器工具集中的一员，负责日志采集，相比于运行在 JVM 上的 Logstash，它更加轻量级。Filebeat 能够实时捕获文件的新增内容（类似 <code>tail -f</code> 命令），按行将新增内容转发到 Elasticsearch 或 Logstash 中存储，并记录文件当前偏移量，以便中断后下次启动从中断点继续开始。</p>
 <p>下载、解压 Filebeat 安装包并重命名。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.15.2-linux-x86_64.tar.gz</span><br><span class="line">$ tar -xzvf filebeat-7.15.2-linux-x86_64.tar.gz </span><br><span class="line">$ mv filebeat-7.15.2-linux-x86_64 filebeat</span><br></pre></td></tr></table></figure>
@@ -313,12 +327,12 @@
 
 <p>对于原始的 message 字段，能够提供的信息有限，因此需要对消息字段加以处理。Logstash 的插件 Grok 正则过滤器提供对字符串的解析功能。如今，Elastic 提供了 Ingest Node 功能，允许在文档写入 Elasticsearch 索引之前经过<strong>预处理</strong>，并提供了对 Grok 的集成。</p>
 <h2 id="使用-Grok-正则处理日志消息"><a href="#使用-Grok-正则处理日志消息" class="headerlink" title="使用 Grok 正则处理日志消息"></a>使用 Grok 正则处理日志消息</h2><p>在 Kibana 的 “Stack Management | Ingest Node Pipelines” 界面，可以指定一系列的处理器 （Processors）对消息进行流水线处理，包括定义异常处理分支。</p>
-<p><img data-src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/3.png" alt="dc741da57eca3e2b9bdc4bf70357cc3c.png"></p>
+<p><img src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/3.png" alt="dc741da57eca3e2b9bdc4bf70357cc3c.png"></p>
 <p>对于 query.log 文件中的日志记录，由于日志格式固定，因此可以使用 Grok 对一条记录进行匹配。正则表达式格式如 <code>%&#123;IP:source.ip&#125;</code>，冒号左侧为 <a target="_blank" rel="noopener" href="https://github.com/logstash-plugins/logstash-patterns-core/blob/main/patterns/legacy/grok-patterns">Grok 默认 Pattern</a>，冒号右侧为存储的 JSON 字段名，支持嵌套结构。解析日志的 Grok 正则表达式如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">23-Nov-2021 13:58:03.222 client @0x7f7034054680 168.168.168.47#56504 (baidu.com): query: baidu.com IN A + (168.168.168.47)</span><br><span class="line"></span><br><span class="line">%&#123;GREEDYDATA:timestamp&#125; %&#123;WORD&#125; %&#123;DATA:source.client&#125; %&#123;IP:source.ip&#125;#%&#123;NUMBER:source.port&#125; \(%&#123;HOSTNAME:domain.fullname&#125;\): query: %&#123;HOSTNAME&#125; %&#123;WORD:class&#125; %&#123;WORD:type&#125; </span><br></pre></td></tr></table></figure>
 
 <p>此外，还可以<strong>自定义 Grok Pattern</strong>。例如，对于域名字段来说，其“二级域名 + 顶级域名”构成的域名后缀（即用户可以在域名注册网站购买的域名）可能具有重要分析意义。为此，定义了名为 SLD 的  Grok Pattern，将其解析成 <code>domain.eTLDplusOne</code> 字段（有效顶级域名 + 1，名称借鉴自 Packetbeat）。</p>
-<p><img data-src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/4-1.png" alt="fb23cc0fd30fb9e1e9c8d89ee52a22a6.png"></p>
+<p><img src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/4-1.png" alt="fb23cc0fd30fb9e1e9c8d89ee52a22a6.png"></p>
 <p>注：正则表达式中的反义字符由于要表示在 JSON 文档中，所以需要额外一个下划线，如 <code>\\.</code>。</p>
 <p>可以在 “Stack Management | Ingest Node Pipelines” 界面添加测试文档测试流水线是否正常工作，这对于验证正则表达式正确性有巨大帮助。此外，还能够在 Dev Tools 的 Grok Debugger 控制台中调试正则表达式。</p>
 <p>实际上，在 Kibana 界面添加 Pipeline 相当于在 Elasticsearch 的 <code>/_ingest/pipeline</code> 索引中添加了如下的一条文档：</p>
@@ -328,9 +342,9 @@
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">output.elasticsearch:</span></span><br><span class="line">  <span class="attr">hosts:</span> [<span class="string">&quot;http://localhost:9200&quot;</span>]</span><br><span class="line">  <span class="attr">pipeline:</span> <span class="string">&quot;dns_query_log_pipeline&quot;</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="Kibana-可视化"><a href="#Kibana-可视化" class="headerlink" title="Kibana 可视化"></a>Kibana 可视化</h2><p>要在 Kibana 查看 Elasticsearch 中存储的数据，首先需要在 “Stack Management | Index patterns” 中配置索引模式（Index pattern）。</p>
-<p><img data-src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/4-2.png" alt="c1ddec742b59b52562067be4e9ed6231.png"></p>
+<p><img src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/4-2.png" alt="c1ddec742b59b52562067be4e9ed6231.png"></p>
 <p>创建完成后，可以在 “Discover” 界面查看索引中存放的数据。</p>
-<p><img data-src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/5.png" alt="6625242b24495aaf1c3a084b4c17bb71.png"></p>
+<p><img src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/5.png" alt="6625242b24495aaf1c3a084b4c17bb71.png"></p>
 <p>还可以在 “Dashboard” 界面自定义可视化看板，效果图如前言中所示。</p>
 <h2 id="使用-Packetbeat-监听数据包"><a href="#使用-Packetbeat-监听数据包" class="headerlink" title="使用 Packetbeat 监听数据包"></a>使用 Packetbeat 监听数据包</h2><p>除了使用 Filebeat + Grok 手动解析日志文件之外，Beats 工具集还提供了专用于<strong>网络数据包分析</strong>的轻量型工具 Packetbeat，它能够捕获由 ping 工具发起的 ICMP 报文（网络层），或者通过端口捕获应用层报文，如 HTTP 80 端口、MySQL 3306 端口等。捕获的报文可被解析成 JSON 格式存储到 Elasticsearch。</p>
 <p>下载、解压 Packetbeat 安装包，并重命名。</p>
@@ -347,14 +361,14 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./packetbeat setup --dashboards</span><br></pre></td></tr></table></figure>
 
 <p>Dashboard 效果图如下。</p>
-<p><img data-src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/6.png" alt="7a2a13ab1327c49fa654607b52f662e5.png"></p>
+<p><img src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/6.png" alt="7a2a13ab1327c49fa654607b52f662e5.png"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>值得注意的是，Packetbeat 监听的是目的端口为 53 的数据包。不管是下面哪种 DNS 报文，Packetbeat 都能进行捕获。</p>
 <ul>
 <li>内网中访问内网 DNS 服务器的其他终端，如 192.168.101.215 -&gt; 168.168.168.47（内网 DNS 服务器）；</li>
 <li>内网 DNS 服务器转发的 DNS 查询，如 168.168.168.47 -&gt; 8.8.8.8（谷歌 DNS 服务器，可在 Bind9 配置文件中定义转发规则）；</li>
 <li>甚至是手动指定 DNS 服务器的查询报文，如 <code>dig @114.114.114.114 baidu.com</code>。</li>
 </ul>
-<p><img data-src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/7.png" alt="08d3eb68410326d6b2798b8aa397eacc.png"></p>
+<p><img src="/2021/12/14/%E5%9F%BA%E4%BA%8E-Elasticsearch-%E4%B8%8E-Kibana-%E6%90%AD%E5%BB%BA%E6%B5%81%E9%87%8F%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B9%B3%E5%8F%B0/7.png" alt="08d3eb68410326d6b2798b8aa397eacc.png"></p>
 <p>相比之下，使用日志记录 DNS 查询请求的方式就显得十分局限了。即使内网中的用户在 <code>/etc/resolv.conf</code> 中配置了内网 DNS 服务器，也不能保证恶意软件乖乖的使用该 DNS 服务器。因此理论上，只有在内网所有终端上部署类似 Packetbeat 的数据包探测器（类似的还有 Wireshark 的底层库工具 tshark），才能真正全量的监听 DNS 流量。此外，Packetbeat 解析出的 JSON 结构的数据所包含的信息要远大于通过正则分析的日志信息。</p>
 <p>因此对于端口固定的数据包探测，Packetbeat 的实用性要优于 Filebeat + Grok 的方案。但 Filebeat 适用范围更广，任何有生成日志的程序，甚至是批/流处理产生的中间数据文件，理论上都能通过 Filebeat 采集特征存入 Elasticsearch 进行后续分析。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
@@ -503,10 +517,16 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/zhang-zhen-2-52" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhang-zhen-2-52" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=64441901" title="网易云 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;64441901" rel="noopener" target="_blank"><i class="fas fa-music fa-fw"></i></a>
       </span>
   </div>
 
@@ -530,12 +550,24 @@
 
 <div class="copyright">
   
-  &copy; 
+  &copy; 2017 – 
   <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">s1mple</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">421k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -556,7 +588,6 @@
   
   <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 

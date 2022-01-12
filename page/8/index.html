@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="春光恰与少年同，十里清风慕天青">
@@ -246,7 +246,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -273,7 +287,7 @@
 <h2 id="GitHub-Flow"><a href="#GitHub-Flow" class="headerlink" title="GitHub Flow"></a>GitHub Flow</h2><blockquote>
 <p><a target="_blank" rel="noopener" href="https://guides.github.com/introduction/flow/">GitHub Flow</a> 是一个更轻量级的软件开发模型，示意图如下。它摒弃了 Git Flow 中繁杂的分支，<strong>只保留一个主分支 master</strong>。开发新功能时从 master 分支上拉取 feature 分支，开发完成后发起 <strong>Pull-Request</strong>，小组内进行评审和反馈，此时也进行 <strong>Code Review</strong>。测试通过后合并回主分支。</p>
 </blockquote>
-<p><img data-src="/0.png" alt="GitHub-Flow2-1"></p>
+<p><img src="/0.png" alt="GitHub-Flow2-1"></p>
 <p>相比于 Git Flow，这种方式因为省去了一些分支而降低了复杂度，同时也更符合持续集成的思想，以一张故事卡为集成的最小单位，相对来说集成的周期短，反馈的速度也快，能够及早的遇到问题并及早解决。</p>
 <p>顺着持续集成的思想，如果我们把 GitHub Flow 分支模型做得再极致一点，我们不要 feature 分支，或者把 feature 分支只留在本地；不需要使用 Pull-Request 而是直接 Push 到远程 master 分支，我们就做到了 Trunk based Development。</p>
 <h2 id="TBD"><a href="#TBD" class="headerlink" title="TBD"></a>TBD</h2>
@@ -360,7 +374,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -372,7 +400,7 @@
 
       
           <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>你的本地仓库由 Git 维护的三棵「树」组成。第一个是你的<strong>工作目录（Working dir）</strong>，它持有实际文件，即你所见的；第二个是<strong>缓存区（Stage or Index）</strong>，它像个缓存区域，临时保存你的改动；第三个是<strong>提交历史（Commit history）</strong>，包含的 HEAD 指针指向你最近一次 commit 的引用。关于工作区和缓存区概念可参考<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000">廖雪峰的Git教程</a>。</p>
-<p><img data-src="/0.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f62617369632d75736167652e737667-1"></p>
+<p><img src="/0.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f62617369632d75736167652e737667-1"></p>
 <p>上面的四条命令在工作目录、stage 缓存（也叫做索引）和 commit 历史之间复制文件。</p>
 <ul>
 <li><code>git add files</code> 把工作目录中的文件加入 stage 缓存。</li>
@@ -382,7 +410,7 @@
 </ul>
 <h2 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h2><p><code>git merge</code> 命令把不同分支合并起来。合并前，索引必须和当前提交相同。**<code>git merge other</code> 用于将 other 分支上的提交合并到当前分支**。</p>
 <p>如果另一个分支是当前提交的祖父节点，那么合并命令将什么也不做。另一种情况是如果当前提交是另一个分支的祖父节点，就导致 <strong>fast-forward</strong> 合并，HEAD 指针只是简单的移动。</p>
-<p><img data-src="/1.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652d66662e737667"></p>
+<p><img src="/1.svg" alt="687474703a2f2f6d61726b6c6f6461746f2e6769746875622e696f2f76697375616c2d6769742d67756964652f6d657267652d66662e737667"></p>
 <p>否则就是一次真正的合并。默认把当前提交（<em>ed489</em> 如下所示）和另一个提交（_33104_）以及他们的共同祖父节点（_b325c_）进行一次<strong>三方合并</strong>。结果是先保存当前目录和索引，然后和父节点 <em>33104</em> 一起做一次<strong>新提交</strong>。</p>
           <!--noindex-->
             <div class="post-button">
@@ -467,7 +495,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -483,7 +525,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install zsh</span><br></pre></td></tr></table></figure>
 
 <p>安装完后在 Terminal 的设置中设置默认使用 zsh。</p>
-<p><img data-src="/0.png" alt="8F9622E7-901E-46F0-94D7-B5E7AEE04C08"></p>
+<p><img src="/0.png" alt="8F9622E7-901E-46F0-94D7-B5E7AEE04C08"></p>
 <h2 id="Oh-My-Zsh"><a href="#Oh-My-Zsh" class="headerlink" title="Oh My Zsh"></a>Oh My Zsh</h2><p>oh-my-zsh 是最为流行的 zsh 配置文件，提供了完善的插件体系，相关的文件在<code>~/.oh-my-zsh/plugins</code>目录下。<a target="_blank" rel="noopener" href="https://github.com/robbyrussell/oh-my-zsh">GitHub 链接</a>。</p>
 <p>安装 oh-my-zsh：</p>
           <!--noindex-->
@@ -569,7 +611,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>13 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -582,7 +638,7 @@
       
           <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>基于我的上一篇博客：<a target="_blank" rel="noopener" href="https://s2mple.xyz/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">Java 异常处理</a>中的观点，我编写了一个简单的 Web 案例，包括自定义异常类，在合适的层面处理，以及遇到的由于代码 Bug 抛出运行时异常的情形。示例代码已经上传至 <a target="_blank" rel="noopener" href="https://github.com/s1mplecc/exception-demo">GitHub</a>，包含基于 Spring Boot 的 Java 后端代码以及基于 Vue.js 的前端代码两个部分。</p>
 <p>我们的演示案例有两个功能，获取用户列表以及注册新用户，界面如下所示：</p>
-<p><img data-src="/0.png" alt="102BDB82-6CAD-4C3F-A5EC-5F1052F3A337"></p>
+<p><img src="/0.png" alt="102BDB82-6CAD-4C3F-A5EC-5F1052F3A337"></p>
 <h2 id="后端实现"><a href="#后端实现" class="headerlink" title="后端实现"></a>后端实现</h2><p>先看一下我们领域模型 User，为简化代码未使用数据库，而是模拟数据库的自增主键自动生成 userId。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> userIdGenerateKey = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer userId;</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">    <span class="keyword">private</span> String phone;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    User(String username, String phone, Integer age) &#123;</span><br><span class="line">        <span class="keyword">this</span>.userId = User.userIdGenerateKey++;</span><br><span class="line">        <span class="keyword">this</span>.username = username;</span><br><span class="line">        <span class="keyword">this</span>.phone = phone;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    User(User userWithoutId) &#123;</span><br><span class="line">        <span class="keyword">this</span>(userWithoutId.username, userWithoutId.phone, userWithoutId.age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -672,7 +728,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>20 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -698,7 +768,7 @@
 <li>Unchecked Exception 发生在运行期，具有不确定性，通常是由于程序的<strong>逻辑问题</strong>所引起的，所以在程序设计中我们需要考虑周全，尽量通过<strong>提前预检</strong>避免这类异常。</li>
 </ol>
 <p>Java 中异常的继承结构如下图所示：</p>
-<p><img data-src="/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/0.jpg" alt="v2-2cb1558f17876f329804fcced62661ef_1200x500"></p>
+<p><img src="/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/0.jpg" alt="v2-2cb1558f17876f329804fcced62661ef_1200x500"></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2018/07/16/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/#more" rel="contents">
@@ -812,10 +882,16 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/zhang-zhen-2-52" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhang-zhen-2-52" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=64441901" title="网易云 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;64441901" rel="noopener" target="_blank"><i class="fas fa-music fa-fw"></i></a>
       </span>
   </div>
 
@@ -839,12 +915,24 @@
 
 <div class="copyright">
   
-  &copy; 
+  &copy; 2017 – 
   <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">s1mple</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">421k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -865,7 +953,6 @@
   
   <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 

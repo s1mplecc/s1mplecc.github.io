@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="Preface 最近在看 《鸟哥的Linux私房菜–服务器架设》 这本书，感觉受益匪浅，特别是关于网络、各种协议、安全等方面的知识讲得比较透彻。所以整理了一篇博客，也算顺便温习一遍上学时计算机网络学的知识    本片博客主要介绍 TCP&#x2F;IP 协议及各层之间的职责 图片使用微软的 Office Lens 拍取鸟哥书中图片截取而来   Overview 最初，网络的数据传递被划分为如下七个层次，亦即">
@@ -261,7 +261,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>14 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -281,7 +295,7 @@
 </ul>
 <hr>
 <h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><ul>
-<li><p>最初，网络的数据传递被划分为如下七个层次，亦即 <strong>OSI七层协议</strong> (or <strong>Open System Interconnection</strong>)<br><img data-src="/0.JPG" alt="IMG_0058-3"></p>
+<li><p>最初，网络的数据传递被划分为如下七个层次，亦即 <strong>OSI七层协议</strong> (or <strong>Open System Interconnection</strong>)<br><img src="/0.JPG" alt="IMG_0058-3"></p>
 </li>
 <li><p>可以看到，数据包从一个应用程序传递到网络上的另一个应用程序，是一层一层传递的过程，<strong>每一层只认识对方相同层级的数据</strong>，而<strong>数据头</strong>(<strong>Header</strong>)就包含了互相认识的信息，所以<strong>数据自顶向下被层层Header包裹起来</strong>，最后在物理介质上传输</p>
 </li>
@@ -290,7 +304,7 @@
 <p>通俗理解，网络协议干的事就是让数据能<strong>精确投递</strong>到另一个人手中，你比如说网络层的<strong>IP数据包</strong>的 <strong>Header</strong> 就包含了源IP地址、目的IP地址等信息，再比如传输层的源端口号、目的端口号</p>
 </blockquote>
 <ul>
-<li><p>而如今的 <strong>TCP/IP协议</strong> 是由 <strong>OSI七层协议</strong> 简化而来的<br><img data-src="/1.JPG" alt="IMG_0059"></p>
+<li><p>而如今的 <strong>TCP/IP协议</strong> 是由 <strong>OSI七层协议</strong> 简化而来的<br><img src="/1.JPG" alt="IMG_0059"></p>
 </li>
 <li><p>实际上就是简化合并了一些没那么重要的层，相反，从 <strong>TCP/IP</strong> 的命名就可以看出<strong>传输层</strong>和<strong>网络层</strong>的重要性</p>
 </li>
@@ -302,13 +316,13 @@
 <ul>
 <li><p>以太网（<strong>Ethernet</strong>）是现有局域网采用的最通用的通信协议标准，主要定义了局域网内的传输协议（比如<strong>CSMA/CD</strong>），还有数据帧的格式、大小等。以太网的传输主要就是网卡对网卡的传输</p>
 </li>
-<li><p>数据从一个网卡出，以<strong>数据帧(frame)</strong> 在链路上传递，再从另一个网卡进，所以<strong>MAC数据帧</strong>必须包含了来源和目标的网卡卡号<br><img data-src="/2.png" alt="C7A05D1BF522B158CE16E65E6BED7209"></p>
+<li><p>数据从一个网卡出，以<strong>数据帧(frame)</strong> 在链路上传递，再从另一个网卡进，所以<strong>MAC数据帧</strong>必须包含了来源和目标的网卡卡号<br><img src="/2.png" alt="C7A05D1BF522B158CE16E65E6BED7209"></p>
 </li>
 <li><p><strong>MAC地址</strong>(or <strong>Media Access Control</strong>)，其实指的就是网卡卡号(<strong>Hardware Address</strong>，硬件地址)，每张以太网卡出厂就会有个独一无二的卡号</p>
 </li>
 <li><p>可以看到我的 <strong>MAC地址</strong>，以及 <strong>MTU</strong>(or <strong>Maximum Transmission Unit</strong>)为1500，也就是说一个数据帧最大传输 <strong>1500bytes</strong></p>
   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">en0: flags=8863&lt;UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST&gt; mtu 1500</span><br><span class="line">    ether 8c:85:90:85:e3:c7 </span><br></pre></td></tr></table></figure>
-<p>  <img data-src="/3.png" alt="Screen-Shot-2018-01-02-at-9.58.18-PM"></p>
+<p>  <img src="/3.png" alt="Screen-Shot-2018-01-02-at-9.58.18-PM"></p>
 </li>
 </ul>
 <hr>
@@ -316,13 +330,13 @@
 <p>在网络层传输的是<strong>IP数据包</strong>，<strong>IP</strong> 的全称是 <strong>Internet Protocol</strong> ，目前有<strong>IPv4</strong>和<strong>IPv6</strong>两个版本，本文涉及的为<strong>IPv4</strong></p>
 </blockquote>
 <ul>
-<li><p>IP数据包的 <strong>Header</strong>，<strong>Version</strong> 版本（如IPv4），<strong>Total Length</strong> 该IP数据包总长度，最长 <strong>2^16-1</strong> 即 <strong>65535 bytes</strong>（字节为单位）<br><img data-src="/4.JPG" alt="IMG_0061-1"></p>
+<li><p>IP数据包的 <strong>Header</strong>，<strong>Version</strong> 版本（如IPv4），<strong>Total Length</strong> 该IP数据包总长度，最长 <strong>2^16-1</strong> 即 <strong>65535 bytes</strong>（字节为单位）<br><img src="/4.JPG" alt="IMG_0061-1"></p>
 </li>
 <li><p><strong>Identification</strong>辨识码，IP数据包会被封装成数据帧在网络上传输，那就一定不能大于数据帧的 <strong>MTU</strong> ，如果IP数据包超过数据帧的最大长度，则需要分片，辨识码用于<strong>辨识、重组</strong>属于同一数据包的IP数据包</p>
 </li>
 <li><p><strong>Time To Live</strong>( or <strong>TTL</strong>)存活时间，最大255，每经过一个路由器<strong>减一</strong>，为0时该IP数据包将会被直接抛弃</p>
 </li>
-<li><p><strong>Protocol Number</strong>协议代码，用于记录数据包使用的协议，常见的有 <strong>TCP、UDP、ICMP</strong><br><img data-src="/5.jpg" alt="498ADD4210B624434245C9BFF2F58F6A"></p>
+<li><p><strong>Protocol Number</strong>协议代码，用于记录数据包使用的协议，常见的有 <strong>TCP、UDP、ICMP</strong><br><img src="/5.jpg" alt="498ADD4210B624434245C9BFF2F58F6A"></p>
 </li>
 </ul>
 <h3 id="IP-Address"><a href="#IP-Address" class="headerlink" title="IP Address"></a>IP Address</h3><blockquote>
@@ -383,25 +397,25 @@
 <p><strong>DHCP</strong>( or <strong>Dynamic Host Configuration Protocol</strong>，<strong>动态主机配置协议</strong>)是一个局域网的网络协议，使用UDP协议工作，可以给内部网络自动分配IP地址</p>
 </blockquote>
 <ul>
-<li>现在再看电脑上网络设置相关字段应该都明白其意思了<br><img data-src="/6.png" alt="861DECFB-DB0E-4863-A958-4448C560B145"></li>
+<li>现在再看电脑上网络设置相关字段应该都明白其意思了<br><img src="/6.png" alt="861DECFB-DB0E-4863-A958-4448C560B145"></li>
 </ul>
 <hr>
 <h2 id="Transport-Layer"><a href="#Transport-Layer" class="headerlink" title="Transport Layer"></a>Transport Layer</h2><blockquote>
 <p>网络层的 IP 数据包只负责将数据送到正确的目标主机去，但这个数据包有没有被正确接收就是传输层的任务了，传输层常见协议有两个，一个是<strong>可靠的、面向连接</strong>的 <strong>TCP</strong> 协议，一个是<strong>不可靠的、无连接</strong>的 <strong>UDP</strong> 协议</p>
 </blockquote>
 <h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h3><ul>
-<li>TCP 数据包的报头<br><img data-src="/7.JPG" alt="IMG_0091"></li>
+<li>TCP 数据包的报头<br><img src="/7.JPG" alt="IMG_0091"></li>
 </ul>
 <blockquote>
 <p>➤ <strong>Source Port、Destination Port</strong>，源端口号、目的端口号，用于区分数据包到底发往哪个应用程序。端口号 16 位，也就是说最大 65535<br>➤ <strong>Sequence Number</strong>(数据包序号)，TCP数据包要被装入IP数据包中，如果过大也需要分段，该字段记录每个数据包的序号用于<strong>重组</strong><br>➤ <strong>Acknowledge Number</strong>(响应序号)，用于确认之前传递的数据包已被正确接收下<br>➤ <strong>Code</strong>(or <strong>Control Flag</strong>，<strong>状态控制码</strong>)有 6 位，表示 6 个不同的属性，为 1 则为真。主要关心的有下面两个：<strong>ACK</strong>(or <strong>Acknowledge</strong>)若为 1，代表该数据包为<strong>响应数据包</strong>；<strong>SYN</strong>(or <strong>Synchronous</strong>)若为 1，表示发送端希望双方建立同步处理，即<strong>建立连接</strong> </p>
 </blockquote>
 <ul>
-<li>常见端口号<br><img data-src="/8.JPG" alt="IMG_0095"></li>
+<li>常见端口号<br><img src="/8.JPG" alt="IMG_0095"></li>
 </ul>
 <h4 id="TCP-的三次握手"><a href="#TCP-的三次握手" class="headerlink" title="TCP 的三次握手"></a>TCP 的三次握手</h4><blockquote>
 <p>TCP 协议正是通过<strong>三次握手协议</strong>了来确认两个主机的连接</p>
 </blockquote>
-<p><img data-src="/9.JPG" alt="IMG_0096"></p>
+<p><img src="/9.JPG" alt="IMG_0096"></p>
 <blockquote>
 <p>如图，假设左边是客户端，右边是服务器端。<br>➠ 客户端向服务端发送一个 TCP 数据包，并请求连接 <strong>(SYN = 1)<strong>，数据包序号为 10001<br>➠ 当服务器接到客户端的数据包后回传一个同时带有 <strong>(SYN=1, ACK=1)</strong> 的封包，表示</strong>确认收到，也请求客户端连接</strong>。其中 <strong>Acknowledge</strong> 是要给客户端确认用的，所以该数字比 <strong>Sequence Number</strong> 多一号 <strong>(ack = 10001 + 1 = 10002)</strong> 。而服务器也必须要确认客户端接收到服务器的数据包才行，所以也会随机产生一个 <strong>(seq = 20001)</strong> 发送给客户端<br>➠ 当客户端收到来自服务器端的 <strong>(ack = 10002)</strong> 就能够确认之前的数据包被正确接受了，同时发送一个数据包 <strong>(ACK = 1, ack = 20002)</strong> 给服务器表示确认收到服务端的数据包<br>➠ 服务器收到数据包后确认无误即可与客户端建立连接</p>
 </blockquote>
@@ -409,7 +423,7 @@
 <p>TCP 面向连接，需要三次握手，传输的成本较高，并且还会有严密的检测机制，不符合要求的数据包会请求重传，所以是<strong>可靠传输</strong>。而与 TCP 不同，UDP 不提供可靠的传输模式，没有 TCP 的三次握手，传输的消耗自然较低，所以 UDP 适用与视频、音频等<strong>实时性</strong>要求较高，但数据<strong>准确性</strong>要求较低的场合</p>
 </blockquote>
 <ul>
-<li><p>UDP数据包的报头就很简单了<br><img data-src="/10.JPG" alt="IMG_0098-1"></p>
+<li><p>UDP数据包的报头就很简单了<br><img src="/10.JPG" alt="IMG_0098-1"></p>
 </li>
 <li><p>另外，很多的软件其实是同时提供 TCP 与 UDP 的传输协议的，举例来说，查询主机名的 DNS 服务就同时提供了 UDP/TCP 协议。由于 UDP 较为快速，会先使用 UDP 进行传输，当使用 UDP 无法取得正确的数据时，便转换为较为可靠的 TCP 传输。这样可以同时兼顾快速与可靠的传输</p>
 </li>
@@ -566,10 +580,16 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/zhang-zhen-2-52" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhang-zhen-2-52" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=64441901" title="网易云 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;64441901" rel="noopener" target="_blank"><i class="fas fa-music fa-fw"></i></a>
       </span>
   </div>
 
@@ -593,12 +613,24 @@
 
 <div class="copyright">
   
-  &copy; 
+  &copy; 2017 – 
   <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">s1mple</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">421k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -619,7 +651,6 @@
   
   <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 

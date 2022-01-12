@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="MapReduce 架构 本文讨论的 MapReduce 架构是 Hadoop 1.0 版本时的架构，从 Hadoop 2.0 开始，Hadoop 推出了资源管理框架 YARN。在 YARN 中，使用 ResourceManager 来负责容器的调度（任务运行在容器中），以及作业的管理。使用 NodeManager 来向 ResourceManager 汇报节点资源以及容器运行状态，NodeMan">
@@ -255,7 +255,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>17k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>44 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -281,7 +295,7 @@
 <li>运行在 HDFS NameNode 主节点上的 <strong>JobTracker</strong> 程序，负责接收从客户端提交的 Job，将其划分成 Map 任务和 Reduce 任务，分发给从节点 TaskTracker 执行。JobTracker 负责任务之间的协作，并通过 TaskTracker 发送来的心跳包维护集群的运行状态，以及作业进度信息。</li>
 <li>多个运行在 HDFS DataNode 节点上的 <strong>TaskTracker</strong> 程序，负责执行 Map 任务和 Reduce 任务，直接与 HDFS 交互。每隔一段时间，TaskTracker 向 JobTracker 发送心跳包，汇报节点运行状态，以及任务完成进度。</li>
 </ul>
-<p><img data-src="/2021/10/22/%E7%BB%93%E5%90%88%E6%BA%90%E7%A0%81%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-MapReduce-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/1.png" alt="66b01a299a89595ca02de7b5b9f02b85.png"></p>
+<p><img src="/2021/10/22/%E7%BB%93%E5%90%88%E6%BA%90%E7%A0%81%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-MapReduce-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/1.png" alt="66b01a299a89595ca02de7b5b9f02b85.png"></p>
 <p>为了减少网络传输带来的性能影响，JobTracker 在分发 Map 任务时基于<strong>数据本地化优化</strong>（Data locality optimization）策略，将 Map 任务分发给包含此 Map 处理数据的从节点，并将程序 Jar 包发送给该 TaskTracker，遵循“运算移动，数据不移动”的原则。</p>
 <h2 id="新旧版本-API-说明"><a href="#新旧版本-API-说明" class="headerlink" title="新旧版本 API 说明"></a>新旧版本 API 说明</h2><p>本文中的源码是 Hadoop 3.2.0 版本的源码，使用的是 Hadoop 新版 API。新版 API 位于 <code>org.apache.hadoop.mapreduce</code> 包下，旧版 API 位于 <code>org.apache.hadoop.mapred</code> 包下，两版 API 并不兼容，你可以在 <a target="_blank" rel="noopener" href="https://www.slideshare.net/sh1mmer/upgrading-to-the-new-map-reduce-api">这里</a> 查看两者的区别。为保证向后兼容，Hadoop 并没有移除旧版 API，因此依赖库中两个版本并存，使用时要注意。</p>
 <p>设计新版 API 的主要目的是给用户提供更加简洁优雅的接口，框架的核心代码并没有调整包，比如执行 Map 与 Reduce 任务的 MapTask 和 ReduceTask 类仍位于 <code>org.apache.hadoop.mapred</code> 包下。但由于使用了两套 API，在该类中你会经常看到以 Old/New 命名的类或方法，如 <code>runNewMapper()</code> 和 <code>runOldMapper()</code>。</p>
@@ -329,7 +343,7 @@
 <p>经过 reduce 函数处理后，单词的所有计数值被累加，输出形如 <code>&lt;&quot;a&quot;, 4&gt;</code> 的键值对。</p>
 <h2 id="MapReduce-工作流程详解"><a href="#MapReduce-工作流程详解" class="headerlink" title="MapReduce 工作流程详解"></a>MapReduce 工作流程详解</h2><p>MapReduce 将处理过程分成两个大类阶段：Map 阶段和 Reduce 阶段。在 Map 阶段，由于任务分发基于数据本地化原则，Map 任务运行在包含有该任务处理数据的节点上，数据存储在当前节点的 HDFS DataNode 中。因此，Map 阶段处理的都是本地数据，不需要进行网络传输。Map 阶段产生的中间数据将会暂存在当前节点上，Reduce 阶段需要从相关节点上拉取数据进行聚合运算，再将结果写入 HDFS。因此，Reduce 阶段既需要磁盘读写，也需要网络传输。</p>
 <p>当然，MapReduce 在工作时还要细分为许多小阶段，下面这张图很好的展示了 MapReduce 的整个工作流程，具体包括：数据读入阶段、Mapper 处理阶段、优化性阶段 Combiner、中间数据分区 Partitioner 阶段、被称为 MapReduce “心脏”的数据混洗 Shuffle 阶段、Reducer 处理阶段以及数据写入阶段。</p>
-<p><img data-src="/2021/10/22/%E7%BB%93%E5%90%88%E6%BA%90%E7%A0%81%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-MapReduce-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/2.jpg" alt="9b17e681d1c5745840c517209dd2808f.jpeg"></p>
+<p><img src="/2021/10/22/%E7%BB%93%E5%90%88%E6%BA%90%E7%A0%81%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-MapReduce-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/2.jpg" alt="9b17e681d1c5745840c517209dd2808f.jpeg"></p>
 <p>从大类阶段上划分，数据混洗之前的阶段都可以划分到 Map 阶段，因为这些步骤都是在本地节点上完成的，不涉及网络传输。而在数据混洗阶段，程序从本地或是集群上的其他节点拉取并拷贝 Mapper 产生的中间数据，提供给 Reducer 作为输入。因此，可以将包括数据混洗及其之后的步骤划分为 Reduce 阶段。事实上，数据混洗的相关类也被定义在 <code>org.apache.hadoop.mapreduce.task.reduce</code> 包下。</p>
 <p>下面将结合源码详细介绍各个阶段的工作。</p>
 <h3 id="数据读入阶段"><a href="#数据读入阶段" class="headerlink" title="数据读入阶段"></a>数据读入阶段</h3><p>数据被 Mapper 处理前，需要先转换为 Mapper 支持的键值对类型，这个过程由 InputFormat 和 RecordReader 类完成。首先，由 InputFormat 类从 HDFS 读入文件并创建<strong>输入分片</strong>（Input Split），分片为等长的逻辑数据块，比如可能是形如 <code>(input-file-path, start, offset)</code> 的元组。</p>
@@ -345,7 +359,7 @@
 <p>注：Map 阶段的整个工作流程，可以在 MapTask 类的 <code>run()</code> 和 <code>runNewMapper()</code> 或 <code>runOldMapper()</code> 方法中清晰的一览。</p>
 <h3 id="Partitioner-阶段"><a href="#Partitioner-阶段" class="headerlink" title="Partitioner 阶段"></a>Partitioner 阶段</h3><p>与 Map 任务不同，Reduce 任务并不具备数据本地化的优势，单个 Reduce 任务的输入通常来自于所有 Mapper 的输出。因此，即使 Reduce 任务与某些个 Map 任务处于同一节点上，也不可避免的需要通过网络传输从其他节点上获取 Mapper 输出。</p>
 <p>当只有一个 Reduce 任务时，这个 Reduce 任务会读取所有 Mapper 输出，此时对中间数据分区意义不大，因为所有 Mapper 输出都被写入同一文件。但当有多个 Reduce 任务时，为提高数据吞吐量，<strong>每个 Map 任务会针对输出进行分区（Partition），即为每个 Reduce 任务创建一个分区</strong>。同一个键对应的键值对记录都被划分在同一分区中，每个分区中可以包含许多键（及其对应的值）。并且，一个分区中的记录是<strong>按键排序</strong>的，这样，磁盘读取一个键的所有记录时能保证读取连续数据，而不是从零散的文件中再过滤数据。</p>
-<h4 id="数据溢写"><a href="#数据溢写" class="headerlink" title="数据溢写"></a>数据溢写</h4><p><img data-src="/2021/10/22/%E7%BB%93%E5%90%88%E6%BA%90%E7%A0%81%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-MapReduce-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/3.png" alt="20cbf28f315007e05a1c762915a25ca2.png"></p>
+<h4 id="数据溢写"><a href="#数据溢写" class="headerlink" title="数据溢写"></a>数据溢写</h4><p><img src="/2021/10/22/%E7%BB%93%E5%90%88%E6%BA%90%E7%A0%81%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-MapReduce-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/3.png" alt="20cbf28f315007e05a1c762915a25ca2.png"></p>
 <p>每个 Map 任务有一个环形内存缓冲区，缓冲区大小由 <code>io.sort.mb</code> 指定，默认 100MB。Mapper 产生的中间键值对记录将被先写入缓冲区，当达到缓冲区设定阈值时（<code>io.sort.spill.percent</code>，默认 80%），会开启一个线程将内容<strong>溢写</strong>（spill）到磁盘，由 <code>mapred.local.dir</code> 属性指定的目录。线程工作的同时，Mapper 的输出继续被写到缓冲区，如果在此期间缓冲区被写满，Mapper 将会阻塞直到溢写过程结束。</p>
 <p><strong>每次缓冲区达到溢出阈值，就会新建一个溢出文件，键值对会在内存中先按键排序然后写入文件</strong>。在任务完成前，溢出文件会不断合并并保证文件中数据是有序的。</p>
 <p>数据溢写会写入运行 Map 任务节点的本地磁盘，并不会写入 HDFS（但 Reducer 的输出并不是这样）。这是因为，Map 任务运行的输入分片来自本地节点，输出也应写入本地节点，这样保证了整个 Map 任务的数据本地化。而写入 HDFS 则会为数据创建分布式副本，带来额外网络开销。更何况，Map 任务产生的输出只是暂时数据，任务执行完毕后会被删除。</p>
@@ -367,7 +381,7 @@
 <p>Reduce 任务数量可以在作业配置时通过 <code>job.setNumReduceTasks()</code> 手动设置。默认情况下，只有一个 Reduce 任务，这对于本地小规模数据已经足够了。但在真实应用中，几乎所有作业都将它设置为一个较大的数字，否则，所有的中间数据都被传输给一个 Reduce 任务，作业处理极其低效。</p>
 <p>为一个作业设置多少个 Reduce 任务数，与其说是一门技术，不如说更多是一门艺术。由于并行化程度提高，增加 Reducer 能缩短 Reduce 阶段整体耗时。并且，增加的 Reducer 对于解决数据倾斜问题通常能有很好的帮助。然而，如果配置了过多 Reducer，文件将被切分为更多小文件，磁盘 I/O 次数将显著增加，这又不够优化。相对于大批量的小文件，Hadoop 更适合处理少量的大文件。一条经验法则是，目标 Reducer 保持在每个运行 5 分钟左右，且产生至少一个 HDFS 块的输出比较合适。</p>
 <h3 id="Combiner-阶段"><a href="#Combiner-阶段" class="headerlink" title="Combiner 阶段"></a>Combiner 阶段</h3><p>为了减少 Map 和 Reduce 任务之间的数据传输量，Hadoop 允许用户针对 Map 任务指定一个 Combiner 类。以统计词频程序为例，Mapper 输出的键值对 <code>&lt;单词，计数值&gt;</code> 的计数值初始均为一，此时可通过 Combiner 将相同键的值进行聚合，即计数值累加。这样，同一个 Mapper （来自同一输入分片）的处理数据将被提前聚合，既减少了磁盘写入数据量，也减少了需要通过网络传输给 Reducer 的数据量。因此 Combiner 也被称为 “Mini-reducer” 或 “Local-reducer”，意指在本地节点完成的。</p>
-<p><img data-src="/2021/10/22/%E7%BB%93%E5%90%88%E6%BA%90%E7%A0%81%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-MapReduce-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/4.png" alt="e58767ee9dfc6d8bf818f639a0508b7f.png"></p>
+<p><img src="/2021/10/22/%E7%BB%93%E5%90%88%E6%BA%90%E7%A0%81%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-MapReduce-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/4.png" alt="e58767ee9dfc6d8bf818f639a0508b7f.png"></p>
 <p>Combiner 工作在文件溢写的前后，具体是在 MapTask 的内部类的 <code>sortAndSpill() </code> 和 <code>mergeParts()</code> 方法中，由 <code>combinerRunner.combine()</code> 运行。在 Mapper 输出的键值对被溢写到磁盘之前，会在内存中按键排序，如果定义了 Combiner，它将在排序后的输出上运行，经过 Combiner 紧凑后的数据再写入磁盘。在溢出文件合并阶段，如果至少存在 3 个溢出文件（由 <code>mapreduce.map.combine.minspills</code> 属性指定），那么 Combiner 将会在文件合并时再次运行。因此，Combiner 可能会在 Mapper 输出上反复运行。如果只有 1 或 2 个溢出文件，此时说明 Mapper 输出吞吐量降低，因而不值得调用 Combiner 带来额外开销。</p>
 <p>由于 Combiner 与 Reducer 聚合逻辑相同，Hadoop 没有提供额外的 Combiner 类，而是通过 Reducer 类复用。新版的 CombinerRunner 代码如下，它通过反射获取了一个 Reducer 实例，直接运行 Reducer 的 <code>run()</code> 方法进行数据聚合，聚合结果由上下文对象传入 OutputCollector 中，最后写入磁盘。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">NewCombinerRunner</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">CombinerRunner</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">combine</span><span class="params">(RawKeyValueIterator iterator, OutputCollector&lt;K, V&gt; collector)</span> <span class="keyword">throws</span> IOException, InterruptedException, ClassNotFoundException </span>&#123;</span><br><span class="line">        <span class="comment">// make a reducer</span></span><br><span class="line">        Reducer&lt;K, V, K, V&gt; reducer = (Reducer&lt;K, V, K, V&gt;) ReflectionUtils.newInstance(reducerClass, job);</span><br><span class="line">        Context reducerContext = createReduceContext(reducer, job, taskId,</span><br><span class="line">                iterator, <span class="keyword">null</span>, inputCounter,</span><br><span class="line">                <span class="keyword">new</span> OutputConverter(collector),</span><br><span class="line">                committer,</span><br><span class="line">                reporter, comparator, keyClass,</span><br><span class="line">                valueClass);</span><br><span class="line">        reducer.run(reducerContext);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -376,7 +390,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">job.setMapperClass(TokenizerMapper.class);</span><br><span class="line">job.setCombinerClass(IntSumReducer.class);</span><br><span class="line">job.setReducerClass(IntSumReducer.class);</span><br></pre></td></tr></table></figure>
 
 <h3 id="Shuffler-阶段"><a href="#Shuffler-阶段" class="headerlink" title="Shuffler 阶段"></a>Shuffler 阶段</h3><p>数据混洗（Shuffle）被称为是 MapReduce 的“心脏”，是奇迹发生的地方。从宏观上，它体现为从 Map 任务端到 Reduce 任务端的数据流处理过程，具体说即是 <strong>Mapper 产生的中间键值对被重新组织（排序、分区），写入到本地磁盘中（溢写），Reducer 从多个 Mapper 工作节点上拷贝、合并数据</strong>的过程。最终目的是将数据从 Mapper 端发送到 Reducer 端，中间过程则是 MapReduce 框架基于性能考量的优化过程。从下图你可以清晰的体会到为什么这个过程被称为“数据混洗”。</p>
-<p><img data-src="/2021/10/22/%E7%BB%93%E5%90%88%E6%BA%90%E7%A0%81%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-MapReduce-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/5.png" alt="2abd2dc93aa589f4b1d42b451b2b873c.png"></p>
+<p><img src="/2021/10/22/%E7%BB%93%E5%90%88%E6%BA%90%E7%A0%81%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-MapReduce-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/5.png" alt="2abd2dc93aa589f4b1d42b451b2b873c.png"></p>
 <p>在微观上，Shuffle 被划分为了 Reduce 任务阶段的工作，定义在 <code>org.apache.hadoop.mapreduce.task.reduce</code> 包内。它是一个具体类，是框架定义的 <code>ShuffleConsumerPlugin&lt;K, V&gt;</code> 接口的内置实现类。从接口命名上可以体现出它作为 Mapper 端输出数据“消费者”的身份，“插件”则体现了它的可插拔特性，框架允许用户使用除了内置实现以外的三方插件。</p>
 <p>在 ReduceTask 类的 <code>run()</code> 方法中通过反射获取了一个 Shuffle 类实例。<code>job.getClass()</code> 的第一个参数是三方插件的配置地址，第二个值 <code>Shuffle.class</code> 即为默认的内置实现类。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReduceTask</span> <span class="keyword">extends</span> <span class="title">Task</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">(JobConf job, <span class="keyword">final</span> TaskUmbilicalProtocol umbilical)</span> <span class="keyword">throws</span> IOException, InterruptedException, ClassNotFoundException </span>&#123;</span><br><span class="line">        ShuffleConsumerPlugin shuffleConsumerPlugin = <span class="keyword">null</span>;</span><br><span class="line">        Class&lt;? extends ShuffleConsumerPlugin&gt; clazz = job.getClass(MRConfig.SHUFFLE_CONSUMER_PLUGIN, Shuffle.class, ShuffleConsumerPlugin.class);</span><br><span class="line">        shuffleConsumerPlugin = ReflectionUtils.newInstance(clazz, job);</span><br><span class="line"></span><br><span class="line">        shuffleConsumerPlugin.init(shuffleContext);</span><br><span class="line">        rIter = shuffleConsumerPlugin.run();</span><br><span class="line">        <span class="keyword">if</span> (useNewApi) &#123;</span><br><span class="line">            runNewReducer(job, umbilical, reporter, rIter, comparator, keyClass, valueClass);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            runOldReducer(job, umbilical, reporter, rIter, comparator, keyClass, valueClass);</span><br><span class="line">        &#125;</span><br><span class="line">        shuffleConsumerPlugin.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -550,10 +564,16 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/zhang-zhen-2-52" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhang-zhen-2-52" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=64441901" title="网易云 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;64441901" rel="noopener" target="_blank"><i class="fas fa-music fa-fw"></i></a>
       </span>
   </div>
 
@@ -577,12 +597,24 @@
 
 <div class="copyright">
   
-  &copy; 
+  &copy; 2017 – 
   <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">s1mple</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">421k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -603,7 +635,6 @@
   
   <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 

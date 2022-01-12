@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。本篇为该系列的第一篇，主要介绍迪米特法则和信息专家模式，并结合案例实操在 IntelliJ IDEA 中如何重构代码。本文大部分内容转载自张总博客: 迪米特法则与重构。 准备工作 IntelliJ IDEA，相比 Eclipse，IDEA 在重构方面十分优秀，结合快捷键，使用起来让">
@@ -258,7 +258,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -319,18 +333,18 @@
 <p>当我们理解“最小知识法则”时，又可以从<strong>职责</strong>的角度去思考以上代码。对于收银员角色，他的职责应该是负责收钱，而不用去管钱包里的钱够不够，如果够了怎么办，如果不够又该怎么办，这些统统都不属于他的职责。设想一下，当超市里人流如织，大家都在购买商品时，如果每一个收银员都要承担这般的职责时，会出现什么样的景象？所以“最小知识法则”乃善法，在对象社区中，我们就应该刻意减少对象之间彼此深入的了解。了解最小的知识，就意味着依赖最小，彼此产生的影响就会最小。这实际上是 <strong>KISS（keep it simple and stupid）</strong> 原则的体现。</p>
 <p><strong>信息专家模式</strong>告诉我们：“信息的持有者即为操作该信息的专家”。对于对象，所谓<strong>信息就是该对象内部的字段</strong>。在上述的例子中，Wallet 是 Customer 的字段，那么操作 Wallet 的行为自然就应该分配给 Customer 了。这是题中应有之义。“信息专家模式”其实是面向对象最重要原则“<strong>数据与行为应该封装在一起</strong>”的别名。若在领域建模时能遵循该原则，则可以规避我们设计出贫血模型。</p>
 <h2 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h2><p>如何修改以上代码？注意，<code>charge()</code>行为仍然属于 Paperboy 的职责，因此我们不应该将该方法整体搬迁到 Customer 中，而应该先进行<strong>方法的提取</strong>，选中代码块，使用 <strong>Cmd + Alt + M</strong> 快捷键提取方法。这块代码执行的是支付的步骤，所以命名为<code>pay()</code>。</p>
-<p><img data-src="/0.png" alt="781D2706-3961-4C77-ACF8-8BDDCE21B17E"></p>
+<p><img src="/0.png" alt="781D2706-3961-4C77-ACF8-8BDDCE21B17E"></p>
 <p>提取后的<code>charge()</code>在接收方法请求后，转而将请求<strong>委派</strong>给了<code>pay()</code>方法。我们可以这样理解：在抽象层面，收款是收银员的职责；在实现层面，是<code>pay()</code>方法支持了收款行为，该实现归属于顾客。</p>
-<p><img data-src="/1.png" alt="1AF2B42F-7B13-4284-AF03-9C1D5C5FE0A1"></p>
+<p><img src="/1.png" alt="1AF2B42F-7B13-4284-AF03-9C1D5C5FE0A1"></p>
 <p>观察<code>pay()</code>方法，我们发现该方法操作的数据皆来自 Customer。我们嗅到了一种坏味道，即 Martin Fowler 所谓的“<strong>特性依恋（Feature Envy）</strong>”。对于该坏味道，老马是这样阐释的：“函数对某个类的兴趣高过对自己所处类的兴趣”。不要再嫉妒了，桥归桥，路归路，让方法回到自己最喜欢的地方吧。运用“<strong>Move Method</strong>”重构手法，将<code>pay()</code>方法移动到 Customer 中。</p>
 <p>光标在方法签名或方法体中都可，按下 <strong>F6</strong>，IDEA 会根据方法的入参，智能的提示将方法移动到哪个类中，这里只能是 Customer。还要注意方法的访问权限，默认是 Escalate 往上提升一级，这里选择 Public。</p>
-<p><img data-src="/2.png" alt="2C6EA6D7-A330-4E90-8B2A-54223072A47A"></p>
+<p><img src="/2.png" alt="2C6EA6D7-A330-4E90-8B2A-54223072A47A"></p>
 <p>操作之后，<code>pay()</code>方法移动到 Customer 中。</p>
-<p><img data-src="/3.png" alt="F92C14F0-6693-4154-8A6D-F71AB14BF0E2"></p>
+<p><img src="/3.png" alt="F92C14F0-6693-4154-8A6D-F71AB14BF0E2"></p>
 <p>在将方法移到正确的位置后，我们发现暴露的<code>getWallet()</code>方法根本就没有意义。更何况，将钱包裸露出去，难道是想要炫富吗？还是低调一点为好，隐藏自己的“隐私”，总好过被人觊觎而招来飞来横祸之险。于是，<strong>内联（inline）</strong> 之。将光标放在<code>getWallet()</code>上，按下 <strong>Cmd + Alt + N</strong>。</p>
-<p><img data-src="/4.png" alt="563C9626-A71E-4DC7-A8DC-BA4DA530EF64"></p>
-<p><code>getWallet()</code>方法被删除，并被替换为 Customer 的字段<code>myWallet</code>。那现在声明的<code>theWallet</code>就是多余的，继续内联。<br><img data-src="/5.png" alt="28E463A5-F36A-4250-8611-36BDACF80FCE"></p>
-<p>最后，重构过的代码应该是这样的。阅读代码一目了然，Paperboy 进行收银，并委派给顾客进行实际的支付，即掏钱包，数钱，付钱。<br><img data-src="/6.png" alt="3CA41F80-0556-42F3-8E16-5AEEC39332A3"><img data-src="/7.png" alt="E66E7919-9391-4046-8CB4-C46555E561A8"></p>
+<p><img src="/4.png" alt="563C9626-A71E-4DC7-A8DC-BA4DA530EF64"></p>
+<p><code>getWallet()</code>方法被删除，并被替换为 Customer 的字段<code>myWallet</code>。那现在声明的<code>theWallet</code>就是多余的，继续内联。<br><img src="/5.png" alt="28E463A5-F36A-4250-8611-36BDACF80FCE"></p>
+<p>最后，重构过的代码应该是这样的。阅读代码一目了然，Paperboy 进行收银，并委派给顾客进行实际的支付，即掏钱包，数钱，付钱。<br><img src="/6.png" alt="3CA41F80-0556-42F3-8E16-5AEEC39332A3"><img src="/7.png" alt="E66E7919-9391-4046-8CB4-C46555E561A8"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>判断一段代码是否违背了迪米特法则，有一个小窍门，就是看调用代码是否出现形如<code>a.m1().m2().m3().m4()</code>之类的代码。这种代码在 Martin Fowler《重构》一书中，被名为“**消息链条(Message Chain)**”，有人更加夸张地名其为“火车残骸”。车祸现场啊，真是惨不忍睹。</p>
 <p>实际上未重构前的代码即是一种消息链条，在<code>charge()</code>方法中实际执行的是<code>myCustomer.getWallet().subtractMoney(payment)</code>，先获取 Customer 的 Wallet，再执行 Wallet 的扣钱方法。</p>
 <p>那么，如下代码是否这样的残骸呢？</p>
@@ -482,10 +496,16 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/zhang-zhen-2-52" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhang-zhen-2-52" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=64441901" title="网易云 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;64441901" rel="noopener" target="_blank"><i class="fas fa-music fa-fw"></i></a>
       </span>
   </div>
 
@@ -509,12 +529,24 @@
 
 <div class="copyright">
   
-  &copy; 
+  &copy; 2017 – 
   <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">s1mple</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">421k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -535,7 +567,6 @@
   
   <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 

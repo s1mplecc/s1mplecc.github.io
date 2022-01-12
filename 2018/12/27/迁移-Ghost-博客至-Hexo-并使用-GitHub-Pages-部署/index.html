@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="为什么迁移Ghost优点：  提供后台管理界面，支持在线编辑文章，随时更新随时发布。 图片上传方便，直接拷贝到正文即可，会自动上传到服务器并生成 Markdown 链接。 支持多人同时使用，可用作团队博客。  缺点：  需要在服务器上部署 Ghost。 本地和服务器端文章同步麻烦（这也是我换用 Hexo 的主要原因）。 不支持离线编辑文章。虽说这个可以本地写完了再一次性拷贝到服务器上，但这又回到了">
@@ -255,7 +255,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -279,7 +293,7 @@
 <li>不支持离线编辑文章。虽说这个可以本地写完了再一次性拷贝到服务器上，但这又回到了第 2 点。</li>
 <li>Themes 配置麻烦，不够统一。Kaldorei 主题是我废了很大劲才搜罗到的，还得每次修改完源码后压缩上传（调样式的时候调的我头疼）。</li>
 </ol>
-<p><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/0.png" alt="dbdd8ad99f065192aa340cf474709b2d.png"><br><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/1.png" alt="fa0a3c8ae59030f8e5ef80a9b04d8c7d.png"></p>
+<p><img src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/0.png" alt="dbdd8ad99f065192aa340cf474709b2d.png"><br><img src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/1.png" alt="fa0a3c8ae59030f8e5ef80a9b04d8c7d.png"></p>
 <h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><p>优点：</p>
 <ol>
 <li>文档本地化。在本地编写博客，一条指令即可生成静态网页（具体体现就是你在 <code>source/_posts</code> 下编写 Markdown，写完了执行 <code>hexo g</code> 就可以生成样式美观的 <code>index.html</code>）。</li>
@@ -287,7 +301,7 @@
 <li>丰富的插件和主题，配置也统一化了。比如图中我使用的 Next 主题，主题的配置修改 <code>theme/next/_config.yml</code>；Hexo 的配置修改主目录的 <code>_config.yml</code> 即可。</li>
 <li>图片上传还算方便。在与文章同名的文件夹下保存图片即可。这个下面会细说。</li>
 </ol>
-<p><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/2.png" alt="6bc65c0ff0fb6d62ea90ce4c35c04ac9.png"><br><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/3.png" alt="8b1c5aa127adbfef220cfb30a6d55e1d.png"></p>
+<p><img src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/2.png" alt="6bc65c0ff0fb6d62ea90ce4c35c04ac9.png"><br><img src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/3.png" alt="8b1c5aa127adbfef220cfb30a6d55e1d.png"></p>
 <h2 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h2><h3 id="创建-GitHub-Pages-仓库"><a href="#创建-GitHub-Pages-仓库" class="headerlink" title="创建 GitHub Pages 仓库"></a>创建 GitHub Pages 仓库</h3><p>GitHub Pages 是面向用户、组织和项目开放的公共静态页面搭建托管服务，站点可以被免费托管在 GitHub 上，你可以选择使用 GitHub Pages 默认提供的域名 <code>github.io</code> 或者自定义域名来发布站点。</p>
 <p>GitHub Pages 分为两类，用户主页和项目主页。我们需要部署的是用户主页。需要在 GitHub 上新建一个仓库，<strong>仓库名必须为</strong> <code>$&#123;github-username&#125;.github.io</code>，这样才会被识别为用户主页。用户主页是唯一的，填其他名称只会被当成普通项目。通过 <code>https://$&#123;github-username&#125;.github.io</code> 进行访问。</p>
 <p>创建完成后将仓库 clone 至本地。</p>
@@ -369,7 +383,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;s1mple.online&#x27;</span> &gt; ./<span class="built_in">source</span>/CNAME</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
 
 <p>第三步，在 GitHub Pages 项目的配置中<strong>绑定个人域名</strong>，记得将 Enforce HTTPS 选项勾选上（GitHub 提供免费的 HTTPS 服务）。保存成功后如下图提示即可通过 <code>https://s1mple.online</code> 访问。</p>
-<p><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/5.png" alt="5"></p>
+<p><img src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/5.png" alt="5"></p>
 <h2 id="图片引用"><a href="#图片引用" class="headerlink" title="图片引用"></a>图片引用</h2><p>当项目中只用到少量图片时，可以将图片统一放在 <code>source/images</code> 文件夹中，通过绝对路径访问。比如头像。</p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Markdown</span></span><br><span class="line"><span class="type">![avatar](/images/avatar.jpeg)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># themes/next/_config.yml</span></span><br><span class="line"><span class="attr">avatar:</span></span><br><span class="line">  <span class="attr">url:</span> <span class="string">/images/avatar.jpeg</span></span><br></pre></td></tr></table></figure>
 
@@ -387,7 +401,7 @@
 <li>按照 Hexo 的规定，创建与文章标题一致的文件夹用于存放文章中的图片，并更换文章中图片的 Markdown 链接。</li>
 </ul>
 <p>这样可以将整个 <code>downloads</code> 文件夹拷贝到 Hexo 的 <code>source/_posts</code> 目录下发布即可！</p>
-<p><img data-src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/4.png" alt="7292889b7bb90233a1ac2dd1ac2cd97a.png"></p>
+<p><img src="/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/4.png" alt="7292889b7bb90233a1ac2dd1ac2cd97a.png"></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://pages.github.com/">GitHub Pages官网</a></li>
 <li><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/index.html">Hexo官网</a></li>
@@ -531,10 +545,16 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/zhang-zhen-2-52" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhang-zhen-2-52" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=64441901" title="网易云 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;64441901" rel="noopener" target="_blank"><i class="fas fa-music fa-fw"></i></a>
       </span>
   </div>
 
@@ -558,12 +578,24 @@
 
 <div class="copyright">
   
-  &copy; 
+  &copy; 2017 – 
   <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">s1mple</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">421k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -584,7 +616,6 @@
   
   <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 

@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="春光恰与少年同，十里清风慕天青">
@@ -246,7 +246,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -261,9 +275,9 @@
 <p><strong>定义</strong>：设 G=(V, E) 是一个无向图，如果顶点 V 可分割为两个互不相交的子集｛U｝、｛V｝，并且图中的每条边 (i, j) 所关联的两个顶点 i 和 j 分别属于这两个不同的顶点集 i∈ U，j∈ V，则称图 G 为一个二分图。<strong>二分图的一个等价定义是：不含有「含奇数条边的环」的图</strong>。</p>
 </blockquote>
 <p>二分图（Bipartite Graph）是指<strong>图中的顶点可以划分到两个不相交的集合中，同一个集合中的顶点不相邻</strong>，即同一个集合中的两个顶点之间不存在边。如下图，我可以将左侧的蓝色和紫色构成的图转化为右图的二分图，集合 A 中全由紫色顶点构成，集合 B 中全由蓝色顶点构成，只存在<code>蓝-紫</code>（<code>紫-蓝</code>）边，同色顶点间不存在边。</p>
-<p><img data-src="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/0.png" alt="bab01ea393c68a26dee629ce0d7e4de3.png"></p>
+<p><img src="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/0.png" alt="bab01ea393c68a26dee629ce0d7e4de3.png"></p>
 <p>所以二分图又可以等价于二色图（Two-colorable Graph），以下是一些二分图的常见示例，如星状图、网格图、齿轮图等。</p>
-<p><img data-src="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/1.png" alt="14bf3a04408d7eacdf1b4dc323acf58c.png"></p>
+<p><img src="/2020/07/13/%E5%9B%BE%E6%B5%81%E7%AE%97%E6%B3%95%E4%B9%8B-Bipartiteness-Check/1.png" alt="14bf3a04408d7eacdf1b4dc323acf58c.png"></p>
 <h2 id="Bipartiteness-Check"><a href="#Bipartiteness-Check" class="headerlink" title="Bipartiteness Check"></a>Bipartiteness Check</h2><h3 id="批处理"><a href="#批处理" class="headerlink" title="批处理"></a>批处理</h3><p>那么如何检测一个图是否为二分图呢？在批处理情形下，即一个图的所有顶点和所有边的信息都已明确，我们借助于二色图的思想，可以通过<strong>染色法</strong>来判断一个图是否为二分图。算法可以通过 BFS 广度优先算法来实现，具体步骤如下：</p>
 <ol>
 <li>从任意一个顶点出发，将该顶点染成黑色。</li>
@@ -354,7 +368,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>20 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -456,7 +484,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -477,7 +519,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget</span><br><span class="line"></span><br><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; bash ssr.sh</span><br></pre></td></tr></table></figure>
 
 <p>等待下载完成后出现如下界面，按照提示一步步进行配置</p>
-<p><img data-src="/2019/04/10/%E6%90%AD%E5%BB%BA-SSR-%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/0.png" alt="6e65c95d5ad590eec8be684361594373.png"></p>
+<p><img src="/2019/04/10/%E6%90%AD%E5%BB%BA-SSR-%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/0.png" alt="6e65c95d5ad590eec8be684361594373.png"></p>
 <p>依次会配置：</p>
           <!--noindex-->
             <div class="post-button">
@@ -562,7 +604,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>17 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -580,7 +636,7 @@
 <li><strong>RealSubject</strong>，真实对象（被代理类），真正实现功能的对象。</li>
 <li><strong>Proxy</strong>，代理类，用来<strong>封装</strong>真实对象。</li>
 </ul>
-<p><img data-src="/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/0.png" alt="0d73af744af2fd7ecfd3326888c3d69b.png"></p>
+<p><img src="/2019/02/25/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/0.png" alt="0d73af744af2fd7ecfd3326888c3d69b.png"></p>
 <h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><p>代理模式通常用于解决以下几类问题：</p>
 <ul>
 <li><strong>需要控制对象的访问权限</strong></li>
@@ -670,7 +726,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>17 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -682,7 +752,7 @@
 
       
           <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>图中有一个无向图，其中圈内数字代表一个地点，边线上的数字代表长度 Le（双向相同）。机场一辆小型VIP电动摆渡车在起点 A，要去 3 个贵宾厅（V1，V2，V3）接贵宾（每个贵宾厅限1个VIP），送到 3 个对应航班机位（S1，S2，S3），即 V1 至 S1，V2 至 S2，V3 至 S3。VIP 电动摆渡车同时最多装下 2 个 VIP。</p>
-<p><img data-src="/2019/02/15/%E4%B8%80%E9%81%93%E6%9C%89%E8%B6%A3%E7%9A%84%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95%E9%A2%98%EF%BC%88Java-%E7%89%88%EF%BC%89/1.jpg" alt="ff858a30049f1753177d2691a50f09b1.jpeg"></p>
+<p><img src="/2019/02/15/%E4%B8%80%E9%81%93%E6%9C%89%E8%B6%A3%E7%9A%84%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95%E9%A2%98%EF%BC%88Java-%E7%89%88%EF%BC%89/1.jpg" alt="ff858a30049f1753177d2691a50f09b1.jpeg"></p>
 <p><strong>要求</strong>：VIP 电动摆渡车该怎么走路径最短？这个最短路径的长度是多少？这里 A 是出发点，最后一个 VIP（不限次序）送达地为终点。为了简化问题，假设贵宾厅VIP已在贵宾厅等候上车，VIP 电动摆渡车在接送期间不用等待。</p>
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>看到最短路径，不难想到 Dijkstra 等最短路径算法，这些算法用于求出一个图（Graph）中任意两个顶点（Vertex）的最短距离。但是本文待求解的问题不止于此，而是包含起始点 A 在内的 7 个点（A、V1、V2、V3、S1、S2、S3），我们需要先<strong>规划路线</strong>使得摆渡车依次通过这 7 个点，再求出这些路线中的最短路线。</p>
 <p>综上所诉，该问题被拆解为以下两步：<br>第一步，<strong>列出从 A 出发经由其余 6 个点的所有可能的路线</strong>。<br>第二步，<strong>对于给定的任意两个点，求出它们之间的最短路径</strong>（例如给定 A、V2 两个点，可得从 A 到 V2 的最短路径为 2 -&gt; 6 -&gt; 7）。<br>然后对于每条路线，计算每一段（即两个点之间）的最短路径即可得到整条路线的最短路径。</p>
@@ -801,10 +871,16 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/zhang-zhen-2-52" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhang-zhen-2-52" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=64441901" title="网易云 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;64441901" rel="noopener" target="_blank"><i class="fas fa-music fa-fw"></i></a>
       </span>
   </div>
 
@@ -828,12 +904,24 @@
 
 <div class="copyright">
   
-  &copy; 
+  &copy; 2017 – 
   <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">s1mple</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">421k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -854,7 +942,6 @@
   
   <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 

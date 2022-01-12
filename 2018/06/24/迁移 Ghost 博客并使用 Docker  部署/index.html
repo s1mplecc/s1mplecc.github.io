@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="Preface 因为阿里云服务器在七月初即将过期，以及生活上的一些琐事，博客已经近一个月没有更新了。考虑到十月份域名也将过期，以及阿里云非学生用户太贵，遂考虑国外的云服务器 Vultr，优点是绑定域名不需要备案，以及按时计费也很方便，缺点是国内访问网速确实比不上阿里云，但同时也跟同学了解到可以使用锐速进行优化，这个以后再研究。此外，为将来迁移方便，使用 Docker 重新部署 Ghost 博客并制">
@@ -252,7 +252,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>12 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -271,9 +285,9 @@
 </li>
 <li><p>在添加实例成功后第一件事是<code>ping</code>一下公网 IP 是否是通的，有些时候分配的 IP 是被大陆给墙了的。<code>ping</code>通后我习惯的首件要事就是添加我的 ssh 公钥以及修改 ssh 的一些策略，比如修改默认端口号、禁用密码登陆之类的，一切都是为安全考虑（吃了第一次的亏，一夜之间异常登陆三十次）</p>
 </li>
-<li><p>迁移 Ghost 博客之前需要先将原先服务器上的相关文件下载到本地，再上传到新的服务器上。主要包含文章内容，图片以及主题。所幸 Ghost 博客提供了 Export/Import 功能，而且是所有文件导出到一个大 Json 文件中，很方便迁移<br><img data-src="/0.png" alt="14070DA1-C3CD-4A9F-AE52-D4D2DE4A2CDB">主题也很方便，我之前就将代码上传至 <a target="_blank" rel="noopener" href="https://github.com/s1mplecc/ghost-theme-kaldorei">GitHub</a>，克隆下来压缩上传就行。图片稍微麻烦点，需要将 Ghost 目录下的整个<code>content/images</code>文件夹<code>scp</code>到本地，再<code>scp</code>到 Vultr 服务器上，可能要花些时间</p>
+<li><p>迁移 Ghost 博客之前需要先将原先服务器上的相关文件下载到本地，再上传到新的服务器上。主要包含文章内容，图片以及主题。所幸 Ghost 博客提供了 Export/Import 功能，而且是所有文件导出到一个大 Json 文件中，很方便迁移<br><img src="/0.png" alt="14070DA1-C3CD-4A9F-AE52-D4D2DE4A2CDB">主题也很方便，我之前就将代码上传至 <a target="_blank" rel="noopener" href="https://github.com/s1mplecc/ghost-theme-kaldorei">GitHub</a>，克隆下来压缩上传就行。图片稍微麻烦点，需要将 Ghost 目录下的整个<code>content/images</code>文件夹<code>scp</code>到本地，再<code>scp</code>到 Vultr 服务器上，可能要花些时间</p>
 </li>
-<li><p>接下来去修改你的域名设置，我是在 <a target="_blank" rel="noopener" href="https://sg.godaddy.com/zh">GoDaddy</a> 上购买的域名，所以去狗爹网修改配置如下<br><img data-src="/1.png" alt="64F8A358-E544-4FA3-819C-7F38F5327A5A"></p>
+<li><p>接下来去修改你的域名设置，我是在 <a target="_blank" rel="noopener" href="https://sg.godaddy.com/zh">GoDaddy</a> 上购买的域名，所以去狗爹网修改配置如下<br><img src="/1.png" alt="64F8A358-E544-4FA3-819C-7F38F5327A5A"></p>
 </li>
 <li><p>准备工作已经做好，剩下的就是在新服务器上搭建环境和部署博客了。必要的东西也就三个，Nginx 用于做端口映射，Docker 用于运行 Ghost 容器，Certbot 用来配置 Https。Nginx 在 Ubuntu 上安装很简单，使用<code>apt-get</code>命令即可。Certbot 安装在我的另一篇博客<a target="_blank" rel="noopener" href="https://s2mple.xyz/configure-https-with-certbot/">Certbot配置Https</a>中有详细介绍。我们着重介绍一下如何安装 Docker</p>
 </li>
@@ -489,10 +503,16 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/zhang-zhen-2-52" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhang-zhen-2-52" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=64441901" title="网易云 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;64441901" rel="noopener" target="_blank"><i class="fas fa-music fa-fw"></i></a>
       </span>
   </div>
 
@@ -516,12 +536,24 @@
 
 <div class="copyright">
   
-  &copy; 
+  &copy; 2017 – 
   <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">s1mple</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">421k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -542,7 +574,6 @@
   
   <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 

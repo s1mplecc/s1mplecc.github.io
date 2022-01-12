@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"s1mplecc.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="Preface Sidecar 起源于 Netflix Prana，它的目的是将 Non-JVM 语言整合到 Netflix OSS 生态系统中，如今 Spring Cloud 将 Spring Boot 与 Netflix OSS 整合成一套微服务解决框架，大大简化了程序员的开发。而 Sidecar 就是其中的一个衍生物，用于将 Non-JVM 语言，譬如 Node.js、Python 引入至">
@@ -256,7 +256,21 @@
     </a>
   </span>
   
-  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>23 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -309,9 +323,9 @@
 <p>到目前为止，Sidecar 和 Node 服务已准备就绪，我们按顺序启动 <strong>eureka-server</strong> =&gt; <strong>book-service</strong> =&gt; <strong>node-sidecar</strong></p>
 </blockquote>
 <ul>
-<li><p>访问 Eureka 的 WebUI <code>http://localhost:9090/</code>，Sidecar 已被注册到 Eureka 上，并且状态为 UP<br><img data-src="/0.png" alt="B89413D5-130D-4F5D-BB76-7559B6B0A036">如果我们停掉<code>book-service</code>，则<code>node-sidecar</code>的服务状态会变为 Down，显示服务不可用</p>
+<li><p>访问 Eureka 的 WebUI <code>http://localhost:9090/</code>，Sidecar 已被注册到 Eureka 上，并且状态为 UP<br><img src="/0.png" alt="B89413D5-130D-4F5D-BB76-7559B6B0A036">如果我们停掉<code>book-service</code>，则<code>node-sidecar</code>的服务状态会变为 Down，显示服务不可用</p>
 </li>
-<li><p>访问 Sidecar 的首页<code>http://localhost:9091/</code>，提供了三个接口<br><img data-src="/1.png" alt="A2B5DA24-46A6-40B9-9129-54EC7FA0F329"></p>
+<li><p>访问 Sidecar 的首页<code>http://localhost:9091/</code>，提供了三个接口<br><img src="/1.png" alt="A2B5DA24-46A6-40B9-9129-54EC7FA0F329"></p>
 </li>
 <li><p>访问<code>/health</code>可以得到 Node 应用返回的健康报告</p>
   <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;status&quot;</span>: <span class="string">&quot;UP&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -346,7 +360,7 @@
 <p>其他微服务可以通过 Sidecar 实例的服务名间接调用基于 Node 的 book-service。同样的，book-service 也可以通过服务名调用其他微服务，这要归功于<code>@EnableZuulProxy</code></p>
 </blockquote>
 <ul>
-<li>访问<code>http://localhost:9091/author-service/book/1/author</code>惊讶的发现，这和我们访问<code>http://localhost:9092/book/1/author</code>结果是一样的，这是由于 Sidecar 引入了 Zuul 网关，它可以获取 Eureka 上注册的服务的地址信息，从而进行路由跳转<br><img data-src="/2.png" alt="A44BC958-7050-4530-8855-7F0042A6C32F"></li>
+<li>访问<code>http://localhost:9091/author-service/book/1/author</code>惊讶的发现，这和我们访问<code>http://localhost:9092/book/1/author</code>结果是一样的，这是由于 Sidecar 引入了 Zuul 网关，它可以获取 Eureka 上注册的服务的地址信息，从而进行路由跳转<br><img src="/2.png" alt="A44BC958-7050-4530-8855-7F0042A6C32F"></li>
 </ul>
 <blockquote>
 <p><strong>Tips:</strong> Spring Cloud Zuul 通过与 Eureka 的整合，将自身注册为 Eureka 服务治理下的应用，同时从 Eureka 获取其他所有微服务的示实例信息。对于路由规则的维护，Zuul 默认会将服务名作为 ContextPath 的方式创建路由映射</p>
@@ -393,7 +407,7 @@ zuul:
       serviceId: node-sidecar
 </code></pre>
 </li>
-<li><p>访问<code>http://localhost:5555/book-service/book/1</code>，在接口层面，<code>node-sidecar</code>其实是不可见的，访问的还是<code>book-service</code>的 API<br><img data-src="/3.png" alt="WX20180403-110158">  </p>
+<li><p>访问<code>http://localhost:5555/book-service/book/1</code>，在接口层面，<code>node-sidecar</code>其实是不可见的，访问的还是<code>book-service</code>的 API<br><img src="/3.png" alt="WX20180403-110158">  </p>
 </li>
 <li><p>由此，如果<code>book-service</code>需要横向拓展为一个集群，无非是多创建几个对应的 Sidecar 应用，它们的服务名只要是一样的，那就可以通过网关去实现负载均衡，甚至我第二个<code>book-service</code>用 Python 写也没有问题</p>
 </li>
@@ -402,7 +416,7 @@ zuul:
 <p>由此，基于 Non-JVM 语言的微服务，通过 Sidecar ，实现了服务向 Eureka 的注册与健康检查，并且可以通过服务名进行服务间调用。基本上可以说 Non-JVM 应用通过 Sidecar 完美的融入了 Spring Cloud 生态圈。</p>
 </blockquote>
 <ul>
-<li>附上一张架构图<br><img data-src="/4.png" alt="sidecar"></li>
+<li>附上一张架构图<br><img src="/4.png" alt="sidecar"></li>
 </ul>
 <h2 id="Preferences"><a href="#Preferences" class="headerlink" title="Preferences"></a>Preferences</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/marshalYuan/spring-cloud-example/blob/master/docs/sidecar.md">使用 Sidecar 将 Node.js 引入 Spring Cloud</a></li>
@@ -549,10 +563,16 @@ zuul:
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/s1mplecc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;s1mplecc" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:s1mple951205@gmail.com" title="E-Mail → mailto:s1mple951205@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/zhang-zhen-2-52" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhang-zhen-2-52" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=64441901" title="网易云 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;64441901" rel="noopener" target="_blank"><i class="fas fa-music fa-fw"></i></a>
       </span>
   </div>
 
@@ -576,12 +596,24 @@ zuul:
 
 <div class="copyright">
   
-  &copy; 
+  &copy; 2017 – 
   <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">s1mple</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">421k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">17:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -602,7 +634,6 @@ zuul:
   
   <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 
