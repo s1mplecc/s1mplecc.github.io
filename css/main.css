@@ -1307,7 +1307,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ffff0d;
+  background: #8642c4;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2108,6 +2108,13 @@ pre .javascript .function {
 #qr p {
   text-align: center;
 }
+.post-copyright {
+  background: var(--card-bg-color);
+  border-left: 3px solid #ff2a2a;
+  list-style: none;
+  margin: 2em 0 0;
+  padding: 0.5em 1em;
+}
 .category-all-page .category-all-title {
   text-align: center;
 }
@@ -2825,7 +2832,7 @@ body {
   opacity: 0.95 !important;
 }
 .header-inner {
-  opacity: 0.95 !important;
+  background: rgba(255,255,255,0.95) !important;
 }
 .copy-btn {
   opacity: inherit;
@@ -2839,6 +2846,10 @@ body {
 code {
   background: #eaeef3;
   color: #00193a;
+}
+.links-of-author a,
+.links-of-author span.exturl {
+  font-size: 1em;
 }
 .footer {
   color: #c4c8ca;
