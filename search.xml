@@ -957,6 +957,65 @@
       </tags>
   </entry>
   <entry>
+    <title>Git 基础教程</title>
+    <url>/2017/11/28/Git%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Git 是目前世界上最先进的分布式版本控制系统。相比较CVS及SVN这种老式的集中式版本控制系统，要更加灵活方便，也更安全稳定。<strong>集中式</strong>是指版本库是放在中央服务器中，需要联网才能工作。<strong>分布式</strong>是指没有中央服务器，每个人电脑上有个完整的版本仓库，可以本地修改代码再联网提交到Git服务器上，Git服务器作用仅仅“交换”大家的修改即代码同步。此外，Git还拥有极其强大的分支管理功能。</p>
+<h2 id="Git-命令"><a href="#Git-命令" class="headerlink" title="Git 命令"></a>Git 命令</h2><p>本文主要介绍基础的 Git 命令，更加复杂的 Git 命令可以查看：<a href="https://s2mple.xyz/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/">Git 进阶教程</a>。另外 Git 的常用命令文档可以参考：<a href="https://education.github.com/git-cheat-sheet-education.pdf">git-cheatsheet</a>。</p>
+<h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p>始终要记住你的<strong>本地和Git服务器上都存在版本仓库（repository）</strong>，Git实现代码同步实际上是同步你的本地仓库和远程仓库。有两种方式创建仓库：1. 从服务器上克隆一个仓库；2. 初始化一个本地仓库。</p>
+<p>从Git服务器上<strong>克隆（clone）</strong>一个仓库下来，可以通过<strong>ssh</strong>或<strong>http</strong>的方式。ssh需要将你的公钥存放在Git服务器上，而http不需要但是速度相较ssh要慢。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@github.com:s1mplecc/MyHashMap.git</span><br><span class="line">git clone https://github.com/s1mplecc/MyHashMap.git</span><br></pre></td></tr></table></figure>
+
+<p>从远程库克隆下来的是完整的版本库，含有<code>.git</code>文件夹，其下的<code>config</code>文件夹包括了本仓库的配置信息。包含了url、远程库的名字以及分支等：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ cat .git/config</span><br><span class="line"></span><br><span class="line">[remote &quot;origin&quot;]</span><br><span class="line">    url = git@github.com:s1mplecc/MyHashMap.git</span><br><span class="line">    fetch = +refs/heads/*:refs/remotes/origin/*</span><br><span class="line">[branch &quot;master&quot;]</span><br><span class="line">    remote = origin</span><br><span class="line">    merge = refs/heads/master</span><br></pre></td></tr></table></figure>
+
+<p>第二种方式，<code>git init</code>是将当前目录初始化为Git可以管理的仓库。会在当前目录下生成了<code>.git</code>文件夹。</p>
+<p>如果要将本地仓库推到服务器上，需要现在服务器上创建一个repository，然后在本地目录下绑定服务器上的repository，origin是版本库默认的名字：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@github.com:s1mplecc/MyHashMap.git</span><br></pre></td></tr></table></figure>
+<h3 id="提交变更"><a href="#提交变更" class="headerlink" title="提交变更"></a>提交变更</h3><p>当你对版本库中的文件做了变更（增删改），可以使用<code>git status</code>命令查看当前版本库的状态：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜  github.io git:(hexo) ✗ git status</span><br><span class="line">On branch hexo</span><br><span class="line">Your branch is ahead of &#x27;origin/hexo&#x27; by 9 commits.</span><br><span class="line">  (use &quot;git push&quot; to publish your local commits)</span><br><span class="line"></span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span><br><span class="line"></span><br><span class="line">    modified:   &quot;source/_posts/ES6\346\226\260\347\211\271\346\200\247.md&quot;</span><br><span class="line">    modified:   &quot;source/_posts/Git Flow \346\250\241\345\236\213\344\273\245\345\217\212\345\267\245\345\205\267\347\232\204\344\275\277\347\224\250.md&quot;</span><br><span class="line"></span><br><span class="line">no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><code>git add .</code>或者<code>git add all</code>将所有修改提交到暂存区。<code>.</code>表示当前目录下所有修改了的文件，当然也可以指定某个文件。</p>
+<p>将暂存区的所有内容提交到当前分支，默认分支即Git为我们自动创建的<strong>master</strong>分支。<code>-m</code>参数后面接提交的message：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git commit -m &quot;balabala&quot;</span><br></pre></td></tr></table></figure>
+
+<p>将当前分支提交到远程库中，<code>-u</code>第一次使用时将本地的master分支绑定到远程库的master分支，以后可以省略不加：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+
+<p>从远程库拉取修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
+
+<p>在开发过程中会有频繁的提交，所以日常中我们用到最多的就是上述命令了。本质上本地与远程版本库的同步就是记录下每次的<strong>修改信息</strong>。Git会帮我们记录下每次提交的修改，方便我们进行同步、回退以及合并。</p>
+<h4 id="gitignore"><a href="#gitignore" class="headerlink" title=".gitignore"></a>.gitignore</h4><p>说到<code>add</code>不得不提<code>.gitignore</code>这个文件，它的作用是忽略一些文件的提交，比如IntelliJ IDEA生成的<code>.idea</code>文件、编译生成的<code>target</code>文件等等。这类文件不需要提交到服务器污染大家的环境。关于<code>.gitignore</code>的编写github上都有现成的模版。另外IDE也可以安装相应的gitignore插件。</p>
+<h3 id="查看提交历史"><a href="#查看提交历史" class="headerlink" title="查看提交历史"></a>查看提交历史</h3><p>正是Git帮我们记录了每次提交的修改，我们可以通过命令查看历史信息，以及每次做了什么修改。</p>
+<p><code>git log</code>查看提交历史，每条记录有一个唯一的id用于标识，使用时可以使用可以唯一表示的前几位。添加参数<code>-p &lt;file&gt;/&lt;commit id&gt;</code>查看指定文件或某次commit的历史信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">commit 24345a1a74184f99eb32202bfcc1cd0fd6ac945d (HEAD -&gt; master)</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:33:56 2017 +0800</span><br><span class="line"></span><br><span class="line">    second commit</span><br><span class="line"></span><br><span class="line">commit b90b6da1573d55ef59a900d435d903e41667f61e</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:31:43 2017 +0800</span><br><span class="line"></span><br><span class="line">    first commit</span><br></pre></td></tr></table></figure>
+
+<p><code>git diff b90b6da</code>查看某次提交后与当前版本的区别，可以看到我在文本中添加了一行second：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@@ -1 +1,2 @@</span><br><span class="line"> first</span><br><span class="line">+second</span><br></pre></td></tr></table></figure>
+<p><code>git reflog</code>查看命令操作历史。</p>
+<h3 id="撤销变更"><a href="#撤销变更" class="headerlink" title="撤销变更"></a>撤销变更</h3><p>如果你在提交了某次变更后又想撤销这次变更，Git也提供了撤销和回退的功能。Git将提交记录（节点）串成一条线，<strong>HEAD</strong>就是一指向当前版本的指针，做回退操作其实就是这个指针在这条线上的节点间移动。牢记：<strong>Git跟踪并管理的是修改，而非文件</strong>。</p>
+<p><code>reset</code>命令回退到指定的某个版本，<code>HEAD</code>表示当前版本，<code>HEAD^</code>表示上一个版本。也可以用具体的 commit id：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard HEAD^</span><br></pre></td></tr></table></figure>
+
+<p>如果你修改了某个文件，但还没有<code>add</code>，可以直接舍弃这次修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -- &lt;file&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如果你已经<code>commit</code>了，也可以还原回去：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git revert &lt;commit id&gt;</span><br></pre></td></tr></table></figure>
+<p>revert与reset的区别在于，revert会生成一次新的提交去移除某些提交（相当于反向操作），在节点线上还是向前走的。而reset是把HEAD指针后移到指定节点，直接从这个节点走出新的一条线。可以参考<a href="http://www.cnblogs.com/houpeiyong/p/5890748.html">代码回滚：git reset、git checkout和git revert区别和联系</a>。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://education.github.com/git-cheat-sheet-education.pdf">git-cheatsheet</a></li>
+<li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000">Git教程 —— 廖雪峰</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Concepts</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Git 进阶教程</title>
     <url>/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/</url>
     <content><![CDATA[<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>你的本地仓库由 Git 维护的三棵「树」组成。第一个是你的<strong>工作目录（Working dir）</strong>，它持有实际文件，即你所见的；第二个是<strong>缓存区（Stage or Index）</strong>，它像个缓存区域，临时保存你的改动；第三个是<strong>提交历史（Commit history）</strong>，包含的 HEAD 指针指向你最近一次 commit 的引用。关于工作区和缓存区概念可参考<a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000">廖雪峰的Git教程</a>。</p>
@@ -1012,65 +1071,6 @@
 <li><a href="https://github.com/geeeeeeeeek/git-recipes">git-recipes —— GitHub 8k star 的高质量教程</a></li>
 <li><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Merging vs. Rebasing</a></li>
 <li><a href="https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting">Resetting, Checking Out &amp; Reverting</a></li>
-<li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000">Git教程 —— 廖雪峰</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Concepts</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git 基础教程</title>
-    <url>/2017/11/28/Git%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Git 是目前世界上最先进的分布式版本控制系统。相比较CVS及SVN这种老式的集中式版本控制系统，要更加灵活方便，也更安全稳定。<strong>集中式</strong>是指版本库是放在中央服务器中，需要联网才能工作。<strong>分布式</strong>是指没有中央服务器，每个人电脑上有个完整的版本仓库，可以本地修改代码再联网提交到Git服务器上，Git服务器作用仅仅“交换”大家的修改即代码同步。此外，Git还拥有极其强大的分支管理功能。</p>
-<h2 id="Git-命令"><a href="#Git-命令" class="headerlink" title="Git 命令"></a>Git 命令</h2><p>本文主要介绍基础的 Git 命令，更加复杂的 Git 命令可以查看：<a href="https://s2mple.xyz/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/">Git 进阶教程</a>。另外 Git 的常用命令文档可以参考：<a href="https://education.github.com/git-cheat-sheet-education.pdf">git-cheatsheet</a>。</p>
-<h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p>始终要记住你的<strong>本地和Git服务器上都存在版本仓库（repository）</strong>，Git实现代码同步实际上是同步你的本地仓库和远程仓库。有两种方式创建仓库：1. 从服务器上克隆一个仓库；2. 初始化一个本地仓库。</p>
-<p>从Git服务器上<strong>克隆（clone）</strong>一个仓库下来，可以通过<strong>ssh</strong>或<strong>http</strong>的方式。ssh需要将你的公钥存放在Git服务器上，而http不需要但是速度相较ssh要慢。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@github.com:s1mplecc/MyHashMap.git</span><br><span class="line">git clone https://github.com/s1mplecc/MyHashMap.git</span><br></pre></td></tr></table></figure>
-
-<p>从远程库克隆下来的是完整的版本库，含有<code>.git</code>文件夹，其下的<code>config</code>文件夹包括了本仓库的配置信息。包含了url、远程库的名字以及分支等：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ cat .git/config</span><br><span class="line"></span><br><span class="line">[remote &quot;origin&quot;]</span><br><span class="line">    url = git@github.com:s1mplecc/MyHashMap.git</span><br><span class="line">    fetch = +refs/heads/*:refs/remotes/origin/*</span><br><span class="line">[branch &quot;master&quot;]</span><br><span class="line">    remote = origin</span><br><span class="line">    merge = refs/heads/master</span><br></pre></td></tr></table></figure>
-
-<p>第二种方式，<code>git init</code>是将当前目录初始化为Git可以管理的仓库。会在当前目录下生成了<code>.git</code>文件夹。</p>
-<p>如果要将本地仓库推到服务器上，需要现在服务器上创建一个repository，然后在本地目录下绑定服务器上的repository，origin是版本库默认的名字：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@github.com:s1mplecc/MyHashMap.git</span><br></pre></td></tr></table></figure>
-<h3 id="提交变更"><a href="#提交变更" class="headerlink" title="提交变更"></a>提交变更</h3><p>当你对版本库中的文件做了变更（增删改），可以使用<code>git status</code>命令查看当前版本库的状态：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜  github.io git:(hexo) ✗ git status</span><br><span class="line">On branch hexo</span><br><span class="line">Your branch is ahead of &#x27;origin/hexo&#x27; by 9 commits.</span><br><span class="line">  (use &quot;git push&quot; to publish your local commits)</span><br><span class="line"></span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span><br><span class="line"></span><br><span class="line">    modified:   &quot;source/_posts/ES6\346\226\260\347\211\271\346\200\247.md&quot;</span><br><span class="line">    modified:   &quot;source/_posts/Git Flow \346\250\241\345\236\213\344\273\245\345\217\212\345\267\245\345\205\267\347\232\204\344\275\277\347\224\250.md&quot;</span><br><span class="line"></span><br><span class="line">no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</span><br></pre></td></tr></table></figure>
-
-<p><code>git add .</code>或者<code>git add all</code>将所有修改提交到暂存区。<code>.</code>表示当前目录下所有修改了的文件，当然也可以指定某个文件。</p>
-<p>将暂存区的所有内容提交到当前分支，默认分支即Git为我们自动创建的<strong>master</strong>分支。<code>-m</code>参数后面接提交的message：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git commit -m &quot;balabala&quot;</span><br></pre></td></tr></table></figure>
-
-<p>将当前分支提交到远程库中，<code>-u</code>第一次使用时将本地的master分支绑定到远程库的master分支，以后可以省略不加：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
-
-<p>从远程库拉取修改：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
-
-<p>在开发过程中会有频繁的提交，所以日常中我们用到最多的就是上述命令了。本质上本地与远程版本库的同步就是记录下每次的<strong>修改信息</strong>。Git会帮我们记录下每次提交的修改，方便我们进行同步、回退以及合并。</p>
-<h4 id="gitignore"><a href="#gitignore" class="headerlink" title=".gitignore"></a>.gitignore</h4><p>说到<code>add</code>不得不提<code>.gitignore</code>这个文件，它的作用是忽略一些文件的提交，比如IntelliJ IDEA生成的<code>.idea</code>文件、编译生成的<code>target</code>文件等等。这类文件不需要提交到服务器污染大家的环境。关于<code>.gitignore</code>的编写github上都有现成的模版。另外IDE也可以安装相应的gitignore插件。</p>
-<h3 id="查看提交历史"><a href="#查看提交历史" class="headerlink" title="查看提交历史"></a>查看提交历史</h3><p>正是Git帮我们记录了每次提交的修改，我们可以通过命令查看历史信息，以及每次做了什么修改。</p>
-<p><code>git log</code>查看提交历史，每条记录有一个唯一的id用于标识，使用时可以使用可以唯一表示的前几位。添加参数<code>-p &lt;file&gt;/&lt;commit id&gt;</code>查看指定文件或某次commit的历史信息：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">commit 24345a1a74184f99eb32202bfcc1cd0fd6ac945d (HEAD -&gt; master)</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:33:56 2017 +0800</span><br><span class="line"></span><br><span class="line">    second commit</span><br><span class="line"></span><br><span class="line">commit b90b6da1573d55ef59a900d435d903e41667f61e</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:31:43 2017 +0800</span><br><span class="line"></span><br><span class="line">    first commit</span><br></pre></td></tr></table></figure>
-
-<p><code>git diff b90b6da</code>查看某次提交后与当前版本的区别，可以看到我在文本中添加了一行second：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@@ -1 +1,2 @@</span><br><span class="line"> first</span><br><span class="line">+second</span><br></pre></td></tr></table></figure>
-<p><code>git reflog</code>查看命令操作历史。</p>
-<h3 id="撤销变更"><a href="#撤销变更" class="headerlink" title="撤销变更"></a>撤销变更</h3><p>如果你在提交了某次变更后又想撤销这次变更，Git也提供了撤销和回退的功能。Git将提交记录（节点）串成一条线，<strong>HEAD</strong>就是一指向当前版本的指针，做回退操作其实就是这个指针在这条线上的节点间移动。牢记：<strong>Git跟踪并管理的是修改，而非文件</strong>。</p>
-<p><code>reset</code>命令回退到指定的某个版本，<code>HEAD</code>表示当前版本，<code>HEAD^</code>表示上一个版本。也可以用具体的 commit id：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard HEAD^</span><br></pre></td></tr></table></figure>
-
-<p>如果你修改了某个文件，但还没有<code>add</code>，可以直接舍弃这次修改：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -- &lt;file&gt;</span><br></pre></td></tr></table></figure>
-
-<p>如果你已经<code>commit</code>了，也可以还原回去：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git revert &lt;commit id&gt;</span><br></pre></td></tr></table></figure>
-<p>revert与reset的区别在于，revert会生成一次新的提交去移除某些提交（相当于反向操作），在节点线上还是向前走的。而reset是把HEAD指针后移到指定节点，直接从这个节点走出新的一条线。可以参考<a href="http://www.cnblogs.com/houpeiyong/p/5890748.html">代码回滚：git reset、git checkout和git revert区别和联系</a>。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://education.github.com/git-cheat-sheet-education.pdf">git-cheatsheet</a></li>
 <li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000">Git教程 —— 廖雪峰</a></li>
 </ul>
 ]]></content>
@@ -1458,64 +1458,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java8 函数接口</title>
-    <url>/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/</url>
-    <content><![CDATA[<h2 id="函数接口"><a href="#函数接口" class="headerlink" title="函数接口"></a>函数接口</h2><p>在函数式编程中，<strong>纯函数</strong>的定义是：</p>
-<ol>
-<li>此函数在相同的输入值时，需产生相同的输出。函数的输出和输入值以外的其他隐藏信息或状态无关，也和由 I/O 设备产生的外部输出无关。</li>
-<li>该函数不能有语义上可观察的函数副作用，诸如“触发事件”，使输出设备输出，或更改输出值以外物件的内容等。</li>
-</ol>
-<p>为使 Java 支持函数式编程，<strong>函数接口</strong>（<strong>Functional Interfaces</strong>）正是 Java 8 引入的一个核心概念。函数接口要求接口中只能定义个<strong>唯一一个抽象方法</strong>。同时，引入一个新的注解： <code>@FunctionalInterface</code>，作为函数接口的标记。</p>
-<p>Java 8 提供了四大类函数接口：<strong>谓词</strong> <code>Predicate</code>，<strong>函数</strong> <code>Function</code>，<strong>提供者</strong> <code>Supplier</code>，<strong>消费者</strong> <code>Consumer</code>。以及衍生的函数接口，比如 <code>BiFunction&lt;T, U, R&gt;</code> 支持两个入参的函数等等，它们都定义在 <code>java.util.function</code> 包下。</p>
-<h3 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h3><p>函数式接口的重要属性是：<strong>我们能够使用 Lambda 实例化它们</strong>。Lambda 表达式的引入给开发者带来了不少优点：在 Java 8 之前，匿名内部类，监听器和事件处理器的使用都显得很冗长，代码可读性很差，Lambda 表达式的应用则使代码变得更加紧凑，可读性增强；Lambda 表达式使<strong>并行操作大集合</strong>变得很方便，可以充分发挥多核 CPU 的优势，更易于为多核处理器编写代码。</p>
-<p>Lambda 表达式由三个部分组成：第一部分为一个括号内用逗号分隔的函数入参；第二部分为箭头符号 <code>-&gt;</code>；第三部分为方法体，可以是表达式和代码块。语法如下：</p>
-<ul>
-<li><p><code>(parameters) ‑&gt; expression</code> 方法体为表达式，该表达式的值作为返回值返回。</p>
-</li>
-<li><p><code>(parameters) ‑&gt; &#123; statements; &#125;</code> 方法体为代码块，必须用 <code>&#123;&#125;</code> 包裹起来，若该函数需要返回值则需要 <code>return</code>。</p>
-</li>
-</ul>
-<p>用 Lambda 表达式替换匿名内部类的写法如下。再进一步，可以使用<strong>方法引用</strong>（<strong>Method Reference</strong>）简写</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Anonymous inner class</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(<span class="keyword">new</span> Function&lt;String, Integer&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">apply</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> s.length();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(s -&gt; s.length());</span><br><span class="line"></span><br><span class="line"><span class="comment">// Method reference</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(String::length);</span><br></pre></td></tr></table></figure>
-
-<p>使用 <code>parallelStream()</code> 和 Lambda 表达式并行操作集合，默认线程数为 CPU 核数</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">urls.parallelStream()</span><br><span class="line">        .filter(url -&gt; url.endsWith(<span class="string">&quot;.html&quot;</span>))</span><br><span class="line">        .map(url -&gt; htmlParser.contentFrom(url))</span><br><span class="line">        .reduce((x, y) -&gt; x + y)</span><br><span class="line">        .orElse(<span class="string">&quot;&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<h2 id="谓词-Predicate"><a href="#谓词-Predicate" class="headerlink" title="谓词 Predicate"></a>谓词 Predicate</h2><p>在计算机语言的环境下，谓词是指条件表达式的求值返回真或假的过程。在 Java 中就是进行逻辑判断后返回值为 <code>boolean</code> 的函数，对应函数接口为 <code>Predicate&lt;T&gt;</code>。在针对集合进行筛选时，通常会使用谓词对集合元素进行条件判断。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Predicate</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">test</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">and</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; other)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; test(t) &amp;&amp; other.test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">negate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; !test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">or</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; other)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; test(t) || other.test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function">Predicate&lt;T&gt; <span class="title">isEqual</span><span class="params">(Object targetRef)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">null</span> == targetRef)</span><br><span class="line">                ? Objects::isNull</span><br><span class="line">                : object -&gt; targetRef.equals(object);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>Predicate&lt;T&gt;</code> 接口定义的唯一抽象方法 <code>test(T t)</code> 用以验证输入参数是否满足谓词条件。同时，它还提供了默认方法用以支持<strong>组合的与、或、非逻辑运算</strong>。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Predicate&lt;Apple&gt; p1 = p ‑&gt; p.getColor() == Color.RED;</span><br><span class="line">Predicate&lt;Apple&gt; p2 = p ‑&gt; p.getSize() == Size.Medium;</span><br><span class="line"></span><br><span class="line">apples.stream().filter(p1.and(p2));</span><br></pre></td></tr></table></figure>
-
-<h2 id="函数-Function"><a href="#函数-Function" class="headerlink" title="函数 Function"></a>函数 Function</h2><p><code>Function&lt;T, R&gt;</code> 接口代表一个函数，准确地说，代表了具有输入输出的函数，这也是最常见的函数定义。具有两个入参的函数对应接口为 <code>BiFunction&lt;T, U, R&gt;</code> 。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;T&gt; the type of the input to the function</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;R&gt; the type of the result of the function</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Function</span>&lt;<span class="title">T</span>, <span class="title">R</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">R <span class="title">apply</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;V&gt; <span class="function">Function&lt;V, R&gt; <span class="title">compose</span><span class="params">(Function&lt;? <span class="keyword">super</span> V, ? extends T&gt; before)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(before);</span><br><span class="line">        <span class="keyword">return</span> (V v) -&gt; apply(before.apply(v));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;V&gt; <span class="function">Function&lt;T, V&gt; <span class="title">andThen</span><span class="params">(Function&lt;? <span class="keyword">super</span> R, ? extends V&gt; after)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        <span class="keyword">return</span> (T t) -&gt; after.apply(apply(t));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function">Function&lt;T, T&gt; <span class="title">identity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> t -&gt; t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>函数也可以进行组合，组合后返回的结果也是一个函数，这就是所谓的<strong>组合子</strong>。组合子方法分别为：</p>
-<ul>
-<li><code>compose(before)</code>，组合前一个函数，相当于 <code>V -&gt; T -&gt; R</code> </li>
-<li><code>andThen(after)</code>，组合后一个函数，相当于 <code>T -&gt; R -&gt; V</code></li>
-</ul>
-<h2 id="提供者-Supplier"><a href="#提供者-Supplier" class="headerlink" title="提供者 Supplier"></a>提供者 Supplier</h2><p>当一个函数仅仅用于返回结果时，我们可以将这种函数称为<strong>提供者</strong>，接口定义为 <code>Supplier&lt;T&gt;</code>。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Supplier</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function">T <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>只提供一个 <code>get()</code> 方法，我们可以将这种提供者代表的函数看做是一种 Query 操作。</p>
-<h2 id="消费者-Consumer"><a href="#消费者-Consumer" class="headerlink" title="消费者 Consumer"></a>消费者 Consumer</h2><p>与提供者对应的接口则被称之为<strong>消费者</strong>，用以接收一个输入，但却并不关心返回结果，即返回值为 <code>void</code>。消费者的对应接口为 <code>Consumer&lt;T&gt;</code>。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Represents an operation that accepts a single input argument and returns no</span></span><br><span class="line"><span class="comment"> * result. Unlike most other functional interfaces, &#123;<span class="doctag">@code</span> Consumer&#125; is expected</span></span><br><span class="line"><span class="comment"> * to operate via side-effects.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Consumer</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">accept</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Consumer&lt;T&gt; <span class="title">andThen</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; after)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        <span class="keyword">return</span> (T t) -&gt; &#123; accept(t); after.accept(t); &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>不像其他函数接口，<code>Consumer</code> 通常是<strong>有副作用的</strong>。这也不难理解，该函数只有输入没有输出，那数据通常是被外部系统消费了。同时 <code>Consumer</code> 支持 <code>andThen(after)</code> 组合</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Consumer&lt;String&gt; c1 = s -&gt; System.out.println(s);</span><br><span class="line">Consumer&lt;String&gt; c2 = s -&gt; storeToDB(s);</span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).ifPresent(c1.andThen(c2));</span><br></pre></td></tr></table></figure>
-
-<p>这种消费者代表的函数相当于是一个 Command 操作。软件设计的一条原则就是 <strong>CQS</strong>（Command-Query Separation）命令-查询分离原则，即保证一个方法体内只有 Query 和 Command 的一种，就是因为查询无副作用而命令可能会改变数据状态。</p>
-]]></content>
-      <categories>
-        <category>Languages</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>函数式编程</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java8 Optional 源码阅读</title>
     <url>/2018/11/27/Java8%20Optional%20%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Optional 是 Java8 引入的一个重要特性，它是一个容器，里面装着一个可能为空可能不为空的对象。在它出现之前，为避免空指针异常我们可能会这样编码：</p>
@@ -1598,40 +1540,61 @@
       </tags>
   </entry>
   <entry>
-    <title>JavaScript 简介</title>
-    <url>/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>JavaScript</strong>是目前前端开发中最流行的语言，在学习的过程中会遇到各种<strong>JS</strong>有关的名词。本文章的主要目的是介绍<strong>ECMAScript</strong>(or <strong>ES</strong>)、<strong>CommonJS</strong>、<strong>Node.js</strong>、<strong>Vue.js</strong>或<strong>AngularJS</strong>等与<strong>JavaScript</strong>之间的联系。</p>
-<h2 id="ECMAScript"><a href="#ECMAScript" class="headerlink" title="ECMAScript"></a>ECMAScript</h2><p><strong>ECMAScript</strong>和<strong>JavaScript</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>（另外的实现还有<strong>Jscript</strong> 和<strong>ActionScript</strong>等）。</p>
-<p><strong>JavaScript</strong>的创造者<strong>Netscape</strong>公司，将<strong>JavaScript</strong>提交给国际标准化组织<strong>ECMA</strong>，希望这种语言能够成为国际标准，标准委员会最终决定，标准在每年的6月份正式发布一次，作为当年的正式版本。</p>
-<p>目前的几乎所有的浏览器（不包括低版本的IE），都已经支持<strong>ES5</strong>了，而写代码时最好采用<strong>ES6</strong>语法（毕竟语法糖写起来更舒服，还添加了很多必要的新特性，而且浏览器全面支持<strong>ES6</strong>是迟早的事）。不用担心浏览器不能识别新语法，<strong>Bable</strong>就是用来解决这种问题的工具。</p>
-<p><strong>Babel</strong>是一个广泛使用的<strong>ES6</strong>转码器，可以将<strong>ES6</strong>代码转为<strong>ES5</strong>代码，从而在浏览器环境运行。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 转码前</span></span><br><span class="line">input.map(<span class="function"><span class="params">item</span> =&gt;</span> item + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转码后</span></span><br><span class="line">input.map(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item + <span class="number">1</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><p>在介绍<strong>CommonJS</strong>之前有必要先介绍一下<strong>Node.js</strong>。首先明确一点，<strong>JavaScript</strong>和<strong>Python</strong>一样，是一种脚本语言，或者是<strong>解释型语言</strong>，和<strong>C、C++</strong> 这种需要编译成可执行文件再运行的语言不同，它的运行只需要解释器能够解释执行即可，而不需要编译器。<strong>浏览器</strong>就包含了解释执行网页中的<strong>JavaScript</strong>代码的功能。</p>
-<p>伴随着互联网和<strong>JavaScript</strong>语言的快速发展，人们不仅仅局限于拿JS来做前端开发，所以<strong>Node.js</strong>随之应运而生。<strong>Node.js</strong>作为一个后端的<strong>Javascrip</strong>t运行环境（解释器），这意味着你可以编写系统级或者服务器端的<strong>Javascript</strong>代码，交给<strong>Node.js</strong>来解释执行。</p>
-<p><strong>Node.js</strong>采用了<strong>Google Chrome</strong>浏览器的V8引擎（<strong>C++编写</strong>），性能很好，同时还提供了很多系统级的API，如文件操作、网络编程等。浏览器端的<strong>Javascript</strong>代码在运行时会受到各种安全性的限制，对客户系统的操作有限。相比之下，<strong>Node.js</strong>则是一个全面的后台运行时，基于<strong>Javascript</strong>提供了其他语言能够实现的许多功能。</p>
-<h2 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h2><p>可以说<strong>CommonJS</strong>和<strong>Node.js</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>。</p>
-<p><strong>ECMAScript</strong>提供核心语言功能，浏览器端的<strong>JavaScript实现</strong>包括了<strong>ES核心</strong>、<strong>DOM</strong>(or <strong>Document Object Model</strong>)和<strong>BOM</strong>(or <strong>Browser Object Model</strong>)，所以你在浏览器的<strong>JS</strong>控制台可以使用<code>document、window、alert...</code>等有关<strong>DOM</strong>和<strong>BOM</strong>的操作。</p>
-<p>而<strong>CommonJS</strong>主要为<strong>非浏览器的应用</strong>定义一套API（比如<strong>Node</strong>应用），从而填补了空白。它的终极目标是提供一个类似<strong>Python、Ruby</strong>和<strong>Java</strong>的<strong>标准库</strong>。</p>
-<p>可以看到在<strong>Node</strong>环境中没有定义<code>alert</code>和<code>document</code>，因为<strong>Node</strong>不关心<strong>DOM</strong>和<strong>BOM</strong>操作。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; alert(&#x27;!!!&#x27;)</span><br><span class="line">ReferenceError: alert is not defined</span><br><span class="line">&gt; document</span><br><span class="line">ReferenceError: document is not defined</span><br></pre></td></tr></table></figure>
-
-<p>但是它可以调用读取文件的函数，读取出了<code>a.txt</code>中的<code>Hello!</code>并打印，这是浏览器做不到也不应该去做的。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; const fs = require(&#x27;fs&#x27;);                 </span><br><span class="line">&gt; const content = fs.readFileSync(&#x27;./a.txt&#x27;,&#x27;utf-8&#x27;);</span><br><span class="line">&gt; console.log(content);</span><br><span class="line">hello!</span><br></pre></td></tr></table></figure>
-
-<h2 id="Vue-js、AngularJS…"><a href="#Vue-js、AngularJS…" class="headerlink" title="Vue.js、AngularJS…"></a>Vue.js、AngularJS…</h2><p>这些没什么好说的，之所以带上<strong>JS</strong>就是因为它们是用<strong>JavaScript</strong>语言开发的框架，实际上就是个<strong>JS库</strong>，用于简化我们前端代码的编写。</p>
-<p>至于为什么使用<strong>Vue.js</strong>这些框架需要安装<strong>Node.js</strong>，原因也很简单，因为很多工具（比如<strong>Babel、webpack</strong>）都是用<strong>Node</strong>开发出来的，这也是你为什么可以用<code>npm</code>安装的原因。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://es6.ruanyifeng.com/#docs/intro">ECMAScript6简介 - 阮一峰</a></li>
-<li><a href="http://www.commonjs.org/">CommonJS官网</a></li>
-<li><a href="https://nodejs.org/en/">Node.js官网</a></li>
+    <title>Java8 函数接口</title>
+    <url>/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/</url>
+    <content><![CDATA[<h2 id="函数接口"><a href="#函数接口" class="headerlink" title="函数接口"></a>函数接口</h2><p>在函数式编程中，<strong>纯函数</strong>的定义是：</p>
+<ol>
+<li>此函数在相同的输入值时，需产生相同的输出。函数的输出和输入值以外的其他隐藏信息或状态无关，也和由 I/O 设备产生的外部输出无关。</li>
+<li>该函数不能有语义上可观察的函数副作用，诸如“触发事件”，使输出设备输出，或更改输出值以外物件的内容等。</li>
+</ol>
+<p>为使 Java 支持函数式编程，<strong>函数接口</strong>（<strong>Functional Interfaces</strong>）正是 Java 8 引入的一个核心概念。函数接口要求接口中只能定义个<strong>唯一一个抽象方法</strong>。同时，引入一个新的注解： <code>@FunctionalInterface</code>，作为函数接口的标记。</p>
+<p>Java 8 提供了四大类函数接口：<strong>谓词</strong> <code>Predicate</code>，<strong>函数</strong> <code>Function</code>，<strong>提供者</strong> <code>Supplier</code>，<strong>消费者</strong> <code>Consumer</code>。以及衍生的函数接口，比如 <code>BiFunction&lt;T, U, R&gt;</code> 支持两个入参的函数等等，它们都定义在 <code>java.util.function</code> 包下。</p>
+<h3 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h3><p>函数式接口的重要属性是：<strong>我们能够使用 Lambda 实例化它们</strong>。Lambda 表达式的引入给开发者带来了不少优点：在 Java 8 之前，匿名内部类，监听器和事件处理器的使用都显得很冗长，代码可读性很差，Lambda 表达式的应用则使代码变得更加紧凑，可读性增强；Lambda 表达式使<strong>并行操作大集合</strong>变得很方便，可以充分发挥多核 CPU 的优势，更易于为多核处理器编写代码。</p>
+<p>Lambda 表达式由三个部分组成：第一部分为一个括号内用逗号分隔的函数入参；第二部分为箭头符号 <code>-&gt;</code>；第三部分为方法体，可以是表达式和代码块。语法如下：</p>
+<ul>
+<li><p><code>(parameters) ‑&gt; expression</code> 方法体为表达式，该表达式的值作为返回值返回。</p>
+</li>
+<li><p><code>(parameters) ‑&gt; &#123; statements; &#125;</code> 方法体为代码块，必须用 <code>&#123;&#125;</code> 包裹起来，若该函数需要返回值则需要 <code>return</code>。</p>
+</li>
 </ul>
+<p>用 Lambda 表达式替换匿名内部类的写法如下。再进一步，可以使用<strong>方法引用</strong>（<strong>Method Reference</strong>）简写</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Anonymous inner class</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(<span class="keyword">new</span> Function&lt;String, Integer&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">apply</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> s.length();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(s -&gt; s.length());</span><br><span class="line"></span><br><span class="line"><span class="comment">// Method reference</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(String::length);</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>parallelStream()</code> 和 Lambda 表达式并行操作集合，默认线程数为 CPU 核数</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">urls.parallelStream()</span><br><span class="line">        .filter(url -&gt; url.endsWith(<span class="string">&quot;.html&quot;</span>))</span><br><span class="line">        .map(url -&gt; htmlParser.contentFrom(url))</span><br><span class="line">        .reduce((x, y) -&gt; x + y)</span><br><span class="line">        .orElse(<span class="string">&quot;&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="谓词-Predicate"><a href="#谓词-Predicate" class="headerlink" title="谓词 Predicate"></a>谓词 Predicate</h2><p>在计算机语言的环境下，谓词是指条件表达式的求值返回真或假的过程。在 Java 中就是进行逻辑判断后返回值为 <code>boolean</code> 的函数，对应函数接口为 <code>Predicate&lt;T&gt;</code>。在针对集合进行筛选时，通常会使用谓词对集合元素进行条件判断。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Predicate</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">test</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">and</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; other)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; test(t) &amp;&amp; other.test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">negate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; !test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">or</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; other)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; test(t) || other.test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function">Predicate&lt;T&gt; <span class="title">isEqual</span><span class="params">(Object targetRef)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">null</span> == targetRef)</span><br><span class="line">                ? Objects::isNull</span><br><span class="line">                : object -&gt; targetRef.equals(object);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Predicate&lt;T&gt;</code> 接口定义的唯一抽象方法 <code>test(T t)</code> 用以验证输入参数是否满足谓词条件。同时，它还提供了默认方法用以支持<strong>组合的与、或、非逻辑运算</strong>。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Predicate&lt;Apple&gt; p1 = p ‑&gt; p.getColor() == Color.RED;</span><br><span class="line">Predicate&lt;Apple&gt; p2 = p ‑&gt; p.getSize() == Size.Medium;</span><br><span class="line"></span><br><span class="line">apples.stream().filter(p1.and(p2));</span><br></pre></td></tr></table></figure>
+
+<h2 id="函数-Function"><a href="#函数-Function" class="headerlink" title="函数 Function"></a>函数 Function</h2><p><code>Function&lt;T, R&gt;</code> 接口代表一个函数，准确地说，代表了具有输入输出的函数，这也是最常见的函数定义。具有两个入参的函数对应接口为 <code>BiFunction&lt;T, U, R&gt;</code> 。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;T&gt; the type of the input to the function</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;R&gt; the type of the result of the function</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Function</span>&lt;<span class="title">T</span>, <span class="title">R</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">R <span class="title">apply</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;V&gt; <span class="function">Function&lt;V, R&gt; <span class="title">compose</span><span class="params">(Function&lt;? <span class="keyword">super</span> V, ? extends T&gt; before)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(before);</span><br><span class="line">        <span class="keyword">return</span> (V v) -&gt; apply(before.apply(v));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;V&gt; <span class="function">Function&lt;T, V&gt; <span class="title">andThen</span><span class="params">(Function&lt;? <span class="keyword">super</span> R, ? extends V&gt; after)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        <span class="keyword">return</span> (T t) -&gt; after.apply(apply(t));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function">Function&lt;T, T&gt; <span class="title">identity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> t -&gt; t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>函数也可以进行组合，组合后返回的结果也是一个函数，这就是所谓的<strong>组合子</strong>。组合子方法分别为：</p>
+<ul>
+<li><code>compose(before)</code>，组合前一个函数，相当于 <code>V -&gt; T -&gt; R</code> </li>
+<li><code>andThen(after)</code>，组合后一个函数，相当于 <code>T -&gt; R -&gt; V</code></li>
+</ul>
+<h2 id="提供者-Supplier"><a href="#提供者-Supplier" class="headerlink" title="提供者 Supplier"></a>提供者 Supplier</h2><p>当一个函数仅仅用于返回结果时，我们可以将这种函数称为<strong>提供者</strong>，接口定义为 <code>Supplier&lt;T&gt;</code>。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Supplier</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function">T <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>只提供一个 <code>get()</code> 方法，我们可以将这种提供者代表的函数看做是一种 Query 操作。</p>
+<h2 id="消费者-Consumer"><a href="#消费者-Consumer" class="headerlink" title="消费者 Consumer"></a>消费者 Consumer</h2><p>与提供者对应的接口则被称之为<strong>消费者</strong>，用以接收一个输入，但却并不关心返回结果，即返回值为 <code>void</code>。消费者的对应接口为 <code>Consumer&lt;T&gt;</code>。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Represents an operation that accepts a single input argument and returns no</span></span><br><span class="line"><span class="comment"> * result. Unlike most other functional interfaces, &#123;<span class="doctag">@code</span> Consumer&#125; is expected</span></span><br><span class="line"><span class="comment"> * to operate via side-effects.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Consumer</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">accept</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Consumer&lt;T&gt; <span class="title">andThen</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; after)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        <span class="keyword">return</span> (T t) -&gt; &#123; accept(t); after.accept(t); &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不像其他函数接口，<code>Consumer</code> 通常是<strong>有副作用的</strong>。这也不难理解，该函数只有输入没有输出，那数据通常是被外部系统消费了。同时 <code>Consumer</code> 支持 <code>andThen(after)</code> 组合</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Consumer&lt;String&gt; c1 = s -&gt; System.out.println(s);</span><br><span class="line">Consumer&lt;String&gt; c2 = s -&gt; storeToDB(s);</span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).ifPresent(c1.andThen(c2));</span><br></pre></td></tr></table></figure>
+
+<p>这种消费者代表的函数相当于是一个 Command 操作。软件设计的一条原则就是 <strong>CQS</strong>（Command-Query Separation）命令-查询分离原则，即保证一个方法体内只有 Query 和 Command 的一种，就是因为查询无副作用而命令可能会改变数据状态。</p>
 ]]></content>
       <categories>
         <category>Languages</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
+        <tag>Java</tag>
+        <tag>函数式编程</tag>
       </tags>
   </entry>
   <entry>
@@ -1679,6 +1642,43 @@
 <li><a href="http://es6.ruanyifeng.com/#docs/promise">Promise 对象 - 阮一峰ES6教程</a></li>
 <li><a href="http://es6.ruanyifeng.com/#docs/async">async 函数 - 阮一峰ES6教程</a></li>
 <li><a href="https://segmentfault.com/a/1190000007535316">理解 JavaScript 的 async/await</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Languages</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JavaScript 简介</title>
+    <url>/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>JavaScript</strong>是目前前端开发中最流行的语言，在学习的过程中会遇到各种<strong>JS</strong>有关的名词。本文章的主要目的是介绍<strong>ECMAScript</strong>(or <strong>ES</strong>)、<strong>CommonJS</strong>、<strong>Node.js</strong>、<strong>Vue.js</strong>或<strong>AngularJS</strong>等与<strong>JavaScript</strong>之间的联系。</p>
+<h2 id="ECMAScript"><a href="#ECMAScript" class="headerlink" title="ECMAScript"></a>ECMAScript</h2><p><strong>ECMAScript</strong>和<strong>JavaScript</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>（另外的实现还有<strong>Jscript</strong> 和<strong>ActionScript</strong>等）。</p>
+<p><strong>JavaScript</strong>的创造者<strong>Netscape</strong>公司，将<strong>JavaScript</strong>提交给国际标准化组织<strong>ECMA</strong>，希望这种语言能够成为国际标准，标准委员会最终决定，标准在每年的6月份正式发布一次，作为当年的正式版本。</p>
+<p>目前的几乎所有的浏览器（不包括低版本的IE），都已经支持<strong>ES5</strong>了，而写代码时最好采用<strong>ES6</strong>语法（毕竟语法糖写起来更舒服，还添加了很多必要的新特性，而且浏览器全面支持<strong>ES6</strong>是迟早的事）。不用担心浏览器不能识别新语法，<strong>Bable</strong>就是用来解决这种问题的工具。</p>
+<p><strong>Babel</strong>是一个广泛使用的<strong>ES6</strong>转码器，可以将<strong>ES6</strong>代码转为<strong>ES5</strong>代码，从而在浏览器环境运行。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 转码前</span></span><br><span class="line">input.map(<span class="function"><span class="params">item</span> =&gt;</span> item + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转码后</span></span><br><span class="line">input.map(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item + <span class="number">1</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><p>在介绍<strong>CommonJS</strong>之前有必要先介绍一下<strong>Node.js</strong>。首先明确一点，<strong>JavaScript</strong>和<strong>Python</strong>一样，是一种脚本语言，或者是<strong>解释型语言</strong>，和<strong>C、C++</strong> 这种需要编译成可执行文件再运行的语言不同，它的运行只需要解释器能够解释执行即可，而不需要编译器。<strong>浏览器</strong>就包含了解释执行网页中的<strong>JavaScript</strong>代码的功能。</p>
+<p>伴随着互联网和<strong>JavaScript</strong>语言的快速发展，人们不仅仅局限于拿JS来做前端开发，所以<strong>Node.js</strong>随之应运而生。<strong>Node.js</strong>作为一个后端的<strong>Javascrip</strong>t运行环境（解释器），这意味着你可以编写系统级或者服务器端的<strong>Javascript</strong>代码，交给<strong>Node.js</strong>来解释执行。</p>
+<p><strong>Node.js</strong>采用了<strong>Google Chrome</strong>浏览器的V8引擎（<strong>C++编写</strong>），性能很好，同时还提供了很多系统级的API，如文件操作、网络编程等。浏览器端的<strong>Javascript</strong>代码在运行时会受到各种安全性的限制，对客户系统的操作有限。相比之下，<strong>Node.js</strong>则是一个全面的后台运行时，基于<strong>Javascript</strong>提供了其他语言能够实现的许多功能。</p>
+<h2 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h2><p>可以说<strong>CommonJS</strong>和<strong>Node.js</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>。</p>
+<p><strong>ECMAScript</strong>提供核心语言功能，浏览器端的<strong>JavaScript实现</strong>包括了<strong>ES核心</strong>、<strong>DOM</strong>(or <strong>Document Object Model</strong>)和<strong>BOM</strong>(or <strong>Browser Object Model</strong>)，所以你在浏览器的<strong>JS</strong>控制台可以使用<code>document、window、alert...</code>等有关<strong>DOM</strong>和<strong>BOM</strong>的操作。</p>
+<p>而<strong>CommonJS</strong>主要为<strong>非浏览器的应用</strong>定义一套API（比如<strong>Node</strong>应用），从而填补了空白。它的终极目标是提供一个类似<strong>Python、Ruby</strong>和<strong>Java</strong>的<strong>标准库</strong>。</p>
+<p>可以看到在<strong>Node</strong>环境中没有定义<code>alert</code>和<code>document</code>，因为<strong>Node</strong>不关心<strong>DOM</strong>和<strong>BOM</strong>操作。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; alert(&#x27;!!!&#x27;)</span><br><span class="line">ReferenceError: alert is not defined</span><br><span class="line">&gt; document</span><br><span class="line">ReferenceError: document is not defined</span><br></pre></td></tr></table></figure>
+
+<p>但是它可以调用读取文件的函数，读取出了<code>a.txt</code>中的<code>Hello!</code>并打印，这是浏览器做不到也不应该去做的。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; const fs = require(&#x27;fs&#x27;);                 </span><br><span class="line">&gt; const content = fs.readFileSync(&#x27;./a.txt&#x27;,&#x27;utf-8&#x27;);</span><br><span class="line">&gt; console.log(content);</span><br><span class="line">hello!</span><br></pre></td></tr></table></figure>
+
+<h2 id="Vue-js、AngularJS…"><a href="#Vue-js、AngularJS…" class="headerlink" title="Vue.js、AngularJS…"></a>Vue.js、AngularJS…</h2><p>这些没什么好说的，之所以带上<strong>JS</strong>就是因为它们是用<strong>JavaScript</strong>语言开发的框架，实际上就是个<strong>JS库</strong>，用于简化我们前端代码的编写。</p>
+<p>至于为什么使用<strong>Vue.js</strong>这些框架需要安装<strong>Node.js</strong>，原因也很简单，因为很多工具（比如<strong>Babel、webpack</strong>）都是用<strong>Node</strong>开发出来的，这也是你为什么可以用<code>npm</code>安装的原因。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://es6.ruanyifeng.com/#docs/intro">ECMAScript6简介 - 阮一峰</a></li>
+<li><a href="http://www.commonjs.org/">CommonJS官网</a></li>
+<li><a href="https://nodejs.org/en/">Node.js官网</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -2677,183 +2677,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Python 函数详解</title>
-    <url>/2021/04/12/Python-%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<h2 id="可调用对象"><a href="#可调用对象" class="headerlink" title="可调用对象"></a>可调用对象</h2><p>除了用户定义的函数，调用运算符，即 “()” 括号对，还能应用到其他对象上。我们将能应用调用运算符的对象称为<strong>可调用对象</strong>，通过内置的 <code>callable()</code> 方法可以判断对象是否是可调用对象。在 Python 3 的<a href="https://docs.python.org/3/reference/datamodel.html">数据模型文档</a>中，一共列出了 7 种可调用对象：</p>
-<ul>
-<li><strong>内置函数和内置方法</strong>：使用 C 语言（CPython）实现的函数和方法，如 <code>len()</code> 和 <code>alist.append()</code>；</li>
-<li><strong>用户定义的函数</strong>：包括使用 def 创建的普通函数和 lambda 创建的匿名函数；</li>
-<li><strong>实例方法与类方法</strong>：定义在类中的方法，实例方法是指第一个参数为 <code>self</code> 的方法，类方法是指第一个参数为 <code>cls</code> 的方法；</li>
-<li><strong>类</strong>：对类使用调用运算符，如 <code>C()</code>，会执行类的 <code>__new__</code> 方法创建类的实例，然后执行 <code>__init__</code> 初始化；</li>
-<li><strong>类的实例</strong>：如果类定义了 <code>__call__</code> 方法，那它的实例可以作为函数调用；</li>
-<li><strong>生成器函数</strong>：内部使用了 yield 关键字的函数，调用生成器函数会返回生成器对象；</li>
-<li><strong>协程函数和异步生成器函数</strong>：从 Python 3.5 开始支持使用 <code>async def</code> 关键字来定义协程函数，如果内部包含 yield 关键字则被称为异步生成器函数。该函数被调用时会返回一个异步迭代器对象。</li>
-</ul>
-<h3 id="自定义的可调用类型"><a href="#自定义的可调用类型" class="headerlink" title="自定义的可调用类型"></a>自定义的可调用类型</h3><p>在装饰器一节，我们已经认识到了，装饰器不仅可以是函数，也可以是类。任何类只要实现了 <code>__call__</code> 方法，那它就是可调用对象，就可以表现的如同函数。因此，我们可以编写用户自定义的可调用类型，将其用在任何期待函数的地方。下面我将通过 Java 和 Python 两种语言，展现它们在可调用类型上的异同。</p>
-<p>假设现有一副扑克，要求按照 <code>A, 2 ~ 10, J, Q, K</code> 的顺序进行排序。在 Java 中，可以通过 <code>Collections.sort()</code> 集合类的接口对一个集合进行排序。Python 也提供了内置的 <code>sorted()</code> 方法，对可迭代对象进行排序。但两种语言都不支持直接对字符串和数字类型进行比较，所以还需要实现特定的排序逻辑。</p>
-<p>Java 中要实现排序逻辑通常有两种方法。一种是让类实现 Comparable 接口，重写其中的 <code>compareTo()</code> 抽象方法：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Poker</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Poker</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Poker otherPoker)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// return ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里重点想展示第二种方法：新建一个实现了 Comparator 接口的比较器类，重写其 <code>compare()</code> 抽象方法。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PokerComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Poker</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Poker firstPoker, Poker secondPoker)</span> </span>&#123;</span><br><span class="line">       <span class="comment">// return ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PokerComparator pokerComparator = <span class="keyword">new</span> PokerComparator();</span><br><span class="line">Collections.sort(pokers, pokerComparator);</span><br></pre></td></tr></table></figure>
-
-<p>对于这种方法，需要将比较器对象作为第二个参数传入 <code>Collections.sort()</code> 接口中。由于 Java 对象不能将函数作为参数的限制，我们定义了一个辅助类，实际上这个类对我们而言只有一个方法有用，那就是 <code>compare()</code> 方法，<code>Collections.sort()</code> 接口会去调用该方法，所以它就是对应的排序逻辑，只不过是用类实现的。</p>
-<p>Python 的函数可以直接作为参数传递，但我们接下来要讲的是如何定义一个类似 Comparator 的类，让它能实现排序逻辑。</p>
-<p>Python 内置的排序方法 <code>sorted()</code>，<strong>允许接收一个关键字参数 key 作为排序的键</strong>，比如 <code>key=len</code> 时依照元素的长度进行排序。对于扑克牌 A ~ K，可以维护一个映射数字类型的字典，比如将 ‘K’ 映射到 13，排序时直接通过映射的数值大小排序。维护一个字典，函数当然可以做到，但将其作为类的属性更加合适。可以定义一个扑克序列类，在初始化这个类时就构建好字典。为了让类可被调用，还需要实现 <code>__call__</code> 方法，直接返回字典中扑克牌对应的数值作为排序的键。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PokerOrder</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self._seq = &#123;<span class="built_in">str</span>(i): i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, <span class="number">11</span>)&#125;</span><br><span class="line">        self._seq.setdefault(<span class="string">&#x27;J&#x27;</span>, <span class="number">11</span>)</span><br><span class="line">        self._seq.setdefault(<span class="string">&#x27;Q&#x27;</span>, <span class="number">12</span>)</span><br><span class="line">        self._seq.setdefault(<span class="string">&#x27;K&#x27;</span>, <span class="number">13</span>)</span><br><span class="line">        self._seq.setdefault(<span class="string">&#x27;A&#x27;</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self, item</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self._seq.get(item)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(self._seq)</span><br></pre></td></tr></table></figure>
-
-<p>由于 PokerOrder 类实现了 <code>__call__</code> 方法，它的实例会被 <code>callable()</code> 方法判定为可调用对象，可以直接应用调用运算符，传入扑克牌值返回对应数值。在排序时，将 PokerOrder 类的实例作为关键字传入，相当于将序列中的每项元素执行 <code>__call__</code> 方法返回的值作为键进行排序。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>pokerorder = PokerOrder()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pokerorder.show()</span><br><span class="line">&#123;<span class="string">&#x27;2&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;3&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;4&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;5&#x27;</span>: <span class="number">5</span>, <span class="string">&#x27;6&#x27;</span>: <span class="number">6</span>, <span class="string">&#x27;7&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;8&#x27;</span>: <span class="number">8</span>, <span class="string">&#x27;9&#x27;</span>: <span class="number">9</span>, <span class="string">&#x27;10&#x27;</span>: <span class="number">10</span>, <span class="string">&#x27;J&#x27;</span>: <span class="number">11</span>, <span class="string">&#x27;Q&#x27;</span>: <span class="number">12</span>, <span class="string">&#x27;K&#x27;</span>: <span class="number">13</span>, <span class="string">&#x27;A&#x27;</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">callable</span>(pokerorder)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pokerorder(<span class="string">&#x27;K&#x27;</span>)</span><br><span class="line"><span class="number">13</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">sorted</span>([<span class="string">&#x27;K&#x27;</span>, <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;7&#x27;</span>, <span class="string">&#x27;J&#x27;</span>, <span class="string">&#x27;Q&#x27;</span>, <span class="string">&#x27;2&#x27;</span>], key=pokerorder)</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;7&#x27;</span>, <span class="string">&#x27;J&#x27;</span>, <span class="string">&#x27;Q&#x27;</span>, <span class="string">&#x27;K&#x27;</span>]</span><br></pre></td></tr></table></figure>
-
-<p>将类定义为可调用类型，不仅能维护内部属性，还能自定义方法，比如如上代码中的 <code>show()</code> 方法。除此之外，在实现更复杂的排序逻辑时，比如按照花色排序等，使用类要比使用函数更合适。甚至如果你觉的 PokerOrder 类应该被实现为单例模式，还可以添加 <code>__new__</code> 方法保证创建类中的字典只会被创建一次。</p>
-<h2 id="函数对象与方法对象"><a href="#函数对象与方法对象" class="headerlink" title="函数对象与方法对象"></a>函数对象与方法对象</h2><p>Python 中一切皆对象，不管是函数还是类中定义的方法都是对象。对于类中的实例方法来说，通过类访问该实例方法，如 <code>C.foo</code>，会返回一个<strong>函数对象</strong>，即 <code>function</code> 类型；通过实例访问实例方法，如 <code>c.foo</code>，会返回一个<strong>绑定方法对象</strong>，即 <code>method</code> 类型，该方法对象绑定在实例上。对于类方法而言，无论是通过类还是实例访问，都返回绑定方法对象，该方法对象绑定在类上。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">C</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">foo</span>(<span class="params">self, x</span>):</span> <span class="built_in">print</span>(x)</span><br><span class="line"><span class="meta">... </span>    @<span class="built_in">classmethod</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">bar</span>(<span class="params">cls, x</span>):</span> <span class="built_in">print</span>(x)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>C.foo</span><br><span class="line">&lt;function C.foo at <span class="number">0x10d613f70</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(C.foo)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">function</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">c</span> = <span class="title">C</span>()</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">c</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">__main__</span>.<span class="title">C</span> <span class="title">object</span> <span class="title">at</span> 0<span class="title">x10b0a5820</span>&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">c</span>.<span class="title">foo</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">bound</span> <span class="title">method</span> <span class="title">C</span>.<span class="title">foo</span> <span class="title">of</span> &lt;<span class="title">__main__</span>.<span class="title">C</span> <span class="title">object</span> <span class="title">at</span> 0<span class="title">x10b0a5820</span>&gt;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">type</span>(<span class="params">c.foo</span>)</span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">method</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">C</span>.<span class="title">bar</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">bound</span> <span class="title">method</span> <span class="title">C</span>.<span class="title">bar</span> <span class="title">of</span> &lt;<span class="title">class</span> &#x27;<span class="title">__main__</span>.<span class="title">C</span>&#x27;&gt;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">c</span>.<span class="title">bar</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">bound</span> <span class="title">method</span> <span class="title">C</span>.<span class="title">bar</span> <span class="title">of</span> &lt;<span class="title">class</span> &#x27;<span class="title">__main__</span>.<span class="title">C</span>&#x27;&gt;&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>方法对象中包含一些特殊的只读属性：</p>
-<ul>
-<li><code>__self__</code> 为类实例对象本身；</li>
-<li><code>__func__</code> 为函数对象；</li>
-<li><code>__doc__</code> 为方法的文档，与 <code>__func__.__doc__</code> 作用相同；</li>
-<li><code>__name__</code> 为方法名称，与 <code>__func__.__name__</code> 作用相同；</li>
-<li><code>__module__</code> 为方法所属模块的名称，没有则为 None。</li>
-</ul>
-<p><strong>访问方法对象的 <code>__func__</code> 属性会获得函数对象</strong>。虽然两者都能通过调用运算符 “()” 调用，但函数对象还需要手动传入第一个位置的参数，即 <code>self</code> 和 <code>cls</code> 参数，方法对象则不需要。原因在于，<strong>调用方法对象会调用对应的下层函数对象 <code>__func__</code>，并将 <code>__self__</code> 参数插入到参数列表的开头</strong>，如果是实例方法则插入类实例，如果是类方法则插入类本身。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">C</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">foo</span>(<span class="params">self, x</span>):</span> <span class="built_in">print</span>(x)</span><br><span class="line"><span class="meta">... </span>    @<span class="built_in">classmethod</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">bar</span>(<span class="params">cls, x</span>):</span> <span class="built_in">print</span>(x)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = C()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c.foo(<span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c.foo.__func__(c, <span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>C.bar(<span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>C.bar.__func__(C, <span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<p>就如同上述代码所展示的，对于实例方法 <code>foo()</code> 来说，调用 <code>c.foo(1)</code> 相当于调用 <code>c.foo.__func__(c, 1)</code>。对于类方法 <code>bar()</code> 来说，无论是调用 <code>c.bar(1)</code> 还是 <code>C.bar(1)</code> 都相当于调用 <code>C.bar.__func__(C, 1)</code>。</p>
-<h3 id="函数内省"><a href="#函数内省" class="headerlink" title="函数内省"></a>函数内省</h3><p>将函数作为对象处理，可以用于运行时内省，类似于 Java 中的反射，可以在运行时获取函数的信息，比如注解、闭包、参数默认值等。下面列出了一些函数对象特有的属性和方法：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>():</span> ...</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">sorted</span>(<span class="built_in">set</span>(<span class="built_in">dir</span>(func)) - <span class="built_in">set</span>(<span class="built_in">dir</span>(<span class="built_in">object</span>)))</span><br><span class="line">[<span class="string">&#x27;__annotations__&#x27;</span>, <span class="string">&#x27;__call__&#x27;</span>, <span class="string">&#x27;__closure__&#x27;</span>, <span class="string">&#x27;__code__&#x27;</span>, <span class="string">&#x27;__defaults__&#x27;</span>, <span class="string">&#x27;__dict__&#x27;</span>, <span class="string">&#x27;__get__&#x27;</span>, <span class="string">&#x27;__globals__&#x27;</span>, <span class="string">&#x27;__kwdefaults__&#x27;</span>, <span class="string">&#x27;__module__&#x27;</span>, <span class="string">&#x27;__name__&#x27;</span>, <span class="string">&#x27;__qualname__&#x27;</span>]</span><br></pre></td></tr></table></figure>
-
-<p><code>dir()</code> 函数可以查看一个模块或一个类中的所有属性，当然方法也算方法属性。上述代码将 func 函数对象与常规对象 object 的属性集合做了一个差集，只打印函数对象特有的属性。下表对这些特有属性做了简要说明。</p>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>__annotations__</code></td>
-<td>dict</td>
-<td>参数和返回值的注解</td>
-</tr>
-<tr>
-<td><code>__call__</code></td>
-<td>method-wrapper</td>
-<td>实现 () 运算符，即可调用对象协议</td>
-</tr>
-<tr>
-<td><code>__closure__</code></td>
-<td>tuple</td>
-<td>函数闭包，即自由变量的绑定（没有则是None）</td>
-</tr>
-<tr>
-<td><code>__code__</code></td>
-<td>code</td>
-<td>编译成字节码的函数元数据和函数定义体</td>
-</tr>
-<tr>
-<td><code>__defaults__</code></td>
-<td>tuple</td>
-<td>形式参数的默认值</td>
-</tr>
-<tr>
-<td><code>__get__</code></td>
-<td>method-wrapper</td>
-<td>实现只读描述符协议</td>
-</tr>
-<tr>
-<td><code>__globals__</code></td>
-<td>dict</td>
-<td>函数所在模块中的全局变量</td>
-</tr>
-<tr>
-<td><code>__kwdefaults__</code></td>
-<td>dict</td>
-<td>仅限关键字形式参数的默认值</td>
-</tr>
-<tr>
-<td><code>__name__</code></td>
-<td>str</td>
-<td>函数名称</td>
-</tr>
-<tr>
-<td><code>__qualname__</code></td>
-<td>str</td>
-<td>函数的限定名称，如 Random.choice</td>
-</tr>
-</tbody></table>
-<p>函数内省经常被一些框架使用发挥出强大效果。比如 <code>__defaults__</code>、<code>__code__</code> 和 <code>__annotations__</code> 属性，经常被 IDE 用来提取关于函数签名的信息，我们之前也提到过 IDE 和 lint 工具使用函数注解做静态类型检查。还比如一些 Python Web 后端框架，可以自动解析 HTTP 请求中的参数将其注入到接口函数中执行，而不用程序员手动处理。</p>
-<h2 id="函数的参数"><a href="#函数的参数" class="headerlink" title="函数的参数"></a>函数的参数</h2><p>Python 最好的特性之一就是提供了极为灵活的参数处理机制。除了基础的定位参数（positional argument）之外，Python 还支持传入关键字参数（keyword argument），如我们之前所使用的内置方法 <code>sorted()</code>，就支持关键字参数 key 与 reverse。关键字参数允许提供默认值，如果无默认值一般为 None。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Return a new list containing all items from the iterable in ascending order.</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">A custom key function can be supplied to customize the sort order, and the</span></span><br><span class="line"><span class="string">reverse flag can be set to request the result in descending order.</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="built_in">sorted</span>(iterable, /, *, key=<span class="literal">None</span>, reverse=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
-
-<p>Java 5 中引入了不定长参数，允许在形参后添加 <code>...</code> 表示该形参可以接收多个参数值，多个参数将被当做数组传入，如 <code>void foo(String... args)</code>。Python 也支持<strong>不定长参数</strong>，它的形式是在参数名称前添加星号运算符，如 <code>*args</code>，不定长参数将被打包成<strong>元组</strong>传入。除此之外，Python 还支持传入<strong>非具名关键字参数</strong>，即没有明确指定名称的关键字参数，如 <code>**kwargs</code>，参数将会被打包成一个<strong>字典</strong>传入。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">*args, **kwargs</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;args: &#x27;</span>, args)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;kwargs: &#x27;</span>, kwargs)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">0</span>, <span class="string">&#x27;a&#x27;</span>, key1=<span class="number">1</span>, key2=<span class="string">&#x27;b&#x27;</span>) </span><br><span class="line">args: (<span class="number">0</span>, <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">kwargs: &#123;<span class="string">&#x27;key1&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;key2&#x27;</span>: <span class="string">&#x27;b&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果同时使用 <code>*args</code> 和 <code>**kwargs</code>，<code>*args</code> 参数必须要在 <code>**kwargs</code> 之前。它们可以与其他类型的参数混合使用，但<strong>参数的顺序必须是：定位参数，默认参数，不定长参数，具名关键字参数和非具名关键字参数</strong>。即如下形式：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">record</span>(<span class="params">name, age=<span class="number">18</span>, *phones, email=<span class="literal">None</span>, **other</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;name: &#x27;</span>, name)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;age: &#x27;</span>, age)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;phones: &#x27;</span>, phones)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;email: &#x27;</span>, email)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;other: &#x27;</span>, other)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>record(<span class="string">&#x27;Jack&#x27;</span>, <span class="number">20</span>, <span class="number">123456</span>, <span class="number">654321</span>, email=<span class="string">&#x27;abc@email.com&#x27;</span>, height=<span class="number">180</span>, weight=<span class="number">90</span>)</span><br><span class="line">name: Jack</span><br><span class="line">age: <span class="number">20</span></span><br><span class="line">phones: (<span class="number">123456</span>, <span class="number">654321</span>)</span><br><span class="line">email: abc@email.com</span><br><span class="line">other: &#123;<span class="string">&#x27;height&#x27;</span>: <span class="number">180</span>, <span class="string">&#x27;weight&#x27;</span>: <span class="number">90</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中，默认参数与具名关键字参数形式上一样，默认参数通常是用来简化函数调用者的传参的。这两者可以通过位置进行区分，在不定长参数之前的是默认参数，之后的是关键字参数。如果要传入不定长参数，默认参数就不能省略，此时默认参数被视为定位参数（默认值失去了意义），其后的非关键字参数会被不定长参数 <code>*phones</code> 捕获。如果省略了默认参数，那么不定长参数的第一个元素会被赋值给默认参数。具名关键字参数则没有这一限制。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>record(<span class="string">&#x27;Jack&#x27;</span>, <span class="number">123456</span>, <span class="number">654321</span>, height=<span class="number">180</span>)</span><br><span class="line">name:  Jack</span><br><span class="line">age:  <span class="number">123456</span></span><br><span class="line">phones:  (<span class="number">654321</span>,)</span><br><span class="line">email:  <span class="literal">None</span></span><br><span class="line">other:  &#123;<span class="string">&#x27;height&#x27;</span>: <span class="number">180</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>仅限关键字参数</strong>（keyword-only argument）是 Python 3 新增的特性。如果定义函数时想指定仅限关键字参数，需要将它们放在带有 <code>*</code> 的不定长参数之后。如果不想支持不定长参数，可以在签名中放一个 <code>*</code>，标志着定位参数到此终结，之后的参数只能以关键字形式提供，即仅限关键字参数。如下所示：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, *, b, c=<span class="number">3</span></span>):</span> </span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> a, b, c</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">1</span>, b=<span class="number">2</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">1</span>, b=<span class="number">2</span>, c=<span class="number">4</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
-
-<p>可以看到，仅限关键字参数不一定要有默认值，但如果没有默认值，调用函数时必须传入该参数。内置方法 <code>sorted()</code> 的参数就包含一个 <code>*</code>，其后的 key 和 reverse 参数就是带有默认值的仅限关键字参数。</p>
-<h3 id="函数参数的最佳实践"><a href="#函数参数的最佳实践" class="headerlink" title="函数参数的最佳实践"></a>函数参数的最佳实践</h3><p>对于函数参数如何正确的使用，《Effective Python》给出了一些建议。我结合自己的一些看法，给出如下几点建议。</p>
-<p>第一点，<strong>使用不定长参数减少视觉杂讯</strong>。这是一种比喻，目的是使函数签名内容不要过于过多，而应凸显重要部分。如果一个函数支持传入多个相同类型的对象，或对不同类型的对象做相同处理，可以考虑不定长参数（或者组合成一个可迭代对象传入）。拿 Python 的内置方法来举例，<code>map()</code> 的最后一个参数就是不定长参数 <code>*iterables</code>，支持传入多个可迭代对象；<code>print()</code> 方法的第一个参数 <code>*values</code> 也是不定长参数，对于传入多个参数，不管它们是什么类型都能将其打印。</p>
-<p>第二点，<strong>使用关键字参数来表达可选的行为</strong>。关键字参数的名称可以辅助调用者明确参数的用途，比如 <code>sorted()</code> 方法中的 reverse 参数用来反向排序。关键字参数还能提供默认值，就如同一个开关，如果使用函数默认功能，就不需要操心这些参数，还可以避免传参时的重复代码。如果想开启附加功能，可以传入指定的关键字参数。带有默认值的关键字参数还能在不改变调用代码的基础上为函数添加新功能，保证了代码的兼容性。从另一种角度看，带有默认值的关键字参数提供了类似多态重载的动态语言特性，虽然 Python 并不支持函数重载。</p>
-<p>第三点，<strong>使用仅限关键字参数来确保代码清晰</strong>。关键字参数可以提高可读性，但不能保证调用者一定使用关键字来明确指出参数的含义，关键字参数可以通过位置来赋值，比如定义的函数 <code>def func(a, b=1)</code> 可以通过 <code>func(1, 2)</code> 来为关键字参数 b 赋值。如果有必要，可以使用仅限关键字参数来强制调用者使用关键字。比如 <code>sorted()</code> 方法签名 <code>*</code> 后指定的仅限关键字参数 key 和 reverse。</p>
-<p>第四点，<strong>使用 None 而不是可变序列为参数默认值赋空</strong>。绝对不要将参数默认值指定为空的可变序列 <code>[]</code> 和 <code>&#123;&#125;</code>。参数的默认值会在模块被加载时执行一次并绑定，如果默认值定义为了可变序列，那么以默认形式调用函数的代码都会共享同一份序列，从而导致难以预料的结果。比如如下解析 JSON 的函数，默认值为空字典，在解析出错时将其返回，导致两个对象共用一个字典。解决的方法是使用 None 作为参数默认值，在函数内重新赋值为空字典，并添加文档说明参数默认值的实际行为。如果参数默认值是动态变化的，如当前时间，也应如此做。总之，要避免参数默认值是可变的。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">decode</span>(<span class="params">data, default=&#123;&#125;</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">try</span>:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">return</span> json.loads(data)</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">except</span> ValueError:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">return</span> default</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo = decode(<span class="string">&#x27;bad data&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bar = decode(<span class="string">&#x27;also bad&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo[<span class="string">&#x27;a&#x27;</span>] = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bar</span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo <span class="keyword">is</span> bar</span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
-
-<p>第五点，<strong>避免修改传入参数的值</strong>。函数式编程中非常强调的一点是，函数要无副作用。无副作用指的是函数内部不与外部互动（最典型的情况是，修改全局变量的值），产生除函数本身运算以外的其他效果。函数无副作用，意味着函数要保持独立，不依赖于上下文环境，不得修改外部变量包括传入参数的值。即使函数要在传入参数本身上做运算，也应该新建一个副本将其返回。就拿 <code>sorted()</code> 来说，即使排序前后元素位置没有变化，也返回一个全新的列表。除此之外，<code>map()</code>、<code>filter()</code> 等其他内置方法也都遵循这一点，不对参数本身做修改。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">sorted</span>(l)</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">sorted</span>(l) <span class="keyword">is</span> l</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="自定义的-sorted-函数"><a href="#自定义的-sorted-函数" class="headerlink" title="自定义的 sorted() 函数"></a>自定义的 <code>sorted()</code> 函数</h3><p>在本章中我一直拿内置的 <code>sorted()</code> 函数来举例，不妨自己来实现一个。借此案例我想演示：如何使用仅限关键字参数，如何编写高阶函数，以及如何使用卫语句对异常参数进行处理。</p>
-<p>这里的排序算法不是关键，使用的是最简单的冒泡排序算法。函数签名上尽可能与 <code>sorted()</code> 保持一致，为了保证函数无副作用，函数内部新建了一个列表副本保存传入可迭代序列的值。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sort</span>(<span class="params">iterable, *, key=<span class="literal">None</span>, reverse=<span class="literal">False</span></span>):</span></span><br><span class="line">    <span class="keyword">if</span> key <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> <span class="keyword">not</span> <span class="built_in">callable</span>(key):</span><br><span class="line">        <span class="keyword">raise</span> TypeError(<span class="string">f&#x27;<span class="subst">&#123;<span class="built_in">type</span>(key)&#125;</span> object is not callable&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    _l = <span class="built_in">list</span>(iterable)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(_l)):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i):</span><br><span class="line">            <span class="keyword">if</span> key <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="keyword">if</span> _l[j] &gt; _l[i]:</span><br><span class="line">                    _l[j], _l[i] = _l[i], _l[j]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> key(_l[j]) &gt; key(_l[i]):</span><br><span class="line">                    _l[j], _l[i] = _l[i], _l[j]</span><br><span class="line">    <span class="keyword">if</span> reverse:</span><br><span class="line">        _l.reverse()</span><br><span class="line">    <span class="keyword">return</span> _l</span><br></pre></td></tr></table></figure>
-
-<p>仅限关键字参数是指在 <code>*</code> 运算符之后定义的关键字参数，在调用时必须指定关键字名称，如上述函数中的 key 和 reverse 关键字。</p>
-<p>在函数的开头，首先判断传入的 key 参数在非 None 情况下是否是可调用的，若不可调用则抛出 TypeError 异常。这种 if 条件分支语句叫做<strong>卫语句</strong>（guard clause），目的是将可能出错的每个分支做单独检查，要么抛出异常要么立即返回。通过在函数头部的集中处理及早抛出各种可能的异常（又称迅速失败），避免无效的运算。函数真正的实现代码放在卫语句之后，保证运行到此处时所有条件都已通过。</p>
-<p>通过了卫语句检测的 key 参数是可调用的，在函数内部直接使用 <code>key()</code> 调用。对于接收函数作为参数的 <code>sort()</code> 函数，我们将其称之为<strong>高阶函数</strong>，这也是 Python 函数式编程特性之一。</p>
-<p>下面是测试方法：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_sort_number_sequence</span>(<span class="params">self</span>):</span></span><br><span class="line">    _l = [<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>]</span><br><span class="line">    result = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">7</span>]</span><br><span class="line">    <span class="keyword">assert</span> sort(_l) == result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_sort_sequence_with_key_function</span>(<span class="params">self</span>):</span></span><br><span class="line">    _l = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;aab&#x27;</span>, <span class="string">&#x27;ab&#x27;</span>, <span class="string">&#x27;aabb&#x27;</span>]</span><br><span class="line">    result = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;ab&#x27;</span>, <span class="string">&#x27;aab&#x27;</span>, <span class="string">&#x27;aabb&#x27;</span>]</span><br><span class="line">    <span class="keyword">assert</span> sort(_l, key=<span class="built_in">len</span>) == result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_sort_sequence_with_key_function_and_reverse</span>(<span class="params">self</span>):</span></span><br><span class="line">    _l = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;aab&#x27;</span>, <span class="string">&#x27;ab&#x27;</span>, <span class="string">&#x27;aabb&#x27;</span>]</span><br><span class="line">    result = [<span class="string">&#x27;aabb&#x27;</span>, <span class="string">&#x27;aab&#x27;</span>, <span class="string">&#x27;ab&#x27;</span>, <span class="string">&#x27;a&#x27;</span>]</span><br><span class="line">    <span class="keyword">assert</span> sort(_l, key=<span class="built_in">len</span>, reverse=<span class="literal">True</span>) == result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_raise_error_when_key_function_is_not_callable</span>(<span class="params">self</span>):</span></span><br><span class="line">    _l = [<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>]</span><br><span class="line">    <span class="keyword">with</span> pytest.raises(TypeError) <span class="keyword">as</span> e:</span><br><span class="line">        sort(_l, key=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-
-<p>pytest 框架支持对抛出异常的测试，使用 with 语句加 <code>pytest.raises()</code> 方法可以断言定义体内调用的方法是否会抛出对应的异常。</p>
-<h3 id="与-运算符"><a href="#与-运算符" class="headerlink" title="* 与 ** 运算符"></a><code>*</code> 与 <code>**</code> 运算符</h3><p>在 Python 中，<code>*</code> 与 <code>**</code> 运算符除了能用作数学运算符中的乘法和乘方之外，还有一些其他的巧妙用法。之前讨论的函数中的不定长参数 <code>*args</code> 和不具名关键字参数 <code>**kwargs</code> 是它们的经典用法之一。此外，这两个运算符还可以用来对参数列表进行<strong>拆包</strong>。</p>
-<p>运用 <code>*</code> 运算符可以把一个可迭代对象拆开作为函数的参数：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">f&#x27;a=<span class="subst">&#123;a&#125;</span>, b=<span class="subst">&#123;b&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">a=<span class="number">1</span>, b=<span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(*t)</span><br><span class="line">a=<span class="number">1</span>, b=<span class="number">2</span></span><br></pre></td></tr></table></figure>
-
-<p>类似的，运用 <code>**</code> 运算符可以把一个字典拆开作为函数的参数，同名键会绑定到对应的具名参数上，如果函数还定义了非具名关键字参数 <code>**kwargs</code>，除了绑定的同名键外余下参数会被 <code>**kwargs</code> 捕获。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a=<span class="literal">None</span>, b=<span class="literal">None</span>, **kwargs</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">f&#x27;a=<span class="subst">&#123;a&#125;</span>, b=<span class="subst">&#123;b&#125;</span>, kwargs=<span class="subst">&#123;kwargs&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;c&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;d&#x27;</span>: <span class="number">4</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(**d)</span><br><span class="line">a=<span class="number">1</span>, b=<span class="number">2</span>, kwargs=&#123;<span class="string">&#x27;c&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;d&#x27;</span>: <span class="number">4</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>*</code> 运算符对于函数参数中的可迭代对象拆包概念，在 Python 3 被扩展到了<strong>平行赋值</strong>。在平行赋值中，<code>*</code> 前缀只能被用在一个变量名前，但这个变量可以出现在赋值表达式的任何位置，用来处理剩下的元素。拆包所赋值的元素是列表类型，即使其中只有一个元素。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, b, *rest = <span class="built_in">range</span>(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, b, rest</span><br><span class="line">(<span class="number">0</span>, <span class="number">1</span>, [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, *rest, d, e = <span class="built_in">range</span>(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, rest, d, e</span><br><span class="line">(<span class="number">0</span>, [<span class="number">1</span>, <span class="number">2</span>], <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, *rest, c, d, e = <span class="built_in">range</span>(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, rest, c, d, e</span><br><span class="line">(<span class="number">0</span>, [<span class="number">1</span>], <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
-
-<h2 id="lambda-表达式"><a href="#lambda-表达式" class="headerlink" title="lambda 表达式"></a>lambda 表达式</h2><p>Python 中的 lambda 关键字用于创建<strong>匿名函数</strong>。lambda 表达式的格式如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">lambda</span> arguments : statement</span><br></pre></td></tr></table></figure>
-
-<p>表达式以 lambda 关键字开头，冒号 “:” 左侧是函数的<strong>传入参数</strong>，当有多个入参时使用逗号划分开，冒号右侧是<strong>返回值</strong>的表达式语句，函数会根据表达式计算结果并将其返回。lambda 表达式会创建一个函数对象，可以对其赋值并如同普通函数一样使用。下面定义了一个求平方的 lambda 表达式：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>square = <span class="keyword">lambda</span> x : x * x</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>square</span><br><span class="line">&lt;function &lt;<span class="keyword">lambda</span>&gt; at <span class="number">0x101631e50</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>square(<span class="number">3</span>)</span><br><span class="line"><span class="number">9</span></span><br></pre></td></tr></table></figure>
-
-<p>lambda 句法只是语法糖，上述定义的 lambda 表达式与如下使用 def 关键字定义的普通函数没有本质区别，甚至 lambda 表达式的功能要更加受限。由于 Python 简单的句法限制了 lambda 定义体只能使用纯表达式，不能进行赋值，也不能使用 while 和 try 等 Python 语句。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">square</span>(<span class="params">x</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> x * x</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>square</span><br><span class="line">&lt;function square at <span class="number">0x101631dc0</span>&gt;</span><br></pre></td></tr></table></figure>
-
-<p>在 Python 中，<strong>lambda 表达式的通常作用是作为参数传入给高阶函数</strong>。比如在列表推导一节介绍的 map、filter 和 reduce 函数，这些函数接收一个函数作为参数，如果不想额外定义函数，那么使用 lambda 表达式创建匿名函数就是最佳的应用场景。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x : x * x, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))</span><br><span class="line">[<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">filter</span>(<span class="keyword">lambda</span> x : x &lt; <span class="number">2</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))</span><br><span class="line">[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
-
-<p>除了上述这种应用场景之外，Python 很少使用匿名函数。受到句法的限制，lambda 表达式无法实现复杂的函数功能。同时，在使用 lambda 表达式时要尽可能保证表达式的清晰简短，否则冗长的 lambda 表达式将会导致代码难以阅读。此时，应该使用 def 关键字创建普通函数，即《Effective Python》所提倡的：<strong>使用辅助函数来取代复杂的表达式</strong>，并赋予函数清晰的名称以提高代码可读性。</p>
-]]></content>
-      <categories>
-        <category>Languages</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Python 中的可迭代类型</title>
     <url>/2021/04/01/Python-%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<h2 id="序列"><a href="#序列" class="headerlink" title="序列"></a>序列</h2><p>之前我们已经讨论过，Python 的“序列协议”是指：任何类，只要使用标准的签名和语义实现了 <code>__getitem__</code> 和 <code>__len__</code> 方法，就能用在任何期待序列的地方，解释器会为这些类做特殊的支持，比如支持迭代和 in 运算符。序列协议的接口定义可以查阅官方的 CPython API 接口文档：<a href="https://docs.python.org/3.8/c-api/sequence.html">Python/C API Reference Manual – Sequence Protocol</a>，其中有这样一个函数：</p>
@@ -3122,6 +2945,183 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Author</span>(<span class="params">models.Model</span>):</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">50</span>)</span><br><span class="line">    books = models.ManyToManyField(Book)</span><br><span class="line">    person = models.OneToOneField(<span class="string">&#x27;Person&#x27;</span>, models.CASCADE, null=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
 
 <p>当然，目前定义的描述符类还有提升的空间，比如 <code>price = Quantity(&#39;price&#39;)</code> 使用字符串对属性名进行初始化可能并不那么可靠。又比如想为字段设置更多限定，比如 Django 中设置的字段 max_length 等。其实，Django 框架使用到了 Python 更高阶的类元编程的特性 —— 元类。除了开放框架，一般用不到这个特性。后面我们会对元类加以介绍。</p>
+]]></content>
+      <categories>
+        <category>Languages</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python 函数详解</title>
+    <url>/2021/04/12/Python-%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="可调用对象"><a href="#可调用对象" class="headerlink" title="可调用对象"></a>可调用对象</h2><p>除了用户定义的函数，调用运算符，即 “()” 括号对，还能应用到其他对象上。我们将能应用调用运算符的对象称为<strong>可调用对象</strong>，通过内置的 <code>callable()</code> 方法可以判断对象是否是可调用对象。在 Python 3 的<a href="https://docs.python.org/3/reference/datamodel.html">数据模型文档</a>中，一共列出了 7 种可调用对象：</p>
+<ul>
+<li><strong>内置函数和内置方法</strong>：使用 C 语言（CPython）实现的函数和方法，如 <code>len()</code> 和 <code>alist.append()</code>；</li>
+<li><strong>用户定义的函数</strong>：包括使用 def 创建的普通函数和 lambda 创建的匿名函数；</li>
+<li><strong>实例方法与类方法</strong>：定义在类中的方法，实例方法是指第一个参数为 <code>self</code> 的方法，类方法是指第一个参数为 <code>cls</code> 的方法；</li>
+<li><strong>类</strong>：对类使用调用运算符，如 <code>C()</code>，会执行类的 <code>__new__</code> 方法创建类的实例，然后执行 <code>__init__</code> 初始化；</li>
+<li><strong>类的实例</strong>：如果类定义了 <code>__call__</code> 方法，那它的实例可以作为函数调用；</li>
+<li><strong>生成器函数</strong>：内部使用了 yield 关键字的函数，调用生成器函数会返回生成器对象；</li>
+<li><strong>协程函数和异步生成器函数</strong>：从 Python 3.5 开始支持使用 <code>async def</code> 关键字来定义协程函数，如果内部包含 yield 关键字则被称为异步生成器函数。该函数被调用时会返回一个异步迭代器对象。</li>
+</ul>
+<h3 id="自定义的可调用类型"><a href="#自定义的可调用类型" class="headerlink" title="自定义的可调用类型"></a>自定义的可调用类型</h3><p>在装饰器一节，我们已经认识到了，装饰器不仅可以是函数，也可以是类。任何类只要实现了 <code>__call__</code> 方法，那它就是可调用对象，就可以表现的如同函数。因此，我们可以编写用户自定义的可调用类型，将其用在任何期待函数的地方。下面我将通过 Java 和 Python 两种语言，展现它们在可调用类型上的异同。</p>
+<p>假设现有一副扑克，要求按照 <code>A, 2 ~ 10, J, Q, K</code> 的顺序进行排序。在 Java 中，可以通过 <code>Collections.sort()</code> 集合类的接口对一个集合进行排序。Python 也提供了内置的 <code>sorted()</code> 方法，对可迭代对象进行排序。但两种语言都不支持直接对字符串和数字类型进行比较，所以还需要实现特定的排序逻辑。</p>
+<p>Java 中要实现排序逻辑通常有两种方法。一种是让类实现 Comparable 接口，重写其中的 <code>compareTo()</code> 抽象方法：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Poker</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Poker</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Poker otherPoker)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// return ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里重点想展示第二种方法：新建一个实现了 Comparator 接口的比较器类，重写其 <code>compare()</code> 抽象方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PokerComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Poker</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Poker firstPoker, Poker secondPoker)</span> </span>&#123;</span><br><span class="line">       <span class="comment">// return ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PokerComparator pokerComparator = <span class="keyword">new</span> PokerComparator();</span><br><span class="line">Collections.sort(pokers, pokerComparator);</span><br></pre></td></tr></table></figure>
+
+<p>对于这种方法，需要将比较器对象作为第二个参数传入 <code>Collections.sort()</code> 接口中。由于 Java 对象不能将函数作为参数的限制，我们定义了一个辅助类，实际上这个类对我们而言只有一个方法有用，那就是 <code>compare()</code> 方法，<code>Collections.sort()</code> 接口会去调用该方法，所以它就是对应的排序逻辑，只不过是用类实现的。</p>
+<p>Python 的函数可以直接作为参数传递，但我们接下来要讲的是如何定义一个类似 Comparator 的类，让它能实现排序逻辑。</p>
+<p>Python 内置的排序方法 <code>sorted()</code>，<strong>允许接收一个关键字参数 key 作为排序的键</strong>，比如 <code>key=len</code> 时依照元素的长度进行排序。对于扑克牌 A ~ K，可以维护一个映射数字类型的字典，比如将 ‘K’ 映射到 13，排序时直接通过映射的数值大小排序。维护一个字典，函数当然可以做到，但将其作为类的属性更加合适。可以定义一个扑克序列类，在初始化这个类时就构建好字典。为了让类可被调用，还需要实现 <code>__call__</code> 方法，直接返回字典中扑克牌对应的数值作为排序的键。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PokerOrder</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self._seq = &#123;<span class="built_in">str</span>(i): i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, <span class="number">11</span>)&#125;</span><br><span class="line">        self._seq.setdefault(<span class="string">&#x27;J&#x27;</span>, <span class="number">11</span>)</span><br><span class="line">        self._seq.setdefault(<span class="string">&#x27;Q&#x27;</span>, <span class="number">12</span>)</span><br><span class="line">        self._seq.setdefault(<span class="string">&#x27;K&#x27;</span>, <span class="number">13</span>)</span><br><span class="line">        self._seq.setdefault(<span class="string">&#x27;A&#x27;</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self, item</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self._seq.get(item)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(self._seq)</span><br></pre></td></tr></table></figure>
+
+<p>由于 PokerOrder 类实现了 <code>__call__</code> 方法，它的实例会被 <code>callable()</code> 方法判定为可调用对象，可以直接应用调用运算符，传入扑克牌值返回对应数值。在排序时，将 PokerOrder 类的实例作为关键字传入，相当于将序列中的每项元素执行 <code>__call__</code> 方法返回的值作为键进行排序。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>pokerorder = PokerOrder()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pokerorder.show()</span><br><span class="line">&#123;<span class="string">&#x27;2&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;3&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;4&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;5&#x27;</span>: <span class="number">5</span>, <span class="string">&#x27;6&#x27;</span>: <span class="number">6</span>, <span class="string">&#x27;7&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;8&#x27;</span>: <span class="number">8</span>, <span class="string">&#x27;9&#x27;</span>: <span class="number">9</span>, <span class="string">&#x27;10&#x27;</span>: <span class="number">10</span>, <span class="string">&#x27;J&#x27;</span>: <span class="number">11</span>, <span class="string">&#x27;Q&#x27;</span>: <span class="number">12</span>, <span class="string">&#x27;K&#x27;</span>: <span class="number">13</span>, <span class="string">&#x27;A&#x27;</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">callable</span>(pokerorder)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pokerorder(<span class="string">&#x27;K&#x27;</span>)</span><br><span class="line"><span class="number">13</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">sorted</span>([<span class="string">&#x27;K&#x27;</span>, <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;7&#x27;</span>, <span class="string">&#x27;J&#x27;</span>, <span class="string">&#x27;Q&#x27;</span>, <span class="string">&#x27;2&#x27;</span>], key=pokerorder)</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;7&#x27;</span>, <span class="string">&#x27;J&#x27;</span>, <span class="string">&#x27;Q&#x27;</span>, <span class="string">&#x27;K&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>将类定义为可调用类型，不仅能维护内部属性，还能自定义方法，比如如上代码中的 <code>show()</code> 方法。除此之外，在实现更复杂的排序逻辑时，比如按照花色排序等，使用类要比使用函数更合适。甚至如果你觉的 PokerOrder 类应该被实现为单例模式，还可以添加 <code>__new__</code> 方法保证创建类中的字典只会被创建一次。</p>
+<h2 id="函数对象与方法对象"><a href="#函数对象与方法对象" class="headerlink" title="函数对象与方法对象"></a>函数对象与方法对象</h2><p>Python 中一切皆对象，不管是函数还是类中定义的方法都是对象。对于类中的实例方法来说，通过类访问该实例方法，如 <code>C.foo</code>，会返回一个<strong>函数对象</strong>，即 <code>function</code> 类型；通过实例访问实例方法，如 <code>c.foo</code>，会返回一个<strong>绑定方法对象</strong>，即 <code>method</code> 类型，该方法对象绑定在实例上。对于类方法而言，无论是通过类还是实例访问，都返回绑定方法对象，该方法对象绑定在类上。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">C</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">foo</span>(<span class="params">self, x</span>):</span> <span class="built_in">print</span>(x)</span><br><span class="line"><span class="meta">... </span>    @<span class="built_in">classmethod</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">bar</span>(<span class="params">cls, x</span>):</span> <span class="built_in">print</span>(x)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>C.foo</span><br><span class="line">&lt;function C.foo at <span class="number">0x10d613f70</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(C.foo)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">function</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">c</span> = <span class="title">C</span>()</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">c</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">__main__</span>.<span class="title">C</span> <span class="title">object</span> <span class="title">at</span> 0<span class="title">x10b0a5820</span>&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">c</span>.<span class="title">foo</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">bound</span> <span class="title">method</span> <span class="title">C</span>.<span class="title">foo</span> <span class="title">of</span> &lt;<span class="title">__main__</span>.<span class="title">C</span> <span class="title">object</span> <span class="title">at</span> 0<span class="title">x10b0a5820</span>&gt;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">type</span>(<span class="params">c.foo</span>)</span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">method</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">C</span>.<span class="title">bar</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">bound</span> <span class="title">method</span> <span class="title">C</span>.<span class="title">bar</span> <span class="title">of</span> &lt;<span class="title">class</span> &#x27;<span class="title">__main__</span>.<span class="title">C</span>&#x27;&gt;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">c</span>.<span class="title">bar</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">bound</span> <span class="title">method</span> <span class="title">C</span>.<span class="title">bar</span> <span class="title">of</span> &lt;<span class="title">class</span> &#x27;<span class="title">__main__</span>.<span class="title">C</span>&#x27;&gt;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>方法对象中包含一些特殊的只读属性：</p>
+<ul>
+<li><code>__self__</code> 为类实例对象本身；</li>
+<li><code>__func__</code> 为函数对象；</li>
+<li><code>__doc__</code> 为方法的文档，与 <code>__func__.__doc__</code> 作用相同；</li>
+<li><code>__name__</code> 为方法名称，与 <code>__func__.__name__</code> 作用相同；</li>
+<li><code>__module__</code> 为方法所属模块的名称，没有则为 None。</li>
+</ul>
+<p><strong>访问方法对象的 <code>__func__</code> 属性会获得函数对象</strong>。虽然两者都能通过调用运算符 “()” 调用，但函数对象还需要手动传入第一个位置的参数，即 <code>self</code> 和 <code>cls</code> 参数，方法对象则不需要。原因在于，<strong>调用方法对象会调用对应的下层函数对象 <code>__func__</code>，并将 <code>__self__</code> 参数插入到参数列表的开头</strong>，如果是实例方法则插入类实例，如果是类方法则插入类本身。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">C</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">foo</span>(<span class="params">self, x</span>):</span> <span class="built_in">print</span>(x)</span><br><span class="line"><span class="meta">... </span>    @<span class="built_in">classmethod</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">bar</span>(<span class="params">cls, x</span>):</span> <span class="built_in">print</span>(x)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = C()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c.foo(<span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c.foo.__func__(c, <span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>C.bar(<span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>C.bar.__func__(C, <span class="number">1</span>)</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>就如同上述代码所展示的，对于实例方法 <code>foo()</code> 来说，调用 <code>c.foo(1)</code> 相当于调用 <code>c.foo.__func__(c, 1)</code>。对于类方法 <code>bar()</code> 来说，无论是调用 <code>c.bar(1)</code> 还是 <code>C.bar(1)</code> 都相当于调用 <code>C.bar.__func__(C, 1)</code>。</p>
+<h3 id="函数内省"><a href="#函数内省" class="headerlink" title="函数内省"></a>函数内省</h3><p>将函数作为对象处理，可以用于运行时内省，类似于 Java 中的反射，可以在运行时获取函数的信息，比如注解、闭包、参数默认值等。下面列出了一些函数对象特有的属性和方法：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>():</span> ...</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">sorted</span>(<span class="built_in">set</span>(<span class="built_in">dir</span>(func)) - <span class="built_in">set</span>(<span class="built_in">dir</span>(<span class="built_in">object</span>)))</span><br><span class="line">[<span class="string">&#x27;__annotations__&#x27;</span>, <span class="string">&#x27;__call__&#x27;</span>, <span class="string">&#x27;__closure__&#x27;</span>, <span class="string">&#x27;__code__&#x27;</span>, <span class="string">&#x27;__defaults__&#x27;</span>, <span class="string">&#x27;__dict__&#x27;</span>, <span class="string">&#x27;__get__&#x27;</span>, <span class="string">&#x27;__globals__&#x27;</span>, <span class="string">&#x27;__kwdefaults__&#x27;</span>, <span class="string">&#x27;__module__&#x27;</span>, <span class="string">&#x27;__name__&#x27;</span>, <span class="string">&#x27;__qualname__&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p><code>dir()</code> 函数可以查看一个模块或一个类中的所有属性，当然方法也算方法属性。上述代码将 func 函数对象与常规对象 object 的属性集合做了一个差集，只打印函数对象特有的属性。下表对这些特有属性做了简要说明。</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>__annotations__</code></td>
+<td>dict</td>
+<td>参数和返回值的注解</td>
+</tr>
+<tr>
+<td><code>__call__</code></td>
+<td>method-wrapper</td>
+<td>实现 () 运算符，即可调用对象协议</td>
+</tr>
+<tr>
+<td><code>__closure__</code></td>
+<td>tuple</td>
+<td>函数闭包，即自由变量的绑定（没有则是None）</td>
+</tr>
+<tr>
+<td><code>__code__</code></td>
+<td>code</td>
+<td>编译成字节码的函数元数据和函数定义体</td>
+</tr>
+<tr>
+<td><code>__defaults__</code></td>
+<td>tuple</td>
+<td>形式参数的默认值</td>
+</tr>
+<tr>
+<td><code>__get__</code></td>
+<td>method-wrapper</td>
+<td>实现只读描述符协议</td>
+</tr>
+<tr>
+<td><code>__globals__</code></td>
+<td>dict</td>
+<td>函数所在模块中的全局变量</td>
+</tr>
+<tr>
+<td><code>__kwdefaults__</code></td>
+<td>dict</td>
+<td>仅限关键字形式参数的默认值</td>
+</tr>
+<tr>
+<td><code>__name__</code></td>
+<td>str</td>
+<td>函数名称</td>
+</tr>
+<tr>
+<td><code>__qualname__</code></td>
+<td>str</td>
+<td>函数的限定名称，如 Random.choice</td>
+</tr>
+</tbody></table>
+<p>函数内省经常被一些框架使用发挥出强大效果。比如 <code>__defaults__</code>、<code>__code__</code> 和 <code>__annotations__</code> 属性，经常被 IDE 用来提取关于函数签名的信息，我们之前也提到过 IDE 和 lint 工具使用函数注解做静态类型检查。还比如一些 Python Web 后端框架，可以自动解析 HTTP 请求中的参数将其注入到接口函数中执行，而不用程序员手动处理。</p>
+<h2 id="函数的参数"><a href="#函数的参数" class="headerlink" title="函数的参数"></a>函数的参数</h2><p>Python 最好的特性之一就是提供了极为灵活的参数处理机制。除了基础的定位参数（positional argument）之外，Python 还支持传入关键字参数（keyword argument），如我们之前所使用的内置方法 <code>sorted()</code>，就支持关键字参数 key 与 reverse。关键字参数允许提供默认值，如果无默认值一般为 None。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Return a new list containing all items from the iterable in ascending order.</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">A custom key function can be supplied to customize the sort order, and the</span></span><br><span class="line"><span class="string">reverse flag can be set to request the result in descending order.</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="built_in">sorted</span>(iterable, /, *, key=<span class="literal">None</span>, reverse=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+
+<p>Java 5 中引入了不定长参数，允许在形参后添加 <code>...</code> 表示该形参可以接收多个参数值，多个参数将被当做数组传入，如 <code>void foo(String... args)</code>。Python 也支持<strong>不定长参数</strong>，它的形式是在参数名称前添加星号运算符，如 <code>*args</code>，不定长参数将被打包成<strong>元组</strong>传入。除此之外，Python 还支持传入<strong>非具名关键字参数</strong>，即没有明确指定名称的关键字参数，如 <code>**kwargs</code>，参数将会被打包成一个<strong>字典</strong>传入。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">*args, **kwargs</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;args: &#x27;</span>, args)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;kwargs: &#x27;</span>, kwargs)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">0</span>, <span class="string">&#x27;a&#x27;</span>, key1=<span class="number">1</span>, key2=<span class="string">&#x27;b&#x27;</span>) </span><br><span class="line">args: (<span class="number">0</span>, <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">kwargs: &#123;<span class="string">&#x27;key1&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;key2&#x27;</span>: <span class="string">&#x27;b&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果同时使用 <code>*args</code> 和 <code>**kwargs</code>，<code>*args</code> 参数必须要在 <code>**kwargs</code> 之前。它们可以与其他类型的参数混合使用，但<strong>参数的顺序必须是：定位参数，默认参数，不定长参数，具名关键字参数和非具名关键字参数</strong>。即如下形式：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">record</span>(<span class="params">name, age=<span class="number">18</span>, *phones, email=<span class="literal">None</span>, **other</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;name: &#x27;</span>, name)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;age: &#x27;</span>, age)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;phones: &#x27;</span>, phones)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;email: &#x27;</span>, email)</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;other: &#x27;</span>, other)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>record(<span class="string">&#x27;Jack&#x27;</span>, <span class="number">20</span>, <span class="number">123456</span>, <span class="number">654321</span>, email=<span class="string">&#x27;abc@email.com&#x27;</span>, height=<span class="number">180</span>, weight=<span class="number">90</span>)</span><br><span class="line">name: Jack</span><br><span class="line">age: <span class="number">20</span></span><br><span class="line">phones: (<span class="number">123456</span>, <span class="number">654321</span>)</span><br><span class="line">email: abc@email.com</span><br><span class="line">other: &#123;<span class="string">&#x27;height&#x27;</span>: <span class="number">180</span>, <span class="string">&#x27;weight&#x27;</span>: <span class="number">90</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，默认参数与具名关键字参数形式上一样，默认参数通常是用来简化函数调用者的传参的。这两者可以通过位置进行区分，在不定长参数之前的是默认参数，之后的是关键字参数。如果要传入不定长参数，默认参数就不能省略，此时默认参数被视为定位参数（默认值失去了意义），其后的非关键字参数会被不定长参数 <code>*phones</code> 捕获。如果省略了默认参数，那么不定长参数的第一个元素会被赋值给默认参数。具名关键字参数则没有这一限制。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>record(<span class="string">&#x27;Jack&#x27;</span>, <span class="number">123456</span>, <span class="number">654321</span>, height=<span class="number">180</span>)</span><br><span class="line">name:  Jack</span><br><span class="line">age:  <span class="number">123456</span></span><br><span class="line">phones:  (<span class="number">654321</span>,)</span><br><span class="line">email:  <span class="literal">None</span></span><br><span class="line">other:  &#123;<span class="string">&#x27;height&#x27;</span>: <span class="number">180</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>仅限关键字参数</strong>（keyword-only argument）是 Python 3 新增的特性。如果定义函数时想指定仅限关键字参数，需要将它们放在带有 <code>*</code> 的不定长参数之后。如果不想支持不定长参数，可以在签名中放一个 <code>*</code>，标志着定位参数到此终结，之后的参数只能以关键字形式提供，即仅限关键字参数。如下所示：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, *, b, c=<span class="number">3</span></span>):</span> </span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> a, b, c</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">1</span>, b=<span class="number">2</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">1</span>, b=<span class="number">2</span>, c=<span class="number">4</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，仅限关键字参数不一定要有默认值，但如果没有默认值，调用函数时必须传入该参数。内置方法 <code>sorted()</code> 的参数就包含一个 <code>*</code>，其后的 key 和 reverse 参数就是带有默认值的仅限关键字参数。</p>
+<h3 id="函数参数的最佳实践"><a href="#函数参数的最佳实践" class="headerlink" title="函数参数的最佳实践"></a>函数参数的最佳实践</h3><p>对于函数参数如何正确的使用，《Effective Python》给出了一些建议。我结合自己的一些看法，给出如下几点建议。</p>
+<p>第一点，<strong>使用不定长参数减少视觉杂讯</strong>。这是一种比喻，目的是使函数签名内容不要过于过多，而应凸显重要部分。如果一个函数支持传入多个相同类型的对象，或对不同类型的对象做相同处理，可以考虑不定长参数（或者组合成一个可迭代对象传入）。拿 Python 的内置方法来举例，<code>map()</code> 的最后一个参数就是不定长参数 <code>*iterables</code>，支持传入多个可迭代对象；<code>print()</code> 方法的第一个参数 <code>*values</code> 也是不定长参数，对于传入多个参数，不管它们是什么类型都能将其打印。</p>
+<p>第二点，<strong>使用关键字参数来表达可选的行为</strong>。关键字参数的名称可以辅助调用者明确参数的用途，比如 <code>sorted()</code> 方法中的 reverse 参数用来反向排序。关键字参数还能提供默认值，就如同一个开关，如果使用函数默认功能，就不需要操心这些参数，还可以避免传参时的重复代码。如果想开启附加功能，可以传入指定的关键字参数。带有默认值的关键字参数还能在不改变调用代码的基础上为函数添加新功能，保证了代码的兼容性。从另一种角度看，带有默认值的关键字参数提供了类似多态重载的动态语言特性，虽然 Python 并不支持函数重载。</p>
+<p>第三点，<strong>使用仅限关键字参数来确保代码清晰</strong>。关键字参数可以提高可读性，但不能保证调用者一定使用关键字来明确指出参数的含义，关键字参数可以通过位置来赋值，比如定义的函数 <code>def func(a, b=1)</code> 可以通过 <code>func(1, 2)</code> 来为关键字参数 b 赋值。如果有必要，可以使用仅限关键字参数来强制调用者使用关键字。比如 <code>sorted()</code> 方法签名 <code>*</code> 后指定的仅限关键字参数 key 和 reverse。</p>
+<p>第四点，<strong>使用 None 而不是可变序列为参数默认值赋空</strong>。绝对不要将参数默认值指定为空的可变序列 <code>[]</code> 和 <code>&#123;&#125;</code>。参数的默认值会在模块被加载时执行一次并绑定，如果默认值定义为了可变序列，那么以默认形式调用函数的代码都会共享同一份序列，从而导致难以预料的结果。比如如下解析 JSON 的函数，默认值为空字典，在解析出错时将其返回，导致两个对象共用一个字典。解决的方法是使用 None 作为参数默认值，在函数内重新赋值为空字典，并添加文档说明参数默认值的实际行为。如果参数默认值是动态变化的，如当前时间，也应如此做。总之，要避免参数默认值是可变的。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">decode</span>(<span class="params">data, default=&#123;&#125;</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">try</span>:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">return</span> json.loads(data)</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">except</span> ValueError:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">return</span> default</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo = decode(<span class="string">&#x27;bad data&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bar = decode(<span class="string">&#x27;also bad&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo[<span class="string">&#x27;a&#x27;</span>] = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bar</span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo <span class="keyword">is</span> bar</span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<p>第五点，<strong>避免修改传入参数的值</strong>。函数式编程中非常强调的一点是，函数要无副作用。无副作用指的是函数内部不与外部互动（最典型的情况是，修改全局变量的值），产生除函数本身运算以外的其他效果。函数无副作用，意味着函数要保持独立，不依赖于上下文环境，不得修改外部变量包括传入参数的值。即使函数要在传入参数本身上做运算，也应该新建一个副本将其返回。就拿 <code>sorted()</code> 来说，即使排序前后元素位置没有变化，也返回一个全新的列表。除此之外，<code>map()</code>、<code>filter()</code> 等其他内置方法也都遵循这一点，不对参数本身做修改。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">sorted</span>(l)</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">sorted</span>(l) <span class="keyword">is</span> l</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义的-sorted-函数"><a href="#自定义的-sorted-函数" class="headerlink" title="自定义的 sorted() 函数"></a>自定义的 <code>sorted()</code> 函数</h3><p>在本章中我一直拿内置的 <code>sorted()</code> 函数来举例，不妨自己来实现一个。借此案例我想演示：如何使用仅限关键字参数，如何编写高阶函数，以及如何使用卫语句对异常参数进行处理。</p>
+<p>这里的排序算法不是关键，使用的是最简单的冒泡排序算法。函数签名上尽可能与 <code>sorted()</code> 保持一致，为了保证函数无副作用，函数内部新建了一个列表副本保存传入可迭代序列的值。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sort</span>(<span class="params">iterable, *, key=<span class="literal">None</span>, reverse=<span class="literal">False</span></span>):</span></span><br><span class="line">    <span class="keyword">if</span> key <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> <span class="keyword">not</span> <span class="built_in">callable</span>(key):</span><br><span class="line">        <span class="keyword">raise</span> TypeError(<span class="string">f&#x27;<span class="subst">&#123;<span class="built_in">type</span>(key)&#125;</span> object is not callable&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    _l = <span class="built_in">list</span>(iterable)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(_l)):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i):</span><br><span class="line">            <span class="keyword">if</span> key <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="keyword">if</span> _l[j] &gt; _l[i]:</span><br><span class="line">                    _l[j], _l[i] = _l[i], _l[j]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> key(_l[j]) &gt; key(_l[i]):</span><br><span class="line">                    _l[j], _l[i] = _l[i], _l[j]</span><br><span class="line">    <span class="keyword">if</span> reverse:</span><br><span class="line">        _l.reverse()</span><br><span class="line">    <span class="keyword">return</span> _l</span><br></pre></td></tr></table></figure>
+
+<p>仅限关键字参数是指在 <code>*</code> 运算符之后定义的关键字参数，在调用时必须指定关键字名称，如上述函数中的 key 和 reverse 关键字。</p>
+<p>在函数的开头，首先判断传入的 key 参数在非 None 情况下是否是可调用的，若不可调用则抛出 TypeError 异常。这种 if 条件分支语句叫做<strong>卫语句</strong>（guard clause），目的是将可能出错的每个分支做单独检查，要么抛出异常要么立即返回。通过在函数头部的集中处理及早抛出各种可能的异常（又称迅速失败），避免无效的运算。函数真正的实现代码放在卫语句之后，保证运行到此处时所有条件都已通过。</p>
+<p>通过了卫语句检测的 key 参数是可调用的，在函数内部直接使用 <code>key()</code> 调用。对于接收函数作为参数的 <code>sort()</code> 函数，我们将其称之为<strong>高阶函数</strong>，这也是 Python 函数式编程特性之一。</p>
+<p>下面是测试方法：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_sort_number_sequence</span>(<span class="params">self</span>):</span></span><br><span class="line">    _l = [<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>]</span><br><span class="line">    result = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">7</span>]</span><br><span class="line">    <span class="keyword">assert</span> sort(_l) == result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_sort_sequence_with_key_function</span>(<span class="params">self</span>):</span></span><br><span class="line">    _l = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;aab&#x27;</span>, <span class="string">&#x27;ab&#x27;</span>, <span class="string">&#x27;aabb&#x27;</span>]</span><br><span class="line">    result = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;ab&#x27;</span>, <span class="string">&#x27;aab&#x27;</span>, <span class="string">&#x27;aabb&#x27;</span>]</span><br><span class="line">    <span class="keyword">assert</span> sort(_l, key=<span class="built_in">len</span>) == result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_sort_sequence_with_key_function_and_reverse</span>(<span class="params">self</span>):</span></span><br><span class="line">    _l = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;aab&#x27;</span>, <span class="string">&#x27;ab&#x27;</span>, <span class="string">&#x27;aabb&#x27;</span>]</span><br><span class="line">    result = [<span class="string">&#x27;aabb&#x27;</span>, <span class="string">&#x27;aab&#x27;</span>, <span class="string">&#x27;ab&#x27;</span>, <span class="string">&#x27;a&#x27;</span>]</span><br><span class="line">    <span class="keyword">assert</span> sort(_l, key=<span class="built_in">len</span>, reverse=<span class="literal">True</span>) == result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_should_raise_error_when_key_function_is_not_callable</span>(<span class="params">self</span>):</span></span><br><span class="line">    _l = [<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>]</span><br><span class="line">    <span class="keyword">with</span> pytest.raises(TypeError) <span class="keyword">as</span> e:</span><br><span class="line">        sort(_l, key=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>pytest 框架支持对抛出异常的测试，使用 with 语句加 <code>pytest.raises()</code> 方法可以断言定义体内调用的方法是否会抛出对应的异常。</p>
+<h3 id="与-运算符"><a href="#与-运算符" class="headerlink" title="* 与 ** 运算符"></a><code>*</code> 与 <code>**</code> 运算符</h3><p>在 Python 中，<code>*</code> 与 <code>**</code> 运算符除了能用作数学运算符中的乘法和乘方之外，还有一些其他的巧妙用法。之前讨论的函数中的不定长参数 <code>*args</code> 和不具名关键字参数 <code>**kwargs</code> 是它们的经典用法之一。此外，这两个运算符还可以用来对参数列表进行<strong>拆包</strong>。</p>
+<p>运用 <code>*</code> 运算符可以把一个可迭代对象拆开作为函数的参数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">f&#x27;a=<span class="subst">&#123;a&#125;</span>, b=<span class="subst">&#123;b&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">a=<span class="number">1</span>, b=<span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(*t)</span><br><span class="line">a=<span class="number">1</span>, b=<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>类似的，运用 <code>**</code> 运算符可以把一个字典拆开作为函数的参数，同名键会绑定到对应的具名参数上，如果函数还定义了非具名关键字参数 <code>**kwargs</code>，除了绑定的同名键外余下参数会被 <code>**kwargs</code> 捕获。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a=<span class="literal">None</span>, b=<span class="literal">None</span>, **kwargs</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">f&#x27;a=<span class="subst">&#123;a&#125;</span>, b=<span class="subst">&#123;b&#125;</span>, kwargs=<span class="subst">&#123;kwargs&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;c&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;d&#x27;</span>: <span class="number">4</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(**d)</span><br><span class="line">a=<span class="number">1</span>, b=<span class="number">2</span>, kwargs=&#123;<span class="string">&#x27;c&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;d&#x27;</span>: <span class="number">4</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>*</code> 运算符对于函数参数中的可迭代对象拆包概念，在 Python 3 被扩展到了<strong>平行赋值</strong>。在平行赋值中，<code>*</code> 前缀只能被用在一个变量名前，但这个变量可以出现在赋值表达式的任何位置，用来处理剩下的元素。拆包所赋值的元素是列表类型，即使其中只有一个元素。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, b, *rest = <span class="built_in">range</span>(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, b, rest</span><br><span class="line">(<span class="number">0</span>, <span class="number">1</span>, [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, *rest, d, e = <span class="built_in">range</span>(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, rest, d, e</span><br><span class="line">(<span class="number">0</span>, [<span class="number">1</span>, <span class="number">2</span>], <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, *rest, c, d, e = <span class="built_in">range</span>(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, rest, c, d, e</span><br><span class="line">(<span class="number">0</span>, [<span class="number">1</span>], <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="lambda-表达式"><a href="#lambda-表达式" class="headerlink" title="lambda 表达式"></a>lambda 表达式</h2><p>Python 中的 lambda 关键字用于创建<strong>匿名函数</strong>。lambda 表达式的格式如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">lambda</span> arguments : statement</span><br></pre></td></tr></table></figure>
+
+<p>表达式以 lambda 关键字开头，冒号 “:” 左侧是函数的<strong>传入参数</strong>，当有多个入参时使用逗号划分开，冒号右侧是<strong>返回值</strong>的表达式语句，函数会根据表达式计算结果并将其返回。lambda 表达式会创建一个函数对象，可以对其赋值并如同普通函数一样使用。下面定义了一个求平方的 lambda 表达式：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>square = <span class="keyword">lambda</span> x : x * x</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>square</span><br><span class="line">&lt;function &lt;<span class="keyword">lambda</span>&gt; at <span class="number">0x101631e50</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>square(<span class="number">3</span>)</span><br><span class="line"><span class="number">9</span></span><br></pre></td></tr></table></figure>
+
+<p>lambda 句法只是语法糖，上述定义的 lambda 表达式与如下使用 def 关键字定义的普通函数没有本质区别，甚至 lambda 表达式的功能要更加受限。由于 Python 简单的句法限制了 lambda 定义体只能使用纯表达式，不能进行赋值，也不能使用 while 和 try 等 Python 语句。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">square</span>(<span class="params">x</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> x * x</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>square</span><br><span class="line">&lt;function square at <span class="number">0x101631dc0</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在 Python 中，<strong>lambda 表达式的通常作用是作为参数传入给高阶函数</strong>。比如在列表推导一节介绍的 map、filter 和 reduce 函数，这些函数接收一个函数作为参数，如果不想额外定义函数，那么使用 lambda 表达式创建匿名函数就是最佳的应用场景。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x : x * x, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))</span><br><span class="line">[<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">filter</span>(<span class="keyword">lambda</span> x : x &lt; <span class="number">2</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))</span><br><span class="line">[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<p>除了上述这种应用场景之外，Python 很少使用匿名函数。受到句法的限制，lambda 表达式无法实现复杂的函数功能。同时，在使用 lambda 表达式时要尽可能保证表达式的清晰简短，否则冗长的 lambda 表达式将会导致代码难以阅读。此时，应该使用 def 关键字创建普通函数，即《Effective Python》所提倡的：<strong>使用辅助函数来取代复杂的表达式</strong>，并赋予函数清晰的名称以提高代码可读性。</p>
 ]]></content>
       <categories>
         <category>Languages</category>
@@ -6802,111 +6802,6 @@ zuul:
       </tags>
   </entry>
   <entry>
-    <title>结合案例使用 Java 注解和反射</title>
-    <url>/2018/11/29/%E7%BB%93%E5%90%88%E6%A1%88%E4%BE%8B%E4%BD%BF%E7%94%A8%20Java%20%E6%B3%A8%E8%A7%A3%E5%92%8C%E5%8F%8D%E5%B0%84/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在项目开发时遇到这样一个场景：从上游传过来一个实体类对象 <code>newEntity</code>，但它只有部分字段，需要去库中查出对应的旧对象 <code>oldEntity</code> 做一次补全（相当于一次部分更新）。</p>
-<p>一开始我们这样编码的：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> FlightBasic <span class="title">merge</span><span class="params">(FlightBasic newEntity)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getAirportCode() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setAirportCode(newEntity.getAirportCode());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getCraftNo() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setCraftNo(newEntity.getCraftNo());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getCraftType() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setCraftType(newEntity.getCraftType());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// too long ...</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>很快我们发现了问题：不仅类的字段很多，这样的 Entity 也有很多，所以到处都是又臭又长的 <code>merge</code> 方法。</p>
-<p>其实不难总结这些代码的共性：</p>
-<ul>
-<li>一个 Entity 只能和本身的类型 Merge</li>
-<li>代码都是判空后对属性的 <code>getter/setter</code> 方法的重复调用</li>
-</ul>
-<p>为了简化代码（偷懒），就在想能不能通过统一的处理完成这些 Merge 逻辑。首先想到的是代码生成，类似 MyBatis Generator，重复的工作交给脚本或者工具多好。但是很快就否定了这种方案，配置这些类的工作量也不小，而且很多类中有自己的业务逻辑，一不小心覆盖了也不行。那注解行不行呢？Spring Boot 就大量使用注解替换了之前配置繁杂的 XML 文件。实际编码后验证是可行的！本文将介绍如何<strong>配合使用 Java 的注解和反射</strong>实现上述问题中的 Merge 操作。示例代码已上传到 <a href="https://github.com/s1mplecc/merging">GitHub</a> 上。</p>
-<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p>每当你创建描述符性质的类或者接口时，一旦其中包含重复性的工作，就可以考虑使用注解来简化与自动化该过程。一个注解准确意义上来说，只不过是一种特殊的注释而已，如果没有<strong>解析</strong>它的代码，它可能连注释都不如。而解析注解往往有两种方式，一种是<strong>编译期扫描</strong>，典型的例如 <code>@Override</code>，这种只适用于编译器已经认识的注解，一般都是 JDK 内置注解；另一种则是通过<strong>运行期反射</strong>，也是在我们自定义注解后需要自己编码的。</p>
-<h3 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h3><p>Java提供了四种元注解，专门负责<strong>修饰其他注解</strong>：</p>
-<ul>
-<li><code>@Target</code>：注解的作用目标</li>
-<li><code>@Retention</code>：注解的生命周期</li>
-<li><code>@Documented</code>：注解是否要包含在 JavaDoc 文档中</li>
-<li><code>@Inherited</code>：子类是否继承该注解</li>
-</ul>
-<h4 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h4><p><code>@Target</code> 用于定义注解的<strong>作用域</strong>，源码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.ANNOTATION_TYPE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Target &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns an array of the kinds of elements an annotation type</span></span><br><span class="line"><span class="comment">     * can be applied to.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    ElementType[] value();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中 <code>ElementType</code> 是一个枚举类型，包含以下值：</p>
-<ul>
-<li><code>ElementType.TYPE</code>：允许注解作用在类、接口和枚举上</li>
-<li><code>ElementType.FIELD</code>：允许作用在属性字段上</li>
-<li><code>ElementType.METHOD</code>：允许作用在方法上</li>
-<li><code>ElementType.PARAMETER</code>：允许作用在方法参数上</li>
-<li><code>ElementType.CONSTRUCTOR</code>：允许作用在构造器上</li>
-<li><code>ElementType.LOCAL_VARIABLE</code>：允许作用在本地局部变量上</li>
-<li><code>ElementType.ANNOTATION_TYPE</code>：允许作用在注解上</li>
-<li><code>ElementType.PACKAGE</code>：允许作用在包上</li>
-</ul>
-<p>当允许有多个作用域时使用花括号 <code>&#123;&#125;</code> 包裹，比如这样：<code>@Target(&#123; ElementType.TYPE, ElementType.FIELD &#125;)</code></p>
-<h4 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h4><p><code>@Retention</code> 用于标明注解存在的<strong>生命周期</strong>，源码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.ANNOTATION_TYPE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Retention &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns the retention policy.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">RetentionPolicy <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>RetentionPolicy</code> 也是一个枚举类型，包含以下值：</p>
-<ul>
-<li><code>RetentionPolicy.SOURCE</code>：在源文件中保留，编译为 .class 文件时会被丢弃，比如 <code>@Override</code>、<code>@SuppressWarnings</code></li>
-<li><code>RetentionPolicy.CLASS</code>：.class 文件中会保留，但运行时丢弃</li>
-<li><code>RetentionPolicy.RUNTIME</code>：运行时保留，可以通过<strong>反射获取</strong></li>
-</ul>
-<p>剩下两种类型的注解用的不多，也比较简单，这里不再详细的介绍了，只需要知道他们各自的作用即可。<code>@Documented</code> 修饰的注解，当执行 JavaDoc 文档打包时会被保存进文档，否则将被丢弃。<code>@Inherited</code> 注解修饰的注解是有<strong>继承性</strong>的，也就说我们的注解修饰了一个类，而该类的子类将自动继承父类的该注解。该注解只作用于类，对属性或方法无效。</p>
-<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>Java 反射机制是指在<strong>程序运行时（Runtime）识别和使用对象的类型信息</strong>。以下内容摘自《Thinking in Java》，是我认为的有利于理解反射的核心概念。</p>
-<blockquote>
-<p>要理解反射的工作原理，首先必须知道<strong>类型信息</strong>在运行时是如何表示的。这项工作是由称为 <strong>Class</strong> 对象的特殊对象完成的，它包含了与类有关的信息。事实上，Class 对象就是用来创建类的所有“常规”对象的。</p>
-<p>类是程序的一部分，每个类都有一个 Class 对象。换言之，每当编写并且编译了一个新类，就会产生一个 Class 对象（更恰当地说，是被保存在一个同名的 <code>.class</code> 文中）。为了生成这个类的对象，运行这个程序的 Java 虚拟机（JVM）将使用被称为<strong>类加载器</strong>的子系统。类加载器首先检查这个类的 Class 对象是否已经加载。如果尚未加载，默认的类加载器就会根据类名查找 <code>.class</code> 文件。<strong>一旦某个类的 Class 对象被载入内存，它就被用来创建这个类的所有对象</strong>。</p>
-<p><code>Class</code> 类和 <code>java.lang.reflect</code> 类库一起对反射的概念提供了支持，该类库包含 <code>Field</code>、<code>Method</code> 以及 <code>Constructor</code> 类。这些类型的对象是由 JVM 在运行时创建的，用以<strong>表示未知类里对应的成员</strong>。这样你就可以使用 <code>Constructor</code> 创建新的对象，用 <code>get()</code> 和 <code>set()</code> 方法读取和修改与 <code>Field</code> 对象关联的字段，用 <code>invoke()</code> 方法调用与 <code>Method</code> 对象关联的方法等等。另外，还可以调用 <code>getFields()</code>、<code>getMethods()</code> 和 <code>getConstructors()</code> 等方法以返回表示字段、方法以及构造器的对象的数组（可以查看 Class 类源码了解更多资料）。</p>
-<p>重要的是，要认识到反射机制并没有什么神奇之处。当通过反射与一个未知类型的对象打交道时，JVM 只是简单地检查这个对象，看它属于哪个特定的类。在用它做其他事情之前必须先加在那个类的 Class 对象。对于反射机制来说，<code>.class</code> 文件在编译时是不可获取的，所以是在运行时打开和检查 <code>.class</code> 文件。</p>
-</blockquote>
-<p>这里简单的介绍一下我们编码时用到的与反射有关的方法：</p>
-<ul>
-<li><code>obj.getClass();</code> Java 提供了三种方式获取类的 Class 对象的引用：<code>Class.forName()</code> 通过类名获取；<code>obj.getClass();</code> 通过对象获取和 <code>Object.class</code> 通过类字面常量获取。</li>
-<li><code>getDeclaredFields();</code> 获取类中声明的所有字段，不包括父类和接口中的字段。它与 <code>getFields()</code> 的区别在于，<code>getFields()</code> 是获取所在类以及父类和接口中的所有访问修饰符为 <code>public</code> 的字段。</li>
-<li><code>getAnnotation();</code> 获取标注的注解实例对象。</li>
-</ul>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="Merge-粒度与等级"><a href="#Merge-粒度与等级" class="headerlink" title="Merge 粒度与等级"></a>Merge 粒度与等级</h3><p>回到我们的问题上来，首先考虑一个问题：Merge 的粒度应该位于什么层次？如果是类级别的，意味着整个类的所有属性将一视同仁，要么都合并要么都不，显然这样是不行的。Merge 的<strong>粒度应该在属性字段上</strong>，为此，我们专门定义了字段的 Merge 等级 <code>Level</code>：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">Level</span> </span>&#123;</span><br><span class="line">    <span class="comment">/* 无论新值为何值，都会覆盖旧值 */</span></span><br><span class="line">    Mandatory,</span><br><span class="line">    <span class="comment">/* 如果新值不为null，覆盖旧值，否则不覆盖 */</span></span><br><span class="line">    Required,</span><br><span class="line">    <span class="comment">/* 忽略，不做合并处理 */</span></span><br><span class="line">    Ignored;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="自定义注解-MergeOn"><a href="#自定义注解-MergeOn" class="headerlink" title="自定义注解 @MergeOn"></a>自定义注解 @MergeOn</h3><p>接下来就需要自定义我们的注解：<code>@MergeOn</code>，作用在字段上，在运行时有效：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Target(ElementType.FIELD)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MergeOn &#123;</span><br><span class="line">    <span class="function">Level <span class="title">level</span><span class="params">()</span> <span class="keyword">default</span> Level.Required</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用 <code>default</code> 关键字可以设置缺省等级为 <code>Required</code>。</p>
-<h3 id="通过反射将字段设值"><a href="#通过反射将字段设值" class="headerlink" title="通过反射将字段设值"></a>通过反射将字段设值</h3><p>现在，还差最后一步，就是如何通过反射将字段设值。要想让实体类实现 Merge，首先需要定义一个接口 <code>Merging</code> 让实体类去继承它，然后接口中得有一个默认方法 <code>mergeWith(T newEntity)</code>，它将做下面这几件事：</p>
-<ul>
-<li>通过反射获取 Entity 声明的所有字段</li>
-<li>通过反射获取字段上 <code>@MergeOn</code> 注解的 Level</li>
-<li>通过 Level 走不同的分支去给字段设值，是强制或是忽略亦或是只有非空情况下才设值。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Merging</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Merging</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">mergeWith</span><span class="params">(T newEntity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.getClass() != newEntity.getClass()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MergeWithDifferentClassTypeException(</span><br><span class="line">                    String.format(<span class="string">&quot;&lt;%s&gt; can not merge with other class type &lt;%s&gt;&quot;</span>, <span class="keyword">this</span>.getClass().getName(), newEntity.getClass().getName()));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Field[] fields = <span class="keyword">this</span>.getClass().getDeclaredFields(); <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Field field : fields) &#123;</span><br><span class="line">            MergeOn mergeOn = field.getAnnotation(MergeOn.class); <span class="comment">// 2</span></span><br><span class="line">            field.setAccessible(<span class="keyword">true</span>); <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (mergeOn == <span class="keyword">null</span> || mergeOn.level().isRequired()) &#123; <span class="comment">// 4...</span></span><br><span class="line">                    Object newFieldValue = field.get(newEntity);</span><br><span class="line">                    <span class="keyword">if</span> (newFieldValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        field.set(<span class="keyword">this</span>, newFieldValue);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (mergeOn.level().isMandatory()) &#123; <span class="comment">// 4...</span></span><br><span class="line">                    field.set(<span class="keyword">this</span>, field.get(newEntity)); <span class="comment">// 5</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IllegalAccessException ex) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> MergeOnFieldIllegalAccessException(field.getName(), ex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>我们看看代码具体的实现步骤（注释中标明了顺序）：</p>
-<ol>
-<li><code>this.getClass().getDeclaredFields();</code> 获取类中声明的所有字段，不包含父类和接口中的字段。<code>this</code> 指向的是实现接口的实体类。</li>
-<li><code>field.getAnnotation(MergeOn.class);</code> 获取字段上的 <code>@MergeOn</code> 注解实例。</li>
-<li><code>field.setAccessible(true);</code> 由于字段通常是 <code>private</code> 修饰的，就需要<strong>获取访问权</strong>（并不是修改实际权限），否则将抛出 <code>IllegalAccessException</code> 异常。由此可见，反射有可能破环封装性。</li>
-<li>根据 Level 做相应设值。如果无注解或 Level 为 Required，则新值非空时覆盖旧值；如果是强制（Mandatory）则始终覆盖；否则（Ignored），忽略不做处理。</li>
-<li><code>field.set(this, field.get(newEntity));</code> 字段设值的实际操作，接口设计看上去有点反人类。第一个参数为需要设置字段的对象，此处为 oldEntity，第二个参数为要设置的值，此处为新对象的字段值。</li>
-</ol>
-<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>接下来我将演示如何使用这个接口，并编写单元测试验证其正确性。</p>
-<p>首先定义实体类 Entity。</p>
-<ul>
-<li>为了测试全面性，加入了各种类型的属性字段，包括基础类型、集合、数组和类；同时，<code>@MergeOn</code> 注解覆盖了所有 Level，还包括缺省和无注解的情况。</li>
-<li>为了简单，直接在字段声明时赋初值。即 <code>new Entity()</code> 出来的可以看成旧的模型对象（oldEntity）。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Entity</span> <span class="keyword">implements</span> <span class="title">Merging</span>&lt;<span class="title">Entity</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@MergeOn(level = Level.Ignored)</span></span><br><span class="line">    <span class="keyword">private</span> String string = <span class="string">&quot;string&quot;</span>;</span><br><span class="line">    <span class="meta">@MergeOn</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> anInt = <span class="number">1</span>;</span><br><span class="line">    <span class="meta">@MergeOn(level = Level.Mandatory)</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; stringList = Arrays.asList(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>);</span><br><span class="line">    <span class="meta">@MergeOn(level = Level.Required)</span></span><br><span class="line">    <span class="keyword">private</span> String[] strings = <span class="keyword">new</span> String[]&#123;<span class="string">&quot;sArr1&quot;</span>, <span class="string">&quot;sArr2&quot;</span>&#125;;</span><br><span class="line">    <span class="keyword">private</span> Email email = <span class="keyword">new</span> Email(<span class="string">&quot;zz@163.com&quot;</span>);</span><br><span class="line">    <span class="keyword">private</span> Set&lt;Email&gt; emails = Sets.newLinkedHashSet(<span class="keyword">new</span> Email(<span class="string">&quot;zz@163.com&quot;</span>), <span class="keyword">new</span> Email(<span class="string">&quot;zz@gmail.com&quot;</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Email</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String value;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Email</span><span class="params">(String value)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.value = value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>理想情况下，<code>string</code> 字段新值应当被忽略；<code>stringList</code> 在新值为 null 时也会被强制覆盖；其他缺省和无注解的应当行为与 <code>@MergeOn(level = Level.Required)</code> 一致，即非空时才会覆盖旧值。以下为测试代码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_merge_new_entity_with_different_merge_level</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Entity newEntity = <span class="keyword">new</span> Entity();</span><br><span class="line">    newEntity.setString(<span class="string">&quot;newString&quot;</span>);  <span class="comment">// Ignored</span></span><br><span class="line">    newEntity.setAnInt(<span class="number">2</span>);</span><br><span class="line">    newEntity.setStringList(<span class="keyword">null</span>);  <span class="comment">// Mandatory</span></span><br><span class="line">    newEntity.setStrings(<span class="keyword">new</span> String[]&#123;<span class="string">&quot;newS1&quot;</span>, <span class="string">&quot;newS2&quot;</span>, <span class="string">&quot;newS3&quot;</span>&#125;);</span><br><span class="line">    newEntity.setEmail(<span class="keyword">new</span> Entity.Email(<span class="string">&quot;newEmail@163.com&quot;</span>));</span><br><span class="line">    newEntity.setEmails(<span class="keyword">null</span>); <span class="comment">// Required, wished not be overwrited</span></span><br><span class="line"></span><br><span class="line">    Entity entity = <span class="keyword">new</span> Entity(); <span class="comment">// oldEntity</span></span><br><span class="line">    entity.mergeWith(newEntity);</span><br><span class="line"></span><br><span class="line">    assertThat(entity.getString()).isEqualTo(<span class="string">&quot;string&quot;</span>);</span><br><span class="line">    assertThat(entity.getAnInt()).isEqualTo(<span class="number">2</span>);</span><br><span class="line">    assertThat(entity.getStringList()).isNull();</span><br><span class="line">    assertThat(entity.getStrings()).containsSequence(<span class="string">&quot;newS1&quot;</span>, <span class="string">&quot;newS2&quot;</span>, <span class="string">&quot;newS3&quot;</span>);</span><br><span class="line">    assertThat(entity.getEmail().getValue()).isEqualTo(<span class="string">&quot;newEmail@163.com&quot;</span>);</span><br><span class="line">    assertThat(entity.getEmails()).hasSize(<span class="number">2</span>);</span><br><span class="line">    assertThat(entity.getEmails()).contains(<span class="keyword">new</span> Entity.Email(<span class="string">&quot;zz@163.com&quot;</span>));</span><br><span class="line">    assertThat(entity.getEmails()).contains(<span class="keyword">new</span> Entity.Email(<span class="string">&quot;zz@gmail.com&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://juejin.im/post/5b45bd715188251b3a1db54f">JAVA 注解的基本原理 —— 掘金</a></li>
-<li>Thinking in Java 第14章：类型信息</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>结合源码深入理解 MapReduce 工作原理</title>
     <url>/2021/10/22/%E7%BB%93%E5%90%88%E6%BA%90%E7%A0%81%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-MapReduce-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/</url>
     <content><![CDATA[<h2 id="MapReduce-架构"><a href="#MapReduce-架构" class="headerlink" title="MapReduce 架构"></a>MapReduce 架构</h2><blockquote>
@@ -7129,6 +7024,111 @@ zuul:
       </tags>
   </entry>
   <entry>
+    <title>结合案例使用 Java 注解和反射</title>
+    <url>/2018/11/29/%E7%BB%93%E5%90%88%E6%A1%88%E4%BE%8B%E4%BD%BF%E7%94%A8%20Java%20%E6%B3%A8%E8%A7%A3%E5%92%8C%E5%8F%8D%E5%B0%84/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在项目开发时遇到这样一个场景：从上游传过来一个实体类对象 <code>newEntity</code>，但它只有部分字段，需要去库中查出对应的旧对象 <code>oldEntity</code> 做一次补全（相当于一次部分更新）。</p>
+<p>一开始我们这样编码的：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> FlightBasic <span class="title">merge</span><span class="params">(FlightBasic newEntity)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getAirportCode() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setAirportCode(newEntity.getAirportCode());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getCraftNo() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setCraftNo(newEntity.getCraftNo());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (newEntity.getCraftType() != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">this</span>.setCraftType(newEntity.getCraftType());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// too long ...</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>很快我们发现了问题：不仅类的字段很多，这样的 Entity 也有很多，所以到处都是又臭又长的 <code>merge</code> 方法。</p>
+<p>其实不难总结这些代码的共性：</p>
+<ul>
+<li>一个 Entity 只能和本身的类型 Merge</li>
+<li>代码都是判空后对属性的 <code>getter/setter</code> 方法的重复调用</li>
+</ul>
+<p>为了简化代码（偷懒），就在想能不能通过统一的处理完成这些 Merge 逻辑。首先想到的是代码生成，类似 MyBatis Generator，重复的工作交给脚本或者工具多好。但是很快就否定了这种方案，配置这些类的工作量也不小，而且很多类中有自己的业务逻辑，一不小心覆盖了也不行。那注解行不行呢？Spring Boot 就大量使用注解替换了之前配置繁杂的 XML 文件。实际编码后验证是可行的！本文将介绍如何<strong>配合使用 Java 的注解和反射</strong>实现上述问题中的 Merge 操作。示例代码已上传到 <a href="https://github.com/s1mplecc/merging">GitHub</a> 上。</p>
+<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p>每当你创建描述符性质的类或者接口时，一旦其中包含重复性的工作，就可以考虑使用注解来简化与自动化该过程。一个注解准确意义上来说，只不过是一种特殊的注释而已，如果没有<strong>解析</strong>它的代码，它可能连注释都不如。而解析注解往往有两种方式，一种是<strong>编译期扫描</strong>，典型的例如 <code>@Override</code>，这种只适用于编译器已经认识的注解，一般都是 JDK 内置注解；另一种则是通过<strong>运行期反射</strong>，也是在我们自定义注解后需要自己编码的。</p>
+<h3 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h3><p>Java提供了四种元注解，专门负责<strong>修饰其他注解</strong>：</p>
+<ul>
+<li><code>@Target</code>：注解的作用目标</li>
+<li><code>@Retention</code>：注解的生命周期</li>
+<li><code>@Documented</code>：注解是否要包含在 JavaDoc 文档中</li>
+<li><code>@Inherited</code>：子类是否继承该注解</li>
+</ul>
+<h4 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h4><p><code>@Target</code> 用于定义注解的<strong>作用域</strong>，源码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.ANNOTATION_TYPE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Target &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns an array of the kinds of elements an annotation type</span></span><br><span class="line"><span class="comment">     * can be applied to.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    ElementType[] value();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>ElementType</code> 是一个枚举类型，包含以下值：</p>
+<ul>
+<li><code>ElementType.TYPE</code>：允许注解作用在类、接口和枚举上</li>
+<li><code>ElementType.FIELD</code>：允许作用在属性字段上</li>
+<li><code>ElementType.METHOD</code>：允许作用在方法上</li>
+<li><code>ElementType.PARAMETER</code>：允许作用在方法参数上</li>
+<li><code>ElementType.CONSTRUCTOR</code>：允许作用在构造器上</li>
+<li><code>ElementType.LOCAL_VARIABLE</code>：允许作用在本地局部变量上</li>
+<li><code>ElementType.ANNOTATION_TYPE</code>：允许作用在注解上</li>
+<li><code>ElementType.PACKAGE</code>：允许作用在包上</li>
+</ul>
+<p>当允许有多个作用域时使用花括号 <code>&#123;&#125;</code> 包裹，比如这样：<code>@Target(&#123; ElementType.TYPE, ElementType.FIELD &#125;)</code></p>
+<h4 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h4><p><code>@Retention</code> 用于标明注解存在的<strong>生命周期</strong>，源码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.ANNOTATION_TYPE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Retention &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns the retention policy.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">RetentionPolicy <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>RetentionPolicy</code> 也是一个枚举类型，包含以下值：</p>
+<ul>
+<li><code>RetentionPolicy.SOURCE</code>：在源文件中保留，编译为 .class 文件时会被丢弃，比如 <code>@Override</code>、<code>@SuppressWarnings</code></li>
+<li><code>RetentionPolicy.CLASS</code>：.class 文件中会保留，但运行时丢弃</li>
+<li><code>RetentionPolicy.RUNTIME</code>：运行时保留，可以通过<strong>反射获取</strong></li>
+</ul>
+<p>剩下两种类型的注解用的不多，也比较简单，这里不再详细的介绍了，只需要知道他们各自的作用即可。<code>@Documented</code> 修饰的注解，当执行 JavaDoc 文档打包时会被保存进文档，否则将被丢弃。<code>@Inherited</code> 注解修饰的注解是有<strong>继承性</strong>的，也就说我们的注解修饰了一个类，而该类的子类将自动继承父类的该注解。该注解只作用于类，对属性或方法无效。</p>
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>Java 反射机制是指在<strong>程序运行时（Runtime）识别和使用对象的类型信息</strong>。以下内容摘自《Thinking in Java》，是我认为的有利于理解反射的核心概念。</p>
+<blockquote>
+<p>要理解反射的工作原理，首先必须知道<strong>类型信息</strong>在运行时是如何表示的。这项工作是由称为 <strong>Class</strong> 对象的特殊对象完成的，它包含了与类有关的信息。事实上，Class 对象就是用来创建类的所有“常规”对象的。</p>
+<p>类是程序的一部分，每个类都有一个 Class 对象。换言之，每当编写并且编译了一个新类，就会产生一个 Class 对象（更恰当地说，是被保存在一个同名的 <code>.class</code> 文中）。为了生成这个类的对象，运行这个程序的 Java 虚拟机（JVM）将使用被称为<strong>类加载器</strong>的子系统。类加载器首先检查这个类的 Class 对象是否已经加载。如果尚未加载，默认的类加载器就会根据类名查找 <code>.class</code> 文件。<strong>一旦某个类的 Class 对象被载入内存，它就被用来创建这个类的所有对象</strong>。</p>
+<p><code>Class</code> 类和 <code>java.lang.reflect</code> 类库一起对反射的概念提供了支持，该类库包含 <code>Field</code>、<code>Method</code> 以及 <code>Constructor</code> 类。这些类型的对象是由 JVM 在运行时创建的，用以<strong>表示未知类里对应的成员</strong>。这样你就可以使用 <code>Constructor</code> 创建新的对象，用 <code>get()</code> 和 <code>set()</code> 方法读取和修改与 <code>Field</code> 对象关联的字段，用 <code>invoke()</code> 方法调用与 <code>Method</code> 对象关联的方法等等。另外，还可以调用 <code>getFields()</code>、<code>getMethods()</code> 和 <code>getConstructors()</code> 等方法以返回表示字段、方法以及构造器的对象的数组（可以查看 Class 类源码了解更多资料）。</p>
+<p>重要的是，要认识到反射机制并没有什么神奇之处。当通过反射与一个未知类型的对象打交道时，JVM 只是简单地检查这个对象，看它属于哪个特定的类。在用它做其他事情之前必须先加在那个类的 Class 对象。对于反射机制来说，<code>.class</code> 文件在编译时是不可获取的，所以是在运行时打开和检查 <code>.class</code> 文件。</p>
+</blockquote>
+<p>这里简单的介绍一下我们编码时用到的与反射有关的方法：</p>
+<ul>
+<li><code>obj.getClass();</code> Java 提供了三种方式获取类的 Class 对象的引用：<code>Class.forName()</code> 通过类名获取；<code>obj.getClass();</code> 通过对象获取和 <code>Object.class</code> 通过类字面常量获取。</li>
+<li><code>getDeclaredFields();</code> 获取类中声明的所有字段，不包括父类和接口中的字段。它与 <code>getFields()</code> 的区别在于，<code>getFields()</code> 是获取所在类以及父类和接口中的所有访问修饰符为 <code>public</code> 的字段。</li>
+<li><code>getAnnotation();</code> 获取标注的注解实例对象。</li>
+</ul>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="Merge-粒度与等级"><a href="#Merge-粒度与等级" class="headerlink" title="Merge 粒度与等级"></a>Merge 粒度与等级</h3><p>回到我们的问题上来，首先考虑一个问题：Merge 的粒度应该位于什么层次？如果是类级别的，意味着整个类的所有属性将一视同仁，要么都合并要么都不，显然这样是不行的。Merge 的<strong>粒度应该在属性字段上</strong>，为此，我们专门定义了字段的 Merge 等级 <code>Level</code>：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">Level</span> </span>&#123;</span><br><span class="line">    <span class="comment">/* 无论新值为何值，都会覆盖旧值 */</span></span><br><span class="line">    Mandatory,</span><br><span class="line">    <span class="comment">/* 如果新值不为null，覆盖旧值，否则不覆盖 */</span></span><br><span class="line">    Required,</span><br><span class="line">    <span class="comment">/* 忽略，不做合并处理 */</span></span><br><span class="line">    Ignored;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义注解-MergeOn"><a href="#自定义注解-MergeOn" class="headerlink" title="自定义注解 @MergeOn"></a>自定义注解 @MergeOn</h3><p>接下来就需要自定义我们的注解：<code>@MergeOn</code>，作用在字段上，在运行时有效：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Target(ElementType.FIELD)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MergeOn &#123;</span><br><span class="line">    <span class="function">Level <span class="title">level</span><span class="params">()</span> <span class="keyword">default</span> Level.Required</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>default</code> 关键字可以设置缺省等级为 <code>Required</code>。</p>
+<h3 id="通过反射将字段设值"><a href="#通过反射将字段设值" class="headerlink" title="通过反射将字段设值"></a>通过反射将字段设值</h3><p>现在，还差最后一步，就是如何通过反射将字段设值。要想让实体类实现 Merge，首先需要定义一个接口 <code>Merging</code> 让实体类去继承它，然后接口中得有一个默认方法 <code>mergeWith(T newEntity)</code>，它将做下面这几件事：</p>
+<ul>
+<li>通过反射获取 Entity 声明的所有字段</li>
+<li>通过反射获取字段上 <code>@MergeOn</code> 注解的 Level</li>
+<li>通过 Level 走不同的分支去给字段设值，是强制或是忽略亦或是只有非空情况下才设值。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Merging</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Merging</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">mergeWith</span><span class="params">(T newEntity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.getClass() != newEntity.getClass()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MergeWithDifferentClassTypeException(</span><br><span class="line">                    String.format(<span class="string">&quot;&lt;%s&gt; can not merge with other class type &lt;%s&gt;&quot;</span>, <span class="keyword">this</span>.getClass().getName(), newEntity.getClass().getName()));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Field[] fields = <span class="keyword">this</span>.getClass().getDeclaredFields(); <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Field field : fields) &#123;</span><br><span class="line">            MergeOn mergeOn = field.getAnnotation(MergeOn.class); <span class="comment">// 2</span></span><br><span class="line">            field.setAccessible(<span class="keyword">true</span>); <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (mergeOn == <span class="keyword">null</span> || mergeOn.level().isRequired()) &#123; <span class="comment">// 4...</span></span><br><span class="line">                    Object newFieldValue = field.get(newEntity);</span><br><span class="line">                    <span class="keyword">if</span> (newFieldValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        field.set(<span class="keyword">this</span>, newFieldValue);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (mergeOn.level().isMandatory()) &#123; <span class="comment">// 4...</span></span><br><span class="line">                    field.set(<span class="keyword">this</span>, field.get(newEntity)); <span class="comment">// 5</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IllegalAccessException ex) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> MergeOnFieldIllegalAccessException(field.getName(), ex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们看看代码具体的实现步骤（注释中标明了顺序）：</p>
+<ol>
+<li><code>this.getClass().getDeclaredFields();</code> 获取类中声明的所有字段，不包含父类和接口中的字段。<code>this</code> 指向的是实现接口的实体类。</li>
+<li><code>field.getAnnotation(MergeOn.class);</code> 获取字段上的 <code>@MergeOn</code> 注解实例。</li>
+<li><code>field.setAccessible(true);</code> 由于字段通常是 <code>private</code> 修饰的，就需要<strong>获取访问权</strong>（并不是修改实际权限），否则将抛出 <code>IllegalAccessException</code> 异常。由此可见，反射有可能破环封装性。</li>
+<li>根据 Level 做相应设值。如果无注解或 Level 为 Required，则新值非空时覆盖旧值；如果是强制（Mandatory）则始终覆盖；否则（Ignored），忽略不做处理。</li>
+<li><code>field.set(this, field.get(newEntity));</code> 字段设值的实际操作，接口设计看上去有点反人类。第一个参数为需要设置字段的对象，此处为 oldEntity，第二个参数为要设置的值，此处为新对象的字段值。</li>
+</ol>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>接下来我将演示如何使用这个接口，并编写单元测试验证其正确性。</p>
+<p>首先定义实体类 Entity。</p>
+<ul>
+<li>为了测试全面性，加入了各种类型的属性字段，包括基础类型、集合、数组和类；同时，<code>@MergeOn</code> 注解覆盖了所有 Level，还包括缺省和无注解的情况。</li>
+<li>为了简单，直接在字段声明时赋初值。即 <code>new Entity()</code> 出来的可以看成旧的模型对象（oldEntity）。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Entity</span> <span class="keyword">implements</span> <span class="title">Merging</span>&lt;<span class="title">Entity</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@MergeOn(level = Level.Ignored)</span></span><br><span class="line">    <span class="keyword">private</span> String string = <span class="string">&quot;string&quot;</span>;</span><br><span class="line">    <span class="meta">@MergeOn</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> anInt = <span class="number">1</span>;</span><br><span class="line">    <span class="meta">@MergeOn(level = Level.Mandatory)</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; stringList = Arrays.asList(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>);</span><br><span class="line">    <span class="meta">@MergeOn(level = Level.Required)</span></span><br><span class="line">    <span class="keyword">private</span> String[] strings = <span class="keyword">new</span> String[]&#123;<span class="string">&quot;sArr1&quot;</span>, <span class="string">&quot;sArr2&quot;</span>&#125;;</span><br><span class="line">    <span class="keyword">private</span> Email email = <span class="keyword">new</span> Email(<span class="string">&quot;zz@163.com&quot;</span>);</span><br><span class="line">    <span class="keyword">private</span> Set&lt;Email&gt; emails = Sets.newLinkedHashSet(<span class="keyword">new</span> Email(<span class="string">&quot;zz@163.com&quot;</span>), <span class="keyword">new</span> Email(<span class="string">&quot;zz@gmail.com&quot;</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Email</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String value;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Email</span><span class="params">(String value)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.value = value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>理想情况下，<code>string</code> 字段新值应当被忽略；<code>stringList</code> 在新值为 null 时也会被强制覆盖；其他缺省和无注解的应当行为与 <code>@MergeOn(level = Level.Required)</code> 一致，即非空时才会覆盖旧值。以下为测试代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_merge_new_entity_with_different_merge_level</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Entity newEntity = <span class="keyword">new</span> Entity();</span><br><span class="line">    newEntity.setString(<span class="string">&quot;newString&quot;</span>);  <span class="comment">// Ignored</span></span><br><span class="line">    newEntity.setAnInt(<span class="number">2</span>);</span><br><span class="line">    newEntity.setStringList(<span class="keyword">null</span>);  <span class="comment">// Mandatory</span></span><br><span class="line">    newEntity.setStrings(<span class="keyword">new</span> String[]&#123;<span class="string">&quot;newS1&quot;</span>, <span class="string">&quot;newS2&quot;</span>, <span class="string">&quot;newS3&quot;</span>&#125;);</span><br><span class="line">    newEntity.setEmail(<span class="keyword">new</span> Entity.Email(<span class="string">&quot;newEmail@163.com&quot;</span>));</span><br><span class="line">    newEntity.setEmails(<span class="keyword">null</span>); <span class="comment">// Required, wished not be overwrited</span></span><br><span class="line"></span><br><span class="line">    Entity entity = <span class="keyword">new</span> Entity(); <span class="comment">// oldEntity</span></span><br><span class="line">    entity.mergeWith(newEntity);</span><br><span class="line"></span><br><span class="line">    assertThat(entity.getString()).isEqualTo(<span class="string">&quot;string&quot;</span>);</span><br><span class="line">    assertThat(entity.getAnInt()).isEqualTo(<span class="number">2</span>);</span><br><span class="line">    assertThat(entity.getStringList()).isNull();</span><br><span class="line">    assertThat(entity.getStrings()).containsSequence(<span class="string">&quot;newS1&quot;</span>, <span class="string">&quot;newS2&quot;</span>, <span class="string">&quot;newS3&quot;</span>);</span><br><span class="line">    assertThat(entity.getEmail().getValue()).isEqualTo(<span class="string">&quot;newEmail@163.com&quot;</span>);</span><br><span class="line">    assertThat(entity.getEmails()).hasSize(<span class="number">2</span>);</span><br><span class="line">    assertThat(entity.getEmails()).contains(<span class="keyword">new</span> Entity.Email(<span class="string">&quot;zz@163.com&quot;</span>));</span><br><span class="line">    assertThat(entity.getEmails()).contains(<span class="keyword">new</span> Entity.Email(<span class="string">&quot;zz@gmail.com&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://juejin.im/post/5b45bd715188251b3a1db54f">JAVA 注解的基本原理 —— 掘金</a></li>
+<li>Thinking in Java 第14章：类型信息</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>迁移 Ghost 博客并使用 Docker  部署</title>
     <url>/2018/06/24/%E8%BF%81%E7%A7%BB%20Ghost%20%E5%8D%9A%E5%AE%A2%E5%B9%B6%E4%BD%BF%E7%94%A8%20Docker%20%20%E9%83%A8%E7%BD%B2/</url>
     <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
@@ -7223,6 +7223,63 @@ zuul:
       <tags>
         <tag>Docker</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>部署 Ghost Blog</title>
+    <url>/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/</url>
+    <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>Ghost是比较简约、轻量级的博客平台，而且文档编写使用markdown完成的。所以本片博客将介绍如何在服务器上搭建了Ghost。</p>
+</blockquote>
+<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
+<li>Ubuntu 16.04</li>
+<li>MySQL</li>
+<li>NGINX (minimum of 1.9.5 for SSL)</li>
+<li>Systemd</li>
+<li>Node v6 installed via NodeSource</li>
+<li>At least 1GB memory (swap can be used)</li>
+<li>A non-root user for running ghost commands</li>
+</ul>
+<h2 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h2><p><a href="https://docs.ghost.org/v1.0.0/docs/install">官网安装文档</a>   </p>
+<blockquote>
+<p>如果你的数据库在其他服务器上，可以不安装mysql</p>
+</blockquote>
+<ul>
+<li>更新软件包源以及更新通过包源安装的软件  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br></pre></td></tr></table></figure></li>
+<li>mysql、ngnix、systemd都可以通过<code>sudo apt-get install</code>命令安装</li>
+<li>由于ghost是基于nodejs开发的，所以要安装nodejs，执行下面这俩条命令  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash </span><br><span class="line">sudo apt-get install -y nodejs</span><br></pre></td></tr></table></figure></li>
+<li>安装ghost-cli命令行程序  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo npm i -g ghost-cli</span><br></pre></td></tr></table></figure></li>
+<li>安装完成后可以使用<code>ghost</code>命令，<code>ghost help</code>查看帮助，ghost安装需要一个空的文件夹  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /home/s1mple/ghost</span><br></pre></td></tr></table></figure></li>
+<li><code>cd</code>到这个目录下，执行<code>ghost install</code>命令即可</li>
+</ul>
+<blockquote>
+<p>1.安装过程中会配置数据库，需要提前建个空的database。如果mysql装在本机，就输入localhost，装在别的服务器上就需要输入服务器IP<br>2.询问是否使用nginx可以选no，可以自己手动配置nginx。实际上他帮你配置将80端口的请求转发到ghost的2368端口<br>3.询问是否新建”ghost”用户可以选no，若选yes他会在数据库中新建此用户，并且在ghost后台管理可以看到此用户和一些默认文章。</p>
+</blockquote>
+<h3 id="After-Installation"><a href="#After-Installation" class="headerlink" title="After Installation"></a>After Installation</h3><ul>
+<li>安装后当前文件下会生成<strong>config.production.json</strong>文件，配置信息在这里。<code>ghost ls</code>查看当前ghost运行实例信息，<code>ghost restart</code>重启ghost。</li>
+<li>安装完成后，访问<code>／ghost</code>进入后台管理系统，根据引导创建用户。</li>
+<li>在后台Design模块中可以导入主题zip压缩包，<code>/ghost/#/settings/design</code>。在Ghost Marketplace下找了个时间轴的主题，并修改了部分视觉效果。<a href="https://github.com/s1mplecc/ghost-theme">时间轴主题下载链接</a></li>
+</ul>
+<h3 id="Redirect-Port-With-Nginx"><a href="#Redirect-Port-With-Nginx" class="headerlink" title="Redirect Port With Nginx"></a>Redirect Port With Nginx</h3><blockquote>
+<p>很尴尬，因为Aliyun的服务器需要备案，80端口有时候会出现抽风的情况。所以有必要先配置个其他端口（2368端口太难记了），比如8080。</p>
+</blockquote>
+<ul>
+<li><code>cat /etc/nginx/nginx.conf </code>发现nginx配置文件包括如下两行  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">include /etc/nginx/conf.d/*.conf;</span><br><span class="line">include /etc/nginx/sites-enabled/*;</span><br></pre></td></tr></table></figure>
+  意思就是配置文件会导入上述两个目录中的文件。所以我们可以<code>cd /etc/nginx/sites-enabled/</code>中。</li>
+<li>发现目录下有个<strong>s1mple.info.conf</strong>文件，这其实就是ghost配置nginx的文件。  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp s1mple.info.conf ghost_8080.conf</span><br></pre></td></tr></table></figure></li>
+<li>修改<code>ghost_8080.conf</code>中的监听端口80为8080,<code>service nginx restart</code>重启nginx</li>
+<li>修改ghost安装目录下的<strong>config.production.json</strong>,重启ghost  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;url&quot;: &quot;http://s1mple.info:8080&quot;,</span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>有个端口号看着很丑，等备案完成，删掉<code>ghost_8080.conf</code>就行了。（你看，国外主机就不用备案）</p>
+</blockquote>
+<h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><ul>
+<li>本来想在docker容器中部署Ghost,但是可能由于docker和宿主系统隔离的原因，systemd命令不能正常运行<code>Failed to connect to bus: No such file or directory</code>。暂时没找到解决方法。不过我在docker里部署了另一个博客平台jPress。<a href="https://jpress.s2mple.xyz/">跳转链接</a></li>
+<li>jPress是基于java的轻量级博客平台，前身是WordPress。也许下个博客我会介绍如何用docker部署jPress，谁知道呢。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Ops</category>
+      </categories>
   </entry>
   <entry>
     <title>迁移 Ghost 博客至 Hexo 并使用 GitHub Pages 部署</title>
@@ -7354,63 +7411,6 @@ zuul:
 <li><a href="https://hexo.io/zh-cn/index.html">Hexo官网</a></li>
 <li><a href="https://theme-next.org/docs/getting-started/">Next官方文档</a> </li>
 <li><a href="https://juejin.im/post/5acf02086fb9a028b92d8652#heading-17">GitHub Pages部署个人博客（Hexo篇）—— 掘金</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Ops</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>部署 Ghost Blog</title>
-    <url>/2017/11/01/%E9%83%A8%E7%BD%B2Ghost%20Blog/</url>
-    <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>Ghost是比较简约、轻量级的博客平台，而且文档编写使用markdown完成的。所以本片博客将介绍如何在服务器上搭建了Ghost。</p>
-</blockquote>
-<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><ul>
-<li>Ubuntu 16.04</li>
-<li>MySQL</li>
-<li>NGINX (minimum of 1.9.5 for SSL)</li>
-<li>Systemd</li>
-<li>Node v6 installed via NodeSource</li>
-<li>At least 1GB memory (swap can be used)</li>
-<li>A non-root user for running ghost commands</li>
-</ul>
-<h2 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h2><p><a href="https://docs.ghost.org/v1.0.0/docs/install">官网安装文档</a>   </p>
-<blockquote>
-<p>如果你的数据库在其他服务器上，可以不安装mysql</p>
-</blockquote>
-<ul>
-<li>更新软件包源以及更新通过包源安装的软件  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br></pre></td></tr></table></figure></li>
-<li>mysql、ngnix、systemd都可以通过<code>sudo apt-get install</code>命令安装</li>
-<li>由于ghost是基于nodejs开发的，所以要安装nodejs，执行下面这俩条命令  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash </span><br><span class="line">sudo apt-get install -y nodejs</span><br></pre></td></tr></table></figure></li>
-<li>安装ghost-cli命令行程序  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo npm i -g ghost-cli</span><br></pre></td></tr></table></figure></li>
-<li>安装完成后可以使用<code>ghost</code>命令，<code>ghost help</code>查看帮助，ghost安装需要一个空的文件夹  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /home/s1mple/ghost</span><br></pre></td></tr></table></figure></li>
-<li><code>cd</code>到这个目录下，执行<code>ghost install</code>命令即可</li>
-</ul>
-<blockquote>
-<p>1.安装过程中会配置数据库，需要提前建个空的database。如果mysql装在本机，就输入localhost，装在别的服务器上就需要输入服务器IP<br>2.询问是否使用nginx可以选no，可以自己手动配置nginx。实际上他帮你配置将80端口的请求转发到ghost的2368端口<br>3.询问是否新建”ghost”用户可以选no，若选yes他会在数据库中新建此用户，并且在ghost后台管理可以看到此用户和一些默认文章。</p>
-</blockquote>
-<h3 id="After-Installation"><a href="#After-Installation" class="headerlink" title="After Installation"></a>After Installation</h3><ul>
-<li>安装后当前文件下会生成<strong>config.production.json</strong>文件，配置信息在这里。<code>ghost ls</code>查看当前ghost运行实例信息，<code>ghost restart</code>重启ghost。</li>
-<li>安装完成后，访问<code>／ghost</code>进入后台管理系统，根据引导创建用户。</li>
-<li>在后台Design模块中可以导入主题zip压缩包，<code>/ghost/#/settings/design</code>。在Ghost Marketplace下找了个时间轴的主题，并修改了部分视觉效果。<a href="https://github.com/s1mplecc/ghost-theme">时间轴主题下载链接</a></li>
-</ul>
-<h3 id="Redirect-Port-With-Nginx"><a href="#Redirect-Port-With-Nginx" class="headerlink" title="Redirect Port With Nginx"></a>Redirect Port With Nginx</h3><blockquote>
-<p>很尴尬，因为Aliyun的服务器需要备案，80端口有时候会出现抽风的情况。所以有必要先配置个其他端口（2368端口太难记了），比如8080。</p>
-</blockquote>
-<ul>
-<li><code>cat /etc/nginx/nginx.conf </code>发现nginx配置文件包括如下两行  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">include /etc/nginx/conf.d/*.conf;</span><br><span class="line">include /etc/nginx/sites-enabled/*;</span><br></pre></td></tr></table></figure>
-  意思就是配置文件会导入上述两个目录中的文件。所以我们可以<code>cd /etc/nginx/sites-enabled/</code>中。</li>
-<li>发现目录下有个<strong>s1mple.info.conf</strong>文件，这其实就是ghost配置nginx的文件。  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp s1mple.info.conf ghost_8080.conf</span><br></pre></td></tr></table></figure></li>
-<li>修改<code>ghost_8080.conf</code>中的监听端口80为8080,<code>service nginx restart</code>重启nginx</li>
-<li>修改ghost安装目录下的<strong>config.production.json</strong>,重启ghost  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;url&quot;: &quot;http://s1mple.info:8080&quot;,</span><br></pre></td></tr></table></figure></li>
-</ul>
-<blockquote>
-<p>有个端口号看着很丑，等备案完成，删掉<code>ghost_8080.conf</code>就行了。（你看，国外主机就不用备案）</p>
-</blockquote>
-<h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><ul>
-<li>本来想在docker容器中部署Ghost,但是可能由于docker和宿主系统隔离的原因，systemd命令不能正常运行<code>Failed to connect to bus: No such file or directory</code>。暂时没找到解决方法。不过我在docker里部署了另一个博客平台jPress。<a href="https://jpress.s2mple.xyz/">跳转链接</a></li>
-<li>jPress是基于java的轻量级博客平台，前身是WordPress。也许下个博客我会介绍如何用docker部署jPress，谁知道呢。</li>
 </ul>
 ]]></content>
       <categories>
