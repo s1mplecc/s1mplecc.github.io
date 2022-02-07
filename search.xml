@@ -957,65 +957,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Git 基础教程</title>
-    <url>/2017/11/28/Git%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Git 是目前世界上最先进的分布式版本控制系统。相比较CVS及SVN这种老式的集中式版本控制系统，要更加灵活方便，也更安全稳定。<strong>集中式</strong>是指版本库是放在中央服务器中，需要联网才能工作。<strong>分布式</strong>是指没有中央服务器，每个人电脑上有个完整的版本仓库，可以本地修改代码再联网提交到Git服务器上，Git服务器作用仅仅“交换”大家的修改即代码同步。此外，Git还拥有极其强大的分支管理功能。</p>
-<h2 id="Git-命令"><a href="#Git-命令" class="headerlink" title="Git 命令"></a>Git 命令</h2><p>本文主要介绍基础的 Git 命令，更加复杂的 Git 命令可以查看：<a href="https://s2mple.xyz/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/">Git 进阶教程</a>。另外 Git 的常用命令文档可以参考：<a href="https://education.github.com/git-cheat-sheet-education.pdf">git-cheatsheet</a>。</p>
-<h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p>始终要记住你的<strong>本地和Git服务器上都存在版本仓库（repository）</strong>，Git实现代码同步实际上是同步你的本地仓库和远程仓库。有两种方式创建仓库：1. 从服务器上克隆一个仓库；2. 初始化一个本地仓库。</p>
-<p>从Git服务器上<strong>克隆（clone）</strong>一个仓库下来，可以通过<strong>ssh</strong>或<strong>http</strong>的方式。ssh需要将你的公钥存放在Git服务器上，而http不需要但是速度相较ssh要慢。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@github.com:s1mplecc/MyHashMap.git</span><br><span class="line">git clone https://github.com/s1mplecc/MyHashMap.git</span><br></pre></td></tr></table></figure>
-
-<p>从远程库克隆下来的是完整的版本库，含有<code>.git</code>文件夹，其下的<code>config</code>文件夹包括了本仓库的配置信息。包含了url、远程库的名字以及分支等：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ cat .git/config</span><br><span class="line"></span><br><span class="line">[remote &quot;origin&quot;]</span><br><span class="line">    url = git@github.com:s1mplecc/MyHashMap.git</span><br><span class="line">    fetch = +refs/heads/*:refs/remotes/origin/*</span><br><span class="line">[branch &quot;master&quot;]</span><br><span class="line">    remote = origin</span><br><span class="line">    merge = refs/heads/master</span><br></pre></td></tr></table></figure>
-
-<p>第二种方式，<code>git init</code>是将当前目录初始化为Git可以管理的仓库。会在当前目录下生成了<code>.git</code>文件夹。</p>
-<p>如果要将本地仓库推到服务器上，需要现在服务器上创建一个repository，然后在本地目录下绑定服务器上的repository，origin是版本库默认的名字：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@github.com:s1mplecc/MyHashMap.git</span><br></pre></td></tr></table></figure>
-<h3 id="提交变更"><a href="#提交变更" class="headerlink" title="提交变更"></a>提交变更</h3><p>当你对版本库中的文件做了变更（增删改），可以使用<code>git status</code>命令查看当前版本库的状态：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜  github.io git:(hexo) ✗ git status</span><br><span class="line">On branch hexo</span><br><span class="line">Your branch is ahead of &#x27;origin/hexo&#x27; by 9 commits.</span><br><span class="line">  (use &quot;git push&quot; to publish your local commits)</span><br><span class="line"></span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span><br><span class="line"></span><br><span class="line">    modified:   &quot;source/_posts/ES6\346\226\260\347\211\271\346\200\247.md&quot;</span><br><span class="line">    modified:   &quot;source/_posts/Git Flow \346\250\241\345\236\213\344\273\245\345\217\212\345\267\245\345\205\267\347\232\204\344\275\277\347\224\250.md&quot;</span><br><span class="line"></span><br><span class="line">no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</span><br></pre></td></tr></table></figure>
-
-<p><code>git add .</code>或者<code>git add all</code>将所有修改提交到暂存区。<code>.</code>表示当前目录下所有修改了的文件，当然也可以指定某个文件。</p>
-<p>将暂存区的所有内容提交到当前分支，默认分支即Git为我们自动创建的<strong>master</strong>分支。<code>-m</code>参数后面接提交的message：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git commit -m &quot;balabala&quot;</span><br></pre></td></tr></table></figure>
-
-<p>将当前分支提交到远程库中，<code>-u</code>第一次使用时将本地的master分支绑定到远程库的master分支，以后可以省略不加：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
-
-<p>从远程库拉取修改：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
-
-<p>在开发过程中会有频繁的提交，所以日常中我们用到最多的就是上述命令了。本质上本地与远程版本库的同步就是记录下每次的<strong>修改信息</strong>。Git会帮我们记录下每次提交的修改，方便我们进行同步、回退以及合并。</p>
-<h4 id="gitignore"><a href="#gitignore" class="headerlink" title=".gitignore"></a>.gitignore</h4><p>说到<code>add</code>不得不提<code>.gitignore</code>这个文件，它的作用是忽略一些文件的提交，比如IntelliJ IDEA生成的<code>.idea</code>文件、编译生成的<code>target</code>文件等等。这类文件不需要提交到服务器污染大家的环境。关于<code>.gitignore</code>的编写github上都有现成的模版。另外IDE也可以安装相应的gitignore插件。</p>
-<h3 id="查看提交历史"><a href="#查看提交历史" class="headerlink" title="查看提交历史"></a>查看提交历史</h3><p>正是Git帮我们记录了每次提交的修改，我们可以通过命令查看历史信息，以及每次做了什么修改。</p>
-<p><code>git log</code>查看提交历史，每条记录有一个唯一的id用于标识，使用时可以使用可以唯一表示的前几位。添加参数<code>-p &lt;file&gt;/&lt;commit id&gt;</code>查看指定文件或某次commit的历史信息：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">commit 24345a1a74184f99eb32202bfcc1cd0fd6ac945d (HEAD -&gt; master)</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:33:56 2017 +0800</span><br><span class="line"></span><br><span class="line">    second commit</span><br><span class="line"></span><br><span class="line">commit b90b6da1573d55ef59a900d435d903e41667f61e</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:31:43 2017 +0800</span><br><span class="line"></span><br><span class="line">    first commit</span><br></pre></td></tr></table></figure>
-
-<p><code>git diff b90b6da</code>查看某次提交后与当前版本的区别，可以看到我在文本中添加了一行second：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@@ -1 +1,2 @@</span><br><span class="line"> first</span><br><span class="line">+second</span><br></pre></td></tr></table></figure>
-<p><code>git reflog</code>查看命令操作历史。</p>
-<h3 id="撤销变更"><a href="#撤销变更" class="headerlink" title="撤销变更"></a>撤销变更</h3><p>如果你在提交了某次变更后又想撤销这次变更，Git也提供了撤销和回退的功能。Git将提交记录（节点）串成一条线，<strong>HEAD</strong>就是一指向当前版本的指针，做回退操作其实就是这个指针在这条线上的节点间移动。牢记：<strong>Git跟踪并管理的是修改，而非文件</strong>。</p>
-<p><code>reset</code>命令回退到指定的某个版本，<code>HEAD</code>表示当前版本，<code>HEAD^</code>表示上一个版本。也可以用具体的 commit id：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard HEAD^</span><br></pre></td></tr></table></figure>
-
-<p>如果你修改了某个文件，但还没有<code>add</code>，可以直接舍弃这次修改：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -- &lt;file&gt;</span><br></pre></td></tr></table></figure>
-
-<p>如果你已经<code>commit</code>了，也可以还原回去：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git revert &lt;commit id&gt;</span><br></pre></td></tr></table></figure>
-<p>revert与reset的区别在于，revert会生成一次新的提交去移除某些提交（相当于反向操作），在节点线上还是向前走的。而reset是把HEAD指针后移到指定节点，直接从这个节点走出新的一条线。可以参考<a href="http://www.cnblogs.com/houpeiyong/p/5890748.html">代码回滚：git reset、git checkout和git revert区别和联系</a>。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://education.github.com/git-cheat-sheet-education.pdf">git-cheatsheet</a></li>
-<li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000">Git教程 —— 廖雪峰</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Concepts</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Git 进阶教程</title>
     <url>/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/</url>
     <content><![CDATA[<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>你的本地仓库由 Git 维护的三棵「树」组成。第一个是你的<strong>工作目录（Working dir）</strong>，它持有实际文件，即你所见的；第二个是<strong>缓存区（Stage or Index）</strong>，它像个缓存区域，临时保存你的改动；第三个是<strong>提交历史（Commit history）</strong>，包含的 HEAD 指针指向你最近一次 commit 的引用。关于工作区和缓存区概念可参考<a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000">廖雪峰的Git教程</a>。</p>
@@ -1071,6 +1012,65 @@
 <li><a href="https://github.com/geeeeeeeeek/git-recipes">git-recipes —— GitHub 8k star 的高质量教程</a></li>
 <li><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Merging vs. Rebasing</a></li>
 <li><a href="https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting">Resetting, Checking Out &amp; Reverting</a></li>
+<li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000">Git教程 —— 廖雪峰</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Concepts</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git 基础教程</title>
+    <url>/2017/11/28/Git%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Git 是目前世界上最先进的分布式版本控制系统。相比较CVS及SVN这种老式的集中式版本控制系统，要更加灵活方便，也更安全稳定。<strong>集中式</strong>是指版本库是放在中央服务器中，需要联网才能工作。<strong>分布式</strong>是指没有中央服务器，每个人电脑上有个完整的版本仓库，可以本地修改代码再联网提交到Git服务器上，Git服务器作用仅仅“交换”大家的修改即代码同步。此外，Git还拥有极其强大的分支管理功能。</p>
+<h2 id="Git-命令"><a href="#Git-命令" class="headerlink" title="Git 命令"></a>Git 命令</h2><p>本文主要介绍基础的 Git 命令，更加复杂的 Git 命令可以查看：<a href="https://s2mple.xyz/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/">Git 进阶教程</a>。另外 Git 的常用命令文档可以参考：<a href="https://education.github.com/git-cheat-sheet-education.pdf">git-cheatsheet</a>。</p>
+<h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p>始终要记住你的<strong>本地和Git服务器上都存在版本仓库（repository）</strong>，Git实现代码同步实际上是同步你的本地仓库和远程仓库。有两种方式创建仓库：1. 从服务器上克隆一个仓库；2. 初始化一个本地仓库。</p>
+<p>从Git服务器上<strong>克隆（clone）</strong>一个仓库下来，可以通过<strong>ssh</strong>或<strong>http</strong>的方式。ssh需要将你的公钥存放在Git服务器上，而http不需要但是速度相较ssh要慢。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@github.com:s1mplecc/MyHashMap.git</span><br><span class="line">git clone https://github.com/s1mplecc/MyHashMap.git</span><br></pre></td></tr></table></figure>
+
+<p>从远程库克隆下来的是完整的版本库，含有<code>.git</code>文件夹，其下的<code>config</code>文件夹包括了本仓库的配置信息。包含了url、远程库的名字以及分支等：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ cat .git/config</span><br><span class="line"></span><br><span class="line">[remote &quot;origin&quot;]</span><br><span class="line">    url = git@github.com:s1mplecc/MyHashMap.git</span><br><span class="line">    fetch = +refs/heads/*:refs/remotes/origin/*</span><br><span class="line">[branch &quot;master&quot;]</span><br><span class="line">    remote = origin</span><br><span class="line">    merge = refs/heads/master</span><br></pre></td></tr></table></figure>
+
+<p>第二种方式，<code>git init</code>是将当前目录初始化为Git可以管理的仓库。会在当前目录下生成了<code>.git</code>文件夹。</p>
+<p>如果要将本地仓库推到服务器上，需要现在服务器上创建一个repository，然后在本地目录下绑定服务器上的repository，origin是版本库默认的名字：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@github.com:s1mplecc/MyHashMap.git</span><br></pre></td></tr></table></figure>
+<h3 id="提交变更"><a href="#提交变更" class="headerlink" title="提交变更"></a>提交变更</h3><p>当你对版本库中的文件做了变更（增删改），可以使用<code>git status</code>命令查看当前版本库的状态：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜  github.io git:(hexo) ✗ git status</span><br><span class="line">On branch hexo</span><br><span class="line">Your branch is ahead of &#x27;origin/hexo&#x27; by 9 commits.</span><br><span class="line">  (use &quot;git push&quot; to publish your local commits)</span><br><span class="line"></span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span><br><span class="line"></span><br><span class="line">    modified:   &quot;source/_posts/ES6\346\226\260\347\211\271\346\200\247.md&quot;</span><br><span class="line">    modified:   &quot;source/_posts/Git Flow \346\250\241\345\236\213\344\273\245\345\217\212\345\267\245\345\205\267\347\232\204\344\275\277\347\224\250.md&quot;</span><br><span class="line"></span><br><span class="line">no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><code>git add .</code>或者<code>git add all</code>将所有修改提交到暂存区。<code>.</code>表示当前目录下所有修改了的文件，当然也可以指定某个文件。</p>
+<p>将暂存区的所有内容提交到当前分支，默认分支即Git为我们自动创建的<strong>master</strong>分支。<code>-m</code>参数后面接提交的message：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git commit -m &quot;balabala&quot;</span><br></pre></td></tr></table></figure>
+
+<p>将当前分支提交到远程库中，<code>-u</code>第一次使用时将本地的master分支绑定到远程库的master分支，以后可以省略不加：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+
+<p>从远程库拉取修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
+
+<p>在开发过程中会有频繁的提交，所以日常中我们用到最多的就是上述命令了。本质上本地与远程版本库的同步就是记录下每次的<strong>修改信息</strong>。Git会帮我们记录下每次提交的修改，方便我们进行同步、回退以及合并。</p>
+<h4 id="gitignore"><a href="#gitignore" class="headerlink" title=".gitignore"></a>.gitignore</h4><p>说到<code>add</code>不得不提<code>.gitignore</code>这个文件，它的作用是忽略一些文件的提交，比如IntelliJ IDEA生成的<code>.idea</code>文件、编译生成的<code>target</code>文件等等。这类文件不需要提交到服务器污染大家的环境。关于<code>.gitignore</code>的编写github上都有现成的模版。另外IDE也可以安装相应的gitignore插件。</p>
+<h3 id="查看提交历史"><a href="#查看提交历史" class="headerlink" title="查看提交历史"></a>查看提交历史</h3><p>正是Git帮我们记录了每次提交的修改，我们可以通过命令查看历史信息，以及每次做了什么修改。</p>
+<p><code>git log</code>查看提交历史，每条记录有一个唯一的id用于标识，使用时可以使用可以唯一表示的前几位。添加参数<code>-p &lt;file&gt;/&lt;commit id&gt;</code>查看指定文件或某次commit的历史信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">commit 24345a1a74184f99eb32202bfcc1cd0fd6ac945d (HEAD -&gt; master)</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:33:56 2017 +0800</span><br><span class="line"></span><br><span class="line">    second commit</span><br><span class="line"></span><br><span class="line">commit b90b6da1573d55ef59a900d435d903e41667f61e</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:31:43 2017 +0800</span><br><span class="line"></span><br><span class="line">    first commit</span><br></pre></td></tr></table></figure>
+
+<p><code>git diff b90b6da</code>查看某次提交后与当前版本的区别，可以看到我在文本中添加了一行second：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@@ -1 +1,2 @@</span><br><span class="line"> first</span><br><span class="line">+second</span><br></pre></td></tr></table></figure>
+<p><code>git reflog</code>查看命令操作历史。</p>
+<h3 id="撤销变更"><a href="#撤销变更" class="headerlink" title="撤销变更"></a>撤销变更</h3><p>如果你在提交了某次变更后又想撤销这次变更，Git也提供了撤销和回退的功能。Git将提交记录（节点）串成一条线，<strong>HEAD</strong>就是一指向当前版本的指针，做回退操作其实就是这个指针在这条线上的节点间移动。牢记：<strong>Git跟踪并管理的是修改，而非文件</strong>。</p>
+<p><code>reset</code>命令回退到指定的某个版本，<code>HEAD</code>表示当前版本，<code>HEAD^</code>表示上一个版本。也可以用具体的 commit id：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard HEAD^</span><br></pre></td></tr></table></figure>
+
+<p>如果你修改了某个文件，但还没有<code>add</code>，可以直接舍弃这次修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -- &lt;file&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如果你已经<code>commit</code>了，也可以还原回去：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git revert &lt;commit id&gt;</span><br></pre></td></tr></table></figure>
+<p>revert与reset的区别在于，revert会生成一次新的提交去移除某些提交（相当于反向操作），在节点线上还是向前走的。而reset是把HEAD指针后移到指定节点，直接从这个节点走出新的一条线。可以参考<a href="http://www.cnblogs.com/houpeiyong/p/5890748.html">代码回滚：git reset、git checkout和git revert区别和联系</a>。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://education.github.com/git-cheat-sheet-education.pdf">git-cheatsheet</a></li>
 <li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000">Git教程 —— 廖雪峰</a></li>
 </ul>
 ]]></content>
@@ -1458,6 +1458,64 @@
       </tags>
   </entry>
   <entry>
+    <title>Java8 函数接口</title>
+    <url>/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/</url>
+    <content><![CDATA[<h2 id="函数接口"><a href="#函数接口" class="headerlink" title="函数接口"></a>函数接口</h2><p>在函数式编程中，<strong>纯函数</strong>的定义是：</p>
+<ol>
+<li>此函数在相同的输入值时，需产生相同的输出。函数的输出和输入值以外的其他隐藏信息或状态无关，也和由 I/O 设备产生的外部输出无关。</li>
+<li>该函数不能有语义上可观察的函数副作用，诸如“触发事件”，使输出设备输出，或更改输出值以外物件的内容等。</li>
+</ol>
+<p>为使 Java 支持函数式编程，<strong>函数接口</strong>（<strong>Functional Interfaces</strong>）正是 Java 8 引入的一个核心概念。函数接口要求接口中只能定义个<strong>唯一一个抽象方法</strong>。同时，引入一个新的注解： <code>@FunctionalInterface</code>，作为函数接口的标记。</p>
+<p>Java 8 提供了四大类函数接口：<strong>谓词</strong> <code>Predicate</code>，<strong>函数</strong> <code>Function</code>，<strong>提供者</strong> <code>Supplier</code>，<strong>消费者</strong> <code>Consumer</code>。以及衍生的函数接口，比如 <code>BiFunction&lt;T, U, R&gt;</code> 支持两个入参的函数等等，它们都定义在 <code>java.util.function</code> 包下。</p>
+<h3 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h3><p>函数式接口的重要属性是：<strong>我们能够使用 Lambda 实例化它们</strong>。Lambda 表达式的引入给开发者带来了不少优点：在 Java 8 之前，匿名内部类，监听器和事件处理器的使用都显得很冗长，代码可读性很差，Lambda 表达式的应用则使代码变得更加紧凑，可读性增强；Lambda 表达式使<strong>并行操作大集合</strong>变得很方便，可以充分发挥多核 CPU 的优势，更易于为多核处理器编写代码。</p>
+<p>Lambda 表达式由三个部分组成：第一部分为一个括号内用逗号分隔的函数入参；第二部分为箭头符号 <code>-&gt;</code>；第三部分为方法体，可以是表达式和代码块。语法如下：</p>
+<ul>
+<li><p><code>(parameters) ‑&gt; expression</code> 方法体为表达式，该表达式的值作为返回值返回。</p>
+</li>
+<li><p><code>(parameters) ‑&gt; &#123; statements; &#125;</code> 方法体为代码块，必须用 <code>&#123;&#125;</code> 包裹起来，若该函数需要返回值则需要 <code>return</code>。</p>
+</li>
+</ul>
+<p>用 Lambda 表达式替换匿名内部类的写法如下。再进一步，可以使用<strong>方法引用</strong>（<strong>Method Reference</strong>）简写</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Anonymous inner class</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(<span class="keyword">new</span> Function&lt;String, Integer&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">apply</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> s.length();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(s -&gt; s.length());</span><br><span class="line"></span><br><span class="line"><span class="comment">// Method reference</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(String::length);</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>parallelStream()</code> 和 Lambda 表达式并行操作集合，默认线程数为 CPU 核数</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">urls.parallelStream()</span><br><span class="line">        .filter(url -&gt; url.endsWith(<span class="string">&quot;.html&quot;</span>))</span><br><span class="line">        .map(url -&gt; htmlParser.contentFrom(url))</span><br><span class="line">        .reduce((x, y) -&gt; x + y)</span><br><span class="line">        .orElse(<span class="string">&quot;&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="谓词-Predicate"><a href="#谓词-Predicate" class="headerlink" title="谓词 Predicate"></a>谓词 Predicate</h2><p>在计算机语言的环境下，谓词是指条件表达式的求值返回真或假的过程。在 Java 中就是进行逻辑判断后返回值为 <code>boolean</code> 的函数，对应函数接口为 <code>Predicate&lt;T&gt;</code>。在针对集合进行筛选时，通常会使用谓词对集合元素进行条件判断。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Predicate</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">test</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">and</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; other)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; test(t) &amp;&amp; other.test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">negate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; !test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">or</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; other)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; test(t) || other.test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function">Predicate&lt;T&gt; <span class="title">isEqual</span><span class="params">(Object targetRef)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">null</span> == targetRef)</span><br><span class="line">                ? Objects::isNull</span><br><span class="line">                : object -&gt; targetRef.equals(object);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Predicate&lt;T&gt;</code> 接口定义的唯一抽象方法 <code>test(T t)</code> 用以验证输入参数是否满足谓词条件。同时，它还提供了默认方法用以支持<strong>组合的与、或、非逻辑运算</strong>。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Predicate&lt;Apple&gt; p1 = p ‑&gt; p.getColor() == Color.RED;</span><br><span class="line">Predicate&lt;Apple&gt; p2 = p ‑&gt; p.getSize() == Size.Medium;</span><br><span class="line"></span><br><span class="line">apples.stream().filter(p1.and(p2));</span><br></pre></td></tr></table></figure>
+
+<h2 id="函数-Function"><a href="#函数-Function" class="headerlink" title="函数 Function"></a>函数 Function</h2><p><code>Function&lt;T, R&gt;</code> 接口代表一个函数，准确地说，代表了具有输入输出的函数，这也是最常见的函数定义。具有两个入参的函数对应接口为 <code>BiFunction&lt;T, U, R&gt;</code> 。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;T&gt; the type of the input to the function</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;R&gt; the type of the result of the function</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Function</span>&lt;<span class="title">T</span>, <span class="title">R</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">R <span class="title">apply</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;V&gt; <span class="function">Function&lt;V, R&gt; <span class="title">compose</span><span class="params">(Function&lt;? <span class="keyword">super</span> V, ? extends T&gt; before)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(before);</span><br><span class="line">        <span class="keyword">return</span> (V v) -&gt; apply(before.apply(v));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;V&gt; <span class="function">Function&lt;T, V&gt; <span class="title">andThen</span><span class="params">(Function&lt;? <span class="keyword">super</span> R, ? extends V&gt; after)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        <span class="keyword">return</span> (T t) -&gt; after.apply(apply(t));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function">Function&lt;T, T&gt; <span class="title">identity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> t -&gt; t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>函数也可以进行组合，组合后返回的结果也是一个函数，这就是所谓的<strong>组合子</strong>。组合子方法分别为：</p>
+<ul>
+<li><code>compose(before)</code>，组合前一个函数，相当于 <code>V -&gt; T -&gt; R</code> </li>
+<li><code>andThen(after)</code>，组合后一个函数，相当于 <code>T -&gt; R -&gt; V</code></li>
+</ul>
+<h2 id="提供者-Supplier"><a href="#提供者-Supplier" class="headerlink" title="提供者 Supplier"></a>提供者 Supplier</h2><p>当一个函数仅仅用于返回结果时，我们可以将这种函数称为<strong>提供者</strong>，接口定义为 <code>Supplier&lt;T&gt;</code>。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Supplier</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function">T <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>只提供一个 <code>get()</code> 方法，我们可以将这种提供者代表的函数看做是一种 Query 操作。</p>
+<h2 id="消费者-Consumer"><a href="#消费者-Consumer" class="headerlink" title="消费者 Consumer"></a>消费者 Consumer</h2><p>与提供者对应的接口则被称之为<strong>消费者</strong>，用以接收一个输入，但却并不关心返回结果，即返回值为 <code>void</code>。消费者的对应接口为 <code>Consumer&lt;T&gt;</code>。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Represents an operation that accepts a single input argument and returns no</span></span><br><span class="line"><span class="comment"> * result. Unlike most other functional interfaces, &#123;<span class="doctag">@code</span> Consumer&#125; is expected</span></span><br><span class="line"><span class="comment"> * to operate via side-effects.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Consumer</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">accept</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Consumer&lt;T&gt; <span class="title">andThen</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; after)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        <span class="keyword">return</span> (T t) -&gt; &#123; accept(t); after.accept(t); &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不像其他函数接口，<code>Consumer</code> 通常是<strong>有副作用的</strong>。这也不难理解，该函数只有输入没有输出，那数据通常是被外部系统消费了。同时 <code>Consumer</code> 支持 <code>andThen(after)</code> 组合</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Consumer&lt;String&gt; c1 = s -&gt; System.out.println(s);</span><br><span class="line">Consumer&lt;String&gt; c2 = s -&gt; storeToDB(s);</span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).ifPresent(c1.andThen(c2));</span><br></pre></td></tr></table></figure>
+
+<p>这种消费者代表的函数相当于是一个 Command 操作。软件设计的一条原则就是 <strong>CQS</strong>（Command-Query Separation）命令-查询分离原则，即保证一个方法体内只有 Query 和 Command 的一种，就是因为查询无副作用而命令可能会改变数据状态。</p>
+]]></content>
+      <categories>
+        <category>Languages</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>函数式编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java8 Optional 源码阅读</title>
     <url>/2018/11/27/Java8%20Optional%20%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Optional 是 Java8 引入的一个重要特性，它是一个容器，里面装着一个可能为空可能不为空的对象。在它出现之前，为避免空指针异常我们可能会这样编码：</p>
@@ -1540,61 +1598,40 @@
       </tags>
   </entry>
   <entry>
-    <title>Java8 函数接口</title>
-    <url>/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/</url>
-    <content><![CDATA[<h2 id="函数接口"><a href="#函数接口" class="headerlink" title="函数接口"></a>函数接口</h2><p>在函数式编程中，<strong>纯函数</strong>的定义是：</p>
-<ol>
-<li>此函数在相同的输入值时，需产生相同的输出。函数的输出和输入值以外的其他隐藏信息或状态无关，也和由 I/O 设备产生的外部输出无关。</li>
-<li>该函数不能有语义上可观察的函数副作用，诸如“触发事件”，使输出设备输出，或更改输出值以外物件的内容等。</li>
-</ol>
-<p>为使 Java 支持函数式编程，<strong>函数接口</strong>（<strong>Functional Interfaces</strong>）正是 Java 8 引入的一个核心概念。函数接口要求接口中只能定义个<strong>唯一一个抽象方法</strong>。同时，引入一个新的注解： <code>@FunctionalInterface</code>，作为函数接口的标记。</p>
-<p>Java 8 提供了四大类函数接口：<strong>谓词</strong> <code>Predicate</code>，<strong>函数</strong> <code>Function</code>，<strong>提供者</strong> <code>Supplier</code>，<strong>消费者</strong> <code>Consumer</code>。以及衍生的函数接口，比如 <code>BiFunction&lt;T, U, R&gt;</code> 支持两个入参的函数等等，它们都定义在 <code>java.util.function</code> 包下。</p>
-<h3 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h3><p>函数式接口的重要属性是：<strong>我们能够使用 Lambda 实例化它们</strong>。Lambda 表达式的引入给开发者带来了不少优点：在 Java 8 之前，匿名内部类，监听器和事件处理器的使用都显得很冗长，代码可读性很差，Lambda 表达式的应用则使代码变得更加紧凑，可读性增强；Lambda 表达式使<strong>并行操作大集合</strong>变得很方便，可以充分发挥多核 CPU 的优势，更易于为多核处理器编写代码。</p>
-<p>Lambda 表达式由三个部分组成：第一部分为一个括号内用逗号分隔的函数入参；第二部分为箭头符号 <code>-&gt;</code>；第三部分为方法体，可以是表达式和代码块。语法如下：</p>
-<ul>
-<li><p><code>(parameters) ‑&gt; expression</code> 方法体为表达式，该表达式的值作为返回值返回。</p>
-</li>
-<li><p><code>(parameters) ‑&gt; &#123; statements; &#125;</code> 方法体为代码块，必须用 <code>&#123;&#125;</code> 包裹起来，若该函数需要返回值则需要 <code>return</code>。</p>
-</li>
+    <title>JavaScript 简介</title>
+    <url>/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>JavaScript</strong>是目前前端开发中最流行的语言，在学习的过程中会遇到各种<strong>JS</strong>有关的名词。本文章的主要目的是介绍<strong>ECMAScript</strong>(or <strong>ES</strong>)、<strong>CommonJS</strong>、<strong>Node.js</strong>、<strong>Vue.js</strong>或<strong>AngularJS</strong>等与<strong>JavaScript</strong>之间的联系。</p>
+<h2 id="ECMAScript"><a href="#ECMAScript" class="headerlink" title="ECMAScript"></a>ECMAScript</h2><p><strong>ECMAScript</strong>和<strong>JavaScript</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>（另外的实现还有<strong>Jscript</strong> 和<strong>ActionScript</strong>等）。</p>
+<p><strong>JavaScript</strong>的创造者<strong>Netscape</strong>公司，将<strong>JavaScript</strong>提交给国际标准化组织<strong>ECMA</strong>，希望这种语言能够成为国际标准，标准委员会最终决定，标准在每年的6月份正式发布一次，作为当年的正式版本。</p>
+<p>目前的几乎所有的浏览器（不包括低版本的IE），都已经支持<strong>ES5</strong>了，而写代码时最好采用<strong>ES6</strong>语法（毕竟语法糖写起来更舒服，还添加了很多必要的新特性，而且浏览器全面支持<strong>ES6</strong>是迟早的事）。不用担心浏览器不能识别新语法，<strong>Bable</strong>就是用来解决这种问题的工具。</p>
+<p><strong>Babel</strong>是一个广泛使用的<strong>ES6</strong>转码器，可以将<strong>ES6</strong>代码转为<strong>ES5</strong>代码，从而在浏览器环境运行。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 转码前</span></span><br><span class="line">input.map(<span class="function"><span class="params">item</span> =&gt;</span> item + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转码后</span></span><br><span class="line">input.map(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item + <span class="number">1</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><p>在介绍<strong>CommonJS</strong>之前有必要先介绍一下<strong>Node.js</strong>。首先明确一点，<strong>JavaScript</strong>和<strong>Python</strong>一样，是一种脚本语言，或者是<strong>解释型语言</strong>，和<strong>C、C++</strong> 这种需要编译成可执行文件再运行的语言不同，它的运行只需要解释器能够解释执行即可，而不需要编译器。<strong>浏览器</strong>就包含了解释执行网页中的<strong>JavaScript</strong>代码的功能。</p>
+<p>伴随着互联网和<strong>JavaScript</strong>语言的快速发展，人们不仅仅局限于拿JS来做前端开发，所以<strong>Node.js</strong>随之应运而生。<strong>Node.js</strong>作为一个后端的<strong>Javascrip</strong>t运行环境（解释器），这意味着你可以编写系统级或者服务器端的<strong>Javascript</strong>代码，交给<strong>Node.js</strong>来解释执行。</p>
+<p><strong>Node.js</strong>采用了<strong>Google Chrome</strong>浏览器的V8引擎（<strong>C++编写</strong>），性能很好，同时还提供了很多系统级的API，如文件操作、网络编程等。浏览器端的<strong>Javascript</strong>代码在运行时会受到各种安全性的限制，对客户系统的操作有限。相比之下，<strong>Node.js</strong>则是一个全面的后台运行时，基于<strong>Javascript</strong>提供了其他语言能够实现的许多功能。</p>
+<h2 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h2><p>可以说<strong>CommonJS</strong>和<strong>Node.js</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>。</p>
+<p><strong>ECMAScript</strong>提供核心语言功能，浏览器端的<strong>JavaScript实现</strong>包括了<strong>ES核心</strong>、<strong>DOM</strong>(or <strong>Document Object Model</strong>)和<strong>BOM</strong>(or <strong>Browser Object Model</strong>)，所以你在浏览器的<strong>JS</strong>控制台可以使用<code>document、window、alert...</code>等有关<strong>DOM</strong>和<strong>BOM</strong>的操作。</p>
+<p>而<strong>CommonJS</strong>主要为<strong>非浏览器的应用</strong>定义一套API（比如<strong>Node</strong>应用），从而填补了空白。它的终极目标是提供一个类似<strong>Python、Ruby</strong>和<strong>Java</strong>的<strong>标准库</strong>。</p>
+<p>可以看到在<strong>Node</strong>环境中没有定义<code>alert</code>和<code>document</code>，因为<strong>Node</strong>不关心<strong>DOM</strong>和<strong>BOM</strong>操作。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; alert(&#x27;!!!&#x27;)</span><br><span class="line">ReferenceError: alert is not defined</span><br><span class="line">&gt; document</span><br><span class="line">ReferenceError: document is not defined</span><br></pre></td></tr></table></figure>
+
+<p>但是它可以调用读取文件的函数，读取出了<code>a.txt</code>中的<code>Hello!</code>并打印，这是浏览器做不到也不应该去做的。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; const fs = require(&#x27;fs&#x27;);                 </span><br><span class="line">&gt; const content = fs.readFileSync(&#x27;./a.txt&#x27;,&#x27;utf-8&#x27;);</span><br><span class="line">&gt; console.log(content);</span><br><span class="line">hello!</span><br></pre></td></tr></table></figure>
+
+<h2 id="Vue-js、AngularJS…"><a href="#Vue-js、AngularJS…" class="headerlink" title="Vue.js、AngularJS…"></a>Vue.js、AngularJS…</h2><p>这些没什么好说的，之所以带上<strong>JS</strong>就是因为它们是用<strong>JavaScript</strong>语言开发的框架，实际上就是个<strong>JS库</strong>，用于简化我们前端代码的编写。</p>
+<p>至于为什么使用<strong>Vue.js</strong>这些框架需要安装<strong>Node.js</strong>，原因也很简单，因为很多工具（比如<strong>Babel、webpack</strong>）都是用<strong>Node</strong>开发出来的，这也是你为什么可以用<code>npm</code>安装的原因。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://es6.ruanyifeng.com/#docs/intro">ECMAScript6简介 - 阮一峰</a></li>
+<li><a href="http://www.commonjs.org/">CommonJS官网</a></li>
+<li><a href="https://nodejs.org/en/">Node.js官网</a></li>
 </ul>
-<p>用 Lambda 表达式替换匿名内部类的写法如下。再进一步，可以使用<strong>方法引用</strong>（<strong>Method Reference</strong>）简写</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Anonymous inner class</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(<span class="keyword">new</span> Function&lt;String, Integer&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">apply</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> s.length();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(s -&gt; s.length());</span><br><span class="line"></span><br><span class="line"><span class="comment">// Method reference</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(String::length);</span><br></pre></td></tr></table></figure>
-
-<p>使用 <code>parallelStream()</code> 和 Lambda 表达式并行操作集合，默认线程数为 CPU 核数</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">urls.parallelStream()</span><br><span class="line">        .filter(url -&gt; url.endsWith(<span class="string">&quot;.html&quot;</span>))</span><br><span class="line">        .map(url -&gt; htmlParser.contentFrom(url))</span><br><span class="line">        .reduce((x, y) -&gt; x + y)</span><br><span class="line">        .orElse(<span class="string">&quot;&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<h2 id="谓词-Predicate"><a href="#谓词-Predicate" class="headerlink" title="谓词 Predicate"></a>谓词 Predicate</h2><p>在计算机语言的环境下，谓词是指条件表达式的求值返回真或假的过程。在 Java 中就是进行逻辑判断后返回值为 <code>boolean</code> 的函数，对应函数接口为 <code>Predicate&lt;T&gt;</code>。在针对集合进行筛选时，通常会使用谓词对集合元素进行条件判断。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Predicate</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">test</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">and</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; other)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; test(t) &amp;&amp; other.test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">negate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; !test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Predicate&lt;T&gt; <span class="title">or</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; other)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        <span class="keyword">return</span> (t) -&gt; test(t) || other.test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function">Predicate&lt;T&gt; <span class="title">isEqual</span><span class="params">(Object targetRef)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">null</span> == targetRef)</span><br><span class="line">                ? Objects::isNull</span><br><span class="line">                : object -&gt; targetRef.equals(object);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>Predicate&lt;T&gt;</code> 接口定义的唯一抽象方法 <code>test(T t)</code> 用以验证输入参数是否满足谓词条件。同时，它还提供了默认方法用以支持<strong>组合的与、或、非逻辑运算</strong>。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Predicate&lt;Apple&gt; p1 = p ‑&gt; p.getColor() == Color.RED;</span><br><span class="line">Predicate&lt;Apple&gt; p2 = p ‑&gt; p.getSize() == Size.Medium;</span><br><span class="line"></span><br><span class="line">apples.stream().filter(p1.and(p2));</span><br></pre></td></tr></table></figure>
-
-<h2 id="函数-Function"><a href="#函数-Function" class="headerlink" title="函数 Function"></a>函数 Function</h2><p><code>Function&lt;T, R&gt;</code> 接口代表一个函数，准确地说，代表了具有输入输出的函数，这也是最常见的函数定义。具有两个入参的函数对应接口为 <code>BiFunction&lt;T, U, R&gt;</code> 。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;T&gt; the type of the input to the function</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;R&gt; the type of the result of the function</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Function</span>&lt;<span class="title">T</span>, <span class="title">R</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">R <span class="title">apply</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;V&gt; <span class="function">Function&lt;V, R&gt; <span class="title">compose</span><span class="params">(Function&lt;? <span class="keyword">super</span> V, ? extends T&gt; before)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(before);</span><br><span class="line">        <span class="keyword">return</span> (V v) -&gt; apply(before.apply(v));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span> &lt;V&gt; <span class="function">Function&lt;T, V&gt; <span class="title">andThen</span><span class="params">(Function&lt;? <span class="keyword">super</span> R, ? extends V&gt; after)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        <span class="keyword">return</span> (T t) -&gt; after.apply(apply(t));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function">Function&lt;T, T&gt; <span class="title">identity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> t -&gt; t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>函数也可以进行组合，组合后返回的结果也是一个函数，这就是所谓的<strong>组合子</strong>。组合子方法分别为：</p>
-<ul>
-<li><code>compose(before)</code>，组合前一个函数，相当于 <code>V -&gt; T -&gt; R</code> </li>
-<li><code>andThen(after)</code>，组合后一个函数，相当于 <code>T -&gt; R -&gt; V</code></li>
-</ul>
-<h2 id="提供者-Supplier"><a href="#提供者-Supplier" class="headerlink" title="提供者 Supplier"></a>提供者 Supplier</h2><p>当一个函数仅仅用于返回结果时，我们可以将这种函数称为<strong>提供者</strong>，接口定义为 <code>Supplier&lt;T&gt;</code>。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Supplier</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function">T <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>只提供一个 <code>get()</code> 方法，我们可以将这种提供者代表的函数看做是一种 Query 操作。</p>
-<h2 id="消费者-Consumer"><a href="#消费者-Consumer" class="headerlink" title="消费者 Consumer"></a>消费者 Consumer</h2><p>与提供者对应的接口则被称之为<strong>消费者</strong>，用以接收一个输入，但却并不关心返回结果，即返回值为 <code>void</code>。消费者的对应接口为 <code>Consumer&lt;T&gt;</code>。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Represents an operation that accepts a single input argument and returns no</span></span><br><span class="line"><span class="comment"> * result. Unlike most other functional interfaces, &#123;<span class="doctag">@code</span> Consumer&#125; is expected</span></span><br><span class="line"><span class="comment"> * to operate via side-effects.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Consumer</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">accept</span><span class="params">(T t)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> Consumer&lt;T&gt; <span class="title">andThen</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; after)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        <span class="keyword">return</span> (T t) -&gt; &#123; accept(t); after.accept(t); &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>不像其他函数接口，<code>Consumer</code> 通常是<strong>有副作用的</strong>。这也不难理解，该函数只有输入没有输出，那数据通常是被外部系统消费了。同时 <code>Consumer</code> 支持 <code>andThen(after)</code> 组合</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Consumer&lt;String&gt; c1 = s -&gt; System.out.println(s);</span><br><span class="line">Consumer&lt;String&gt; c2 = s -&gt; storeToDB(s);</span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).ifPresent(c1.andThen(c2));</span><br></pre></td></tr></table></figure>
-
-<p>这种消费者代表的函数相当于是一个 Command 操作。软件设计的一条原则就是 <strong>CQS</strong>（Command-Query Separation）命令-查询分离原则，即保证一个方法体内只有 Query 和 Command 的一种，就是因为查询无副作用而命令可能会改变数据状态。</p>
 ]]></content>
       <categories>
         <category>Languages</category>
       </categories>
       <tags>
-        <tag>Java</tag>
-        <tag>函数式编程</tag>
+        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -1642,43 +1679,6 @@
 <li><a href="http://es6.ruanyifeng.com/#docs/promise">Promise 对象 - 阮一峰ES6教程</a></li>
 <li><a href="http://es6.ruanyifeng.com/#docs/async">async 函数 - 阮一峰ES6教程</a></li>
 <li><a href="https://segmentfault.com/a/1190000007535316">理解 JavaScript 的 async/await</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Languages</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JavaScript 简介</title>
-    <url>/2017/12/26/JavaScript%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>JavaScript</strong>是目前前端开发中最流行的语言，在学习的过程中会遇到各种<strong>JS</strong>有关的名词。本文章的主要目的是介绍<strong>ECMAScript</strong>(or <strong>ES</strong>)、<strong>CommonJS</strong>、<strong>Node.js</strong>、<strong>Vue.js</strong>或<strong>AngularJS</strong>等与<strong>JavaScript</strong>之间的联系。</p>
-<h2 id="ECMAScript"><a href="#ECMAScript" class="headerlink" title="ECMAScript"></a>ECMAScript</h2><p><strong>ECMAScript</strong>和<strong>JavaScript</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>（另外的实现还有<strong>Jscript</strong> 和<strong>ActionScript</strong>等）。</p>
-<p><strong>JavaScript</strong>的创造者<strong>Netscape</strong>公司，将<strong>JavaScript</strong>提交给国际标准化组织<strong>ECMA</strong>，希望这种语言能够成为国际标准，标准委员会最终决定，标准在每年的6月份正式发布一次，作为当年的正式版本。</p>
-<p>目前的几乎所有的浏览器（不包括低版本的IE），都已经支持<strong>ES5</strong>了，而写代码时最好采用<strong>ES6</strong>语法（毕竟语法糖写起来更舒服，还添加了很多必要的新特性，而且浏览器全面支持<strong>ES6</strong>是迟早的事）。不用担心浏览器不能识别新语法，<strong>Bable</strong>就是用来解决这种问题的工具。</p>
-<p><strong>Babel</strong>是一个广泛使用的<strong>ES6</strong>转码器，可以将<strong>ES6</strong>代码转为<strong>ES5</strong>代码，从而在浏览器环境运行。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 转码前</span></span><br><span class="line">input.map(<span class="function"><span class="params">item</span> =&gt;</span> item + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转码后</span></span><br><span class="line">input.map(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item + <span class="number">1</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><p>在介绍<strong>CommonJS</strong>之前有必要先介绍一下<strong>Node.js</strong>。首先明确一点，<strong>JavaScript</strong>和<strong>Python</strong>一样，是一种脚本语言，或者是<strong>解释型语言</strong>，和<strong>C、C++</strong> 这种需要编译成可执行文件再运行的语言不同，它的运行只需要解释器能够解释执行即可，而不需要编译器。<strong>浏览器</strong>就包含了解释执行网页中的<strong>JavaScript</strong>代码的功能。</p>
-<p>伴随着互联网和<strong>JavaScript</strong>语言的快速发展，人们不仅仅局限于拿JS来做前端开发，所以<strong>Node.js</strong>随之应运而生。<strong>Node.js</strong>作为一个后端的<strong>Javascrip</strong>t运行环境（解释器），这意味着你可以编写系统级或者服务器端的<strong>Javascript</strong>代码，交给<strong>Node.js</strong>来解释执行。</p>
-<p><strong>Node.js</strong>采用了<strong>Google Chrome</strong>浏览器的V8引擎（<strong>C++编写</strong>），性能很好，同时还提供了很多系统级的API，如文件操作、网络编程等。浏览器端的<strong>Javascript</strong>代码在运行时会受到各种安全性的限制，对客户系统的操作有限。相比之下，<strong>Node.js</strong>则是一个全面的后台运行时，基于<strong>Javascript</strong>提供了其他语言能够实现的许多功能。</p>
-<h2 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h2><p>可以说<strong>CommonJS</strong>和<strong>Node.js</strong>的关系是，前者是后者的<strong>规范</strong>，后者是前者的一种<strong>实现</strong>。</p>
-<p><strong>ECMAScript</strong>提供核心语言功能，浏览器端的<strong>JavaScript实现</strong>包括了<strong>ES核心</strong>、<strong>DOM</strong>(or <strong>Document Object Model</strong>)和<strong>BOM</strong>(or <strong>Browser Object Model</strong>)，所以你在浏览器的<strong>JS</strong>控制台可以使用<code>document、window、alert...</code>等有关<strong>DOM</strong>和<strong>BOM</strong>的操作。</p>
-<p>而<strong>CommonJS</strong>主要为<strong>非浏览器的应用</strong>定义一套API（比如<strong>Node</strong>应用），从而填补了空白。它的终极目标是提供一个类似<strong>Python、Ruby</strong>和<strong>Java</strong>的<strong>标准库</strong>。</p>
-<p>可以看到在<strong>Node</strong>环境中没有定义<code>alert</code>和<code>document</code>，因为<strong>Node</strong>不关心<strong>DOM</strong>和<strong>BOM</strong>操作。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; alert(&#x27;!!!&#x27;)</span><br><span class="line">ReferenceError: alert is not defined</span><br><span class="line">&gt; document</span><br><span class="line">ReferenceError: document is not defined</span><br></pre></td></tr></table></figure>
-
-<p>但是它可以调用读取文件的函数，读取出了<code>a.txt</code>中的<code>Hello!</code>并打印，这是浏览器做不到也不应该去做的。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ node</span><br><span class="line">&gt; const fs = require(&#x27;fs&#x27;);                 </span><br><span class="line">&gt; const content = fs.readFileSync(&#x27;./a.txt&#x27;,&#x27;utf-8&#x27;);</span><br><span class="line">&gt; console.log(content);</span><br><span class="line">hello!</span><br></pre></td></tr></table></figure>
-
-<h2 id="Vue-js、AngularJS…"><a href="#Vue-js、AngularJS…" class="headerlink" title="Vue.js、AngularJS…"></a>Vue.js、AngularJS…</h2><p>这些没什么好说的，之所以带上<strong>JS</strong>就是因为它们是用<strong>JavaScript</strong>语言开发的框架，实际上就是个<strong>JS库</strong>，用于简化我们前端代码的编写。</p>
-<p>至于为什么使用<strong>Vue.js</strong>这些框架需要安装<strong>Node.js</strong>，原因也很简单，因为很多工具（比如<strong>Babel、webpack</strong>）都是用<strong>Node</strong>开发出来的，这也是你为什么可以用<code>npm</code>安装的原因。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://es6.ruanyifeng.com/#docs/intro">ECMAScript6简介 - 阮一峰</a></li>
-<li><a href="http://www.commonjs.org/">CommonJS官网</a></li>
-<li><a href="https://nodejs.org/en/">Node.js官网</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -2677,152 +2677,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Python 中的可迭代类型</title>
-    <url>/2021/04/01/Python-%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%B1%BB%E5%9E%8B/</url>
-    <content><![CDATA[<h2 id="序列"><a href="#序列" class="headerlink" title="序列"></a>序列</h2><p>之前我们已经讨论过，Python 的“序列协议”是指：任何类，只要使用标准的签名和语义实现了 <code>__getitem__</code> 和 <code>__len__</code> 方法，就能用在任何期待序列的地方，解释器会为这些类做特殊的支持，比如支持迭代和 in 运算符。序列协议的接口定义可以查阅官方的 CPython API 接口文档：<a href="https://docs.python.org/3.8/c-api/sequence.html">Python/C API Reference Manual – Sequence Protocol</a>，其中有这样一个函数：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">PySequence_Check</span><span class="params">(PyObject *o)</span></span></span><br><span class="line"><span class="function"><span class="comment">/* Return 1 if the object provides sequence protocol, and 0 otherwise. Note that it returns 1 for Python classes with a __getitem__() method unless they are dict subclasses since in general case it is impossible to determine what the type of keys it supports. This function always succeeds. */</span></span></span><br></pre></td></tr></table></figure>
-
-<p>这个函数的作用是检查并返回对象是否支持序列协议 —— 只在实现了 <code>__getitem__</code> 方法且不是字典子类时才返回 1。这也符合我们之前所说的，协议是非正式的，没有强制力，只要你知道类的具体使用场景，可以只实现协议的一部分。比如，仅为了支持迭代，甚至不需要提供 <code>__len__</code> 方法。</p>
-<p>Python 常用的内置序列类型包括：字符串 str、列表 list、元组 tuple 和范围 range。尽管字典 dict 和集合 set 实现了序列协议中的 <code>__getitem__</code> 和 <code>__len__</code> 方法，但它们并不算序列类型，因为它们的特征与序列有本质差异，比如这两个类型不支持通过整数下标索引访问元素，不支持切片，并且字典和集合内的元素是无序的。</p>
-<p>序列类 Sequence，定义在标准库 <code>collections.abc</code> 模块中，继承自 Reversible 和 Collection 类，而 Collection 又继承自 Sized、Iterable 和 Container，体现了序列类可反转、具有规模、可迭代和是一个容器的语义。</p>
-<p>从 <code>collections.abc</code> 模块的源码中，我们还能了解到序列类包含哪些子类。除了显示继承了 Sequence 的子类，如 ByteString 和 MutableSequence，还有通过 register 关键字绑定为 Sequence 虚拟子类的一些内置类型，在绑定虚拟子类一节中也提到过这一点。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> <span class="type">Sequence</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">all</span>([<span class="built_in">issubclass</span>(i, <span class="type">Sequence</span>) <span class="keyword">for</span> i <span class="keyword">in</span> (<span class="built_in">str</span>, <span class="built_in">list</span>, <span class="built_in">tuple</span>, <span class="built_in">range</span>, <span class="built_in">bytes</span>, <span class="built_in">bytearray</span>, <span class="built_in">memoryview</span>)])</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">any</span>([<span class="built_in">issubclass</span>(i, <span class="type">Sequence</span>) <span class="keyword">for</span> i <span class="keyword">in</span> (<span class="built_in">dict</span>, <span class="built_in">set</span>)])</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure>
-
-<p>上面列表推导表达式中的所有类型都是定义在 builtsin 模块中的内置类型，可以看到，除了 dict 和 set 之外，第二行的所有内置类型都是序列类型。除此之外，标准库中还定义了其他序列类型，比如 array 模块的 array 数组类型，collections 模块中的 deque 双端队列类型。</p>
-<p>对于这些序列类型，按照序列内可容纳的类型，可以划分为以下两组：</p>
-<ul>
-<li><strong>容器序列</strong>：list、tuple 和 collections.deque 这些序列类能存放不同类型的数据；</li>
-<li><strong>扁平序列</strong>：str、bytes、bytearray、memoryview、array.array 和 range 这类序列类只能容纳一种或某种特定类型的数据。</li>
-</ul>
-<p>容器序列存放的是它们所包含的任意类型的对象的引用，而扁平序列存放的是值而不是引用。扁平序列存储在一段连续的内存空间之上，只能存放诸如字符、字节和数值这种基础类型。</p>
-<p>序列类型还能按照能否被修改来分类：</p>
-<ul>
-<li><strong>可变序列</strong>：list、bytearray、memoryview、array.array 和 collections.deque；</li>
-<li><strong>不可变序列</strong>：tuple、str、bytes 和 range。</li>
-</ul>
-<p>可变序列 MutableSequence 也定义在 <code>collections.abc</code> 模块中，并在继承 Sequence 的基础上还添加了一些支持序列修改的默认方法，如 <code>append()</code>、<code>pop()</code> 方法等。除了 Sequence 基类中要实现的 <code>__getitem__</code> 和 <code>__len__</code> 方法外，可变序列还要求具体子类必须实现 <code>__setitem__</code>、<code>__delitem__</code> 和 <code>insert()</code> 方法。</p>
-<p>序列不可变意味着序列一旦被声明赋值，序列的大小就固定下来，其内的元素也不能被修改。这里用来说明序列可变不可变的典型案例是列表和元组。在 Python 中，列表是可变的，元组是不可变的。列表可变体现在它支持对元素的增加删除和直接赋值，且列表支持<strong>就地运算</strong>，比如使用 “+=” 运算符可以直接将一个可迭代对象中的元素添加到当前列表的末尾。而元组是不可变的，元组一经定义大小就已固定，不能增加删除元素，也不对其内元素重新赋值。即使元组也支持就地运算符，但会生成一个新的元组对象重新绑定。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l = [<span class="number">1</span>, <span class="number">2</span>]  <span class="comment"># list</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(l)</span><br><span class="line"><span class="number">4411278528</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l[<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l += [<span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(l)</span><br><span class="line"><span class="number">4411278528</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = (<span class="number">1</span>, <span class="number">2</span>)  <span class="comment"># tuple</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(t)</span><br><span class="line"><span class="number">4410964416</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t += (<span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(t)</span><br><span class="line"><span class="number">4411277824</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t[<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: <span class="string">&#x27;tuple&#x27;</span> <span class="built_in">object</span> does <span class="keyword">not</span> support item assignment</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
-
-<p>此外，Python 中的可散列对象一定是不可变类型，散列方法 <code>__hash__</code> 通常和 <code>__eq__</code> 方法一起用来判断两个对象是否相等，如集合 set 和字典的键要求元素是可散列的，这被用来判断元素是否重复。所以，元组可以作为集合的元素和字典的键，而列表却不可以。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>t1 = (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t2 = (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(t1) == <span class="built_in">id</span>(t2)</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">hash</span>(t1) == <span class="built_in">hash</span>(t2)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">set</span>([(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>,)])</span><br><span class="line">&#123;(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>,)&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dict</span>(&#123;(<span class="number">1</span>, <span class="number">2</span>): <span class="number">1</span>&#125;)</span><br><span class="line">&#123;(<span class="number">1</span>, <span class="number">2</span>): <span class="number">1</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注：在散列时，元组内的每一项元素会被散列然后进行 XOR 异或运算，因此只有当元组中的每个元素都是不可变类型时，该元组才能被散列。</p>
-<h2 id="map、filter-与列表推导"><a href="#map、filter-与列表推导" class="headerlink" title="map、filter 与列表推导"></a>map、filter 与列表推导</h2><p>列表是 Python 中非常重要且常用的内置类型，列表被注册为可变序列的虚拟子类，<code>MutableSequence.register(list)</code>，所以列表的性质与可变序列性质相符，可以阅读 <code>collections.abc</code> 模块中 MutableSequence 类的源码进行了解。列表的性质不做过多介绍，这一节我想介绍一下列表推导。在上一节中就曾经使用 <code>all()</code>、<code>any()</code> 方法结合列表推导，巧妙地展示了哪些内置类型是序列类的子类。</p>
-<p>在介绍列表推导之前，有必要先介绍以下几个函数：<code>map()</code>、<code>filter()</code> 和 <code>reduce()</code> 函数。这几个函数是函数式编程的范例函数。它们都是用于处理可迭代序列的基本函数，所以被视为可迭代数据集函数式编程的基石，包含了数据集的映射、过滤和规约三个思想。所有支持函数式编程的语言都提供了这些函数的接口。Java 8 新增的 Stream API 配合箭头函数可以写出很优雅的链式函数，同样，JavaScript 中也支持链式写法：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&gt; l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">[ <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span> ]</span><br><span class="line">&gt; l.map(<span class="function"><span class="params">x</span> =&gt;</span> x * x)</span><br><span class="line">[ <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span> ]</span><br><span class="line">&gt; l.map(<span class="function"><span class="params">x</span> =&gt;</span> x * x).filter(<span class="function"><span class="params">x</span> =&gt;</span> x &gt; <span class="number">10</span>)</span><br><span class="line">[ <span class="number">16</span>, <span class="number">25</span> ]</span><br><span class="line">&gt; l.map(<span class="function"><span class="params">x</span> =&gt;</span> x * x).filter(<span class="function"><span class="params">x</span> =&gt;</span> x &gt; <span class="number">10</span>).reduce(<span class="function">(<span class="params">x, y</span>) =&gt;</span> x + y)</span><br><span class="line"><span class="number">41</span></span><br></pre></td></tr></table></figure>
-
-<p>相比之下，Python 中的写法就不那么优雅了，map、filter 和 reduce 函数作为内置库或者标准库中的函数提供，序列本身并没有实现这些方法，所以不能通过 dot 运算符直接调用，而需要将序列作为这些函数的参数传入。</p>
-<h3 id="map"><a href="#map" class="headerlink" title="map()"></a><code>map()</code></h3><blockquote>
-<p><code>map(func, *iterables) --&gt; map object</code></p>
-<p>Make an iterator that computes the function using arguments from each of the iterables.  Stops when the shortest iterable is exhausted.</p>
-</blockquote>
-<p>map 函数，又称映射函数，定义在内置模块 builtins 模块中。map 函数将可迭代对象的每个元素依次应用于 func 函数进行映射，返回的 map object 是一个可以依次产出映射后元素的生成器对象，可以使用 <code>list()</code> 包装一次性输出。传入的函数 func 可以是预先定义好的函数，也可以是 lambda 表达式定义的匿名函数。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">square</span>(<span class="params">x</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> x * x</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">map</span>(square, <span class="built_in">range</span>(<span class="number">10</span>))</span><br><span class="line">&lt;<span class="built_in">map</span> <span class="built_in">object</span> at <span class="number">0x106ebb910</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(square, <span class="built_in">range</span>(<span class="number">10</span>)))</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x: x * x, <span class="built_in">range</span>(<span class="number">10</span>)))</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br></pre></td></tr></table></figure>
-
-<p>从函数签名来看，map 函数能够接受多个可迭代对象，映射时将依次从每个可迭代对象中各取出一个元素应用于 func 函数，因此 func 也须接受同样数量的参数。如果这些可迭代对象的元素个数不一致，以个数最少的为标杆，即个数最少的可迭代对象遍历完毕时终止迭代。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x, y: x * y, <span class="built_in">range</span>(<span class="number">5</span>), <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">6</span>)))</span><br><span class="line">[<span class="number">0</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">12</span>, <span class="number">20</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x, y: x * y, <span class="built_in">range</span>(<span class="number">10</span>), <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">6</span>)))</span><br><span class="line">[<span class="number">0</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">12</span>, <span class="number">20</span>]</span><br></pre></td></tr></table></figure>
-
-<h3 id="filter"><a href="#filter" class="headerlink" title="filter()"></a><code>filter()</code></h3><blockquote>
-<p><code>filter(function or None, iterable) --&gt; filter object</code></p>
-<p>Return an iterator yielding those items of iterable for which function(item) is true. If function is None, return the items that are true.</p>
-</blockquote>
-<p>filter 函数，又称过滤函数，定义在内置模块 builtins 模块中。过滤函数将可迭代对象中的每个元素应用于谓词函数 function 后为 True 的保留下来。返回的 filter object 也是一个生成器对象，可以依次产出过滤后为真的元素。如果 function 为 None，直接判断元素是否为真值。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">filter</span>(<span class="keyword">lambda</span> x: x &gt; <span class="number">5</span>, <span class="built_in">range</span>(<span class="number">10</span>)))</span><br><span class="line">[<span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">filter</span>(<span class="literal">None</span>, [<span class="number">0</span>, <span class="number">1</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="number">0.0</span>, -<span class="number">1</span>, [], (<span class="number">1</span>, <span class="number">2</span>)]))</span><br><span class="line">[<span class="number">1</span>, <span class="literal">True</span>, -<span class="number">1</span>, (<span class="number">1</span>, <span class="number">2</span>)]</span><br></pre></td></tr></table></figure>
-
-<h3 id="reduce"><a href="#reduce" class="headerlink" title="reduce()"></a><code>reduce()</code></h3><blockquote>
-<p><code>reduce(function, sequence[, initial]) -&gt; value</code></p>
-<p>Apply a function of two arguments cumulatively to the items of a sequence, from left to right, so as to reduce the sequence to a single value. For example, reduce(lambda x, y: x + y, [1, 2, 3, 4, 5]) calculates ((((1 + 2) + 3) + 4) + 5).  If initial is present, it is placed before the items of the sequence in the calculation, and serves as a default when the sequence is empty.</p>
-</blockquote>
-<p>reduce 函数，又称规约函数，定义在 functools 模块中。规约函数的参数除了函数和序列之外，还接收一个可选的初始值。规约函数会将一个序列从左至右逐步规约为一个值。参数 function 接收两个参数，第一个参数代表每步规约后的累积值（首次规约为初始值），第二个参数代表每次迭代的序列中的元素，返回值为规约的结果，作为下一步规约的第一个参数传入。也就是说，function 函数的第一个参数、每步规约的返回值和 reduce 函数的返回值应为同一类型，function 的第二个参数为迭代序列的元素类型，两者可以是相同类型也可以是不同类型。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>reduce(<span class="keyword">lambda</span> x, y: x + y, <span class="built_in">range</span>(<span class="number">10</span>))</span><br><span class="line"><span class="number">45</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">concat_string</span>(<span class="params">s, ch</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> s + <span class="built_in">str</span>(ch)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>reduce(concat_string, [<span class="string">&#x27;a&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;b&#x27;</span>], <span class="string">&#x27;0&#x27;</span>)</span><br><span class="line"><span class="string">&#x27;0a1b&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="列表推导"><a href="#列表推导" class="headerlink" title="列表推导"></a>列表推导</h3><p>如果想像 JavaScript 代码演示的那样，依次对一个序列数据流进行映射、过滤和规约操作，Python 的写法会显得不那么优雅。由于序列必须作为参数传入，无法放在左侧使用 dot 运算符进行链式书写，我们不得不编写多层嵌套的表达式：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> operator</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">filter</span>(<span class="keyword">lambda</span> x: x &lt; <span class="number">50</span>, <span class="built_in">map</span>(<span class="keyword">lambda</span> x: x * x, <span class="built_in">range</span>(<span class="number">10</span>))))</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>reduce(operator.add, (<span class="built_in">filter</span>(<span class="keyword">lambda</span> x: x &lt; <span class="number">50</span>, <span class="built_in">map</span>(<span class="keyword">lambda</span> x: x**<span class="number">2</span>, <span class="built_in">range</span>(<span class="number">10</span>)))))</span><br><span class="line"><span class="number">140</span></span><br></pre></td></tr></table></figure>
-
-<p>且不说冗余的 lambda 关键字，即使预先定义了函数使用函数名代替，整个表达式从右至左的执行循序也会不利于理解。所幸的是，Python 提供了一种精炼的表达式，来代替多层嵌套下纠缠不清的 map 和 filter 方法，那就是<strong>列表推导</strong>（list comprehension）。</p>
-<p>列表推导是一个语法糖，可以根据可迭代对象构建出一个新的列表。列表推导使用一对中括号 “[]”，内部至少包含一个 for 循环表达式，对应 map 方法；以及可选的 if 条件表达式，对应 filter 方法。列表推导返回的是列表类型。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x * x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>)]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x * x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>) <span class="keyword">if</span> x &lt; <span class="number">5</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[_ * _ <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>) <span class="keyword">if</span> _ &lt; <span class="number">5</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x * y <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">3</span>) <span class="keyword">for</span> y <span class="keyword">in</span> (<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>)]</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;aa&#x27;</span>, <span class="string">&#x27;bb&#x27;</span>, <span class="string">&#x27;cc&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x <span class="keyword">for</span> y <span class="keyword">in</span> [(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">5</span>,)] <span class="keyword">for</span> x <span class="keyword">in</span> y]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br></pre></td></tr></table></figure>
-
-<p>表达式内的变量是一个局部变量，作用域仅限于该列表推导表达式。但 Python2 中的列表推导存在变量泄漏问题，表达式内的变量会影响到上下文中的同名变量，在 Python 3 中这个缺陷已被修复。</p>
-<p>列表推导也支持<strong>多重循环</strong>，即多个 for 循环表达式，这些 for 表达式会按照从左至右的顺序来嵌套。与多层嵌套的 for 循环函数一致，先定义（左侧）的 for 循环在外层，后定义（右侧）的 for 循环在内层。外层定义的变量可用作内层的 for 循环，如上述代码中的最后一个列表推导式。如果用函数形式书写，那么代码如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x <span class="keyword">for</span> y <span class="keyword">in</span> [(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">5</span>,)] <span class="keyword">for</span> x <span class="keyword">in</span> y]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">flat</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">for</span> y <span class="keyword">in</span> [(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">5</span>,)]:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">for</span> x <span class="keyword">in</span> y:</span><br><span class="line"><span class="meta">... </span>            <span class="keyword">yield</span> x</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(flat())</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br></pre></td></tr></table></figure>
-
-<p>字典和集合也有类似的推导机制，可以通过这些推导机制创建衍生的数据结构。字典推导可以从任何以键值对为元素的可迭代对象中构建出字典。集合推导可以从可迭代对象中去除重复元素，构建集合。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;c&#x27;</span>: <span class="number">3</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>&#123;i: j <span class="keyword">for</span> j, i <span class="keyword">in</span> d.items()&#125;  <span class="comment"># 字典推导</span></span><br><span class="line">&#123;<span class="number">1</span>: <span class="string">&#x27;a&#x27;</span>, <span class="number">2</span>: <span class="string">&#x27;b&#x27;</span>, <span class="number">3</span>: <span class="string">&#x27;c&#x27;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>&#123;i <span class="keyword">for</span> i <span class="keyword">in</span> d.keys()&#125;  <span class="comment"># 集合推导</span></span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;b&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="列表推导的最佳实践"><a href="#列表推导的最佳实践" class="headerlink" title="列表推导的最佳实践"></a>列表推导的最佳实践</h4><p>使用列表推导的原则是：<strong>只用于创建新的列表，并且尽量保持简短，不建议使用含有两个以上表达式的列表推导</strong>。依照函数式编程中的纯函数定义，函数不应该对传入的参数进行修改，否则会产生副作用。所以列表推导不该对传入序列做修改，而应该只用于创建新的列表。尽量保持简短则是出于可读性的考量。如果包含两个较长的表达式，可以考虑拆分为两行。Python 会忽略 []、{} 和 () 中换行，所以可以省略不太好看的续行符 \。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[(i, j) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>)</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>)]</span><br><span class="line">[(<span class="number">0</span>, <span class="number">0</span>), (<span class="number">0</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>)]</span><br></pre></td></tr></table></figure>
-
-<p>如果列表推导式过长，就要考虑是否需要使用函数形式改写，有时命名清晰且带有缩进的函数可读性要更高。</p>
-<p>列表推导也不是银弹，相较于生成器表达式的惰性求值，它会<strong>及早求值</strong>（eager evaluation）。在声明了一个列表推导式时，序列中的所有数据都会被即时处理，并将处理后的完整列表存放在内存中。并且在推导过程中，对于输入序列的每个值都可能创建一个仅含一项元素的全新列表。所以当序列的数据量很大时，如读文件或读数据库，将会消耗大量内存并导致程序崩溃。所以，列表推导另一个最佳实践是：<strong>使用生成器表达式代替数据量较大的列表推导</strong>。生成式表达式将在后续章节进行介绍。</p>
-<h2 id="可迭代对象、迭代器和生成器源码分析"><a href="#可迭代对象、迭代器和生成器源码分析" class="headerlink" title="可迭代对象、迭代器和生成器源码分析"></a>可迭代对象、迭代器和生成器源码分析</h2><p>迭代，或称循环，是数据处理的基石。Python 中的可迭代类型的抽象基类定义在 <code>collections.abc</code> 模块中，从抽象层次来说，可以分为以下三类：</p>
-<ul>
-<li><strong>可迭代对象</strong>，<code>class Iterable(metaclass=ABCMeta)</code>，抽象类；</li>
-<li><strong>迭代器</strong>，<code>class Iterator(Iterable)</code>，继承自 Iterable 的抽象类；</li>
-<li><strong>生成器</strong>，<code>class Generator(Iterator)</code>，继承自 Iterator 的抽象类。</li>
-</ul>
-<p>在这三个抽象基类的实现中，都有一个名为 <code>__subclasshook__</code> 的钩子方法，用于将实现了特定方法的类绑定为这些抽象基类的虚拟子类。如下是可迭代对象 Iterable 的部分代码，钩子方法检查了类中有无实现 <code>__iter__</code> 方法，对于实现了的类，会被绑定为 Iterable 的虚拟子类。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Iterable</span>(<span class="params">metaclass=ABCMeta</span>):</span></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__subclasshook__</span>(<span class="params">cls, C</span>):</span></span><br><span class="line">        <span class="keyword">if</span> cls <span class="keyword">is</span> Iterable:</span><br><span class="line">            <span class="keyword">return</span> _check_methods(C, <span class="string">&quot;__iter__&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NotImplemented</span></span><br></pre></td></tr></table></figure>
-
-<p>联系到鸭子类型一节中所说的“协议”的概念，可以得出结论：可迭代对象的协议需要实现 <code>__iter__</code> 方法；类似的，迭代器协议需要同时实现 <code>__iter__</code> 和 <code>__next__</code> 方法；生成器协议要更复杂一些，除了这两个方法外还需要实现  <code>send()</code>、<code>throw()</code> 和 <code>close()</code> 方法，这三个方法体现了生成器除了迭代之外的功能：可以用作<strong>协程</strong>。</p>
-<p>除了钩子方法之外，<code>collections.abc</code> 模块中还使用 register 关键字手动绑定了 Iterator 和 Generator 的虚拟子类。这里截取了部分源码：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dict_keyiterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(&#123;&#125;.keys()))</span><br><span class="line">dict_valueiterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(&#123;&#125;.values()))</span><br><span class="line">dict_itemiterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(&#123;&#125;.items()))</span><br><span class="line">list_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>([]))</span><br><span class="line">range_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(<span class="built_in">range</span>(<span class="number">0</span>)))</span><br><span class="line">set_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(<span class="built_in">set</span>()))</span><br><span class="line">str_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(<span class="string">&quot;&quot;</span>))</span><br><span class="line">tuple_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(()))</span><br><span class="line"></span><br><span class="line">Iterator.register(dict_keyiterator)</span><br><span class="line">Iterator.register(dict_valueiterator)</span><br><span class="line">Iterator.register(dict_itemiterator)</span><br><span class="line">Iterator.register(list_iterator)</span><br><span class="line">Iterator.register(range_iterator)</span><br><span class="line">Iterator.register(set_iterator)</span><br><span class="line">Iterator.register(str_iterator)</span><br><span class="line">Iterator.register(tuple_iterator)</span><br><span class="line"></span><br><span class="line">generator = <span class="built_in">type</span>((<span class="keyword">lambda</span>: (<span class="keyword">yield</span>))())</span><br><span class="line">Generator.register(generator)</span><br></pre></td></tr></table></figure>
-
-<p>上述代码出现的所有内置类型，包括 list、range、set、str 和 tuple，都实现了 <code>__iter__</code> 方法，所以都是可迭代对象。特殊一点的是字典的键、值和键值对，也都分别被定义为可迭代的视图类型 KeysView、ValuesView 和 ItemsView。这些类型都是 Python 的集合类型，集合由于继承了 Iterable 类，所以 <strong>Python 中的所有集合都是可迭代对象</strong>。此处说的集合不是内置类型 set 而是 Collection，定义在 <code>collections.abc</code> 模块中。也有人将 Collection 称之为“容器”的，这里将其称之为集合而不是容器是为了与 <code>collections.abc</code> 模块中的另一个类 Container 做区分。集合类的钩子方法会去检测是否实现了 <code>__len__</code>、<code>__iter__</code> 和 <code>__contains__</code> 这三个方法。</p>
-<p>尽管上述所说的这些内置类型都是可迭代对象，但要注意它们并不是迭代器，被注册的是经过 <code>iter()</code> 方法包装后的类型。也就是说，访问这些内置类型的 <code>__iter__</code> 方法将会返回一个迭代器，即 <code>iter(iterable) -&gt; iterator</code>。迭代器除了能被 for 循环遍历外，还能使用 <code>next()</code> 方法产出下一个值。编码时如果要使用 <code>next()</code> 方法，首先要注意对象是不是一个迭代器。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">isinstance</span>(l, Iterator)</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">iter</span>(l)</span><br><span class="line">&lt;list_iterator <span class="built_in">object</span> at <span class="number">0x106e2f640</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(<span class="built_in">iter</span>(l))</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<p>除了可迭代对象和迭代器之外，<code>collections.abc</code> 模块中还定义了生成器类 Generator，并将形如 <code>type((lambda: (yield))())</code> 的类型注册为了生成器的虚拟子类。其中，yield 是一个关键字，意为产出一个值。<strong>只要 Python 函数的定义中含有 yield 关键字，该函数就是生成器函数，调用生成器函数时会返回一个生成器对象</strong>。<code>lambda: (yield)</code> 语句其实是定义了一个返回生成器函数的匿名函数，再调用这个生成器函数得到生成器对象，如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">gen</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> (<span class="keyword">yield</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>gen()</span><br><span class="line">&lt;generator <span class="built_in">object</span> gen at <span class="number">0x104b36660</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(gen())</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">generator</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">type</span>(<span class="params">(<span class="params"><span class="keyword">lambda</span>: (<span class="params"><span class="keyword">yield</span></span>)</span>)(<span class="params"></span>)</span>)</span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">generator</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>生成器尤为重要，有必要将其作为单独的一节进行介绍。下一节我们将介绍生成器函数的执行过程，以及如何使用生成器表达式返回一个生成器对象。</p>
-<h2 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h2><p>所有生成器都是迭代器，因为生成器完全实现了迭代器接口。不过，根据《设计模式：可复用面向对象软件的基础》一书的定义，迭代器用于从集合中取出元素，而生成器用于“凭空”生成元素。通过斐波那契数列能很好地说明二者之间的区别：斐波纳契数列中的数有无穷多个，无法将它们都装在一个集合里，但是生成器可以在每次需要时生成一项元素。因此，尽管 Python 社区中经常将迭代器和生成器视为同一概念，你也要明白生成器所具有的特殊语义。</p>
-<h3 id="生成器函数"><a href="#生成器函数" class="headerlink" title="生成器函数"></a>生成器函数</h3><p>前面我们说到，生成器函数是包含了 yield 关键字的函数，调用生成器函数时会返回一个生成器对象。也就是说，生成器函数是生成器的工厂函数。因此，生成器函数和普通的函数有着显著的行为差异：即使没有 return 语句，生成器函数依然会返回一个生成器对象。就算有，定义在 yield 语句后的 return 返回值也会被忽略。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">gen</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">yield</span> <span class="number">1</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> <span class="string">&#x27;a&#x27;</span></span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>gen()</span><br><span class="line">&lt;generator <span class="built_in">object</span> gen at <span class="number">0x10ddd9820</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(gen())</span><br><span class="line">[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
-
-<p>“yield” 这个单词，除了产出还有<strong>让步</strong>的含义，对于生成器函数中的 yield 来说，这两个含义都成立。让步体现在，生成器函数在执行到 yield 语句产出值后，会作出让步，暂停执行生成器，让调用方继续工作，直到需要下一个值时再调用 <code>next()</code>。下面使用 for 循环来更清楚地说明生成器函数定义体的执行过程。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">gen_AB</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;start&#x27;</span>)</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">yield</span> <span class="string">&#x27;A&#x27;</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;continue&#x27;</span>)</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">yield</span> <span class="string">&#x27;B&#x27;</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;end&#x27;</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> c <span class="keyword">in</span> gen_AB():</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;--&gt;&#x27;</span>, c)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line">start</span><br><span class="line">--&gt; A</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line">--&gt; B</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-
-<p>迭代时，for 机制的作用与 <code>g = iter(gen_AB())</code> 一样，生成器的 <code>__iter__</code> 方法会返回生成器对象本身，然后每次迭代时调用 <code>next(g)</code>。</p>
-<ul>
-<li>在 for 循环中第一次隐式调用 next 函数时，会打印 ‘start’，然后停留在第一个 yield 语句，产出值 ‘A’；</li>
-<li>第二次隐式调用 next 函数时，会打印 ‘continue’，然后停留在第一个 yield 语句，产出值 ‘B’；</li>
-<li>第三次隐式调用 next 函数时，打印 ‘end’，到达函数定义体的末尾，导致生成器对象抛出 StopIteration 异常。for 机制会捕获异常，因此循环终止时不会报错。</li>
-</ul>
-<p>如果显式调用 <code>next()</code> 方法，那么生成器函数定义体被执行的过程如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>g = <span class="built_in">iter</span>(gen_AB())</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(g)</span><br><span class="line">start</span><br><span class="line"><span class="string">&#x27;A&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(g)</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line"><span class="string">&#x27;B&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(g)</span><br><span class="line">end</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure>
-
-<p>在这个例子中你可以看到，定义在生成器函数体内的 print 语句并没有在生成器函数被调用时就立即打印，而被延迟到调用 <code>next(g)</code> 时才打印。同样，如果在生成器函数中加入复杂的处理逻辑，该逻辑只在被 <code>next()</code> 调用时才进行处理，从而达到延迟处理的目的。我们将生成器的这一特性归纳为<strong>惰性求值</strong>（lazy evaluation），即尽可能地延后求值，只在需要时才进行求值。这样做的优点是可以节省内存，还可能避免无用的处理。</p>
-<p>与惰性求值相对的是<strong>及早求值</strong>（eager evaluation），比如之前介绍的列表推导，列表这种数据结构一定要求内部的元素是已明确其值的，并且会将完整的列表保存在内存中。因此，《Effective Python》中提出这么一条：<strong>考虑用生成器来改写直接返回列表的函数</strong>。实际上，Python 3 已经对一些原本原本返回列表的函数使用生成器进行了改写。比如 Python 2 中返回完整列表的 <code>range()</code> 函数，现在也返回一个类似生成器的对象。如果一定要让 <code>range()</code> 函数返回列表，必须明确指明，如 <code>list(range(100))</code>。</p>
-<p>定义生成器函数时，唯一需要留意的就是：<strong>函数返回的那个迭代器是有状态的</strong>，调用者不应该反复使用它。</p>
-<h3 id="生成器表达式"><a href="#生成器表达式" class="headerlink" title="生成器表达式"></a>生成器表达式</h3><p>除了定义包含 yield 关键字的生成器函数可以返回生成器外，生成器表达式也可以返回生成器对象。相比于列表推导的及早求值，生成器表达式能够进行惰性求值：不会迫切地构建列表，而是返回一个生成器，按需产出元素。也就是说，如果说列表推导时构建列表的工厂，那么生成器表达式就是构建生成器的工厂。</p>
-<p>生成器表达式与列表推导的唯一区别是使用了一对圆括号 “()” 代替列表推导中的中括号 “[]”。我们使用之前定义的生成器函数 <code>gen_AB()</code> 来演示生成器表达式与列表推导之间的区别。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>res1 = [x <span class="keyword">for</span> x <span class="keyword">in</span> gen_AB()]  <span class="comment"># list comprehension</span></span><br><span class="line">start</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line">end</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>res1</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> x <span class="keyword">in</span> res1:</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;--&gt;&#x27;</span>, x)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line">--&gt; A</span><br><span class="line">--&gt; B</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>res2 = (x <span class="keyword">for</span> x <span class="keyword">in</span> gen_AB())  <span class="comment"># generator expression</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>res2</span><br><span class="line">&lt;generator <span class="built_in">object</span> &lt;genexpr&gt; at <span class="number">0x10dea8f20</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> x <span class="keyword">in</span> res2:</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;--&gt;&#x27;</span>, x)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line">start</span><br><span class="line">--&gt; A</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line">--&gt; B</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-
-<p>归因于列表的及早求值，在声明列表推导表达式时，<code>gen_AB()</code> 函数中的 print 语句被立即执行了，函数产出的两个值 ‘A’、’B’ 也被存放在构建出的列表中。而生成器表达式则将这个过程推迟到值真正需要之时，即 for 循环隐式调用 <code>next()</code> 之时。</p>
-<p>前面提到，生成器对象是有状态的，这里体现在，一个生成器对象产出的值只能被消费一次，除非定义一个新的个生成器对象重新绑定。你可以想象成，生成器对象中存在不能回头的“指针”，每次调用 <code>next()</code> 方法时指向下一个元素，这个过程不可逆。所以对于同一个生成器对象重复调用时可能会产生意想不到的结果。比如下面代码中第二次调用 <code>list(res2)</code> 返回一个空列表，因为第一次调用时“指针”就已经到头了。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>res2 = (x <span class="keyword">for</span> x <span class="keyword">in</span> gen_AB())</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(res2)</span><br><span class="line">start</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line">end</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(res2)</span><br><span class="line">[]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(res2)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure>
-
-<p>所以如果要对生成器对象进行多次迭代，一种方法是使用列表将生成器中的所有元素备份下来，另一种是定义一个新的生成器对象重新绑定。由此可见，尽管生成器对象相比列表能够通过惰性求值节省内存，但如果每次迭代时定义新的生成器对象，求值过程也会被重复多次。而列表推导只会在声明时进行一次求值，并将结果保存在列表中可供多次迭代调用，这其实是一种空间消耗和时间消耗的权衡。</p>
-<h3 id="yield-from"><a href="#yield-from" class="headerlink" title="yield from"></a>yield from</h3><p>刚才所提到的生成器产出值被消费的概念，也侧面体现了生成器可以作为“协程”的语义。“协程”从字面意思理解就是协作的进程，协作的进程之间需要进行通信，就需要消费者和生产者之间建立通道。从 Python 3.3 开始引入了一个新的句法：<code>yield from</code>，类似于其他语言中的 await 关键字。它可以在两个生成器之间建立通道，将产出的值从一个生成器传输到另一个生成器。</p>
-<p>如果生成器函数需要产出其他生成器的值，传统的做法是使用 for 循环遍历生成器的元素并产出。以下定义了一个能够产出多个生成器产出值的生成器函数。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">chain</span>(<span class="params">*iterables</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">for</span> it <span class="keyword">in</span> iterables:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">for</span> i <span class="keyword">in</span> it:</span><br><span class="line"><span class="meta">... </span>            <span class="keyword">yield</span> i</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g1 = (x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="string">&#x27;ABC&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g2 = (x <span class="keyword">for</span> x <span class="keyword">in</span> (<span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(chain(g1, g2))</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
-
-<p>引入的 <code>yield from</code> 句法可以直接将一个生成器的所有产出值产出，而不用遍历生成器对象。因此我们可以编写只有一层的 for 循环：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">chain</span>(<span class="params">*iterables</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">for</span> it <span class="keyword">in</span> iterables:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">yield</span> <span class="keyword">from</span> it</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g1 = (x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="string">&#x27;ABC&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g2 = (x <span class="keyword">for</span> x <span class="keyword">in</span> (<span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>chain(g1, g2)</span><br><span class="line">&lt;generator <span class="built_in">object</span> chain at <span class="number">0x10dea8e40</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(chain(g1, g2))</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
-
-<p>chain 函数依然返回一个生成器对象，其中的 <code>yield from it</code> 语句对 it 对象所做的第一件事是调用 <code>iter(it)</code> 获得一个迭代器，所以 it 对象可以是任何可迭代对象。我们将 <code>yield from &lt;iterable&gt;</code> 表达式中用于获取值的 <code>&lt;iterable&gt;</code> 称为<strong>子生成器</strong>（subgenerator），即上面代码中的 g1、g2；将包含了 <code>yield from</code> 语句的生成器函数，即 chain 函数，称为委派生成器。<code>yield from</code> 的主要功能是打开双向通道，把最外层的调用层与最内层的子生成器连接起来，这样二者可以直接发送和产出值。</p>
-<p>上述的例子只能勉强算一个协程的案例，其中的“协作”部分体现的不够明显，只是简单的将一个生成器的值传输给另一个生成器产出。真正的协作应该是通过生成器对象的 <code>send()</code> 方法将值从客户端传输给生成器。在后面章节我们会专门介绍协程，里面会提及生成器的 <code>send()</code>、<code>throw()</code> 和 <code>close()</code> 方法，以及 <code>yield from</code> 句法的其他作用。</p>
-]]></content>
-      <categories>
-        <category>Languages</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Python 函数详解</title>
     <url>/2021/04/12/Python-%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<h2 id="可调用对象"><a href="#可调用对象" class="headerlink" title="可调用对象"></a>可调用对象</h2><p>除了用户定义的函数，调用运算符，即 “()” 括号对，还能应用到其他对象上。我们将能应用调用运算符的对象称为<strong>可调用对象</strong>，通过内置的 <code>callable()</code> 方法可以判断对象是否是可调用对象。在 Python 3 的<a href="https://docs.python.org/3/reference/datamodel.html">数据模型文档</a>中，一共列出了 7 种可调用对象：</p>
@@ -2991,6 +2845,152 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x : x * x, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))</span><br><span class="line">[<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">filter</span>(<span class="keyword">lambda</span> x : x &lt; <span class="number">2</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))</span><br><span class="line">[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
 
 <p>除了上述这种应用场景之外，Python 很少使用匿名函数。受到句法的限制，lambda 表达式无法实现复杂的函数功能。同时，在使用 lambda 表达式时要尽可能保证表达式的清晰简短，否则冗长的 lambda 表达式将会导致代码难以阅读。此时，应该使用 def 关键字创建普通函数，即《Effective Python》所提倡的：<strong>使用辅助函数来取代复杂的表达式</strong>，并赋予函数清晰的名称以提高代码可读性。</p>
+]]></content>
+      <categories>
+        <category>Languages</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python 中的可迭代类型</title>
+    <url>/2021/04/01/Python-%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%B1%BB%E5%9E%8B/</url>
+    <content><![CDATA[<h2 id="序列"><a href="#序列" class="headerlink" title="序列"></a>序列</h2><p>之前我们已经讨论过，Python 的“序列协议”是指：任何类，只要使用标准的签名和语义实现了 <code>__getitem__</code> 和 <code>__len__</code> 方法，就能用在任何期待序列的地方，解释器会为这些类做特殊的支持，比如支持迭代和 in 运算符。序列协议的接口定义可以查阅官方的 CPython API 接口文档：<a href="https://docs.python.org/3.8/c-api/sequence.html">Python/C API Reference Manual – Sequence Protocol</a>，其中有这样一个函数：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">PySequence_Check</span><span class="params">(PyObject *o)</span></span></span><br><span class="line"><span class="function"><span class="comment">/* Return 1 if the object provides sequence protocol, and 0 otherwise. Note that it returns 1 for Python classes with a __getitem__() method unless they are dict subclasses since in general case it is impossible to determine what the type of keys it supports. This function always succeeds. */</span></span></span><br></pre></td></tr></table></figure>
+
+<p>这个函数的作用是检查并返回对象是否支持序列协议 —— 只在实现了 <code>__getitem__</code> 方法且不是字典子类时才返回 1。这也符合我们之前所说的，协议是非正式的，没有强制力，只要你知道类的具体使用场景，可以只实现协议的一部分。比如，仅为了支持迭代，甚至不需要提供 <code>__len__</code> 方法。</p>
+<p>Python 常用的内置序列类型包括：字符串 str、列表 list、元组 tuple 和范围 range。尽管字典 dict 和集合 set 实现了序列协议中的 <code>__getitem__</code> 和 <code>__len__</code> 方法，但它们并不算序列类型，因为它们的特征与序列有本质差异，比如这两个类型不支持通过整数下标索引访问元素，不支持切片，并且字典和集合内的元素是无序的。</p>
+<p>序列类 Sequence，定义在标准库 <code>collections.abc</code> 模块中，继承自 Reversible 和 Collection 类，而 Collection 又继承自 Sized、Iterable 和 Container，体现了序列类可反转、具有规模、可迭代和是一个容器的语义。</p>
+<p>从 <code>collections.abc</code> 模块的源码中，我们还能了解到序列类包含哪些子类。除了显示继承了 Sequence 的子类，如 ByteString 和 MutableSequence，还有通过 register 关键字绑定为 Sequence 虚拟子类的一些内置类型，在绑定虚拟子类一节中也提到过这一点。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections.abc <span class="keyword">import</span> <span class="type">Sequence</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">all</span>([<span class="built_in">issubclass</span>(i, <span class="type">Sequence</span>) <span class="keyword">for</span> i <span class="keyword">in</span> (<span class="built_in">str</span>, <span class="built_in">list</span>, <span class="built_in">tuple</span>, <span class="built_in">range</span>, <span class="built_in">bytes</span>, <span class="built_in">bytearray</span>, <span class="built_in">memoryview</span>)])</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">any</span>([<span class="built_in">issubclass</span>(i, <span class="type">Sequence</span>) <span class="keyword">for</span> i <span class="keyword">in</span> (<span class="built_in">dict</span>, <span class="built_in">set</span>)])</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<p>上面列表推导表达式中的所有类型都是定义在 builtsin 模块中的内置类型，可以看到，除了 dict 和 set 之外，第二行的所有内置类型都是序列类型。除此之外，标准库中还定义了其他序列类型，比如 array 模块的 array 数组类型，collections 模块中的 deque 双端队列类型。</p>
+<p>对于这些序列类型，按照序列内可容纳的类型，可以划分为以下两组：</p>
+<ul>
+<li><strong>容器序列</strong>：list、tuple 和 collections.deque 这些序列类能存放不同类型的数据；</li>
+<li><strong>扁平序列</strong>：str、bytes、bytearray、memoryview、array.array 和 range 这类序列类只能容纳一种或某种特定类型的数据。</li>
+</ul>
+<p>容器序列存放的是它们所包含的任意类型的对象的引用，而扁平序列存放的是值而不是引用。扁平序列存储在一段连续的内存空间之上，只能存放诸如字符、字节和数值这种基础类型。</p>
+<p>序列类型还能按照能否被修改来分类：</p>
+<ul>
+<li><strong>可变序列</strong>：list、bytearray、memoryview、array.array 和 collections.deque；</li>
+<li><strong>不可变序列</strong>：tuple、str、bytes 和 range。</li>
+</ul>
+<p>可变序列 MutableSequence 也定义在 <code>collections.abc</code> 模块中，并在继承 Sequence 的基础上还添加了一些支持序列修改的默认方法，如 <code>append()</code>、<code>pop()</code> 方法等。除了 Sequence 基类中要实现的 <code>__getitem__</code> 和 <code>__len__</code> 方法外，可变序列还要求具体子类必须实现 <code>__setitem__</code>、<code>__delitem__</code> 和 <code>insert()</code> 方法。</p>
+<p>序列不可变意味着序列一旦被声明赋值，序列的大小就固定下来，其内的元素也不能被修改。这里用来说明序列可变不可变的典型案例是列表和元组。在 Python 中，列表是可变的，元组是不可变的。列表可变体现在它支持对元素的增加删除和直接赋值，且列表支持<strong>就地运算</strong>，比如使用 “+=” 运算符可以直接将一个可迭代对象中的元素添加到当前列表的末尾。而元组是不可变的，元组一经定义大小就已固定，不能增加删除元素，也不对其内元素重新赋值。即使元组也支持就地运算符，但会生成一个新的元组对象重新绑定。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l = [<span class="number">1</span>, <span class="number">2</span>]  <span class="comment"># list</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(l)</span><br><span class="line"><span class="number">4411278528</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l[<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l += [<span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(l)</span><br><span class="line"><span class="number">4411278528</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = (<span class="number">1</span>, <span class="number">2</span>)  <span class="comment"># tuple</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(t)</span><br><span class="line"><span class="number">4410964416</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t += (<span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(t)</span><br><span class="line"><span class="number">4411277824</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t[<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: <span class="string">&#x27;tuple&#x27;</span> <span class="built_in">object</span> does <span class="keyword">not</span> support item assignment</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+
+<p>此外，Python 中的可散列对象一定是不可变类型，散列方法 <code>__hash__</code> 通常和 <code>__eq__</code> 方法一起用来判断两个对象是否相等，如集合 set 和字典的键要求元素是可散列的，这被用来判断元素是否重复。所以，元组可以作为集合的元素和字典的键，而列表却不可以。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>t1 = (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t2 = (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">id</span>(t1) == <span class="built_in">id</span>(t2)</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">hash</span>(t1) == <span class="built_in">hash</span>(t2)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">set</span>([(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>,)])</span><br><span class="line">&#123;(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>,)&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dict</span>(&#123;(<span class="number">1</span>, <span class="number">2</span>): <span class="number">1</span>&#125;)</span><br><span class="line">&#123;(<span class="number">1</span>, <span class="number">2</span>): <span class="number">1</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注：在散列时，元组内的每一项元素会被散列然后进行 XOR 异或运算，因此只有当元组中的每个元素都是不可变类型时，该元组才能被散列。</p>
+<h2 id="map、filter-与列表推导"><a href="#map、filter-与列表推导" class="headerlink" title="map、filter 与列表推导"></a>map、filter 与列表推导</h2><p>列表是 Python 中非常重要且常用的内置类型，列表被注册为可变序列的虚拟子类，<code>MutableSequence.register(list)</code>，所以列表的性质与可变序列性质相符，可以阅读 <code>collections.abc</code> 模块中 MutableSequence 类的源码进行了解。列表的性质不做过多介绍，这一节我想介绍一下列表推导。在上一节中就曾经使用 <code>all()</code>、<code>any()</code> 方法结合列表推导，巧妙地展示了哪些内置类型是序列类的子类。</p>
+<p>在介绍列表推导之前，有必要先介绍以下几个函数：<code>map()</code>、<code>filter()</code> 和 <code>reduce()</code> 函数。这几个函数是函数式编程的范例函数。它们都是用于处理可迭代序列的基本函数，所以被视为可迭代数据集函数式编程的基石，包含了数据集的映射、过滤和规约三个思想。所有支持函数式编程的语言都提供了这些函数的接口。Java 8 新增的 Stream API 配合箭头函数可以写出很优雅的链式函数，同样，JavaScript 中也支持链式写法：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&gt; l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">[ <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span> ]</span><br><span class="line">&gt; l.map(<span class="function"><span class="params">x</span> =&gt;</span> x * x)</span><br><span class="line">[ <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span> ]</span><br><span class="line">&gt; l.map(<span class="function"><span class="params">x</span> =&gt;</span> x * x).filter(<span class="function"><span class="params">x</span> =&gt;</span> x &gt; <span class="number">10</span>)</span><br><span class="line">[ <span class="number">16</span>, <span class="number">25</span> ]</span><br><span class="line">&gt; l.map(<span class="function"><span class="params">x</span> =&gt;</span> x * x).filter(<span class="function"><span class="params">x</span> =&gt;</span> x &gt; <span class="number">10</span>).reduce(<span class="function">(<span class="params">x, y</span>) =&gt;</span> x + y)</span><br><span class="line"><span class="number">41</span></span><br></pre></td></tr></table></figure>
+
+<p>相比之下，Python 中的写法就不那么优雅了，map、filter 和 reduce 函数作为内置库或者标准库中的函数提供，序列本身并没有实现这些方法，所以不能通过 dot 运算符直接调用，而需要将序列作为这些函数的参数传入。</p>
+<h3 id="map"><a href="#map" class="headerlink" title="map()"></a><code>map()</code></h3><blockquote>
+<p><code>map(func, *iterables) --&gt; map object</code></p>
+<p>Make an iterator that computes the function using arguments from each of the iterables.  Stops when the shortest iterable is exhausted.</p>
+</blockquote>
+<p>map 函数，又称映射函数，定义在内置模块 builtins 模块中。map 函数将可迭代对象的每个元素依次应用于 func 函数进行映射，返回的 map object 是一个可以依次产出映射后元素的生成器对象，可以使用 <code>list()</code> 包装一次性输出。传入的函数 func 可以是预先定义好的函数，也可以是 lambda 表达式定义的匿名函数。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">square</span>(<span class="params">x</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> x * x</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">map</span>(square, <span class="built_in">range</span>(<span class="number">10</span>))</span><br><span class="line">&lt;<span class="built_in">map</span> <span class="built_in">object</span> at <span class="number">0x106ebb910</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(square, <span class="built_in">range</span>(<span class="number">10</span>)))</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x: x * x, <span class="built_in">range</span>(<span class="number">10</span>)))</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br></pre></td></tr></table></figure>
+
+<p>从函数签名来看，map 函数能够接受多个可迭代对象，映射时将依次从每个可迭代对象中各取出一个元素应用于 func 函数，因此 func 也须接受同样数量的参数。如果这些可迭代对象的元素个数不一致，以个数最少的为标杆，即个数最少的可迭代对象遍历完毕时终止迭代。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x, y: x * y, <span class="built_in">range</span>(<span class="number">5</span>), <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">6</span>)))</span><br><span class="line">[<span class="number">0</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">12</span>, <span class="number">20</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x, y: x * y, <span class="built_in">range</span>(<span class="number">10</span>), <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">6</span>)))</span><br><span class="line">[<span class="number">0</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">12</span>, <span class="number">20</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="filter"><a href="#filter" class="headerlink" title="filter()"></a><code>filter()</code></h3><blockquote>
+<p><code>filter(function or None, iterable) --&gt; filter object</code></p>
+<p>Return an iterator yielding those items of iterable for which function(item) is true. If function is None, return the items that are true.</p>
+</blockquote>
+<p>filter 函数，又称过滤函数，定义在内置模块 builtins 模块中。过滤函数将可迭代对象中的每个元素应用于谓词函数 function 后为 True 的保留下来。返回的 filter object 也是一个生成器对象，可以依次产出过滤后为真的元素。如果 function 为 None，直接判断元素是否为真值。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">filter</span>(<span class="keyword">lambda</span> x: x &gt; <span class="number">5</span>, <span class="built_in">range</span>(<span class="number">10</span>)))</span><br><span class="line">[<span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">filter</span>(<span class="literal">None</span>, [<span class="number">0</span>, <span class="number">1</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="number">0.0</span>, -<span class="number">1</span>, [], (<span class="number">1</span>, <span class="number">2</span>)]))</span><br><span class="line">[<span class="number">1</span>, <span class="literal">True</span>, -<span class="number">1</span>, (<span class="number">1</span>, <span class="number">2</span>)]</span><br></pre></td></tr></table></figure>
+
+<h3 id="reduce"><a href="#reduce" class="headerlink" title="reduce()"></a><code>reduce()</code></h3><blockquote>
+<p><code>reduce(function, sequence[, initial]) -&gt; value</code></p>
+<p>Apply a function of two arguments cumulatively to the items of a sequence, from left to right, so as to reduce the sequence to a single value. For example, reduce(lambda x, y: x + y, [1, 2, 3, 4, 5]) calculates ((((1 + 2) + 3) + 4) + 5).  If initial is present, it is placed before the items of the sequence in the calculation, and serves as a default when the sequence is empty.</p>
+</blockquote>
+<p>reduce 函数，又称规约函数，定义在 functools 模块中。规约函数的参数除了函数和序列之外，还接收一个可选的初始值。规约函数会将一个序列从左至右逐步规约为一个值。参数 function 接收两个参数，第一个参数代表每步规约后的累积值（首次规约为初始值），第二个参数代表每次迭代的序列中的元素，返回值为规约的结果，作为下一步规约的第一个参数传入。也就是说，function 函数的第一个参数、每步规约的返回值和 reduce 函数的返回值应为同一类型，function 的第二个参数为迭代序列的元素类型，两者可以是相同类型也可以是不同类型。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>reduce(<span class="keyword">lambda</span> x, y: x + y, <span class="built_in">range</span>(<span class="number">10</span>))</span><br><span class="line"><span class="number">45</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">concat_string</span>(<span class="params">s, ch</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> s + <span class="built_in">str</span>(ch)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>reduce(concat_string, [<span class="string">&#x27;a&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;b&#x27;</span>], <span class="string">&#x27;0&#x27;</span>)</span><br><span class="line"><span class="string">&#x27;0a1b&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="列表推导"><a href="#列表推导" class="headerlink" title="列表推导"></a>列表推导</h3><p>如果想像 JavaScript 代码演示的那样，依次对一个序列数据流进行映射、过滤和规约操作，Python 的写法会显得不那么优雅。由于序列必须作为参数传入，无法放在左侧使用 dot 运算符进行链式书写，我们不得不编写多层嵌套的表达式：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> operator</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">filter</span>(<span class="keyword">lambda</span> x: x &lt; <span class="number">50</span>, <span class="built_in">map</span>(<span class="keyword">lambda</span> x: x * x, <span class="built_in">range</span>(<span class="number">10</span>))))</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>reduce(operator.add, (<span class="built_in">filter</span>(<span class="keyword">lambda</span> x: x &lt; <span class="number">50</span>, <span class="built_in">map</span>(<span class="keyword">lambda</span> x: x**<span class="number">2</span>, <span class="built_in">range</span>(<span class="number">10</span>)))))</span><br><span class="line"><span class="number">140</span></span><br></pre></td></tr></table></figure>
+
+<p>且不说冗余的 lambda 关键字，即使预先定义了函数使用函数名代替，整个表达式从右至左的执行循序也会不利于理解。所幸的是，Python 提供了一种精炼的表达式，来代替多层嵌套下纠缠不清的 map 和 filter 方法，那就是<strong>列表推导</strong>（list comprehension）。</p>
+<p>列表推导是一个语法糖，可以根据可迭代对象构建出一个新的列表。列表推导使用一对中括号 “[]”，内部至少包含一个 for 循环表达式，对应 map 方法；以及可选的 if 条件表达式，对应 filter 方法。列表推导返回的是列表类型。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x * x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>)]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x * x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>) <span class="keyword">if</span> x &lt; <span class="number">5</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[_ * _ <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>) <span class="keyword">if</span> _ &lt; <span class="number">5</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x * y <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">3</span>) <span class="keyword">for</span> y <span class="keyword">in</span> (<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>)]</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;aa&#x27;</span>, <span class="string">&#x27;bb&#x27;</span>, <span class="string">&#x27;cc&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x <span class="keyword">for</span> y <span class="keyword">in</span> [(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">5</span>,)] <span class="keyword">for</span> x <span class="keyword">in</span> y]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br></pre></td></tr></table></figure>
+
+<p>表达式内的变量是一个局部变量，作用域仅限于该列表推导表达式。但 Python2 中的列表推导存在变量泄漏问题，表达式内的变量会影响到上下文中的同名变量，在 Python 3 中这个缺陷已被修复。</p>
+<p>列表推导也支持<strong>多重循环</strong>，即多个 for 循环表达式，这些 for 表达式会按照从左至右的顺序来嵌套。与多层嵌套的 for 循环函数一致，先定义（左侧）的 for 循环在外层，后定义（右侧）的 for 循环在内层。外层定义的变量可用作内层的 for 循环，如上述代码中的最后一个列表推导式。如果用函数形式书写，那么代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[x <span class="keyword">for</span> y <span class="keyword">in</span> [(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">5</span>,)] <span class="keyword">for</span> x <span class="keyword">in</span> y]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">flat</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">for</span> y <span class="keyword">in</span> [(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">5</span>,)]:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">for</span> x <span class="keyword">in</span> y:</span><br><span class="line"><span class="meta">... </span>            <span class="keyword">yield</span> x</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(flat())</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br></pre></td></tr></table></figure>
+
+<p>字典和集合也有类似的推导机制，可以通过这些推导机制创建衍生的数据结构。字典推导可以从任何以键值对为元素的可迭代对象中构建出字典。集合推导可以从可迭代对象中去除重复元素，构建集合。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;c&#x27;</span>: <span class="number">3</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>&#123;i: j <span class="keyword">for</span> j, i <span class="keyword">in</span> d.items()&#125;  <span class="comment"># 字典推导</span></span><br><span class="line">&#123;<span class="number">1</span>: <span class="string">&#x27;a&#x27;</span>, <span class="number">2</span>: <span class="string">&#x27;b&#x27;</span>, <span class="number">3</span>: <span class="string">&#x27;c&#x27;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>&#123;i <span class="keyword">for</span> i <span class="keyword">in</span> d.keys()&#125;  <span class="comment"># 集合推导</span></span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;b&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="列表推导的最佳实践"><a href="#列表推导的最佳实践" class="headerlink" title="列表推导的最佳实践"></a>列表推导的最佳实践</h4><p>使用列表推导的原则是：<strong>只用于创建新的列表，并且尽量保持简短，不建议使用含有两个以上表达式的列表推导</strong>。依照函数式编程中的纯函数定义，函数不应该对传入的参数进行修改，否则会产生副作用。所以列表推导不该对传入序列做修改，而应该只用于创建新的列表。尽量保持简短则是出于可读性的考量。如果包含两个较长的表达式，可以考虑拆分为两行。Python 会忽略 []、{} 和 () 中换行，所以可以省略不太好看的续行符 \。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[(i, j) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>)</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>)]</span><br><span class="line">[(<span class="number">0</span>, <span class="number">0</span>), (<span class="number">0</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>)]</span><br></pre></td></tr></table></figure>
+
+<p>如果列表推导式过长，就要考虑是否需要使用函数形式改写，有时命名清晰且带有缩进的函数可读性要更高。</p>
+<p>列表推导也不是银弹，相较于生成器表达式的惰性求值，它会<strong>及早求值</strong>（eager evaluation）。在声明了一个列表推导式时，序列中的所有数据都会被即时处理，并将处理后的完整列表存放在内存中。并且在推导过程中，对于输入序列的每个值都可能创建一个仅含一项元素的全新列表。所以当序列的数据量很大时，如读文件或读数据库，将会消耗大量内存并导致程序崩溃。所以，列表推导另一个最佳实践是：<strong>使用生成器表达式代替数据量较大的列表推导</strong>。生成式表达式将在后续章节进行介绍。</p>
+<h2 id="可迭代对象、迭代器和生成器源码分析"><a href="#可迭代对象、迭代器和生成器源码分析" class="headerlink" title="可迭代对象、迭代器和生成器源码分析"></a>可迭代对象、迭代器和生成器源码分析</h2><p>迭代，或称循环，是数据处理的基石。Python 中的可迭代类型的抽象基类定义在 <code>collections.abc</code> 模块中，从抽象层次来说，可以分为以下三类：</p>
+<ul>
+<li><strong>可迭代对象</strong>，<code>class Iterable(metaclass=ABCMeta)</code>，抽象类；</li>
+<li><strong>迭代器</strong>，<code>class Iterator(Iterable)</code>，继承自 Iterable 的抽象类；</li>
+<li><strong>生成器</strong>，<code>class Generator(Iterator)</code>，继承自 Iterator 的抽象类。</li>
+</ul>
+<p>在这三个抽象基类的实现中，都有一个名为 <code>__subclasshook__</code> 的钩子方法，用于将实现了特定方法的类绑定为这些抽象基类的虚拟子类。如下是可迭代对象 Iterable 的部分代码，钩子方法检查了类中有无实现 <code>__iter__</code> 方法，对于实现了的类，会被绑定为 Iterable 的虚拟子类。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Iterable</span>(<span class="params">metaclass=ABCMeta</span>):</span></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__subclasshook__</span>(<span class="params">cls, C</span>):</span></span><br><span class="line">        <span class="keyword">if</span> cls <span class="keyword">is</span> Iterable:</span><br><span class="line">            <span class="keyword">return</span> _check_methods(C, <span class="string">&quot;__iter__&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NotImplemented</span></span><br></pre></td></tr></table></figure>
+
+<p>联系到鸭子类型一节中所说的“协议”的概念，可以得出结论：可迭代对象的协议需要实现 <code>__iter__</code> 方法；类似的，迭代器协议需要同时实现 <code>__iter__</code> 和 <code>__next__</code> 方法；生成器协议要更复杂一些，除了这两个方法外还需要实现  <code>send()</code>、<code>throw()</code> 和 <code>close()</code> 方法，这三个方法体现了生成器除了迭代之外的功能：可以用作<strong>协程</strong>。</p>
+<p>除了钩子方法之外，<code>collections.abc</code> 模块中还使用 register 关键字手动绑定了 Iterator 和 Generator 的虚拟子类。这里截取了部分源码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dict_keyiterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(&#123;&#125;.keys()))</span><br><span class="line">dict_valueiterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(&#123;&#125;.values()))</span><br><span class="line">dict_itemiterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(&#123;&#125;.items()))</span><br><span class="line">list_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>([]))</span><br><span class="line">range_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(<span class="built_in">range</span>(<span class="number">0</span>)))</span><br><span class="line">set_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(<span class="built_in">set</span>()))</span><br><span class="line">str_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(<span class="string">&quot;&quot;</span>))</span><br><span class="line">tuple_iterator = <span class="built_in">type</span>(<span class="built_in">iter</span>(()))</span><br><span class="line"></span><br><span class="line">Iterator.register(dict_keyiterator)</span><br><span class="line">Iterator.register(dict_valueiterator)</span><br><span class="line">Iterator.register(dict_itemiterator)</span><br><span class="line">Iterator.register(list_iterator)</span><br><span class="line">Iterator.register(range_iterator)</span><br><span class="line">Iterator.register(set_iterator)</span><br><span class="line">Iterator.register(str_iterator)</span><br><span class="line">Iterator.register(tuple_iterator)</span><br><span class="line"></span><br><span class="line">generator = <span class="built_in">type</span>((<span class="keyword">lambda</span>: (<span class="keyword">yield</span>))())</span><br><span class="line">Generator.register(generator)</span><br></pre></td></tr></table></figure>
+
+<p>上述代码出现的所有内置类型，包括 list、range、set、str 和 tuple，都实现了 <code>__iter__</code> 方法，所以都是可迭代对象。特殊一点的是字典的键、值和键值对，也都分别被定义为可迭代的视图类型 KeysView、ValuesView 和 ItemsView。这些类型都是 Python 的集合类型，集合由于继承了 Iterable 类，所以 <strong>Python 中的所有集合都是可迭代对象</strong>。此处说的集合不是内置类型 set 而是 Collection，定义在 <code>collections.abc</code> 模块中。也有人将 Collection 称之为“容器”的，这里将其称之为集合而不是容器是为了与 <code>collections.abc</code> 模块中的另一个类 Container 做区分。集合类的钩子方法会去检测是否实现了 <code>__len__</code>、<code>__iter__</code> 和 <code>__contains__</code> 这三个方法。</p>
+<p>尽管上述所说的这些内置类型都是可迭代对象，但要注意它们并不是迭代器，被注册的是经过 <code>iter()</code> 方法包装后的类型。也就是说，访问这些内置类型的 <code>__iter__</code> 方法将会返回一个迭代器，即 <code>iter(iterable) -&gt; iterator</code>。迭代器除了能被 for 循环遍历外，还能使用 <code>next()</code> 方法产出下一个值。编码时如果要使用 <code>next()</code> 方法，首先要注意对象是不是一个迭代器。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">isinstance</span>(l, Iterator)</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">iter</span>(l)</span><br><span class="line">&lt;list_iterator <span class="built_in">object</span> at <span class="number">0x106e2f640</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(<span class="built_in">iter</span>(l))</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>除了可迭代对象和迭代器之外，<code>collections.abc</code> 模块中还定义了生成器类 Generator，并将形如 <code>type((lambda: (yield))())</code> 的类型注册为了生成器的虚拟子类。其中，yield 是一个关键字，意为产出一个值。<strong>只要 Python 函数的定义中含有 yield 关键字，该函数就是生成器函数，调用生成器函数时会返回一个生成器对象</strong>。<code>lambda: (yield)</code> 语句其实是定义了一个返回生成器函数的匿名函数，再调用这个生成器函数得到生成器对象，如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">gen</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> (<span class="keyword">yield</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>gen()</span><br><span class="line">&lt;generator <span class="built_in">object</span> gen at <span class="number">0x104b36660</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(gen())</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">generator</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">type</span>(<span class="params">(<span class="params"><span class="keyword">lambda</span>: (<span class="params"><span class="keyword">yield</span></span>)</span>)(<span class="params"></span>)</span>)</span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">generator</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>生成器尤为重要，有必要将其作为单独的一节进行介绍。下一节我们将介绍生成器函数的执行过程，以及如何使用生成器表达式返回一个生成器对象。</p>
+<h2 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h2><p>所有生成器都是迭代器，因为生成器完全实现了迭代器接口。不过，根据《设计模式：可复用面向对象软件的基础》一书的定义，迭代器用于从集合中取出元素，而生成器用于“凭空”生成元素。通过斐波那契数列能很好地说明二者之间的区别：斐波纳契数列中的数有无穷多个，无法将它们都装在一个集合里，但是生成器可以在每次需要时生成一项元素。因此，尽管 Python 社区中经常将迭代器和生成器视为同一概念，你也要明白生成器所具有的特殊语义。</p>
+<h3 id="生成器函数"><a href="#生成器函数" class="headerlink" title="生成器函数"></a>生成器函数</h3><p>前面我们说到，生成器函数是包含了 yield 关键字的函数，调用生成器函数时会返回一个生成器对象。也就是说，生成器函数是生成器的工厂函数。因此，生成器函数和普通的函数有着显著的行为差异：即使没有 return 语句，生成器函数依然会返回一个生成器对象。就算有，定义在 yield 语句后的 return 返回值也会被忽略。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">gen</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">yield</span> <span class="number">1</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> <span class="string">&#x27;a&#x27;</span></span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>gen()</span><br><span class="line">&lt;generator <span class="built_in">object</span> gen at <span class="number">0x10ddd9820</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(gen())</span><br><span class="line">[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<p>“yield” 这个单词，除了产出还有<strong>让步</strong>的含义，对于生成器函数中的 yield 来说，这两个含义都成立。让步体现在，生成器函数在执行到 yield 语句产出值后，会作出让步，暂停执行生成器，让调用方继续工作，直到需要下一个值时再调用 <code>next()</code>。下面使用 for 循环来更清楚地说明生成器函数定义体的执行过程。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">gen_AB</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;start&#x27;</span>)</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">yield</span> <span class="string">&#x27;A&#x27;</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;continue&#x27;</span>)</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">yield</span> <span class="string">&#x27;B&#x27;</span></span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;end&#x27;</span>)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> c <span class="keyword">in</span> gen_AB():</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;--&gt;&#x27;</span>, c)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line">start</span><br><span class="line">--&gt; A</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line">--&gt; B</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>迭代时，for 机制的作用与 <code>g = iter(gen_AB())</code> 一样，生成器的 <code>__iter__</code> 方法会返回生成器对象本身，然后每次迭代时调用 <code>next(g)</code>。</p>
+<ul>
+<li>在 for 循环中第一次隐式调用 next 函数时，会打印 ‘start’，然后停留在第一个 yield 语句，产出值 ‘A’；</li>
+<li>第二次隐式调用 next 函数时，会打印 ‘continue’，然后停留在第一个 yield 语句，产出值 ‘B’；</li>
+<li>第三次隐式调用 next 函数时，打印 ‘end’，到达函数定义体的末尾，导致生成器对象抛出 StopIteration 异常。for 机制会捕获异常，因此循环终止时不会报错。</li>
+</ul>
+<p>如果显式调用 <code>next()</code> 方法，那么生成器函数定义体被执行的过程如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>g = <span class="built_in">iter</span>(gen_AB())</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(g)</span><br><span class="line">start</span><br><span class="line"><span class="string">&#x27;A&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(g)</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line"><span class="string">&#x27;B&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(g)</span><br><span class="line">end</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中你可以看到，定义在生成器函数体内的 print 语句并没有在生成器函数被调用时就立即打印，而被延迟到调用 <code>next(g)</code> 时才打印。同样，如果在生成器函数中加入复杂的处理逻辑，该逻辑只在被 <code>next()</code> 调用时才进行处理，从而达到延迟处理的目的。我们将生成器的这一特性归纳为<strong>惰性求值</strong>（lazy evaluation），即尽可能地延后求值，只在需要时才进行求值。这样做的优点是可以节省内存，还可能避免无用的处理。</p>
+<p>与惰性求值相对的是<strong>及早求值</strong>（eager evaluation），比如之前介绍的列表推导，列表这种数据结构一定要求内部的元素是已明确其值的，并且会将完整的列表保存在内存中。因此，《Effective Python》中提出这么一条：<strong>考虑用生成器来改写直接返回列表的函数</strong>。实际上，Python 3 已经对一些原本原本返回列表的函数使用生成器进行了改写。比如 Python 2 中返回完整列表的 <code>range()</code> 函数，现在也返回一个类似生成器的对象。如果一定要让 <code>range()</code> 函数返回列表，必须明确指明，如 <code>list(range(100))</code>。</p>
+<p>定义生成器函数时，唯一需要留意的就是：<strong>函数返回的那个迭代器是有状态的</strong>，调用者不应该反复使用它。</p>
+<h3 id="生成器表达式"><a href="#生成器表达式" class="headerlink" title="生成器表达式"></a>生成器表达式</h3><p>除了定义包含 yield 关键字的生成器函数可以返回生成器外，生成器表达式也可以返回生成器对象。相比于列表推导的及早求值，生成器表达式能够进行惰性求值：不会迫切地构建列表，而是返回一个生成器，按需产出元素。也就是说，如果说列表推导时构建列表的工厂，那么生成器表达式就是构建生成器的工厂。</p>
+<p>生成器表达式与列表推导的唯一区别是使用了一对圆括号 “()” 代替列表推导中的中括号 “[]”。我们使用之前定义的生成器函数 <code>gen_AB()</code> 来演示生成器表达式与列表推导之间的区别。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>res1 = [x <span class="keyword">for</span> x <span class="keyword">in</span> gen_AB()]  <span class="comment"># list comprehension</span></span><br><span class="line">start</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line">end</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>res1</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> x <span class="keyword">in</span> res1:</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;--&gt;&#x27;</span>, x)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line">--&gt; A</span><br><span class="line">--&gt; B</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>res2 = (x <span class="keyword">for</span> x <span class="keyword">in</span> gen_AB())  <span class="comment"># generator expression</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>res2</span><br><span class="line">&lt;generator <span class="built_in">object</span> &lt;genexpr&gt; at <span class="number">0x10dea8f20</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> x <span class="keyword">in</span> res2:</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">&#x27;--&gt;&#x27;</span>, x)</span><br><span class="line"><span class="meta">... </span></span><br><span class="line">start</span><br><span class="line">--&gt; A</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line">--&gt; B</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>归因于列表的及早求值，在声明列表推导表达式时，<code>gen_AB()</code> 函数中的 print 语句被立即执行了，函数产出的两个值 ‘A’、’B’ 也被存放在构建出的列表中。而生成器表达式则将这个过程推迟到值真正需要之时，即 for 循环隐式调用 <code>next()</code> 之时。</p>
+<p>前面提到，生成器对象是有状态的，这里体现在，一个生成器对象产出的值只能被消费一次，除非定义一个新的个生成器对象重新绑定。你可以想象成，生成器对象中存在不能回头的“指针”，每次调用 <code>next()</code> 方法时指向下一个元素，这个过程不可逆。所以对于同一个生成器对象重复调用时可能会产生意想不到的结果。比如下面代码中第二次调用 <code>list(res2)</code> 返回一个空列表，因为第一次调用时“指针”就已经到头了。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>res2 = (x <span class="keyword">for</span> x <span class="keyword">in</span> gen_AB())</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(res2)</span><br><span class="line">start</span><br><span class="line"><span class="keyword">continue</span></span><br><span class="line">end</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(res2)</span><br><span class="line">[]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(res2)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure>
+
+<p>所以如果要对生成器对象进行多次迭代，一种方法是使用列表将生成器中的所有元素备份下来，另一种是定义一个新的生成器对象重新绑定。由此可见，尽管生成器对象相比列表能够通过惰性求值节省内存，但如果每次迭代时定义新的生成器对象，求值过程也会被重复多次。而列表推导只会在声明时进行一次求值，并将结果保存在列表中可供多次迭代调用，这其实是一种空间消耗和时间消耗的权衡。</p>
+<h3 id="yield-from"><a href="#yield-from" class="headerlink" title="yield from"></a>yield from</h3><p>刚才所提到的生成器产出值被消费的概念，也侧面体现了生成器可以作为“协程”的语义。“协程”从字面意思理解就是协作的进程，协作的进程之间需要进行通信，就需要消费者和生产者之间建立通道。从 Python 3.3 开始引入了一个新的句法：<code>yield from</code>，类似于其他语言中的 await 关键字。它可以在两个生成器之间建立通道，将产出的值从一个生成器传输到另一个生成器。</p>
+<p>如果生成器函数需要产出其他生成器的值，传统的做法是使用 for 循环遍历生成器的元素并产出。以下定义了一个能够产出多个生成器产出值的生成器函数。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">chain</span>(<span class="params">*iterables</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">for</span> it <span class="keyword">in</span> iterables:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">for</span> i <span class="keyword">in</span> it:</span><br><span class="line"><span class="meta">... </span>            <span class="keyword">yield</span> i</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g1 = (x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="string">&#x27;ABC&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g2 = (x <span class="keyword">for</span> x <span class="keyword">in</span> (<span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(chain(g1, g2))</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<p>引入的 <code>yield from</code> 句法可以直接将一个生成器的所有产出值产出，而不用遍历生成器对象。因此我们可以编写只有一层的 for 循环：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">chain</span>(<span class="params">*iterables</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">for</span> it <span class="keyword">in</span> iterables:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">yield</span> <span class="keyword">from</span> it</span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g1 = (x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="string">&#x27;ABC&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g2 = (x <span class="keyword">for</span> x <span class="keyword">in</span> (<span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>chain(g1, g2)</span><br><span class="line">&lt;generator <span class="built_in">object</span> chain at <span class="number">0x10dea8e40</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(chain(g1, g2))</span><br><span class="line">[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<p>chain 函数依然返回一个生成器对象，其中的 <code>yield from it</code> 语句对 it 对象所做的第一件事是调用 <code>iter(it)</code> 获得一个迭代器，所以 it 对象可以是任何可迭代对象。我们将 <code>yield from &lt;iterable&gt;</code> 表达式中用于获取值的 <code>&lt;iterable&gt;</code> 称为<strong>子生成器</strong>（subgenerator），即上面代码中的 g1、g2；将包含了 <code>yield from</code> 语句的生成器函数，即 chain 函数，称为委派生成器。<code>yield from</code> 的主要功能是打开双向通道，把最外层的调用层与最内层的子生成器连接起来，这样二者可以直接发送和产出值。</p>
+<p>上述的例子只能勉强算一个协程的案例，其中的“协作”部分体现的不够明显，只是简单的将一个生成器的值传输给另一个生成器产出。真正的协作应该是通过生成器对象的 <code>send()</code> 方法将值从客户端传输给生成器。在后面章节我们会专门介绍协程，里面会提及生成器的 <code>send()</code>、<code>throw()</code> 和 <code>close()</code> 方法，以及 <code>yield from</code> 句法的其他作用。</p>
 ]]></content>
       <categories>
         <category>Languages</category>
@@ -3865,68 +3865,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Redis 安装及初步使用</title>
-    <url>/2018/03/15/Redis%E5%AE%89%E8%A3%85%E5%8F%8A%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p><strong>Redis</strong> 是一个开源的使用 ANSI C 语言编写的高性能 <strong>Key-Value</strong> 数据库，是一个<strong>可基于内存亦可持久化的日志型</strong>的 <strong>NoSQL</strong> 数据库。它将数据保存在内存中，在项目中可用于保存编码表、Token 等<strong>少量数据存储，高速读写访问</strong>的场景</p>
-</blockquote>
-<h2 id="Installing"><a href="#Installing" class="headerlink" title="Installing"></a>Installing</h2><ul>
-<li><p>我的服务器系统为 Ubuntu 16.04 ，直接使用 <strong>apt</strong> 安装。当然也可以在<a href="https://redis.io/download">官网</a>下载压缩包解压安装</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt install -y redis-server</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Redis 的命令主要有两个，一个是服务端命令<code>redis-server</code>，用于启动 Redis 。还有个客户端命令<code>redis-cli</code>，可用于访问 Redis</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">redis-server -v    // 查看版本</span><br><span class="line">redis-server -h    // 查看帮助</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装完成后 redis-server 已经启动了，默认端口号 <strong>6379</strong>     </p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ ps -ef | grep redis</span><br><span class="line">redis    14689     1  0 10:43 ?     00:00:00 /usr/bin/redis-server 127.0.0.1:6379</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>注意到 Redis 默认启动时只允许本机（即 127.0.0.1）访问，如果要允许其他主机访问或使用 <strong>GUI</strong> 图形化管理工具，可以修改配置文件<code>/etc/redis/redis.conf</code></p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">bind 127.0.0.1 =&gt; bind 0.0.0.0</span><br></pre></td></tr></table></figure>
-<p>  如果只需某几个 IP 访问 Redis 服务器，可以修改为对应 IP 以增强安全性</p>
-</li>
-<li><p>修改完成后重启 Redis</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">service redis-server restart</span><br></pre></td></tr></table></figure>
-<p>  使用<code>service redis-server status</code>命令可以查看 Redis 状态</p>
-</li>
-</ul>
-<h2 id="redis-cli"><a href="#redis-cli" class="headerlink" title="redis-cli"></a>redis-cli</h2><blockquote>
-<p><code>redis-cli</code>是客户端程序，可以使用一些命令操作 Redis 数据库，具体命令参考 <a href="https://redis.io/commands">Redis 官网</a>，或者 <a href="http://doc.redisfans.com/">Redis 命令参考</a></p>
-</blockquote>
-<ul>
-<li><p>直接输入<code>redis-cli</code>进入客户端，设置一个键值对</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ redis-cli</span><br><span class="line">127.0.0.1:6379&gt; set foo &quot;bar&quot;</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get foo</span><br><span class="line">&quot;bar&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>redis-cli</code>也可查看 Redis 的配置，使用<code>config get</code>，命令大小写不敏感，可以使用<code>TAB</code>补全</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">127.0.0.1:6379&gt; CONFIG GET bind</span><br><span class="line">1) &quot;bind&quot;</span><br><span class="line">2) &quot;0.0.0.0&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>也可以修改配置，比如我们可以设置 Redis 数据库的密码，默认是不设密码的</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">127.0.0.1:6379&gt; CONFIG SET requirepass passwd</span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; CONFIG GET requirepass</span><br><span class="line">(error) NOAUTH Authentication required.</span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; AUTH passwd</span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; CONFIG GET requirepass</span><br><span class="line">1) &quot;requirepass&quot;</span><br><span class="line">2) &quot;passwd&quot;</span><br></pre></td></tr></table></figure>
-<p>  修改密码的格式为<code>CONFIG SET requirepass password</code>，修改后需要先登录认证，命令为<code>AUTH password</code></p>
-</li>
-</ul>
-<h2 id="GUI"><a href="#GUI" class="headerlink" title="GUI"></a>GUI</h2><blockquote>
-<p>Mac 下我使用的 Redis 图形化管理工具是 <strong>Redis Desktop Manager</strong></p>
-</blockquote>
-<ul>
-<li><p>输入配置信息连接 Redis 服务器<br><img data-src="/0.png" alt="99B23802-7EA6-4ECE-9A1F-A63F31624FA0"></p>
-</li>
-<li><p>连接上后查看我们刚才设置的键值对<br><img data-src="/1.png" alt="92EF26D6-3278-43C7-BB81-C34D0D6E6DC7"></p>
-</li>
-</ul>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="https://redis.io/">Redis 官网</a></li>
-<li><a href="http://doc.redisfans.com/">Redis 命令参考</a></li>
-<li><a href="http://www.redis.net.cn/tutorial/3501.html">Redis 中文网</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Ops</category>
-      </categories>
-      <tags>
-        <tag>Redis</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Redis 五种数据类型</title>
     <url>/2018/03/16/Redis%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文介绍 Redis 的五种数据类型，并结合 redis-cli 交互式命令行，以及 Node.js 应用演示如何与 Redis 的五种数据类型进行交互，在文章最后还有关于过期时间设置的介绍。相关代码已上传至 <a href="https://github.com/s1mplecc/koa-redis-example">GitHub</a>。</p>
@@ -3986,6 +3924,68 @@
 ]]></content>
       <categories>
         <category>Concepts</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Redis 安装及初步使用</title>
+    <url>/2018/03/15/Redis%E5%AE%89%E8%A3%85%E5%8F%8A%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p><strong>Redis</strong> 是一个开源的使用 ANSI C 语言编写的高性能 <strong>Key-Value</strong> 数据库，是一个<strong>可基于内存亦可持久化的日志型</strong>的 <strong>NoSQL</strong> 数据库。它将数据保存在内存中，在项目中可用于保存编码表、Token 等<strong>少量数据存储，高速读写访问</strong>的场景</p>
+</blockquote>
+<h2 id="Installing"><a href="#Installing" class="headerlink" title="Installing"></a>Installing</h2><ul>
+<li><p>我的服务器系统为 Ubuntu 16.04 ，直接使用 <strong>apt</strong> 安装。当然也可以在<a href="https://redis.io/download">官网</a>下载压缩包解压安装</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt install -y redis-server</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Redis 的命令主要有两个，一个是服务端命令<code>redis-server</code>，用于启动 Redis 。还有个客户端命令<code>redis-cli</code>，可用于访问 Redis</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">redis-server -v    // 查看版本</span><br><span class="line">redis-server -h    // 查看帮助</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装完成后 redis-server 已经启动了，默认端口号 <strong>6379</strong>     </p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ ps -ef | grep redis</span><br><span class="line">redis    14689     1  0 10:43 ?     00:00:00 /usr/bin/redis-server 127.0.0.1:6379</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注意到 Redis 默认启动时只允许本机（即 127.0.0.1）访问，如果要允许其他主机访问或使用 <strong>GUI</strong> 图形化管理工具，可以修改配置文件<code>/etc/redis/redis.conf</code></p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">bind 127.0.0.1 =&gt; bind 0.0.0.0</span><br></pre></td></tr></table></figure>
+<p>  如果只需某几个 IP 访问 Redis 服务器，可以修改为对应 IP 以增强安全性</p>
+</li>
+<li><p>修改完成后重启 Redis</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">service redis-server restart</span><br></pre></td></tr></table></figure>
+<p>  使用<code>service redis-server status</code>命令可以查看 Redis 状态</p>
+</li>
+</ul>
+<h2 id="redis-cli"><a href="#redis-cli" class="headerlink" title="redis-cli"></a>redis-cli</h2><blockquote>
+<p><code>redis-cli</code>是客户端程序，可以使用一些命令操作 Redis 数据库，具体命令参考 <a href="https://redis.io/commands">Redis 官网</a>，或者 <a href="http://doc.redisfans.com/">Redis 命令参考</a></p>
+</blockquote>
+<ul>
+<li><p>直接输入<code>redis-cli</code>进入客户端，设置一个键值对</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ redis-cli</span><br><span class="line">127.0.0.1:6379&gt; set foo &quot;bar&quot;</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get foo</span><br><span class="line">&quot;bar&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>redis-cli</code>也可查看 Redis 的配置，使用<code>config get</code>，命令大小写不敏感，可以使用<code>TAB</code>补全</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">127.0.0.1:6379&gt; CONFIG GET bind</span><br><span class="line">1) &quot;bind&quot;</span><br><span class="line">2) &quot;0.0.0.0&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>也可以修改配置，比如我们可以设置 Redis 数据库的密码，默认是不设密码的</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">127.0.0.1:6379&gt; CONFIG SET requirepass passwd</span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; CONFIG GET requirepass</span><br><span class="line">(error) NOAUTH Authentication required.</span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; AUTH passwd</span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; CONFIG GET requirepass</span><br><span class="line">1) &quot;requirepass&quot;</span><br><span class="line">2) &quot;passwd&quot;</span><br></pre></td></tr></table></figure>
+<p>  修改密码的格式为<code>CONFIG SET requirepass password</code>，修改后需要先登录认证，命令为<code>AUTH password</code></p>
+</li>
+</ul>
+<h2 id="GUI"><a href="#GUI" class="headerlink" title="GUI"></a>GUI</h2><blockquote>
+<p>Mac 下我使用的 Redis 图形化管理工具是 <strong>Redis Desktop Manager</strong></p>
+</blockquote>
+<ul>
+<li><p>输入配置信息连接 Redis 服务器<br><img data-src="/0.png" alt="99B23802-7EA6-4ECE-9A1F-A63F31624FA0"></p>
+</li>
+<li><p>连接上后查看我们刚才设置的键值对<br><img data-src="/1.png" alt="92EF26D6-3278-43C7-BB81-C34D0D6E6DC7"></p>
+</li>
+</ul>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://redis.io/">Redis 官网</a></li>
+<li><a href="http://doc.redisfans.com/">Redis 命令参考</a></li>
+<li><a href="http://www.redis.net.cn/tutorial/3501.html">Redis 中文网</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Ops</category>
       </categories>
       <tags>
         <tag>Redis</tag>
@@ -5022,6 +5022,73 @@ zuul:
       </tags>
   </entry>
   <entry>
+    <title>使用 Certbot 配置 HTTPS</title>
+    <url>/2017/11/06/%E4%BD%BF%E7%94%A8%20Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文介绍在搭建了服务器并且配置了域名后，如何通过 Certbot 将原先的 <code>http://</code> 域名配置为 <code>https://</code> 域名。文章的最后介绍了 HTTPS 基于的 SSL 协议，以及和 SSL 加密通信过程类似的 SSH 协议。</p>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ul>
+<li>Ubuntu 16.04</li>
+<li>Nginx</li>
+</ul>
+<h2 id="安装配置-Certbot"><a href="#安装配置-Certbot" class="headerlink" title="安装配置 Certbot"></a>安装配置 Certbot</h2><p>添加软件源：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install software-properties-common</span><br><span class="line">sudo add-apt-repository ppa:certbot/certbot</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 <code>/etc/apt/sources.list.d</code> 目录下多了个 <code>certbot-ubuntu-certbot-xenial.list</code> 文件，内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deb http://ppa.launchpad.net/certbot/certbot/ubuntu xenial main</span><br><span class="line"># deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu xenial main</span><br></pre></td></tr></table></figure>
+
+<p>安装Certbot：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install python-certbot-nginx </span><br></pre></td></tr></table></figure>
+
+<p>使用如下命令自动配置Nginx服务，也可以加上 <code>certonly</code> 参数来手动配置nginx。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo certbot --nginx</span><br></pre></td></tr></table></figure>
+
+<p>出现如下文字，说明Certbot读取了nginx配置文件。默认回车选择所有：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Which names would you like to activate HTTPS for?</span><br><span class="line">-------------------------------------------------</span><br><span class="line">1: s1mple.info</span><br><span class="line">2: www.s1mple.info</span><br></pre></td></tr></table></figure>
+
+<p>选择是否重定位到HTTPS：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.</span><br><span class="line">-------------------------------------------------------------------------------------</span><br><span class="line">1: No redirect - Make no further changes to the webserver configuration.</span><br><span class="line">2: Redirect - Make all requests redirect to secure HTTPS access. Choose this for</span><br><span class="line">new sites, or if you&#x27;re confident your site works on HTTPS. You can undo this</span><br><span class="line">change by editing your web server&#x27;s configuration.</span><br></pre></td></tr></table></figure>
+
+<p>配置成功，有效期为90天，过期需要使用 <code>certbot renew</code> 更新新的证书。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">IMPORTANT NOTES:</span><br><span class="line">- Congratulations! Your certificate and chain have been saved at:</span><br><span class="line">  /etc/letsencrypt/live/simple. info/fullchain.pem</span><br><span class="line">  Your key file has been saved at:</span><br><span class="line">  /etc/letsencrypt/live/simple. info/privkey.pem</span><br><span class="line">  Your cert will expire on 2018-02-04. To obtain a new or tweaked</span><br><span class="line">  version of this certificate in the future, simply run certbot again</span><br><span class="line">  with the “certonly&quot; option. To non-interactively renew xall* of</span><br><span class="line">  your certificates, run &quot;certbot renew&quot;</span><br></pre></td></tr></table></figure>
+
+<p>现在你可以通过HTTPS访问你的网站了。</p>
+<p>我们查看一下Nginx配置文件，文件名对应你的域名，以 <code>.conf</code> 结尾，发现新增了如下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">listen 443 ssl; # managed by Certbot</span><br><span class="line">ssl_certificate /etc/letsencrypt/live/s1mple.info/fullchain.pem; # managed by Certbot</span><br><span class="line">ssl_certificate_key /etc/letsencrypt/live/s1mple.info/privkey.pem; # managed by Certbot</span><br><span class="line">include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot</span><br><span class="line"></span><br><span class="line"># Redirect non-https traffic to https</span><br><span class="line">if ($scheme != &quot;https&quot;) &#123;</span><br><span class="line">    return 301 https://$host$request_uri;</span><br><span class="line">&#125; # managed by Certbot</span><br></pre></td></tr></table></figure>
+
+<p>说明Nginx在监听443端口，并将不是HTTPS的请求重定位到HTTPS。</p>
+<h2 id="协议原理"><a href="#协议原理" class="headerlink" title="协议原理"></a>协议原理</h2><h3 id="SSL"><a href="#SSL" class="headerlink" title="SSL"></a>SSL</h3><p><strong>HTTPS(Http over Secure Socket Layer)</strong> 是基于SSL加密的更安全的HTTP协议，默认端口443。SSL握手协议过程如下：</p>
+<ol>
+<li>客户端的浏览器向服务器传送客户端SSL协议的版本号，加密算法的种类，产生的随机数，以及其他通讯所需要信息。</li>
+<li>服务器向客户端传送SSL协议的版本号，加密算法的种类，随机数以及其他相关信息，同时<strong>服务器还将向客户端传送自己的证书</strong>。</li>
+<li>客户端利用服务器传过来的信息<strong>验证服务器的合法性</strong>，服务器的合法性包括：证书是否过期，发行服务器证书的CA是否可靠，发行者证书的公钥能否正确解开服务器证书的“发行者的数字签名”，服务器证书上的域名是否和服务器的实际域名相匹配。</li>
+<li>客户端随机产生一个用于后面通讯的“对话密钥”，然后用服务器的公钥（从步骤2中的服务器的证书中获得）对其加密，然后传给服务器。</li>
+<li><strong>服务器用私钥解密</strong>“对话密钥”（此处的公钥和私钥是对应的，公钥加密的数据只能用私钥解密，服务器私钥只在服务器端保留），然后用其作为服务器和客户端的“通话密码”加解密通讯。具体的加密算法详见<a href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95">RSA加密算法</a>。</li>
+<li>SSL的握手部分结束，SSL安全通道的数据通讯开始，客户和服务器开始使用对话密钥进行数据通讯，同时进行通讯完整性的检验。</li>
+</ol>
+<p><img data-src="/2017/11/06/%E4%BD%BF%E7%94%A8%20Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/0.png" alt="78ab162bf20b438ca377faa87f4ea2a2_th"></p>
+<h3 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h3><p><strong>SSH(Secure Shell)<strong>协议，专为远程登录会话提供安全性的协议，传输的数据都进行了加密。SSH提供两种级别的安全验证，第一种是</strong>基于口令</strong>的安全验证。第二种是<strong>基于密匙</strong>的安全验证，不需要传输口令，原理同 SSL 类似。下面介绍一下 SSH 基于密钥的安全验证。</p>
+<p>客户端创建<strong>一对密钥</strong>（公钥和私钥），公钥存放在服务器上的 authorized_keys 文件中，当你想通过 ssh 远程连接服务器时会进行<strong>公钥比对</strong>。如果一致，服务器就用公用密匙加密“质询”（challenge）并把它发送给客户端。客户端收到“质询”之后就可以用你的<strong>私钥解密</strong>再把它发送给服务器。</p>
+<p>SSH 通过密钥连接服务器步骤如下：</p>
+<ol>
+<li>在本地执行<code>ssh-keygen</code>生成配对密钥，在你的<code>~/.ssh</code>目录下会生成两个文件，<code>id_rsa</code>私钥，<code>id_rsa.pub</code>公钥。</li>
+<li>将公钥拷贝到服务器的<code>~/.ssh/authorized_keys</code>文件中。</li>
+<li>使用<code>chattr +i authorized_keys</code>命令给<code>authorized_keys</code>增加不可修改、删除的权限。</li>
+<li>在本地使用<code>ssh &#123;username&#125;@&#123;ip&#125;</code>连接服务器。第一次连接会询问你是否继续，选择 yes 则将连接信息添加到<code>~/.ssh/known_hosts</code>文件中，此后连接不再询问。</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://certbot.eff.org/#ubuntuxenial-nginx">Certbot官方文档</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html">图解SSL/TLS协议 —— 阮一峰</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95">RSA加密算法 —— WiKi</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Ops</category>
+      </categories>
+      <tags>
+        <tag>Security</tag>
+        <tag>Network</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>使用 Docker 部署 Java Web 应用</title>
     <url>/2017/11/04/%E4%BD%BF%E7%94%A8%20Docker%20%E9%83%A8%E7%BD%B2%20Java%20Web%20%E5%BA%94%E7%94%A8/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>JPress是基于JAVA的博客平台，作为一个Web程序，我将用它演示如何构建自己的Docker镜像，以及如何使用Docker部署Java Web应用。</p>
@@ -5087,73 +5154,6 @@ zuul:
       <tags>
         <tag>Web</tag>
         <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>使用 Certbot 配置 HTTPS</title>
-    <url>/2017/11/06/%E4%BD%BF%E7%94%A8%20Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文介绍在搭建了服务器并且配置了域名后，如何通过 Certbot 将原先的 <code>http://</code> 域名配置为 <code>https://</code> 域名。文章的最后介绍了 HTTPS 基于的 SSL 协议，以及和 SSL 加密通信过程类似的 SSH 协议。</p>
-<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ul>
-<li>Ubuntu 16.04</li>
-<li>Nginx</li>
-</ul>
-<h2 id="安装配置-Certbot"><a href="#安装配置-Certbot" class="headerlink" title="安装配置 Certbot"></a>安装配置 Certbot</h2><p>添加软件源：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install software-properties-common</span><br><span class="line">sudo add-apt-repository ppa:certbot/certbot</span><br></pre></td></tr></table></figure>
-
-<p>可以看到 <code>/etc/apt/sources.list.d</code> 目录下多了个 <code>certbot-ubuntu-certbot-xenial.list</code> 文件，内容如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deb http://ppa.launchpad.net/certbot/certbot/ubuntu xenial main</span><br><span class="line"># deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu xenial main</span><br></pre></td></tr></table></figure>
-
-<p>安装Certbot：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install python-certbot-nginx </span><br></pre></td></tr></table></figure>
-
-<p>使用如下命令自动配置Nginx服务，也可以加上 <code>certonly</code> 参数来手动配置nginx。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo certbot --nginx</span><br></pre></td></tr></table></figure>
-
-<p>出现如下文字，说明Certbot读取了nginx配置文件。默认回车选择所有：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Which names would you like to activate HTTPS for?</span><br><span class="line">-------------------------------------------------</span><br><span class="line">1: s1mple.info</span><br><span class="line">2: www.s1mple.info</span><br></pre></td></tr></table></figure>
-
-<p>选择是否重定位到HTTPS：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.</span><br><span class="line">-------------------------------------------------------------------------------------</span><br><span class="line">1: No redirect - Make no further changes to the webserver configuration.</span><br><span class="line">2: Redirect - Make all requests redirect to secure HTTPS access. Choose this for</span><br><span class="line">new sites, or if you&#x27;re confident your site works on HTTPS. You can undo this</span><br><span class="line">change by editing your web server&#x27;s configuration.</span><br></pre></td></tr></table></figure>
-
-<p>配置成功，有效期为90天，过期需要使用 <code>certbot renew</code> 更新新的证书。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">IMPORTANT NOTES:</span><br><span class="line">- Congratulations! Your certificate and chain have been saved at:</span><br><span class="line">  /etc/letsencrypt/live/simple. info/fullchain.pem</span><br><span class="line">  Your key file has been saved at:</span><br><span class="line">  /etc/letsencrypt/live/simple. info/privkey.pem</span><br><span class="line">  Your cert will expire on 2018-02-04. To obtain a new or tweaked</span><br><span class="line">  version of this certificate in the future, simply run certbot again</span><br><span class="line">  with the “certonly&quot; option. To non-interactively renew xall* of</span><br><span class="line">  your certificates, run &quot;certbot renew&quot;</span><br></pre></td></tr></table></figure>
-
-<p>现在你可以通过HTTPS访问你的网站了。</p>
-<p>我们查看一下Nginx配置文件，文件名对应你的域名，以 <code>.conf</code> 结尾，发现新增了如下内容：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">listen 443 ssl; # managed by Certbot</span><br><span class="line">ssl_certificate /etc/letsencrypt/live/s1mple.info/fullchain.pem; # managed by Certbot</span><br><span class="line">ssl_certificate_key /etc/letsencrypt/live/s1mple.info/privkey.pem; # managed by Certbot</span><br><span class="line">include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot</span><br><span class="line"></span><br><span class="line"># Redirect non-https traffic to https</span><br><span class="line">if ($scheme != &quot;https&quot;) &#123;</span><br><span class="line">    return 301 https://$host$request_uri;</span><br><span class="line">&#125; # managed by Certbot</span><br></pre></td></tr></table></figure>
-
-<p>说明Nginx在监听443端口，并将不是HTTPS的请求重定位到HTTPS。</p>
-<h2 id="协议原理"><a href="#协议原理" class="headerlink" title="协议原理"></a>协议原理</h2><h3 id="SSL"><a href="#SSL" class="headerlink" title="SSL"></a>SSL</h3><p><strong>HTTPS(Http over Secure Socket Layer)</strong> 是基于SSL加密的更安全的HTTP协议，默认端口443。SSL握手协议过程如下：</p>
-<ol>
-<li>客户端的浏览器向服务器传送客户端SSL协议的版本号，加密算法的种类，产生的随机数，以及其他通讯所需要信息。</li>
-<li>服务器向客户端传送SSL协议的版本号，加密算法的种类，随机数以及其他相关信息，同时<strong>服务器还将向客户端传送自己的证书</strong>。</li>
-<li>客户端利用服务器传过来的信息<strong>验证服务器的合法性</strong>，服务器的合法性包括：证书是否过期，发行服务器证书的CA是否可靠，发行者证书的公钥能否正确解开服务器证书的“发行者的数字签名”，服务器证书上的域名是否和服务器的实际域名相匹配。</li>
-<li>客户端随机产生一个用于后面通讯的“对话密钥”，然后用服务器的公钥（从步骤2中的服务器的证书中获得）对其加密，然后传给服务器。</li>
-<li><strong>服务器用私钥解密</strong>“对话密钥”（此处的公钥和私钥是对应的，公钥加密的数据只能用私钥解密，服务器私钥只在服务器端保留），然后用其作为服务器和客户端的“通话密码”加解密通讯。具体的加密算法详见<a href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95">RSA加密算法</a>。</li>
-<li>SSL的握手部分结束，SSL安全通道的数据通讯开始，客户和服务器开始使用对话密钥进行数据通讯，同时进行通讯完整性的检验。</li>
-</ol>
-<p><img data-src="/2017/11/06/%E4%BD%BF%E7%94%A8%20Certbot%20%E9%85%8D%E7%BD%AE%20HTTPS/0.png" alt="78ab162bf20b438ca377faa87f4ea2a2_th"></p>
-<h3 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h3><p><strong>SSH(Secure Shell)<strong>协议，专为远程登录会话提供安全性的协议，传输的数据都进行了加密。SSH提供两种级别的安全验证，第一种是</strong>基于口令</strong>的安全验证。第二种是<strong>基于密匙</strong>的安全验证，不需要传输口令，原理同 SSL 类似。下面介绍一下 SSH 基于密钥的安全验证。</p>
-<p>客户端创建<strong>一对密钥</strong>（公钥和私钥），公钥存放在服务器上的 authorized_keys 文件中，当你想通过 ssh 远程连接服务器时会进行<strong>公钥比对</strong>。如果一致，服务器就用公用密匙加密“质询”（challenge）并把它发送给客户端。客户端收到“质询”之后就可以用你的<strong>私钥解密</strong>再把它发送给服务器。</p>
-<p>SSH 通过密钥连接服务器步骤如下：</p>
-<ol>
-<li>在本地执行<code>ssh-keygen</code>生成配对密钥，在你的<code>~/.ssh</code>目录下会生成两个文件，<code>id_rsa</code>私钥，<code>id_rsa.pub</code>公钥。</li>
-<li>将公钥拷贝到服务器的<code>~/.ssh/authorized_keys</code>文件中。</li>
-<li>使用<code>chattr +i authorized_keys</code>命令给<code>authorized_keys</code>增加不可修改、删除的权限。</li>
-<li>在本地使用<code>ssh &#123;username&#125;@&#123;ip&#125;</code>连接服务器。第一次连接会询问你是否继续，选择 yes 则将连接信息添加到<code>~/.ssh/known_hosts</code>文件中，此后连接不再询问。</li>
-</ol>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://certbot.eff.org/#ubuntuxenial-nginx">Certbot官方文档</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html">图解SSL/TLS协议 —— 阮一峰</a></li>
-<li><a href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95">RSA加密算法 —— WiKi</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Ops</category>
-      </categories>
-      <tags>
-        <tag>Security</tag>
-        <tag>Network</tag>
       </tags>
   </entry>
   <entry>
