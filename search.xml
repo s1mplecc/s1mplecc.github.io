@@ -1,41 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>API 设计心得</title>
-    <url>/2018/10/10/API%E8%AE%BE%E8%AE%A1%E5%BF%83%E5%BE%97/</url>
-    <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>最近我在项目中单独编码了加载配置的模块，并提供给团队里的其他开发者使用。在设计 API 时有些心得体会，遂有了此博客记录下来。</p>
-</blockquote>
-<h2 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h2><p>截取了部分项目结构，大致如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// config module</span></span><br><span class="line"></span><br><span class="line">├── ConfigFactory.java</span><br><span class="line">├── YamlConverter.java</span><br><span class="line">└── core</span><br><span class="line">    ├── AbstractConfig.java</span><br><span class="line">    ├── Config.java</span><br><span class="line">    ├── ConfigFile.java</span><br><span class="line">    ├── ConfigLoader.java</span><br><span class="line">    ├── ...</span><br><span class="line">    └── exceptions</span><br><span class="line">        ├── ConfigFileNotFoundException.java</span><br><span class="line">        ├── UnsupportedFileTypeException.java</span><br><span class="line">        └── ...</span><br></pre></td></tr></table></figure>
-
-<p><code>ConfigFactory</code> 和 <code>YamlConverter</code> 都是对外提供 API 的类，故放在最外层目录下，另外有个 <strong>core</strong> 的文件夹，存放间接使用到的类。类似于操作系统和用户 UI 界面，内核 core 封装你的实现，不暴露给用户，可以非常复杂。外层的 API 提供给用户使用，应该尽量满足<strong>不变</strong>的原则，即<strong>隔离变化</strong>，为了避免升级后用户需要改动代码。</p>
-<h2 id="易用性"><a href="#易用性" class="headerlink" title="易用性"></a>易用性</h2><p>API 应该保持简单易用，尽量可以<strong>望文知义</strong>。由于现在的 IDE 都有智能感知，会自动提示可调用的方法，一个设计优秀的 API 应该<strong>方法名即能显示用途</strong>，再不济，用户跟进方法阅读注释或者源码也应知道如何使用。<strong>能避免用户必须查阅文档才知道如何使用的应当尽量避免</strong>。</p>
-<p>提高易用性可以从如下几各方面：</p>
-<h4 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a><strong>静态方法</strong></h4><p>静态方法不需要实例化，一些工具类就大量运用静态方法，比如 Apache 的 StringUtils 字符串处理工具类，<code>StringUtils.isEmpty()、StringUtils.upperCase()</code> 等几乎所有方法都是 <code>static</code> 的。</p>
-<h4 id="Fluent-Interface"><a href="#Fluent-Interface" class="headerlink" title="Fluent Interface"></a><strong>Fluent Interface</strong></h4><p>流畅接口符合人的阅读习惯，比如 jOOQ 数据库映射库，使用流畅接口模拟 SQL。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">create.selectFrom(a)</span><br><span class="line">      .where(exists(selectOne()</span><br><span class="line">                 .from(BOOK)</span><br><span class="line">                 .where(BOOK.STATUS.equal(BOOK_STATUS.SOLD_OUT))</span><br><span class="line">                 .and(BOOK.AUTHOR_ID.equal(a.ID))));</span><br></pre></td></tr></table></figure>
-<h4 id="命名"><a href="#命名" class="headerlink" title="命名"></a><strong>命名</strong></h4><p>不管是类名、方法名还是参数名，好的命名应该<strong>语义清晰简单</strong>、<strong>符合直觉</strong>、<strong>易于记忆</strong>和<strong>引导用户</strong>，应尽量简单或使用业界常用的命名，比如我在编写 config 模块时借鉴了 Typesafe，它的 API 这样使用：<code>ConfigFactory.load(String resourceBasename)</code>，清晰明了，并且我知道入参是基于 resource 相对路径的文件名。</p>
-<p><strong>不要重复局部命名</strong>。在有上下文环境的调用中，减少不必要的描述可以提高 API 的精简和清晰度。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">  <span class="comment">// good</span></span><br><span class="line">  setName() &#123;&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// bad</span></span><br><span class="line">  setUserName() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="封装"><a href="#封装" class="headerlink" title="封装"></a><strong>封装</strong></h4><p>使用 Java 的访问控制修饰符 <code>private、default、protected</code> 对方法访问权限进行限定，该隐藏的隐藏，仅暴露对外公开接口。这样在 IDE 智能提示时也方便用户快速定位方法。</p>
-<h2 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h2><p>良好的 API 设计利于未来的版本升级——升级带来的用户兼容性成本较低，或者框架开发者的兼容性包袱较轻。</p>
-<p>为了将来的兼容性考虑，设计 API 时建议考虑这些因素：</p>
-<h4 id="不要提前公开-API"><a href="#不要提前公开-API" class="headerlink" title="不要提前公开 API"></a><strong>不要提前公开 API</strong></h4><p>如果你的某个 API 是为将来预留的，那么不要开放，因为你不清楚未来的设计需求是怎样的，提前公开的 API 在将来改变的可能性非常高。</p>
-<h4 id="预留足够的扩展点"><a href="#预留足够的扩展点" class="headerlink" title="预留足够的扩展点"></a><strong>预留足够的扩展点</strong></h4><p>没有良好扩展性的 API 通常会因为频繁的需求变更而导致 API 间接变化，这都是兼容性成本。如果在良好的设计下预留了足够的扩展点，那么这样的 API 能够应对未来一段时间内未知的需求变化，使得 API 变化在可控范围内。</p>
-<p>要预留扩展点就意味着通常应该<strong>使用接口或者抽象</strong>的概念来描述 API，建议用清晰定位的接口替代具体的类型。</p>
-<h4 id="明确的-API-迁移说明"><a href="#明确的-API-迁移说明" class="headerlink" title="明确的 API 迁移说明"></a><strong>明确的 API 迁移说明</strong></h4><p>如果某个 API 过时了，也不建议删除它；应该标记为过时，Java 中使用 <code>@Deprecated</code> 注解，并告诉使用者新的 API 是什么。当然如果这个 API 会导致出现不可接受的问题，也可以标记它无法通过编译。</p>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="https://walterlv.com/post/framework-api-design.html#%E4%B8%80%E8%87%B4%E6%80%A7">好的框架需要好的 API 设计 —— API 设计的六个原则
-</a></li>
-<li><a href="https://www.cnblogs.com/zfc2201/p/3423370.html">接口设计六大原则</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Design</category>
-      </categories>
-  </entry>
-  <entry>
     <title>50 行代码实现一个并发的 Python 爬虫程序</title>
     <url>/2018/12/03/50%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%B9%B6%E5%8F%91%E7%9A%84%20Python%20%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>得益于 Python 丰富的库，我们可以不用重复造轮子而是直接拿人家现成的库用，比如爬虫所需的解析 Html 功能都不用自己亲自写。所以，我在用 Python 改写之前的 Java 爬虫时，只用了 50 行代码就实现了原有功能。本文主要介绍编码时用到的库，以及总结了一些 Python 编码的知识点。</p>
@@ -174,6 +139,41 @@
       <tags>
         <tag>Python</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>API 设计心得</title>
+    <url>/2018/10/10/API%E8%AE%BE%E8%AE%A1%E5%BF%83%E5%BE%97/</url>
+    <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>最近我在项目中单独编码了加载配置的模块，并提供给团队里的其他开发者使用。在设计 API 时有些心得体会，遂有了此博客记录下来。</p>
+</blockquote>
+<h2 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h2><p>截取了部分项目结构，大致如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// config module</span></span><br><span class="line"></span><br><span class="line">├── ConfigFactory.java</span><br><span class="line">├── YamlConverter.java</span><br><span class="line">└── core</span><br><span class="line">    ├── AbstractConfig.java</span><br><span class="line">    ├── Config.java</span><br><span class="line">    ├── ConfigFile.java</span><br><span class="line">    ├── ConfigLoader.java</span><br><span class="line">    ├── ...</span><br><span class="line">    └── exceptions</span><br><span class="line">        ├── ConfigFileNotFoundException.java</span><br><span class="line">        ├── UnsupportedFileTypeException.java</span><br><span class="line">        └── ...</span><br></pre></td></tr></table></figure>
+
+<p><code>ConfigFactory</code> 和 <code>YamlConverter</code> 都是对外提供 API 的类，故放在最外层目录下，另外有个 <strong>core</strong> 的文件夹，存放间接使用到的类。类似于操作系统和用户 UI 界面，内核 core 封装你的实现，不暴露给用户，可以非常复杂。外层的 API 提供给用户使用，应该尽量满足<strong>不变</strong>的原则，即<strong>隔离变化</strong>，为了避免升级后用户需要改动代码。</p>
+<h2 id="易用性"><a href="#易用性" class="headerlink" title="易用性"></a>易用性</h2><p>API 应该保持简单易用，尽量可以<strong>望文知义</strong>。由于现在的 IDE 都有智能感知，会自动提示可调用的方法，一个设计优秀的 API 应该<strong>方法名即能显示用途</strong>，再不济，用户跟进方法阅读注释或者源码也应知道如何使用。<strong>能避免用户必须查阅文档才知道如何使用的应当尽量避免</strong>。</p>
+<p>提高易用性可以从如下几各方面：</p>
+<h4 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a><strong>静态方法</strong></h4><p>静态方法不需要实例化，一些工具类就大量运用静态方法，比如 Apache 的 StringUtils 字符串处理工具类，<code>StringUtils.isEmpty()、StringUtils.upperCase()</code> 等几乎所有方法都是 <code>static</code> 的。</p>
+<h4 id="Fluent-Interface"><a href="#Fluent-Interface" class="headerlink" title="Fluent Interface"></a><strong>Fluent Interface</strong></h4><p>流畅接口符合人的阅读习惯，比如 jOOQ 数据库映射库，使用流畅接口模拟 SQL。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">create.selectFrom(a)</span><br><span class="line">      .where(exists(selectOne()</span><br><span class="line">                 .from(BOOK)</span><br><span class="line">                 .where(BOOK.STATUS.equal(BOOK_STATUS.SOLD_OUT))</span><br><span class="line">                 .and(BOOK.AUTHOR_ID.equal(a.ID))));</span><br></pre></td></tr></table></figure>
+<h4 id="命名"><a href="#命名" class="headerlink" title="命名"></a><strong>命名</strong></h4><p>不管是类名、方法名还是参数名，好的命名应该<strong>语义清晰简单</strong>、<strong>符合直觉</strong>、<strong>易于记忆</strong>和<strong>引导用户</strong>，应尽量简单或使用业界常用的命名，比如我在编写 config 模块时借鉴了 Typesafe，它的 API 这样使用：<code>ConfigFactory.load(String resourceBasename)</code>，清晰明了，并且我知道入参是基于 resource 相对路径的文件名。</p>
+<p><strong>不要重复局部命名</strong>。在有上下文环境的调用中，减少不必要的描述可以提高 API 的精简和清晰度。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">  <span class="comment">// good</span></span><br><span class="line">  setName() &#123;&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// bad</span></span><br><span class="line">  setUserName() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="封装"><a href="#封装" class="headerlink" title="封装"></a><strong>封装</strong></h4><p>使用 Java 的访问控制修饰符 <code>private、default、protected</code> 对方法访问权限进行限定，该隐藏的隐藏，仅暴露对外公开接口。这样在 IDE 智能提示时也方便用户快速定位方法。</p>
+<h2 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h2><p>良好的 API 设计利于未来的版本升级——升级带来的用户兼容性成本较低，或者框架开发者的兼容性包袱较轻。</p>
+<p>为了将来的兼容性考虑，设计 API 时建议考虑这些因素：</p>
+<h4 id="不要提前公开-API"><a href="#不要提前公开-API" class="headerlink" title="不要提前公开 API"></a><strong>不要提前公开 API</strong></h4><p>如果你的某个 API 是为将来预留的，那么不要开放，因为你不清楚未来的设计需求是怎样的，提前公开的 API 在将来改变的可能性非常高。</p>
+<h4 id="预留足够的扩展点"><a href="#预留足够的扩展点" class="headerlink" title="预留足够的扩展点"></a><strong>预留足够的扩展点</strong></h4><p>没有良好扩展性的 API 通常会因为频繁的需求变更而导致 API 间接变化，这都是兼容性成本。如果在良好的设计下预留了足够的扩展点，那么这样的 API 能够应对未来一段时间内未知的需求变化，使得 API 变化在可控范围内。</p>
+<p>要预留扩展点就意味着通常应该<strong>使用接口或者抽象</strong>的概念来描述 API，建议用清晰定位的接口替代具体的类型。</p>
+<h4 id="明确的-API-迁移说明"><a href="#明确的-API-迁移说明" class="headerlink" title="明确的 API 迁移说明"></a><strong>明确的 API 迁移说明</strong></h4><p>如果某个 API 过时了，也不建议删除它；应该标记为过时，Java 中使用 <code>@Deprecated</code> 注解，并告诉使用者新的 API 是什么。当然如果这个 API 会导致出现不可接受的问题，也可以标记它无法通过编译。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://walterlv.com/post/framework-api-design.html#%E4%B8%80%E8%87%B4%E6%80%A7">好的框架需要好的 API 设计 —— API 设计的六个原则
+</a></li>
+<li><a href="https://www.cnblogs.com/zfc2201/p/3423370.html">接口设计六大原则</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Design</category>
+      </categories>
   </entry>
   <entry>
     <title>Clean Code -- 第一节：迪米特法则与 Paperboy 案例</title>
@@ -884,6 +884,65 @@
       </tags>
   </entry>
   <entry>
+    <title>Git 基础教程</title>
+    <url>/2017/11/28/Git%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Git 是目前世界上最先进的分布式版本控制系统。相比较CVS及SVN这种老式的集中式版本控制系统，要更加灵活方便，也更安全稳定。<strong>集中式</strong>是指版本库是放在中央服务器中，需要联网才能工作。<strong>分布式</strong>是指没有中央服务器，每个人电脑上有个完整的版本仓库，可以本地修改代码再联网提交到Git服务器上，Git服务器作用仅仅“交换”大家的修改即代码同步。此外，Git还拥有极其强大的分支管理功能。</p>
+<h2 id="Git-命令"><a href="#Git-命令" class="headerlink" title="Git 命令"></a>Git 命令</h2><p>本文主要介绍基础的 Git 命令，更加复杂的 Git 命令可以查看：<a href="https://s2mple.xyz/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/">Git 进阶教程</a>。另外 Git 的常用命令文档可以参考：<a href="https://education.github.com/git-cheat-sheet-education.pdf">git-cheatsheet</a>。</p>
+<h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p>始终要记住你的<strong>本地和Git服务器上都存在版本仓库（repository）</strong>，Git实现代码同步实际上是同步你的本地仓库和远程仓库。有两种方式创建仓库：1. 从服务器上克隆一个仓库；2. 初始化一个本地仓库。</p>
+<p>从Git服务器上<strong>克隆（clone）</strong>一个仓库下来，可以通过<strong>ssh</strong>或<strong>http</strong>的方式。ssh需要将你的公钥存放在Git服务器上，而http不需要但是速度相较ssh要慢。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@github.com:s1mplecc/MyHashMap.git</span><br><span class="line">git clone https://github.com/s1mplecc/MyHashMap.git</span><br></pre></td></tr></table></figure>
+
+<p>从远程库克隆下来的是完整的版本库，含有<code>.git</code>文件夹，其下的<code>config</code>文件夹包括了本仓库的配置信息。包含了url、远程库的名字以及分支等：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ cat .git/config</span><br><span class="line"></span><br><span class="line">[remote &quot;origin&quot;]</span><br><span class="line">    url = git@github.com:s1mplecc/MyHashMap.git</span><br><span class="line">    fetch = +refs/heads/*:refs/remotes/origin/*</span><br><span class="line">[branch &quot;master&quot;]</span><br><span class="line">    remote = origin</span><br><span class="line">    merge = refs/heads/master</span><br></pre></td></tr></table></figure>
+
+<p>第二种方式，<code>git init</code>是将当前目录初始化为Git可以管理的仓库。会在当前目录下生成了<code>.git</code>文件夹。</p>
+<p>如果要将本地仓库推到服务器上，需要现在服务器上创建一个repository，然后在本地目录下绑定服务器上的repository，origin是版本库默认的名字：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@github.com:s1mplecc/MyHashMap.git</span><br></pre></td></tr></table></figure>
+<h3 id="提交变更"><a href="#提交变更" class="headerlink" title="提交变更"></a>提交变更</h3><p>当你对版本库中的文件做了变更（增删改），可以使用<code>git status</code>命令查看当前版本库的状态：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜  github.io git:(hexo) ✗ git status</span><br><span class="line">On branch hexo</span><br><span class="line">Your branch is ahead of &#x27;origin/hexo&#x27; by 9 commits.</span><br><span class="line">  (use &quot;git push&quot; to publish your local commits)</span><br><span class="line"></span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span><br><span class="line"></span><br><span class="line">    modified:   &quot;source/_posts/ES6\346\226\260\347\211\271\346\200\247.md&quot;</span><br><span class="line">    modified:   &quot;source/_posts/Git Flow \346\250\241\345\236\213\344\273\245\345\217\212\345\267\245\345\205\267\347\232\204\344\275\277\347\224\250.md&quot;</span><br><span class="line"></span><br><span class="line">no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><code>git add .</code>或者<code>git add all</code>将所有修改提交到暂存区。<code>.</code>表示当前目录下所有修改了的文件，当然也可以指定某个文件。</p>
+<p>将暂存区的所有内容提交到当前分支，默认分支即Git为我们自动创建的<strong>master</strong>分支。<code>-m</code>参数后面接提交的message：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git commit -m &quot;balabala&quot;</span><br></pre></td></tr></table></figure>
+
+<p>将当前分支提交到远程库中，<code>-u</code>第一次使用时将本地的master分支绑定到远程库的master分支，以后可以省略不加：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+
+<p>从远程库拉取修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
+
+<p>在开发过程中会有频繁的提交，所以日常中我们用到最多的就是上述命令了。本质上本地与远程版本库的同步就是记录下每次的<strong>修改信息</strong>。Git会帮我们记录下每次提交的修改，方便我们进行同步、回退以及合并。</p>
+<h4 id="gitignore"><a href="#gitignore" class="headerlink" title=".gitignore"></a>.gitignore</h4><p>说到<code>add</code>不得不提<code>.gitignore</code>这个文件，它的作用是忽略一些文件的提交，比如IntelliJ IDEA生成的<code>.idea</code>文件、编译生成的<code>target</code>文件等等。这类文件不需要提交到服务器污染大家的环境。关于<code>.gitignore</code>的编写github上都有现成的模版。另外IDE也可以安装相应的gitignore插件。</p>
+<h3 id="查看提交历史"><a href="#查看提交历史" class="headerlink" title="查看提交历史"></a>查看提交历史</h3><p>正是Git帮我们记录了每次提交的修改，我们可以通过命令查看历史信息，以及每次做了什么修改。</p>
+<p><code>git log</code>查看提交历史，每条记录有一个唯一的id用于标识，使用时可以使用可以唯一表示的前几位。添加参数<code>-p &lt;file&gt;/&lt;commit id&gt;</code>查看指定文件或某次commit的历史信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">commit 24345a1a74184f99eb32202bfcc1cd0fd6ac945d (HEAD -&gt; master)</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:33:56 2017 +0800</span><br><span class="line"></span><br><span class="line">    second commit</span><br><span class="line"></span><br><span class="line">commit b90b6da1573d55ef59a900d435d903e41667f61e</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:31:43 2017 +0800</span><br><span class="line"></span><br><span class="line">    first commit</span><br></pre></td></tr></table></figure>
+
+<p><code>git diff b90b6da</code>查看某次提交后与当前版本的区别，可以看到我在文本中添加了一行second：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@@ -1 +1,2 @@</span><br><span class="line"> first</span><br><span class="line">+second</span><br></pre></td></tr></table></figure>
+<p><code>git reflog</code>查看命令操作历史。</p>
+<h3 id="撤销变更"><a href="#撤销变更" class="headerlink" title="撤销变更"></a>撤销变更</h3><p>如果你在提交了某次变更后又想撤销这次变更，Git也提供了撤销和回退的功能。Git将提交记录（节点）串成一条线，<strong>HEAD</strong>就是一指向当前版本的指针，做回退操作其实就是这个指针在这条线上的节点间移动。牢记：<strong>Git跟踪并管理的是修改，而非文件</strong>。</p>
+<p><code>reset</code>命令回退到指定的某个版本，<code>HEAD</code>表示当前版本，<code>HEAD^</code>表示上一个版本。也可以用具体的 commit id：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard HEAD^</span><br></pre></td></tr></table></figure>
+
+<p>如果你修改了某个文件，但还没有<code>add</code>，可以直接舍弃这次修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -- &lt;file&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如果你已经<code>commit</code>了，也可以还原回去：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git revert &lt;commit id&gt;</span><br></pre></td></tr></table></figure>
+<p>revert与reset的区别在于，revert会生成一次新的提交去移除某些提交（相当于反向操作），在节点线上还是向前走的。而reset是把HEAD指针后移到指定节点，直接从这个节点走出新的一条线。可以参考<a href="http://www.cnblogs.com/houpeiyong/p/5890748.html">代码回滚：git reset、git checkout和git revert区别和联系</a>。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://education.github.com/git-cheat-sheet-education.pdf">git-cheatsheet</a></li>
+<li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000">Git教程 —— 廖雪峰</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Concepts</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Git Flow 模型以及工具的使用</title>
     <url>/2018/07/03/Git%20Flow%20%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h2 id="Git-Flow-是什么？"><a href="#Git-Flow-是什么？" class="headerlink" title="Git Flow 是什么？"></a>Git Flow 是什么？</h2><p>2010 年 5 月，在一篇名为 “<a href="https://nvie.com/posts/a-successful-git-branching-model/">A successful Git branching model</a>” 的博文中，Vincent Driessen 介绍了一种构建在 Git 之上的软件开发模型。<strong>通过利用 Git 创建和管理分支的能力，为每个分支设定具有特定的含义名称，并将软件生命周期中的各类活动归并到不同的分支上，实现了软件开发过程不同阶段的相互隔离</strong>。这种软件开发的活动模型被 Vincent 称为 “<strong>Git Flow</strong>”。</p>
@@ -947,65 +1006,6 @@
 <li><a href="http://deshui.wang/%E6%95%8F%E6%8D%B7/2015/10/27/sourcecode-management">敏捷实践系列(四)：代码管理流程</a></li>
 <li><a href="https://www.jianshu.com/p/36292d36e41d">Git Flow的使用 —— 简书</a></li>
 <li><a href="https://insights.thoughtworks.cn/gitflow-consider-harmful/">Git Flow有害论 —— ThoughtWorks洞见</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Concepts</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git 基础教程</title>
-    <url>/2017/11/28/Git%20%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Git 是目前世界上最先进的分布式版本控制系统。相比较CVS及SVN这种老式的集中式版本控制系统，要更加灵活方便，也更安全稳定。<strong>集中式</strong>是指版本库是放在中央服务器中，需要联网才能工作。<strong>分布式</strong>是指没有中央服务器，每个人电脑上有个完整的版本仓库，可以本地修改代码再联网提交到Git服务器上，Git服务器作用仅仅“交换”大家的修改即代码同步。此外，Git还拥有极其强大的分支管理功能。</p>
-<h2 id="Git-命令"><a href="#Git-命令" class="headerlink" title="Git 命令"></a>Git 命令</h2><p>本文主要介绍基础的 Git 命令，更加复杂的 Git 命令可以查看：<a href="https://s2mple.xyz/2018/09/18/Git%20%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B/">Git 进阶教程</a>。另外 Git 的常用命令文档可以参考：<a href="https://education.github.com/git-cheat-sheet-education.pdf">git-cheatsheet</a>。</p>
-<h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p>始终要记住你的<strong>本地和Git服务器上都存在版本仓库（repository）</strong>，Git实现代码同步实际上是同步你的本地仓库和远程仓库。有两种方式创建仓库：1. 从服务器上克隆一个仓库；2. 初始化一个本地仓库。</p>
-<p>从Git服务器上<strong>克隆（clone）</strong>一个仓库下来，可以通过<strong>ssh</strong>或<strong>http</strong>的方式。ssh需要将你的公钥存放在Git服务器上，而http不需要但是速度相较ssh要慢。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@github.com:s1mplecc/MyHashMap.git</span><br><span class="line">git clone https://github.com/s1mplecc/MyHashMap.git</span><br></pre></td></tr></table></figure>
-
-<p>从远程库克隆下来的是完整的版本库，含有<code>.git</code>文件夹，其下的<code>config</code>文件夹包括了本仓库的配置信息。包含了url、远程库的名字以及分支等：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜ cat .git/config</span><br><span class="line"></span><br><span class="line">[remote &quot;origin&quot;]</span><br><span class="line">    url = git@github.com:s1mplecc/MyHashMap.git</span><br><span class="line">    fetch = +refs/heads/*:refs/remotes/origin/*</span><br><span class="line">[branch &quot;master&quot;]</span><br><span class="line">    remote = origin</span><br><span class="line">    merge = refs/heads/master</span><br></pre></td></tr></table></figure>
-
-<p>第二种方式，<code>git init</code>是将当前目录初始化为Git可以管理的仓库。会在当前目录下生成了<code>.git</code>文件夹。</p>
-<p>如果要将本地仓库推到服务器上，需要现在服务器上创建一个repository，然后在本地目录下绑定服务器上的repository，origin是版本库默认的名字：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@github.com:s1mplecc/MyHashMap.git</span><br></pre></td></tr></table></figure>
-<h3 id="提交变更"><a href="#提交变更" class="headerlink" title="提交变更"></a>提交变更</h3><p>当你对版本库中的文件做了变更（增删改），可以使用<code>git status</code>命令查看当前版本库的状态：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">➜  github.io git:(hexo) ✗ git status</span><br><span class="line">On branch hexo</span><br><span class="line">Your branch is ahead of &#x27;origin/hexo&#x27; by 9 commits.</span><br><span class="line">  (use &quot;git push&quot; to publish your local commits)</span><br><span class="line"></span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span><br><span class="line"></span><br><span class="line">    modified:   &quot;source/_posts/ES6\346\226\260\347\211\271\346\200\247.md&quot;</span><br><span class="line">    modified:   &quot;source/_posts/Git Flow \346\250\241\345\236\213\344\273\245\345\217\212\345\267\245\345\205\267\347\232\204\344\275\277\347\224\250.md&quot;</span><br><span class="line"></span><br><span class="line">no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</span><br></pre></td></tr></table></figure>
-
-<p><code>git add .</code>或者<code>git add all</code>将所有修改提交到暂存区。<code>.</code>表示当前目录下所有修改了的文件，当然也可以指定某个文件。</p>
-<p>将暂存区的所有内容提交到当前分支，默认分支即Git为我们自动创建的<strong>master</strong>分支。<code>-m</code>参数后面接提交的message：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git commit -m &quot;balabala&quot;</span><br></pre></td></tr></table></figure>
-
-<p>将当前分支提交到远程库中，<code>-u</code>第一次使用时将本地的master分支绑定到远程库的master分支，以后可以省略不加：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
-
-<p>从远程库拉取修改：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
-
-<p>在开发过程中会有频繁的提交，所以日常中我们用到最多的就是上述命令了。本质上本地与远程版本库的同步就是记录下每次的<strong>修改信息</strong>。Git会帮我们记录下每次提交的修改，方便我们进行同步、回退以及合并。</p>
-<h4 id="gitignore"><a href="#gitignore" class="headerlink" title=".gitignore"></a>.gitignore</h4><p>说到<code>add</code>不得不提<code>.gitignore</code>这个文件，它的作用是忽略一些文件的提交，比如IntelliJ IDEA生成的<code>.idea</code>文件、编译生成的<code>target</code>文件等等。这类文件不需要提交到服务器污染大家的环境。关于<code>.gitignore</code>的编写github上都有现成的模版。另外IDE也可以安装相应的gitignore插件。</p>
-<h3 id="查看提交历史"><a href="#查看提交历史" class="headerlink" title="查看提交历史"></a>查看提交历史</h3><p>正是Git帮我们记录了每次提交的修改，我们可以通过命令查看历史信息，以及每次做了什么修改。</p>
-<p><code>git log</code>查看提交历史，每条记录有一个唯一的id用于标识，使用时可以使用可以唯一表示的前几位。添加参数<code>-p &lt;file&gt;/&lt;commit id&gt;</code>查看指定文件或某次commit的历史信息：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">commit 24345a1a74184f99eb32202bfcc1cd0fd6ac945d (HEAD -&gt; master)</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:33:56 2017 +0800</span><br><span class="line"></span><br><span class="line">    second commit</span><br><span class="line"></span><br><span class="line">commit b90b6da1573d55ef59a900d435d903e41667f61e</span><br><span class="line">Author: s1mple &lt;s1mple@macpro.local&gt;</span><br><span class="line">Date:   Wed Nov 29 11:31:43 2017 +0800</span><br><span class="line"></span><br><span class="line">    first commit</span><br></pre></td></tr></table></figure>
-
-<p><code>git diff b90b6da</code>查看某次提交后与当前版本的区别，可以看到我在文本中添加了一行second：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@@ -1 +1,2 @@</span><br><span class="line"> first</span><br><span class="line">+second</span><br></pre></td></tr></table></figure>
-<p><code>git reflog</code>查看命令操作历史。</p>
-<h3 id="撤销变更"><a href="#撤销变更" class="headerlink" title="撤销变更"></a>撤销变更</h3><p>如果你在提交了某次变更后又想撤销这次变更，Git也提供了撤销和回退的功能。Git将提交记录（节点）串成一条线，<strong>HEAD</strong>就是一指向当前版本的指针，做回退操作其实就是这个指针在这条线上的节点间移动。牢记：<strong>Git跟踪并管理的是修改，而非文件</strong>。</p>
-<p><code>reset</code>命令回退到指定的某个版本，<code>HEAD</code>表示当前版本，<code>HEAD^</code>表示上一个版本。也可以用具体的 commit id：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard HEAD^</span><br></pre></td></tr></table></figure>
-
-<p>如果你修改了某个文件，但还没有<code>add</code>，可以直接舍弃这次修改：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -- &lt;file&gt;</span><br></pre></td></tr></table></figure>
-
-<p>如果你已经<code>commit</code>了，也可以还原回去：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git revert &lt;commit id&gt;</span><br></pre></td></tr></table></figure>
-<p>revert与reset的区别在于，revert会生成一次新的提交去移除某些提交（相当于反向操作），在节点线上还是向前走的。而reset是把HEAD指针后移到指定节点，直接从这个节点走出新的一条线。可以参考<a href="http://www.cnblogs.com/houpeiyong/p/5890748.html">代码回滚：git reset、git checkout和git revert区别和联系</a>。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://education.github.com/git-cheat-sheet-education.pdf">git-cheatsheet</a></li>
-<li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000">Git教程 —— 廖雪峰</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -1356,6 +1356,88 @@
       </tags>
   </entry>
   <entry>
+    <title>Java8 Optional 源码阅读</title>
+    <url>/2018/11/27/Java8%20Optional%20%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Optional 是 Java8 引入的一个重要特性，它是一个容器，里面装着一个可能为空可能不为空的对象。在它出现之前，为避免空指针异常我们可能会这样编码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getLastFour</span><span class="params">(Employee employee)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(employee != <span class="keyword">null</span>) &#123;</span><br><span class="line">        Address address = employee.getPrimaryAddress();</span><br><span class="line">        <span class="keyword">if</span>(address != <span class="keyword">null</span>) &#123;</span><br><span class="line">            ZipCode zip = address.getZipCode();</span><br><span class="line">            <span class="keyword">if</span>(zip != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> zip.getLastFour()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> FMLException(<span class="string">&quot;Missing data&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>显然代码嵌套层次很深不够整洁。而用 Optional 将值包裹起来后，我们可以不再关注于值会不会为 <code>null</code>，会不会抛空指针，而将注意力集中在<strong>对数据的操作</strong>。并且 Optional 提供了 <code>map</code>、<code>flatMap</code>、<code>filter</code> 等方法让我们可以进行<strong>函数式风格</strong>的编码。那么上诉代码可以如此改写：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getLastFour</span><span class="params">(Optional&lt;Employee&gt; employee)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> employee.flatMap(employee -&gt; employee.getPrimaryAddress())</span><br><span class="line">                   .flatMap(address -&gt; address.getZipCode())</span><br><span class="line">                   .flatMap(zip -&gt; zip.getLastFour())</span><br><span class="line">                   .orElseThrow(() -&gt; <span class="keyword">new</span> FMLException(<span class="string">&quot;Missing data&quot;</span>));</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<p>更确切的说，Optional 是一个 <strong>Monad</strong> 容器。那什么是 Monad 呢？可以参考下面这段话：<code> Think of monads as an object that wraps a value and allows us to apply a set of transformations on that value and get it back out with all the transformations applied.</code> 简单的说，Monad 是一个包裹了一个值的容器（值可以是单个对象也可以是集合），允许我们对该值进行一系列的转换（函数操作）后返回给m我们期望的值。也就是说，Monad 封装了接收函数作为入参的一些方法（filter、map、flatMap 等）。</p>
+<p>那么现在，让我们从源码开始一步一步揭开它的神秘面纱。</p>
+<h2 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h2><p>Optional 使用私有化的构造函数和单例模式提供了<strong>值为空的单例</strong>，暴露的静态工厂方法为 <code>Optional.empty()</code>。该种设计感觉和 Java 设计模式中的<strong>空对象模式</strong>有异曲同工之妙，也是避免空指针的核心所在，后面我们将会提到。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Common instance for &#123;<span class="doctag">@code</span> empty()&#125;.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Optional&lt;?&gt; EMPTY = <span class="keyword">new</span> Optional&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Optional</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span>&lt;T&gt; Optional&lt;T&gt; <span class="title">empty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">    Optional&lt;T&gt; t = (Optional&lt;T&gt;) EMPTY;</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同时提供 <code>Optional.of(value)</code> 和 <code>Optional.ofNullable(value)</code> 两个工厂方法用于将 value 装入 Optional 容器中。注意 <code>of()</code> 方法在值为空时会抛出<strong>空指针异常</strong>。所以在允许入参值为空时使用 <code>ofNullable()</code>，它在值为空时调用 <code>Optional.empty()</code> 返回 <code>EMPTY</code> 单例。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Optional&lt;T&gt; <span class="title">of</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Optional&lt;&gt;(value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> NullPointerException if value is null</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Optional</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = Objects.requireNonNull(value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Optional&lt;T&gt; <span class="title">ofNullable</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value == <span class="keyword">null</span> ? empty() : of(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="isPresent-和-get"><a href="#isPresent-和-get" class="headerlink" title="isPresent 和 get"></a>isPresent 和 get</h2><p>Optional 提供的 <code>isPresent()</code> 用于判断容器中的值是否为空，<code>get()</code> 方法用来获取容器中的值。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isPresent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value != <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException(<span class="string">&quot;No value present&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这两个方法通常会组合起来使用：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional&lt;String&gt; optString = Optional.of(<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (optString.isPresent()) &#123;</span><br><span class="line">    System.out.println(optString.get());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但我想说的是，Optional 的初衷不是为了让我们仅仅使用这两个方法，事实上也应当尽量避免使用这两个方法，而是多使用 <code>ifPresent()</code> 和 <code>orElse()</code> 等方法代替。因为一旦你这样用，就和使用 <code>if(xxx != null)&#123;&#125;</code> 没什么区别了。</p>
+<p>Optional 真正的核心就在于下面这些方法。</p>
+<h2 id="Optional-与函数接口"><a href="#Optional-与函数接口" class="headerlink" title="Optional 与函数接口"></a>Optional 与函数接口</h2><p>Optional 对于 Java8 提供的四种<strong>函数接口</strong>：<code>Function</code>、<code>Predicate</code>、<code>Consumer</code>、<code>Supplier</code> 都包装了相应的方法，以满足我们可以进行<strong>函数式</strong>风格的编码。本部分介绍这些方法的实现和使用，为了直观，部分代码使用匿名内部类的方式。</p>
+<p>关于函数接口（<strong>Functional Interfaces</strong>），我的上一篇博客 <a href="https://s2mple.xyz/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/">Java8 函数接口</a>中有详细介绍。</p>
+<h3 id="ifPresent"><a href="#ifPresent" class="headerlink" title="ifPresent"></a>ifPresent</h3><p><code>ifPresent(consumer)</code> 方法接受一个<strong>消费者函数</strong> <code>Consumer</code> 入参，如果 Optional 容器中的值不为空，则调用 <code>Consumer</code> 的 <code>accept(value)</code> 方法消费容器中的值。若值为空则什么都不做。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ifPresent</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; consumer)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value != <span class="keyword">null</span>)</span><br><span class="line">        consumer.accept(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如下代码会打印容器中的值 “abc”</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line">        .ifPresent(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                System.out.println(s);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;); <span class="comment">// print abc</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).ifPresent(s -&gt; System.out.println(s));</span><br></pre></td></tr></table></figure>
+
+<h3 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h3><p><code>filter(predicate)</code> 方法接受一个<strong>谓词函数</strong> <code>Predicate</code> 入参，调用谓词的 <code>test(value)</code> 判断容器中的值是否满足谓词条件，<strong>满足则返回该容器本身</strong>，不满足或值为空时返回 <code>Optional.empty()</code> 单例。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Optional&lt;T&gt; <span class="title">filter</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; predicate)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(predicate);</span><br><span class="line">    <span class="keyword">if</span> (!isPresent())</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> predicate.test(value) ? <span class="keyword">this</span> : empty();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下代码分别展示了 <code>filter</code> 通过和不通过的情况：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line">        .filter(<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">test</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> s.length() &gt; <span class="number">5</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .ifPresent(System.out::println); <span class="comment">// do nothing</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line">        .filter(s -&gt; s.length() == <span class="number">3</span>)</span><br><span class="line">        .ifPresent(System.out::println); <span class="comment">// print abc</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p><code>map(mapper)</code> 方法接受一个<strong>函数</strong> <code>Function</code> 入参，将容器中的值执行 <code>apply(value)</code> 操作后返回，返回的依然是 <code>Optional</code> 包裹的值，值的类型为 <code>apply()</code>  方法的返回类型，即 <code>map</code> 可能<strong>改变容器中值的类型</strong>。同样，值为空或 <code>apply()</code> 为空则返回 <code>empty()</code>。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span>&lt;U&gt; Optional&lt;U&gt; <span class="title">map</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, ? extends U&gt; mapper)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(mapper);</span><br><span class="line">    <span class="keyword">if</span> (!isPresent())</span><br><span class="line">        <span class="keyword">return</span> empty();</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Optional.ofNullable(mapper.apply(value));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下代码展示了 <code>map</code> 的用法，通过 <code>.map(s -&gt; s.length())</code> 返回类型已经从 <code>Optional&lt;String&gt;</code> 变为 <code>Optional&lt;Integer&gt;</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line">        .map(<span class="keyword">new</span> Function&lt;String, Integer&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Integer <span class="title">apply</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> s.length();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .ifPresent(System.out::println); <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(s -&gt; s.length()); <span class="comment">// Optional&lt;Integer&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap"></a>flatMap</h3><p><code>flatMap</code> 可以视作一种特殊的 <code>map</code> 操作，可以视为 map + flatten 操作。仔细观察，它的入参接受的 Function 函数的输出泛型为 <code>Optional&lt;U&gt;</code>，所以不需要像 <code>map</code> 方法中再用 <code>ofNullable()</code> 包装成 Optional 容器。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span>&lt;U&gt; Optional&lt;U&gt; <span class="title">flatMap</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, Optional&lt;U&gt;&gt; mapper)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(mapper);</span><br><span class="line">    <span class="keyword">if</span> (!isPresent())</span><br><span class="line">        <span class="keyword">return</span> empty();</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Objects.requireNonNull(mapper.apply(value));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>map</code> 与 <code>flatMap</code> 的区别如下。自定义的 <code>optionalLength(string)</code> 返回 <code>Optional&lt;Integer&gt;</code> 类型，所以 <code>map</code> 会返回 <code>Optional&lt;Optional&lt;Integer&gt;&gt;</code> 类型，只有调用 <code>flatMap</code> 才返回 <code>Optional&lt;Integer&gt;</code> 类型，相当于多做了一步 flatten 操作将其拍平为一维纬度。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> Optional&lt;Integer&gt; <span class="title">optionalLength</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> Optional.empty();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Optional.of(s.length());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(s -&gt; optionalLength(s)); <span class="comment">// Optional&lt;Optional&lt;Integer&gt;&gt;</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).flatMap(s -&gt; optionalLength(s)); <span class="comment">// Optional&lt;Integer&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="orElseGet-和-orElseThrow"><a href="#orElseGet-和-orElseThrow" class="headerlink" title="orElseGet 和 orElseThrow"></a>orElseGet 和 orElseThrow</h3><p><code>orElseGet(other)</code> 接受<strong>提供者函数</strong> <code>Supplier</code> 作为入参，当容器中的值为空时调用 <code>Supplier</code> 的 <code>get()</code> 方法获取值。<code>orElseThrow(supplier)</code> 则是值为空时抛出异常。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">orElseGet</span><span class="params">(Supplier&lt;? extends T&gt; other)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value != <span class="keyword">null</span> ? value : other.get();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> &lt;X extends Throwable&gt; <span class="function">T <span class="title">orElseThrow</span><span class="params">(Supplier&lt;? extends X&gt; exceptionSupplier)</span> <span class="keyword">throws</span> X </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> exceptionSupplier.get();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用时如下，若当前容器中的值为空则返回 <code>anotherString()</code> 的值。注意这一步已经跳出了 Optional 容器，返回的类型为容器中值的类型。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> String <span class="title">anotherString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;anotherString&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line">        .filter(s -&gt; s.startsWith(<span class="string">&quot;zzz&quot;</span>)) <span class="comment">// Optional.empty()</span></span><br><span class="line">        .orElseGet(<span class="keyword">new</span> Supplier&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> String <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> anotherString();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;); <span class="comment">// &quot;anotherString&quot;</span></span><br><span class="line">        </span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line">        .filter(s -&gt; s.length() == <span class="number">3</span>) <span class="comment">// Optional[&quot;abc&quot;]</span></span><br><span class="line">        .orElseGet(() -&gt; anotherString()); <span class="comment">// &quot;abc&quot;</span></span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line">        .filter(s -&gt; s.startsWith(<span class="string">&quot;zzz&quot;</span>)) <span class="comment">// Optional.empty()</span></span><br><span class="line">        .orElseThrow(() -&gt; <span class="keyword">new</span> RuntimeException(<span class="string">&quot;no eligible values&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Optional 提供的这些方法让我们不再关注于是否会抛出空指针异常，而是通过函数的自由组合专注于对数据的操作，比如如下代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional.ofNullable(people)</span><br><span class="line">        .flatMap(people -&gt; people.getName())</span><br><span class="line">        .map(name -&gt; name.toUpperCase())</span><br><span class="line">        .filter(name -&gt; name.startsWith(<span class="string">&quot;T&quot;</span>))</span><br><span class="line">        .orElse(<span class="string">&quot;TONY&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>其实 Optional 的核心在于提供的 <code>empty()</code> 单例，使得如上代码整条链路不会在某一步中断抛出空指针异常，而是只要其中一步值为空后，<code>Optional.empty()</code> <strong>将在这条链路上继续向下传播</strong>，直到最后 <code>orElse()</code> 等方法指名默认处理并跳出容器。</p>
+<p>Optional 源码时有诸多值得我们借鉴取经的地方，诸如：</p>
+<ul>
+<li>Monad 容器的思想。容器接收一个值，进行函数操作后依然返回该容器，比如 <code>map</code>、<code>flatMap</code>、<code>filter</code>。这就使得我们可以随意组合以上方法，编写函数式风格的代码。类似的还有 Java 8 的 <code>Stream</code> 接口。</li>
+<li>提供 <code>Optional.empty()</code> 类似空对象模式的空值单例。</li>
+<li>严谨的编码，源码中有许多 <code>Objects.requireNonNull()</code> 对极端情况进行验证，比如 <code>flatMap</code> 方法中的 <code>Objects.requireNonNull(mapper);</code> 和 <code>Optional.ofNullable(mapper.apply(value));</code> 对于入参函数不为空和调用 <code>apply()</code> 后返回值不为空的验证。</li>
+<li>API 的全面性，当容器中没有你期待的值时提供 <code>orElse</code>、<code>orElseGet</code>、<code>orElseThrow</code> 等其他处理手段，不管是设置默认值还是抛出异常，API 都考虑到了。</li>
+</ul>
+<p>目前在一些 ORM 框架中也加入了 Optional 的支持，比如 Hibernate 从 5.2 版本后提供 <code>loadOptional()</code> 方法返回 <code>Optional&lt;T&gt;</code> 类型。有兴趣的可以自己去研究。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html">Functors, Applicatives, And Monads In Pictures</a></li>
+<li><a href="https://medium.com/coding-with-clarity/understanding-the-optional-monad-in-java-8-e3000d85ffd2">Understanding the Optional Monad in Java 8</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Languages</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>函数式编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java 日志二三事</title>
     <url>/2019/01/13/Java-%E6%97%A5%E5%BF%97%E4%BA%8C%E4%B8%89%E4%BA%8B/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Java 拥有功能和性能都非常强大的日志库，但另一方面，Java 日志库依赖看起来丰富的让人眼花缭乱。相信大家或多或少都有这样的疑问，Log4j，SLF4J，Logback，Log4j2 这些日志框架我该如何选择？它们彼此间又有什么关系？本篇文章将介绍这些日志库的历史演进和之间的关系，方便你选择最适合的日志库。文章最后还有日志库使用的最佳实践。</p>
@@ -1455,88 +1537,6 @@
       </categories>
       <tags>
         <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java8 Optional 源码阅读</title>
-    <url>/2018/11/27/Java8%20Optional%20%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Optional 是 Java8 引入的一个重要特性，它是一个容器，里面装着一个可能为空可能不为空的对象。在它出现之前，为避免空指针异常我们可能会这样编码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getLastFour</span><span class="params">(Employee employee)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(employee != <span class="keyword">null</span>) &#123;</span><br><span class="line">        Address address = employee.getPrimaryAddress();</span><br><span class="line">        <span class="keyword">if</span>(address != <span class="keyword">null</span>) &#123;</span><br><span class="line">            ZipCode zip = address.getZipCode();</span><br><span class="line">            <span class="keyword">if</span>(zip != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> zip.getLastFour()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> FMLException(<span class="string">&quot;Missing data&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>显然代码嵌套层次很深不够整洁。而用 Optional 将值包裹起来后，我们可以不再关注于值会不会为 <code>null</code>，会不会抛空指针，而将注意力集中在<strong>对数据的操作</strong>。并且 Optional 提供了 <code>map</code>、<code>flatMap</code>、<code>filter</code> 等方法让我们可以进行<strong>函数式风格</strong>的编码。那么上诉代码可以如此改写：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getLastFour</span><span class="params">(Optional&lt;Employee&gt; employee)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> employee.flatMap(employee -&gt; employee.getPrimaryAddress())</span><br><span class="line">                   .flatMap(address -&gt; address.getZipCode())</span><br><span class="line">                   .flatMap(zip -&gt; zip.getLastFour())</span><br><span class="line">                   .orElseThrow(() -&gt; <span class="keyword">new</span> FMLException(<span class="string">&quot;Missing data&quot;</span>));</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-
-<p>更确切的说，Optional 是一个 <strong>Monad</strong> 容器。那什么是 Monad 呢？可以参考下面这段话：<code> Think of monads as an object that wraps a value and allows us to apply a set of transformations on that value and get it back out with all the transformations applied.</code> 简单的说，Monad 是一个包裹了一个值的容器（值可以是单个对象也可以是集合），允许我们对该值进行一系列的转换（函数操作）后返回给m我们期望的值。也就是说，Monad 封装了接收函数作为入参的一些方法（filter、map、flatMap 等）。</p>
-<p>那么现在，让我们从源码开始一步一步揭开它的神秘面纱。</p>
-<h2 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h2><p>Optional 使用私有化的构造函数和单例模式提供了<strong>值为空的单例</strong>，暴露的静态工厂方法为 <code>Optional.empty()</code>。该种设计感觉和 Java 设计模式中的<strong>空对象模式</strong>有异曲同工之妙，也是避免空指针的核心所在，后面我们将会提到。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Common instance for &#123;<span class="doctag">@code</span> empty()&#125;.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Optional&lt;?&gt; EMPTY = <span class="keyword">new</span> Optional&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Optional</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span>&lt;T&gt; Optional&lt;T&gt; <span class="title">empty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">    Optional&lt;T&gt; t = (Optional&lt;T&gt;) EMPTY;</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>同时提供 <code>Optional.of(value)</code> 和 <code>Optional.ofNullable(value)</code> 两个工厂方法用于将 value 装入 Optional 容器中。注意 <code>of()</code> 方法在值为空时会抛出<strong>空指针异常</strong>。所以在允许入参值为空时使用 <code>ofNullable()</code>，它在值为空时调用 <code>Optional.empty()</code> 返回 <code>EMPTY</code> 单例。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Optional&lt;T&gt; <span class="title">of</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Optional&lt;&gt;(value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> NullPointerException if value is null</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Optional</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = Objects.requireNonNull(value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Optional&lt;T&gt; <span class="title">ofNullable</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value == <span class="keyword">null</span> ? empty() : of(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="isPresent-和-get"><a href="#isPresent-和-get" class="headerlink" title="isPresent 和 get"></a>isPresent 和 get</h2><p>Optional 提供的 <code>isPresent()</code> 用于判断容器中的值是否为空，<code>get()</code> 方法用来获取容器中的值。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isPresent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value != <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException(<span class="string">&quot;No value present&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这两个方法通常会组合起来使用：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional&lt;String&gt; optString = Optional.of(<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (optString.isPresent()) &#123;</span><br><span class="line">    System.out.println(optString.get());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>但我想说的是，Optional 的初衷不是为了让我们仅仅使用这两个方法，事实上也应当尽量避免使用这两个方法，而是多使用 <code>ifPresent()</code> 和 <code>orElse()</code> 等方法代替。因为一旦你这样用，就和使用 <code>if(xxx != null)&#123;&#125;</code> 没什么区别了。</p>
-<p>Optional 真正的核心就在于下面这些方法。</p>
-<h2 id="Optional-与函数接口"><a href="#Optional-与函数接口" class="headerlink" title="Optional 与函数接口"></a>Optional 与函数接口</h2><p>Optional 对于 Java8 提供的四种<strong>函数接口</strong>：<code>Function</code>、<code>Predicate</code>、<code>Consumer</code>、<code>Supplier</code> 都包装了相应的方法，以满足我们可以进行<strong>函数式</strong>风格的编码。本部分介绍这些方法的实现和使用，为了直观，部分代码使用匿名内部类的方式。</p>
-<p>关于函数接口（<strong>Functional Interfaces</strong>），我的上一篇博客 <a href="https://s2mple.xyz/2018/11/16/Java8%20%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3/">Java8 函数接口</a>中有详细介绍。</p>
-<h3 id="ifPresent"><a href="#ifPresent" class="headerlink" title="ifPresent"></a>ifPresent</h3><p><code>ifPresent(consumer)</code> 方法接受一个<strong>消费者函数</strong> <code>Consumer</code> 入参，如果 Optional 容器中的值不为空，则调用 <code>Consumer</code> 的 <code>accept(value)</code> 方法消费容器中的值。若值为空则什么都不做。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ifPresent</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; consumer)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value != <span class="keyword">null</span>)</span><br><span class="line">        consumer.accept(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如下代码会打印容器中的值 “abc”</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line">        .ifPresent(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                System.out.println(s);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;); <span class="comment">// print abc</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).ifPresent(s -&gt; System.out.println(s));</span><br></pre></td></tr></table></figure>
-
-<h3 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h3><p><code>filter(predicate)</code> 方法接受一个<strong>谓词函数</strong> <code>Predicate</code> 入参，调用谓词的 <code>test(value)</code> 判断容器中的值是否满足谓词条件，<strong>满足则返回该容器本身</strong>，不满足或值为空时返回 <code>Optional.empty()</code> 单例。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Optional&lt;T&gt; <span class="title">filter</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; predicate)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(predicate);</span><br><span class="line">    <span class="keyword">if</span> (!isPresent())</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> predicate.test(value) ? <span class="keyword">this</span> : empty();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以下代码分别展示了 <code>filter</code> 通过和不通过的情况：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line">        .filter(<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">test</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> s.length() &gt; <span class="number">5</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .ifPresent(System.out::println); <span class="comment">// do nothing</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line">        .filter(s -&gt; s.length() == <span class="number">3</span>)</span><br><span class="line">        .ifPresent(System.out::println); <span class="comment">// print abc</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p><code>map(mapper)</code> 方法接受一个<strong>函数</strong> <code>Function</code> 入参，将容器中的值执行 <code>apply(value)</code> 操作后返回，返回的依然是 <code>Optional</code> 包裹的值，值的类型为 <code>apply()</code>  方法的返回类型，即 <code>map</code> 可能<strong>改变容器中值的类型</strong>。同样，值为空或 <code>apply()</code> 为空则返回 <code>empty()</code>。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span>&lt;U&gt; Optional&lt;U&gt; <span class="title">map</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, ? extends U&gt; mapper)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(mapper);</span><br><span class="line">    <span class="keyword">if</span> (!isPresent())</span><br><span class="line">        <span class="keyword">return</span> empty();</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Optional.ofNullable(mapper.apply(value));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以下代码展示了 <code>map</code> 的用法，通过 <code>.map(s -&gt; s.length())</code> 返回类型已经从 <code>Optional&lt;String&gt;</code> 变为 <code>Optional&lt;Integer&gt;</code></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line">        .map(<span class="keyword">new</span> Function&lt;String, Integer&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Integer <span class="title">apply</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> s.length();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .ifPresent(System.out::println); <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(s -&gt; s.length()); <span class="comment">// Optional&lt;Integer&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap"></a>flatMap</h3><p><code>flatMap</code> 可以视作一种特殊的 <code>map</code> 操作，可以视为 map + flatten 操作。仔细观察，它的入参接受的 Function 函数的输出泛型为 <code>Optional&lt;U&gt;</code>，所以不需要像 <code>map</code> 方法中再用 <code>ofNullable()</code> 包装成 Optional 容器。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span>&lt;U&gt; Optional&lt;U&gt; <span class="title">flatMap</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, Optional&lt;U&gt;&gt; mapper)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(mapper);</span><br><span class="line">    <span class="keyword">if</span> (!isPresent())</span><br><span class="line">        <span class="keyword">return</span> empty();</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Objects.requireNonNull(mapper.apply(value));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>map</code> 与 <code>flatMap</code> 的区别如下。自定义的 <code>optionalLength(string)</code> 返回 <code>Optional&lt;Integer&gt;</code> 类型，所以 <code>map</code> 会返回 <code>Optional&lt;Optional&lt;Integer&gt;&gt;</code> 类型，只有调用 <code>flatMap</code> 才返回 <code>Optional&lt;Integer&gt;</code> 类型，相当于多做了一步 flatten 操作将其拍平为一维纬度。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> Optional&lt;Integer&gt; <span class="title">optionalLength</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> Optional.empty();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Optional.of(s.length());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).map(s -&gt; optionalLength(s)); <span class="comment">// Optional&lt;Optional&lt;Integer&gt;&gt;</span></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>).flatMap(s -&gt; optionalLength(s)); <span class="comment">// Optional&lt;Integer&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="orElseGet-和-orElseThrow"><a href="#orElseGet-和-orElseThrow" class="headerlink" title="orElseGet 和 orElseThrow"></a>orElseGet 和 orElseThrow</h3><p><code>orElseGet(other)</code> 接受<strong>提供者函数</strong> <code>Supplier</code> 作为入参，当容器中的值为空时调用 <code>Supplier</code> 的 <code>get()</code> 方法获取值。<code>orElseThrow(supplier)</code> 则是值为空时抛出异常。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">orElseGet</span><span class="params">(Supplier&lt;? extends T&gt; other)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value != <span class="keyword">null</span> ? value : other.get();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> &lt;X extends Throwable&gt; <span class="function">T <span class="title">orElseThrow</span><span class="params">(Supplier&lt;? extends X&gt; exceptionSupplier)</span> <span class="keyword">throws</span> X </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> exceptionSupplier.get();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>使用时如下，若当前容器中的值为空则返回 <code>anotherString()</code> 的值。注意这一步已经跳出了 Optional 容器，返回的类型为容器中值的类型。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> String <span class="title">anotherString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;anotherString&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line">        .filter(s -&gt; s.startsWith(<span class="string">&quot;zzz&quot;</span>)) <span class="comment">// Optional.empty()</span></span><br><span class="line">        .orElseGet(<span class="keyword">new</span> Supplier&lt;String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> String <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> anotherString();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;); <span class="comment">// &quot;anotherString&quot;</span></span><br><span class="line">        </span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line">        .filter(s -&gt; s.length() == <span class="number">3</span>) <span class="comment">// Optional[&quot;abc&quot;]</span></span><br><span class="line">        .orElseGet(() -&gt; anotherString()); <span class="comment">// &quot;abc&quot;</span></span><br><span class="line"></span><br><span class="line">Optional.of(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line">        .filter(s -&gt; s.startsWith(<span class="string">&quot;zzz&quot;</span>)) <span class="comment">// Optional.empty()</span></span><br><span class="line">        .orElseThrow(() -&gt; <span class="keyword">new</span> RuntimeException(<span class="string">&quot;no eligible values&quot;</span>));</span><br></pre></td></tr></table></figure>
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Optional 提供的这些方法让我们不再关注于是否会抛出空指针异常，而是通过函数的自由组合专注于对数据的操作，比如如下代码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Optional.ofNullable(people)</span><br><span class="line">        .flatMap(people -&gt; people.getName())</span><br><span class="line">        .map(name -&gt; name.toUpperCase())</span><br><span class="line">        .filter(name -&gt; name.startsWith(<span class="string">&quot;T&quot;</span>))</span><br><span class="line">        .orElse(<span class="string">&quot;TONY&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>其实 Optional 的核心在于提供的 <code>empty()</code> 单例，使得如上代码整条链路不会在某一步中断抛出空指针异常，而是只要其中一步值为空后，<code>Optional.empty()</code> <strong>将在这条链路上继续向下传播</strong>，直到最后 <code>orElse()</code> 等方法指名默认处理并跳出容器。</p>
-<p>Optional 源码时有诸多值得我们借鉴取经的地方，诸如：</p>
-<ul>
-<li>Monad 容器的思想。容器接收一个值，进行函数操作后依然返回该容器，比如 <code>map</code>、<code>flatMap</code>、<code>filter</code>。这就使得我们可以随意组合以上方法，编写函数式风格的代码。类似的还有 Java 8 的 <code>Stream</code> 接口。</li>
-<li>提供 <code>Optional.empty()</code> 类似空对象模式的空值单例。</li>
-<li>严谨的编码，源码中有许多 <code>Objects.requireNonNull()</code> 对极端情况进行验证，比如 <code>flatMap</code> 方法中的 <code>Objects.requireNonNull(mapper);</code> 和 <code>Optional.ofNullable(mapper.apply(value));</code> 对于入参函数不为空和调用 <code>apply()</code> 后返回值不为空的验证。</li>
-<li>API 的全面性，当容器中没有你期待的值时提供 <code>orElse</code>、<code>orElseGet</code>、<code>orElseThrow</code> 等其他处理手段，不管是设置默认值还是抛出异常，API 都考虑到了。</li>
-</ul>
-<p>目前在一些 ORM 框架中也加入了 Optional 的支持，比如 Hibernate 从 5.2 版本后提供 <code>loadOptional()</code> 方法返回 <code>Optional&lt;T&gt;</code> 类型。有兴趣的可以自己去研究。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html">Functors, Applicatives, And Monads In Pictures</a></li>
-<li><a href="https://medium.com/coding-with-clarity/understanding-the-optional-monad-in-java-8-e3000d85ffd2">Understanding the Optional Monad in Java 8</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Languages</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>函数式编程</tag>
       </tags>
   </entry>
   <entry>
@@ -7129,6 +7129,102 @@ zuul:
       </tags>
   </entry>
   <entry>
+    <title>迁移 Ghost 博客并使用 Docker  部署</title>
+    <url>/2018/06/24/%E8%BF%81%E7%A7%BB%20Ghost%20%E5%8D%9A%E5%AE%A2%E5%B9%B6%E4%BD%BF%E7%94%A8%20Docker%20%20%E9%83%A8%E7%BD%B2/</url>
+    <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>因为阿里云服务器在七月初即将过期，以及生活上的一些琐事，博客已经近一个月没有更新了。考虑到十月份域名也将过期，以及阿里云非学生用户太贵，遂考虑国外的云服务器 <a href="https://www.vultr.com/">Vultr</a>，优点是绑定域名不需要备案，以及按时计费也很方便，缺点是国内访问网速确实比不上阿里云，但同时也跟同学了解到可以使用<strong>锐速</strong>进行优化，这个以后再研究。此外，为将来迁移方便，使用 <strong>Docker</strong> 重新部署 Ghost 博客并制作成镜像上传到云端。这也算我迁移博客后的第一篇文章了。</p>
+</blockquote>
+<h2 id="Prefaring"><a href="#Prefaring" class="headerlink" title="Prefaring"></a>Prefaring</h2><ul>
+<li><p>在 Vultr 的 Servers 界面先新增一个实例，如果能抢到每月 $2.5 的服务器是最好的，然而我没有抢到，所以选择了每月 $5 的服务器，系统为 Ubuntu 16.04，机房在新加坡</p>
+</li>
+<li><p>在添加实例成功后第一件事是<code>ping</code>一下公网 IP 是否是通的，有些时候分配的 IP 是被大陆给墙了的。<code>ping</code>通后我习惯的首件要事就是添加我的 ssh 公钥以及修改 ssh 的一些策略，比如修改默认端口号、禁用密码登陆之类的，一切都是为安全考虑（吃了第一次的亏，一夜之间异常登陆三十次）</p>
+</li>
+<li><p>迁移 Ghost 博客之前需要先将原先服务器上的相关文件下载到本地，再上传到新的服务器上。主要包含文章内容，图片以及主题。所幸 Ghost 博客提供了 Export/Import 功能，而且是所有文件导出到一个大 Json 文件中，很方便迁移<br><img data-src="/0.png" alt="14070DA1-C3CD-4A9F-AE52-D4D2DE4A2CDB">主题也很方便，我之前就将代码上传至 <a href="https://github.com/s1mplecc/ghost-theme-kaldorei">GitHub</a>，克隆下来压缩上传就行。图片稍微麻烦点，需要将 Ghost 目录下的整个<code>content/images</code>文件夹<code>scp</code>到本地，再<code>scp</code>到 Vultr 服务器上，可能要花些时间</p>
+</li>
+<li><p>接下来去修改你的域名设置，我是在 <a href="https://sg.godaddy.com/zh">GoDaddy</a> 上购买的域名，所以去狗爹网修改配置如下<br><img data-src="/1.png" alt="64F8A358-E544-4FA3-819C-7F38F5327A5A"></p>
+</li>
+<li><p>准备工作已经做好，剩下的就是在新服务器上搭建环境和部署博客了。必要的东西也就三个，Nginx 用于做端口映射，Docker 用于运行 Ghost 容器，Certbot 用来配置 Https。Nginx 在 Ubuntu 上安装很简单，使用<code>apt-get</code>命令即可。Certbot 安装在我的另一篇博客<a href="https://s2mple.xyz/configure-https-with-certbot/">Certbot配置Https</a>中有详细介绍。我们着重介绍一下如何安装 Docker</p>
+</li>
+</ul>
+<h2 id="Installing-Docker"><a href="#Installing-Docker" class="headerlink" title="Installing Docker"></a>Installing Docker</h2><blockquote>
+<p>参考 <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">Docker官方网站</a>，选择自己的操作系统，我的是 Ubuntu 16.04</p>
+</blockquote>
+<ul>
+<li><p>Update the apt package index, Install packages to allow apt to use a repository over HTTPS</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install \</span><br><span class="line">    apt-transport-https \</span><br><span class="line">    ca-certificates \</span><br><span class="line">    curl \</span><br><span class="line">    software-properties-common</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Add Docker’s official GPG key</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Set up the stable repository</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo add-apt-repository \</span><br><span class="line">   &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu \</span><br><span class="line">   $(lsb_release -cs) \</span><br><span class="line">   stable&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Install the latest version of Docker CE</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install docker-ce</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Deploying-Ghost"><a href="#Deploying-Ghost" class="headerlink" title="Deploying Ghost"></a>Deploying Ghost</h2><ul>
+<li><p>拉取 Ghost 最新的 Docker 镜像</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker pull ghost</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行一个容器实例，<code>-d</code>后台运行，<code>-p 2368:2368</code>绑定宿主机 2368 端口至容器内 2368 端口（必须显式的绑定，不然不会自动映射），这也是 Ghost 默认占用的端口号</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker run -d -p 2368:2368 ghost</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行后访问<code>&#123;IP&#125;:2368</code>可以成功进入 Ghost 主页，但是现在还有一些问题，就是点击 Home 键跳转的地址为 localhost:2368，我们需要进入到容器内部修改 Ghost 配置文件</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker exec -it 16 bash</span><br></pre></td></tr></table></figure>
+<p>  上述命令表示以交互式终端执行容器的<code>bash</code>命令，其中 16 是刚才启动的容器 ID 前两位，可以使用<code>docker ps</code>查看，通常使用可以唯一标识的前几位即可</p>
+</li>
+<li><p>进入容器后默认在<code>/var/lib/ghost</code>即 Ghost 安装路径下，修改其下的<code>config.production.json</code>配置文件，其实该文件链接到<code>config.development.json</code>，所以修改哪一个都一样，只需要修改 url 和 server 即可</p>
+  <figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;url&quot;</span>: <span class="string">&quot;https://s2mple.xyz/&quot;</span>,</span><br><span class="line"><span class="string">&quot;server&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;port&quot;</span>: <span class="number">2368</span>,</span><br><span class="line">    <span class="attr">&quot;host&quot;</span>: <span class="string">&quot;0.0.0.0&quot;</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>  退出容器后使用<code>docker restart 16</code>重启容器</p>
+</li>
+<li><p>主题可以在网页上直接上传。图片还需要我们拷贝到容器中，使用如下命令</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker cp images/ 16:/var/lib/ghost/content</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Nginx-amp-Https"><a href="#Nginx-amp-Https" class="headerlink" title="Nginx &amp; Https"></a>Nginx &amp; Https</h2><blockquote>
+<p>至此，我们的博客已经算迁移完毕，接下来还剩下两个步骤：1. 配置 Nginx 80 端口转发到 2368 端口；2. 使用 Certbot 配置 Https。</p>
+</blockquote>
+<h4 id="Configuring-Nginx"><a href="#Configuring-Nginx" class="headerlink" title="Configuring Nginx"></a>Configuring Nginx</h4><ul>
+<li><p>前往 <code>/etc/nginx/conf.d/</code> 目录中创建 ghost.conf 配置文件，配置如下</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server &#123;                                                                                  </span><br><span class="line">    server_name s1mple.info www.s1mple.info;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $http_host;</span><br><span class="line">        proxy_pass http://127.0.0.1:2368;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location ~ /.well-known &#123;</span><br><span class="line">        allow all;</span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    client_max_body_size 50m;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  保存退出后，<code>service nginx restart</code> 重启 Nginx 服务</p>
+</li>
+</ul>
+<h4 id="Configuring-Https"><a href="#Configuring-Https" class="headerlink" title="Configuring Https"></a>Configuring Https</h4><ul>
+<li><p>使用 Certbot 工具配置 Https，如何安装运行可以参考我的另一篇博客<a href="https://s2mple.xyz/configure-https-with-certbot/"><br>Certbot配置Https</a>。实际上它会读取 Nginx 配置文件并修改它们，可以发现，配置完成后的 ghost.conf 多了如下一些内容，其中就包括重定位到 Https 端口 443</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    # 省略...</span><br><span class="line"></span><br><span class="line">    listen [::]:443 ssl ipv6only=on; # managed by Certbot</span><br><span class="line">    listen 443 ssl; # managed by Certbot</span><br><span class="line">    ssl_certificate /etc/letsencrypt/live/s2mple.xyz/fullchain.pem; # managed by Certbot</span><br><span class="line">    ssl_certificate_key /etc/letsencrypt/live/s2mple.xyz/privkey.pem; # managed by Certbot</span><br><span class="line">    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    if ($host = www.s1mple.info) &#123;</span><br><span class="line">        return 301 https://$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    if ($host = s1mple.info) &#123;</span><br><span class="line">        return 301 https://$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line">    listen 80; </span><br><span class="line">    listen [::]:80;</span><br><span class="line"></span><br><span class="line">    server_name s1mple.info www.s1mple.info;</span><br><span class="line">    return 404; # managed by Certbot</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  大功告成！现在就可以通过 <a href="https://s2mple.xyz/">https://s2mple.xyz/</a> 访问我的博客网站了！</p>
+</li>
+</ul>
+<h2 id="Docker-image"><a href="#Docker-image" class="headerlink" title="Docker image"></a>Docker image</h2><blockquote>
+<p>接下来我们将经过修改的容器（包含文章、图片、Kaldorei 主题、修改后的配置文件）提交为一个镜像，上传到云端。以后迁移直接<code>pull</code>下来即可。可以参考我之前的博客 <a href="https://s2mple.xyz/build-docker-images/">构建你的Docker镜像</a></p>
+</blockquote>
+<ul>
+<li><p>首先需要在 <a href="https://cloud.docker.com/">Docker Cloud官网</a> 注册自己的账号，然后在服务器使用命令登陆</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker login</span><br><span class="line">Login with your Docker ID to push and pull images from Docker Hub. If you don&#x27;t have a Docker ID, head over to https://hub.docker.com to create one.</span><br><span class="line">// username</span><br><span class="line">// password</span><br><span class="line">Login Succeeded</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在 Docker Cloud 中创建一个新的仓库，命名为 myghost 。将当前容器提交为一个镜像，不加标签默认 latest</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker commit 16 s1mple1995/myghost</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看本地的 Docker 镜像，有两个，一个是原始的 ghost 镜像，一个是刚刚提交的镜像</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker images</span><br><span class="line">REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">s1mple1995/myghost   latest              e11def1af177        15 seconds ago      613MB</span><br><span class="line">ghost                latest              a375d6b66f06        4 weeks ago         574MB</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将镜像<code>push</code>到云端，等待上传完成</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker push s1mple1995/myghost</span><br></pre></td></tr></table></figure></li>
+<li><p>现在镜像已经存放在 Docker Cloud 云端了，搜索你的镜像，随时随地可以<code>pull</code>下来</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker search s1mple1995</span><br><span class="line">NAME                      DESCRIPTION                    STARS               OFFICIAL            AUTOMATED</span><br><span class="line">s1mple1995/get-started    学习初步使用                         1                                       </span><br><span class="line">s1mple1995/java-web-env   Java Web程序的运行环境                0                                       </span><br><span class="line">s1mple1995/jpress         jpress blog                    0                                       </span><br><span class="line">s1mple1995/ubuntu         基于官方ubuntu镜像，更改为阿里云软件源，并安…     0                                       </span><br><span class="line">s1mple1995/myghost        我的 Ghost 镜像，包含了文章、图片和主题（ Ka…   0 </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
+<p>总的来说，使用 Docker 部署 Ghost 的话可以方便许多。而且制作成镜像上传到云端的话，以后可以直接<code>pull</code>下来，图片、文章、主题都在镜像中了，顶多是更换域名要修改 Ghost 的配置文件。除此之外，更换域名后文章中的域名也需要全量替换，这个我打算以后要换域名的时候写个 Python 脚本来完成。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Ops</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>迁移 Ghost 博客至 Hexo 并使用 GitHub Pages 部署</title>
     <url>/2018/12/27/%E8%BF%81%E7%A7%BB-Ghost-%E5%8D%9A%E5%AE%A2%E8%87%B3-Hexo-%E5%B9%B6%E4%BD%BF%E7%94%A8-GitHub-Pages-%E9%83%A8%E7%BD%B2/</url>
     <content><![CDATA[<h2 id="为什么迁移"><a href="#为什么迁移" class="headerlink" title="为什么迁移"></a>为什么迁移</h2><h3 id="Ghost"><a href="#Ghost" class="headerlink" title="Ghost"></a>Ghost</h3><p>优点：</p>
@@ -7263,102 +7359,6 @@ zuul:
       <categories>
         <category>Ops</category>
       </categories>
-  </entry>
-  <entry>
-    <title>迁移 Ghost 博客并使用 Docker  部署</title>
-    <url>/2018/06/24/%E8%BF%81%E7%A7%BB%20Ghost%20%E5%8D%9A%E5%AE%A2%E5%B9%B6%E4%BD%BF%E7%94%A8%20Docker%20%20%E9%83%A8%E7%BD%B2/</url>
-    <content><![CDATA[<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
-<p>因为阿里云服务器在七月初即将过期，以及生活上的一些琐事，博客已经近一个月没有更新了。考虑到十月份域名也将过期，以及阿里云非学生用户太贵，遂考虑国外的云服务器 <a href="https://www.vultr.com/">Vultr</a>，优点是绑定域名不需要备案，以及按时计费也很方便，缺点是国内访问网速确实比不上阿里云，但同时也跟同学了解到可以使用<strong>锐速</strong>进行优化，这个以后再研究。此外，为将来迁移方便，使用 <strong>Docker</strong> 重新部署 Ghost 博客并制作成镜像上传到云端。这也算我迁移博客后的第一篇文章了。</p>
-</blockquote>
-<h2 id="Prefaring"><a href="#Prefaring" class="headerlink" title="Prefaring"></a>Prefaring</h2><ul>
-<li><p>在 Vultr 的 Servers 界面先新增一个实例，如果能抢到每月 $2.5 的服务器是最好的，然而我没有抢到，所以选择了每月 $5 的服务器，系统为 Ubuntu 16.04，机房在新加坡</p>
-</li>
-<li><p>在添加实例成功后第一件事是<code>ping</code>一下公网 IP 是否是通的，有些时候分配的 IP 是被大陆给墙了的。<code>ping</code>通后我习惯的首件要事就是添加我的 ssh 公钥以及修改 ssh 的一些策略，比如修改默认端口号、禁用密码登陆之类的，一切都是为安全考虑（吃了第一次的亏，一夜之间异常登陆三十次）</p>
-</li>
-<li><p>迁移 Ghost 博客之前需要先将原先服务器上的相关文件下载到本地，再上传到新的服务器上。主要包含文章内容，图片以及主题。所幸 Ghost 博客提供了 Export/Import 功能，而且是所有文件导出到一个大 Json 文件中，很方便迁移<br><img data-src="/0.png" alt="14070DA1-C3CD-4A9F-AE52-D4D2DE4A2CDB">主题也很方便，我之前就将代码上传至 <a href="https://github.com/s1mplecc/ghost-theme-kaldorei">GitHub</a>，克隆下来压缩上传就行。图片稍微麻烦点，需要将 Ghost 目录下的整个<code>content/images</code>文件夹<code>scp</code>到本地，再<code>scp</code>到 Vultr 服务器上，可能要花些时间</p>
-</li>
-<li><p>接下来去修改你的域名设置，我是在 <a href="https://sg.godaddy.com/zh">GoDaddy</a> 上购买的域名，所以去狗爹网修改配置如下<br><img data-src="/1.png" alt="64F8A358-E544-4FA3-819C-7F38F5327A5A"></p>
-</li>
-<li><p>准备工作已经做好，剩下的就是在新服务器上搭建环境和部署博客了。必要的东西也就三个，Nginx 用于做端口映射，Docker 用于运行 Ghost 容器，Certbot 用来配置 Https。Nginx 在 Ubuntu 上安装很简单，使用<code>apt-get</code>命令即可。Certbot 安装在我的另一篇博客<a href="https://s2mple.xyz/configure-https-with-certbot/">Certbot配置Https</a>中有详细介绍。我们着重介绍一下如何安装 Docker</p>
-</li>
-</ul>
-<h2 id="Installing-Docker"><a href="#Installing-Docker" class="headerlink" title="Installing Docker"></a>Installing Docker</h2><blockquote>
-<p>参考 <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">Docker官方网站</a>，选择自己的操作系统，我的是 Ubuntu 16.04</p>
-</blockquote>
-<ul>
-<li><p>Update the apt package index, Install packages to allow apt to use a repository over HTTPS</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install \</span><br><span class="line">    apt-transport-https \</span><br><span class="line">    ca-certificates \</span><br><span class="line">    curl \</span><br><span class="line">    software-properties-common</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Add Docker’s official GPG key</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Set up the stable repository</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo add-apt-repository \</span><br><span class="line">   &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu \</span><br><span class="line">   $(lsb_release -cs) \</span><br><span class="line">   stable&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Install the latest version of Docker CE</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install docker-ce</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Deploying-Ghost"><a href="#Deploying-Ghost" class="headerlink" title="Deploying Ghost"></a>Deploying Ghost</h2><ul>
-<li><p>拉取 Ghost 最新的 Docker 镜像</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker pull ghost</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>运行一个容器实例，<code>-d</code>后台运行，<code>-p 2368:2368</code>绑定宿主机 2368 端口至容器内 2368 端口（必须显式的绑定，不然不会自动映射），这也是 Ghost 默认占用的端口号</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker run -d -p 2368:2368 ghost</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>运行后访问<code>&#123;IP&#125;:2368</code>可以成功进入 Ghost 主页，但是现在还有一些问题，就是点击 Home 键跳转的地址为 localhost:2368，我们需要进入到容器内部修改 Ghost 配置文件</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker exec -it 16 bash</span><br></pre></td></tr></table></figure>
-<p>  上述命令表示以交互式终端执行容器的<code>bash</code>命令，其中 16 是刚才启动的容器 ID 前两位，可以使用<code>docker ps</code>查看，通常使用可以唯一标识的前几位即可</p>
-</li>
-<li><p>进入容器后默认在<code>/var/lib/ghost</code>即 Ghost 安装路径下，修改其下的<code>config.production.json</code>配置文件，其实该文件链接到<code>config.development.json</code>，所以修改哪一个都一样，只需要修改 url 和 server 即可</p>
-  <figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;url&quot;</span>: <span class="string">&quot;https://s2mple.xyz/&quot;</span>,</span><br><span class="line"><span class="string">&quot;server&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;port&quot;</span>: <span class="number">2368</span>,</span><br><span class="line">    <span class="attr">&quot;host&quot;</span>: <span class="string">&quot;0.0.0.0&quot;</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<p>  退出容器后使用<code>docker restart 16</code>重启容器</p>
-</li>
-<li><p>主题可以在网页上直接上传。图片还需要我们拷贝到容器中，使用如下命令</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker cp images/ 16:/var/lib/ghost/content</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Nginx-amp-Https"><a href="#Nginx-amp-Https" class="headerlink" title="Nginx &amp; Https"></a>Nginx &amp; Https</h2><blockquote>
-<p>至此，我们的博客已经算迁移完毕，接下来还剩下两个步骤：1. 配置 Nginx 80 端口转发到 2368 端口；2. 使用 Certbot 配置 Https。</p>
-</blockquote>
-<h4 id="Configuring-Nginx"><a href="#Configuring-Nginx" class="headerlink" title="Configuring Nginx"></a>Configuring Nginx</h4><ul>
-<li><p>前往 <code>/etc/nginx/conf.d/</code> 目录中创建 ghost.conf 配置文件，配置如下</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server &#123;                                                                                  </span><br><span class="line">    server_name s1mple.info www.s1mple.info;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $http_host;</span><br><span class="line">        proxy_pass http://127.0.0.1:2368;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location ~ /.well-known &#123;</span><br><span class="line">        allow all;</span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    client_max_body_size 50m;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  保存退出后，<code>service nginx restart</code> 重启 Nginx 服务</p>
-</li>
-</ul>
-<h4 id="Configuring-Https"><a href="#Configuring-Https" class="headerlink" title="Configuring Https"></a>Configuring Https</h4><ul>
-<li><p>使用 Certbot 工具配置 Https，如何安装运行可以参考我的另一篇博客<a href="https://s2mple.xyz/configure-https-with-certbot/"><br>Certbot配置Https</a>。实际上它会读取 Nginx 配置文件并修改它们，可以发现，配置完成后的 ghost.conf 多了如下一些内容，其中就包括重定位到 Https 端口 443</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    # 省略...</span><br><span class="line"></span><br><span class="line">    listen [::]:443 ssl ipv6only=on; # managed by Certbot</span><br><span class="line">    listen 443 ssl; # managed by Certbot</span><br><span class="line">    ssl_certificate /etc/letsencrypt/live/s2mple.xyz/fullchain.pem; # managed by Certbot</span><br><span class="line">    ssl_certificate_key /etc/letsencrypt/live/s2mple.xyz/privkey.pem; # managed by Certbot</span><br><span class="line">    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot</span><br><span class="line">    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    if ($host = www.s1mple.info) &#123;</span><br><span class="line">        return 301 https://$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    if ($host = s1mple.info) &#123;</span><br><span class="line">        return 301 https://$host$request_uri;</span><br><span class="line">    &#125; # managed by Certbot</span><br><span class="line"></span><br><span class="line">    listen 80; </span><br><span class="line">    listen [::]:80;</span><br><span class="line"></span><br><span class="line">    server_name s1mple.info www.s1mple.info;</span><br><span class="line">    return 404; # managed by Certbot</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  大功告成！现在就可以通过 <a href="https://s2mple.xyz/">https://s2mple.xyz/</a> 访问我的博客网站了！</p>
-</li>
-</ul>
-<h2 id="Docker-image"><a href="#Docker-image" class="headerlink" title="Docker image"></a>Docker image</h2><blockquote>
-<p>接下来我们将经过修改的容器（包含文章、图片、Kaldorei 主题、修改后的配置文件）提交为一个镜像，上传到云端。以后迁移直接<code>pull</code>下来即可。可以参考我之前的博客 <a href="https://s2mple.xyz/build-docker-images/">构建你的Docker镜像</a></p>
-</blockquote>
-<ul>
-<li><p>首先需要在 <a href="https://cloud.docker.com/">Docker Cloud官网</a> 注册自己的账号，然后在服务器使用命令登陆</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker login</span><br><span class="line">Login with your Docker ID to push and pull images from Docker Hub. If you don&#x27;t have a Docker ID, head over to https://hub.docker.com to create one.</span><br><span class="line">// username</span><br><span class="line">// password</span><br><span class="line">Login Succeeded</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在 Docker Cloud 中创建一个新的仓库，命名为 myghost 。将当前容器提交为一个镜像，不加标签默认 latest</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker commit 16 s1mple1995/myghost</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查看本地的 Docker 镜像，有两个，一个是原始的 ghost 镜像，一个是刚刚提交的镜像</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker images</span><br><span class="line">REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">s1mple1995/myghost   latest              e11def1af177        15 seconds ago      613MB</span><br><span class="line">ghost                latest              a375d6b66f06        4 weeks ago         574MB</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将镜像<code>push</code>到云端，等待上传完成</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker push s1mple1995/myghost</span><br></pre></td></tr></table></figure></li>
-<li><p>现在镜像已经存放在 Docker Cloud 云端了，搜索你的镜像，随时随地可以<code>pull</code>下来</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ sudo docker search s1mple1995</span><br><span class="line">NAME                      DESCRIPTION                    STARS               OFFICIAL            AUTOMATED</span><br><span class="line">s1mple1995/get-started    学习初步使用                         1                                       </span><br><span class="line">s1mple1995/java-web-env   Java Web程序的运行环境                0                                       </span><br><span class="line">s1mple1995/jpress         jpress blog                    0                                       </span><br><span class="line">s1mple1995/ubuntu         基于官方ubuntu镜像，更改为阿里云软件源，并安…     0                                       </span><br><span class="line">s1mple1995/myghost        我的 Ghost 镜像，包含了文章、图片和主题（ Ka…   0 </span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
-<p>总的来说，使用 Docker 部署 Ghost 的话可以方便许多。而且制作成镜像上传到云端的话，以后可以直接<code>pull</code>下来，图片、文章、主题都在镜像中了，顶多是更换域名要修改 Ghost 的配置文件。除此之外，更换域名后文章中的域名也需要全量替换，这个我打算以后要换域名的时候写个 Python 脚本来完成。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Ops</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
   </entry>
   <entry>
     <title>部署 Ghost Blog</title>
