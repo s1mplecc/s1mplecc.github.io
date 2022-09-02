@@ -27,22 +27,22 @@
 <meta property="og:site_name" content="芥子屋">
 <meta property="og:description" content="前言该系列源于张逸总监的 Clean Code 培训，包涵了如何写出高质量代码的思想、代码案例以及重构代码的实际演练。上一篇我们介绍了迪米特法则（最小知识法则）、信息专家模式：数据和行为应该封装在一起，并且通过 Paperboy 案例实操在 IntelliJ IDEA 中如何重构代码。本篇我们将通过报表参数填充案例来加深理解，并见识 IDEA 中更为强大的重构功能。 准备工作 IntelliJ I">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s1mplecc.github.io/0.png">
-<meta property="og:image" content="https://s1mplecc.github.io/1.png">
-<meta property="og:image" content="https://s1mplecc.github.io/2.png">
-<meta property="og:image" content="https://s1mplecc.github.io/3.png">
-<meta property="og:image" content="https://s1mplecc.github.io/4.png">
-<meta property="og:image" content="https://s1mplecc.github.io/5.png">
-<meta property="og:image" content="https://s1mplecc.github.io/6.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/0.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/1.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/2.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/3.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/4.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/5.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/6.png">
 <meta property="og:image" content="https://s1mplecc.github.io/7.png">
-<meta property="og:image" content="https://s1mplecc.github.io/8.png">
-<meta property="og:image" content="https://s1mplecc.github.io/9.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/8.png">
+<meta property="og:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/9.png">
 <meta property="article:published_time" content="2018-05-07T05:39:03.000Z">
-<meta property="article:modified_time" content="2021-12-17T05:47:55.482Z">
+<meta property="article:modified_time" content="2022-09-02T04:09:55.941Z">
 <meta property="article:author" content="s1mple">
 <meta property="article:tag" content="代码重构">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s1mplecc.github.io/0.png">
+<meta name="twitter:image" content="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/0.png">
 
 <link rel="canonical" href="https://s1mplecc.github.io/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/">
 
@@ -239,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-17 13:47:55" itemprop="dateModified" datetime="2021-12-17T13:47:55+08:00">2021-12-17</time>
+                <time title="修改时间：2022-09-02 12:09:55" itemprop="dateModified" datetime="2022-09-02T12:09:55+08:00">2022-09-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -343,21 +343,21 @@
 
 <p>观察代码，<code>if statement</code>中的三段代码块其实做的都是<strong>填充参数</strong>的事，只不过用<code>instanceof</code>判断了参数类型再执行对应的填充操作。结合之前的 Paperboy 案例，与 Wallet 打交道的应该是 Customer 而不是 Paperboy。上述代码明显也违反了迪米特法则，<strong>参数填充的行为应该交由参数类完成而不是 ParameterCollector</strong>。</p>
 <h2 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h2><p>基于代码重用的思想，先将三段代码 <strong>提取方法（Cmd + Alt + M）</strong>，并分别取名为<code>fillSimplePara()</code>、<code>fillItemPara()</code>、<code>fillTablePara()</code>，重构后的方法顺序可能有所差异，可以在方法签名上使用 <strong>Cmd + Shift + ⬆️/ ⬇️</strong> 快捷键移动方法顺序，使之符合正常的阅读习惯。</p>
-<p><img data-src="/0.png" alt="A6C5B629-ACC6-458A-8379-852021771E83"></p>
+<p><img data-src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/0.png" alt="A6C5B629-ACC6-458A-8379-852021771E83"></p>
 <p>提取了方法后，这一幕是不是似曾相识？之前的 Paperboy 案例中，我们从<code>charge()</code>方法中提取了<code>pay()</code>方法，意识到<code>pay()</code>方法应该归属于 Customer 而不是 Paperboy。这里就要再次强调：<strong>数据和行为应该封装在一起</strong>。显然，ParameterCollector 这个类不应该关注如何填充参数，而是应该收到<code>fillParameters()</code>请求后<strong>委派</strong>给各个 Parameter 类完成填充操作。所以我们采取“<strong>Move Method</strong>”重构手法（<strong>F6</strong>）。</p>
-<p><img data-src="/1.png" alt="17C89C7E-DA4F-4914-AA2A-5F6C8DE8845E"></p>
+<p><img data-src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/1.png" alt="17C89C7E-DA4F-4914-AA2A-5F6C8DE8845E"></p>
 <p>注意，IDEA 通过入参智能提示可以将方法移动到两个类中，显然应该选择 SimpleParameter，同时，方法的访问权限应为 public。接下来分别将<code>fillItemPara()</code>和<code>fillTablePara()</code>方法移动至 ItemParameter 和 TableParameter 中。</p>
-<p><img data-src="/2.png" alt="8FB216EF-394B-42F3-B556-6EC576224FE7"></p>
+<p><img data-src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/2.png" alt="8FB216EF-394B-42F3-B556-6EC576224FE7"></p>
 <p>观察上图你会发现，原先的方法有两个参数，但由于我们移动了方法到对应的 Parameter 类中，第二个参数直接变成了用<code>this</code>引用当前对象。<code>ItemParameter itemPara = this;</code>这一步是多余的，直接使用<strong>内联（Cmd + Alt + N</strong>）消除。然后呢，别着急，我们想一想，既然 SimpleParameter、ItemParameter、TableParameter 三个类都有接收一个 request 参数的填充方法，而且他们都实现了 Parameter 接口，那我们为什么不将方法提到接口中，让其他三个类去重写呢？所以接下来先把方法都重命名为<code>fill()</code>，使用 <strong>Shift + F6</strong>进行重命名。</p>
-<p><img data-src="/3.png" alt="74F483BA-13C8-4769-9E94-290369E2B41B-1"></p>
-<p>接着，不要傻乎乎的去 Parameter 接口中手写<code>fill()</code>抽象方法，还是有快捷键的！那就是 “<strong>Pull Members Up</strong>”重构手法，说真的，当时看张总演示我就震惊了！选中方法，使用 <strong>Ctrl + T</strong> 调出重构菜单，输入一个 pull 你就能看到提示了。<br><img data-src="/4.png" alt="C477A0C4-7E53-4C85-BE02-4A37697680B5"></p>
-<p>IDEA 会提示你将<code>pull()</code>方法提升至 Parameter 接口中并 make abstract。<br><img data-src="/5.png" alt="9E0BC21E-0DFB-47AF-8B9E-C99900755E7F"></p>
+<p><img data-src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/3.png" alt="74F483BA-13C8-4769-9E94-290369E2B41B-1"></p>
+<p>接着，不要傻乎乎的去 Parameter 接口中手写<code>fill()</code>抽象方法，还是有快捷键的！那就是 “<strong>Pull Members Up</strong>”重构手法，说真的，当时看张总演示我就震惊了！选中方法，使用 <strong>Ctrl + T</strong> 调出重构菜单，输入一个 pull 你就能看到提示了。<br><img data-src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/4.png" alt="C477A0C4-7E53-4C85-BE02-4A37697680B5"></p>
+<p>IDEA 会提示你将<code>pull()</code>方法提升至 Parameter 接口中并 make abstract。<br><img data-src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/5.png" alt="9E0BC21E-0DFB-47AF-8B9E-C99900755E7F"></p>
 <p>我们看看重构后的效果，甚至于 ItemParameter 的<code>fill()</code>方法还已经帮你添加了<code>@Override</code>注解，但是剩下的两个 Parameter 类中的<code>fill()</code>方法还需要你手动的添加注解。</p>
-<p><img data-src="/6.png" alt="0007121B-DCAA-4629-B1EB-911959D12455"> <img data-src="/7.png" alt="FE508CEB-BABF-4D6F-830E-A6C126BCD693"></p>
+<p><img data-src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/6.png" alt="0007121B-DCAA-4629-B1EB-911959D12455"> <img data-src="/7.png" alt="FE508CEB-BABF-4D6F-830E-A6C126BCD693"></p>
 <p>最后我们回到 ParameterCollector 类，使用 IDEA 的<strong>智能辅助</strong>快捷键（<strong>Alt + Enter</strong>）去 Cleanup code 删除多余的类型转换。</p>
-<p><img data-src="/8.png" alt="5A6909D5-21DC-45BB-B3F0-02ECE946EC10"></p>
+<p><img data-src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/8.png" alt="5A6909D5-21DC-45BB-B3F0-02ECE946EC10"></p>
 <p>然后，你就会发现，<code>if statement</code>也是多余的，删除后，<strong>Cmd + Alt + L</strong> 格式化代码。</p>
-<p><img data-src="/9.png" alt="91715C62-8438-4C16-BE77-0C821007877A"></p>
+<p><img data-src="/2018/05/07/Clean%20Code%20--%20%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E6%8A%A5%E8%A1%A8%E5%8F%82%E6%95%B0%E5%A1%AB%E5%85%85%E6%A1%88%E4%BE%8B/9.png" alt="91715C62-8438-4C16-BE77-0C821007877A"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如此，重构过的代码，可谓是层次清晰、一目了然，可比原来一坨堆在 ParameterCollector 中要美观多了。在重构的过程中，我们意识到，<strong>填充参数的行为应该交由它的专家，即各个 Parameter 类管理</strong>，移动方法后，又意识到既然都实现了 Parameter 接口，就应当使用 Java 接口的特性将<code>fill()</code>提升到 Parameter 接口中成为一个抽象方法。至此，<code>if</code>语句和<code>instanceof</code>也都不需要了，交由 JVM 在运行时识别类类型即可。所以说，<strong>重构的过程还可以帮助程序员梳理编码过程，进行合理的抽象和封装</strong>。当然，没有实践的空想理论是不行的，牢记 IDEA 的快捷键，将重构养成习惯，不时来一波亮瞎狗眼的骚操作，岂不美滋滋？</p>
 
     </div>
